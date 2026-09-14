@@ -12,6 +12,33 @@
 @keyframes exp-float{0%{transform:translate(-50%,15px);opacity:0}15%,70%{opacity:1}100%{transform:translate(-50%,-50px);opacity:0}}
 @media(prefers-reduced-motion:reduce){.app-shell:has(.victory-shake){animation:none}.pixel-feedback{transform:translateX(-50%)}}
 
+.momentum-features{display:grid;gap:16px;margin-top:18px}
+.momentum-panel,.quest-panel,.lore-panel,.contracts-panel,.archive-panel{border:1px solid #e3d9eb;border-radius:15px;background:#fff;padding:22px;min-width:0}
+.momentum-panel{background:linear-gradient(135deg,#fffdf8,#f6f0fb)}
+.feature-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.feature-heading h2{font-size:18px;color:#51405e;letter-spacing:-.35px;margin-top:7px}
+.feature-heading p{font-size:11px;line-height:1.6;color:#887993;margin-top:6px}
+.feature-kicker{display:inline-flex;align-items:center;gap:6px;color:#8765a2;font-size:9px;font-weight:800;letter-spacing:1.3px}
+.momentum-state,.quest-badge{font:700 9px monospace;letter-spacing:1px;color:#6e577e;border:1px solid #ddcee8;border-radius:99px;padding:7px 9px;white-space:nowrap}
+.momentum-active .momentum-state{color:#46745b;background:#eff8f0;border-color:#c9e0cc}
+.momentum-shattered .momentum-state,.quest-failed{color:#9a5360;background:#fff0f1;border-color:#edc9cf}
+.momentum-readout{display:flex;align-items:baseline;gap:10px;margin:24px 0 18px;color:var(--game-accent);font:500 clamp(34px,5vw,52px) monospace;letter-spacing:-3px}
+.momentum-readout b{font-size:24px;color:#b9a9c3;letter-spacing:0}
+.momentum-readout span{display:flex;align-items:baseline;gap:7px}.momentum-readout small{font:500 9px Manrope,sans-serif;letter-spacing:0;color:#8c7898}
+.feature-actions,.quest-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.feature-primary,.feature-secondary,.sound-button{display:inline-flex;align-items:center;gap:7px;border-radius:7px;padding:10px 13px;font-size:10px;cursor:pointer}
+.feature-primary{border:1px solid var(--game-accent);background:var(--game-accent);color:#fff}.feature-primary:disabled{opacity:.5;cursor:not-allowed}
+.feature-secondary,.sound-button{border:1px solid #ded2e8;background:#fbf8fd;color:#765c87}.feature-secondary.danger{color:#9a5360}
+.feature-alert,.quest-note{font-size:10px;line-height:1.5;color:#9a5360;margin-top:13px}.quest-note{color:#887993}
+.quest-panel{background:#fcfbfe}.quest-controls{margin:20px 0 12px}.quest-controls select,.archive-tools select{border:1px solid #ded2e8;border-radius:7px;background:#fff;padding:10px;color:#765c87;font-size:10px}
+.quest-clock{font:500 clamp(34px,5vw,50px) monospace;letter-spacing:-2px;color:#7653a8;margin:10px 0 15px}.quest-completed{color:#4e8061;background:#eff8f0;border-color:#c9e0cc}
+.lore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.lore-card{min-height:165px;padding:15px;border-radius:10px;background:#fbf9fd;border:1px solid #e4d9ec}.lore-card svg{width:80px;height:54px;margin-bottom:8px;stroke:#8765a2;stroke-width:2}.lore-card svg path{stroke-dasharray:100;animation:lore-draw 2.2s ease-out both}.lore-card h3{font-size:12px;color:#594768}.lore-card p{font-size:10px;line-height:1.6;color:#887993;margin-top:7px}.lore-locked{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#a898b0}.lore-locked h3{margin-top:11px;color:#806f8c}
+.contracts-panel{background:#faf7f0}.contract-form{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:16px 0}.contract-form label{display:grid;gap:5px;font:700 9px monospace;color:#8a6b47;text-transform:uppercase}.contract-form input{width:100%;border:1px solid #e4d4bd;border-radius:5px;padding:9px;font:11px Manrope,sans-serif;color:#5e4a39;background:#fffdf9}.contract-form .feature-primary{grid-column:1/-1;justify-self:start;background:#75538a;border-color:#75538a}.contract-list{display:grid;gap:10px;margin-top:17px}.contract-card{display:flex;justify-content:space-between;gap:18px;padding:15px;border:1px solid #eadbc5;background:#fffdf9;border-radius:8px}.contract-card>div:first-child{display:grid;gap:5px}.contract-card span{font:700 8px monospace;color:#a27b45;letter-spacing:1px}.contract-card p{font-size:11px;color:#614e40;margin-bottom:5px}.contract-signature{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px}.contract-signature small{font:9px monospace;color:#9d856a}.contract-signature button{border:1px solid #cdb993;background:#f8ebc9;color:#77582e;border-radius:5px;padding:7px 9px;font:700 9px monospace}.contract-done{opacity:.7}.contract-done p{text-decoration:line-through}.feature-empty{font-size:11px;color:#96879c;padding:18px 0}
+.archive-tools{display:flex;gap:9px;margin:18px 0}.archive-search{display:flex;align-items:center;gap:7px;flex:1;border:1px solid #ded2e8;border-radius:7px;padding:0 10px;color:#987fa2;background:#fff}.archive-search input{width:100%;border:0;outline:0;padding:10px 0;font:11px Manrope,sans-serif;color:#594768}.archive-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.archive-item{min-height:140px;padding:13px;border:1px solid #e5dced;border-radius:9px;background:#fdfbfe;position:relative}.archive-icon{display:grid;place-items:center;width:28px;height:28px;border-radius:7px;background:#f3e8bb;color:#a57925;font-size:16px}.archive-item time{display:block;font:9px monospace;color:#9888a2;margin-top:12px}.archive-item h3{font-size:11px;line-height:1.45;color:#594768;margin:5px 0 10px}.archive-item div{display:flex;gap:4px;flex-wrap:wrap}.archive-item div span{font-size:8px;color:#8765a2}
+@keyframes lore-draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@media(max-width:700px){.momentum-panel,.quest-panel,.lore-panel,.contracts-panel,.archive-panel{padding:17px}.lore-grid,.archive-grid{grid-template-columns:repeat(2,1fr)}.contract-form{grid-template-columns:1fr}.contract-card{flex-direction:column}.contract-signature{align-items:flex-start;flex-direction:row}.archive-tools{flex-direction:column}.archive-tools select{width:100%}}
+@media(prefers-reduced-motion:reduce){.lore-card svg path{animation:none}}
+
 html[data-theme='dark'] .app-shell[data-palette='forest']{background:#15231e}
 html[data-theme='dark'] .app-shell[data-palette='amber']{background:#282016}
 html[data-theme='dark'] .combo-card,

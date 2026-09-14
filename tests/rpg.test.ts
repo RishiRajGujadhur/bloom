@@ -1,13 +1,30 @@
 import { defaults, newSession, parseData, reply, advance, toggleHabit } from '../src/model'
 import { dayKey, previousDay } from '../src/dates'
 import { initialRpg } from '../src/rpg/schema'
-import { bossHealth, combo, commitBoss, habitKey, initializeGame, multiplier, openLoot, syncGame, totals, unlocks } from '../src/rpg/engine'
+import { bossHealth, combo, commitBoss, contractSignature, elapsedParts, failFocusQuest, focusQuestState, habitKey, initializeGame, multiplier, openLoot, resetMomentum, startFocusQuest, startMomentum, syncGame, totals, unlocks, completeFocusQuest, FOCUS_QUEST_MS } from '../src/rpg/engine'
 import type { AppData } from '../src/model'
 const time=(day: number,hour=10)=>new Date(2026,8,day,hour).getTime()
 function fresh(at=time(1)) { const data=defaults(); data.rpg=initialRpg(at);return data }
 function log(data: AppData, at: number, index=0) { return syncGame(toggleHabit(data,data.habits[index].id,dayKey(new Date(at))),data,at) }
 function run(days: number) { let data=fresh();for(let n=1;n<=days;n++)data=log(data,time(n));return data }
 function completeJournal(data: AppData,at:number) { let session=newSession();session.metadata.date=new Date(at).toISOString();for(const answer of ['Steady','Walked','Rested','Read'])session=advance(reply(session,answer));return syncGame({...data,sessions:[...data.sessions,session]},data,at) }
+test('momentum exposes exact parts and explicit reset/shatter states',()=>{
+  let data=fresh(time(1));expect(elapsedParts(time(1),time(2,1))).toEqual({days:0,hours:15,minutes:0,milliseconds:15*60*60*1000})
+  data=startMomentum(data,time(1));expect(data.rpg.momentum.startedAt).toBe(time(1))
+  expect(resetMomentum(data,time(2)).rpg.momentum.resetAt).toBe(time(2))
+  expect(data.rpg.momentum.shatteredAt).toBeNull()
+})
+test('focus quest requires the full 25 minutes and damage is idempotent',()=>{
+  let data=startFocusQuest(fresh(), 'forest', time(1))
+  expect(focusQuestState(data.rpg,time(1)+FOCUS_QUEST_MS-1)).toBe('active')
+  expect(completeFocusQuest(data,time(1)+FOCUS_QUEST_MS)).not.toBe(data)
+  data=failFocusQuest(data,time(1)+1000);expect(data.rpg.focusQuest.damage).toBe(1)
+  expect(failFocusQuest(data,time(1)+2000)).toBe(data)
+})
+test('contract signatures are deterministic and input-sensitive',()=>{
+  expect(contractSignature('a','b','c')).toBe(contractSignature('a','b','c'))
+  expect(contractSignature('a','b','c')).not.toBe(contractSignature('a','b','d'))
+})
 
 test('legacy migration preserves all existing coaching records and does not grant retroactive rewards',()=>{
   const current=fresh();const {rpg: _rpg,...legacy}=current;void _rpg
