@@ -25,6 +25,7 @@ export function combo(rpg: Rpg, clock = Date.now()) {
     days.set(event.day, Math.min(days.get(event.day) ?? Infinity, event.at))
   }
   let cursor = days.has(today) ? today : previousDay(today)
+  if (!days.has(cursor) && rpg.buffs.some(buff => buff.kind === 'streak-shield' && buff.quantity > 0)) cursor = previousDay(cursor)
   if (!days.has(cursor)) return { elapsed: 0, multiplier: 1, days: 0, startedAt: null, loggedToday: false }
   let startedAt = days.get(cursor)!
   let count = 0
@@ -92,7 +93,8 @@ export function syncGame(next: AppData, previous: AppData, clock = Date.now()): 
   const newJournal = data.sessions.find(s => s.flow.complete && !previous.sessions.some(old => old.metadata.id === s.metadata.id))
   if (newJournal) update(`journal:${today}`, true, false, 'journal', newJournal.metadata.id, 'spirit', 20, 5)
   const currentCombo = combo(rpg, now)
-  for (const { key, base } of fresh) rpg.ledger[key] = { ...rpg.ledger[key], exp: Math.round(base*currentCombo.multiplier) }
+  const focusMultiplier = rpg.buffs.some(buff => buff.kind === 'focus-elixir' && buff.expiresAt !== null && buff.expiresAt > now) ? 1.1 : 1
+  for (const { key, base } of fresh) rpg.ledger[key] = { ...rpg.ledger[key], exp: Math.round(base*currentCombo.multiplier*focusMultiplier) }
   const boss = rpg.bosses[today]
   if (boss && !boss.settled) {
     const won = bossHealth(data,today)!.remaining === 0
