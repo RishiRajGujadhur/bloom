@@ -25,6 +25,8 @@ import { useCoach } from './useCoach'
 import { Modal } from './components/Modal'
 import { ChatJournalContainer } from './components/journal/ChatJournalContainer'
 import { SummaryContent } from './components/journal/SessionSummaryModal'
+import { DashboardWelcome } from './components/DashboardWelcome'
+import { LanguageSelector } from './components/LanguageSelector'
 import './App.css'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
@@ -232,6 +234,7 @@ function App() {
               <span className="tiny-dot" /> A LITTLE BETTER, EVERY DAY
             </span>
             <div className="topbar-actions">
+              <LanguageSelector />
               <button
                 className="theme-toggle"
                 type="button"
@@ -252,26 +255,13 @@ function App() {
             </div>
           </header>
           <div className="page-content">
-            <div className="welcome">
-              <div>
-                <div className="eyebrow">
-                  {new Date(`${today}T12:00:00`).toLocaleDateString(undefined, {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </div>
-                <h1>
-                  A little space to <em>grow.</em>
-                </h1>
-                <p>
-                  Welcome back. Let’s make today feel a little more like you.
-                </p>
-              </div>
-              <div className="private-badge">
-                <span className="tiny-dot" /> Just for you
-              </div>
-            </div>
+            <DashboardWelcome
+              date={new Date(`${today}T12:00:00`).toLocaleDateString(undefined, {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+              })}
+            />
             {error && (
               <div className="storage-error" role="alert">
                 <strong>Saving needs your attention</strong>
