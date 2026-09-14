@@ -1,0 +1,106 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Archive, Check, Clock3, Headphones, KeyRound, Lock, Play, RotateCcw, Search, ShieldAlert, Sparkles, Volume2, VolumeX } from 'lucide-react'
+import type { Dispatch, SetStateAction } from 'react'
+import type { AppData } from '../model'
+import type { Rpg } from './schema'
+import { contractSignature, elapsedParts, failFocusQuest, FOCUS_QUEST_MS, focusQuestState, resetMomentum, shatterMomentum, startFocusQuest, startMomentum, completeFocusQuest, momentumState } from './engine'
+
+const pad = (value: number) => String(value).padStart(2, '0')
+const formatCountdown = (ms: number) => {
+  const left = Math.max(0, FOCUS_QUEST_MS - ms)
+  const minutes = Math.floor(left / 60000)
+  return `${pad(minutes)}:${pad(Math.floor(left / 1000) % 60)}`
+}
+
+export function MomentumFeatures({ data, setData }: { data: AppData; setData: Dispatch<SetStateAction<AppData>> }) {
+  const [clock, setClock] = useState(Date.now)
+  const [query, setQuery] = useState('')
+  const [tag, setTag] = useState('all')
+  const [contractOpen, setContractOpen] = useState(false)
+  const [contract, setContract] = useState({ given: '', when: '', then: '' })
+  const [soundOn, setSoundOn] = useState(false)
+  const audio = useRef<AudioContext | null>(null)
+  const oscillator = useRef<OscillatorNode | null>(null)
+  const quest = data.rpg.focusQuest
+  const momentum = momentumState(data.rpg, clock)
+  const questState = focusQuestState(data.rpg, clock)
+
+  useEffect(() => {
+    const id = window.setInterval(() => setClock(Date.now()), 1000)
+    return () => window.clearInterval(id)
+  }, [])
+  useEffect(() => {
+    const leave = () => {
+      if (document.visibilityState === 'hidden' && focusQuestState(data.rpg, Date.now()) === 'active') setData(current => failFocusQuest(current))
+    }
+    document.addEventListener('visibilitychange', leave)
+    return () => document.removeEventListener('visibilitychange', leave)
+  }, [data.rpg, setData])
+  useEffect(() => {
+    if (questState === 'active' && quest.startedAt && clock - quest.startedAt >= FOCUS_QUEST_MS) setData(current => completeFocusQuest(current, clock))
+  }, [clock, quest.startedAt, questState, setData])
+  useEffect(() => () => {
+    oscillator.current?.stop()
+    audio.current?.close()
+  }, [])
+
+  const toggleSound = async () => {
+    if (soundOn) {
+      oscillator.current?.stop()
+      oscillator.current = null
+      setSoundOn(false)
+      return
+    }
+    try {
+      const context = audio.current ?? new AudioContext()
+      audio.current = context
+      await context.resume()
+      const node = context.createOscillator()
+      const gain = context.createGain()
+      node.type = quest.soundscape === 'brown-noise' ? 'sawtooth' : 'sine'
+      node.frequency.value = quest.soundscape === 'forest' ? 220 : quest.soundscape === 'brown-noise' ? 92 : 174
+      gain.gain.value = 0.025
+      node.connect(gain).connect(context.destination)
+      node.start()
+      oscillator.current = node
+      setSoundOn(true)
+    } catch {
+      setSoundOn(false)
+    }
+  }
+  const archive = useMemo(() => data.sessions.filter(session => session.flow.complete).map(session => ({
+    id: session.metadata.id,
+    date: session.metadata.date,
+    title: session.messages.find(message => message.sender === 'user')?.text ?? 'A quiet reflection',
+    tags: session.metadata.tags.length ? session.metadata.tags : ['reflection'],
+    mood: session.metadata.mood,
+  })).filter(entry => `${entry.title} ${entry.tags.join(' ')}`.toLowerCase().includes(query.toLowerCase()) && (tag === 'all' || entry.tags.includes(tag))), [data.sessions, query, tag])
+  const tags = [...new Set(data.sessions.flatMap(session => session.metadata.tags))].filter(Boolean)
+  const addContract = () => {
+    const given = contract.given.trim(), when = contract.when.trim(), then = contract.then.trim()
+    if (!given || !when || !then) return
+    const next = { id: crypto.randomUUID(), given, when, then, createdAt: clock, completed: false, signature: contractSignature(given, when, then) }
+    setData(current => ({ ...current, rpg: { ...current.rpg, contracts: [next, ...current.rpg.contracts] } }))
+    setContract({ given: '', when: '', then: '' })
+    setContractOpen(false)
+  }
+  const elapsed = elapsedParts(data.rpg.momentum.startedAt, clock)
+  return <div className="momentum-features">
+    <section className={`momentum-panel momentum-${momentum.state}`} aria-labelledby="momentum-title">
+      <div className="feature-heading"><div><span className="feature-kicker"><Clock3 size={14}/> MOMENTUM ENGINE</span><h2 id="momentum-title">Keep the thread, gently.</h2><p>Exact time since this run began. No streak math hidden behind a badge.</p></div><span className="momentum-state">{momentum.state === 'active' ? 'RUNNING' : momentum.state.toUpperCase()}</span></div>
+      <div className="momentum-readout" aria-live="polite"><span>{elapsed.days}<small>days</small></span><b>:</b><span>{pad(elapsed.hours)}<small>hours</small></span><b>:</b><span>{pad(elapsed.minutes)}<small>minutes</small></span></div>
+      <div className="feature-actions">{momentum.state === 'idle' || momentum.state === 'shattered' ? <button className="feature-primary" onClick={() => setData(current => startMomentum(current, clock))}><Play size={15}/> Start a new run</button> : <><button className="feature-secondary" onClick={() => setData(current => resetMomentum(current, clock))}><RotateCcw size={14}/> Reset clock</button><button className="feature-secondary danger" onClick={() => setData(current => shatterMomentum(current, clock))}><ShieldAlert size={14}/> Mark as shattered</button></>}</div>
+      {momentum.state === 'shattered' && <p className="feature-alert" role="status">The run is shattered, not you. Start again when it feels useful.</p>}
+    </section>
+    <section className="quest-panel" aria-labelledby="quest-title">
+      <div className="feature-heading"><div><span className="feature-kicker"><Headphones size={14}/> FOCUS QUEST</span><h2 id="quest-title">25 minutes of protected attention.</h2><p>Choose a quiet loop. Leaving this tab before completion costs one armor point.</p></div><span className={`quest-badge quest-${questState}`}>{questState}</span></div>
+      <div className="quest-controls"><select aria-label="Soundscape" value={quest.soundscape} disabled={questState === 'active'} onChange={event => setData(current => ({ ...current, rpg: { ...current.rpg, focusQuest: { ...current.rpg.focusQuest, soundscape: event.target.value as Rpg['focusQuest']['soundscape'] } } }))}><option value="rain">Soft rain</option><option value="forest">Night forest</option><option value="brown-noise">Brown noise</option></select><button className="sound-button" onClick={toggleSound} aria-pressed={soundOn}>{soundOn ? <Volume2 size={15}/> : <VolumeX size={15}/>} {soundOn ? 'Sound on' : 'Preview loop'}</button></div>
+      <div className="quest-clock" aria-live="polite">{questState === 'active' && quest.startedAt ? formatCountdown(clock - quest.startedAt) : questState === 'completed' ? 'COMPLETE' : questState === 'failed' ? 'DAMAGED' : '25:00'}</div>
+      {questState === 'idle' || questState === 'failed' || questState === 'completed' ? <button className="feature-primary" onClick={() => setData(current => startFocusQuest(current, quest.soundscape, clock))}><Play size={15}/> {questState === 'idle' ? 'Begin survival quest' : 'Run it again'}</button> : <button className="feature-primary" onClick={() => setData(current => completeFocusQuest(current, clock))} disabled={clock - (quest.startedAt ?? clock) < FOCUS_QUEST_MS}><Check size={15}/> Claim completion</button>}
+      <p className="quest-note">{quest.damage ? `${quest.damage} damage taken from leaving early.` : 'Damage is recorded locally and never affects your journal data.'}</p>
+    </section>
+    <section className="lore-panel" aria-labelledby="lore-title"><div className="feature-heading"><div><span className="feature-kicker"><Sparkles size={14}/> SCIENTIFIC LORE</span><h2 id="lore-title">Why small repetitions work.</h2></div></div><div className="lore-grid">{[{at:0,title:'Attention is trainable',body:'Repeatedly returning to one cue strengthens the brain’s ability to notice and redirect attention.',unlock:'Always available'},{at:3,title:'Momentum lowers friction',body:'A visible starting point makes the next action easier to choose, especially on low-energy days.',unlock:'3-day momentum'},{at:7,title:'Recovery is part of learning',body:'Rest and reset protect consistency by making the practice resilient instead of brittle.',unlock:'7-day momentum'}].map(card => { const unlocked = card.at === 0 || elapsed.days >= card.at; return <article className={`lore-card ${unlocked ? 'lore-unlocked' : 'lore-locked'}`} key={card.title}>{unlocked ? <svg viewBox="0 0 80 54" aria-hidden="true"><path d="M8 43C20 10 36 44 49 17S68 8 74 11" fill="none"/><circle cx="49" cy="17" r="4"/></svg> : <Lock size={22}/>}<h3>{card.title}</h3><p>{unlocked ? card.body : `Unlock at ${card.unlock}`}</p></article> })}</div></section>
+    <section className="contracts-panel" aria-labelledby="contracts-title"><div className="feature-heading"><div><span className="feature-kicker"><KeyRound size={14}/> ACTION CONTRACTS</span><h2 id="contracts-title">Make the next step executable.</h2><p>Given / When / Then, signed to this device.</p></div><button className="feature-secondary" onClick={() => setContractOpen(value => !value)}>{contractOpen ? 'Close' : 'New contract'}</button></div>{contractOpen && <div className="contract-form">{(['given','when','then'] as const).map(field => <label key={field}>{field}<input value={contract[field]} onChange={event => setContract(current => ({ ...current, [field]: event.target.value }))} placeholder={field === 'given' ? 'I have ten quiet minutes' : field === 'when' ? 'The kettle finishes boiling' : 'I will take three breaths'} /></label>)}<button className="feature-primary" onClick={addContract}><KeyRound size={14}/> Sign contract</button></div>}<div className="contract-list">{data.rpg.contracts.length === 0 && <p className="feature-empty">No contracts yet. Write one small promise you can keep.</p>}{data.rpg.contracts.map(item => <article className={`contract-card ${item.completed ? 'contract-done' : ''}`} key={item.id}><div><span>GIVEN</span><p>{item.given}</p><span>WHEN</span><p>{item.when}</p><span>THEN</span><p>{item.then}</p></div><div className="contract-signature"><small>{item.signature}</small><button aria-label={`${item.completed ? 'Reopen' : 'Complete'} contract`} onClick={() => setData(current => ({ ...current, rpg: { ...current.rpg, contracts: current.rpg.contracts.map(contractItem => contractItem.id === item.id ? { ...contractItem, completed: !contractItem.completed } : contractItem) } }))}>{item.completed ? <Check size={17}/> : 'SIGN'}</button></div></article>)}</div></section>
+    <section className="archive-panel" aria-labelledby="archive-title"><div className="feature-heading"><div><span className="feature-kicker"><Archive size={14}/> INVENTORY ARCHIVE</span><h2 id="archive-title">Journal entries, carried forward.</h2><p>Search your completed reflections as key items and status notes.</p></div></div><div className="archive-tools"><label className="archive-search"><Search size={15}/><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search your archive" aria-label="Search journal archive" /></label><select value={tag} onChange={event => setTag(event.target.value)} aria-label="Filter archive tags"><option value="all">All tags</option>{tags.map(value => <option key={value} value={value}>{value}</option>)}</select></div><div className="archive-grid">{archive.map(entry => <article className="archive-item" key={entry.id}><span className="archive-icon">{entry.mood && entry.mood >= 4 ? '✦' : '◌'}</span><time dateTime={entry.date}>{new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</time><h3>{entry.title}</h3><div>{entry.tags.map(value => <span key={value}>#{value}</span>)}</div></article>)}{archive.length === 0 && <p className="feature-empty">{data.sessions.length ? 'No entries match that search.' : 'Complete a reflection to place your first entry here.'}</p>}</div></section>
+  </div>
+}
