@@ -24,6 +24,7 @@ import type { Session } from './model'
 import { useCoach } from './useCoach'
 import { Modal } from './components/Modal'
 import { ChatJournalContainer } from './components/journal/ChatJournalContainer'
+import { JournalContainer } from './components/daybook/JournalContainer'
 import { SummaryContent } from './components/journal/SessionSummaryModal'
 import './App.css'
 import { RpgDashboard } from './rpg/RpgDashboard'
@@ -194,6 +195,7 @@ function App() {
               { key: 'overview', title: 'My dashboard', Icon: LayoutDashboard },
               { key: 'habits', title: 'Daily habits', Icon: ListChecks },
               { key: 'journal', title: 'Reflection journal', Icon: BookOpen },
+              { key: 'daybook', title: 'Daybook modes', Icon: Pencil },
               { key: 'planning', title: 'My intentions', Icon: Sun },
             ].map(({ key, title, Icon }) => (
               <button
@@ -480,6 +482,7 @@ function App() {
               </div>
               <div className="right-column">
                 <ChatJournalContainer data={data} setData={setData} />
+                <JournalContainer />
                 <section className="affirmation">
                   <div className="card-heading">
                     <span className="eyebrow">
