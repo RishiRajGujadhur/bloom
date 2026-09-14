@@ -3,6 +3,7 @@ import { dayKey, previousDay } from '../dates'
 import type { Rpg, Stat } from './schema'
 
 const DAY = 86_400_000
+export const FOCUS_QUEST_MS = 25 * 60 * 1000
 type Award = Rpg['ledger'][string]
 const weekStart = (day: string) => {
   const date = new Date(`${day}T12:00:00`)
@@ -11,6 +12,52 @@ const weekStart = (day: string) => {
 }
 export const habitKey = (id: string, day: string) => `habit:${id}:${day}`
 export const priorityKey = (id: string, day: string) => `priority:${id}:${day}`
+
+export function elapsedParts(startedAt: number | null, now = Date.now()) {
+  const elapsed = Math.max(0, startedAt === null ? 0 : now - startedAt)
+  const totalMinutes = Math.floor(elapsed / 60_000)
+  return { days: Math.floor(totalMinutes / 1440), hours: Math.floor(totalMinutes / 60) % 24, minutes: totalMinutes % 60, milliseconds: elapsed }
+}
+export function momentumState(rpg: Rpg, now = Date.now()) {
+  const elapsed = elapsedParts(rpg.momentum.startedAt, now)
+  const state = rpg.momentum.shatteredAt ? 'shattered' : rpg.momentum.resetAt && (!rpg.momentum.startedAt || rpg.momentum.resetAt >= rpg.momentum.startedAt) ? 'reset' : rpg.momentum.startedAt ? 'active' : 'idle'
+  return { ...elapsed, state }
+}
+export function startMomentum(data: AppData, now = Date.now()): AppData {
+  if (data.rpg.momentum.startedAt && !data.rpg.momentum.shatteredAt) return data
+  return { ...data, rpg: { ...data.rpg, momentum: { startedAt: now, resetAt: null, shatteredAt: null } } }
+}
+export function resetMomentum(data: AppData, now = Date.now()): AppData {
+  return { ...data, rpg: { ...data.rpg, momentum: { startedAt: now, resetAt: now, shatteredAt: null } } }
+}
+export function shatterMomentum(data: AppData, now = Date.now()): AppData {
+  return { ...data, rpg: { ...data.rpg, momentum: { ...data.rpg.momentum, shatteredAt: now } } }
+}
+
+export type FocusQuestState = 'idle' | 'active' | 'completed' | 'failed'
+export function focusQuestState(rpg: Rpg, now = Date.now()): FocusQuestState {
+  const quest = rpg.focusQuest
+  if (quest.completedAt) return 'completed'
+  if (quest.failedAt) return 'failed'
+  if (quest.startedAt && now - quest.startedAt >= FOCUS_QUEST_MS) return 'active'
+  return quest.startedAt ? 'active' : 'idle'
+}
+export function startFocusQuest(data: AppData, soundscape: Rpg['focusQuest']['soundscape'], now = Date.now()): AppData {
+  return { ...data, rpg: { ...data.rpg, focusQuest: { ...data.rpg.focusQuest, startedAt: now, completedAt: null, failedAt: null, soundscape } } }
+}
+export function completeFocusQuest(data: AppData, now = Date.now()): AppData {
+  const quest = data.rpg.focusQuest
+  if (!quest.startedAt || now - quest.startedAt < FOCUS_QUEST_MS) return data
+  return { ...data, rpg: { ...data.rpg, focusQuest: { ...quest, completedAt: now } } }
+}
+export function failFocusQuest(data: AppData, now = Date.now()): AppData {
+  const quest = data.rpg.focusQuest
+  if (!quest.startedAt || quest.completedAt || quest.failedAt) return data
+  return { ...data, rpg: { ...data.rpg, focusQuest: { ...quest, failedAt: now, damage: quest.damage + 1 } } }
+}
+export function contractSignature(given: string, when: string, then: string) {
+  return `BLOOM-${[given, when, then].join('|').replace(/\s+/g, ' ').trim().split('').reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 7).toString(16).toUpperCase()}`
+}
 
 export function multiplier(elapsedMs: number) {
   const days = Math.max(0, elapsedMs) / DAY

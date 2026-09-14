@@ -23,6 +23,27 @@ const weeklyRaidSchema = z.object({
   lootClaimed: z.boolean(),
   badgeUnlocked: z.boolean(),
 })
+const momentumSchema = z.object({
+  startedAt: stamp.nullable(),
+  resetAt: stamp.nullable(),
+  shatteredAt: stamp.nullable(),
+})
+const focusQuestSchema = z.object({
+  startedAt: stamp.nullable(),
+  completedAt: stamp.nullable(),
+  failedAt: stamp.nullable(),
+  damage: z.number().int().nonnegative(),
+  soundscape: z.enum(['rain', 'forest', 'brown-noise']).default('rain'),
+})
+const contractSchema = z.object({
+  id: z.string(),
+  given: z.string().min(1).max(240),
+  when: z.string().min(1).max(240),
+  then: z.string().min(1).max(240),
+  createdAt: stamp,
+  completed: z.boolean(),
+  signature: z.string(),
+})
 export const rpgSchema = z.object({
   createdAt: stamp,
   lastSeenAt: stamp,
@@ -38,9 +59,12 @@ export const rpgSchema = z.object({
   graceDays: z.array(z.string()).default([]),
   weeklyRaid: weeklyRaidSchema.nullable().default(null),
   badges: z.array(z.string()).default([]),
+  momentum: momentumSchema.default({ startedAt: null, resetAt: null, shatteredAt: null }),
+  focusQuest: focusQuestSchema.default({ startedAt: null, completedAt: null, failedAt: null, damage: 0, soundscape: 'rain' }),
+  contracts: z.array(contractSchema).default([]),
 })
 export type Rpg = z.infer<typeof rpgSchema>
-export const initialRpg = (now = Date.now()): Rpg => ({ createdAt: now, lastSeenAt: now, ledger: {}, bosses: {}, loot: [], palette: 'bloom', companion: 'none', sound: false, gold: 0, buffs: [], skills: {}, graceDays: [], weeklyRaid: null, badges: [] })
+export const initialRpg = (now = Date.now()): Rpg => ({ createdAt: now, lastSeenAt: now, ledger: {}, bosses: {}, loot: [], palette: 'bloom', companion: 'none', sound: false, gold: 0, buffs: [], skills: {}, graceDays: [], weeklyRaid: null, badges: [], momentum: { startedAt: null, resetAt: null, shatteredAt: null }, focusQuest: { startedAt: null, completedAt: null, failedAt: null, damage: 0, soundscape: 'rain' }, contracts: [] })
 export const statNames: Record<Stat,string> = { strength: 'Strength', intelligence: 'Intelligence', spirit: 'Spirit' }
 export function inferStat(title: string): Stat {
   return /cod|study|learn|read|focus|deep work/i.test(title) ? 'intelligence' : /workout|exercis|walk|run|move|gym|strength|stretch/i.test(title) ? 'strength' : 'spirit'
