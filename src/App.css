@@ -1727,3 +1727,40 @@ html[data-theme='dark'] .storage-error button {
     display: none;
   }
 }
+
+.daybook { margin-top: 16px; }
+.daybook-container { padding: 24px; }
+.daybook-heading, .daybook-editor-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+.daybook-kicker { color: #8765a2; font-size: 9px; font-weight: 800; letter-spacing: 1.4px; }
+.daybook-heading h2, .daybook-editor-header h2 { margin-top: 7px; color: #51405e; font-size: 21px; letter-spacing: -.5px; }
+.daybook-heading p, .daybook-editor-description { margin-top: 7px; color: #887993; font-size: 11px; line-height: 1.6; }
+.daybook-search { display: flex; align-items: center; gap: 7px; min-width: 170px; padding: 0 10px; border: 1px solid #ded2e8; border-radius: 7px; color: #987fa2; background: #fff; }
+.daybook-search input { border: 0; padding: 10px 0; outline: 0; background: transparent; }
+.daybook-category { margin-top: 24px; }
+.daybook-category h3 { color: #765c87; font-size: 12px; }
+.daybook-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 10px; }
+.daybook-mode { display: flex; align-items: center; gap: 11px; text-align: left; padding: 13px; border: 1px solid #e5dced; border-radius: 9px; background: #fdfbfe; color: #765c87; }
+.daybook-mode:hover { border-color: #bca2d0; background: #f8f1fc; transform: translateY(-1px); }
+.daybook-mode-icon { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 auto; border-radius: 8px; background: #f0e8fa; color: #8765a2; font-size: 18px; }
+.daybook-mode-copy { display: grid; gap: 4px; min-width: 0; flex: 1; }
+.daybook-mode-copy strong { color: #594768; font-size: 11px; }
+.daybook-mode-copy small { color: #887993; font-size: 9px; line-height: 1.4; }
+.daybook-mode-copy em { display: inline-flex; align-items: center; gap: 4px; color: #a082ad; font-size: 8px; font-style: normal; }
+.daybook-empty, .daybook-editor-footer { color: #96879c; font-size: 11px; padding-top: 18px; }
+.daybook-back, .daybook-save { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ded2e8; border-radius: 7px; padding: 9px 11px; background: #fff; color: #765c87; font-size: 10px; }
+.daybook-save { background: #7653a8; border-color: #7653a8; color: #fff; }
+.daybook-editor-description { margin: 18px 0; }
+.guided-editor, .split-editor { display: grid; gap: 13px; }
+.guided-editor label, .split-editor label, .focus-editor, .freeform-editor { display: grid; gap: 7px; color: #765c87; font-size: 11px; }
+.guided-editor textarea, .split-editor textarea, .bujo-editor textarea { min-height: 90px; }
+.focus-editor { place-items: center; padding: 42px 20px; text-align: center; color: #887993; }
+.focus-editor span { font-size: 13px; }
+.focus-editor input { max-width: 650px; border: 0; border-bottom: 2px solid #c9b5d7; border-radius: 0; background: transparent; text-align: center; color: #51405e; font: 800 clamp(24px, 5vw, 46px) Manrope, sans-serif; }
+.bujo-toolbar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.bujo-toolbar button { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #ded2e8; border-radius: 6px; padding: 8px 10px; background: #fbf8fd; color: #765c87; font-size: 10px; }
+.split-editor { grid-template-columns: 1fr 1fr; }
+.daybook-editor-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; border-top: 1px solid #eee8f2; }
+.daybook-editor-footer span { display: inline-flex; align-items: center; gap: 5px; color: #568064; }
+html[data-theme='dark'] .daybook, html[data-theme='dark'] .daybook-mode, html[data-theme='dark'] .daybook-search, html[data-theme='dark'] .daybook-back { background: #211d2c; border-color: #3a3348; }
+html[data-theme='dark'] .daybook-heading h2, html[data-theme='dark'] .daybook-editor-header h2, html[data-theme='dark'] .daybook-mode-copy strong, html[data-theme='dark'] .focus-editor input { color: #eee9f6; }
+@media (max-width: 700px) { .daybook-container { padding: 17px; } .daybook-heading, .daybook-editor-header { flex-direction: column; } .daybook-search { width: 100%; } .daybook-grid, .split-editor { grid-template-columns: 1fr; } .daybook-save { align-self: stretch; justify-content: center; } }
