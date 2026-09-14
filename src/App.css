@@ -189,6 +189,22 @@ main {
   align-items: center;
   gap: 9px;
 }
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #81778e;
+  font-size: 11px;
+}
+.language-selector select {
+  width: auto;
+  padding: 8px 27px 8px 9px;
+  border: 1px solid #e6e0ee;
+  border-radius: 7px;
+  background: white;
+  color: #5f526f;
+  font-size: 11px;
+}
 .theme-toggle {
   background: transparent;
   border: 1px solid #e6e0ee;
@@ -1594,13 +1610,15 @@ html[data-theme='dark'] .avatar {
   color: #d2b8f1;
 }
 html[data-theme='dark'] .quiet-button,
-html[data-theme='dark'] .theme-toggle {
+html[data-theme='dark'] .theme-toggle,
+html[data-theme='dark'] .language-selector select {
   background: #211d2c;
   border-color: #463d57;
   color: #c0b4ce;
 }
 html[data-theme='dark'] .quiet-button:hover,
 html[data-theme='dark'] .theme-toggle:hover,
+html[data-theme='dark'] .language-selector select:hover,
 html[data-theme='dark'] .icon-button:hover {
   background: #342747;
   color: #e1cef7;
