@@ -161,9 +161,11 @@ function App() {
   }
   const jump = (target: string) => {
     setActive(target)
-    document
-      .getElementById(target)
-      ?.scrollIntoView({
+    const destination =
+      document
+      .getElementById(target) ??
+      document.getElementById(target === 'journal' ? 'chat-journal' : target)
+    destination?.scrollIntoView({
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
           ? 'instant'
           : 'smooth',
@@ -353,7 +355,7 @@ function App() {
                       animate={{ width: `${progress}%` }}
                     />
                   </div>
-                  <div className="habit-list">
+                  <div className="habit-list" id="habit-grid">
                     {data.habits.map((h) => (
                       <div className="habit-with-stat" key={h.id}>
                       <button

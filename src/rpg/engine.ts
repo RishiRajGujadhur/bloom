@@ -4,6 +4,11 @@ import type { Rpg, Stat } from './schema'
 
 const DAY = 86_400_000
 type Award = Rpg['ledger'][string]
+const weekStart = (day: string) => {
+  const date = new Date(`${day}T12:00:00`)
+  date.setDate(date.getDate() - date.getDay())
+  return dayKey(date)
+}
 export const habitKey = (id: string, day: string) => `habit:${id}:${day}`
 export const priorityKey = (id: string, day: string) => `priority:${id}:${day}`
 
@@ -54,7 +59,7 @@ export function bossHealth(data: AppData, day: string) {
 export function initializeGame(data: AppData, now = Date.now()): AppData {
   if (Object.keys(data.rpg.ledger).length || Object.keys(data.rpg.bosses).length) return data
   const rpg = { ...data.rpg, ledger: { ...data.rpg.ledger } }
-  const baseline = (key: string, day: string, kind: Award['kind'], sourceId: string) => { rpg.ledger[key] = { day, at: now, exp: 0, stat: null, points: 0, active: true, kind, sourceId } }
+  const baseline = (key: string, day: string, kind: Award['kind'], sourceId: string) => { rpg.ledger[key] = { day, at: now, exp: 0, stat: null, points: 0, gold: 0, active: true, kind, sourceId } }
   data.habits.forEach(h => h.dates.forEach(day => baseline(habitKey(h.id,day),day,'habit',h.id)))
   data.plans.filter(p => p.done).forEach(p => baseline(priorityKey(p.id,p.date),p.date,'priority',p.id))
   data.sessions.forEach(s => { const day = dayKey(new Date(s.metadata.date)); baseline(`journal:${day}`,day,'journal',s.metadata.id) })
@@ -65,7 +70,7 @@ export function initializeGame(data: AppData, now = Date.now()): AppData {
 export function syncGame(next: AppData, previous: AppData, clock = Date.now()): AppData {
   const now = Math.max(clock, next.rpg.lastSeenAt)
   const today = dayKey(new Date(now))
-  const rpg: Rpg = { ...next.rpg, lastSeenAt: now, ledger: { ...next.rpg.ledger }, bosses: { ...next.rpg.bosses }, loot: [...next.rpg.loot] }
+  const rpg: Rpg = { ...next.rpg, lastSeenAt: now, ledger: { ...next.rpg.ledger }, bosses: { ...next.rpg.bosses }, loot: [...next.rpg.loot], buffs: [...next.rpg.buffs], badges: [...next.rpg.badges] }
   let data = { ...next, rpg }
   // A committed boss is settled once when its local date closes, including offline gaps.
   for (const [day, boss] of Object.entries(rpg.bosses)) {
@@ -74,15 +79,16 @@ export function syncGame(next: AppData, previous: AppData, clock = Date.now()): 
     rpg.bosses[day] = { ...boss, settled: true, defeated: health.remaining === 0, penalty: health.criticalComplete ? 0 : 5 }
   }
   const fresh: { key: string; base: number }[] = []
-  const update = (key: string, active: boolean, wasActive: boolean, kind: Award['kind'], sourceId: string, stat: Stat | null, base: number, points = 0) => {
+  const update = (key: string, active: boolean, wasActive: boolean, kind: Award['kind'], sourceId: string, stat: Stat | null, base: number, points = 0, gold = 0) => {
     const found = rpg.ledger[key]
     if (found) { if (found.active !== active) rpg.ledger[key] = { ...found, active }; return }
     if (!active || wasActive) return
-    rpg.ledger[key] = { day: today, at: now, exp: base, stat, points, active: true, kind, sourceId }
+    rpg.ledger[key] = { day: today, at: now, exp: base, stat, points, gold, active: true, kind, sourceId }
+    rpg.gold += gold
     fresh.push({ key, base })
   }
-  for (const h of data.habits) update(habitKey(h.id,today), h.dates.includes(today), previous.habits.find(p => p.id === h.id)?.dates.includes(today) ?? false, 'habit', h.id, h.stat, 10, 5)
-  for (const p of data.plans.filter(p => p.date === today)) update(priorityKey(p.id,today), p.done, previous.plans.find(old => old.id === p.id)?.done ?? false, 'priority', p.id, null, 10)
+  for (const h of data.habits) update(habitKey(h.id,today), h.dates.includes(today), previous.habits.find(p => p.id === h.id)?.dates.includes(today) ?? false, 'habit', h.id, h.stat, 10, 5, 10)
+  for (const p of data.plans.filter(p => p.date === today)) update(priorityKey(p.id,today), p.done, previous.plans.find(old => old.id === p.id)?.done ?? false, 'priority', p.id, null, 10, 0, 10)
   const newJournal = data.sessions.find(s => s.flow.complete && !previous.sessions.some(old => old.metadata.id === s.metadata.id))
   if (newJournal) update(`journal:${today}`, true, false, 'journal', newJournal.metadata.id, 'spirit', 20, 5)
   const currentCombo = combo(rpg, now)
@@ -94,8 +100,16 @@ export function syncGame(next: AppData, previous: AppData, clock = Date.now()): 
     const key = `boss:${today}`
     const reward = rpg.ledger[key]
     if (reward) rpg.ledger[key] = { ...reward, active: won }
-    else if (won) rpg.ledger[key] = { day: today, at: now, exp: Math.round(50*currentCombo.multiplier), stat: null, points: 0, active: true, kind: 'boss', sourceId: today }
+    else if (won) rpg.ledger[key] = { day: today, at: now, exp: Math.round(50*currentCombo.multiplier), stat: null, points: 0, gold: 0, active: true, kind: 'boss', sourceId: today }
   }
+  const currentWeek = weekStart(today)
+  const raid = rpg.weeklyRaid?.weekStart === currentWeek
+    ? rpg.weeklyRaid
+    : { weekStart: currentWeek, maxHp: 500, hp: 500, defeated: false, lootClaimed: false, badgeUnlocked: false }
+  const damage = fresh.reduce((sum, { key }) => sum + (key.startsWith('priority:') ? 35 : key.startsWith('habit:') ? 20 : 0), 0)
+  const raidHp = Math.max(0, raid.hp - damage)
+  rpg.weeklyRaid = { ...raid, hp: raidHp, defeated: raidHp === 0, lootClaimed: raid.lootClaimed || raidHp === 0, badgeUnlocked: raid.badgeUnlocked || raidHp === 0 }
+  if (raidHp === 0 && !rpg.badges.includes('fog-breaker')) rpg.badges.push('fog-breaker')
   // Claim a milestone only on a real newly rewarded activity, not by waiting idle or undo/redo.
   if (fresh.length) for (const milestone of [7,30] as const) {
     if (currentCombo.elapsed >= milestone*DAY && !rpg.loot.some(l => l.milestone === milestone)) rpg.loot.push({ milestone, earnedAt: now, opened: false })
@@ -117,4 +131,50 @@ export function openLoot(data: AppData, milestone: 7 | 30): AppData {
 }
 export function unlocks(rpg: Rpg) {
   return { forest: rpg.loot.some(l => l.milestone === 7 && l.opened), amber: rpg.loot.some(l => l.milestone === 30 && l.opened) }
+}
+
+export function buyShopItem(data: AppData, item: 'streak-shield' | 'focus-elixir', now = Date.now()): AppData {
+  const cost = item === 'streak-shield' ? 120 : 80
+  if (data.rpg.gold < cost) return data
+  const expiresAt = item === 'focus-elixir' ? now + 4 * 60 * 60 * 1000 : null
+  return { ...data, rpg: { ...data.rpg, gold: data.rpg.gold - cost, buffs: [...data.rpg.buffs, { kind: item, expiresAt, quantity: 1 }] } }
+}
+
+export function toggleGraceDay(data: AppData, day: string): AppData {
+  const graceDays = data.rpg.graceDays.includes(day) ? data.rpg.graceDays.filter(value => value !== day) : [...data.rpg.graceDays, day]
+  return { ...data, rpg: { ...data.rpg, graceDays } }
+}
+
+export function unlockSkill(data: AppData, skillId: string, exp: number, stats: Record<Stat, number>, definitions: Record<string, { prerequisites: string[]; attribute: Stat | null; threshold: number; expCost: number }>): AppData {
+  const definition = definitions[skillId]
+  if (!definition || exp < definition.expCost || (definition.attribute && stats[definition.attribute] < definition.threshold) || definition.prerequisites.some(id => data.rpg.skills[id]?.state !== 'unlocked')) return data
+  return { ...data, rpg: { ...data.rpg, skills: { ...data.rpg.skills, [skillId]: { ...definition, state: 'unlocked' } } } }
+}
+
+export function raidAttack(data: AppData, damage: number): AppData {
+  const raid = data.rpg.weeklyRaid
+  if (!raid || raid.defeated) return data
+  const hp = Math.max(0, raid.hp - Math.max(0, damage))
+  return { ...data, rpg: { ...data.rpg, weeklyRaid: { ...raid, hp, defeated: hp === 0, lootClaimed: hp === 0 || raid.lootClaimed, badgeUnlocked: hp === 0 || raid.badgeUnlocked }, badges: hp === 0 && !data.rpg.badges.includes('fog-breaker') ? [...data.rpg.badges, 'fog-breaker'] : data.rpg.badges } }
+}
+
+/** Applies one point of decay per inactive day while honoring explicitly planned grace dates. */
+export function statsAfterDecay(rpg: Rpg, clock = Date.now()) {
+  const stats: Record<Stat, number> = { strength: 0, intelligence: 0, spirit: 0 }
+  const activeDays = new Set(Object.values(rpg.ledger).filter(event => event.active && event.points > 0).map(event => event.day))
+  for (const reward of Object.values(rpg.ledger)) if (reward.active && reward.stat) stats[reward.stat] += reward.points
+  const latest = [...activeDays].sort().at(-1)
+  if (!latest) return stats
+  const cursor = new Date(`${latest}T12:00:00`)
+  const today = new Date(clock)
+  while (cursor < today) {
+    cursor.setDate(cursor.getDate() + 1)
+    const day = dayKey(cursor)
+    if (!activeDays.has(day) && !rpg.graceDays.includes(day)) {
+      stats.strength = Math.max(0, stats.strength - 1)
+      stats.intelligence = Math.max(0, stats.intelligence - 1)
+      stats.spirit = Math.max(0, stats.spirit - 1)
+    }
+  }
+  return stats
 }

@@ -40,6 +40,7 @@ html[data-theme='dark'] .boss-won .boss-art{background:#2e4833}
 .showcase-heading p{font-size:11px;color:#887993;margin-top:7px}
 .gamify-kicker{display:flex;align-items:center;gap:6px;color:#8765a2;font-size:9px;font-weight:800;letter-spacing:1.4px}
 .orientation-button{display:flex;align-items:center;gap:7px;border:0;border-radius:7px;background:#7653a8;color:white;padding:11px 14px;font-size:11px;box-shadow:0 7px 14px #7653a833}
+.orientation-fab{position:fixed;right:24px;bottom:24px;z-index:75;border-radius:999px;padding:13px 16px}
 .orientation-button:hover{transform:translateY(-1px);box-shadow:0 9px 18px #7653a844}
 .resource-strip{display:grid;grid-template-columns:1fr 1fr auto;gap:20px;align-items:end;margin:22px 0 19px;position:relative}
 .liquid-meter{color:#9c64b4}.liquid-hp{color:#b65d72}.liquid-mana{color:#4c91ae}

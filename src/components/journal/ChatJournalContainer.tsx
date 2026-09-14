@@ -80,7 +80,7 @@ export function ChatJournalContainer({
     setSummary(true)
   }
   return (
-    <section className="card journal" id="journal">
+    <section className="card journal" id="chat-journal">
       <div className="card-heading">
         <div className="section-title">
           <span className="icon-tile purple">
