@@ -120,6 +120,12 @@ function App() {
   })
   const themeMounted = useRef(false)
   useEffect(() => {
+    document.documentElement.lang = i18n.resolvedLanguage ?? 'en'
+    document.title = t('ui.documentTitle')
+    const description = document.querySelector('meta[name="description"]')
+    if (description) description.setAttribute('content', t('ui.metaDescription'))
+  }, [t])
+  useEffect(() => {
     const timer = setInterval(() => setToday(dayKey()), 30000)
     const refresh = () => setToday(dayKey())
     window.addEventListener('focus', refresh)
@@ -147,7 +153,7 @@ function App() {
     const key = dayKey(date)
     return {
       key,
-      label: date.toLocaleDateString(undefined, { weekday: 'narrow' }),
+      label: date.toLocaleDateString(i18n.resolvedLanguage ?? 'en', { weekday: 'narrow' }),
       count: data.habits.filter((h) => h.dates.includes(key)).length,
     }
   })
@@ -228,10 +234,10 @@ function App() {
                   ]
                 : []),
               ...(settings.features.daybookModes
-                ? [{ key: 'daybook', title: 'Daybook modes', Icon: Pencil }]
+                ? [{ key: 'daybook', title: t('ui.daybookNav'), Icon: Pencil }]
                 : []),
               { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
-              { key: 'settings', title: 'Settings', Icon: Settings },
+              { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
             ].map(({ key, title, Icon }) => (
               <button
                 key={key}
@@ -298,7 +304,7 @@ function App() {
               <>
                 <DashboardWelcome
                   date={new Date(`${today}T12:00:00`).toLocaleDateString(
-                    undefined,
+                    i18n.resolvedLanguage ?? 'en',
                     {
                       weekday: 'long',
                       month: 'long',
@@ -377,7 +383,7 @@ function App() {
                             </span>
                             <div>
                               <h2>{t('dashboard.quests')}</h2>
-                              <p>Show up for yourself, in small ways.</p>
+                              <p>{t('ui.habitsSubtitle')}</p>
                             </div>
                           </div>
                           <button
@@ -412,7 +418,7 @@ function App() {
                                 <span>
                                   <strong>{h.title}</strong>
                                   <small>
-                                    {h.detail || 'A small promise to yourself'}
+                                    {h.detail || t('ui.habitDetailDefault')}
                                   </small>
                                 </span>
                                 <span className="habit-spark">
@@ -422,7 +428,7 @@ function App() {
                               <label className="habit-stat-select">
                                 +5
                                 <select
-                                  aria-label={`Stat for ${h.title}`}
+                                  aria-label={t('ui.statFor', { title: h.title })}
                                   value={h.stat}
                                   onChange={(e) => {
                                     const stat = e.target.value as Stat
@@ -555,7 +561,7 @@ function App() {
                     <section className="affirmation">
                       <div className="card-heading">
                         <span className="eyebrow">
-                          <Quote size={15} /> WORDS TO GROW WITH
+                          <Quote size={15} /> {t('ui.wordsToGrowWith')}
                         </span>
                         <button
                           className="icon-button"
@@ -703,7 +709,7 @@ function App() {
                 onClick={() => setViewSession(s)}
               >
                 <strong>
-                  {new Date(s.metadata.date).toLocaleDateString(undefined, {
+                  {new Date(s.metadata.date).toLocaleDateString(i18n.resolvedLanguage ?? 'en', {
                     dateStyle: 'medium',
                   })}
                 </strong>

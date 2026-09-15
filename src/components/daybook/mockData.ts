@@ -1,28 +1,69 @@
-import type { JournalMode } from './types'
+import type { JournalMode, JournalCategory } from './types'
+import i18n from '../../i18n'
 
-const mode = (id: string, title: string, category: JournalMode['category'], description: string, icon: string, editorType: JournalMode['editorType'], prompts?: string[]): JournalMode => ({
-  id, title, category, description, icon, editorType, prompts, metadata: { time: editorType === 'focus' ? '5 min' : editorType === 'guided' ? '10 min' : '15 min', bestFor: category === 'Daily Planning & Productivity' ? 'Starting with intention' : 'Making sense of your inner world' },
-})
+type Translate = (key: string, options?: Record<string, unknown>) => unknown
 
-export const journalModes: JournalMode[] = [
-  mode('morning-intentionality', 'Morning Intentionality (The One Thing)', 'Daily Planning & Productivity', 'Choose the one thing that would make today feel meaningful.', '☀', 'focus'),
-  mode('bullet-journal', 'Bullet Journal (BuJo) Rapid Logging', 'Daily Planning & Productivity', 'Rapid-log tasks, events, notes, and completions without breaking your rhythm.', '•', 'bujo'),
-  mode('weekly-review', 'Weekly Review & Brain Dump', 'Daily Planning & Productivity', 'Clear the mental tabs and decide what deserves your attention next.', '↗', 'split-pane'),
-  mode('done-list', 'The Done List (Reverse To-Do list)', 'Daily Planning & Productivity', 'Notice what you finished, carried, and quietly made progress on.', '✓', 'freeform'),
-  mode('energy-audit', 'End of Day Energy Audit', 'Daily Planning & Productivity', 'Trace what restored your energy and what asked too much of it.', '◒', 'guided', ['What gave you energy today?', 'What drained or scattered you?', 'What will you protect tomorrow?']),
-  mode('nightly-reflection', 'Nightly Reflection', 'Mental Health & Reflection', 'Close the day with a softer, more honest look back.', '☾', 'guided', ['What moment stays with you?', 'What did you learn about yourself?', 'What can you release before sleep?']),
-  mode('mental-health-check-in', 'Mental Health Check-in', 'Mental Health & Reflection', 'Name your current state without needing to fix it immediately.', '♡', 'guided', ['What are you feeling?', 'Where do you feel it in your body?', 'What kind of support would help?']),
-  mode('gratitude-log', 'Gratitude Log', 'Mental Health & Reflection', 'Collect three specific things that made today a little brighter.', '✦', 'guided', ['Something small I noticed', 'Someone or something I appreciate', 'A way I showed up for myself']),
-  mode('unsent-letter', 'Unsent Letter', 'Mental Health & Reflection', 'Give the words somewhere private to land.', '✉', 'freeform'),
-  mode('shadow-work', 'Shadow Work Prompts', 'Mental Health & Reflection', 'Meet the patterns you usually edit out with curiosity instead of judgment.', '◐', 'guided', ['What reaction surprised you recently?', 'What might this part of you be protecting?', 'What would compassion sound like here?']),
-  mode('future-self-vision', 'Future Self (1-Year Vision)', 'Vision & Future Self', 'Describe a year that feels aligned, vivid, and recognizably yours.', '◎', 'split-pane'),
-  mode('future-self-letter', 'Future Self (Letter from the Future)', 'Vision & Future Self', 'Write from the perspective of a future you who kept going.', '⌁', 'freeform'),
-  mode('fear-setting', 'Fear Setting', 'Vision & Future Self', 'Make fear concrete, then give yourself a path through it.', '△', 'split-pane'),
-  mode('stoic-visualization', 'Stoic Negative Visualization', 'Vision & Future Self', 'Imagine absence briefly so presence becomes easier to appreciate.', '◇', 'guided', ['What are you taking for granted?', 'What would you miss?', 'How can you meet this moment fully?']),
-  mode('dream-journal', 'Dream Journal', 'Vision & Future Self', 'Capture the texture of a dream before the details dissolve.', '☁', 'freeform'),
-  mode('rpg-quest-log', 'RPG Quest Log (Epic framing for daily tasks)', 'Gamified & Habit Analysis', 'Frame today’s tasks as quests with a clear next action and reward.', '⚔', 'guided', ['What is today’s main quest?', 'What is the smallest next attack?', 'What loot will completion unlock?']),
-  mode('peak-experience', 'Peak Experience Log (Logging a major win/loot drop)', 'Gamified & Habit Analysis', 'Record a major win while the glow is still present.', '★', 'guided', ['What happened?', 'What strengths did you use?', 'How will you remember this win?']),
-  mode('habit-autopsy', 'Habit Autopsy (Why did a habit fail?)', 'Gamified & Habit Analysis', 'Study a missed habit without turning the evidence into shame.', '⌁', 'split-pane'),
-  mode('five-minute-morning', '5-Minute Morning Journal', 'Gamified & Habit Analysis', 'A quick check-in for momentum before the day gets loud.', '5', 'guided', ['How do I want to feel?', 'What is one doable move?', 'What would make today a win?']),
-  mode('decision-matrix', 'Decision Matrix Journal', 'Gamified & Habit Analysis', 'Lay out the trade-offs so your next choice can feel grounded.', '⊞', 'split-pane'),
+type ModeSeed = {
+  id: string
+  category: JournalCategory
+  icon: string
+  editorType: JournalMode['editorType']
+}
+
+const seeds: ModeSeed[] = [
+  { id: 'morning-intentionality', category: 'planning', icon: '☀', editorType: 'focus' },
+  { id: 'bullet-journal', category: 'planning', icon: '•', editorType: 'bujo' },
+  { id: 'weekly-review', category: 'planning', icon: '↗', editorType: 'split-pane' },
+  { id: 'done-list', category: 'planning', icon: '✓', editorType: 'freeform' },
+  { id: 'energy-audit', category: 'planning', icon: '◒', editorType: 'guided' },
+  { id: 'nightly-reflection', category: 'reflection', icon: '☾', editorType: 'guided' },
+  { id: 'mental-health-check-in', category: 'reflection', icon: '♡', editorType: 'guided' },
+  { id: 'gratitude-log', category: 'reflection', icon: '✦', editorType: 'guided' },
+  { id: 'unsent-letter', category: 'reflection', icon: '✉', editorType: 'freeform' },
+  { id: 'shadow-work', category: 'reflection', icon: '◐', editorType: 'guided' },
+  { id: 'future-self-vision', category: 'vision', icon: '◎', editorType: 'split-pane' },
+  { id: 'future-self-letter', category: 'vision', icon: '⌁', editorType: 'freeform' },
+  { id: 'fear-setting', category: 'vision', icon: '△', editorType: 'split-pane' },
+  { id: 'stoic-visualization', category: 'vision', icon: '◇', editorType: 'guided' },
+  { id: 'dream-journal', category: 'vision', icon: '☁', editorType: 'freeform' },
+  { id: 'rpg-quest-log', category: 'gamified', icon: '⚔', editorType: 'guided' },
+  { id: 'peak-experience', category: 'gamified', icon: '★', editorType: 'guided' },
+  { id: 'habit-autopsy', category: 'gamified', icon: '⌁', editorType: 'split-pane' },
+  { id: 'five-minute-morning', category: 'gamified', icon: '5', editorType: 'guided' },
+  { id: 'decision-matrix', category: 'gamified', icon: '⊞', editorType: 'split-pane' },
 ]
+
+const timeKey = (editorType: JournalMode['editorType']) =>
+  editorType === 'focus' ? 'five' : editorType === 'guided' ? 'ten' : 'fifteen'
+
+const build = (tt: Translate): JournalMode[] =>
+  seeds.map((seed) => {
+    const prompts = tt(`daybook.mode.${seed.id}.prompts`, { returnObjects: true })
+    return {
+      id: seed.id,
+      title: String(tt(`daybook.mode.${seed.id}.title`)),
+      category: seed.category,
+      description: String(tt(`daybook.mode.${seed.id}.description`)),
+      icon: seed.icon,
+      editorType: seed.editorType,
+      prompts: Array.isArray(prompts) ? (prompts as string[]) : undefined,
+      metadata: {
+        time: String(tt(`daybook.time.${timeKey(seed.editorType)}`)),
+        bestFor: String(
+          tt(
+            seed.category === 'planning'
+              ? 'daybook.bestFor.planning'
+              : 'daybook.bestFor.reflection',
+          ),
+        ),
+      },
+    }
+  })
+
+/** English baseline (stable for tests and SSR); use localizedJournalModes for the active language. */
+export const journalModes: JournalMode[] = build(
+  i18n.getFixedT('en') as unknown as Translate,
+)
+
+export const localizedJournalModes = (language: string): JournalMode[] =>
+  build(i18n.getFixedT(language) as unknown as Translate)

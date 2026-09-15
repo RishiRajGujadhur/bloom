@@ -1,9 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import i18n from '../../i18n'
 import type { Session } from '../../model'
 import { MessageBubble } from './MessageBubble'
 import { TypingIndicator } from './TypingIndicator'
 export function MessageFeed({ session }: { session: Session }) {
+  const { t } = useTranslation(undefined, { i18n })
   const ref = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
   useEffect(() => {
@@ -17,7 +20,7 @@ export function MessageFeed({ session }: { session: Session }) {
       ref={ref}
       className="message-feed"
       role="log"
-      aria-label="Journal conversation"
+      aria-label={t('journal.journalConversation')}
       aria-live="polite"
     >
       <AnimatePresence initial={false}>

@@ -2,29 +2,29 @@ import type { Session } from '../model'
 
 export type LoreCard = {
   at: number
-  title: string
-  body: string
-  unlock: string
+  titleKey: string
+  bodyKey: string
+  unlockKey: string
 }
 
 export const loreCards: LoreCard[] = [
   {
     at: 0,
-    title: 'Attention is trainable',
-    body: 'Repeatedly returning to one cue strengthens the brain’s ability to notice and redirect attention.',
-    unlock: 'Always available',
+    titleKey: 'rpg.lore.attentionTitle',
+    bodyKey: 'rpg.lore.attentionBody',
+    unlockKey: 'rpg.lore.alwaysAvailable',
   },
   {
     at: 3,
-    title: 'Momentum lowers friction',
-    body: 'A visible starting point makes the next action easier to choose, especially on low-energy days.',
-    unlock: '3-day momentum',
+    titleKey: 'rpg.lore.momentumTitle',
+    bodyKey: 'rpg.lore.momentumBody',
+    unlockKey: 'rpg.lore.momentumUnlock',
   },
   {
     at: 7,
-    title: 'Recovery is part of learning',
-    body: 'Rest and reset protect consistency by making the practice resilient instead of brittle.',
-    unlock: '7-day momentum',
+    titleKey: 'rpg.lore.recoveryTitle',
+    bodyKey: 'rpg.lore.recoveryBody',
+    unlockKey: 'rpg.lore.recoveryUnlock',
   },
 ]
 
@@ -39,13 +39,13 @@ export type ArchiveEntry = {
   mood: number | null
 }
 
-export function journalArchive(sessions: Session[]): ArchiveEntry[] {
+export function journalArchive(sessions: Session[], fallbackTitle = 'A quiet reflection'): ArchiveEntry[] {
   return sessions
     .filter(session => session.flow.complete)
     .map(session => ({
       id: session.metadata.id,
       date: session.metadata.date,
-      title: session.messages.find(message => message.sender === 'user')?.text ?? 'A quiet reflection',
+      title: session.messages.find(message => message.sender === 'user')?.text ?? fallbackTitle,
       tags: session.metadata.tags.length ? session.metadata.tags : ['reflection'],
       mood: session.metadata.mood,
     }))

@@ -3,6 +3,8 @@ import type { Dispatch, SetStateAction } from 'react'
 import { driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n'
 import {
   Compass,
   Crown,
@@ -61,72 +63,16 @@ export interface ShopItem {
   icon: 'shield' | 'sparkles'
 }
 
-const skillNodes: SkillNode[] = [
-  {
-    id: 'mindfulness',
-    title: 'Mindfulness',
-    subtitle: 'Root skill · 0 EXP',
-    state: 'unlocked',
-    prerequisites: [],
-    attribute: null,
-    threshold: 0,
-    expCost: 0,
-    x: 8,
-    y: 48,
-  },
-  {
-    id: 'breathwork',
-    title: '5-Min Breathwork',
-    subtitle: 'Spirit 10 · 40 EXP',
-    state: 'available',
-    prerequisites: ['mindfulness'],
-    attribute: 'spirit',
-    threshold: 10,
-    expCost: 40,
-    x: 31,
-    y: 25,
-  },
-  {
-    id: 'meditation',
-    title: '20-Min Meditation',
-    subtitle: 'Spirit 25 · 100 EXP',
-    state: 'locked',
-    prerequisites: ['breathwork'],
-    attribute: 'spirit',
-    threshold: 25,
-    expCost: 100,
-    x: 53,
-    y: 67,
-  },
-  {
-    id: 'zen',
-    title: 'Zen State',
-    subtitle: 'All stats 50 · 250 EXP',
-    state: 'locked',
-    prerequisites: ['meditation'],
-    attribute: 'spirit',
-    threshold: 50,
-    expCost: 250,
-    x: 80,
-    y: 38,
-  },
+const skillSeeds: ReadonlyArray<Omit<SkillNode, 'title' | 'subtitle'>> = [
+  { id: 'mindfulness', state: 'unlocked', prerequisites: [], attribute: null, threshold: 0, expCost: 0, x: 8, y: 48 },
+  { id: 'breathwork', state: 'available', prerequisites: ['mindfulness'], attribute: 'spirit', threshold: 10, expCost: 40, x: 31, y: 25 },
+  { id: 'meditation', state: 'locked', prerequisites: ['breathwork'], attribute: 'spirit', threshold: 25, expCost: 100, x: 53, y: 67 },
+  { id: 'zen', state: 'locked', prerequisites: ['meditation'], attribute: 'spirit', threshold: 50, expCost: 250, x: 80, y: 38 },
 ]
 
-const shopItems: ShopItem[] = [
-  {
-    id: 'shield',
-    name: 'Streak Shield',
-    description: 'Protect one missed day.',
-    cost: 120,
-    icon: 'shield',
-  },
-  {
-    id: 'elixir',
-    name: 'Focus Elixir',
-    description: 'Double your next reflection EXP.',
-    cost: 80,
-    icon: 'sparkles',
-  },
+const shopSeeds: ReadonlyArray<{ id: 'shield' | 'elixir'; cost: number; icon: ShopItem['icon'] }> = [
+  { id: 'shield', cost: 120, icon: 'shield' },
+  { id: 'elixir', cost: 80, icon: 'sparkles' },
 ]
 
 function clamp(value: number, max: number) {
@@ -139,12 +85,13 @@ export function LiquidProgressBar({
   max,
   tone,
 }: LiquidProgressBarProps) {
+  const { t } = useTranslation(undefined, { i18n })
   const percent = (clamp(value, max) / max) * 100
   const gradientId = `liquid-${tone}`
   return (
     <div
       className={`liquid-meter liquid-${tone}`}
-      aria-label={`${label}: ${value} of ${max}`}
+      aria-label={t('rpg.meterAria', { label, value, max })}
     >
       <div className="liquid-meter-heading">
         <span>{label}</span>
@@ -189,14 +136,15 @@ function SkillTree({
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   const stats = { ...totals(data.rpg), stats: statsAfterDecay(data.rpg) }
   const definitions = Object.fromEntries(
-    skillNodes.map(({ id, prerequisites, attribute, threshold, expCost }) => [
+    skillSeeds.map(({ id, prerequisites, attribute, threshold, expCost }) => [
       id,
       { prerequisites, attribute, threshold, expCost },
     ]),
   )
-  const nodes = skillNodes.map((node) => {
+  const nodes = skillSeeds.map((node) => {
     const saved = data.rpg.skills[node.id]
     const prerequisitesMet = node.prerequisites.every(
       (id) => id === 'mindfulness' || data.rpg.skills[id]?.state === 'unlocked',
@@ -205,6 +153,8 @@ function SkillTree({
       !node.attribute || stats.stats[node.attribute] >= node.threshold
     return {
       ...node,
+      title: t(`rpg.skills.${node.id}.title`),
+      subtitle: t(`rpg.skills.${node.id}.subtitle`),
       state:
         saved?.state ??
         ((prerequisitesMet && attributeMet && stats.exp >= node.expCost
@@ -212,6 +162,7 @@ function SkillTree({
           : node.state) as SkillNodeState),
     }
   })
+  const unlocked = nodes.filter((node) => node.state === 'unlocked').length
   return (
     <section
       className="gamify-panel skill-tree-panel"
@@ -221,19 +172,18 @@ function SkillTree({
       <div className="gamify-panel-heading">
         <div>
           <span className="gamify-kicker">
-            <Map size={13} /> PATH OF PRACTICE
+            <Map size={13} /> {t('rpg.pathOfPractice')}
           </span>
-          <h3 id="skill-tree-title">Your skill tree</h3>
+          <h3 id="skill-tree-title">{t('rpg.skillTreeTitle')}</h3>
         </div>
         <span className="tree-progress">
-          {nodes.filter((node) => node.state === 'unlocked').length} /{' '}
-          {nodes.length} unlocked
+          {t('rpg.skillTreeUnlocked', { unlocked, total: nodes.length })}
         </span>
       </div>
       <div
         className="skill-tree"
         role="list"
-        aria-label="Mindfulness skill tree"
+        aria-label={t('rpg.skillTreeAria')}
       >
         <svg
           className="skill-connectors"
@@ -274,15 +224,13 @@ function SkillTree({
             <strong>{node.title}</strong>
             <small>
               {node.state === 'available'
-                ? `Unlock · ${node.expCost} EXP`
+                ? t('rpg.unlockCost', { cost: node.expCost })
                 : node.subtitle}
             </small>
           </button>
         ))}
       </div>
-      <p className="gamify-note">
-        Complete the available practice to illuminate the next branch.
-      </p>
+      <p className="gamify-note">{t('rpg.skillTreeNote')}</p>
     </section>
   )
 }
@@ -294,19 +242,29 @@ function ShopPanel({
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
 }) {
+  const { t } = useTranslation(undefined, { i18n })
+  const items: ShopItem[] = shopSeeds.map((seed) => ({
+    id: seed.id,
+    name: t(`rpg.shopItem.${seed.id}.name`),
+    description: t(`rpg.shopItem.${seed.id}.description`),
+    cost: seed.cost,
+    icon: seed.icon,
+  }))
   return (
     <section className="gamify-panel shop-panel" aria-labelledby="shop-title">
       <div className="gamify-panel-heading">
         <div>
           <span className="gamify-kicker">
-            <ShoppingBag size={13} /> THE WAYFARER&apos;S SHOP
+            <ShoppingBag size={13} /> {t('rpg.shopKicker')}
           </span>
-          <h3 id="shop-title">Useful magic</h3>
+          <h3 id="shop-title">{t('rpg.shopTitle')}</h3>
         </div>
-        <strong className="gold-balance">✦ {data.rpg.gold} gold</strong>
+        <strong className="gold-balance">
+          {t('rpg.gold', { gold: data.rpg.gold })}
+        </strong>
       </div>
       <div className="shop-list">
-        {shopItems.map((item) => {
+        {items.map((item) => {
           const bought = data.rpg.buffs.some((buff) => buff.kind === item.id)
           return (
             <div className="shop-item" key={item.id}>
@@ -332,7 +290,7 @@ function ShopPanel({
                   )
                 }
               >
-                {bought ? 'Owned' : `${item.cost} ✦`}
+                {bought ? t('rpg.owned') : `${item.cost} ✦`}
               </button>
             </div>
           )
@@ -349,6 +307,7 @@ function RaidPanel({
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   const [attacked, setAttacked] = useState(false)
   const hp = data.rpg.weeklyRaid?.hp ?? 500
   const maxHp = data.rpg.weeklyRaid?.maxHp ?? 500
@@ -359,14 +318,14 @@ function RaidPanel({
           <Crown size={22} />
         </div>
         <div>
-          <span className="gamify-kicker">WEEKLY RAID</span>
-          <h3 id="raid-title">The Fog of Almost</h3>
-          <p>Ends in 3 days · party of one</p>
+          <span className="gamify-kicker">{t('rpg.raidKicker')}</span>
+          <h3 id="raid-title">{t('rpg.raidName')}</h3>
+          <p>{t('rpg.raidMeta')}</p>
         </div>
-        <span className="raid-level">LV. 07</span>
+        <span className="raid-level">{t('rpg.raidLevel', { level: '07' })}</span>
       </div>
       <LiquidProgressBar
-        label="Boss vitality"
+        label={t('rpg.bossVitality')}
         value={hp}
         max={maxHp}
         tone="hp"
@@ -379,7 +338,7 @@ function RaidPanel({
             setAttacked(true)
           }}
         >
-          <Sword size={14} /> Complete a habit <span>-12 HP</span>
+          <Sword size={14} /> {t('rpg.raidHabit')} <span>-12 HP</span>
         </button>
         <button
           disabled={data.rpg.weeklyRaid?.defeated}
@@ -388,12 +347,12 @@ function RaidPanel({
             setAttacked(true)
           }}
         >
-          <Zap size={14} /> Reflect for 5 minutes <span>-20 HP</span>
+          <Zap size={14} /> {t('rpg.raidReflect')} <span>-20 HP</span>
         </button>
       </div>
       {attacked && (
         <p className="attack-feedback" role="status">
-          <Flame size={13} /> Direct hit. Keep the chain gentle.
+          <Flame size={13} /> {t('rpg.raidHit')}
         </p>
       )}
     </section>
@@ -407,22 +366,33 @@ function GracePanel({
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
 }) {
-  const graceDays = useMemo(() => ['M', 'T', 'W', 'T', 'F', 'S', 'S'], [])
+  const { t } = useTranslation(undefined, { i18n })
+  const graceDays = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, index) =>
+        new Date(2024, 0, 1 + index).toLocaleDateString(i18n.language, {
+          weekday: 'narrow',
+        }),
+      ),
+    [],
+  )
   return (
     <section className="gamify-panel grace-panel" aria-labelledby="grace-title">
       <div className="gamify-panel-heading">
         <div>
           <span className="gamify-kicker">
-            <HeartIcon /> RECOVERY LEDGER
+            <HeartIcon /> {t('rpg.recoveryLedger')}
           </span>
-          <h3 id="grace-title">Grace Days</h3>
+          <h3 id="grace-title">{t('rpg.graceDays')}</h3>
         </div>
         <span className="grace-count">
-          {Math.max(0, 2 - data.rpg.graceDays.length)} remaining
+          {t('rpg.graceRemaining', {
+            count: Math.max(0, 2 - data.rpg.graceDays.length),
+          })}
         </span>
       </div>
-      <p>Pause decay without losing your place. Rest is part of the run.</p>
-      <div className="grace-week" aria-label="Weekly grace day overview">
+      <p>{t('rpg.graceNote')}</p>
+      <div className="grace-week" aria-label={t('rpg.graceWeekAria')}>
         {graceDays.map((day, index) => {
           const key = `grace-${index}`
           const active = data.rpg.graceDays.includes(key)
@@ -439,13 +409,13 @@ function GracePanel({
       </div>
       <div className="grace-stats">
         <span>
-          <strong>14</strong> active days
+          <strong>14</strong> {t('rpg.graceActiveDays')}
         </span>
         <span>
-          <strong>02</strong> grace days
+          <strong>02</strong> {t('rpg.graceDaysStat')}
         </span>
         <span>
-          <strong>×1.8</strong> current combo
+          <strong>×1.8</strong> {t('rpg.graceCombo')}
         </span>
       </div>
     </section>
@@ -467,6 +437,7 @@ export function GamificationShowcase({
   showWeeklyRaid: boolean
   showWalkthroughTour: boolean
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   const [showCelebration, setShowCelebration] = useState(false)
   const morphRef = useRef<SVGPathElement>(null)
   const startTour = () =>
@@ -476,33 +447,32 @@ export function GamificationShowcase({
         {
           element: '#skill-tree',
           popover: {
-            title: "The Hero's Orientation",
-            description:
-              'Your skill tree turns tiny rituals into a visible path.',
+            title: t('rpg.tour.skillTreeTitle'),
+            description: t('rpg.tour.skillTreeBody'),
             side: 'bottom',
           },
         },
         {
           element: '#chat-journal',
           popover: {
-            title: 'Reflect',
-            description: 'Your journal becomes spirit EXP.',
+            title: t('rpg.tour.journalTitle'),
+            description: t('rpg.tour.journalBody'),
             side: 'top',
           },
         },
         {
           element: '#habit-grid',
           popover: {
-            title: 'Daily quests',
-            description: 'Non-negotiables earn gold and raid damage.',
+            title: t('rpg.tour.habitsTitle'),
+            description: t('rpg.tour.habitsBody'),
             side: 'top',
           },
         },
         {
           element: '#avatar-card',
           popover: {
-            title: 'Your avatar',
-            description: 'Watch stats, buffs, and grace protect your run.',
+            title: t('rpg.tour.avatarTitle'),
+            description: t('rpg.tour.avatarBody'),
             side: 'bottom',
           },
         },
@@ -517,39 +487,37 @@ export function GamificationShowcase({
   return (
     <section
       className="gamification-showcase"
-      aria-label="RPG progression tools"
+      aria-label={t('rpg.showcaseAria')}
     >
       <div className="showcase-heading">
         <div>
           <span className="gamify-kicker">
-            <Compass size={14} /> THE HERO&apos;S ORIENTATION
+            <Compass size={14} /> {t('rpg.orientationKicker')}
           </span>
-          <h2>Make the invisible progress visible.</h2>
-          <p>
-            Mock progression tools for the days you&apos;re building quietly.
-          </p>
+          <h2>{t('rpg.orientationTitle')}</h2>
+          <p>{t('rpg.orientationSubtitle')}</p>
         </div>
         {showWalkthroughTour && (
           <button
             className="orientation-button orientation-fab"
             onClick={startTour}
           >
-            <Compass size={16} /> Guide me
+            <Compass size={16} /> {t('rpg.guideMe')}
           </button>
         )}
       </div>
       <div className="resource-strip">
-        <LiquidProgressBar label="EXP" value={72} max={100} tone="exp" />
-        <LiquidProgressBar label="Mana" value={44} max={100} tone="mana" />
+        <LiquidProgressBar label={t('rpg.expLabel')} value={72} max={100} tone="exp" />
+        <LiquidProgressBar label={t('rpg.manaLabel')} value={44} max={100} tone="mana" />
         <button
           className="morph-button"
           onClick={morph}
-          aria-label="Toggle action icon"
+          aria-label={t('rpg.morphAria')}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path ref={morphRef} d="M4 5 L20 5 L12 21 Z" />
           </svg>
-          <span>Morph action</span>
+          <span>{t('rpg.morphAction')}</span>
         </button>
       </div>
       <div className="showcase-grid">
@@ -561,7 +529,7 @@ export function GamificationShowcase({
       {showCelebration && (
         <div className="tutorial-reward" role="status">
           <button
-            aria-label="Dismiss tutorial reward"
+            aria-label={t('rpg.dismissReward')}
             onClick={() => setShowCelebration(false)}
           >
             ×
@@ -575,8 +543,8 @@ export function GamificationShowcase({
             />
           </Suspense>
           <div>
-            <strong>Orientation complete</strong>
-            <span>+50 Tutorial EXP</span>
+            <strong>{t('rpg.orientationComplete')}</strong>
+            <span>{t('rpg.tutorialExp')}</span>
           </div>
         </div>
       )}
