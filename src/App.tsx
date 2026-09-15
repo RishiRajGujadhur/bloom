@@ -35,7 +35,7 @@ import './App.css'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
-import { SettingsPage } from './SettingsPage'
+import { SettingsPage, useAppSettings } from './SettingsPage'
 
 const THEME_STORAGE_KEY = 'mindfulness-dashboard-theme'
 type Theme = 'light' | 'dark'
@@ -106,6 +106,7 @@ function TextForm({
 function App() {
   const { t } = useTranslation(undefined, { i18n })
   const { data, setData, error, blocked, resumeSaving } = useCoach()
+  const [settings, setSettings] = useAppSettings()
   const [today, setToday] = useState(dayKey)
   const [modal, setModal] = useState<
     'habit' | 'plan' | 'affirmation' | 'history' | null
@@ -208,17 +209,27 @@ function App() {
                 title: t('navigation.dashboard'),
                 Icon: LayoutDashboard,
               },
-              {
-                key: 'habits',
-                title: t('navigation.habits'),
-                Icon: ListChecks,
-              },
-              {
-                key: 'journal',
-                title: t('navigation.journal'),
-                Icon: BookOpen,
-              },
-              { key: 'daybook', title: 'Daybook modes', Icon: Pencil },
+              ...(settings.features.habitTracker
+                ? [
+                    {
+                      key: 'habits',
+                      title: t('navigation.habits'),
+                      Icon: ListChecks,
+                    },
+                  ]
+                : []),
+              ...(settings.features.chatJournal
+                ? [
+                    {
+                      key: 'journal',
+                      title: t('navigation.journal'),
+                      Icon: BookOpen,
+                    },
+                  ]
+                : []),
+              ...(settings.features.daybookModes
+                ? [{ key: 'daybook', title: 'Daybook modes', Icon: Pencil }]
+                : []),
               { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
               { key: 'settings', title: 'Settings', Icon: Settings },
             ].map(({ key, title, Icon }) => (
@@ -254,7 +265,7 @@ function App() {
               <span className="tiny-dot" /> {t('welcome.eyebrow')}
             </span>
             <div className="topbar-actions">
-              <LanguageSelector />
+              {settings.features.languageSelector && <LanguageSelector />}
               <button
                 className="theme-toggle"
                 type="button"
@@ -282,7 +293,7 @@ function App() {
           </header>
           <div className="page-content">
             {active === 'settings' ? (
-              <SettingsPage />
+              <SettingsPage settings={settings} setSettings={setSettings} />
             ) : (
               <>
                 <DashboardWelcome
@@ -311,11 +322,15 @@ function App() {
                     )}
                   </div>
                 )}
-                <RpgDashboard
-                  data={data}
-                  setData={setData}
-                  onReflect={() => jump('journal')}
-                />
+                {settings.features.rpgSkillTree && (
+                  <RpgDashboard
+                    data={data}
+                    setData={setData}
+                    onReflect={() => jump('journal')}
+                    showWeeklyRaid={settings.features.weeklyRaidBoss}
+                    showWalkthroughTour={settings.features.walkthroughTour}
+                  />
+                )}
                 <div className="stats">
                   <div>
                     <span className="stat-icon lavender">
@@ -353,110 +368,112 @@ function App() {
                 </div>
                 <div className="dashboard-grid">
                   <div className="left-column">
-                    <section className="card" id="habits">
-                      <div className="card-heading">
-                        <div className="section-title">
-                          <span className="icon-tile purple">
-                            <ListChecks size={19} />
-                          </span>
-                          <div>
-                            <h2>{t('dashboard.quests')}</h2>
-                            <p>Show up for yourself, in small ways.</p>
+                    {settings.features.habitTracker && (
+                      <section className="card" id="habits">
+                        <div className="card-heading">
+                          <div className="section-title">
+                            <span className="icon-tile purple">
+                              <ListChecks size={19} />
+                            </span>
+                            <div>
+                              <h2>{t('dashboard.quests')}</h2>
+                              <p>Show up for yourself, in small ways.</p>
+                            </div>
                           </div>
+                          <button
+                            className="icon-button"
+                            aria-label={t('ui.addHabit')}
+                            onClick={() => setModal('habit')}
+                          >
+                            <Plus size={20} />
+                          </button>
                         </div>
-                        <button
-                          className="icon-button"
-                          aria-label={t('ui.addHabit')}
-                          onClick={() => setModal('habit')}
-                        >
-                          <Plus size={20} />
-                        </button>
-                      </div>
-                      <div className="progress-label">
-                        <span>{t('ui.todaysProgress')}</span>
-                        <strong>{progress}%</strong>
-                      </div>
-                      <div className="progress-track">
-                        <motion.div
-                          initial={false}
-                          animate={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <div className="habit-list" id="habit-grid">
-                        {data.habits.map((h) => (
-                          <div className="habit-with-stat" key={h.id}>
-                            <button
-                              className={`habit ${h.dates.includes(today) ? 'done' : ''}`}
-                              aria-pressed={h.dates.includes(today)}
-                              onClick={() =>
-                                setData((d) => toggleHabit(d, h.id, dayKey()))
-                              }
-                            >
-                              <Checkmark checked={h.dates.includes(today)} />
-                              <span>
-                                <strong>{h.title}</strong>
-                                <small>
-                                  {h.detail || 'A small promise to yourself'}
-                                </small>
-                              </span>
-                              <span className="habit-spark">
-                                {h.dates.includes(today) ? '✦' : '＋'}
-                              </span>
-                            </button>
-                            <label className="habit-stat-select">
-                              +5
-                              <select
-                                aria-label={`Stat for ${h.title}`}
-                                value={h.stat}
-                                onChange={(e) => {
-                                  const stat = e.target.value as Stat
-                                  setData((d) => ({
-                                    ...d,
-                                    habits: d.habits.map((item) =>
-                                      item.id === h.id
-                                        ? { ...item, stat }
-                                        : item,
-                                    ),
-                                  }))
-                                }}
+                        <div className="progress-label">
+                          <span>{t('ui.todaysProgress')}</span>
+                          <strong>{progress}%</strong>
+                        </div>
+                        <div className="progress-track">
+                          <motion.div
+                            initial={false}
+                            animate={{ width: `${progress}%` }}
+                          />
+                        </div>
+                        <div className="habit-list" id="habit-grid">
+                          {data.habits.map((h) => (
+                            <div className="habit-with-stat" key={h.id}>
+                              <button
+                                className={`habit ${h.dates.includes(today) ? 'done' : ''}`}
+                                aria-pressed={h.dates.includes(today)}
+                                onClick={() =>
+                                  setData((d) => toggleHabit(d, h.id, dayKey()))
+                                }
                               >
-                                {(Object.keys(statNames) as Stat[]).map(
-                                  (stat) => (
-                                    <option key={stat} value={stat}>
-                                      {statNames[stat]}
-                                    </option>
-                                  ),
-                                )}
-                              </select>
-                              <small>{t('ui.comboExp')}</small>
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        className="add-line"
-                        onClick={() => setModal('habit')}
-                      >
-                        <Plus size={16} /> {t('ui.addSmallHabit')}
-                      </button>
-                      <div className="week-strip">
-                        <span>{t('ui.lastSevenDays')}</span>
-                        <div>
-                          {lastWeek.map((d) => (
-                            <div
-                              key={d.key}
-                              title={`${d.key}: ${t('ui.habitsCompleted', { count: d.count })}`}
-                              className={d.key === today ? 'today' : ''}
-                            >
-                              <span>{d.label}</span>
-                              <i className={d.count ? 'has-progress' : ''}>
-                                {d.count ? <Check size={12} /> : '·'}
-                              </i>
+                                <Checkmark checked={h.dates.includes(today)} />
+                                <span>
+                                  <strong>{h.title}</strong>
+                                  <small>
+                                    {h.detail || 'A small promise to yourself'}
+                                  </small>
+                                </span>
+                                <span className="habit-spark">
+                                  {h.dates.includes(today) ? '✦' : '＋'}
+                                </span>
+                              </button>
+                              <label className="habit-stat-select">
+                                +5
+                                <select
+                                  aria-label={`Stat for ${h.title}`}
+                                  value={h.stat}
+                                  onChange={(e) => {
+                                    const stat = e.target.value as Stat
+                                    setData((d) => ({
+                                      ...d,
+                                      habits: d.habits.map((item) =>
+                                        item.id === h.id
+                                          ? { ...item, stat }
+                                          : item,
+                                      ),
+                                    }))
+                                  }}
+                                >
+                                  {(Object.keys(statNames) as Stat[]).map(
+                                    (stat) => (
+                                      <option key={stat} value={stat}>
+                                        {statNames[stat]}
+                                      </option>
+                                    ),
+                                  )}
+                                </select>
+                                <small>{t('ui.comboExp')}</small>
+                              </label>
                             </div>
                           ))}
                         </div>
-                      </div>
-                    </section>
+                        <button
+                          className="add-line"
+                          onClick={() => setModal('habit')}
+                        >
+                          <Plus size={16} /> {t('ui.addSmallHabit')}
+                        </button>
+                        <div className="week-strip">
+                          <span>{t('ui.lastSevenDays')}</span>
+                          <div>
+                            {lastWeek.map((d) => (
+                              <div
+                                key={d.key}
+                                title={`${d.key}: ${t('ui.habitsCompleted', { count: d.count })}`}
+                                className={d.key === today ? 'today' : ''}
+                              >
+                                <span>{d.label}</span>
+                                <i className={d.count ? 'has-progress' : ''}>
+                                  {d.count ? <Check size={12} /> : '·'}
+                                </i>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </section>
+                    )}
                     <section className="card" id="planning">
                       <div className="card-heading">
                         <div className="section-title">
@@ -531,8 +548,10 @@ function App() {
                     </section>
                   </div>
                   <div className="right-column">
-                    <ChatJournalContainer data={data} setData={setData} />
-                    <JournalContainer />
+                    {settings.features.chatJournal && (
+                      <ChatJournalContainer data={data} setData={setData} />
+                    )}
+                    {settings.features.daybookModes && <JournalContainer />}
                     <section className="affirmation">
                       <div className="card-heading">
                         <span className="eyebrow">

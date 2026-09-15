@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
@@ -87,7 +88,7 @@ function parseSettings(value: unknown): AppSettings | null {
     : null
 }
 
-function loadSettings(): AppSettings {
+export function loadSettings(): AppSettings {
   if (typeof window === 'undefined') return defaultSettings
 
   const raw = window.localStorage.getItem(SETTINGS_STORAGE_KEY)
@@ -100,22 +101,14 @@ function loadSettings(): AppSettings {
   }
 }
 
-export function SettingsPage() {
+export function useAppSettings(): [
+  AppSettings,
+  Dispatch<SetStateAction<AppSettings>>,
+] {
   const [settings, setSettings] = useState<AppSettings>(loadSettings)
-  const [importValue, setImportValue] = useState('')
-  const [importError, setImportError] = useState('')
-  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>(
-    'idle',
-  )
-
-  const persistSettings = (
-    nextSettings: AppSettings | ((current: AppSettings) => AppSettings),
-  ) => {
+  const persistSettings: Dispatch<SetStateAction<AppSettings>> = (update) => {
     setSettings((current) => {
-      const resolved =
-        typeof nextSettings === 'function'
-          ? nextSettings(current)
-          : nextSettings
+      const resolved = typeof update === 'function' ? update(current) : update
       window.localStorage.setItem(
         SETTINGS_STORAGE_KEY,
         JSON.stringify(resolved),
@@ -123,9 +116,23 @@ export function SettingsPage() {
       return resolved
     })
   }
+  return [settings, persistSettings]
+}
+
+interface SettingsPageProps {
+  settings: AppSettings
+  setSettings: Dispatch<SetStateAction<AppSettings>>
+}
+
+export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
+  const [importValue, setImportValue] = useState('')
+  const [importError, setImportError] = useState('')
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>(
+    'idle',
+  )
 
   const handleToggleFeature = (featureKey: keyof FeatureFlags) => {
-    persistSettings((current) => ({
+    setSettings((current) => ({
       ...current,
       features: {
         ...current.features,
@@ -149,7 +156,11 @@ export function SettingsPage() {
         )
         return
       }
-      persistSettings(imported)
+      setSettings(imported)
+      window.localStorage.setItem(
+        SETTINGS_STORAGE_KEY,
+        JSON.stringify(imported),
+      )
       setImportError('')
     } catch {
       setImportError('Enter valid JSON to import settings.')
