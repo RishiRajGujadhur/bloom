@@ -39,26 +39,26 @@
 @media(max-width:700px){.momentum-panel,.quest-panel,.lore-panel,.contracts-panel,.archive-panel{padding:17px}.lore-grid,.archive-grid{grid-template-columns:repeat(2,1fr)}.contract-form{grid-template-columns:1fr}.contract-card{flex-direction:column}.contract-signature{align-items:flex-start;flex-direction:row}.archive-tools{flex-direction:column}.archive-tools select{width:100%}}
 @media(prefers-reduced-motion:reduce){.lore-card svg path{animation:none}}
 
-html[data-theme='dark'] .app-shell[data-palette='forest']{background:#15231e}
-html[data-theme='dark'] .app-shell[data-palette='amber']{background:#282016}
-html[data-theme='dark'] .combo-card,
-html[data-theme='dark'] .daily-boss{background:#211d2c;border-color:#3a3348}
-html[data-theme='dark'] .boss-art{background:#332b3f;border-color:#493d55}
-html[data-theme='dark'] .boss-meter{background:#393246}
-html[data-theme='dark'] .boss-meter::-webkit-progress-bar{background:#393246}
-html[data-theme='dark'] .boss-content .rpg-meter-label>span,
-html[data-theme='dark'] .boss-content>p,
-html[data-theme='dark'] .boss-content small,
-html[data-theme='dark'] .boss-objectives span,
-html[data-theme='dark'] .boss-select label,
-html[data-theme='dark'] .combo-card>p,
-html[data-theme='dark'] .combo-anchors span,
-html[data-theme='dark'] .combo-status{color:#aa9fbb}
-html[data-theme='dark'] .combo-anchors i{background:#493e52}
-html[data-theme='dark'] .boss-objectives span{border-color:#493d55}
-html[data-theme='dark'] .boss-start{border-color:#594b69}
-html[data-theme='dark'] .boss-won{background:#223126;border-color:#4d7358}
-html[data-theme='dark'] .boss-won .boss-art{background:#2e4833}
+html[data-mode='dark'] .app-shell[data-palette='forest']{background:#15231e}
+html[data-mode='dark'] .app-shell[data-palette='amber']{background:#282016}
+html[data-mode='dark'] .combo-card,
+html[data-mode='dark'] .daily-boss{background:#211d2c;border-color:#3a3348}
+html[data-mode='dark'] .boss-art{background:#332b3f;border-color:#493d55}
+html[data-mode='dark'] .boss-meter{background:#393246}
+html[data-mode='dark'] .boss-meter::-webkit-progress-bar{background:#393246}
+html[data-mode='dark'] .boss-content .rpg-meter-label>span,
+html[data-mode='dark'] .boss-content>p,
+html[data-mode='dark'] .boss-content small,
+html[data-mode='dark'] .boss-objectives span,
+html[data-mode='dark'] .boss-select label,
+html[data-mode='dark'] .combo-card>p,
+html[data-mode='dark'] .combo-anchors span,
+html[data-mode='dark'] .combo-status{color:#aa9fbb}
+html[data-mode='dark'] .combo-anchors i{background:#493e52}
+html[data-mode='dark'] .boss-objectives span{border-color:#493d55}
+html[data-mode='dark'] .boss-start{border-color:#594b69}
+html[data-mode='dark'] .boss-won{background:#223126;border-color:#4d7358}
+html[data-mode='dark'] .boss-won .boss-art{background:#2e4833}
 
 .gamification-showcase{margin-top:18px;padding:26px;border:1px solid #e1d8eb;border-radius:18px;background:#fbf9fd;position:relative;overflow:hidden}
 .gamification-showcase:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% 8%,#dfd2f255,transparent 30%);pointer-events:none}
@@ -88,4 +88,4 @@ html[data-theme='dark'] .boss-won .boss-art{background:#2e4833}
 @keyframes connector-glow{50%{stroke:#9b73ba;stroke-dashoffset:14}}@keyframes available-pulse{50%{box-shadow:0 0 0 6px #e7cf7c33}}@keyframes reward-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media(max-width:700px){.gamification-showcase{padding:18px 14px}.showcase-heading{align-items:flex-start;flex-direction:column}.showcase-heading h2{font-size:19px}.orientation-button{align-self:stretch;justify-content:center}.resource-strip{grid-template-columns:1fr 1fr}.morph-button{grid-column:1/-1;justify-content:center}.showcase-grid{grid-template-columns:1fr}.skill-tree{height:190px}.tutorial-reward{left:14px;right:14px;bottom:14px}}
 @media(prefers-reduced-motion:reduce){.skill-connectors path,.skill-available .skill-node-orb,.tutorial-reward{animation:none}.liquid-wave{display:none}.orientation-button:hover{transform:none}}
-html[data-theme='dark'] .gamification-showcase{background:#211d2c;border-color:#3a3348}.app-shell[data-palette='forest'] .gamification-showcase{--game-accent:#337c6c}.app-shell[data-palette='amber'] .gamification-showcase{--game-accent:#966a29}
+html[data-mode='dark'] .gamification-showcase{background:#211d2c;border-color:#3a3348}.app-shell[data-palette='forest'] .gamification-showcase{--game-accent:#337c6c}.app-shell[data-palette='amber'] .gamification-showcase{--game-accent:#966a29}

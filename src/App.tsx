@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
 import { useFormik } from 'formik'
@@ -8,15 +8,12 @@ import {
   ArrowRight,
   Check,
   ChevronRight,
-  Heart,
-  LayoutDashboard,
   Leaf,
   ListChecks,
   Moon,
   Plus,
   Quote,
   Sun,
-  Settings,
   X,
   BookOpen,
   Pencil,
@@ -36,9 +33,15 @@ import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
 import { SettingsPage, useAppSettings } from './SettingsPage'
-
-const THEME_STORAGE_KEY = 'mindfulness-dashboard-theme'
-type Theme = 'light' | 'dark'
+import { Sidebar } from './components/layout/Sidebar'
+import type { NavKey } from './components/layout/Sidebar'
+import {
+  applyTheme,
+  getStoredTheme,
+  getThemeMode,
+  toggleThemeMode,
+} from './utils/themeEngine'
+import type { ThemeSettings } from './utils/themeEngine'
 
 function Checkmark({ checked }: { checked: boolean }) {
   const reduced = useReducedMotion()
@@ -114,11 +117,10 @@ function App() {
   const [editPlan, setEditPlan] = useState<string | null>(null)
   const [viewSession, setViewSession] = useState<Session | null>(null)
   const [active, setActive] = useState('overview')
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem(THEME_STORAGE_KEY)
-    return stored === 'dark' ? 'dark' : 'light'
-  })
-  const themeMounted = useRef(false)
+  const [themeSettings, setThemeSettings] = useState<ThemeSettings>(
+    getStoredTheme,
+  )
+  const isDark = getThemeMode(themeSettings.themeId) === 'dark'
   useEffect(() => {
     document.documentElement.lang = i18n.resolvedLanguage ?? 'en'
     document.title = t('ui.documentTitle')
@@ -134,14 +136,11 @@ function App() {
       window.removeEventListener('focus', refresh)
     }
   }, [])
+  // applyTheme() is the only writer of <html>'s theme attributes, so a theme
+  // change repaints the page without re-rendering the tree.
   useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    if (themeMounted.current) {
-      localStorage.setItem(THEME_STORAGE_KEY, theme)
-    } else {
-      themeMounted.current = true
-    }
-  }, [theme])
+    applyTheme(themeSettings)
+  }, [themeSettings])
   const completed = data.habits.filter((h) => h.dates.includes(today)).length
   const progress = data.habits.length
     ? Math.round((completed / data.habits.length) * 100)
@@ -175,7 +174,7 @@ function App() {
     anchor.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
-  const jump = (target: string) => {
+  const jump = (target: NavKey) => {
     setActive(target)
     const destination =
       document.getElementById(target) ??
@@ -189,82 +188,15 @@ function App() {
   }
   return (
     <MotionConfig reducedMotion="user">
-      <div
-        className="app-shell"
-        data-palette={data.rpg.palette}
-        data-theme={theme}
-      >
+      <div className="app-shell" data-palette={data.rpg.palette}>
         <a className="skip-link" href="#overview">
           {t('ui.skipToDashboard')}
         </a>
-        <aside className="sidebar">
-          <a className="brand" href="#overview">
-            <span className="brand-icon">
-              <Flower2 size={27} />
-            </span>
-            <span>
-              bloom<span className="brand-dot">.</span>
-              <small>{t('ui.everydaySpace')}</small>
-            </span>
-          </a>
-          <div className="nav-caption">{t('navigation.space')}</div>
-          <nav aria-label={t('navigation.main')}>
-            {[
-              {
-                key: 'overview',
-                title: t('navigation.dashboard'),
-                Icon: LayoutDashboard,
-              },
-              ...(settings.features.habitTracker
-                ? [
-                    {
-                      key: 'habits',
-                      title: t('navigation.habits'),
-                      Icon: ListChecks,
-                    },
-                  ]
-                : []),
-              ...(settings.features.chatJournal
-                ? [
-                    {
-                      key: 'journal',
-                      title: t('navigation.journal'),
-                      Icon: BookOpen,
-                    },
-                  ]
-                : []),
-              ...(settings.features.daybookModes
-                ? [{ key: 'daybook', title: t('ui.daybookNav'), Icon: Pencil }]
-                : []),
-              { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
-              { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
-            ].map(({ key, title, Icon }) => (
-              <button
-                key={key}
-                className={active === key ? 'active' : ''}
-                onClick={() => jump(key)}
-              >
-                <Icon size={19} />
-                {title}
-                {active === key && <span className="nav-indicator" />}
-              </button>
-            ))}
-          </nav>
-          <div className="sidebar-note">
-            <Leaf size={24} />
-            <h3>{t('ui.growAtYourOwnPace')}</h3>
-            <p>{t('ui.progressMessage')}</p>
-            <span>{t('ui.oneSmallStep')} ✧</span>
-          </div>
-          <div className="sidebar-bottom">
-            <span className="avatar">Y</span>
-            <div>
-              <strong>{t('ui.personalSpace')}</strong>
-              <small>{t('ui.noAccount')}</small>
-            </div>
-            <Heart size={16} />
-          </div>
-        </aside>
+        <Sidebar
+          active={active}
+          onNavigate={jump}
+          flags={settings.features}
+        />
         <main id="overview">
           <header className="topbar">
             <span>
@@ -275,21 +207,13 @@ function App() {
               <button
                 className="theme-toggle"
                 type="button"
-                aria-label={
-                  theme === 'dark'
-                    ? t('ui.switchToLight')
-                    : t('ui.switchToDark')
-                }
-                aria-pressed={theme === 'dark'}
-                onClick={() =>
-                  setTheme((current) => (current === 'dark' ? 'light' : 'dark'))
-                }
+                aria-label={isDark ? t('ui.switchToLight') : t('ui.switchToDark')}
+                aria-pressed={isDark}
+                onClick={() => setThemeSettings(toggleThemeMode)}
               >
-                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
                 <span>
-                  {theme === 'dark'
-                    ? t('actions.lightMode')
-                    : t('actions.darkMode')}
+                  {isDark ? t('actions.lightMode') : t('actions.darkMode')}
                 </span>
               </button>
               <button className="quiet-button" onClick={() => exportData()}>
@@ -299,7 +223,12 @@ function App() {
           </header>
           <div className="page-content">
             {active === 'settings' ? (
-              <SettingsPage settings={settings} setSettings={setSettings} />
+              <SettingsPage
+                settings={settings}
+                setSettings={setSettings}
+                theme={themeSettings}
+                setTheme={setThemeSettings}
+              />
             ) : (
               <>
                 <DashboardWelcome

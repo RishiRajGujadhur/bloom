@@ -2,6 +2,8 @@ import { useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
+import { ThemePicker } from './components/settings/ThemePicker'
+import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
@@ -92,9 +94,17 @@ export function useAppSettings(): [
 interface SettingsPageProps {
   settings: AppSettings
   setSettings: Dispatch<SetStateAction<AppSettings>>
+  /** Palette + font live outside AppSettings so the engine can own the DOM. */
+  theme: ThemeSettings
+  setTheme: Dispatch<SetStateAction<ThemeSettings>>
 }
 
-export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
+export function SettingsPage({
+  settings,
+  setSettings,
+  theme,
+  setTheme,
+}: SettingsPageProps) {
   const { t } = useTranslation(undefined, { i18n })
   const [importValue, setImportValue] = useState('')
   const [importError, setImportError] = useState('')
@@ -154,6 +164,16 @@ export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
         <h1>{t('settings.title')}</h1>
         <p className={styles.intro}>{t('settings.intro')}</p>
       </header>
+
+      <section className={styles.card} aria-labelledby="appearance-heading">
+        <div className={styles.cardHeader}>
+          <div>
+            <h2 id="appearance-heading">{t('settings.appearanceHeading')}</h2>
+            <p>{t('settings.appearanceDescription')}</p>
+          </div>
+        </div>
+        <ThemePicker settings={theme} onChange={setTheme} />
+      </section>
 
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>

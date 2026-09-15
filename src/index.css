@@ -1,3 +1,11 @@
+@import './styles/variables.css';
+@import './styles/themes.css';
+@import '@fontsource/caveat/400.css';
+@import '@fontsource/press-start-2p/400.css';
+@import '@fontsource/vt323/400.css';
+@import '@fontsource/fira-code/400.css';
+@import '@fontsource/fira-code/500.css';
+@import '@fontsource/fira-code/600.css';
 @import '@fontsource/dm-sans/400.css';
 @import '@fontsource/dm-sans/500.css';
 @import '@fontsource/dm-sans/600.css';
@@ -7,18 +15,18 @@
 @import '@fontsource/manrope/700.css';
 @import '@fontsource/manrope/800.css';
 :root {
-  font-family: 'DM Sans', sans-serif;
-  color: #312b40;
-  background: #f8f7fb;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background: var(--bg-primary);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   font-weight: 400;
   font-size: 14px;
 }
-html[data-theme='dark'] {
-  color: #eee9f6;
-  background: #17141f;
+html[data-mode='dark'] {
+  color: var(--text-primary);
+  background: var(--bg-primary);
 }
 * {
   box-sizing: border-box;
@@ -52,7 +60,7 @@ button {
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 3px solid #a88bdb;
+  outline:3px solid var(--focus-ring);
   outline-offset: 4px;
 }
 a {
@@ -71,22 +79,22 @@ input,
 textarea {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #ded9e7;
+  border:1px solid var(--border-color);
   border-radius: 9px;
   background: white;
-  color: #312b40;
+  color: var(--text-primary);
   outline: none;
 }
-html[data-theme='dark'] input,
-html[data-theme='dark'] textarea {
-  border-color: #463d57;
-  background: #211d2c;
-  color: #eee9f6;
+html[data-mode='dark'] input,
+html[data-mode='dark'] textarea {
+  border-color: var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
 }
 input:focus,
 textarea:focus {
-  border-color: #9876c8;
-  box-shadow: 0 0 0 3px #a88bdb22;
+  border-color: var(--focus-ring);
+  box-shadow:0 0 0 3px color-mix(in oklab, var(--shadow-color) 13%, transparent);
 }
 textarea {
   resize: vertical;
@@ -116,7 +124,7 @@ small {
   top: 10px;
 }
 ::selection {
-  background: #e4d9f5;
+  background: var(--accent-soft);
 }
 html {
   scroll-behavior: smooth;

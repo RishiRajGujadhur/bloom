@@ -2,7 +2,7 @@
   width: min(100%, 920px);
   margin: 0 auto;
   padding: 48px 24px 72px;
-  color: #312b40;
+  color: var(--text-primary);
 }
 
 .header {
@@ -11,7 +11,7 @@
 
 .eyebrow {
   margin-bottom: 8px;
-  color: #8061b3;
+  color: var(--text-secondary);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -20,13 +20,13 @@
 
 .header h1 {
   margin: 0 0 10px;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(30px, 5vw, 42px);
 }
 
 .intro,
 .cardHeader p {
-  color: #756d84;
+  color: var(--text-secondary);
 }
 
 .intro {
@@ -37,10 +37,10 @@
 .card {
   margin-top: 20px;
   padding: 24px;
-  border: 1px solid #e3deeb;
+  border:1px solid var(--border-color);
   border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 12px 35px #55426f0d;
+  background: var(--bg-surface);
+  box-shadow:0 12px 35px color-mix(in oklab, var(--shadow-color) 5%, transparent);
 }
 
 .cardHeader {
@@ -53,7 +53,7 @@
 
 .cardHeader h2 {
   margin: 0 0 5px;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-display);
   font-size: 20px;
 }
 
@@ -64,15 +64,15 @@
 .savedStatus {
   padding: 6px 10px;
   border-radius: 999px;
-  background: #edf8f1;
-  color: #39704e;
+  background: var(--success-soft);
+  color: var(--success);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .featureList {
-  border-top: 1px solid #eeeaf3;
+  border-top:1px solid var(--accent-border);
 }
 
 .feature {
@@ -81,7 +81,7 @@
   justify-content: space-between;
   gap: 20px;
   padding: 18px 0;
-  border-bottom: 1px solid #eeeaf3;
+  border-bottom:1px solid var(--accent-border);
   cursor: pointer;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .featureCopy span {
-  color: #756d84;
+  color: var(--text-secondary);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -118,7 +118,7 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: #d9d3e3;
+  background: var(--accent-soft);
   transition: background 0.2s ease;
 }
 
@@ -129,14 +129,14 @@
   top: 3px;
   left: 3px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 2px 5px #312b4033;
+  background: var(--bg-surface);
+  box-shadow:0 2px 5px color-mix(in oklab, var(--shadow-color) 20%, transparent);
   content: '';
   transition: transform 0.2s ease;
 }
 
 .switch input:checked + .slider {
-  background: #9876c8;
+  background: var(--focus-ring);
 }
 
 .switch input:checked + .slider::before {
@@ -144,22 +144,22 @@
 }
 
 .switch input:focus-visible + .slider {
-  outline: 3px solid #a88bdb66;
+  outline:3px solid color-mix(in oklab, var(--focus-ring) 40%, transparent);
   outline-offset: 3px;
 }
 
 .copyButton {
   padding: 9px 13px;
-  border: 1px solid #d4c8e5;
+  border:1px solid var(--border-color);
   border-radius: 9px;
-  background: #faf8fd;
-  color: #68469a;
+  background: var(--accent-soft);
+  color: var(--text-secondary);
   font-weight: 600;
   white-space: nowrap;
 }
 
 .copyButton:hover {
-  background: #f1ebfa;
+  background: var(--accent-soft);
 }
 
 .preview {
@@ -167,11 +167,11 @@
   overflow: auto;
   margin: 0 0 24px;
   padding: 18px;
-  border: 1px solid #e3deeb;
+  border:1px solid var(--border-color);
   border-radius: 10px;
-  background: #211d2c;
-  color: #eee9f6;
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -184,7 +184,7 @@
 }
 
 .importLabel span {
-  color: #756d84;
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 400;
 }
@@ -192,25 +192,25 @@
 .importInput {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #ded9e7;
+  border:1px solid var(--border-color);
   border-radius: 9px;
-  background: #fff;
-  color: #312b40;
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.5;
   resize: vertical;
 }
 
 .importInput:focus {
-  border-color: #9876c8;
-  box-shadow: 0 0 0 3px #a88bdb22;
+  border-color: var(--focus-ring);
+  box-shadow:0 0 0 3px color-mix(in oklab, var(--shadow-color) 13%, transparent);
   outline: none;
 }
 
 .error {
   margin: 10px 0;
-  color: #a33f52;
+  color: var(--danger);
   font-size: 13px;
 }
 
@@ -232,30 +232,30 @@
   }
 }
 
-html[data-theme='dark'] .page {
-  color: #eee9f6;
+html[data-mode='dark'] .page {
+  color: var(--text-primary);
 }
 
-html[data-theme='dark'] .intro,
-html[data-theme='dark'] .cardHeader p,
-html[data-theme='dark'] .featureCopy span,
-html[data-theme='dark'] .importLabel span {
-  color: #b9b0c8;
+html[data-mode='dark'] .intro,
+html[data-mode='dark'] .cardHeader p,
+html[data-mode='dark'] .featureCopy span,
+html[data-mode='dark'] .importLabel span {
+  color: var(--text-secondary);
 }
 
-html[data-theme='dark'] .card {
-  border-color: #463d57;
-  background: #211d2c;
+html[data-mode='dark'] .card {
+  border-color: var(--border-color);
+  background: var(--bg-surface);
 }
 
-html[data-theme='dark'] .featureList,
-html[data-theme='dark'] .feature {
-  border-color: #463d57;
+html[data-mode='dark'] .featureList,
+html[data-mode='dark'] .feature {
+  border-color: var(--border-color);
 }
 
-html[data-theme='dark'] .copyButton,
-html[data-theme='dark'] .importInput {
-  border-color: #463d57;
-  background: #17141f;
-  color: #eee9f6;
+html[data-mode='dark'] .copyButton,
+html[data-mode='dark'] .importInput {
+  border-color: var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
