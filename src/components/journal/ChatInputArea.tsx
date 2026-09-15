@@ -1,4 +1,6 @@
 import { useFormik } from 'formik'
+import { useTranslation } from 'react-i18next'
+import i18n from '../../i18n'
 import { ArrowUp } from 'lucide-react'
 export function ChatInputArea({
   disabled,
@@ -7,13 +9,14 @@ export function ChatInputArea({
   disabled: boolean
   onSend: (text: string) => void
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   const form = useFormik({
     initialValues: { message: '' },
     validate: (v) =>
       !v.message.trim()
-        ? { message: 'Write a reflection first.' }
+        ? { message: t('forms.required') }
         : v.message.length > 2000
-          ? { message: 'Keep your reply under 2,000 characters.' }
+          ? { message: t('journal.inputTooLong') }
           : {},
     onSubmit: (values, helpers) => {
       if (disabled) return
@@ -24,13 +27,13 @@ export function ChatInputArea({
   return (
     <form className="chat-form" onSubmit={form.handleSubmit}>
       <label className="sr-only" htmlFor="message">
-        Your reflection
+        {t('journal.reflectionLabel')}
       </label>
       <div className="chat-compose">
         <textarea
           id="message"
           name="message"
-          placeholder="There’s no right answer. Start wherever you are…"
+          placeholder={t('journal.inputPlaceholder')}
           rows={2}
           maxLength={2000}
           value={form.values.message}
@@ -45,7 +48,7 @@ export function ChatInputArea({
           className="send"
           type="submit"
           disabled={disabled || !form.values.message.trim()}
-          aria-label="Send reflection"
+          aria-label={t('journal.sendReflection')}
         >
           <ArrowUp size={20} />
         </button>
@@ -54,9 +57,9 @@ export function ChatInputArea({
         <span>
           {form.submitCount > 0 && form.errors.message
             ? form.errors.message
-            : 'A little honesty goes a long way.'}
+            : t('journal.honesty')}
         </span>
-        <span>{form.values.message.length}/2000</span>
+        <span>{t('journal.characters', { count: form.values.message.length })}</span>
       </div>
     </form>
   )

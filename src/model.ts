@@ -1,42 +1,37 @@
 import { z } from 'zod'
+import i18n from './i18n'
 import { initialRpg, inferStat, rpgSchema, statSchema } from './rpg/schema'
 export { dayKey } from './dates'
 
 export const id = () => crypto.randomUUID()
-export const steps = [
-  {
-    category: 'reflection',
-    prompt: 'Let’s take a breath. How are you feeling today?',
-    chips: [
-      'Feeling grounded',
-      'A little overwhelmed',
-      'Ready for a fresh start',
-    ],
-  },
-  {
-    category: 'win',
-    prompt: 'What’s one small win you want to give yourself credit for?',
-    chips: ['I made time for myself', 'I showed up', 'I took a small step'],
-  },
-  {
-    category: 'obstacle',
-    prompt: 'What felt challenging, and what helped you get through it?',
-    chips: [
-      'I paused and tried again',
-      'I asked for help',
-      'I’m still working through it',
-    ],
-  },
-  {
-    category: 'action_step',
-    prompt: 'What’s one gentle, doable action you’ll take tomorrow?',
-    chips: [
-      'Take a 10-minute walk',
-      'Start with a glass of water',
-      'Make space to rest',
-    ],
-  },
+
+/** Categories are stable data keys; their prompt and chip text comes from the active locale. */
+export const stepCategories = [
+  'reflection',
+  'win',
+  'obstacle',
+  'action_step',
 ] as const
+export type StepCategory = (typeof stepCategories)[number]
+export const STEPS = stepCategories.length
+
+type Translator = (key: string, options?: Record<string, unknown>) => unknown
+const translator = (language: string) =>
+  i18n.getFixedT(language) as unknown as Translator
+
+export function stepPrompt(step: number, language = 'en'): string {
+  const category = stepCategories[step] ?? stepCategories[0]
+  return String(translator(language)(`prompts.${category}.prompt`))
+}
+
+export function stepChips(step: number, language = 'en'): string[] {
+  const category = stepCategories[step] ?? stepCategories[0]
+  const chips = translator(language)(`prompts.${category}.chips`, {
+    returnObjects: true,
+  })
+  return Array.isArray(chips) ? (chips as string[]) : []
+}
+
 const categorySchema = z.enum(['reflection', 'win', 'obstacle', 'action_step'])
 const messageSchema = z.object({
   id: z.string(),
@@ -93,7 +88,7 @@ export function parseData(input: unknown): AppData {
 export type JournalMessage = z.infer<typeof messageSchema>
 export type Session = z.infer<typeof sessionSchema>
 export type AppData = z.infer<typeof dataSchema>
-export function newSession(): Session {
+export function newSession(language = 'en'): Session {
   return {
     metadata: {
       id: id(),
@@ -106,7 +101,7 @@ export function newSession(): Session {
       {
         id: id(),
         sender: 'bot',
-        text: steps[0].prompt,
+        text: stepPrompt(0, language),
         timestamp: Date.now(),
         category: 'reflection',
       },
@@ -114,38 +109,41 @@ export function newSession(): Session {
     flow: { step: 0, typing: false, complete: false },
   }
 }
-export const defaults = (): AppData => ({
-  version: 2,
-  habits: [
-    {
-      id: id(),
-      title: 'Move with intention',
-      stat: 'strength',
-      detail: 'A walk, a stretch, a little movement',
-      dates: [],
-    },
-    {
-      id: id(),
-      title: 'Stay hydrated',
-      stat: 'spirit',
-      detail: 'Make time for a glass of water',
-      dates: [],
-    },
-    {
-      id: id(),
-      title: 'Take a mindful moment',
-      stat: 'spirit',
-      detail: 'Pause. Breathe. Come back to yourself.',
-      dates: [],
-    },
-  ],
-  plans: [],
-  affirmation:
-    'I don’t have to do it all. Small steps are still steps forward.',
-  draft: null,
-  sessions: [],
-  rpg: initialRpg(),
-})
+export const defaults = (language = 'en'): AppData => {
+  const tt = translator(language)
+  const text = (key: string) => String(tt(key))
+  return {
+    version: 2,
+    habits: [
+      {
+        id: id(),
+        title: text('defaults.move'),
+        stat: 'strength',
+        detail: text('defaults.moveDetail'),
+        dates: [],
+      },
+      {
+        id: id(),
+        title: text('defaults.hydrate'),
+        stat: 'spirit',
+        detail: text('defaults.hydrateDetail'),
+        dates: [],
+      },
+      {
+        id: id(),
+        title: text('defaults.mindful'),
+        stat: 'spirit',
+        detail: text('defaults.mindfulDetail'),
+        dates: [],
+      },
+    ],
+    plans: [],
+    affirmation: text('defaults.affirmation'),
+    draft: null,
+    sessions: [],
+    rpg: initialRpg(),
+  }
+}
 
 export function reply(session: Session, text: string): Session {
   const trimmed = text.trim()
@@ -156,7 +154,7 @@ export function reply(session: Session, text: string): Session {
     session.flow.complete
   )
     return session
-  const final = session.flow.step === steps.length - 1
+  const final = session.flow.step === STEPS - 1
   return {
     ...session,
     messages: [
@@ -166,16 +164,16 @@ export function reply(session: Session, text: string): Session {
         sender: 'user',
         text: trimmed,
         timestamp: Date.now(),
-        category: steps[session.flow.step].category,
+        category: stepCategories[session.flow.step],
       },
     ],
     flow: { ...session.flow, typing: !final, complete: final },
   }
 }
-export function advance(session: Session): Session {
+export function advance(session: Session, language = 'en'): Session {
   if (!session.flow.typing || session.flow.complete) return session
   const step = session.flow.step + 1
-  if (step >= steps.length) return session
+  if (step >= STEPS) return session
   return {
     ...session,
     messages: [
@@ -183,9 +181,9 @@ export function advance(session: Session): Session {
       {
         id: id(),
         sender: 'bot',
-        text: steps[step].prompt,
+        text: stepPrompt(step, language),
         timestamp: Date.now(),
-        category: steps[step].category,
+        category: stepCategories[step],
       },
     ],
     flow: { step, typing: false, complete: false },
@@ -211,16 +209,16 @@ export function toggleHabit(
   }
 }
 export const STORAGE_KEY = 'mindfulness-dashboard-v1'
-export function loadData(): { data: AppData; error: string } {
+export function loadData(language = 'en'): { data: AppData; error: string } {
+  const tt = translator(language)
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return { data: defaults(), error: '' }
+    if (!raw) return { data: defaults(language), error: '' }
     return { data: parseData(JSON.parse(raw)), error: '' }
   } catch {
     return {
-      data: defaults(),
-      error:
-        'Your saved data could not be read. It has not been overwritten. Export the original data before enabling saving again.',
+      data: defaults(language),
+      error: String(tt('errors.load')),
     }
   }
 }

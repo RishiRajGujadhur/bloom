@@ -1,8 +1,4 @@
-export type JournalCategory =
-  | 'Daily Planning & Productivity'
-  | 'Mental Health & Reflection'
-  | 'Vision & Future Self'
-  | 'Gamified & Habit Analysis'
+export type JournalCategory = 'planning' | 'reflection' | 'vision' | 'gamified'
 
 export type JournalEditorType =
   | 'guided'

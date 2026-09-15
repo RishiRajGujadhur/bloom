@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import type { Dispatch, SetStateAction } from 'react'
 import { BookOpen, ArrowRight } from 'lucide-react'
-import { advance, newSession, reply, steps } from '../../model'
+import { advance, newSession, reply, stepChips } from '../../model'
 import type { AppData } from '../../model'
 import { JournalHeader } from './JournalHeader'
 import { MessageFeed } from './MessageFeed'
@@ -19,6 +19,7 @@ export function ChatJournalContainer({
   setData: Dispatch<SetStateAction<AppData>>
 }) {
   const { t } = useTranslation(undefined, { i18n })
+  const language = i18n.resolvedLanguage ?? 'en'
   const session = data.draft
   const [summary, setSummary] = useState(false)
   const [tags, setTags] = useState('')
@@ -29,13 +30,13 @@ export function ChatJournalContainer({
       () =>
         setData((d) =>
           d.draft?.metadata.id === sessionId
-            ? { ...d, draft: advance(d.draft) }
+            ? { ...d, draft: advance(d.draft, language) }
             : d,
         ),
       800,
     )
     return () => clearTimeout(timer)
-  }, [session?.flow.typing, session?.metadata.id, setData])
+  }, [session?.flow.typing, session?.metadata.id, setData, language])
   const send = (text: string) =>
     setData((d) => (d.draft ? { ...d, draft: reply(d.draft, text) } : d))
   const saved = Boolean(
@@ -96,8 +97,10 @@ export function ChatJournalContainer({
         </div>
         <span className="badge">
           {session
-            ? `${session.flow.complete ? 4 : session.flow.step + 1} / 4`
-            : '5 MIN FOR YOU'}
+            ? t('ui.stepCounter', {
+                step: session.flow.complete ? 4 : session.flow.step + 1,
+              })
+            : t('ui.fiveMin')}
         </span>
       </div>
       {!session ? (
@@ -107,14 +110,14 @@ export function ChatJournalContainer({
           </div>
           <h3>{t('journal.makeRoom')}</h3>
           <p>
-            Notice how you feel, celebrate a small win,
+            {t('ui.welcomeLine1')}
             <br />
-            and find your next gentle step.
+            {t('ui.welcomeLine2')}
           </p>
           <button
             className="primary"
             onClick={() => {
-              setData((d) => ({ ...d, draft: newSession() }))
+              setData((d) => ({ ...d, draft: newSession(language) }))
               setTags('')
             }}
           >
@@ -129,7 +132,7 @@ export function ChatJournalContainer({
           {!session.flow.complete ? (
             <>
               <PromptChips
-                chips={steps[session.flow.step].chips}
+                chips={stepChips(session.flow.step, language)}
                 disabled={session.flow.typing}
                 onChoose={send}
               />
@@ -162,7 +165,7 @@ export function ChatJournalContainer({
                 <button
                   className="text-button"
                   onClick={() => {
-                    setData((d) => ({ ...d, draft: newSession() }))
+                    setData((d) => ({ ...d, draft: newSession(language) }))
                     setTags('')
                   }}
                 >

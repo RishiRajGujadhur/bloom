@@ -20,7 +20,13 @@ export function JournalHeader({
             {[1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
-                aria-label={`${field} ${n} of 5`}
+                aria-label={t('journal.ratingAria', {
+                  field:
+                    field === 'mood'
+                      ? t('journal.moodField')
+                      : t('journal.energyField'),
+                  n,
+                })}
                 aria-pressed={session.metadata[field] === n}
                 onClick={() => onRate(field, n)}
               >

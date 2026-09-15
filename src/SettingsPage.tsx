@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
+import { useTranslation } from 'react-i18next'
+import i18n from './i18n'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
@@ -30,47 +32,15 @@ export const defaultSettings: AppSettings = {
   },
 }
 
-const featureDetails: ReadonlyArray<{
-  key: keyof FeatureFlags
-  title: string
-  description: string
-}> = [
-  {
-    key: 'habitTracker',
-    title: 'Habit tracker',
-    description: 'Keep small promises to yourself and track your progress.',
-  },
-  {
-    key: 'chatJournal',
-    title: 'Chat journal',
-    description: 'Reflect through a gentle, guided conversation.',
-  },
-  {
-    key: 'rpgSkillTree',
-    title: 'RPG skill tree',
-    description: 'Turn your growth into visible skills and momentum.',
-  },
-  {
-    key: 'weeklyRaidBoss',
-    title: 'Weekly raid boss',
-    description: 'Add a playful weekly challenge to your self-coaching.',
-  },
-  {
-    key: 'daybookModes',
-    title: 'Daybook modes',
-    description: 'Choose a writing mode that fits the moment.',
-  },
-  {
-    key: 'languageSelector',
-    title: 'Language selector',
-    description: 'Switch the app language from the dashboard.',
-  },
-  {
-    key: 'walkthroughTour',
-    title: 'Walkthrough tour',
-    description: 'Show the guided introduction for new features.',
-  },
-]
+const featureKeys = [
+  'habitTracker',
+  'chatJournal',
+  'rpgSkillTree',
+  'weeklyRaidBoss',
+  'daybookModes',
+  'languageSelector',
+  'walkthroughTour',
+] as const satisfies ReadonlyArray<keyof FeatureFlags>
 
 function isFeatureFlags(value: unknown): value is FeatureFlags {
   if (typeof value !== 'object' || value === null) return false
@@ -125,6 +95,7 @@ interface SettingsPageProps {
 }
 
 export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
+  const { t } = useTranslation(undefined, { i18n })
   const [importValue, setImportValue] = useState('')
   const [importError, setImportError] = useState('')
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>(
@@ -151,9 +122,7 @@ export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
     try {
       const imported = parseSettings(JSON.parse(value))
       if (!imported) {
-        setImportError(
-          'Settings JSON must include a features object with boolean values for every feature.',
-        )
+        setImportError(t('settings.importShape'))
         return
       }
       setSettings(imported)
@@ -163,7 +132,7 @@ export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
       )
       setImportError('')
     } catch {
-      setImportError('Enter valid JSON to import settings.')
+      setImportError(t('settings.importInvalid'))
     }
   }
 
@@ -181,63 +150,63 @@ export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <p className={styles.eyebrow}>Personalize your space</p>
-        <h1>Settings</h1>
-        <p className={styles.intro}>
-          Choose the tools that support your self-coaching practice. Changes are
-          saved automatically.
-        </p>
+        <p className={styles.eyebrow}>{t('settings.eyebrow')}</p>
+        <h1>{t('settings.title')}</h1>
+        <p className={styles.intro}>{t('settings.intro')}</p>
       </header>
 
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>
           <div>
-            <h2 id="features-heading">Features</h2>
-            <p>Turn parts of bloom on or off whenever you need.</p>
+            <h2 id="features-heading">{t('settings.featuresHeading')}</h2>
+            <p>{t('settings.featuresDescription')}</p>
           </div>
           <span className={styles.savedStatus} role="status">
-            Saved locally
+            {t('settings.savedLocally')}
           </span>
         </div>
 
         <div className={styles.featureList}>
-          {featureDetails.map(({ key, title, description }) => (
-            <label className={styles.feature} key={key}>
-              <span className={styles.featureCopy}>
-                <strong>{title}</strong>
-                <span>{description}</span>
-              </span>
-              <span className={styles.switch}>
-                <input
-                  type="checkbox"
-                  checked={settings.features[key]}
-                  onChange={() => handleToggleFeature(key)}
-                  aria-label={`Enable ${title}`}
-                />
-                <span className={styles.slider} aria-hidden="true" />
-              </span>
-            </label>
-          ))}
+          {featureKeys.map((key) => {
+            const title = t(`settings.feature.${key}.title`)
+            return (
+              <label className={styles.feature} key={key}>
+                <span className={styles.featureCopy}>
+                  <strong>{title}</strong>
+                  <span>{t(`settings.feature.${key}.description`)}</span>
+                </span>
+                <span className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={settings.features[key]}
+                    onChange={() => handleToggleFeature(key)}
+                    aria-label={t('settings.enableFeature', { title })}
+                  />
+                  <span className={styles.slider} aria-hidden="true" />
+                </span>
+              </label>
+            )
+          })}
         </div>
       </section>
 
       <section className={styles.card} aria-labelledby="json-heading">
         <div className={styles.cardHeader}>
           <div>
-            <h2 id="json-heading">Configuration</h2>
-            <p>Your current settings are shown as formatted JSON.</p>
+            <h2 id="json-heading">{t('settings.configurationHeading')}</h2>
+            <p>{t('settings.configurationDescription')}</p>
           </div>
           <button
             className={styles.copyButton}
             type="button"
             onClick={handleCopy}
           >
-            {copyState === 'copied' ? 'Copied' : 'Copy JSON to Clipboard'}
+            {copyState === 'copied' ? t('settings.copied') : t('settings.copyJson')}
           </button>
         </div>
         {copyState === 'failed' && (
           <p className={styles.error} role="alert">
-            Clipboard access is unavailable. Copy the JSON manually instead.
+            {t('settings.clipboardError')}
           </p>
         )}
         <pre className={styles.preview}>
@@ -245,8 +214,8 @@ export function SettingsPage({ settings, setSettings }: SettingsPageProps) {
         </pre>
 
         <label className={styles.importLabel} htmlFor="settings-import">
-          Import JSON
-          <span>Paste a complete settings object to apply it immediately.</span>
+          {t('settings.importJson')}
+          <span>{t('settings.importHint')}</span>
         </label>
         <textarea
           id="settings-import"

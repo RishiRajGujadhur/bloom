@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { SetStateAction } from 'react'
+import { useTranslation } from 'react-i18next'
+import i18n from './i18n'
 import type { AppData } from './model'
 import { loadData, STORAGE_KEY } from './model'
 import { initializeGame, syncGame } from './rpg/engine'
 
 export function useCoach() {
-  const [initial] = useState(loadData)
+  const { t } = useTranslation(undefined, { i18n })
+  const [initial] = useState(() => loadData(i18n.resolvedLanguage ?? 'en'))
   const [data, rawSetData] = useState(() => initializeGame(initial.data))
   const setData = useCallback((action: SetStateAction<AppData>) => {
     const now = Date.now()
@@ -26,11 +29,9 @@ export function useCoach() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
       setError('')
     } catch {
-      setError(
-        'Changes are in memory only. Browser storage is unavailable or full. Export a backup before closing this page.',
-      )
+      setError(t('errors.storage'))
     }
-  }, [data, blocked])
+  }, [data, blocked, t])
   return {
     data,
     setData,
