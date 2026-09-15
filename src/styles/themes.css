@@ -1,0 +1,299 @@
+/* ==========================================================================
+   themes.css — colour palettes and font personalities.
+
+   HOW IT WORKS
+   ------------
+   themeEngine.ts sets three attributes on <html>:
+     data-theme="<theme-id>"   which palette   (this file, section 1)
+     data-font="<font-id>"     which font stack (this file, section 3)
+     data-mode="light|dark"    derived from the theme (this file, section 2)
+
+   A palette only declares its true anchors — page, surface, sidebar, accent.
+   Every other token (text scale, borders, hovers, soft tints) is DERIVED from
+   those anchors in the [data-mode] blocks, so a new theme is ~5 lines and
+   multi-theme support costs no extra CSS.
+
+   `data-mode` exists because the app already used data-theme="light|dark" for
+   its structural dark styling; keeping mode separate lets 12 palettes share
+   one dark and one light structural layer instead of 12 copies.
+
+   Requires CSS color-mix() (Chrome/Edge 111+, Firefox 113+, Safari 16.2+).
+   ========================================================================== */
+
+/* ==========================================================================
+   1. PALETTES — anchors only
+   ========================================================================== */
+
+/* ---- Spec set ------------------------------------------------------- */
+[data-theme='github-dark'] {
+  --mode: dark;
+  --bg-primary: #0d1117;
+  --bg-surface: #161b22;
+  --bg-sidebar: #161b22;
+  --accent-color: #58a6ff;
+}
+
+[data-theme='github-light'] {
+  --mode: light;
+  --bg-primary: #ffffff;
+  --bg-surface: #f6f8fa;
+  --bg-sidebar: #f6f8fa;
+  --accent-color: #0969da;
+}
+
+[data-theme='dracula'] {
+  --mode: dark;
+  --bg-primary: #282a36;
+  --bg-surface: #44475a;
+  --bg-sidebar: #21222c;
+  --accent-color: #ff79c6;
+}
+
+[data-theme='nord'] {
+  --mode: dark;
+  --bg-primary: #2e3440;
+  --bg-surface: #3b4252;
+  --bg-sidebar: #2b303b;
+  --accent-color: #88c0d0;
+}
+
+[data-theme='catppuccin-mocha'] {
+  --mode: dark;
+  --bg-primary: #1e1e2e;
+  --bg-surface: #313244;
+  --bg-sidebar: #181825;
+  --accent-color: #cba6f7;
+}
+
+[data-theme='tokyo-night'] {
+  --mode: dark;
+  --bg-primary: #1a1b26;
+  --bg-surface: #24283b;
+  --bg-sidebar: #16161e;
+  --accent-color: #7aa2f7;
+}
+
+[data-theme='rose-pine'] {
+  --mode: dark;
+  --bg-primary: #191724;
+  --bg-surface: #1f1d2e;
+  --bg-sidebar: #1f1d2e;
+  --accent-color: #ebbcba;
+}
+
+[data-theme='solarized-dark'] {
+  --mode: dark;
+  --bg-primary: #002b36;
+  --bg-surface: #073642;
+  --bg-sidebar: #073642;
+  --accent-color: #268bd2;
+}
+
+[data-theme='synthwave-84'] {
+  --mode: dark;
+  --bg-primary: #262335;
+  --bg-surface: #34294f;
+  --bg-sidebar: #241b2f;
+  --accent-color: #ff7edb;
+}
+
+[data-theme='emerald-forest'] {
+  --mode: dark;
+  --bg-primary: #121e17;
+  --bg-surface: #1c2d23;
+  --bg-sidebar: #16241c;
+  --accent-color: #52b788;
+}
+
+/* ---- Bloom: the app's original soft-purple identity, preserved ------ */
+[data-theme='bloom-light'] {
+  --mode: light;
+  --bg-primary: #f8f7fb;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #ffffff;
+  --accent-color: #7044ac;
+}
+
+[data-theme='bloom-dark'] {
+  --mode: dark;
+  --bg-primary: #17141f;
+  --bg-surface: #211d2c;
+  --bg-sidebar: #211d2c;
+  --accent-color: #a78bc5;
+}
+
+/* ==========================================================================
+   2. DERIVED TOKENS — one structural layer per mode
+   Tests after the anchors on purpose: same element, equal specificity,
+   so these land without fighting the palette blocks above.
+   ========================================================================== */
+
+/* ---- Dark palettes --------------------------------------------------- */
+html[data-mode='dark'] {
+  --text-primary: color-mix(in oklab, var(--bg-primary) 8%, #ffffff);
+  --text-secondary: color-mix(
+    in oklab,
+    var(--text-primary) 60%,
+    var(--bg-primary)
+  );
+  --text-muted: color-mix(in oklab, var(--text-primary) 42%, var(--bg-primary));
+  --text-on-accent: color-mix(in oklab, var(--accent-color) 14%, #05050a);
+
+  --bg-elevated: color-mix(in oklab, var(--bg-surface) 88%, #ffffff);
+  --bg-overlay: rgb(6 5 10 / 64%);
+
+  --accent-hover: color-mix(in oklab, var(--accent-color) 82%, #ffffff);
+  --accent-soft: color-mix(
+    in oklab,
+    var(--accent-color) 20%,
+    var(--bg-primary)
+  );
+  --accent-border: color-mix(
+    in oklab,
+    var(--accent-color) 45%,
+    var(--bg-primary)
+  );
+
+  --border-color: color-mix(
+    in oklab,
+    var(--bg-surface) 78%,
+    var(--text-primary)
+  );
+  --border-strong: color-mix(
+    in oklab,
+    var(--bg-surface) 60%,
+    var(--text-primary)
+  );
+  --card-hover: color-mix(in oklab, var(--bg-surface) 85%, var(--text-primary));
+
+  --success: #7fc08a;
+  --success-soft: color-mix(in oklab, var(--success) 20%, var(--bg-primary));
+  --warning: #e2b06a;
+  --warning-soft: color-mix(in oklab, var(--warning) 20%, var(--bg-primary));
+  --danger: #e0736f;
+  --danger-soft: color-mix(in oklab, var(--danger) 18%, var(--bg-primary));
+
+  --shadow-color: rgb(0 0 0 / 45%);
+  --focus-ring: color-mix(in oklab, var(--accent-color) 62%, transparent);
+  --scrollbar-thumb: var(--border-strong);
+}
+
+/* ---- Light palettes -------------------------------------------------- */
+html[data-mode='light'] {
+  --text-primary: color-mix(in oklab, var(--bg-primary) 12%, #1b1725);
+  --text-secondary: color-mix(
+    in oklab,
+    var(--text-primary) 62%,
+    var(--bg-primary)
+  );
+  --text-muted: color-mix(in oklab, var(--text-primary) 45%, var(--bg-primary));
+  --text-on-accent: #ffffff;
+
+  /* Cards stay the brightest thing on the page, even when the page itself
+     is white (github-light) — so elevated is pinned, not derived. */
+  --bg-elevated: #ffffff;
+  --bg-overlay: rgb(24 18 32 / 46%);
+
+  --accent-hover: color-mix(in oklab, var(--accent-color) 86%, #000000);
+  --accent-soft: color-mix(
+    in oklab,
+    var(--accent-color) 12%,
+    var(--bg-primary)
+  );
+  --accent-border: color-mix(
+    in oklab,
+    var(--accent-color) 34%,
+    var(--bg-primary)
+  );
+
+  --border-color: color-mix(
+    in oklab,
+    var(--bg-primary) 88%,
+    var(--text-primary)
+  );
+  --border-strong: color-mix(
+    in oklab,
+    var(--bg-primary) 76%,
+    var(--text-primary)
+  );
+  --card-hover: color-mix(in oklab, var(--bg-surface) 92%, var(--text-primary));
+
+  --success: #4c8064;
+  --success-soft: color-mix(in oklab, var(--success) 10%, var(--bg-primary));
+  --warning: #966a29;
+  --warning-soft: color-mix(in oklab, var(--warning) 12%, var(--bg-primary));
+  --danger: #b66076;
+  --danger-soft: color-mix(in oklab, var(--danger) 12%, var(--bg-primary));
+
+  --shadow-color: rgb(49 32 63 / 21%);
+  --focus-ring: color-mix(in oklab, var(--accent-color) 30%, transparent);
+  --scrollbar-thumb: var(--border-strong);
+}
+
+/* ==========================================================================
+   3. FONT PERSONALITIES
+   ========================================================================== */
+
+[data-font='system'] {
+  --font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-family);
+  --font-mono:
+    'Fira Code', 'Cascadia Code', ui-monospace, 'Courier New', monospace;
+}
+
+[data-font='mono'] {
+  --font-family:
+    'Fira Code', 'Cascadia Code', ui-monospace, 'Courier New', monospace;
+  --font-display: var(--font-family);
+  --font-mono:
+    'Fira Code', 'Cascadia Code', ui-monospace, 'Courier New', monospace;
+  --letter-spacing-body: -0.15px;
+}
+
+[data-font='serif'] {
+  --font-family: Georgia, Merriweather, 'Times New Roman', serif;
+  --font-display: var(--font-family);
+  --font-mono: Georgia, Merriweather, serif;
+}
+
+[data-font='handwritten'] {
+  --font-family: 'Caveat', 'Kalam', 'Segoe Script', cursive;
+  --font-display: var(--font-family);
+  --font-mono: 'Caveat', 'Kalam', cursive;
+  --line-height-body: 1.45;
+  /* Caveat runs small and loose at UI sizes — nudge weight up for legibility. */
+  --font-weight-bump: 500;
+}
+
+/* Press Start 2P is a fixed-width bitmap face: charming in headings, close to
+   unreadable for body copy. Body gets VT323 and headings keep the 8-bit face,
+   so the "pixel" personality stays usable rather than being a novelty that
+   makes the journal impossible to read. */
+[data-font='pixel'] {
+  --font-family: 'VT323', 'Press Start 2P', monospace;
+  --font-display: 'Press Start 2P', 'VT323', monospace;
+  --font-mono: 'VT323', 'Press Start 2P', monospace;
+  --letter-spacing-body: 0.3px;
+  --line-height-body: 1.6;
+  --font-size-body: 17px; /* VT323 is a small-face pixel font */
+  --font-weight-bump: 400;
+}
+
+/* Press Start 2P needs real breathing room wherever it is used. */
+[data-font='pixel'] h1,
+[data-font='pixel'] h2,
+[data-font='pixel'] .brand {
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+/* Fallback palette: keeps the app styled before themeEngine runs (no FOUC
+   of unstyled cards), matching the spec's documented defaults. */
+:root:not([data-theme]) {
+  --mode: dark;
+  --bg-primary: #0d1117;
+  --bg-surface: #161b22;
+  --bg-sidebar: #161b22;
+  --accent-color: #58a6ff;
+}

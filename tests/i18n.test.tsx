@@ -5,10 +5,19 @@ import path from 'node:path'
 import i18n, { resources } from '../src/i18n'
 import App from '../src/App'
 import { SettingsPage, defaultSettings } from '../src/SettingsPage'
+import { getStoredTheme } from '../src/utils/themeEngine'
 
 function SettingsHarness() {
   const [settings, setSettings] = useState(defaultSettings)
-  return <SettingsPage settings={settings} setSettings={setSettings} />
+  const [theme, setTheme] = useState(getStoredTheme)
+  return (
+    <SettingsPage
+      settings={settings}
+      setSettings={setSettings}
+      theme={theme}
+      setTheme={setTheme}
+    />
+  )
 }
 
 const flatten = (value: unknown, prefix = ''): string[] => {

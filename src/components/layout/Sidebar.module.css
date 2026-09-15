@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Sidebar.module.css — drawer animation, backdrop and the new controls.
+   Layout width / margin rules live in App.css beside the existing `.sidebar`
+   and `main` declarations so there is a single owner for the layout shift.
+   ========================================================================== */
+
+/* ---- Hamburger (drawer widths only) ---------------------------------- */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 14px;
+  z-index: var(--z-hamburger);
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 6px 18px var(--shadow-color);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.hamburger:hover {
+  background: var(--card-hover);
+}
+
+/* ---- Backdrop -------------------------------------------------------- */
+.backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-backdrop);
+  background: var(--bg-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--transition-drawer),
+    visibility var(--transition-drawer);
+}
+
+.backdrop[data-visible='true'] {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---- Collapse / expand toggle --------------------------------------- */
+.collapseToggle {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  background: none;
+  padding: 14px 15px 2px;
+  border-radius: 0;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.collapseToggle:hover {
+  color: var(--accent-color);
+}
+
+/* ---- Text that folds away in the icon rail -------------------------- */
+.navLabel,
+.brandText,
+.bottomText,
+.toggleLabel {
+  transition:
+    opacity var(--transition-base),
+    width var(--transition-drawer);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Collapsed (icon rail) — narrow screens never collapse, they slide away,
+   so these rules are scoped to the wide-screen layout.
+   ========================================================================== */
+@media (min-width: 901px) {
+  html[data-sidebar='collapsed'] .navLabel,
+  html[data-sidebar='collapsed'] .brandText,
+  html[data-sidebar='collapsed'] .bottomText,
+  html[data-sidebar='collapsed'] .toggleLabel {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+  }
+
+  html[data-sidebar='collapsed'] .collapseToggle {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ==========================================================================
+   Drawer (narrow screens)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .backdrop {
+    display: block;
+  }
+
+  .collapseToggle {
+    /* The hamburger owns the toggle at these widths. */
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .hamburger,
+  .navLabel,
+  .brandText,
+  .bottomText,
+  .toggleLabel {
+    transition: none;
+  }
+}

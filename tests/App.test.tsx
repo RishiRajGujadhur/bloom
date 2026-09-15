@@ -68,18 +68,20 @@ test('habit completion persists after reload', () => {
     screen.getByRole('button', { name: /Move with intention/ }),
   ).toHaveAttribute('aria-pressed', 'true')
 })
-test('dark mode toggles and persists after reload', () => {
+test('light/dark toggle switches palette mode and persists after reload', () => {
   const view = render(<App />)
   fireEvent.click(
     screen.getByRole('button', { name: 'Switch to dark mode' }),
   )
-  expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
-  expect(localStorage.getItem('mindfulness-dashboard-theme')).toBe('dark')
+  // data-theme now names the palette; data-mode carries light/dark.
+  expect(document.documentElement).toHaveAttribute('data-mode', 'dark')
+  expect(document.documentElement).toHaveAttribute('data-theme', 'bloom-dark')
   view.unmount()
   render(<App />)
   expect(
     screen.getByRole('button', { name: 'Switch to light mode' }),
   ).toHaveAttribute('aria-pressed', 'true')
+  expect(document.documentElement).toHaveAttribute('data-mode', 'dark')
 })
 test('corrupt storage is not overwritten by rendering', () => {
   localStorage.setItem(STORAGE_KEY, 'broken')
