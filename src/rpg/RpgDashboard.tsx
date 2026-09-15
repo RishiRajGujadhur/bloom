@@ -1,10 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
-import { BookOpen, Flame, Info, Shield, Sparkles, Swords, Trophy, Volume2, VolumeX } from 'lucide-react'
+import {
+  BookOpen,
+  Flame,
+  Info,
+  Shield,
+  Sparkles,
+  Swords,
+  Trophy,
+  Volume2,
+  VolumeX,
+} from 'lucide-react'
 import type { AppData } from '../model'
 import { dayKey } from '../dates'
 import { Modal } from '../components/Modal'
-import { bossHealth, combo, commitBoss, openLoot, totals, unlocks } from './engine'
+import {
+  bossHealth,
+  combo,
+  commitBoss,
+  openLoot,
+  totals,
+  unlocks,
+} from './engine'
 import { Sprite } from './Sprite'
 import { enableAudio, victoryChord } from './audio'
 import { statNames } from './schema'
@@ -13,59 +30,596 @@ import { GamificationShowcase } from './GamificationShowcase'
 import { MomentumFeatures } from './MomentumFeatures'
 import './rpg.css'
 
-const elapsedLabel = (elapsed: number) => { const minutes=Math.floor(elapsed/60000);return `${Math.floor(minutes/1440)}d ${String(Math.floor(minutes/60)%24).padStart(2,'0')}h ${String(minutes%60).padStart(2,'0')}m` }
-export function RpgDashboard({ data, setData, onReflect }: { data: AppData; setData: Dispatch<SetStateAction<AppData>>; onReflect: () => void }) {
-  const [clock,setClock]=useState(Date.now)
-  const [showRules,setShowRules]=useState(false)
-  const [showInventory,setShowInventory]=useState(false)
-  const [lootModal,setLootModal]=useState<7|30|null>(null)
-  const [selection,setSelection]=useState<string[]>([])
-  const [soundError,setSoundError]=useState('')
-  const [audioReady,setAudioReady]=useState(false)
-  const [feedback,setFeedback]=useState<{text:string;kind:'attack'|'journal'|'victory';nonce:number;x:number;y:number}|null>(null)
-  const clickPosition=useRef({x:200,y:160})
-  const prior=useRef(data.rpg)
-  const timer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined)
-  useEffect(()=>{ const tick=setInterval(()=>setClock(Date.now()),1000);return()=>clearInterval(tick) },[])
-  useEffect(()=>()=>clearTimeout(timer.current),[])
-  useEffect(()=>{
-    const capture=(event:MouseEvent)=>{const target=event.target instanceof Element?event.target.closest('button'):null;if(!target)return;const rect=target.getBoundingClientRect();clickPosition.current={x:Math.min(Math.max(rect.left+rect.width/2,140),window.innerWidth-140),y:Math.max(75,Math.min(rect.top,window.innerHeight-100))}}
-    document.addEventListener('click',capture,true);return()=>document.removeEventListener('click',capture,true)
-  },[])
-  useEffect(()=>{
-    const old=prior.current
-    prior.current=data.rpg
-    const newRewards=Object.entries(data.rpg.ledger).filter(([key,e])=>e.active && e.exp>0 && !old.ledger[key]?.active)
-    if(!newRewards.length)return
-    const earned=newRewards.reduce((sum,[,e])=>sum+e.exp,0)
-    const kind=newRewards.some(([,e])=>e.kind==='boss')?'victory':newRewards.some(([,e])=>e.kind==='journal')?'journal':'attack'
-    setFeedback({text:`+${earned} EXP${kind==='victory'?' · BOSS DEFEATED!':''}`,kind,nonce:Date.now(),...clickPosition.current})
-    clearTimeout(timer.current);timer.current=setTimeout(()=>setFeedback(null),2200)
-    if(kind==='victory' && data.rpg.sound && audioReady)victoryChord()
-  },[data.rpg,audioReady])
-  const now=Math.max(clock,data.rpg.lastSeenAt)
-  const today=dayKey(new Date(now)), stats=totals(data.rpg), streak=combo(data.rpg,now), owned=unlocks(data.rpg)
-  const boss=data.rpg.bosses[today], health=bossHealth(data,today)
-  const priorities=data.plans.filter(p=>p.date===today)
-  const pending=data.rpg.loot.filter(l=>!l.opened)
-  const titles=['The Seedling','The Grove Guardian','The Sunlit Champion']
-  const row=feedback?.kind==='victory'?2:feedback?.kind==='journal'?3:feedback?.kind==='attack'?1:0
-  const changeSound=async()=>{ if(data.rpg.sound && audioReady){setData(d=>({...d,rpg:{...d.rpg,sound:false}}));setAudioReady(false);return} const ready=await enableAudio();setAudioReady(ready);setSoundError(ready?'':'Audio is unavailable in this browser. You can keep playing without sound.');if(ready)setData(d=>({...d,rpg:{...d.rpg,sound:true}})) }
-  return <section className={`rpg-zone ${feedback?.kind==='victory'?'victory-shake':''}`} aria-label="Your RPG adventure">
-    <div className="rpg-heading"><span className="eyebrow"><Swords size={15}/> YOUR EVERYDAY ADVENTURE</span><button className="rpg-link" onClick={()=>setShowRules(true)}><Info size={14}/> How to play</button></div>
-    <div className="adventure-grid"><div className="character-card" id="avatar-card"><div className="character-title"><span className="level-tag">LV. {stats.level}</span><div><h2>{titles[stats.tier]}</h2><p>Your small steps are becoming superpowers.</p></div><button className="inventory-button" onClick={()=>setShowInventory(true)}>Inventory <Sparkles size={14}/></button></div>
-      <div className="character-body"><div className={`pixel-stage tier-${stats.tier}`}><div className="pixel-moon"/><span className="pixel-star star-one">✦</span><span className="pixel-star star-two">✧</span><div className="pixel-ground"/><div className={`avatar-aura aura-${stats.tier}`}><Sprite name={`hero-${stats.tier}`} label={`${titles[stats.tier]} pixel avatar`} row={row} size={128}/></div>{data.rpg.companion!=='none' && ((data.rpg.companion==='fox' && owned.forest)||(data.rpg.companion==='spirit' && owned.amber)) && <div className="companion-sprite"><Sprite name={data.rpg.companion} label={`${data.rpg.companion} companion`} size={64}/></div>}<span className="stage-caption">{stats.tier===0?'APPRENTICE GEAR':stats.tier===1?'GROVE ARMOR':'GOLDEN ARMOR + AURA'}</span></div>
-      <div className="character-details"><div className="rpg-meter-label"><span><HeartGlyph/> Vitality</span><strong>{stats.hp} / 100 HP</strong></div><meter className="hp-meter" min={0} max={100} value={stats.hp} aria-label="Avatar health"/><div className="rpg-meter-label"><span>Experience</span><strong>{stats.exp} EXP</strong></div><progress className="xp-meter" value={stats.exp%100} max={100} aria-label="Progress to next level"/><p className="level-next">{stats.nextLevel} EXP to level {stats.level+1}</p><div className="rpg-stats">{(Object.keys(statNames) as Stat[]).map(stat=><div key={stat} className={`stat-${stat}`}><span>{statNames[stat]}</span><strong>{stats.stats[stat]}</strong><small>{stat==='strength'?'MOVE':stat==='intelligence'?'FOCUS':'REFLECT'}</small></div>)}</div><p className="evolution-note">{stats.tier===2?'Your champion aura is awake.':`${(stats.tier===0?100:300)-Object.values(stats.stats).reduce((a,b)=>a+b,0)} stat points until your next evolution`}</p></div></div>
-    </div><aside className="combo-card"><span className="combo-label"><Flame size={16}/> STREAK COMBO</span><div className="combo-multiplier">{streak.multiplier.toFixed(2)}<span>×</span></div><strong className="combo-time" aria-label="Continuous streak time">{elapsedLabel(streak.elapsed)}</strong><p>{streak.days ? `${streak.days} consecutive logging ${streak.days===1?'day':'days'}` : 'Your next action starts the clock.'}</p><div className="combo-anchors"><span>3 DAYS <b>1.5×</b></span><i/><span>14 DAYS <b>3×</b></span></div><div className="combo-status"><span className={`tiny-dot ${streak.loggedToday?'lit':''}`}/>{streak.loggedToday?'Today’s combo is protected':streak.days?'Log once before midnight to keep it':'Log a habit, intention or reflection'}</div><button className="rpg-reflect" onClick={onReflect}><BookOpen size={14}/> Reflect for +5 Spirit</button></aside></div>
-    <div className={`daily-boss ${boss?.defeated?'boss-won':''}`}><div className="boss-art"><Sprite name="boss" label="The Procrastination Golem" size={96}/>{boss?.defeated && <span className="defeated-stamp">DEFEATED</span>}</div><div className="boss-content"><div className="boss-title"><div><span className="eyebrow">DAILY BOSS</span><h3>The Procrastination Golem</h3></div><span className="boss-reward"><Trophy size={13}/> 50 EXP × combo</span></div>{boss && health ? <><div className="rpg-meter-label"><span>{boss.defeated?'Victory! You kept your promises.':'Every completed habit is an attack.'}</span><strong>{health.remaining} / {health.max} HP</strong></div><progress className="boss-meter" value={health.remaining} max={health.max} aria-label="Daily boss health"/><div className="boss-objectives">{boss.priorityIds.map(id=>{const p=data.plans.find(p=>p.id===id);return <span key={id} className={p?.done?'objective-done':''}>{p?.done?'✓':'◇'} {p?.title ?? 'Committed intention'}</span>})}</div><small>{health.habitHits}/{boss.habitIds.length} habits · {health.priorityHits}/{boss.priorityIds.length} critical intentions · Defeat restores 5 HP</small></> : <><p>Choose 1–3 non-negotiable intentions. Your habits and priorities become today’s attacks.</p>{priorities.length ? <><div className="boss-select">{priorities.map(p=><label key={p.id}><input type="checkbox" checked={selection.includes(p.id)} disabled={!selection.includes(p.id)&&selection.length>=3} onChange={()=>setSelection(ids=>ids.includes(p.id)?ids.filter(id=>id!==p.id):[...ids,p.id])}/><span>{p.title}</span></label>)}</div><button className="boss-start" disabled={!selection.length} onClick={()=>setData(d=>commitBoss(d,selection))}><Swords size={14}/> Commit today’s boss ({selection.length}/3)</button><small>Missed critical intentions cost 5 HP at midnight. The lineup locks when you commit.</small></> : <button className="rpg-link" onClick={()=>document.getElementById('planning')?.scrollIntoView({block:'start'})}>Add an intention below to summon your boss →</button>}</>}</div></div>
-    <div className="loot-row"><div><Sparkles size={15}/><span>CONSISTENCY HAS ITS TREASURES</span></div>{([7,30] as const).map(m=>{const loot=data.rpg.loot.find(l=>l.milestone===m);return <button key={m} className={`loot-button ${loot&&!loot.opened?'chest-drop':''}`} disabled={!loot} onClick={()=>setLootModal(m)}><Sprite name="chest" label={`${m}-day chest`} size={40}/><span>{m}-day chest<small>{loot?.opened?'Collected':loot?'Ready to open!':m===7?'Forest palette + fox':'Amber + spirit + chiptune'}</small></span>{loot?.opened?'✓':loot?'OPEN':'⌑'}</button>})}</div>
-    {feedback && <div key={feedback.nonce} className="pixel-feedback" role="status" style={{left:feedback.x,top:feedback.y}}>{feedback.text}</div>}
-    {pending.length>0 && <div className="loot-notice" role="status">A milestone chest has dropped. Open it below your boss!</div>}
-    <GamificationShowcase data={data} setData={setData} />
-    <MomentumFeatures data={data} setData={setData} />
-    {lootModal && <Modal title={`${lootModal}-day treasure`} onClose={()=>setLootModal(null)}><div className="loot-reveal"><Sprite name="chest" label="Milestone treasure chest" size={128}/>{data.rpg.loot.find(l=>l.milestone===lootModal)?.opened ? <><h3>New treasures unlocked!</h3><p>{lootModal===7?'Forest color palette and a rare fox companion.':'Amber color palette, a spirit companion and an 8-bit victory cadence.'}</p><button className="primary" onClick={()=>{setLootModal(null);setShowInventory(true)}}>Equip in inventory</button></> : <><p>You kept your combo alive. This one’s yours.</p><button className="primary" onClick={()=>setData(d=>openLoot(d,lootModal))}>Open chest</button></>}</div></Modal>}
-    {showInventory && <Modal title="Your adventurer’s inventory" onClose={()=>setShowInventory(false)}><div className="inventory-section"><h3>World palette</h3><div className="equipment-grid">{(['bloom','forest','amber'] as const).map(p=><button key={p} disabled={p!=='bloom'&&!owned[p]} aria-pressed={data.rpg.palette===p} className={`palette-option palette-${p}`} onClick={()=>setData(d=>({...d,rpg:{...d.rpg,palette:p}}))}><span/>{p}{p!=='bloom'&&!owned[p]&&<small>{p==='forest'?7:30}-day chest</small>}</button>)}</div><h3>Travel companion</h3><div className="equipment-grid">{(['none','fox','spirit'] as const).map(p=><button key={p} disabled={p==='fox'?!owned.forest:p==='spirit'?!owned.amber:false} aria-pressed={data.rpg.companion===p} onClick={()=>setData(d=>({...d,rpg:{...d.rpg,companion:p}}))}>{p==='none'?<Shield size={32}/>:<Sprite name={p} label={p} size={48}/>}<span>{p}</span></button>)}</div><h3>Victory sound</h3><button className="sound-toggle" disabled={!owned.amber} aria-pressed={data.rpg.sound&&audioReady} onClick={changeSound}>{data.rpg.sound&&audioReady?<Volume2 size={17}/>:<VolumeX size={17}/>} {owned.amber?(data.rpg.sound&&audioReady?'Sound on — click to mute':'Enable 8-bit victory cadence'):'Unlock with the 30-day chest'}</button><p className="muted">Sound starts only after you enable it in this visit. Quiet by default.</p>{soundError&&<p role="alert">{soundError}</p>}</div></Modal>}
-    {showRules && <Modal title="A gentler kind of RPG" onClose={()=>setShowRules(false)}><div className="rpg-rules"><h3>Grow your character</h3><p>Each habit gives 10 base EXP and +5 to its assigned stat. Intentions give 10 base EXP; your first saved journal each day gives 20 EXP and +5 Spirit. Every 100 EXP is a level. At 100 total stat points you equip grove armor; at 300 you unlock golden armor and an aura.</p><h3>Keep your combo alive</h3><p>Complete at least one activity each local calendar day. Today stays open until midnight. The clock starts with your first rewarded log in the current run. EXP compounds with exact elapsed hours: 72 hours gives 1.5×, 14 full days gives 3× (the cap). A missed whole day resets the combo. Device time is used.</p><h3>Fight the daily boss</h3><p>Commit 1–3 intentions. The current habit list is locked into that boss: habits deal 20 damage each and priorities 30. Finish all of them to win 50 base EXP and restore 5 HP. Missing committed critical intentions costs 5 HP once when the day closes. No committed boss means no HP penalty. Health never drops below 1.</p><h3>Earn real unlocks</h3><p>A new log after 7 or 30 full elapsed days drops a one-time chest. Open it to equip palettes and companions. The 30-day chest adds a quiet, synthesized classical V–I victory cadence. Cosmetics stay unlocked.</p><h3>Your progress stays honest</h3><p>Undoing a completion reverses its EXP, stat points and boss damage. Rechecking restores the original award, never a larger one. Journals earn rewards once per day. Previous Bloom entries stay saved without retroactive rewards. No purchases, no punishment spiral.</p></div></Modal>}
-  </section>
+const elapsedLabel = (elapsed: number) => {
+  const minutes = Math.floor(elapsed / 60000)
+  return `${Math.floor(minutes / 1440)}d ${String(Math.floor(minutes / 60) % 24).padStart(2, '0')}h ${String(minutes % 60).padStart(2, '0')}m`
 }
-function HeartGlyph(){return <span aria-hidden="true">♥</span>}
+export function RpgDashboard({
+  data,
+  setData,
+  onReflect,
+  showWeeklyRaid,
+  showWalkthroughTour,
+}: {
+  data: AppData
+  setData: Dispatch<SetStateAction<AppData>>
+  onReflect: () => void
+  showWeeklyRaid: boolean
+  showWalkthroughTour: boolean
+}) {
+  const [clock, setClock] = useState(Date.now)
+  const [showRules, setShowRules] = useState(false)
+  const [showInventory, setShowInventory] = useState(false)
+  const [lootModal, setLootModal] = useState<7 | 30 | null>(null)
+  const [selection, setSelection] = useState<string[]>([])
+  const [soundError, setSoundError] = useState('')
+  const [audioReady, setAudioReady] = useState(false)
+  const [feedback, setFeedback] = useState<{
+    text: string
+    kind: 'attack' | 'journal' | 'victory'
+    nonce: number
+    x: number
+    y: number
+  } | null>(null)
+  const clickPosition = useRef({ x: 200, y: 160 })
+  const prior = useRef(data.rpg)
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  useEffect(() => {
+    const tick = setInterval(() => setClock(Date.now()), 1000)
+    return () => clearInterval(tick)
+  }, [])
+  useEffect(() => () => clearTimeout(timer.current), [])
+  useEffect(() => {
+    const capture = (event: MouseEvent) => {
+      const target =
+        event.target instanceof Element ? event.target.closest('button') : null
+      if (!target) return
+      const rect = target.getBoundingClientRect()
+      clickPosition.current = {
+        x: Math.min(
+          Math.max(rect.left + rect.width / 2, 140),
+          window.innerWidth - 140,
+        ),
+        y: Math.max(75, Math.min(rect.top, window.innerHeight - 100)),
+      }
+    }
+    document.addEventListener('click', capture, true)
+    return () => document.removeEventListener('click', capture, true)
+  }, [])
+  useEffect(() => {
+    const old = prior.current
+    prior.current = data.rpg
+    const newRewards = Object.entries(data.rpg.ledger).filter(
+      ([key, e]) => e.active && e.exp > 0 && !old.ledger[key]?.active,
+    )
+    if (!newRewards.length) return
+    const earned = newRewards.reduce((sum, [, e]) => sum + e.exp, 0)
+    const kind = newRewards.some(([, e]) => e.kind === 'boss')
+      ? 'victory'
+      : newRewards.some(([, e]) => e.kind === 'journal')
+        ? 'journal'
+        : 'attack'
+    setFeedback({
+      text: `+${earned} EXP${kind === 'victory' ? ' · BOSS DEFEATED!' : ''}`,
+      kind,
+      nonce: Date.now(),
+      ...clickPosition.current,
+    })
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => setFeedback(null), 2200)
+    if (kind === 'victory' && data.rpg.sound && audioReady) victoryChord()
+  }, [data.rpg, audioReady])
+  const now = Math.max(clock, data.rpg.lastSeenAt)
+  const today = dayKey(new Date(now)),
+    stats = totals(data.rpg),
+    streak = combo(data.rpg, now),
+    owned = unlocks(data.rpg)
+  const boss = data.rpg.bosses[today],
+    health = bossHealth(data, today)
+  const priorities = data.plans.filter((p) => p.date === today)
+  const pending = data.rpg.loot.filter((l) => !l.opened)
+  const titles = ['The Seedling', 'The Grove Guardian', 'The Sunlit Champion']
+  const row =
+    feedback?.kind === 'victory'
+      ? 2
+      : feedback?.kind === 'journal'
+        ? 3
+        : feedback?.kind === 'attack'
+          ? 1
+          : 0
+  const changeSound = async () => {
+    if (data.rpg.sound && audioReady) {
+      setData((d) => ({ ...d, rpg: { ...d.rpg, sound: false } }))
+      setAudioReady(false)
+      return
+    }
+    const ready = await enableAudio()
+    setAudioReady(ready)
+    setSoundError(
+      ready
+        ? ''
+        : 'Audio is unavailable in this browser. You can keep playing without sound.',
+    )
+    if (ready) setData((d) => ({ ...d, rpg: { ...d.rpg, sound: true } }))
+  }
+  return (
+    <section
+      className={`rpg-zone ${feedback?.kind === 'victory' ? 'victory-shake' : ''}`}
+      aria-label="Your RPG adventure"
+    >
+      <div className="rpg-heading">
+        <span className="eyebrow">
+          <Swords size={15} /> YOUR EVERYDAY ADVENTURE
+        </span>
+        <button className="rpg-link" onClick={() => setShowRules(true)}>
+          <Info size={14} /> How to play
+        </button>
+      </div>
+      <div className="adventure-grid">
+        <div className="character-card" id="avatar-card">
+          <div className="character-title">
+            <span className="level-tag">LV. {stats.level}</span>
+            <div>
+              <h2>{titles[stats.tier]}</h2>
+              <p>Your small steps are becoming superpowers.</p>
+            </div>
+            <button
+              className="inventory-button"
+              onClick={() => setShowInventory(true)}
+            >
+              Inventory <Sparkles size={14} />
+            </button>
+          </div>
+          <div className="character-body">
+            <div className={`pixel-stage tier-${stats.tier}`}>
+              <div className="pixel-moon" />
+              <span className="pixel-star star-one">✦</span>
+              <span className="pixel-star star-two">✧</span>
+              <div className="pixel-ground" />
+              <div className={`avatar-aura aura-${stats.tier}`}>
+                <Sprite
+                  name={`hero-${stats.tier}`}
+                  label={`${titles[stats.tier]} pixel avatar`}
+                  row={row}
+                  size={128}
+                />
+              </div>
+              {data.rpg.companion !== 'none' &&
+                ((data.rpg.companion === 'fox' && owned.forest) ||
+                  (data.rpg.companion === 'spirit' && owned.amber)) && (
+                  <div className="companion-sprite">
+                    <Sprite
+                      name={data.rpg.companion}
+                      label={`${data.rpg.companion} companion`}
+                      size={64}
+                    />
+                  </div>
+                )}
+              <span className="stage-caption">
+                {stats.tier === 0
+                  ? 'APPRENTICE GEAR'
+                  : stats.tier === 1
+                    ? 'GROVE ARMOR'
+                    : 'GOLDEN ARMOR + AURA'}
+              </span>
+            </div>
+            <div className="character-details">
+              <div className="rpg-meter-label">
+                <span>
+                  <HeartGlyph /> Vitality
+                </span>
+                <strong>{stats.hp} / 100 HP</strong>
+              </div>
+              <meter
+                className="hp-meter"
+                min={0}
+                max={100}
+                value={stats.hp}
+                aria-label="Avatar health"
+              />
+              <div className="rpg-meter-label">
+                <span>Experience</span>
+                <strong>{stats.exp} EXP</strong>
+              </div>
+              <progress
+                className="xp-meter"
+                value={stats.exp % 100}
+                max={100}
+                aria-label="Progress to next level"
+              />
+              <p className="level-next">
+                {stats.nextLevel} EXP to level {stats.level + 1}
+              </p>
+              <div className="rpg-stats">
+                {(Object.keys(statNames) as Stat[]).map((stat) => (
+                  <div key={stat} className={`stat-${stat}`}>
+                    <span>{statNames[stat]}</span>
+                    <strong>{stats.stats[stat]}</strong>
+                    <small>
+                      {stat === 'strength'
+                        ? 'MOVE'
+                        : stat === 'intelligence'
+                          ? 'FOCUS'
+                          : 'REFLECT'}
+                    </small>
+                  </div>
+                ))}
+              </div>
+              <p className="evolution-note">
+                {stats.tier === 2
+                  ? 'Your champion aura is awake.'
+                  : `${(stats.tier === 0 ? 100 : 300) - Object.values(stats.stats).reduce((a, b) => a + b, 0)} stat points until your next evolution`}
+              </p>
+            </div>
+          </div>
+        </div>
+        <aside className="combo-card">
+          <span className="combo-label">
+            <Flame size={16} /> STREAK COMBO
+          </span>
+          <div className="combo-multiplier">
+            {streak.multiplier.toFixed(2)}
+            <span>×</span>
+          </div>
+          <strong className="combo-time" aria-label="Continuous streak time">
+            {elapsedLabel(streak.elapsed)}
+          </strong>
+          <p>
+            {streak.days
+              ? `${streak.days} consecutive logging ${streak.days === 1 ? 'day' : 'days'}`
+              : 'Your next action starts the clock.'}
+          </p>
+          <div className="combo-anchors">
+            <span>
+              3 DAYS <b>1.5×</b>
+            </span>
+            <i />
+            <span>
+              14 DAYS <b>3×</b>
+            </span>
+          </div>
+          <div className="combo-status">
+            <span className={`tiny-dot ${streak.loggedToday ? 'lit' : ''}`} />
+            {streak.loggedToday
+              ? 'Today’s combo is protected'
+              : streak.days
+                ? 'Log once before midnight to keep it'
+                : 'Log a habit, intention or reflection'}
+          </div>
+          <button className="rpg-reflect" onClick={onReflect}>
+            <BookOpen size={14} /> Reflect for +5 Spirit
+          </button>
+        </aside>
+      </div>
+      <div className={`daily-boss ${boss?.defeated ? 'boss-won' : ''}`}>
+        <div className="boss-art">
+          <Sprite name="boss" label="The Procrastination Golem" size={96} />
+          {boss?.defeated && <span className="defeated-stamp">DEFEATED</span>}
+        </div>
+        <div className="boss-content">
+          <div className="boss-title">
+            <div>
+              <span className="eyebrow">DAILY BOSS</span>
+              <h3>The Procrastination Golem</h3>
+            </div>
+            <span className="boss-reward">
+              <Trophy size={13} /> 50 EXP × combo
+            </span>
+          </div>
+          {boss && health ? (
+            <>
+              <div className="rpg-meter-label">
+                <span>
+                  {boss.defeated
+                    ? 'Victory! You kept your promises.'
+                    : 'Every completed habit is an attack.'}
+                </span>
+                <strong>
+                  {health.remaining} / {health.max} HP
+                </strong>
+              </div>
+              <progress
+                className="boss-meter"
+                value={health.remaining}
+                max={health.max}
+                aria-label="Daily boss health"
+              />
+              <div className="boss-objectives">
+                {boss.priorityIds.map((id) => {
+                  const p = data.plans.find((p) => p.id === id)
+                  return (
+                    <span key={id} className={p?.done ? 'objective-done' : ''}>
+                      {p?.done ? '✓' : '◇'} {p?.title ?? 'Committed intention'}
+                    </span>
+                  )
+                })}
+              </div>
+              <small>
+                {health.habitHits}/{boss.habitIds.length} habits ·{' '}
+                {health.priorityHits}/{boss.priorityIds.length} critical
+                intentions · Defeat restores 5 HP
+              </small>
+            </>
+          ) : (
+            <>
+              <p>
+                Choose 1–3 non-negotiable intentions. Your habits and priorities
+                become today’s attacks.
+              </p>
+              {priorities.length ? (
+                <>
+                  <div className="boss-select">
+                    {priorities.map((p) => (
+                      <label key={p.id}>
+                        <input
+                          type="checkbox"
+                          checked={selection.includes(p.id)}
+                          disabled={
+                            !selection.includes(p.id) && selection.length >= 3
+                          }
+                          onChange={() =>
+                            setSelection((ids) =>
+                              ids.includes(p.id)
+                                ? ids.filter((id) => id !== p.id)
+                                : [...ids, p.id],
+                            )
+                          }
+                        />
+                        <span>{p.title}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <button
+                    className="boss-start"
+                    disabled={!selection.length}
+                    onClick={() => setData((d) => commitBoss(d, selection))}
+                  >
+                    <Swords size={14} /> Commit today’s boss ({selection.length}
+                    /3)
+                  </button>
+                  <small>
+                    Missed critical intentions cost 5 HP at midnight. The lineup
+                    locks when you commit.
+                  </small>
+                </>
+              ) : (
+                <button
+                  className="rpg-link"
+                  onClick={() =>
+                    document
+                      .getElementById('planning')
+                      ?.scrollIntoView({ block: 'start' })
+                  }
+                >
+                  Add an intention below to summon your boss →
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+      <div className="loot-row">
+        <div>
+          <Sparkles size={15} />
+          <span>CONSISTENCY HAS ITS TREASURES</span>
+        </div>
+        {([7, 30] as const).map((m) => {
+          const loot = data.rpg.loot.find((l) => l.milestone === m)
+          return (
+            <button
+              key={m}
+              className={`loot-button ${loot && !loot.opened ? 'chest-drop' : ''}`}
+              disabled={!loot}
+              onClick={() => setLootModal(m)}
+            >
+              <Sprite name="chest" label={`${m}-day chest`} size={40} />
+              <span>
+                {m}-day chest
+                <small>
+                  {loot?.opened
+                    ? 'Collected'
+                    : loot
+                      ? 'Ready to open!'
+                      : m === 7
+                        ? 'Forest palette + fox'
+                        : 'Amber + spirit + chiptune'}
+                </small>
+              </span>
+              {loot?.opened ? '✓' : loot ? 'OPEN' : '⌑'}
+            </button>
+          )
+        })}
+      </div>
+      {feedback && (
+        <div
+          key={feedback.nonce}
+          className="pixel-feedback"
+          role="status"
+          style={{ left: feedback.x, top: feedback.y }}
+        >
+          {feedback.text}
+        </div>
+      )}
+      {pending.length > 0 && (
+        <div className="loot-notice" role="status">
+          A milestone chest has dropped. Open it below your boss!
+        </div>
+      )}
+      <GamificationShowcase
+        data={data}
+        setData={setData}
+        showWeeklyRaid={showWeeklyRaid}
+        showWalkthroughTour={showWalkthroughTour}
+      />
+      <MomentumFeatures data={data} setData={setData} />
+      {lootModal && (
+        <Modal
+          title={`${lootModal}-day treasure`}
+          onClose={() => setLootModal(null)}
+        >
+          <div className="loot-reveal">
+            <Sprite name="chest" label="Milestone treasure chest" size={128} />
+            {data.rpg.loot.find((l) => l.milestone === lootModal)?.opened ? (
+              <>
+                <h3>New treasures unlocked!</h3>
+                <p>
+                  {lootModal === 7
+                    ? 'Forest color palette and a rare fox companion.'
+                    : 'Amber color palette, a spirit companion and an 8-bit victory cadence.'}
+                </p>
+                <button
+                  className="primary"
+                  onClick={() => {
+                    setLootModal(null)
+                    setShowInventory(true)
+                  }}
+                >
+                  Equip in inventory
+                </button>
+              </>
+            ) : (
+              <>
+                <p>You kept your combo alive. This one’s yours.</p>
+                <button
+                  className="primary"
+                  onClick={() => setData((d) => openLoot(d, lootModal))}
+                >
+                  Open chest
+                </button>
+              </>
+            )}
+          </div>
+        </Modal>
+      )}
+      {showInventory && (
+        <Modal
+          title="Your adventurer’s inventory"
+          onClose={() => setShowInventory(false)}
+        >
+          <div className="inventory-section">
+            <h3>World palette</h3>
+            <div className="equipment-grid">
+              {(['bloom', 'forest', 'amber'] as const).map((p) => (
+                <button
+                  key={p}
+                  disabled={p !== 'bloom' && !owned[p]}
+                  aria-pressed={data.rpg.palette === p}
+                  className={`palette-option palette-${p}`}
+                  onClick={() =>
+                    setData((d) => ({ ...d, rpg: { ...d.rpg, palette: p } }))
+                  }
+                >
+                  <span />
+                  {p}
+                  {p !== 'bloom' && !owned[p] && (
+                    <small>{p === 'forest' ? 7 : 30}-day chest</small>
+                  )}
+                </button>
+              ))}
+            </div>
+            <h3>Travel companion</h3>
+            <div className="equipment-grid">
+              {(['none', 'fox', 'spirit'] as const).map((p) => (
+                <button
+                  key={p}
+                  disabled={
+                    p === 'fox'
+                      ? !owned.forest
+                      : p === 'spirit'
+                        ? !owned.amber
+                        : false
+                  }
+                  aria-pressed={data.rpg.companion === p}
+                  onClick={() =>
+                    setData((d) => ({ ...d, rpg: { ...d.rpg, companion: p } }))
+                  }
+                >
+                  {p === 'none' ? (
+                    <Shield size={32} />
+                  ) : (
+                    <Sprite name={p} label={p} size={48} />
+                  )}
+                  <span>{p}</span>
+                </button>
+              ))}
+            </div>
+            <h3>Victory sound</h3>
+            <button
+              className="sound-toggle"
+              disabled={!owned.amber}
+              aria-pressed={data.rpg.sound && audioReady}
+              onClick={changeSound}
+            >
+              {data.rpg.sound && audioReady ? (
+                <Volume2 size={17} />
+              ) : (
+                <VolumeX size={17} />
+              )}{' '}
+              {owned.amber
+                ? data.rpg.sound && audioReady
+                  ? 'Sound on — click to mute'
+                  : 'Enable 8-bit victory cadence'
+                : 'Unlock with the 30-day chest'}
+            </button>
+            <p className="muted">
+              Sound starts only after you enable it in this visit. Quiet by
+              default.
+            </p>
+            {soundError && <p role="alert">{soundError}</p>}
+          </div>
+        </Modal>
+      )}
+      {showRules && (
+        <Modal
+          title="A gentler kind of RPG"
+          onClose={() => setShowRules(false)}
+        >
+          <div className="rpg-rules">
+            <h3>Grow your character</h3>
+            <p>
+              Each habit gives 10 base EXP and +5 to its assigned stat.
+              Intentions give 10 base EXP; your first saved journal each day
+              gives 20 EXP and +5 Spirit. Every 100 EXP is a level. At 100 total
+              stat points you equip grove armor; at 300 you unlock golden armor
+              and an aura.
+            </p>
+            <h3>Keep your combo alive</h3>
+            <p>
+              Complete at least one activity each local calendar day. Today
+              stays open until midnight. The clock starts with your first
+              rewarded log in the current run. EXP compounds with exact elapsed
+              hours: 72 hours gives 1.5×, 14 full days gives 3× (the cap). A
+              missed whole day resets the combo. Device time is used.
+            </p>
+            <h3>Fight the daily boss</h3>
+            <p>
+              Commit 1–3 intentions. The current habit list is locked into that
+              boss: habits deal 20 damage each and priorities 30. Finish all of
+              them to win 50 base EXP and restore 5 HP. Missing committed
+              critical intentions costs 5 HP once when the day closes. No
+              committed boss means no HP penalty. Health never drops below 1.
+            </p>
+            <h3>Earn real unlocks</h3>
+            <p>
+              A new log after 7 or 30 full elapsed days drops a one-time chest.
+              Open it to equip palettes and companions. The 30-day chest adds a
+              quiet, synthesized classical V–I victory cadence. Cosmetics stay
+              unlocked.
+            </p>
+            <h3>Your progress stays honest</h3>
+            <p>
+              Undoing a completion reverses its EXP, stat points and boss
+              damage. Rechecking restores the original award, never a larger
+              one. Journals earn rewards once per day. Previous Bloom entries
+              stay saved without retroactive rewards. No purchases, no
+              punishment spiral.
+            </p>
+          </div>
+        </Modal>
+      )}
+    </section>
+  )
+}
+function HeartGlyph() {
+  return <span aria-hidden="true">♥</span>
+}
