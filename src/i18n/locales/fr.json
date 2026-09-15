@@ -1,0 +1,358 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "close": "Fermer la boîte de dialogue",
+    "skipToDashboard": "Aller au tableau de bord",
+    "mainNav": "Navigation principale",
+    "savedInBrowser": "Enregistré dans ce navigateur",
+    "keepBackup": "Garder une sauvegarde",
+    "exportOriginal": "Exporter les données originales",
+    "useFresh": "Utiliser des données fraîches et réactiver l’enregistrement",
+    "openMenu": "Ouvrir le menu de navigation",
+    "closeMenu": "Fermer le menu de navigation",
+    "savingNeeds": "L’enregistrement a besoin de ton attention"
+  },
+  "meta": {
+    "title": "Bloom — Ton tableau de bord de pleine conscience",
+    "description": "Bloom : ton espace personnel pour des habitudes quotidiennes, des intentions douces et une réflexion guidée."
+  },
+  "language": {
+    "select": "Langue"
+  },
+  "nav": {
+    "dashboard": "Mon tableau de bord",
+    "habits": "Habitudes quotidiennes",
+    "journal": "Journal de réflexion",
+    "rpg": "Statistiques RPG",
+    "settings": "Réglages",
+    "planning": "Mes intentions"
+  },
+  "sidebar": {
+    "brandTagline": "TON ESPACE QUOTIDIEN",
+    "mySpace": "MON ESPACE",
+    "greet": "Grandis à ton rythme.",
+    "message1": "Tu n’as pas besoin d’une journée parfaite",
+    "message2": "pour faire un petit progrès.",
+    "message3": "Un petit pas à la fois ✧",
+    "personalSpace": "Ton espace personnel",
+    "noAccount": "Aucun compte nécessaire",
+    "avatar": "T",
+    "collapse": "Réduire le menu",
+    "expand": "Déployer le menu",
+    "footer": "Conçu pour ta propre façon de grandir."
+  },
+  "topbar": {
+    "dailyReminder": "UN PEU MIEUX, CHAQUE JOUR",
+    "themeLight": "Mode clair",
+    "themeDark": "Mode sombre",
+    "switchToLight": "Passer en mode clair",
+    "switchToDark": "Passer en mode sombre",
+    "export": "Exporter mes données"
+  },
+  "welcome": {
+    "title": "Un petit espace pour <em>grandir.</em>",
+    "message": "Bon retour. Rendons la journée un peu plus comme toi.",
+    "justForYou": "Rien que pour toi"
+  },
+  "habits": {
+    "title": "Petites habitudes, grand amour",
+    "subtitle": "Sois présent pour toi, par petits gestes.",
+    "progress": "Progression d’aujourd’hui",
+    "addHabit": "Ajouter une petite habitude",
+    "addHabitAria": "Ajouter une habitude",
+    "lastWeek": "Tes 7 derniers jours",
+    "statFor": "Statistique pour {{title}}",
+    "statStrength": "Force",
+    "statIntelligence": "Intelligence",
+    "statSpirit": "Esprit",
+    "expGain": "+10 EXP × combo",
+    "statPoints": "+5",
+    "habitDetailDefault": "Une petite promesse envers toi-même",
+    "nurturedToday": "Habitudes nourries aujourd’hui",
+    "weekTooltip": "{{day}} : {{count}} habitudes complétées"
+  },
+  "plans": {
+    "title": "Une petite intention",
+    "subtitle": "Qu’est-ce qui mérite ton énergie aujourd’hui ?",
+    "empty": "Une page neuve pour ta journée.",
+    "emptySub": "Choisis quelque chose de significatif, même petit.",
+    "addIntentionAria": "Ajouter une intention",
+    "editAria": "Modifier {{title}}",
+    "intention": "Faire de la place à ce qui compte",
+    "oneIntention": "Une intention pour aujourd’hui",
+    "setIntention": "Poser une intention",
+    "editTitle": "Modifier ton intention",
+    "yourIntention": "Ton intention",
+    "followedThrough": "Intentions tenues"
+  },
+  "journal": {
+    "title": "Ton espace de réflexion",
+    "subtitle": "Un petit bilan. Un peu de clarté.",
+    "welcome": "Fais-toi un peu de place.",
+    "welcomeMessage1": "Remarque comment tu te sens, célèbre une petite victoire,",
+    "welcomeMessage2": "et trouve ton prochain pas tout en douceur.",
+    "button": "Commencer un bilan",
+    "guides": "Invitations guidées · Privé à ce navigateur",
+    "fiveMin": "5 MIN POUR TOI",
+    "stepCounter": "{{step}} / 4",
+    "youShowedUp": "Tu as été là pour toi.",
+    "thatMatters": "Ça compte.",
+    "save": "Enregistrer et revoir la réflexion",
+    "view": "Voir la réflexion enregistrée",
+    "another": "Commencer un autre bilan",
+    "tags": "Étiquettes, séparées par des virgules",
+    "tagsPlaceholder": "Gratitude, repos, croissance",
+    "momentsOfReflection": "Moments de réflexion",
+    "conversation": "Conversation du journal",
+    "suggestedReplies": "Réponses suggérées",
+    "guideName": "TON GUIDE DE RÉFLEXION",
+    "youName": "TOI",
+    "typing": "Préparation de la prochaine réflexion",
+    "reflectionLabel": "Ta réflexion",
+    "inputPlaceholder": "Il n’y a pas de bonne réponse. Commence où tu es…",
+    "send": "Envoyer la réflexion",
+    "honesty": "Un peu d’honnêteté va loin.",
+    "characters": "{{count}}/2000",
+    "summaryReflection": "Ton bilan",
+    "summaryWin": "Une victoire à retenir",
+    "summaryObstacle": "Ce que tu as traversé",
+    "summaryActionStep": "Ton prochain petit pas",
+    "summaryMeta": "Humeur {{mood}}/5 · Énergie {{energy}}/5",
+    "summaryTitle": "Un moment à garder",
+    "summaryBack": "Retour à ma journée",
+    "backToReflections": "Retour aux réflexions",
+    "reflectionsCount": "{{count}} réflexions",
+    "emptyHistory": "Ton histoire commence par un bilan. Les réflexions enregistrées apparaîtront ici.",
+    "storyFallback": "Un moment pour toi",
+    "savedFallback": "Un moment pour toi"
+  },
+  "checkin": {
+    "moodLegend": "Comment est ton humeur ?",
+    "energyLegend": "Ton niveau d’énergie",
+    "moodField": "humeur",
+    "energyField": "énergie",
+    "ratingAria": "{{field}} {{n}} sur 5",
+    "moodRange": "Bas → Excellent",
+    "energyRange": "Épuisé → Plein d’énergie"
+  },
+  "affirmation": {
+    "title": "DES MOTS POUR GRANDIR",
+    "edit": "Modifier l’affirmation",
+    "modalTitle": "Des mots qui te ressemblent",
+    "label": "Ton affirmation personnelle",
+    "subtitle": "Un rappel, rien que pour toi."
+  },
+  "history": {
+    "story": "Ton histoire se déroule",
+    "revisit": "Revisite tes réflexions et vois le chemin parcouru."
+  },
+  "modal": {
+    "habitTitle": "Planter une petite habitude",
+    "habitQuestion": "Qu’aimerais-tu pratiquer ?",
+    "planTitle": "Faire de la place à ce qui compte",
+    "planQuestion": "Une intention pour aujourd’hui",
+    "editPlanTitle": "Modifier ton intention",
+    "editPlanLabel": "Ton intention",
+    "historyTitle": "Ton journal de réflexion"
+  },
+  "validation": {
+    "pleaseAdd": "Ajoute un peu de texte.",
+    "characterLimit": "Utilise {{max}} caractères ou moins.",
+    "writeReflection": "Écris d’abord une réflexion.",
+    "keepUnder": "Garde ta réponse sous 2 000 caractères."
+  },
+  "prompts": {
+    "reflection": {
+      "prompt": "Prenons un souffle. Comment te sens-tu aujourd’hui ?",
+      "chips": ["Ancré", "Un peu submergé", "Prêt pour un nouveau départ"]
+    },
+    "win": {
+      "prompt": "Quelle petite victoire veux-tu t’attribuer ?",
+      "chips": [
+        "J’ai pris du temps pour moi",
+        "J’étais présent",
+        "J’ai fait un petit pas"
+      ]
+    },
+    "obstacle": {
+      "prompt": "Qu’est-ce qui a été difficile, et qu’est-ce qui t’a aidé à traverser ?",
+      "chips": [
+        "J’ai fait une pause et réessayé",
+        "J’ai demandé de l’aide",
+        "J’y travaille encore"
+      ]
+    },
+    "action_step": {
+      "prompt": "Quelle action douce et réaliste feras-tu demain ?",
+      "chips": [
+        "Faire une marche de 10 minutes",
+        "Commencer par un verre d’eau",
+        "Me ménager du repos"
+      ]
+    }
+  },
+  "defaults": {
+    "move": "Bouger avec intention",
+    "moveDetail": "Une marche, un étirement, un peu de mouvement",
+    "hydrate": "Rester hydraté",
+    "hydrateDetail": "Prendre le temps d’un verre d’eau",
+    "mindful": "Prendre un moment conscient",
+    "mindfulDetail": "Pause. Respire. Reviens à toi.",
+    "affirmation": "Je n’ai pas à tout faire. Les petits pas restent des pas en avant."
+  },
+  "errors": {
+    "storage": "Les changements sont seulement en mémoire. Le stockage du navigateur est indisponible ou plein. Exporte une sauvegarde avant de fermer cette page.",
+    "load": "Tes données enregistrées n’ont pas pu être lues. Elles n’ont pas été écrasées. Exporte les données originales avant de réactiver l’enregistrement."
+  },
+  "settings": {
+    "title": "Réglages",
+    "eyebrow": "TON ESPACE, TES RÈGLES",
+    "subtitle": "Fais de cet espace le tien.",
+    "appearanceHeading": "Apparence",
+    "appearanceDescription": "Palette, couleur d’accent et police — appliquées instantanément partout.",
+    "featuresHeading": "Fonctionnalités",
+    "featuresDescription": "Active ou désactive des parties entières du tableau de bord. Rien n’est supprimé : tes données restent enregistrées.",
+    "preferencesHeading": "Préférences",
+    "preferencesDescription": "De petits ajustements au comportement du tableau de bord.",
+    "dark": "Sombre",
+    "light": "Clair",
+    "colors": "Palette de couleurs",
+    "colorsHint": "Choisis une palette — toutes les couleurs de la page changent instantanément.",
+    "fonts": "Personnalité typographique",
+    "fontsHint": "Change la police utilisée dans ton tableau de bord.",
+    "customAccent": "Accent personnalisé",
+    "customAccentHint": "Remplace la couleur d’accent de la palette choisie.",
+    "resetAccent": "Accent de la palette",
+    "storedLocally": "Enregistré dans ce navigateur",
+    "flags": {
+      "habitTracker": {
+        "title": "Suivi des habitudes",
+        "description": "La liste quotidienne des habitudes, la progression et la semaine."
+      },
+      "chatJournal": {
+        "title": "Journal de réflexion",
+        "description": "Le bilan guidé et tes réflexions enregistrées."
+      },
+      "rpgDashboard": {
+        "title": "Statistiques RPG",
+        "description": "Niveau, statistiques, combo de série et boss du jour."
+      },
+      "intentions": {
+        "title": "Intentions",
+        "description": "La liste des intentions du jour, utilisée aussi par le boss."
+      },
+      "languageSelector": {
+        "title": "Sélecteur de langue",
+        "description": "Le choix de langue dans le menu latéral."
+      },
+      "reduceMotion": {
+        "title": "Réduire les animations",
+        "description": "Désactive les animations et le défilement fluide, quel que soit le réglage du système."
+      },
+      "compactCards": {
+        "title": "Cartes compactes",
+        "description": "Un espacement plus serré pour voir plus de ta journée."
+      }
+    }
+  },
+  "rpg": {
+    "zoneAria": "Ton aventure RPG",
+    "eyebrow": "TON AVENTURE QUOTIDIENNE",
+    "howToPlay": "Comment jouer",
+    "level": "NIV. {{level}}",
+    "tier0": "La Pousse",
+    "tier1": "Le Gardien du Bosquet",
+    "tier2": "Le Champion Ensoleillé",
+    "tagline": "Tes petits pas deviennent des superpouvoirs.",
+    "inventory": "Inventaire",
+    "pixelAvatar": "avatar pixel de {{name}}",
+    "companionSprite": "compagnon {{name}}",
+    "stage0": "ÉQUIPEMENT D’APPRENTI",
+    "stage1": "ARMURE DU BOSQUET",
+    "stage2": "ARMURE DORÉE + AURA",
+    "vitality": "Vitalité",
+    "hp": "{{hp}} / 100 PV",
+    "avatarHealth": "Santé de l’avatar",
+    "experience": "Expérience",
+    "expValue": "{{exp}} EXP",
+    "expUnit": "EXP",
+    "progressToNextLevel": "Progression vers le niveau suivant",
+    "expToLevel": "{{exp}} EXP pour le niveau {{level}}",
+    "statShortStrength": "BOUGER",
+    "statShortIntelligence": "FOCUS",
+    "statShortSpirit": "RÉFLÉCHIR",
+    "auraAwake": "Ton aura de champion est éveillée.",
+    "statPointsUntil": "{{count}} points de statistiques avant ta prochaine évolution",
+    "streakCombo": "COMBO DE SÉRIE",
+    "streakTime": "Durée de la série continue",
+    "streakDays_one": "{{count}} jour de journal consécutif",
+    "streakDays_other": "{{count}} jours de journal consécutifs",
+    "streakStart": "Ta prochaine action lance le chrono.",
+    "days3": "3 JOURS",
+    "days14": "14 JOURS",
+    "comboProtected": "Le combo d’aujourd’hui est protégé",
+    "comboKeep": "Enregistre une fois avant minuit pour le garder",
+    "comboStart": "Enregistre une habitude, une intention ou une réflexion",
+    "reflect": "Réfléchir pour +5 Esprit",
+    "bossEyebrow": "BOSS QUOTIDIEN",
+    "bossName": "Le Golem de la Procrastination",
+    "bossDefeatedStamp": "VAINCU",
+    "bossReward": "50 EXP × combo",
+    "bossVictory": "Victoire ! Tu as tenu tes promesses.",
+    "bossAttack": "Chaque habitude complétée est une attaque.",
+    "bossHp": "{{remaining}} / {{max}} PV",
+    "bossHealth": "Santé du boss quotidien",
+    "committedIntention": "Intention engagée",
+    "bossSummary": "{{habitHits}}/{{habitTotal}} habitudes · {{priorityHits}}/{{priorityTotal}} intentions critiques · Vaincre restaure 5 PV",
+    "bossIntro": "Engage 1 à 3 intentions non négociables. Tes habitudes et tes priorités deviennent les attaques du jour.",
+    "commitBoss": "Engager le boss du jour ({{count}}/3)",
+    "bossPenaltyNote": "Les intentions critiques manquées coûtent 5 PV à minuit. La sélection se verrouille à l’engagement.",
+    "addIntentionPrompt": "Ajoute une intention ci-dessous pour invoquer ton boss →",
+    "lootEyebrow": "LA RÉGULARITÉ A SES TRÉSORS",
+    "chestButton": "coffre de {{count}} jours",
+    "chestCollected": "Récupéré",
+    "chestReady": "Prêt à ouvrir !",
+    "chest7Reward": "Palette forêt + renard",
+    "chest30Reward": "Ambre + esprit + chiptune",
+    "chestOpen": "OUVRIR",
+    "chestLocked": "⌑",
+    "chestAria": "coffre de {{count}} jours",
+    "lootNotice": "Un coffre d’étape est tombé. Ouvre-le sous ton boss !",
+    "feedbackExp": "+{{earned}} EXP",
+    "feedbackBoss": " · BOSS VAINCU !",
+    "lootModalTitle": "trésor de {{count}} jours",
+    "treasureAria": "Coffre au trésor d’étape",
+    "treasuresUnlocked": "Nouveaux trésors débloqués !",
+    "treasures7": "Palette de couleurs forêt et un renard rare en compagnon.",
+    "treasures30": "Palette ambre, un compagnon esprit et une cadence de victoire 8 bits.",
+    "equipInventory": "Équiper dans l’inventaire",
+    "chestYours": "Tu as gardé ton combo en vie. Celui-ci est à toi.",
+    "openChest": "Ouvrir le coffre",
+    "inventoryTitle": "L’inventaire de ton aventurier",
+    "worldPalette": "Palette du monde",
+    "paletteBloom": "floraison",
+    "paletteForest": "forêt",
+    "paletteAmber": "ambre",
+    "travelCompanion": "Compagnon de voyage",
+    "companionNone": "aucun",
+    "companionFox": "renard",
+    "companionSpirit": "esprit",
+    "victorySound": "Son de victoire",
+    "soundOn": "Son activé — clique pour couper",
+    "soundEnable": "Activer la cadence de victoire 8 bits",
+    "soundLocked": "Débloquer avec le coffre de 30 jours",
+    "soundNote": "Le son ne démarre qu’après l’avoir activé lors de cette visite. Silencieux par défaut.",
+    "audioUnavailable": "L’audio n’est pas disponible dans ce navigateur. Tu peux continuer à jouer sans son.",
+    "rulesTitle": "Un RPG plus doux",
+    "rulesGrowTitle": "Fais grandir ton personnage",
+    "rulesGrow": "Chaque habitude donne 10 EXP de base et +5 à sa statistique assignée. Les intentions donnent 10 EXP de base ; ton premier journal enregistré chaque jour donne 20 EXP et +5 Esprit. Chaque 100 EXP correspond à un niveau. À 100 points de statistiques au total, tu équipes l’armure du bosquet ; à 300, tu débloques l’armure dorée et une aura.",
+    "rulesComboTitle": "Garde ton combo en vie",
+    "rulesCombo": "Complète au moins une activité chaque jour calendaire local. Aujourd’hui reste ouvert jusqu’à minuit. Le chrono démarre avec ton premier enregistrement récompensé de la série en cours. L’EXP se cumule selon les heures écoulées exactes : 72 heures donnent 1,5×, 14 jours complets donnent 3× (le maximum). Un jour entier manqué réinitialise le combo. L’heure de l’appareil est utilisée.",
+    "rulesBossTitle": "Affronte le boss quotidien",
+    "rulesBoss": "Engage 1 à 3 intentions. La liste d’habitudes actuelle est verrouillée dans ce boss : chaque habitude inflige 20 dégâts et chaque priorité 30. Termine-les toutes pour gagner 50 EXP de base et restaurer 5 PV. Manquer des intentions critiques engagées coûte 5 PV une fois à la fin de la journée. Aucun boss engagé signifie aucune pénalité de PV. La santé ne descend jamais sous 1.",
+    "rulesUnlocksTitle": "Gagne de vrais déblocages",
+    "rulesUnlocks": "Un nouvel enregistrement après 7 ou 30 jours complets écoulés fait tomber un coffre unique. Ouvre-le pour équiper des palettes et des compagnons. Le coffre de 30 jours ajoute une cadence de victoire classique V–I, discrète et synthétisée. Les cosmétiques restent débloqués.",
+    "rulesHonestTitle": "Ta progression reste honnête",
+    "rulesHonest": "Annuler une complétion annule son EXP, ses points de statistiques et les dégâts au boss. Recocher restaure la récompense d’origine, jamais une plus grande. Les journaux rapportent des récompenses une fois par jour. Les entrées Bloom précédentes restent enregistrées sans récompenses rétroactives. Aucun achat, aucune spirale de punition."
+  }
+}

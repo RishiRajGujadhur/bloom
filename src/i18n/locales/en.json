@@ -1,0 +1,358 @@
+{
+  "common": {
+    "save": "Save",
+    "close": "Close dialog",
+    "skipToDashboard": "Skip to dashboard",
+    "mainNav": "Main navigation",
+    "savedInBrowser": "Saved in this browser",
+    "keepBackup": "Keep a backup",
+    "exportOriginal": "Export original data",
+    "useFresh": "Use fresh data & enable saving",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "savingNeeds": "Saving needs your attention"
+  },
+  "meta": {
+    "title": "Bloom — Your Mindfulness Dashboard",
+    "description": "Bloom: your personal space for daily habits, gentle intentions and guided reflection."
+  },
+  "language": {
+    "select": "Language"
+  },
+  "nav": {
+    "dashboard": "My dashboard",
+    "habits": "Daily habits",
+    "journal": "Reflection journal",
+    "rpg": "RPG stats",
+    "settings": "Settings",
+    "planning": "My intentions"
+  },
+  "sidebar": {
+    "brandTagline": "YOUR EVERYDAY SPACE",
+    "mySpace": "MY SPACE",
+    "greet": "Grow at your own pace.",
+    "message1": "You don’t need a perfect day",
+    "message2": "to make a little progress.",
+    "message3": "One small step at a time ✧",
+    "personalSpace": "Your personal space",
+    "noAccount": "No account needed",
+    "avatar": "Y",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
+    "footer": "Made for your own kind of growth."
+  },
+  "topbar": {
+    "dailyReminder": "A LITTLE BETTER, EVERY DAY",
+    "themeLight": "Light mode",
+    "themeDark": "Dark mode",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "export": "Export my data"
+  },
+  "welcome": {
+    "title": "A little space to <em>grow.</em>",
+    "message": "Welcome back. Let’s make today feel a little more like you.",
+    "justForYou": "Just for you"
+  },
+  "habits": {
+    "title": "Little habits, big love",
+    "subtitle": "Show up for yourself, in small ways.",
+    "progress": "Today’s progress",
+    "addHabit": "Add a small habit",
+    "addHabitAria": "Add habit",
+    "lastWeek": "Your last 7 days",
+    "statFor": "Stat for {{title}}",
+    "statStrength": "Strength",
+    "statIntelligence": "Intelligence",
+    "statSpirit": "Spirit",
+    "expGain": "+10 EXP × combo",
+    "statPoints": "+5",
+    "habitDetailDefault": "A small promise to yourself",
+    "nurturedToday": "Habits nurtured today",
+    "weekTooltip": "{{day}}: {{count}} habits completed"
+  },
+  "plans": {
+    "title": "A little intention",
+    "subtitle": "What deserves your energy today?",
+    "empty": "A fresh page for your day.",
+    "emptySub": "Choose something meaningful, however small.",
+    "addIntentionAria": "Add intention",
+    "editAria": "Edit {{title}}",
+    "intention": "Make room for what matters",
+    "oneIntention": "One intention for today",
+    "setIntention": "Set an intention",
+    "editTitle": "Edit your intention",
+    "yourIntention": "Your intention",
+    "followedThrough": "Intentions followed through"
+  },
+  "journal": {
+    "title": "Your reflection space",
+    "subtitle": "A little check-in. A little clarity.",
+    "welcome": "Make a little room for yourself.",
+    "welcomeMessage1": "Notice how you feel, celebrate a small win,",
+    "welcomeMessage2": "and find your next gentle step.",
+    "button": "Begin a check-in",
+    "guides": "Guided prompts · Private to this browser",
+    "fiveMin": "5 MIN FOR YOU",
+    "stepCounter": "{{step}} / 4",
+    "youShowedUp": "You showed up for yourself.",
+    "thatMatters": "That matters.",
+    "save": "Save & review reflection",
+    "view": "View saved reflection",
+    "another": "Start another check-in",
+    "tags": "Tags, separated by commas",
+    "tagsPlaceholder": "Gratitude, rest, growth",
+    "momentsOfReflection": "Moments of reflection",
+    "conversation": "Journal conversation",
+    "suggestedReplies": "Suggested replies",
+    "guideName": "YOUR REFLECTION GUIDE",
+    "youName": "YOU",
+    "typing": "Preparing next reflection",
+    "reflectionLabel": "Your reflection",
+    "inputPlaceholder": "There’s no right answer. Start wherever you are…",
+    "send": "Send reflection",
+    "honesty": "A little honesty goes a long way.",
+    "characters": "{{count}}/2000",
+    "summaryReflection": "Your check-in",
+    "summaryWin": "A win to remember",
+    "summaryObstacle": "What you worked through",
+    "summaryActionStep": "Your next small step",
+    "summaryMeta": "Mood {{mood}}/5 · Energy {{energy}}/5",
+    "summaryTitle": "A moment worth keeping",
+    "summaryBack": "Back to my day",
+    "backToReflections": "Back to reflections",
+    "reflectionsCount": "{{count}} reflections",
+    "emptyHistory": "Your story starts with one check-in. Saved reflections will appear here.",
+    "storyFallback": "A moment for yourself",
+    "savedFallback": "A moment for yourself"
+  },
+  "checkin": {
+    "moodLegend": "How’s your mood?",
+    "energyLegend": "Your energy level",
+    "moodField": "mood",
+    "energyField": "energy",
+    "ratingAria": "{{field}} {{n}} of 5",
+    "moodRange": "Low → Great",
+    "energyRange": "Drained → Energized"
+  },
+  "affirmation": {
+    "title": "WORDS TO GROW WITH",
+    "edit": "Edit affirmation",
+    "modalTitle": "Words that feel like you",
+    "label": "Your personal affirmation",
+    "subtitle": "A reminder, just for you."
+  },
+  "history": {
+    "story": "Your story is unfolding",
+    "revisit": "Revisit your reflections and see how far you’ve come."
+  },
+  "modal": {
+    "habitTitle": "Plant a small habit",
+    "habitQuestion": "What would you like to practice?",
+    "planTitle": "Make room for what matters",
+    "planQuestion": "One intention for today",
+    "editPlanTitle": "Edit your intention",
+    "editPlanLabel": "Your intention",
+    "historyTitle": "Your reflection journal"
+  },
+  "validation": {
+    "pleaseAdd": "Please add a little text.",
+    "characterLimit": "Use {{max}} characters or fewer.",
+    "writeReflection": "Write a reflection first.",
+    "keepUnder": "Keep your reply under 2,000 characters."
+  },
+  "prompts": {
+    "reflection": {
+      "prompt": "Let’s take a breath. How are you feeling today?",
+      "chips": [
+        "Feeling grounded",
+        "A little overwhelmed",
+        "Ready for a fresh start"
+      ]
+    },
+    "win": {
+      "prompt": "What’s one small win you want to give yourself credit for?",
+      "chips": ["I made time for myself", "I showed up", "I took a small step"]
+    },
+    "obstacle": {
+      "prompt": "What felt challenging, and what helped you get through it?",
+      "chips": [
+        "I paused and tried again",
+        "I asked for help",
+        "I’m still working through it"
+      ]
+    },
+    "action_step": {
+      "prompt": "What’s one gentle, doable action you’ll take tomorrow?",
+      "chips": [
+        "Take a 10-minute walk",
+        "Start with a glass of water",
+        "Make space to rest"
+      ]
+    }
+  },
+  "defaults": {
+    "move": "Move with intention",
+    "moveDetail": "A walk, a stretch, a little movement",
+    "hydrate": "Stay hydrated",
+    "hydrateDetail": "Make time for a glass of water",
+    "mindful": "Take a mindful moment",
+    "mindfulDetail": "Pause. Breathe. Come back to yourself.",
+    "affirmation": "I don’t have to do it all. Small steps are still steps forward."
+  },
+  "errors": {
+    "storage": "Changes are in memory only. Browser storage is unavailable or full. Export a backup before closing this page.",
+    "load": "Your saved data could not be read. It has not been overwritten. Export the original data before enabling saving again."
+  },
+  "settings": {
+    "title": "Settings",
+    "eyebrow": "YOUR SPACE, YOUR RULES",
+    "subtitle": "Make this space look and feel like yours.",
+    "appearanceHeading": "Appearance",
+    "appearanceDescription": "Palette, accent colour and font — applied instantly everywhere.",
+    "featuresHeading": "Features",
+    "featuresDescription": "Switch whole parts of the dashboard on or off. Nothing is deleted — your data stays saved.",
+    "preferencesHeading": "Preferences",
+    "preferencesDescription": "Small adjustments to how the dashboard behaves.",
+    "dark": "Dark",
+    "light": "Light",
+    "colors": "Colour palette",
+    "colorsHint": "Pick a palette — every colour on the page updates instantly.",
+    "fonts": "Font personality",
+    "fontsHint": "Change the typeface used across your dashboard.",
+    "customAccent": "Custom accent",
+    "customAccentHint": "Overrides the highlight colour of the palette you chose.",
+    "resetAccent": "Use palette accent",
+    "storedLocally": "Saved in this browser",
+    "flags": {
+      "habitTracker": {
+        "title": "Habit tracker",
+        "description": "The daily habit checklist, progress and weekly strip."
+      },
+      "chatJournal": {
+        "title": "Reflection journal",
+        "description": "The guided check-in and your saved reflections."
+      },
+      "rpgDashboard": {
+        "title": "RPG stats",
+        "description": "Level, stats, streak combo and the daily boss."
+      },
+      "intentions": {
+        "title": "Intentions",
+        "description": "Today's intentions list, also used by the daily boss."
+      },
+      "languageSelector": {
+        "title": "Language selector",
+        "description": "The language switcher in the sidebar."
+      },
+      "reduceMotion": {
+        "title": "Reduce motion",
+        "description": "Turns off animations and smooth scrolling, whatever your system preference is."
+      },
+      "compactCards": {
+        "title": "Compact cards",
+        "description": "Tighter padding so more of your day fits on screen."
+      }
+    }
+  },
+  "rpg": {
+    "zoneAria": "Your RPG adventure",
+    "eyebrow": "YOUR EVERYDAY ADVENTURE",
+    "howToPlay": "How to play",
+    "level": "LV. {{level}}",
+    "tier0": "The Seedling",
+    "tier1": "The Grove Guardian",
+    "tier2": "The Sunlit Champion",
+    "tagline": "Your small steps are becoming superpowers.",
+    "inventory": "Inventory",
+    "pixelAvatar": "{{name}} pixel avatar",
+    "companionSprite": "{{name}} companion",
+    "stage0": "APPRENTICE GEAR",
+    "stage1": "GROVE ARMOR",
+    "stage2": "GOLDEN ARMOR + AURA",
+    "vitality": "Vitality",
+    "hp": "{{hp}} / 100 HP",
+    "avatarHealth": "Avatar health",
+    "experience": "Experience",
+    "expValue": "{{exp}} EXP",
+    "expUnit": "EXP",
+    "progressToNextLevel": "Progress to next level",
+    "expToLevel": "{{exp}} EXP to level {{level}}",
+    "statShortStrength": "MOVE",
+    "statShortIntelligence": "FOCUS",
+    "statShortSpirit": "REFLECT",
+    "auraAwake": "Your champion aura is awake.",
+    "statPointsUntil": "{{count}} stat points until your next evolution",
+    "streakCombo": "STREAK COMBO",
+    "streakTime": "Continuous streak time",
+    "streakDays_one": "{{count}} consecutive logging day",
+    "streakDays_other": "{{count}} consecutive logging days",
+    "streakStart": "Your next action starts the clock.",
+    "days3": "3 DAYS",
+    "days14": "14 DAYS",
+    "comboProtected": "Today’s combo is protected",
+    "comboKeep": "Log once before midnight to keep it",
+    "comboStart": "Log a habit, intention or reflection",
+    "reflect": "Reflect for +5 Spirit",
+    "bossEyebrow": "DAILY BOSS",
+    "bossName": "The Procrastination Golem",
+    "bossDefeatedStamp": "DEFEATED",
+    "bossReward": "50 EXP × combo",
+    "bossVictory": "Victory! You kept your promises.",
+    "bossAttack": "Every completed habit is an attack.",
+    "bossHp": "{{remaining}} / {{max}} HP",
+    "bossHealth": "Daily boss health",
+    "committedIntention": "Committed intention",
+    "bossSummary": "{{habitHits}}/{{habitTotal}} habits · {{priorityHits}}/{{priorityTotal}} critical intentions · Defeat restores 5 HP",
+    "bossIntro": "Choose 1–3 non-negotiable intentions. Your habits and priorities become today’s attacks.",
+    "commitBoss": "Commit today’s boss ({{count}}/3)",
+    "bossPenaltyNote": "Missed critical intentions cost 5 HP at midnight. The lineup locks when you commit.",
+    "addIntentionPrompt": "Add an intention below to summon your boss →",
+    "lootEyebrow": "CONSISTENCY HAS ITS TREASURES",
+    "chestButton": "{{count}}-day chest",
+    "chestCollected": "Collected",
+    "chestReady": "Ready to open!",
+    "chest7Reward": "Forest palette + fox",
+    "chest30Reward": "Amber + spirit + chiptune",
+    "chestOpen": "OPEN",
+    "chestLocked": "⌑",
+    "chestAria": "{{count}}-day chest",
+    "lootNotice": "A milestone chest has dropped. Open it below your boss!",
+    "feedbackExp": "+{{earned}} EXP",
+    "feedbackBoss": " · BOSS DEFEATED!",
+    "lootModalTitle": "{{count}}-day treasure",
+    "treasureAria": "Milestone treasure chest",
+    "treasuresUnlocked": "New treasures unlocked!",
+    "treasures7": "Forest color palette and a rare fox companion.",
+    "treasures30": "Amber color palette, a spirit companion and an 8-bit victory cadence.",
+    "equipInventory": "Equip in inventory",
+    "chestYours": "You kept your combo alive. This one’s yours.",
+    "openChest": "Open chest",
+    "inventoryTitle": "Your adventurer’s inventory",
+    "worldPalette": "World palette",
+    "paletteBloom": "bloom",
+    "paletteForest": "forest",
+    "paletteAmber": "amber",
+    "travelCompanion": "Travel companion",
+    "companionNone": "none",
+    "companionFox": "fox",
+    "companionSpirit": "spirit",
+    "victorySound": "Victory sound",
+    "soundOn": "Sound on — click to mute",
+    "soundEnable": "Enable 8-bit victory cadence",
+    "soundLocked": "Unlock with the 30-day chest",
+    "soundNote": "Sound starts only after you enable it in this visit. Quiet by default.",
+    "audioUnavailable": "Audio is unavailable in this browser. You can keep playing without sound.",
+    "rulesTitle": "A gentler kind of RPG",
+    "rulesGrowTitle": "Grow your character",
+    "rulesGrow": "Each habit gives 10 base EXP and +5 to its assigned stat. Intentions give 10 base EXP; your first saved journal each day gives 20 EXP and +5 Spirit. Every 100 EXP is a level. At 100 total stat points you equip grove armor; at 300 you unlock golden armor and an aura.",
+    "rulesComboTitle": "Keep your combo alive",
+    "rulesCombo": "Complete at least one activity each local calendar day. Today stays open until midnight. The clock starts with your first rewarded log in the current run. EXP compounds with exact elapsed hours: 72 hours gives 1.5×, 14 full days gives 3× (the cap). A missed whole day resets the combo. Device time is used.",
+    "rulesBossTitle": "Fight the daily boss",
+    "rulesBoss": "Commit 1–3 intentions. The current habit list is locked into that boss: habits deal 20 damage each and priorities 30. Finish all of them to win 50 base EXP and restore 5 HP. Missing committed critical intentions costs 5 HP once when the day closes. No committed boss means no HP penalty. Health never drops below 1.",
+    "rulesUnlocksTitle": "Earn real unlocks",
+    "rulesUnlocks": "A new log after 7 or 30 full elapsed days drops a one-time chest. Open it to equip palettes and companions. The 30-day chest adds a quiet, synthesized classical V–I victory cadence. Cosmetics stay unlocked.",
+    "rulesHonestTitle": "Your progress stays honest",
+    "rulesHonest": "Undoing a completion reverses its EXP, stat points and boss damage. Rechecking restores the original award, never a larger one. Journals earn rewards once per day. Previous Bloom entries stay saved without retroactive rewards. No purchases, no punishment spiral."
+  }
+}
