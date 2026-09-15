@@ -74,9 +74,9 @@ const featureDetails: ReadonlyArray<{
 function isFeatureFlags(value: unknown): value is FeatureFlags {
   if (typeof value !== 'object' || value === null) return false
   const flags = value as Record<string, unknown>
-  return (Object.keys(defaultSettings.features) as Array<keyof FeatureFlags>).every(
-    (key) => typeof flags[key] === 'boolean',
-  )
+  return (
+    Object.keys(defaultSettings.features) as Array<keyof FeatureFlags>
+  ).every((key) => typeof flags[key] === 'boolean')
 }
 
 function parseSettings(value: unknown): AppSettings | null {
@@ -113,8 +113,13 @@ export function SettingsPage() {
   ) => {
     setSettings((current) => {
       const resolved =
-        typeof nextSettings === 'function' ? nextSettings(current) : nextSettings
-      window.localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(resolved))
+        typeof nextSettings === 'function'
+          ? nextSettings(current)
+          : nextSettings
+      window.localStorage.setItem(
+        SETTINGS_STORAGE_KEY,
+        JSON.stringify(resolved),
+      )
       return resolved
     })
   }
@@ -163,7 +168,7 @@ export function SettingsPage() {
   const formattedSettings = JSON.stringify(settings, null, 2)
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <header className={styles.header}>
         <p className={styles.eyebrow}>Personalize your space</p>
         <h1>Settings</h1>
@@ -211,7 +216,11 @@ export function SettingsPage() {
             <h2 id="json-heading">Configuration</h2>
             <p>Your current settings are shown as formatted JSON.</p>
           </div>
-          <button className={styles.copyButton} type="button" onClick={handleCopy}>
+          <button
+            className={styles.copyButton}
+            type="button"
+            onClick={handleCopy}
+          >
             {copyState === 'copied' ? 'Copied' : 'Copy JSON to Clipboard'}
           </button>
         </div>
@@ -243,7 +252,7 @@ export function SettingsPage() {
           </p>
         )}
       </section>
-    </main>
+    </div>
   )
 }
 
