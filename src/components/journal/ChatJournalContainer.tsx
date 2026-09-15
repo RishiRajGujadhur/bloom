@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import i18n from '../../i18n'
 import type { Dispatch, SetStateAction } from 'react'
 import { BookOpen, ArrowRight } from 'lucide-react'
 import { advance, newSession, reply, steps } from '../../model'
@@ -16,6 +18,7 @@ export function ChatJournalContainer({
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   const session = data.draft
   const [summary, setSummary] = useState(false)
   const [tags, setTags] = useState('')
@@ -87,8 +90,8 @@ export function ChatJournalContainer({
             <BookOpen size={19} />
           </span>
           <div>
-            <h2>Your reflection space</h2>
-            <p>A little check-in. A little clarity.</p>
+            <h2>{t('journal.reflectionSpace')}</h2>
+            <p>{t('journal.clarity')}</p>
           </div>
         </div>
         <span className="badge">
@@ -102,7 +105,7 @@ export function ChatJournalContainer({
           <div className="journal-illustration" aria-hidden="true">
             ✦<span>☾</span>✧
           </div>
-          <h3>Make a little room for yourself.</h3>
+          <h3>{t('journal.makeRoom')}</h3>
           <p>
             Notice how you feel, celebrate a small win,
             <br />
@@ -115,9 +118,9 @@ export function ChatJournalContainer({
               setTags('')
             }}
           >
-            Begin a check-in <ArrowRight size={17} />
+            {t('journal.checkIn')} <ArrowRight size={17} />
           </button>
-          <small>Guided prompts · Private to this browser</small>
+          <small>{t('journal.guidedPrivate')}</small>
         </div>
       ) : (
         <>
@@ -135,16 +138,16 @@ export function ChatJournalContainer({
           ) : (
             <div className="journal-finish">
               <p>
-                <strong>You showed up for yourself.</strong> That matters.
+                <strong>{t('journal.showedUp')}</strong>
               </p>
               {!saved && (
                 <label>
-                  Tags, separated by commas
+                  {t('journal.tags')}
                   <input
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
                     maxLength={160}
-                    placeholder="Gratitude, rest, growth"
+                    placeholder={t('journal.tagsPlaceholder')}
                   />
                 </label>
               )}
@@ -152,7 +155,7 @@ export function ChatJournalContainer({
                 className="primary"
                 onClick={saved ? () => setSummary(true) : save}
               >
-                {saved ? 'View saved reflection' : 'Save & review reflection'}{' '}
+                {saved ? t('journal.viewSaved') : t('journal.saveReview')}{' '}
                 <ArrowRight size={16} />
               </button>
               {saved && (
@@ -163,7 +166,7 @@ export function ChatJournalContainer({
                     setTags('')
                   }}
                 >
-                  Start another check-in
+                  {t('journal.anotherCheckIn')}
                 </button>
               )}
             </div>

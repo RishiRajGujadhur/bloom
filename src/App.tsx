@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import i18n from './i18n'
 import { useFormik } from 'formik'
 import { motion, MotionConfig, useReducedMotion } from 'framer-motion'
 import {
@@ -66,13 +68,14 @@ function TextForm({
   max?: number
   onSave: (value: string) => void
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   const form = useFormik({
     initialValues: { value: initial },
     validate: (v) =>
       !v.value.trim()
-        ? { value: 'Please add a little text.' }
+        ? { value: t('forms.required') }
         : v.value.trim().length > max
-          ? { value: `Use ${max} characters or fewer.` }
+          ? { value: t('forms.maxLength', { max }) }
           : {},
     onSubmit: (values) => onSave(values.value.trim()),
   })
@@ -93,12 +96,13 @@ function TextForm({
         {form.errors.value && form.submitCount > 0 ? form.errors.value : ''}
       </p>
       <button type="submit" className="primary full">
-        Save <Check size={16} />
+        {t('ui.save')} <Check size={16} />
       </button>
     </form>
   )
 }
 function App() {
+  const { t } = useTranslation(undefined, { i18n })
   const { data, setData, error, blocked, resumeSaving } = useCoach()
   const [today, setToday] = useState(dayKey)
   const [modal, setModal] = useState<
@@ -179,7 +183,7 @@ function App() {
     <MotionConfig reducedMotion="user">
       <div className="app-shell" data-palette={data.rpg.palette} data-theme={theme}>
         <a className="skip-link" href="#overview">
-          Skip to dashboard
+          {t('ui.skipToDashboard')}
         </a>
         <aside className="sidebar">
           <a className="brand" href="#overview">
@@ -188,17 +192,17 @@ function App() {
             </span>
             <span>
               bloom<span className="brand-dot">.</span>
-              <small>YOUR EVERYDAY SPACE</small>
+              <small>{t('ui.everydaySpace')}</small>
             </span>
           </a>
-          <div className="nav-caption">MY SPACE</div>
-          <nav aria-label="Main navigation">
+          <div className="nav-caption">{t('navigation.space')}</div>
+          <nav aria-label={t('navigation.main')}>
             {[
-              { key: 'overview', title: 'My dashboard', Icon: LayoutDashboard },
-              { key: 'habits', title: 'Daily habits', Icon: ListChecks },
-              { key: 'journal', title: 'Reflection journal', Icon: BookOpen },
+              { key: 'overview', title: t('navigation.dashboard'), Icon: LayoutDashboard },
+              { key: 'habits', title: t('navigation.habits'), Icon: ListChecks },
+              { key: 'journal', title: t('navigation.journal'), Icon: BookOpen },
               { key: 'daybook', title: 'Daybook modes', Icon: Pencil },
-              { key: 'planning', title: 'My intentions', Icon: Sun },
+              { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
             ].map(({ key, title, Icon }) => (
               <button
                 key={key}
@@ -213,19 +217,17 @@ function App() {
           </nav>
           <div className="sidebar-note">
             <Leaf size={24} />
-            <h3>Grow at your own pace.</h3>
+            <h3>{t('ui.growAtYourOwnPace')}</h3>
             <p>
-              You don’t need a perfect day
-              <br />
-              to make a little progress.
+              {t('ui.progressMessage')}
             </p>
-            <span>One small step at a time ✧</span>
+            <span>{t('ui.oneSmallStep')} ✧</span>
           </div>
           <div className="sidebar-bottom">
             <span className="avatar">Y</span>
             <div>
-              <strong>Your personal space</strong>
-              <small>No account needed</small>
+              <strong>{t('ui.personalSpace')}</strong>
+              <small>{t('ui.noAccount')}</small>
             </div>
             <Heart size={16} />
           </div>
@@ -233,7 +235,7 @@ function App() {
         <main id="overview">
           <header className="topbar">
             <span>
-              <span className="tiny-dot" /> A LITTLE BETTER, EVERY DAY
+                <span className="tiny-dot" /> {t('welcome.eyebrow')}
             </span>
             <div className="topbar-actions">
               <LanguageSelector />
@@ -242,17 +244,17 @@ function App() {
                 type="button"
                 aria-label={
                   theme === 'dark'
-                    ? 'Switch to light mode'
-                    : 'Switch to dark mode'
+                    ? t('ui.switchToLight')
+                    : t('ui.switchToDark')
                 }
                 aria-pressed={theme === 'dark'}
                 onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
               >
                 {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-                <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+                <span>{theme === 'dark' ? t('actions.lightMode') : t('actions.darkMode')}</span>
               </button>
               <button className="quiet-button" onClick={() => exportData()}>
-                <ArrowDownToLine size={16} /> Export my data
+                <ArrowDownToLine size={16} /> {t('actions.exportData')}
               </button>
             </div>
           </header>
@@ -266,15 +268,15 @@ function App() {
             />
             {error && (
               <div className="storage-error" role="alert">
-                <strong>Saving needs your attention</strong>
+                <strong>{t('ui.savingAttention')}</strong>
                 <p>{error}</p>
                 {blocked && (
                   <>
                     <button onClick={() => exportData(true)}>
-                      Export original data
+                      {t('ui.exportOriginal')}
                     </button>
                     <button onClick={resumeSaving}>
-                      Use fresh data & enable saving
+                      {t('ui.useFreshData')}
                     </button>
                   </>
                 )}
@@ -291,7 +293,7 @@ function App() {
                     {completed}
                     <small> / {data.habits.length}</small>
                   </strong>
-                  <span>Habits nurtured today</span>
+                  <span>{t('ui.habitsToday')}</span>
                 </div>
               </div>
               <div>
@@ -303,7 +305,7 @@ function App() {
                     {plans.filter((p) => p.done).length}
                     <small> / {plans.length}</small>
                   </strong>
-                  <span>Intentions followed through</span>
+                  <span>{t('ui.intentionsToday')}</span>
                 </div>
               </div>
               <div>
@@ -312,7 +314,7 @@ function App() {
                 </span>
                 <div>
                   <strong>{data.sessions.length}</strong>
-                  <span>Moments of reflection</span>
+                  <span>{t('ui.reflections')}</span>
                 </div>
               </div>
             </div>
@@ -325,20 +327,20 @@ function App() {
                         <ListChecks size={19} />
                       </span>
                       <div>
-                        <h2>Little habits, big love</h2>
+                        <h2>{t('dashboard.quests')}</h2>
                         <p>Show up for yourself, in small ways.</p>
                       </div>
                     </div>
                     <button
                       className="icon-button"
-                      aria-label="Add habit"
+                      aria-label={t('ui.addHabit')}
                       onClick={() => setModal('habit')}
                     >
                       <Plus size={20} />
                     </button>
                   </div>
                   <div className="progress-label">
-                    <span>Today’s progress</span>
+                    <span>{t('ui.todaysProgress')}</span>
                     <strong>{progress}%</strong>
                   </div>
                   <div className="progress-track">
@@ -372,7 +374,7 @@ function App() {
                         <select aria-label={`Stat for ${h.title}`} value={h.stat} onChange={e => { const stat=e.target.value as Stat; setData(d=>({...d,habits:d.habits.map(item=>item.id===h.id?{...item,stat}:item)})) }}>
                           {(Object.keys(statNames) as Stat[]).map(stat=><option key={stat} value={stat}>{statNames[stat]}</option>)}
                         </select>
-                        <small>+10 EXP × combo</small>
+                        <small>{t('ui.comboExp')}</small>
                       </label></div>
                     ))}
                   </div>
@@ -380,15 +382,15 @@ function App() {
                     className="add-line"
                     onClick={() => setModal('habit')}
                   >
-                    <Plus size={16} /> Add a small habit
+                    <Plus size={16} /> {t('ui.addSmallHabit')}
                   </button>
                   <div className="week-strip">
-                    <span>Your last 7 days</span>
+                    <span>{t('ui.lastSevenDays')}</span>
                     <div>
                       {lastWeek.map((d) => (
                         <div
                           key={d.key}
-                          title={`${d.key}: ${d.count} habits completed`}
+                          title={`${d.key}: ${t('ui.habitsCompleted', { count: d.count })}`}
                           className={d.key === today ? 'today' : ''}
                         >
                           <span>{d.label}</span>
@@ -407,13 +409,13 @@ function App() {
                         <Sun size={19} />
                       </span>
                       <div>
-                        <h2>A little intention</h2>
-                        <p>What deserves your energy today?</p>
+                        <h2>{t('ui.intentionHeading')}</h2>
+                        <p>{t('ui.intentionDescription')}</p>
                       </div>
                     </div>
                     <button
                       className="icon-button"
-                      aria-label="Add intention"
+                      aria-label={t('ui.addIntention')}
                       onClick={() => setModal('plan')}
                     >
                       <Plus size={20} />
@@ -422,8 +424,8 @@ function App() {
                   {plans.length === 0 ? (
                     <div className="empty-plans">
                       <Sun size={26} />
-                      <p>A fresh page for your day.</p>
-                      <small>Choose something meaningful, however small.</small>
+                      <p>{t('ui.freshPage')}</p>
+                      <small>{t('ui.chooseMeaningful')}</small>
                     </div>
                   ) : (
                     <div className="plan-list">
@@ -456,7 +458,7 @@ function App() {
                           </button>
                           <button
                             className="icon-button"
-                            aria-label={`Edit ${p.title}`}
+                            aria-label={t('ui.edit', { title: p.title })}
                             onClick={() => setEditPlan(p.id)}
                           >
                             <Pencil size={14} />
@@ -466,7 +468,7 @@ function App() {
                     </div>
                   )}
                   <button className="add-line" onClick={() => setModal('plan')}>
-                    <Plus size={16} /> Set an intention
+                    <Plus size={16} /> {t('ui.setIntention')}
                   </button>
                 </section>
               </div>
@@ -480,7 +482,7 @@ function App() {
                     </span>
                     <button
                       className="icon-button"
-                      aria-label="Edit affirmation"
+                      aria-label={t('ui.editAffirmation')}
                       onClick={() => setModal('affirmation')}
                     >
                       <Pencil size={16} />
@@ -488,7 +490,7 @@ function App() {
                   </div>
                   <blockquote>“{data.affirmation}”</blockquote>
                   <div>
-                    <span>A reminder, just for you.</span>
+                    <span>{t('ui.reminder')}</span>
                     <Flower2 size={25} />
                   </div>
                 </section>
@@ -502,32 +504,32 @@ function App() {
                 <BookOpen size={20} />
               </span>
               <span>
-                <strong>Your story is unfolding</strong>
+                <strong>{t('ui.storyUnfolding')}</strong>
                 <small>
-                  Revisit your reflections and see how far you’ve come.
+                  {t('ui.revisit')}
                 </small>
               </span>
               <span className="history-count">
-                {data.sessions.length} reflections
+                {t('ui.reflectionCount', { count: data.sessions.length })}
               </span>
               <ChevronRight size={19} />
             </button>
             <footer>
               <span>
-                <Leaf size={14} /> Made for your own kind of growth.
+                <Leaf size={14} /> {t('ui.madeForGrowth')}
               </span>
               <span>
-                Saved in this browser ·{' '}
-                <button onClick={() => exportData()}>Keep a backup</button>
+                {t('ui.savedBrowser')} ·{' '}
+                <button onClick={() => exportData()}>{t('ui.keepBackup')}</button>
               </span>
             </footer>
           </div>
         </main>
       </div>
       {modal === 'habit' && (
-        <Modal title="Plant a small habit" onClose={() => setModal(null)}>
+        <Modal title={t('ui.plantHabit')} onClose={() => setModal(null)}>
           <TextForm
-            label="What would you like to practice?"
+            label={t('ui.practiceQuestion')}
             onSave={(title) => {
               setData((d) => ({
                 ...d,
@@ -543,11 +545,11 @@ function App() {
       )}
       {modal === 'plan' && (
         <Modal
-          title="Make room for what matters"
+          title={t('ui.makeRoom')}
           onClose={() => setModal(null)}
         >
           <TextForm
-            label="One intention for today"
+            label={t('ui.oneIntention')}
             max={150}
             onSave={(title) => {
               setData((d) => ({
@@ -563,9 +565,9 @@ function App() {
         </Modal>
       )}
       {editPlan && (
-        <Modal title="Edit your intention" onClose={() => setEditPlan(null)}>
+        <Modal title={t('ui.editIntention')} onClose={() => setEditPlan(null)}>
           <TextForm
-            label="Your intention"
+            label={t('ui.yourIntention')}
             initial={data.plans.find((p) => p.id === editPlan)?.title}
             max={150}
             onSave={(title) => {
@@ -581,9 +583,9 @@ function App() {
         </Modal>
       )}
       {modal === 'affirmation' && (
-        <Modal title="Words that feel like you" onClose={() => setModal(null)}>
+        <Modal title={t('ui.wordsLikeYou')} onClose={() => setModal(null)}>
           <TextForm
-            label="Your personal affirmation"
+            label={t('ui.personalAffirmation')}
             initial={data.affirmation}
             max={300}
             onSave={(affirmation) => {
@@ -595,7 +597,7 @@ function App() {
       )}
       {modal === 'history' && (
         <Modal
-          title="Your reflection journal"
+          title={t('ui.reflectionJournal')}
           onClose={() => {
             setModal(null)
             setViewSession(null)
@@ -607,7 +609,7 @@ function App() {
                 className="text-button"
                 onClick={() => setViewSession(null)}
               >
-                <X size={14} /> Back to reflections
+                <X size={14} /> {t('ui.backToReflections')}
               </button>
               <SummaryContent session={viewSession} />
             </>
@@ -626,15 +628,14 @@ function App() {
                 <span>
                   {s.messages.find(
                     (m) => m.sender === 'user' && m.category === 'win',
-                  )?.text ?? 'A moment for yourself'}
+                  )?.text ?? t('ui.momentForYou')}
                 </span>
                 <ArrowRight size={16} />
               </button>
             ))
           ) : (
             <p className="empty-message">
-              Your story starts with one check-in. Saved reflections will appear
-              here.
+              {t('ui.storyStarts')}
             </p>
           )}
         </Modal>

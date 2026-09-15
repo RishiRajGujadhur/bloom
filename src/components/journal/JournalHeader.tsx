@@ -1,4 +1,6 @@
 import type { Session } from '../../model'
+import { useTranslation } from 'react-i18next'
+import i18n from '../../i18n'
 export function JournalHeader({
   session,
   onRate,
@@ -6,12 +8,13 @@ export function JournalHeader({
   session: Session
   onRate: (field: 'mood' | 'energy', value: number) => void
 }) {
+  const { t } = useTranslation(undefined, { i18n })
   return (
     <div className="ratings">
       {(['mood', 'energy'] as const).map((field) => (
         <fieldset key={field}>
           <legend>
-            {field === 'mood' ? 'How’s your mood?' : 'Your energy level'}
+            {field === 'mood' ? t('journal.mood') : t('journal.energy')}
           </legend>
           <div className="rating-row">
             {[1, 2, 3, 4, 5].map((n) => (
@@ -26,7 +29,7 @@ export function JournalHeader({
             ))}
           </div>
           <small>
-            {field === 'mood' ? 'Low → Great' : 'Drained → Energized'}
+            {field === 'mood' ? t('journal.lowGreat') : t('journal.drainedEnergized')}
           </small>
         </fieldset>
       ))}
