@@ -5,6 +5,7 @@ import type { JournalEntry, JournalMode } from './types'
 import { localizedJournalModes } from './mockData'
 import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
+import { SemanticSearch } from './SemanticSearch'
 
 export const DAYBOOK_STORAGE_KEY = 'mindfulness-dashboard-daybook-v1'
 export function JournalContainer() {
@@ -23,5 +24,5 @@ export function JournalContainer() {
     }
   }, [entries, t])
   const save = (next: JournalEntry) => { setEntries(current => [next, ...current.filter(item => item.id !== next.id)]); setSelected(null) }
-  return <section className="card daybook" id="daybook"><div className="daybook-container">{storageError && <p className="daybook-storage-error" role="status">{storageError}</p>}{selected ? <AdaptiveEditor mode={selected} entry={entry} onBack={() => setSelected(null)} onSave={save}/> : <JournalLibrary modes={localizedJournalModes(language)} onSelect={setSelected}/>}</div></section>
+  return <section className="card daybook" id="daybook"><div className="daybook-container">{storageError && <p className="daybook-storage-error" role="status">{storageError}</p>}<div hidden={Boolean(selected)}><SemanticSearch entries={entries} onOpen={modeId => setSelected(localizedJournalModes(language).find(mode => mode.id === modeId) ?? null)}/></div>{selected ? <AdaptiveEditor mode={selected} entry={entry} onBack={() => setSelected(null)} onSave={save}/> : <JournalLibrary modes={localizedJournalModes(language)} onSelect={setSelected}/>}</div></section>
 }
