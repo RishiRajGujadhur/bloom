@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   BookOpen,
+  ChartNoAxesCombined,
   ChevronLeft,
   ChevronRight,
   Flower2,
@@ -22,6 +23,7 @@ import styles from './Sidebar.module.css'
 
 /** Destinations the app knows how to reach; `settings` swaps the page. */
 export type NavKey =
+  | 'insights'
   | 'overview'
   | 'habits'
   | 'journal'
@@ -113,6 +115,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     requires?: keyof FeatureFlags
   }[] = [
     { key: 'overview', title: t('navigation.dashboard'), Icon: LayoutDashboard },
+    { key: 'insights', title: t('navigation.insights', { defaultValue: 'Insights' }), Icon: ChartNoAxesCombined, requires: 'insights' },
     {
       key: 'habits',
       title: t('navigation.habits'),

@@ -4,6 +4,7 @@ import i18n from '../../i18n'
 import type { Dispatch, SetStateAction } from 'react'
 import { BookOpen, ArrowRight } from 'lucide-react'
 import { advance, newSession, reply, stepChips } from '../../model'
+import { dayKey } from '../../dates'
 import type { AppData } from '../../model'
 import { JournalHeader } from './JournalHeader'
 import { MessageFeed } from './MessageFeed'
@@ -59,12 +60,15 @@ export function ChatJournalContainer({
     })
   const save = () => {
     if (!session?.flow.complete) return
+    const completed = new Date()
     setData((d) => {
       if (!d.draft) return d
       const finished = {
         ...d.draft,
         metadata: {
           ...d.draft.metadata,
+          completedAt: d.draft.metadata.completedAt ?? completed.getTime(),
+          completedDay: d.draft.metadata.completedDay ?? dayKey(completed),
           tags: tags
             .split(',')
             .map((t) => t.trim())

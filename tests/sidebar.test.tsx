@@ -5,6 +5,7 @@ import type { FeatureFlags } from '../src/SettingsPage'
 import { resetMatchMedia, resetThemeAttributes, setNarrowScreen } from './setup'
 
 const allOn: FeatureFlags = {
+  insights: true,
   habitTracker: true,
   chatJournal: true,
   rpgSkillTree: true,
@@ -15,6 +16,7 @@ const allOn: FeatureFlags = {
 }
 
 const noneOn: FeatureFlags = {
+  insights: false,
   habitTracker: false,
   chatJournal: false,
   rpgSkillTree: false,

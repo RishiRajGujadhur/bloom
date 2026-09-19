@@ -6,7 +6,7 @@ import TaskList from '@tiptap/extension-task-list'
 import { Player } from '@lottiefiles/react-lottie-player'
 import { ArrowLeft, Check, Save, Sparkles, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import { EditorToolbar } from './EditorToolbar'
@@ -43,15 +43,16 @@ function RichField({ value, placeholder, ariaLabel, compact, focus, bujo, onChan
 
 const initialContent = (mode: JournalMode, entry?: JournalEntry): Record<string, unknown> => entry?.content ?? (mode.editorType === 'split-pane' ? { left: emptyDocument, right: emptyDocument } : mode.editorType === 'guided' ? Object.fromEntries((mode.prompts ?? []).map((_, index) => [`prompt-${index}`, emptyDocument])) : { body: emptyDocument })
 
-export function AdaptiveEditor({ mode, entry, onBack, onSave }: { mode: JournalMode; entry?: JournalEntry; onBack: () => void; onSave: (entry: JournalEntry) => void }) {
+export function AdaptiveEditor({ mode, entry, onBack, onSave }: { mode: JournalMode; entry?: JournalEntry; onBack: () => void; onSave: (entry: JournalEntry) => boolean | void }) {
   const { t } = useTranslation(undefined, { i18n })
   const [content, setContent] = useState<Record<string, unknown>>(() => initialContent(mode, entry))
   const [saved, setSaved] = useState(Boolean(entry))
   const [celebrating, setCelebrating] = useState(false)
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  useEffect(() => () => clearTimeout(saveTimer.current), [])
   const placeholder = useMemo(() => mode.editorType === 'bujo' ? t('journal.startRapid') : mode.editorType === 'focus' ? t('journal.oneThing') : t('journal.holdThought'), [mode.editorType, t])
-  useEffect(() => { setSaved(false); const timer = window.setTimeout(() => setSaved(true), 700); return () => window.clearTimeout(timer) }, [content])
-  const update = (key: string, value: DocumentValue) => setContent(current => ({ ...current, [key]: value }))
-  const save = () => { if (celebrating) return; setCelebrating(true); window.setTimeout(() => onSave({ id: entry?.id ?? crypto.randomUUID(), modeId: mode.id, modeTitle: mode.title, createdAt: entry?.createdAt ?? new Date().toISOString(), updatedAt: new Date().toISOString(), content }), 900) }
+  const update = (key: string, value: DocumentValue) => { setSaved(false); setContent(current => ({ ...current, [key]: value })) }
+  const save = () => { if (celebrating) return; setCelebrating(true); saveTimer.current = setTimeout(() => { if (onSave({ id: entry?.id ?? crypto.randomUUID(), modeId: mode.id, modeTitle: mode.title, createdAt: entry?.createdAt ?? new Date().toISOString(), updatedAt: new Date().toISOString(), content }) === false) setCelebrating(false) }, 900) }
   const ambient = mode.category === 'reflection'
   return <div className={`daybook-editor editor-${mode.editorType}`}>
     <header className="daybook-editor-header"><button className="daybook-back" onClick={onBack}><ArrowLeft size={16}/> {t('journal.allModes')}</button><div><span className="daybook-kicker">{t(`daybook.category.${mode.category}`)}</span><h2>{mode.title}</h2></div><button className="daybook-save daybook-complete" onClick={save} disabled={celebrating}><Save size={15}/> {celebrating ? 'Saving your page…' : 'Complete journal'}</button></header>

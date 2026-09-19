@@ -19,6 +19,8 @@ export interface JournalMode {
 }
 
 export interface JournalEntry {
+  /** One durable completion per local day; saved with the page, not its search index. */
+  activity?: { day: string; at: number }[]
   id: string
   modeId: string
   modeTitle: string

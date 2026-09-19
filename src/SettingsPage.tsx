@@ -7,6 +7,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
+  insights: boolean
   habitTracker: boolean
   chatJournal: boolean
   rpgSkillTree: boolean
@@ -24,6 +25,7 @@ export const SETTINGS_STORAGE_KEY = 'mindfulness-dashboard-settings'
 
 export const defaultSettings: AppSettings = {
   features: {
+    insights: true,
     habitTracker: true,
     chatJournal: true,
     rpgSkillTree: true,
@@ -35,6 +37,7 @@ export const defaultSettings: AppSettings = {
 }
 
 const featureKeys = [
+  'insights',
   'habitTracker',
   'chatJournal',
   'rpgSkillTree',
@@ -49,14 +52,14 @@ function isFeatureFlags(value: unknown): value is FeatureFlags {
   const flags = value as Record<string, unknown>
   return (
     Object.keys(defaultSettings.features) as Array<keyof FeatureFlags>
-  ).every((key) => typeof flags[key] === 'boolean')
+  ).every((key) => key === 'insights' && flags[key] === undefined || typeof flags[key] === 'boolean')
 }
 
 function parseSettings(value: unknown): AppSettings | null {
   if (typeof value !== 'object' || value === null) return null
   const candidate = value as Record<string, unknown>
   return isFeatureFlags(candidate.features)
-    ? { features: { ...candidate.features } }
+    ? { features: { ...defaultSettings.features, ...candidate.features } }
     : null
 }
 
