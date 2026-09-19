@@ -7,6 +7,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
+  visionBoard: boolean
   habitTracker: boolean
   chatJournal: boolean
   rpgSkillTree: boolean
@@ -24,6 +25,7 @@ export const SETTINGS_STORAGE_KEY = 'mindfulness-dashboard-settings'
 
 export const defaultSettings: AppSettings = {
   features: {
+    visionBoard: true,
     habitTracker: true,
     chatJournal: true,
     rpgSkillTree: true,
@@ -35,6 +37,7 @@ export const defaultSettings: AppSettings = {
 }
 
 const featureKeys = [
+  'visionBoard',
   'habitTracker',
   'chatJournal',
   'rpgSkillTree',
@@ -55,8 +58,12 @@ function isFeatureFlags(value: unknown): value is FeatureFlags {
 function parseSettings(value: unknown): AppSettings | null {
   if (typeof value !== 'object' || value === null) return null
   const candidate = value as Record<string, unknown>
-  return isFeatureFlags(candidate.features)
-    ? { features: { ...candidate.features } }
+  const features = candidate.features
+  if (typeof features !== 'object' || features === null) return null
+  // Older exports predate the board; keep their existing feature choices.
+  const migrated = { visionBoard: defaultSettings.features.visionBoard, ...features }
+  return isFeatureFlags(migrated)
+    ? { features: { ...migrated } }
     : null
 }
 

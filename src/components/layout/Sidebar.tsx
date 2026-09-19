@@ -6,6 +6,7 @@ import {
   Flower2,
   Heart,
   LayoutDashboard,
+  Map,
   Leaf,
   ListChecks,
   Menu,
@@ -28,6 +29,7 @@ export type NavKey =
   | 'daybook'
   | 'planning'
   | 'settings'
+  | 'vision-board'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -132,6 +134,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       requires: 'daybookModes',
     },
     { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
+    { key: 'vision-board', title: t('settings.feature.visionBoard.title'), Icon: Map, requires: 'visionBoard' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]

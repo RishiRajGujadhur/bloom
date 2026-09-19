@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
 import { useFormik } from 'formik'
@@ -42,6 +42,8 @@ import {
   toggleThemeMode,
 } from './utils/themeEngine'
 import type { ThemeSettings } from './utils/themeEngine'
+
+const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
 
 function Checkmark({ checked }: { checked: boolean }) {
   const reduced = useReducedMotion()
@@ -229,6 +231,10 @@ function App() {
                 theme={themeSettings}
                 setTheme={setThemeSettings}
               />
+            ) : active === 'vision-board' && settings.features.visionBoard ? (
+              <Suspense fallback={<p role="status">Opening your Vision Board…</p>}>
+                <VisionBoard badges={data.rpg.badges} />
+              </Suspense>
             ) : (
               <>
                 <DashboardWelcome

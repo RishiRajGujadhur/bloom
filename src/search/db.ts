@@ -12,12 +12,23 @@ export interface SearchEntry {
   model?: string
 }
 
+export interface BoardNode {
+  id: string
+  type: 'sticky' | 'journal' | 'badge'
+  position: { x: number; y: number }
+  data: Record<string, unknown>
+  width?: number
+  height?: number
+}
+
 class JournalDatabase extends Dexie {
   entries!: Table<SearchEntry, string>
+  vision_board_nodes!: Table<BoardNode, string>
   constructor() {
     super('JournalDB')
     // Vectors are stored, not indexed: similarity is calculated in memory.
     this.version(1).stores({ entries: 'id, timestamp, category' })
+    this.version(2).stores({ entries: 'id, timestamp, category', vision_board_nodes: 'id, type' })
   }
 }
 export const db = new JournalDatabase()
