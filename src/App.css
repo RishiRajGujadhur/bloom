@@ -1749,6 +1749,21 @@ html[data-theme='dark'] .storage-error button {
 .daybook-empty, .daybook-editor-footer { color: #96879c; font-size: 11px; padding-top: 18px; }
 .daybook-back, .daybook-save { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ded2e8; border-radius: 7px; padding: 9px 11px; background: #fff; color: #765c87; font-size: 10px; }
 .daybook-save { background: #7653a8; border-color: #7653a8; color: #fff; }
+.daybook-mode, .daybook-back, .daybook-save, .text-button { transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+.daybook-back:hover, .text-button:hover { transform: translateX(-2px); }
+.daybook-save:hover { transform: translateY(-2px); box-shadow: 0 9px 18px #7653a842; }
+.daybook-save:active, .daybook-mode:active { transform: scale(.97); }
+.daybook-complete { position: relative; overflow: hidden; }
+.daybook-complete::after { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 25%, #ffffff55 45%, transparent 65%); content: ''; transform: translateX(-120%); animation: complete-sheen 3.8s ease-in-out infinite; }
+.daybook-complete:disabled { cursor: wait; opacity: .78; }
+.daybook-ambient { display: flex; align-items: center; justify-content: center; width: 78px; height: 78px; margin: -7px 0 8px auto; border: 1px solid #e7dcef; border-radius: 50%; background: radial-gradient(circle, #f9f2fc, #fff0); box-shadow: 0 8px 24px #8057a01a; animation: ambient-float 4s ease-in-out infinite; }
+.daybook-ambient > div { width: 68px !important; height: 68px !important; }
+.daybook-celebration { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; overflow: hidden; background: #34234575; backdrop-filter: blur(7px); }
+.daybook-celebration > :first-child { position: absolute; width: min(80vw, 520px) !important; height: min(80vw, 520px) !important; opacity: .46; }
+.daybook-celebration > div:last-child { position: relative; z-index: 1; display: grid; justify-items: center; gap: 9px; min-width: min(360px, calc(100vw - 38px)); padding: 29px; border: 1px solid #ffffffb8; border-radius: 22px; background: #fffc; color: #704c8f; box-shadow: 0 24px 90px #2513345c; }
+.daybook-celebration strong { font: 800 22px Manrope, sans-serif; }.daybook-celebration span { color: #796b85; font-size: 12px; }
+@keyframes ambient-float { 50% { transform: translateY(-5px); } }
+@keyframes complete-sheen { 0%, 55% { transform: translateX(-120%); } 75%, 100% { transform: translateX(120%); } }
 .daybook-editor-description { margin: 18px 0; }
 .guided-editor, .split-editor { display: grid; gap: 13px; }
 .guided-editor label, .split-editor label, .focus-editor, .freeform-editor { display: grid; gap: 7px; color: #765c87; font-size: 11px; }
@@ -1763,4 +1778,6 @@ html[data-theme='dark'] .storage-error button {
 .daybook-editor-footer span { display: inline-flex; align-items: center; gap: 5px; color: #568064; }
 html[data-theme='dark'] .daybook, html[data-theme='dark'] .daybook-mode, html[data-theme='dark'] .daybook-search, html[data-theme='dark'] .daybook-back { background: #211d2c; border-color: #3a3348; }
 html[data-theme='dark'] .daybook-heading h2, html[data-theme='dark'] .daybook-editor-header h2, html[data-theme='dark'] .daybook-mode-copy strong, html[data-theme='dark'] .focus-editor input { color: #eee9f6; }
+html[data-theme='dark'] .daybook-ambient { border-color: #493957; background: radial-gradient(circle, #3b2d4c, #211d2c00); }
+html[data-theme='dark'] .daybook-celebration > div:last-child { background: #211d2cf2; border-color: #5a4a6b; color: #e5d5f4; } html[data-theme='dark'] .daybook-celebration span { color: #c4b7d0; }
 @media (max-width: 700px) { .daybook-container { padding: 17px; } .daybook-heading, .daybook-editor-header { flex-direction: column; } .daybook-search { width: 100%; } .daybook-grid, .split-editor { grid-template-columns: 1fr; } .daybook-save { align-self: stretch; justify-content: center; } }

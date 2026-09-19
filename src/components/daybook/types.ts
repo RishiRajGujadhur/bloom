@@ -24,5 +24,6 @@ export interface JournalEntry {
   modeTitle: string
   createdAt: string
   updatedAt: string
-  content: Record<string, string>
+  /** TipTap document JSON, keyed by field for guided and split-pane pages. */
+  content: Record<string, unknown>
 }
