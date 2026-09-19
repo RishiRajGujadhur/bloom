@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom'
 
+// The browser Lottie runtime needs a canvas implementation that JSDOM does not provide.
+jest.mock('@lottiefiles/react-lottie-player', () => ({
+  Player: ({ className }: { className?: string }) => require('react').createElement('div', { className, 'data-testid': 'lottie-player' }),
+}))
+
 /* --------------------------------------------------------------------------
    Controllable viewport for media-query driven UI.
 
