@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { useJournalEntries } from './components/daybook/useJournalEntries'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
 import { useFormik } from 'formik'
@@ -42,6 +43,8 @@ import {
   toggleThemeMode,
 } from './utils/themeEngine'
 import type { ThemeSettings } from './utils/themeEngine'
+
+const InsightsPage = lazy(() => import('./components/insights/InsightsPage'))
 
 function Checkmark({ checked }: { checked: boolean }) {
   const reduced = useReducedMotion()
@@ -110,6 +113,7 @@ function App() {
   const { t } = useTranslation(undefined, { i18n })
   const { data, setData, error, blocked, resumeSaving } = useCoach()
   const [settings, setSettings] = useAppSettings()
+  const daybook = useJournalEntries()
   const [today, setToday] = useState(dayKey)
   const [modal, setModal] = useState<
     'habit' | 'plan' | 'affirmation' | 'history' | null
@@ -121,6 +125,7 @@ function App() {
     getStoredTheme,
   )
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
+  useEffect(() => { if (active === 'insights' && !settings.features.insights) setActive('overview') }, [active, settings.features.insights])
   useEffect(() => {
     document.documentElement.lang = i18n.resolvedLanguage ?? 'en'
     document.title = t('ui.documentTitle')
@@ -174,8 +179,9 @@ function App() {
     anchor.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
-  const jump = (target: NavKey) => {
-    setActive(target)
+  const jump = (target: NavKey) => setActive(target)
+  useEffect(() => {
+    const target = active === 'insights' || active === 'settings' ? 'overview' : active
     const destination =
       document.getElementById(target) ??
       document.getElementById(target === 'journal' ? 'chat-journal' : target)
@@ -185,7 +191,7 @@ function App() {
         : 'smooth',
       block: 'start',
     })
-  }
+  }, [active])
   return (
     <MotionConfig reducedMotion="user">
       <div className="app-shell" data-palette={data.rpg.palette}>
@@ -229,6 +235,10 @@ function App() {
                 theme={themeSettings}
                 setTheme={setThemeSettings}
               />
+            ) : active === 'insights' && settings.features.insights ? (
+              <Suspense fallback={<p role="status">Loading your insights…</p>}>
+                <InsightsPage data={data} entries={daybook.entries} today={today} storageError={error || daybook.error} />
+              </Suspense>
             ) : (
               <>
                 <DashboardWelcome
@@ -486,7 +496,7 @@ function App() {
                     {settings.features.chatJournal && (
                       <ChatJournalContainer data={data} setData={setData} />
                     )}
-                    {settings.features.daybookModes && <JournalContainer />}
+                    {settings.features.daybookModes && <JournalContainer entries={daybook.entries} onSave={daybook.save} storageError={daybook.error} />}
                     <section className="affirmation">
                       <div className="card-heading">
                         <span className="eyebrow">

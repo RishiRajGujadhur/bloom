@@ -9,6 +9,7 @@ const common = {
     private: 'Just for you',
   },
   navigation: {
+    insights: 'Insights',
     main: 'Main navigation',
     space: 'My space',
     dashboard: 'My dashboard',
@@ -68,6 +69,7 @@ const common = {
     importInvalid: 'Enter valid JSON to import settings.',
     importShape: 'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      insights: { title: 'Insights & Analytics', description: 'Explore journaling streaks, habits, mood trends and RPG growth. Turning this off keeps your history.' },
       habitTracker: { title: 'Habit tracker', description: 'Keep small promises to yourself and track your progress.' },
       chatJournal: { title: 'Chat journal', description: 'Reflect through a gentle, guided conversation.' },
       rpgSkillTree: { title: 'RPG skill tree', description: 'Turn your growth into visible skills and momentum.' },
@@ -246,6 +248,7 @@ export const resources = {
         private: 'Rien que pour vous',
       },
       navigation: {
+        insights: 'Analyses',
         main: 'Navigation principale',
         space: 'Mon espace',
         dashboard: 'Mon tableau de bord',
@@ -304,6 +307,7 @@ export const resources = {
         importInvalid: 'Saisissez un JSON valide pour importer les paramètres.',
         importShape: 'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          insights: { title: 'Analyses et statistiques', description: 'Explorez vos séries d’écriture, vos habitudes, votre humeur et votre progression RPG. Désactiver cette page conserve votre historique.' },
           habitTracker: { title: 'Suivi des habitudes', description: 'Tenez de petites promesses envers vous-même et suivez vos progrès.' },
           chatJournal: { title: 'Journal de discussion', description: 'Réfléchissez par une conversation douce et guidée.' },
           rpgSkillTree: { title: 'Arbre de compétences RPG', description: 'Transformez votre progression en compétences visibles et en élan.' },

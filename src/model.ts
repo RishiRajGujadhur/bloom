@@ -44,6 +44,8 @@ const sessionSchema = z.object({
   metadata: z.object({
     id: z.string(),
     date: z.string(),
+    completedAt: z.number().finite().nonnegative().optional(),
+    completedDay: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     mood: z.number().int().min(1).max(5).nullable(),
     energy: z.number().int().min(1).max(5).nullable(),
     tags: z.array(z.string()),
