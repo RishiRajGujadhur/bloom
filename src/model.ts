@@ -77,18 +77,60 @@ export const legacySchema = z.object({
   draft: sessionSchema.nullable(),
   sessions: z.array(sessionSchema),
 })
-export const taskSchema = z.object({ id: z.string(), title: z.string().min(1).max(150), done: z.boolean(), due: z.string(), challengeId: z.string().nullable(), rewarded: z.boolean().default(false) })
-export const challengeSchema = z.object({ id: z.string(), acceptedAt: z.number(), rewarded: z.boolean().default(false) })
-export const dataSchema = legacySchema.extend({ version: z.literal(2), habits: z.array(legacySchema.shape.habits.element.extend({ stat: statSchema })), rpg: rpgSchema, todos: z.array(taskSchema).default([]), challenges: z.array(challengeSchema).default([]) })
+export const subtaskSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1).max(120),
+  done: z.boolean(),
+})
+export const taskSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1).max(150),
+  done: z.boolean(),
+  due: z.string(),
+  challengeId: z.string().nullable(),
+  rewarded: z.boolean().default(false),
+  priority: z.enum(['P1', 'P2', 'P3', 'P4']).default('P3'),
+  tags: z.array(z.string().min(1).max(30)).default([]),
+  recurrence: z.enum(['none', 'daily', 'weekly', 'monthly']).default('none'),
+  seriesId: z.string().nullable().default(null),
+  subtasks: z.array(subtaskSchema).default([]),
+})
+export const challengeSchema = z.object({
+  id: z.string(),
+  acceptedAt: z.number(),
+  rewarded: z.boolean().default(false),
+})
+export const dataSchema = legacySchema.extend({
+  version: z.literal(2),
+  habits: z.array(
+    legacySchema.shape.habits.element.extend({ stat: statSchema }),
+  ),
+  rpg: rpgSchema,
+  todos: z.array(taskSchema).default([]),
+  challenges: z.array(challengeSchema).default([]),
+})
 export function parseData(input: unknown): AppData {
-  if (typeof input === 'object' && input !== null && 'version' in input && input.version === 1) {
+  if (
+    typeof input === 'object' &&
+    input !== null &&
+    'version' in input &&
+    input.version === 1
+  ) {
     const old = legacySchema.parse(input)
-    return { ...old, todos: [], challenges: [], version: 2, habits: old.habits.map(h => ({ ...h, stat: inferStat(h.title) })), rpg: initialRpg() }
+    return {
+      ...old,
+      todos: [],
+      challenges: [],
+      version: 2,
+      habits: old.habits.map((h) => ({ ...h, stat: inferStat(h.title) })),
+      rpg: initialRpg(),
+    }
   }
   return dataSchema.parse(input)
 }
 export type JournalMessage = z.infer<typeof messageSchema>
 export type Session = z.infer<typeof sessionSchema>
+export type Todo = z.infer<typeof taskSchema>
 export type AppData = z.infer<typeof dataSchema>
 export function newSession(language = 'en'): Session {
   return {

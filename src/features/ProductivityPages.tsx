@@ -1,9 +1,26 @@
 import { useState, type Dispatch, type SetStateAction } from 'react'
-import { ArrowRight, Check, Plus, Pencil, X } from 'lucide-react'
+import {
+  ArrowRight,
+  Check,
+  ChevronDown,
+  ListTree,
+  Plus,
+  Pencil,
+  Repeat2,
+  SlidersHorizontal,
+  Tag,
+  X,
+} from 'lucide-react'
 import type { AppData } from '../model'
 import { dayKey, id } from '../model'
 import { Sprite } from '../rpg/Sprite'
-import { acceptChallenge, challenges, toggleTodo } from './productivity'
+import {
+  acceptChallenge,
+  addSubtask,
+  challenges,
+  toggleSubtask,
+  toggleTodo,
+} from './productivity'
 
 type Props = { data: AppData; setData: Dispatch<SetStateAction<AppData>> }
 export function ChallengesPage({
@@ -94,17 +111,54 @@ export function ChallengesPage({
 export function TodoPage({ data, setData }: Props) {
   const [title, setTitle] = useState('')
   const [due, setDue] = useState(dayKey)
+  const [priority, setPriority] = useState<'P1' | 'P2' | 'P3' | 'P4'>('P3')
+  const [tags, setTags] = useState('')
+  const [recurrence, setRecurrence] = useState<
+    'none' | 'daily' | 'weekly' | 'monthly'
+  >('none')
+  const [showOptions, setShowOptions] = useState(false)
   const [filter, setFilter] = useState('open')
+  const [tagFilter, setTagFilter] = useState('all')
   const [editing, setEditing] = useState<string | null>(null)
   const [editTitle, setEditTitle] = useState('')
   const [editDue, setEditDue] = useState('')
-  const tasks = data.todos.filter((task) =>
-    filter === 'done'
-      ? task.done
-      : filter === 'today'
-        ? !task.done && task.due <= dayKey()
-        : !task.done,
+  const [editPriority, setEditPriority] = useState<'P1' | 'P2' | 'P3' | 'P4'>(
+    'P3',
   )
+  const [editTags, setEditTags] = useState('')
+  const [editRecurrence, setEditRecurrence] = useState<
+    'none' | 'daily' | 'weekly' | 'monthly'
+  >('none')
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const [subtaskTitle, setSubtaskTitle] = useState('')
+  const parseTags = (value: string) =>
+    [
+      ...new Set(
+        value
+          .split(/[\s,]+/)
+          .map((tag) => tag.replace(/^#/, '').toLowerCase())
+          .filter(Boolean),
+      ),
+    ].slice(0, 6)
+  const allTags = [...new Set(data.todos.flatMap((task) => task.tags))].sort()
+  const priorityOrder = { P1: 1, P2: 2, P3: 3, P4: 4 }
+  const tasks = data.todos
+    .filter((task) => {
+      const matchesStatus =
+        filter === 'done'
+          ? task.done
+          : filter === 'today'
+            ? !task.done && task.due <= dayKey()
+            : !task.done
+      return (
+        matchesStatus && (tagFilter === 'all' || task.tags.includes(tagFilter))
+      )
+    })
+    .sort(
+      (a, b) =>
+        priorityOrder[a.priority] - priorityOrder[b.priority] ||
+        a.due.localeCompare(b.due),
+    )
   const add = (event: React.FormEvent) => {
     event.preventDefault()
     if (!title.trim()) return
@@ -119,32 +173,92 @@ export function TodoPage({ data, setData }: Props) {
           done: false,
           challengeId: null,
           rewarded: false,
+          priority,
+          tags: parseTags(tags),
+          recurrence,
+          seriesId: recurrence === 'none' ? null : id(),
+          subtasks: [],
         },
       ],
     }))
     setTitle('')
+    setTags('')
   }
   return (
     <section id="todo-page" className="card task-workspace">
-      <form className="task-add" onSubmit={add}>
-        <input
-          aria-label="New task"
-          placeholder="What needs doing?"
-          maxLength={150}
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          required
-        />
-        <input
-          aria-label="Due date"
-          type="date"
-          value={due}
-          onChange={(event) => setDue(event.target.value)}
-          required
-        />
-        <button className="primary" type="submit">
-          <Plus size={17} /> Add
-        </button>
+      <form className="task-composer" onSubmit={add}>
+        <div className="task-add">
+          <input
+            aria-label="New task"
+            placeholder="What needs doing?"
+            maxLength={150}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            required
+          />
+          <button
+            className="quiet-button"
+            type="button"
+            aria-expanded={showOptions}
+            onClick={() => setShowOptions((value) => !value)}
+          >
+            <SlidersHorizontal size={17} /> Details
+          </button>
+          <button className="primary" type="submit">
+            <Plus size={17} /> Add
+          </button>
+        </div>
+        {showOptions && (
+          <div className="task-options">
+            <label>
+              Due
+              <input
+                aria-label="Due date"
+                type="date"
+                value={due}
+                onChange={(event) => setDue(event.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Priority
+              <select
+                value={priority}
+                onChange={(event) =>
+                  setPriority(event.target.value as typeof priority)
+                }
+              >
+                <option value="P1">P1 · Urgent</option>
+                <option value="P2">P2 · Important</option>
+                <option value="P3">P3 · Normal</option>
+                <option value="P4">P4 · Low</option>
+              </select>
+            </label>
+            <label>
+              Repeat
+              <select
+                value={recurrence}
+                onChange={(event) =>
+                  setRecurrence(event.target.value as typeof recurrence)
+                }
+              >
+                <option value="none">Does not repeat</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </label>
+            <label className="tag-field">
+              Tags
+              <input
+                aria-label="Tags"
+                placeholder="#deep-work, #errands"
+                value={tags}
+                onChange={(event) => setTags(event.target.value)}
+              />
+            </label>
+          </div>
+        )}
       </form>
       <div className="segmented" aria-label="Filter tasks">
         {['open', 'today', 'done'].map((value) => (
@@ -161,6 +275,25 @@ export function TodoPage({ data, setData }: Props) {
           </button>
         ))}
       </div>
+      {allTags.length > 0 && (
+        <div className="tag-filters" aria-label="Filter by tag">
+          <button
+            aria-pressed={tagFilter === 'all'}
+            onClick={() => setTagFilter('all')}
+          >
+            All tags
+          </button>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              aria-pressed={tagFilter === tag}
+              onClick={() => setTagFilter(tag)}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
       {data.challenges.length > 0 && (
         <details className="goal-list">
           <summary>Goals · {data.challenges.length}</summary>
@@ -184,85 +317,247 @@ export function TodoPage({ data, setData }: Props) {
         </details>
       )}
       <ul className="task-list">
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <button
-              className={`task-check ${task.done ? 'done' : ''}`}
-              aria-label={`Complete ${task.title}`}
-              aria-pressed={task.done}
-              onClick={() => setData((current) => toggleTodo(current, task.id))}
+        {tasks.map((task) => {
+          const completedSteps = task.subtasks.filter(
+            (step) => step.done,
+          ).length
+          const open = expanded === task.id
+          return (
+            <li
+              key={task.id}
+              className={`task-item priority-${task.priority.toLowerCase()}`}
             >
-              <Check size={18} />
-            </button>
-            {editing === task.id ? (
-              <form
-                className="task-edit"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  if (!editTitle.trim()) return
-                  setData((current) => ({
-                    ...current,
-                    todos: current.todos.map((item) =>
-                      item.id === task.id
-                        ? { ...item, title: editTitle.trim(), due: editDue }
-                        : item,
-                    ),
-                  }))
-                  setEditing(null)
-                }}
-              >
-                <input
-                  aria-label="Task title"
-                  autoFocus
-                  maxLength={150}
-                  value={editTitle}
-                  onChange={(event) => setEditTitle(event.target.value)}
-                  required
-                />
-                <input
-                  aria-label="Edit due date"
-                  type="date"
-                  value={editDue}
-                  onChange={(event) => setEditDue(event.target.value)}
-                  required
-                />
-                <button aria-label="Save task">
-                  <Check size={16} />
-                </button>
+              <div className="task-row">
                 <button
-                  type="button"
-                  aria-label="Cancel edit"
-                  onClick={() => setEditing(null)}
+                  className={`task-check ${task.done ? 'done' : ''}`}
+                  aria-label={`Complete ${task.title}`}
+                  aria-pressed={task.done}
+                  onClick={() =>
+                    setData((current) => toggleTodo(current, task.id))
+                  }
                 >
-                  <X size={16} />
+                  <Check size={18} />
                 </button>
-              </form>
-            ) : (
-              <div className="task-copy">
-                <strong>{task.title}</strong>
-                <small>
-                  {task.due}
-                  {task.challengeId
-                    ? ` · ${challenges.find((item) => item.id === task.challengeId)?.title}`
-                    : ''}
-                </small>
+                {editing === task.id ? (
+                  <form
+                    className="task-edit"
+                    onSubmit={(event) => {
+                      event.preventDefault()
+                      if (!editTitle.trim()) return
+                      setData((current) => ({
+                        ...current,
+                        todos: current.todos.map((item) =>
+                          item.id === task.id
+                            ? {
+                                ...item,
+                                title: editTitle.trim(),
+                                due: editDue,
+                                priority: editPriority,
+                                tags: parseTags(editTags),
+                                recurrence: editRecurrence,
+                                seriesId:
+                                  editRecurrence === 'none'
+                                    ? null
+                                    : (item.seriesId ?? item.id),
+                              }
+                            : item,
+                        ),
+                      }))
+                      setEditing(null)
+                    }}
+                  >
+                    <input
+                      aria-label="Task title"
+                      autoFocus
+                      maxLength={150}
+                      value={editTitle}
+                      onChange={(event) => setEditTitle(event.target.value)}
+                      required
+                    />
+                    <input
+                      aria-label="Edit due date"
+                      type="date"
+                      value={editDue}
+                      onChange={(event) => setEditDue(event.target.value)}
+                      required
+                    />
+                    <select
+                      aria-label="Edit priority"
+                      value={editPriority}
+                      onChange={(event) =>
+                        setEditPriority(
+                          event.target.value as typeof editPriority,
+                        )
+                      }
+                    >
+                      {['P1', 'P2', 'P3', 'P4'].map((value) => (
+                        <option key={value}>{value}</option>
+                      ))}
+                    </select>
+                    <select
+                      aria-label="Edit recurrence"
+                      value={editRecurrence}
+                      onChange={(event) =>
+                        setEditRecurrence(
+                          event.target.value as typeof editRecurrence,
+                        )
+                      }
+                    >
+                      <option value="none">No repeat</option>
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                    <input
+                      aria-label="Edit tags"
+                      placeholder="#tags"
+                      value={editTags}
+                      onChange={(event) => setEditTags(event.target.value)}
+                    />
+                    <button aria-label="Save task">
+                      <Check size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Cancel edit"
+                      onClick={() => setEditing(null)}
+                    >
+                      <X size={16} />
+                    </button>
+                  </form>
+                ) : (
+                  <div className="task-copy">
+                    <div className="task-title-line">
+                      <span
+                        className={`priority-badge ${task.priority.toLowerCase()}`}
+                      >
+                        {task.priority}
+                      </span>
+                      <strong>{task.title}</strong>
+                    </div>
+                    <div className="task-meta">
+                      <small>{task.due}</small>
+                      {task.recurrence !== 'none' && (
+                        <span>
+                          <Repeat2 size={12} /> {task.recurrence}
+                        </span>
+                      )}
+                      {task.tags.map((tag) => (
+                        <span className="task-tag" key={tag}>
+                          <Tag size={11} />#{tag}
+                        </span>
+                      ))}
+                      {task.challengeId ? (
+                        <span>
+                          {
+                            challenges.find(
+                              (item) => item.id === task.challengeId,
+                            )?.title
+                          }
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                )}
+                {editing !== task.id && (
+                  <button
+                    className="icon-button"
+                    aria-label={`Edit ${task.title}`}
+                    onClick={() => {
+                      setEditing(task.id)
+                      setEditTitle(task.title)
+                      setEditDue(task.due)
+                      setEditPriority(task.priority)
+                      setEditTags(task.tags.map((tag) => `#${tag}`).join(' '))
+                      setEditRecurrence(task.recurrence)
+                    }}
+                  >
+                    <Pencil size={16} />
+                  </button>
+                )}
               </div>
-            )}
-            {editing !== task.id && (
               <button
-                className="icon-button"
-                aria-label={`Edit ${task.title}`}
+                className="checklist-toggle"
+                aria-expanded={open}
                 onClick={() => {
-                  setEditing(task.id)
-                  setEditTitle(task.title)
-                  setEditDue(task.due)
+                  setExpanded(open ? null : task.id)
+                  setSubtaskTitle('')
                 }}
               >
-                <Pencil size={16} />
+                <ListTree size={15} />
+                {task.subtasks.length
+                  ? `${completedSteps}/${task.subtasks.length} steps`
+                  : 'Add steps'}
+                <ChevronDown size={14} className={open ? 'turned' : ''} />
               </button>
-            )}
-          </li>
-        ))}
+              {open && (
+                <div className="checklist">
+                  {task.subtasks.map((step) => (
+                    <div className="checklist-item" key={step.id}>
+                      <button
+                        className={`mini-check ${step.done ? 'done' : ''}`}
+                        aria-label={`${step.done ? 'Reopen' : 'Complete'} ${step.title}`}
+                        onClick={() =>
+                          setData((current) =>
+                            toggleSubtask(current, task.id, step.id),
+                          )
+                        }
+                      >
+                        <Check size={13} />
+                      </button>
+                      <span className={step.done ? 'completed-copy' : ''}>
+                        {step.title}
+                      </span>
+                      <button
+                        className="icon-button"
+                        aria-label={`Remove ${step.title}`}
+                        onClick={() =>
+                          setData((current) => ({
+                            ...current,
+                            todos: current.todos.map((item) =>
+                              item.id === task.id
+                                ? {
+                                    ...item,
+                                    subtasks: item.subtasks.filter(
+                                      (candidate) => candidate.id !== step.id,
+                                    ),
+                                  }
+                                : item,
+                            ),
+                          }))
+                        }
+                      >
+                        <X size={13} />
+                      </button>
+                    </div>
+                  ))}
+                  <form
+                    className="subtask-add"
+                    onSubmit={(event) => {
+                      event.preventDefault()
+                      setData((current) =>
+                        addSubtask(current, task.id, subtaskTitle),
+                      )
+                      setSubtaskTitle('')
+                    }}
+                  >
+                    <input
+                      aria-label={`New step for ${task.title}`}
+                      placeholder="Add a small next step"
+                      maxLength={120}
+                      value={subtaskTitle}
+                      onChange={(event) => setSubtaskTitle(event.target.value)}
+                      required
+                    />
+                    <button className="quiet-button" type="submit">
+                      <Plus size={15} /> Add step
+                    </button>
+                  </form>
+                </div>
+              )}
+            </li>
+          )
+        })}
       </ul>
       {!tasks.length && (
         <div className="calm-empty">

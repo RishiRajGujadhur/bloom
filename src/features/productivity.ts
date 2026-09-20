@@ -1,5 +1,72 @@
 import type { AppData } from '../model'
+import { id as createId } from '../model'
 import { dayKey } from '../dates'
+
+export type Recurrence = 'none' | 'daily' | 'weekly' | 'monthly'
+
+export function nextRecurringDate(due: string, recurrence: Recurrence) {
+  const [year, month, day] = due.split('-').map(Number)
+  const date = new Date(year, month - 1, day, 12)
+  if (recurrence === 'daily') date.setDate(date.getDate() + 1)
+  if (recurrence === 'weekly') date.setDate(date.getDate() + 7)
+  if (recurrence === 'monthly') {
+    const targetMonth = date.getMonth() + 1
+    date.setDate(1)
+    date.setMonth(targetMonth)
+    const lastDay = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0,
+    ).getDate()
+    date.setDate(Math.min(day, lastDay))
+  }
+  return dayKey(date)
+}
+
+export function toggleSubtask(
+  data: AppData,
+  todoId: string,
+  subtaskId: string,
+): AppData {
+  return {
+    ...data,
+    todos: data.todos.map((task) =>
+      task.id === todoId
+        ? {
+            ...task,
+            subtasks: task.subtasks.map((subtask) =>
+              subtask.id === subtaskId
+                ? { ...subtask, done: !subtask.done }
+                : subtask,
+            ),
+          }
+        : task,
+    ),
+  }
+}
+
+export function addSubtask(
+  data: AppData,
+  todoId: string,
+  title: string,
+): AppData {
+  const trimmed = title.trim()
+  if (!trimmed) return data
+  return {
+    ...data,
+    todos: data.todos.map((task) =>
+      task.id === todoId
+        ? {
+            ...task,
+            subtasks: [
+              ...task.subtasks,
+              { id: createId(), title: trimmed, done: false },
+            ],
+          }
+        : task,
+    ),
+  }
+}
 
 export const challenges = [
   {
@@ -62,6 +129,11 @@ export function acceptChallenge(
       due: dayKey(date),
       challengeId,
       rewarded: false,
+      priority: 'P3' as const,
+      tags: ['challenge'],
+      recurrence: 'none' as const,
+      seriesId: null,
+      subtasks: [],
     }
   })
   return {
@@ -81,13 +153,43 @@ export function toggleTodo(
   const task = data.todos.find((item) => item.id === id)
   if (!task) return data
   const earn = !task.done && !task.rewarded
+  const completing = !task.done
+  const seriesId = task.seriesId ?? task.id
+  const nextDue =
+    completing && task.recurrence !== 'none'
+      ? nextRecurringDate(task.due, task.recurrence)
+      : null
+  const recurrenceExists = nextDue
+    ? data.todos.some(
+        (item) => item.seriesId === seriesId && item.due === nextDue,
+      )
+    : false
   let next: AppData = {
     ...data,
-    todos: data.todos.map((item) =>
-      item.id === id
-        ? { ...item, done: !item.done, rewarded: item.rewarded || earn }
-        : item,
-    ),
+    todos: [
+      ...data.todos.map((item) =>
+        item.id === id
+          ? { ...item, done: !item.done, rewarded: item.rewarded || earn }
+          : item,
+      ),
+      ...(nextDue && !recurrenceExists
+        ? [
+            {
+              ...task,
+              id: `recurrence:${seriesId}:${nextDue}`,
+              due: nextDue,
+              done: false,
+              rewarded: false,
+              seriesId,
+              subtasks: task.subtasks.map((subtask) => ({
+                ...subtask,
+                id: createId(),
+                done: false,
+              })),
+            },
+          ]
+        : []),
+    ],
   }
   const reward = (key: string, exp: number, gold: number) => {
     next = {

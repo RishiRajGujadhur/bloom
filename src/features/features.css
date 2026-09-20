@@ -100,8 +100,18 @@
   display: flex;
   gap: 10px;
 }
+.task-composer {
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-surface);
+}
 .task-add input,
 .task-edit input,
+.task-edit select,
+.task-options input,
+.task-options select,
+.subtask-add input,
 .focus-setup select {
   min-width: 0;
   padding: 12px;
@@ -110,6 +120,32 @@
   background: var(--bg-surface);
   color: var(--text-primary);
   font: inherit;
+}
+.task-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(130px, 1fr)) minmax(200px, 1.5fr);
+  gap: 12px;
+  padding-top: 14px;
+  animation: task-options-in 180ms ease-out;
+}
+.task-options label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@keyframes task-options-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .task-add input:first-child {
   flex: 1;
@@ -125,6 +161,22 @@
   align-items: center;
   border-top: 1px solid var(--border-color);
   padding: 18px 0;
+}
+.task-list .task-item {
+  display: block;
+  padding-left: 12px;
+  border-left: 3px solid transparent;
+}
+.task-list .task-item.priority-p1 {
+  border-left-color: #e05a62;
+}
+.task-list .task-item.priority-p2 {
+  border-left-color: #e5a03f;
+}
+.task-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
 }
 .task-check {
   display: grid;
@@ -150,6 +202,70 @@
   font-size: 14px;
   font-weight: 600;
 }
+.task-title-line,
+.task-meta,
+.tag-filters,
+.checklist-toggle {
+  display: flex;
+  align-items: center;
+}
+.task-title-line {
+  gap: 8px;
+}
+.priority-badge {
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+}
+.priority-badge.p1 {
+  background: #fbe6e8;
+  color: #a92e38;
+}
+.priority-badge.p2 {
+  background: #fff0d8;
+  color: #975c0b;
+}
+.task-meta {
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 6px;
+}
+.task-meta small,
+.task-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.task-tag {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+}
+.tag-filters {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -8px 0 18px;
+}
+.tag-filters button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.tag-filters button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent-color);
+  font-weight: 700;
+}
 .task-copy small,
 .session-history small {
   display: block;
@@ -172,6 +288,71 @@
   color: var(--accent-color);
   border-radius: 8px;
   padding: 8px;
+}
+.checklist-toggle {
+  gap: 6px;
+  margin: 8px 0 0 52px;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.checklist-toggle:hover {
+  background: var(--accent-soft);
+}
+.checklist-toggle .turned {
+  transform: rotate(180deg);
+}
+.checklist-toggle svg {
+  transition: transform 160ms ease;
+}
+.checklist {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0 52px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  animation: task-options-in 180ms ease-out;
+}
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 30px;
+  font-size: 13px;
+}
+.checklist-item > span {
+  flex: 1;
+}
+.mini-check {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  background: var(--bg-surface);
+  color: transparent;
+}
+.mini-check.done {
+  background: var(--accent-color);
+  color: white;
+}
+.completed-copy {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+.subtask-add {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.subtask-add input {
+  flex: 1;
 }
 .goal-list {
   border-radius: 12px;
@@ -449,6 +630,12 @@
   .task-add input[type='date'] {
     flex: 1;
   }
+  .task-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .task-options .tag-field {
+    grid-column: 1 / -1;
+  }
   .wizard-steps {
     gap: 10px;
   }
@@ -503,5 +690,12 @@
   .task-edit input {
     flex: 1;
     min-width: 120px;
+  }
+  .checklist,
+  .checklist-toggle {
+    margin-left: 0;
+  }
+  .subtask-add {
+    flex-wrap: wrap;
   }
 }

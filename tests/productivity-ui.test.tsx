@@ -37,6 +37,39 @@ test('accepting a challenge creates visible tasks and a goal, which survive relo
     JSON.parse(localStorage.getItem(STORAGE_KEY)!).challenges,
   ).toHaveLength(1)
 })
+test('a task supports priorities, tags, recurrence, and an actionable checklist', () => {
+  render(<App />)
+  fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true }))
+  fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
+    target: { value: 'Prepare the presentation' },
+  })
+  fireEvent.click(screen.getByRole('button', { name: /Details/ }))
+  fireEvent.change(screen.getByLabelText('Priority'), {
+    target: { value: 'P1' },
+  })
+  fireEvent.change(screen.getByLabelText('Repeat'), {
+    target: { value: 'weekly' },
+  })
+  fireEvent.change(screen.getByLabelText('Tags'), {
+    target: { value: '#deep-work, client' },
+  })
+  fireEvent.click(screen.getByRole('button', { name: /^Add$/ }))
+  expect(screen.getByText('P1')).toBeInTheDocument()
+  expect(screen.getAllByText('#deep-work')).toHaveLength(2)
+  expect(screen.getByText('weekly')).toBeInTheDocument()
+  fireEvent.click(screen.getByRole('button', { name: 'Add steps' }))
+  fireEvent.change(
+    screen.getByRole('textbox', {
+      name: 'New step for Prepare the presentation',
+    }),
+    { target: { value: 'Draft the story' } },
+  )
+  fireEvent.click(screen.getByRole('button', { name: 'Add step' }))
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Complete Draft the story' }),
+  )
+  expect(screen.getByText('Draft the story')).toHaveClass('completed-copy')
+})
 test('focus keeps running after navigation and awards its tree when the session ends', async () => {
   render(<App />)
   fireEvent.click(screen.getByRole('button', { name: 'Focus', exact: true }))

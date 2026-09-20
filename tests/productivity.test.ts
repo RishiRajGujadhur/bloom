@@ -1,7 +1,10 @@
 import { defaults, parseData } from '../src/model'
 import {
   acceptChallenge,
+  addSubtask,
   challenges,
+  nextRecurringDate,
+  toggleSubtask,
   toggleTodo,
 } from '../src/features/productivity'
 import {
@@ -50,6 +53,78 @@ test('older saves receive empty task collections without losing intentions', () 
   expect(migrated.todos).toEqual([])
   expect(migrated.plans[0].title).toBe('Keep this')
   expect(migrated.rpg.focusQuest.durationMinutes).toBe(25)
+})
+test('older tasks receive calm planning defaults without losing their content', () => {
+  const saved = JSON.parse(JSON.stringify(defaults()))
+  saved.todos = [
+    {
+      id: 'old-task',
+      title: 'Still here',
+      done: false,
+      due: '2026-09-20',
+      challengeId: null,
+      rewarded: false,
+    },
+  ]
+  const migrated = parseData(saved)
+  expect(migrated.todos[0]).toMatchObject({
+    title: 'Still here',
+    priority: 'P3',
+    tags: [],
+    recurrence: 'none',
+    subtasks: [],
+  })
+})
+test('subtasks can be added and checked without completing the parent task', () => {
+  let data = defaults()
+  data.todos.push({
+    id: 'project',
+    title: 'Plan launch',
+    done: false,
+    due: '2026-09-20',
+    challengeId: null,
+    rewarded: false,
+    priority: 'P1',
+    tags: ['deep-work'],
+    recurrence: 'none',
+    seriesId: null,
+    subtasks: [],
+  })
+  data = addSubtask(data, 'project', 'Draft the outline')
+  data = toggleSubtask(data, 'project', data.todos[0].subtasks[0].id)
+  expect(data.todos[0].subtasks[0]).toMatchObject({
+    title: 'Draft the outline',
+    done: true,
+  })
+  expect(data.todos[0].done).toBe(false)
+})
+test('completing a recurring task schedules the next occurrence exactly once', () => {
+  let data = defaults()
+  data.todos.push({
+    id: 'review-1',
+    title: 'Weekly review',
+    done: false,
+    due: '2026-09-20',
+    challengeId: null,
+    rewarded: false,
+    priority: 'P2',
+    tags: ['review'],
+    recurrence: 'weekly',
+    seriesId: 'review-series',
+    subtasks: [{ id: 'step-1', title: 'Clear inbox', done: true }],
+  })
+  data = toggleTodo(data, 'review-1', now)
+  expect(data.todos).toHaveLength(2)
+  expect(data.todos[1]).toMatchObject({
+    due: '2026-09-27',
+    done: false,
+    seriesId: 'review-series',
+  })
+  expect(data.todos[1].subtasks[0].done).toBe(false)
+  data = toggleTodo(data, 'review-1', now)
+  data = toggleTodo(data, 'review-1', now)
+  expect(data.todos).toHaveLength(2)
+  expect(nextRecurringDate('2025-01-31', 'monthly')).toBe('2025-02-28')
 })
 test('focus completion honors duration, persists history, and awards only once', () => {
   let data = defaults()
