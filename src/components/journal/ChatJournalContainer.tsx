@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import type { Dispatch, SetStateAction } from 'react'
-import { BookOpen, ArrowRight } from 'lucide-react'
+import { BookOpen, ArrowRight, Clock3, Sparkles } from 'lucide-react'
 import { advance, newSession, reply, stepChips } from '../../model'
-import type { AppData } from '../../model'
+import type { AppData, Session } from '../../model'
 import { JournalHeader } from './JournalHeader'
 import { MessageFeed } from './MessageFeed'
 import { PromptChips } from './PromptChips'
 import { ChatInputArea } from './ChatInputArea'
 import { SessionSummaryModal } from './SessionSummaryModal'
+import { MicroJournalComposer } from './MicroJournalComposer'
 
 export function ChatJournalContainer({
   data,
@@ -21,8 +22,11 @@ export function ChatJournalContainer({
   const { t } = useTranslation(undefined, { i18n })
   const language = i18n.resolvedLanguage ?? 'en'
   const session = data.draft
-  const [summary, setSummary] = useState(false)
+  const [summary, setSummary] = useState<Session | null>(null)
   const [tags, setTags] = useState('')
+  const [mode, setMode] = useState<'quick' | 'guided'>(() =>
+    session ? 'guided' : 'quick',
+  )
   useEffect(() => {
     if (!session?.flow.typing) return
     const sessionId = session.metadata.id
@@ -59,19 +63,19 @@ export function ChatJournalContainer({
     })
   const save = () => {
     if (!session?.flow.complete) return
+    const finished: Session = {
+      ...session,
+      metadata: {
+        ...session.metadata,
+        tags: tags
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+          .slice(0, 8),
+      },
+    }
     setData((d) => {
       if (!d.draft) return d
-      const finished = {
-        ...d.draft,
-        metadata: {
-          ...d.draft.metadata,
-          tags: tags
-            .split(',')
-            .map((t) => t.trim())
-            .filter(Boolean)
-            .slice(0, 8),
-        },
-      }
       return {
         ...d,
         draft: finished,
@@ -81,8 +85,12 @@ export function ChatJournalContainer({
         ],
       }
     })
-    setSummary(true)
+    setSummary(session)
   }
+  const microEntries = [...data.sessions]
+    .filter((entry) => entry.metadata.entryType === 'micro')
+    .sort((a, b) => Date.parse(b.metadata.date) - Date.parse(a.metadata.date))
+    .slice(0, 3)
   return (
     <section className="card journal" id="chat-journal">
       <div className="card-heading">
@@ -96,14 +104,83 @@ export function ChatJournalContainer({
           </div>
         </div>
         <span className="badge">
-          {session
-            ? t('ui.stepCounter', {
-                step: session.flow.complete ? 4 : session.flow.step + 1,
-              })
-            : t('ui.fiveMin')}
+          {mode === 'quick'
+            ? t('journal.quickEntry')
+            : session
+              ? t('ui.stepCounter', {
+                  step: session.flow.complete ? 4 : session.flow.step + 1,
+                })
+              : t('ui.fiveMin')}
         </span>
       </div>
-      {!session ? (
+      <div className="journal-mode-switch" aria-label="Journal style">
+        <button
+          aria-pressed={mode === 'quick'}
+          onClick={() => setMode('quick')}
+        >
+          <Sparkles size={15} /> {t('journal.quickEntry')}
+        </button>
+        <button
+          aria-pressed={mode === 'guided'}
+          onClick={() => setMode('guided')}
+        >
+          <Clock3 size={15} /> {t('journal.guided')}
+        </button>
+      </div>
+      {mode === 'quick' ? (
+        <>
+          <MicroJournalComposer
+            onSave={(entry) =>
+              setData((current) => ({
+                ...current,
+                sessions: [...current.sessions, entry],
+              }))
+            }
+            onGuided={() => {
+              if (!session)
+                setData((current) => ({
+                  ...current,
+                  draft: newSession(language),
+                }))
+              setMode('guided')
+            }}
+          />
+          {microEntries.length > 0 && (
+            <div className="micro-recent">
+              <h3>{t('journal.recentMoments')}</h3>
+              {microEntries.map((entry) => {
+                const entryText = entry.messages.find(
+                  (message) => message.sender === 'user',
+                )?.text
+                return (
+                  <button
+                    key={entry.metadata.id}
+                    onClick={() => setSummary(entry)}
+                  >
+                    <span>
+                      <strong>{entryText || t('journal.mediaMoment')}</strong>
+                      <small>
+                        {new Date(entry.metadata.date).toLocaleDateString()}
+                        {entry.metadata.tags.length
+                          ? ` · ${entry.metadata.tags.map((tag) => `#${tag}`).join(' ')}`
+                          : ''}
+                      </small>
+                    </span>
+                    {entry.metadata.attachments.length > 0 && (
+                      <small className="attachment-count">
+                        {t('journal.attachmentCount', {
+                          count: entry.metadata.attachments.length,
+                        })}
+                      </small>
+                    )}
+                    <ArrowRight size={15} />
+                  </button>
+                )
+              })}
+            </div>
+          )}
+        </>
+      ) : !session ? (
         <div className="journal-welcome">
           <div className="journal-illustration" aria-hidden="true">
             ✦<span>☾</span>✧
@@ -156,7 +233,7 @@ export function ChatJournalContainer({
               )}
               <button
                 className="primary"
-                onClick={saved ? () => setSummary(true) : save}
+                onClick={saved ? () => setSummary(session) : save}
               >
                 {saved ? t('journal.viewSaved') : t('journal.saveReview')}{' '}
                 <ArrowRight size={16} />
@@ -176,10 +253,10 @@ export function ChatJournalContainer({
           )}
         </>
       )}
-      {summary && session && (
+      {summary && (
         <SessionSummaryModal
-          session={session}
-          onClose={() => setSummary(false)}
+          session={summary}
+          onClose={() => setSummary(null)}
         />
       )}
     </section>

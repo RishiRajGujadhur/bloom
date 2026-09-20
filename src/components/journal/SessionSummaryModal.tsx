@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import type { Session } from '../../model'
 import { Modal } from '../Modal'
+import { JournalMediaGrid } from './JournalMediaGrid'
 export function SummaryContent({ session }: { session: Session }) {
   const { t } = useTranslation(undefined, { i18n })
   const names: Record<string, string> = {
@@ -33,6 +34,7 @@ export function SummaryContent({ session }: { session: Session }) {
       {session.metadata.tags.length > 0 && (
         <p className="muted">{session.metadata.tags.join(' · ')}</p>
       )}
+      <JournalMediaGrid attachments={session.metadata.attachments} />
     </>
   )
 }

@@ -3,7 +3,9 @@ import {
   defaults,
   dayKey,
   loadData,
+  newMicroSession,
   newSession,
+  parseData,
   reply,
   STORAGE_KEY,
   toggleHabit,
@@ -34,6 +36,33 @@ test('new session clears metadata, completion and pacing state', () => {
   expect(session.metadata.mood).toBeNull()
   expect(session.metadata.energy).toBeNull()
   expect(session.flow).toEqual({ step: 0, typing: false, complete: false })
+})
+test('micro journal entries keep text, tags, mood, and lightweight media references', () => {
+  const session = newMicroSession(
+    'A small moment worth keeping',
+    ['grateful', 'outside'],
+    [
+      {
+        id: 'photo-1',
+        kind: 'photo',
+        name: 'sunset.jpg',
+        mimeType: 'image/jpeg',
+        duration: null,
+      },
+    ],
+    4,
+  )
+  expect(session.flow.complete).toBe(true)
+  expect(session.metadata).toMatchObject({
+    entryType: 'micro',
+    mood: 4,
+    tags: ['grateful', 'outside'],
+  })
+  expect(session.metadata.attachments[0].name).toBe('sunset.jpg')
+  expect(session.messages[0].text).toBe('A small moment worth keeping')
+  expect(parseData({ ...defaults(), sessions: [session] }).sessions[0]).toEqual(
+    session,
+  )
 })
 test('habits keep history while completion is specific to local calendar day', () => {
   const data = defaults()

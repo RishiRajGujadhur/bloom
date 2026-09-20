@@ -40,6 +40,13 @@ const messageSchema = z.object({
   timestamp: z.number(),
   category: categorySchema,
 })
+export const journalAttachmentSchema = z.object({
+  id: z.string(),
+  kind: z.enum(['photo', 'audio']),
+  name: z.string().max(160),
+  mimeType: z.string().max(100),
+  duration: z.number().nonnegative().nullable().default(null),
+})
 const sessionSchema = z.object({
   metadata: z.object({
     id: z.string(),
@@ -47,6 +54,8 @@ const sessionSchema = z.object({
     mood: z.number().int().min(1).max(5).nullable(),
     energy: z.number().int().min(1).max(5).nullable(),
     tags: z.array(z.string()),
+    entryType: z.enum(['guided', 'micro']).default('guided'),
+    attachments: z.array(journalAttachmentSchema).default([]),
   }),
   messages: z.array(messageSchema),
   flow: z.object({
@@ -129,6 +138,7 @@ export function parseData(input: unknown): AppData {
   return dataSchema.parse(input)
 }
 export type JournalMessage = z.infer<typeof messageSchema>
+export type JournalAttachmentMeta = z.infer<typeof journalAttachmentSchema>
 export type Session = z.infer<typeof sessionSchema>
 export type Todo = z.infer<typeof taskSchema>
 export type AppData = z.infer<typeof dataSchema>
@@ -140,6 +150,8 @@ export function newSession(language = 'en'): Session {
       mood: null,
       energy: null,
       tags: [],
+      entryType: 'guided',
+      attachments: [],
     },
     messages: [
       {
@@ -151,6 +163,38 @@ export function newSession(language = 'en'): Session {
       },
     ],
     flow: { step: 0, typing: false, complete: false },
+  }
+}
+
+export function newMicroSession(
+  text: string,
+  tags: string[],
+  attachments: JournalAttachmentMeta[] = [],
+  mood: number | null = null,
+): Session {
+  const created = new Date().toISOString()
+  return {
+    metadata: {
+      id: id(),
+      date: created,
+      mood,
+      energy: null,
+      tags,
+      entryType: 'micro',
+      attachments,
+    },
+    messages: text.trim()
+      ? [
+          {
+            id: id(),
+            sender: 'user',
+            text: text.trim(),
+            timestamp: Date.parse(created),
+            category: 'reflection',
+          },
+        ]
+      : [],
+    flow: { step: STEPS - 1, typing: false, complete: true },
   }
 }
 export const defaults = (language = 'en'): AppData => {

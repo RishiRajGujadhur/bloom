@@ -65,6 +65,30 @@ test('pending journal timer resumes once after unmount and reload', async () => 
     within(screen.getByRole('log')).getAllByText(/What’s one small win/),
   ).toHaveLength(1)
 })
+test('quick journal saves a tagged micro-entry without starting the guided flow', async () => {
+  render(<App />)
+  fireEvent.click(
+    screen.getAllByRole('button', { name: 'Reflection journal' })[0],
+  )
+  fireEvent.change(screen.getByLabelText('Quick journal entry'), {
+    target: { value: 'The morning light felt peaceful.' },
+  })
+  fireEvent.click(screen.getByRole('button', { name: '#grateful' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Good' }))
+  await act(async () => {
+    fireEvent.click(screen.getByRole('button', { name: 'Save entry' }))
+  })
+  expect(screen.getByRole('status')).toHaveTextContent('Saved to your journal')
+  expect(
+    screen.getByText('The morning light felt peaceful.'),
+  ).toBeInTheDocument()
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)!)
+  expect(data.sessions[0].metadata).toMatchObject({
+    entryType: 'micro',
+    mood: 4,
+    tags: ['grateful'],
+  })
+})
 test('habit completion persists after reload', () => {
   const view = render(<App />)
   fireEvent.click(screen.getByRole('button', { name: /Move with intention/ }))
