@@ -43,12 +43,17 @@ export function focusQuestState(rpg: Rpg, now = Date.now()): FocusQuestState {
   return quest.startedAt ? 'active' : 'idle'
 }
 export function startFocusQuest(data: AppData, soundscape: Rpg['focusQuest']['soundscape'], now = Date.now()): AppData {
+  if (focusQuestState(data.rpg, now) === 'active') return data
   return { ...data, rpg: { ...data.rpg, focusQuest: { ...data.rpg.focusQuest, startedAt: now, completedAt: null, failedAt: null, soundscape } } }
 }
 export function completeFocusQuest(data: AppData, now = Date.now()): AppData {
   const quest = data.rpg.focusQuest
-  if (!quest.startedAt || now - quest.startedAt < FOCUS_QUEST_MS) return data
-  return { ...data, rpg: { ...data.rpg, focusQuest: { ...quest, completedAt: now } } }
+  if (!quest.startedAt || quest.completedAt || quest.failedAt || now - quest.startedAt < (quest.durationMinutes ?? 25) * 60000) return data
+  const key = `focus:${quest.startedAt}`
+  const minutes = quest.durationMinutes ?? 25
+  const bonus = data.rpg.skills.meditation?.state === 'unlocked' ? 5 : 0
+  const reward = { day: dayKey(new Date(now)), at: now, exp: minutes + bonus, stat: 'intelligence' as const, points: 5, gold: 5, active: true, kind: 'priority' as const, sourceId: key }
+  return { ...data, rpg: { ...data.rpg, gold: data.rpg.gold + 5, ledger: { ...data.rpg.ledger, [key]: reward }, focusHistory: [...(data.rpg.focusHistory ?? []), { id: key, completedAt: now, minutes, taskTitle: data.todos?.find(task => task.id === quest.taskId)?.title ?? 'Open focus' }], focusQuest: { ...quest, completedAt: now } } }
 }
 export function failFocusQuest(data: AppData, now = Date.now()): AppData {
   const quest = data.rpg.focusQuest
@@ -138,7 +143,7 @@ export function syncGame(next: AppData, previous: AppData, clock = Date.now()): 
   for (const h of data.habits) update(habitKey(h.id,today), h.dates.includes(today), previous.habits.find(p => p.id === h.id)?.dates.includes(today) ?? false, 'habit', h.id, h.stat, 10, 5, 10)
   for (const p of data.plans.filter(p => p.date === today)) update(priorityKey(p.id,today), p.done, previous.plans.find(old => old.id === p.id)?.done ?? false, 'priority', p.id, null, 10, 0, 10)
   const newJournal = data.sessions.find(s => s.flow.complete && !previous.sessions.some(old => old.metadata.id === s.metadata.id))
-  if (newJournal) update(`journal:${today}`, true, false, 'journal', newJournal.metadata.id, 'spirit', 20, 5)
+  if (newJournal) update(`journal:${today}`, true, false, 'journal', newJournal.metadata.id, 'spirit', data.rpg.skills.breathwork?.state === 'unlocked' ? 25 : 20, 5)
   const currentCombo = combo(rpg, now)
   const focusMultiplier = rpg.buffs.some(buff => buff.kind === 'focus-elixir' && buff.expiresAt !== null && buff.expiresAt > now) ? 1.1 : 1
   for (const { key, base } of fresh) rpg.ledger[key] = { ...rpg.ledger[key], exp: Math.round(base*currentCombo.multiplier*focusMultiplier) }
@@ -195,8 +200,9 @@ export function toggleGraceDay(data: AppData, day: string): AppData {
 }
 
 export function unlockSkill(data: AppData, skillId: string, exp: number, stats: Record<Stat, number>, definitions: Record<string, { prerequisites: string[]; attribute: Stat | null; threshold: number; expCost: number }>): AppData {
+  if (data.rpg.skills[skillId]?.state === 'unlocked') return data
   const definition = definitions[skillId]
-  if (!definition || exp < definition.expCost || (definition.attribute && stats[definition.attribute] < definition.threshold) || definition.prerequisites.some(id => data.rpg.skills[id]?.state !== 'unlocked')) return data
+  if (!definition || exp < definition.expCost || (definition.attribute && stats[definition.attribute] < definition.threshold) || definition.prerequisites.some(id => id !== 'mindfulness' && data.rpg.skills[id]?.state !== 'unlocked')) return data
   return { ...data, rpg: { ...data.rpg, skills: { ...data.rpg.skills, [skillId]: { ...definition, state: 'unlocked' } } } }
 }
 

@@ -64,13 +64,53 @@ export interface ShopItem {
 }
 
 const skillSeeds: ReadonlyArray<Omit<SkillNode, 'title' | 'subtitle'>> = [
-  { id: 'mindfulness', state: 'unlocked', prerequisites: [], attribute: null, threshold: 0, expCost: 0, x: 8, y: 48 },
-  { id: 'breathwork', state: 'available', prerequisites: ['mindfulness'], attribute: 'spirit', threshold: 10, expCost: 40, x: 31, y: 25 },
-  { id: 'meditation', state: 'locked', prerequisites: ['breathwork'], attribute: 'spirit', threshold: 25, expCost: 100, x: 53, y: 67 },
-  { id: 'zen', state: 'locked', prerequisites: ['meditation'], attribute: 'spirit', threshold: 50, expCost: 250, x: 80, y: 38 },
+  {
+    id: 'mindfulness',
+    state: 'unlocked',
+    prerequisites: [],
+    attribute: null,
+    threshold: 0,
+    expCost: 0,
+    x: 8,
+    y: 48,
+  },
+  {
+    id: 'breathwork',
+    state: 'available',
+    prerequisites: ['mindfulness'],
+    attribute: 'spirit',
+    threshold: 10,
+    expCost: 40,
+    x: 31,
+    y: 25,
+  },
+  {
+    id: 'meditation',
+    state: 'locked',
+    prerequisites: ['breathwork'],
+    attribute: 'spirit',
+    threshold: 25,
+    expCost: 100,
+    x: 53,
+    y: 67,
+  },
+  {
+    id: 'zen',
+    state: 'locked',
+    prerequisites: ['meditation'],
+    attribute: 'spirit',
+    threshold: 50,
+    expCost: 250,
+    x: 80,
+    y: 38,
+  },
 ]
 
-const shopSeeds: ReadonlyArray<{ id: 'shield' | 'elixir'; cost: number; icon: ShopItem['icon'] }> = [
+const shopSeeds: ReadonlyArray<{
+  id: 'shield' | 'elixir'
+  cost: number
+  icon: ShopItem['icon']
+}> = [
   { id: 'shield', cost: 120, icon: 'shield' },
   { id: 'elixir', cost: 80, icon: 'sparkles' },
 ]
@@ -137,6 +177,13 @@ function SkillTree({
   setData: Dispatch<SetStateAction<AppData>>
 }) {
   const { t } = useTranslation(undefined, { i18n })
+  const [selectedSkill, setSelectedSkill] = useState('breathwork')
+  const perks: Record<string, string> = {
+    mindfulness: 'Your starting point',
+    breathwork: '+5 XP for saved reflections',
+    meditation: '+5 XP for completed focus sessions',
+    zen: '+5 XP for completed to-dos',
+  }
   const stats = { ...totals(data.rpg), stats: statsAfterDecay(data.rpg) }
   const definitions = Object.fromEntries(
     skillSeeds.map(({ id, prerequisites, attribute, threshold, expCost }) => [
@@ -155,11 +202,11 @@ function SkillTree({
       ...node,
       title: t(`rpg.skills.${node.id}.title`),
       subtitle: t(`rpg.skills.${node.id}.subtitle`),
-      state:
-        saved?.state ??
-        ((prerequisitesMet && attributeMet && stats.exp >= node.expCost
+      state: (node.id === 'mindfulness' || saved?.state === 'unlocked'
+        ? 'unlocked'
+        : prerequisitesMet && attributeMet && stats.exp >= node.expCost
           ? 'available'
-          : node.state) as SkillNodeState),
+          : 'locked') as SkillNodeState,
     }
   })
   const unlocked = nodes.filter((node) => node.state === 'unlocked').length
@@ -182,7 +229,7 @@ function SkillTree({
       </div>
       <div
         className="skill-tree"
-        role="list"
+        role="group"
         aria-label={t('rpg.skillTreeAria')}
       >
         <svg
@@ -200,19 +247,8 @@ function SkillTree({
             key={node.id}
             className={`skill-node skill-${node.state}`}
             style={{ left: `${node.x}%`, top: `${node.y}%` }}
-            role="listitem"
-            disabled={node.state !== 'available'}
-            onClick={() =>
-              setData((current) =>
-                unlockSkill(
-                  current,
-                  node.id,
-                  stats.exp,
-                  stats.stats,
-                  definitions,
-                ),
-              )
-            }
+            aria-pressed={selectedSkill === node.id}
+            onClick={() => setSelectedSkill(node.id)}
           >
             <div className="skill-node-orb">
               {node.state === 'locked' ? (
@@ -223,14 +259,63 @@ function SkillTree({
             </div>
             <strong>{node.title}</strong>
             <small>
-              {node.state === 'available'
-                ? t('rpg.unlockCost', { cost: node.expCost })
-                : node.subtitle}
+              {node.state === 'available' ? 'Ready to unlock' : node.subtitle}
             </small>
           </button>
         ))}
       </div>
-      <p className="gamify-note">{t('rpg.skillTreeNote')}</p>
+      {nodes
+        .filter((node) => node.id === selectedSkill)
+        .map((node) => (
+          <div className="skill-detail" key={node.id}>
+            <h3>{node.title}</h3>
+            <p>{perks[node.id]}</p>
+            {node.state !== 'unlocked' && (
+              <>
+                <span>
+                  {Math.min(stats.exp, node.expCost)}/{node.expCost} XP
+                  {node.attribute
+                    ? ` · ${Math.min(stats.stats[node.attribute], node.threshold)}/${node.threshold} ${node.attribute}`
+                    : ''}
+                </span>
+                <progress
+                  aria-label="Skill experience requirement"
+                  value={stats.exp}
+                  max={node.expCost || 1}
+                />
+                {node.prerequisites
+                  .filter(
+                    (id) =>
+                      id !== 'mindfulness' &&
+                      data.rpg.skills[id]?.state !== 'unlocked',
+                  )
+                  .map((id) => (
+                    <small key={id}>
+                      Unlock {t(`rpg.skills.${id}.title`)} first
+                    </small>
+                  ))}
+                <button
+                  className="primary"
+                  disabled={node.state !== 'available'}
+                  onClick={() =>
+                    setData((current) =>
+                      unlockSkill(
+                        current,
+                        node.id,
+                        totals(current.rpg).exp,
+                        statsAfterDecay(current.rpg),
+                        definitions,
+                      ),
+                    )
+                  }
+                >
+                  Unlock skill
+                </button>
+              </>
+            )}
+            {node.state === 'unlocked' && <strong>Unlocked</strong>}
+          </div>
+        ))}
     </section>
   )
 }
@@ -322,7 +407,9 @@ function RaidPanel({
           <h3 id="raid-title">{t('rpg.raidName')}</h3>
           <p>{t('rpg.raidMeta')}</p>
         </div>
-        <span className="raid-level">{t('rpg.raidLevel', { level: '07' })}</span>
+        <span className="raid-level">
+          {t('rpg.raidLevel', { level: '07' })}
+        </span>
       </div>
       <LiquidProgressBar
         label={t('rpg.bossVitality')}
@@ -431,11 +518,13 @@ export function GamificationShowcase({
   setData,
   showWeeklyRaid,
   showWalkthroughTour,
+  view = 'all',
 }: {
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
   showWeeklyRaid: boolean
   showWalkthroughTour: boolean
+  view?: 'all' | 'skills' | 'rewards'
 }) {
   const { t } = useTranslation(undefined, { i18n })
   const [showCelebration, setShowCelebration] = useState(false)
@@ -489,42 +578,58 @@ export function GamificationShowcase({
       className="gamification-showcase"
       aria-label={t('rpg.showcaseAria')}
     >
-      <div className="showcase-heading">
-        <div>
-          <span className="gamify-kicker">
-            <Compass size={14} /> {t('rpg.orientationKicker')}
-          </span>
-          <h2>{t('rpg.orientationTitle')}</h2>
-          <p>{t('rpg.orientationSubtitle')}</p>
-        </div>
-        {showWalkthroughTour && (
-          <button
-            className="orientation-button orientation-fab"
-            onClick={startTour}
-          >
-            <Compass size={16} /> {t('rpg.guideMe')}
-          </button>
-        )}
-      </div>
-      <div className="resource-strip">
-        <LiquidProgressBar label={t('rpg.expLabel')} value={72} max={100} tone="exp" />
-        <LiquidProgressBar label={t('rpg.manaLabel')} value={44} max={100} tone="mana" />
-        <button
-          className="morph-button"
-          onClick={morph}
-          aria-label={t('rpg.morphAria')}
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path ref={morphRef} d="M4 5 L20 5 L12 21 Z" />
-          </svg>
-          <span>{t('rpg.morphAction')}</span>
-        </button>
-      </div>
+      {view === 'all' && (
+        <>
+          <div className="showcase-heading">
+            <div>
+              <span className="gamify-kicker">
+                <Compass size={14} /> {t('rpg.orientationKicker')}
+              </span>
+              <h2>{t('rpg.orientationTitle')}</h2>
+              <p>{t('rpg.orientationSubtitle')}</p>
+            </div>
+            {showWalkthroughTour && (
+              <button
+                className="orientation-button orientation-fab"
+                onClick={startTour}
+              >
+                <Compass size={16} /> {t('rpg.guideMe')}
+              </button>
+            )}
+          </div>
+          <div className="resource-strip">
+            <LiquidProgressBar
+              label={t('rpg.expLabel')}
+              value={72}
+              max={100}
+              tone="exp"
+            />
+            <LiquidProgressBar
+              label={t('rpg.manaLabel')}
+              value={44}
+              max={100}
+              tone="mana"
+            />
+            <button
+              className="morph-button"
+              onClick={morph}
+              aria-label={t('rpg.morphAria')}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path ref={morphRef} d="M4 5 L20 5 L12 21 Z" />
+              </svg>
+              <span>{t('rpg.morphAction')}</span>
+            </button>
+          </div>
+        </>
+      )}
       <div className="showcase-grid">
-        <SkillTree data={data} setData={setData} />
-        <ShopPanel data={data} setData={setData} />
-        {showWeeklyRaid && <RaidPanel data={data} setData={setData} />}
-        <GracePanel data={data} setData={setData} />
+        {view !== 'rewards' && <SkillTree data={data} setData={setData} />}
+        {view !== 'skills' && <ShopPanel data={data} setData={setData} />}
+        {view !== 'skills' && showWeeklyRaid && (
+          <RaidPanel data={data} setData={setData} />
+        )}
+        {view !== 'skills' && <GracePanel data={data} setData={setData} />}
       </div>
       {showCelebration && (
         <div className="tutorial-reward" role="status">

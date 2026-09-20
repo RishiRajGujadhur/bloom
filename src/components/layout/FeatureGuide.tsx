@@ -9,6 +9,13 @@ export const pageDetails: Record<
   NavKey,
   { title: string; description: string }
 > = {
+  todos: { title: 'To-dos', description: 'One thing at a time.' },
+  challenges: {
+    title: 'Challenges',
+    description: 'Choose your next adventure.',
+  },
+  focus: { title: 'Focus', description: 'Grow your attention.' },
+  growth: { title: 'Growth', description: 'Your small steps add up.' },
   overview: {
     title: 'Your daily space',
     description: 'Small steps. A little reflection. Room to grow.',
@@ -50,6 +57,64 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  todos: [
+    step(
+      '.task-add',
+      'Add a task',
+      'Give it a name and due date. Tasks stay here until completed.',
+    ),
+    step(
+      '.goal-list',
+      'Challenge goals',
+      'Accepted challenges add a goal and dated tasks. Complete those tasks to fill the goal’s progress bar.',
+    ),
+    step(
+      '.segmented',
+      'Keep it manageable',
+      'Switch between open, due today, and completed tasks.',
+    ),
+  ],
+  challenges: [
+    step(
+      '.quest-card',
+      'Choose a challenge',
+      'Preview its steps, then accept to add its goal and dated tasks to To-dos.',
+    ),
+    step(
+      '#challenges-page',
+      'Earn your reward',
+      'Check off the linked tasks in To-dos. Finishing every step earns the challenge reward once.',
+    ),
+  ],
+  focus: [
+    step(
+      '.focus-setup',
+      'Choose your session',
+      'Pick a duration and optionally link a task. Strict mode ends the session when this browser tab is hidden; it does not block other apps.',
+    ),
+    step(
+      '.focus-room',
+      'Plant some focus',
+      'Start the timer. Finishing earns XP, gold, and a tree. It keeps running when you visit another page in Bloom.',
+    ),
+    step(
+      '.focus-garden',
+      'Watch your garden grow',
+      'Each completed session adds a permanent tree and a history entry.',
+    ),
+  ],
+  growth: [
+    step(
+      '.growth-tabs',
+      'Explore your growth',
+      'Choose your avatar, skills, or rewards. Only one area opens at a time.',
+    ),
+    step(
+      '.rpg-zone',
+      'Make progress',
+      'Habits, to-dos, reflections, and focus sessions grow your experience and attributes.',
+    ),
+  ],
   overview: [
     step(
       '.stats',
@@ -109,6 +174,16 @@ const guides: Record<NavKey, DriveStep[]> = {
     ),
   ],
   daybook: [
+    step(
+      '.journal-direction',
+      'Start with one choice',
+      'Choose Plan, Reflect, Imagine, or Explore. You will then pick a writing format.',
+    ),
+    step(
+      '.wizard-steps',
+      'One step at a time',
+      'Choose a direction, pick a page, then write. Guided pages show one prompt at a time.',
+    ),
     step(
       '.daybook-editor-header',
       'Your writing space',

@@ -24,6 +24,8 @@ test('daybook has a dedicated page and hash navigation restores destinations', (
   expect(
     screen.getByRole('heading', { name: 'Daybook', level: 1 }),
   ).toHaveFocus()
+  expect(screen.getByRole('button', { name: 'Plan', exact: true })).toBeVisible()
+  fireEvent.click(screen.getByRole('button', { name: 'Plan', exact: true }))
   expect(screen.getByPlaceholderText('Search modes')).toBeVisible()
   expect(
     screen.queryByRole('button', { name: /Move with intention/ }),
@@ -72,11 +74,11 @@ test('guide highlights only the current feature and cleans up on navigation', ()
 
 test('collapsed sidebar preference survives remount', () => {
   const view = render(<App />)
-  fireEvent.click(screen.getByRole('button', { name: 'Collapse menu' }))
+  fireEvent.click(screen.getByRole('switch', { name: 'Icon-only sidebar' }))
   view.unmount()
   render(<App />)
-  expect(screen.getByRole('button', { name: 'Expand menu' })).toHaveAttribute(
-    'aria-expanded',
-    'false',
+  expect(screen.getByRole('switch', { name: 'Icon-only sidebar' })).toHaveAttribute(
+    'aria-checked',
+    'true',
   )
 })

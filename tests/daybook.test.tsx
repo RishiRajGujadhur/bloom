@@ -26,5 +26,6 @@ test('adaptive editors expose the appropriate accessible controls', () => {
   expect(screen.getByRole('button', { name: 'Checklist' })).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Checklist' }))
   fireEvent.click(screen.getByRole('button', { name: /All modes/ }))
+  fireEvent.click(screen.getByRole('button', { name: 'Discard changes' }))
   expect(onBack).toHaveBeenCalled()
 })

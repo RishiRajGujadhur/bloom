@@ -76,9 +76,7 @@ test('every literal translation key used in the source exists in English and Fre
 test('English remains the default language', () => {
   render(<App />)
   expect(document.documentElement.lang).toBe('en')
-  expect(screen.getAllByText(/YOUR EVERYDAY ADVENTURE/).length).toBeGreaterThan(
-    0,
-  )
+  expect(screen.getByRole('heading', { name: 'Your daily space' })).toBeInTheDocument()
   expect(screen.getAllByText(/Move with intention/).length).toBeGreaterThan(0)
 })
 
@@ -87,21 +85,19 @@ test('switching to French localizes the dashboard, RPG, gamification and daybook
   render(<App />)
 
   expect(document.documentElement.lang).toBe('fr')
-  expect(
-    screen.getAllByText(/VOTRE AVENTURE QUOTIDIENNE/).length,
-  ).toBeGreaterThan(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Growth' }))
   expect(
     screen.getAllByRole('button', { name: /Comment jouer/ }).length,
   ).toBeGreaterThan(0)
   expect(screen.getAllByText('La Pousse').length).toBeGreaterThan(0)
   expect(screen.getAllByText('Vitalité').length).toBeGreaterThan(0)
-  expect(screen.getAllByText(/MOTEUR D’ÉLAN/).length).toBeGreaterThan(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Skill tree' }))
   expect(screen.getAllByText(/CHEMIN DE PRATIQUE/).length).toBeGreaterThan(0)
   expect(
     screen.getAllByText('Votre arbre de compétences').length,
   ).toBeGreaterThan(0)
   fireEvent.click(screen.getAllByRole('button', { name: /Modes de carnet/ })[0])
-  expect(screen.getAllByText('Le carnet').length).toBeGreaterThan(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Plan', exact: true }))
   expect(
     screen.getAllByText('Intention du matin (la seule chose)').length,
   ).toBeGreaterThan(0)
@@ -130,9 +126,8 @@ test('pirate and slang English stay usable on the shared English sections', asyn
   expect(
     screen.getAllByText(/Main deck|Yer Stats|A wee bit better/).length,
   ).toBeGreaterThan(0)
-  expect(
-    screen.getAllByRole('button', { name: /How to play/ }).length,
-  ).toBeGreaterThan(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Growth' }))
+  expect(screen.getByRole('button', { name: /How to play/ })).toBeInTheDocument()
 })
 test('French settings page renders translated feature copy', async () => {
   await i18n.changeLanguage('fr')

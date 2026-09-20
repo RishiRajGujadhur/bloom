@@ -26,7 +26,8 @@ import { Modal } from './components/Modal'
 import { ChatJournalContainer } from './components/journal/ChatJournalContainer'
 import { JournalContainer } from './components/daybook/JournalContainer'
 import { SummaryContent } from './components/journal/SessionSummaryModal'
-import { DashboardWelcome } from './components/DashboardWelcome'
+import { ChallengesPage, TodoPage } from './features/ProductivityPages'
+import { FocusPage, useFocusLifecycle } from './features/FocusPage'
 import { LanguageSelector } from './components/LanguageSelector'
 import './App.css'
 import {
@@ -47,6 +48,8 @@ import {
   toggleThemeMode,
 } from './utils/themeEngine'
 import type { ThemeSettings } from './utils/themeEngine'
+
+import './features/features.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
 
@@ -116,6 +119,7 @@ function TextForm({
 function App() {
   const { t } = useTranslation(undefined, { i18n })
   const { data, setData, error, blocked, resumeSaving } = useCoach()
+  useFocusLifecycle(data, setData)
   const [settings, setSettings] = useAppSettings()
   const [today, setToday] = useState(dayKey)
   const [modal, setModal] = useState<
@@ -239,11 +243,9 @@ function App() {
           <div className={`page-content feature-page page-${active}`}>
             <div className="feature-heading">
               <div>
-                <span className="eyebrow">YOUR EVERYDAY SPACE</span>
                 <h1 id="page-heading" tabIndex={-1}>
                   {pageDetails[active].title}
                 </h1>
-                <p>{pageDetails[active].description}</p>
               </div>
               <FeatureGuide page={active} />
             </div>
@@ -269,7 +271,8 @@ function App() {
                 <JournalContainer />
               </div>
             )}
-            {(active === 'habits' && !settings.features.habitTracker) ||
+            {(active === 'growth' && !settings.features.rpgSkillTree) ||
+            (active === 'habits' && !settings.features.habitTracker) ||
             (active === 'journal' && !settings.features.chatJournal) ||
             (active === 'daybook' && !settings.features.daybookModes) ||
             (active === 'vision-board' && !settings.features.visionBoard) ? (
@@ -280,6 +283,25 @@ function App() {
                   Open settings
                 </button>
               </section>
+            ) : active === 'todos' ? (
+              <TodoPage data={data} setData={setData} />
+            ) : active === 'challenges' ? (
+              <ChallengesPage
+                data={data}
+                setData={setData}
+                onTasks={() => jump('todos')}
+              />
+            ) : active === 'focus' ? (
+              <FocusPage data={data} setData={setData} />
+            ) : active === 'growth' ? (
+              <RpgDashboard
+                compact
+                data={data}
+                setData={setData}
+                onReflect={() => jump('journal')}
+                showWeeklyRaid={settings.features.weeklyRaidBoss}
+                showWalkthroughTour={false}
+              />
             ) : active === 'settings' ? (
               <SettingsPage
                 settings={settings}
@@ -299,27 +321,6 @@ function App() {
               </Suspense>
             ) : (
               <>
-                {active === 'overview' && (
-                  <DashboardWelcome
-                    date={new Date(`${today}T12:00:00`).toLocaleDateString(
-                      i18n.resolvedLanguage ?? 'en',
-                      {
-                        weekday: 'long',
-                        month: 'long',
-                        day: 'numeric',
-                      },
-                    )}
-                  />
-                )}
-                {active === 'overview' && settings.features.rpgSkillTree && (
-                  <RpgDashboard
-                    data={data}
-                    setData={setData}
-                    onReflect={() => jump('journal')}
-                    showWeeklyRaid={settings.features.weeklyRaidBoss}
-                    showWalkthroughTour={false}
-                  />
-                )}
                 {active === 'overview' && (
                   <div className="stats">
                     <div>

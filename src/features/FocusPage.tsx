@@ -1,0 +1,302 @@
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
+import { Play, Square, Check, Timer } from 'lucide-react'
+import { toggleTodo } from './productivity'
+import type { AppData } from '../model'
+import {
+  completeFocusQuest,
+  failFocusQuest,
+  focusQuestState,
+  startFocusQuest,
+} from '../rpg/engine'
+
+export function PixelPlant({ stage = 2 }: { stage?: number }) {
+  return (
+    <svg
+      className="pixel-plant"
+      viewBox="0 0 32 32"
+      role="img"
+      aria-label={
+        stage === 0 ? 'Seed' : stage === 1 ? 'Seedling' : 'Grown tree'
+      }
+      shapeRendering="crispEdges"
+    >
+      <path fill="#9d775b" d="M5 26h22v3H5z" />
+      <path fill="#b8946e" d="M8 25h16v2H8z" />
+      {stage === 0 ? (
+        <path fill="#72543e" d="M14 22h4v4h-4z" />
+      ) : (
+        <>
+          <path fill="#87664b" d="M14 13h4v13h-4z" />
+          <path
+            fill="#548c67"
+            d={
+              stage === 1
+                ? 'M6 16h8v6H9v-3H6zM18 12h9v6h-9z'
+                : 'M8 5h16v4h4v12H4V9h4z'
+            }
+          />
+          <path
+            fill="#85b882"
+            d={
+              stage === 1
+                ? 'M7 16h7v3H7zM18 12h6v3h-6z'
+                : 'M9 5h14v4H9zM5 10h9v5H5zM17 9h7v5h-7z'
+            }
+          />
+          {stage > 2 && <path fill="#e7ba6e" d="M8 15h3v3H8zM21 12h3v3h-3z" />}
+        </>
+      )}
+    </svg>
+  )
+}
+export function useFocusLifecycle(
+  data: AppData,
+  setData: Dispatch<SetStateAction<AppData>>,
+) {
+  const quest = data.rpg.focusQuest
+  useEffect(() => {
+    if (!quest.startedAt || quest.completedAt || quest.failedAt) return
+    const tick = () => {
+      if (Date.now() - quest.startedAt! >= quest.durationMinutes * 60000)
+        setData((current) => completeFocusQuest(current))
+    }
+    const visibility = () => {
+      if (document.visibilityState === 'hidden' && quest.strict)
+        setData((current) => {
+          const completed = completeFocusQuest(current)
+          return completed === current ? failFocusQuest(current) : completed
+        })
+      else tick()
+    }
+    tick()
+    const timer = window.setInterval(tick, 1000)
+    document.addEventListener('visibilitychange', visibility)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', visibility)
+    }
+  }, [
+    quest.startedAt,
+    quest.completedAt,
+    quest.failedAt,
+    quest.strict,
+    quest.durationMinutes,
+    setData,
+  ])
+}
+export function FocusPage({
+  data,
+  setData,
+}: {
+  data: AppData
+  setData: Dispatch<SetStateAction<AppData>>
+}) {
+  const [now, setNow] = useState(Date.now)
+  const [confirmStop, setConfirmStop] = useState(false)
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+  const quest = data.rpg.focusQuest
+  const active = focusQuestState(data.rpg, now) === 'active'
+  const total = quest.durationMinutes * 60000
+  const left = active ? Math.max(0, total - (now - quest.startedAt!)) : total
+  const progress = active
+    ? Math.min(1, (now - quest.startedAt!) / total)
+    : quest.completedAt
+      ? 1
+      : 0
+  const history = data.rpg.focusHistory
+  const update = (patch: Partial<typeof quest>) =>
+    setData((current) => ({
+      ...current,
+      rpg: {
+        ...current.rpg,
+        focusQuest: { ...current.rpg.focusQuest, ...patch, startedAt: null, completedAt: null, failedAt: null },
+      },
+    }))
+  return (
+    <div id="focus-page" className="focus-layout">
+      <section className="card focus-room">
+        <PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />
+        <h2>
+          {active
+            ? 'One thing at a time.'
+            : quest.completedAt
+              ? 'A little more grown.'
+              : 'Plant some focus.'}
+        </h2>
+        <div
+          className="focus-countdown"
+          role="timer"
+          aria-label="Time remaining"
+        >
+          {String(Math.floor(left / 60000)).padStart(2, '0')}:
+          {String(Math.floor(left / 1000) % 60).padStart(2, '0')}
+        </div>
+        {!active && (
+          <div className="focus-setup">
+            <div className="segmented" aria-label="Session length">
+              {[5, 15, 25, 50].map((minutes) => (
+                <button
+                  key={minutes}
+                  aria-pressed={quest.durationMinutes === minutes}
+                  onClick={() => update({ durationMinutes: minutes })}
+                >
+                  {minutes} min
+                </button>
+              ))}
+            </div>
+            <select
+              aria-label="Focus task"
+              value={quest.taskId ?? ''}
+              onChange={(event) =>
+                update({ taskId: event.target.value || null })
+              }
+            >
+              <option value="">Open focus</option>
+              {data.todos
+                .filter((task) => !task.done)
+                .map((task) => (
+                  <option key={task.id} value={task.id}>
+                    {task.title}
+                  </option>
+                ))}
+            </select>
+            <label className="strict-option">
+              <input
+                type="checkbox"
+                checked={quest.strict}
+                onChange={(event) => update({ strict: event.target.checked })}
+              />{' '}
+              Strict mode{' '}
+              <small>Leaving this browser tab ends the session.</small>
+            </label>
+          </div>
+        )}
+        {active ? (
+          <>
+            <progress
+              max={total}
+              value={total - left}
+              aria-label="Focus progress"
+            />
+            <p>
+              {data.todos.find((task) => task.id === quest.taskId)?.title ??
+                'Keep your attention here.'}
+            </p>
+            {confirmStop ? (
+              <div className="feature-actions">
+                <button
+                  className="quiet-button"
+                  onClick={() => setConfirmStop(false)}
+                >
+                  Keep focusing
+                </button>
+                <button
+                  className="quiet-button"
+                  onClick={() => {
+                    setData((current) => failFocusQuest(current))
+                    setConfirmStop(false)
+                  }}
+                >
+                  End session
+                </button>
+              </div>
+            ) : (
+              <button
+                className="quiet-button"
+                onClick={() => setConfirmStop(true)}
+              >
+                <Square size={16} /> Stop
+              </button>
+            )}
+          </>
+        ) : (
+          <button
+            className="primary"
+            onClick={() => {
+              setNow(Date.now())
+              setData((current) =>
+                startFocusQuest(current, current.rpg.focusQuest.soundscape),
+              )
+            }}
+          >
+            <Play size={17} /> Start focus
+          </button>
+        )}
+        {!active &&
+          quest.completedAt &&
+          data.todos.some((task) => task.id === quest.taskId && !task.done) && (
+            <button
+              className="quiet-button"
+              onClick={() =>
+                setData((current) =>
+                  toggleTodo(current, current.rpg.focusQuest.taskId!),
+                )
+              }
+            >
+              <Check size={16} /> Mark task complete
+            </button>
+          )}
+        <p className="focus-result" role="status">
+          {!active && quest.completedAt
+            ? `Tree planted · +${quest.durationMinutes + (data.rpg.skills.meditation?.state === 'unlocked' ? 5 : 0)} XP · +5 gold`
+            : !active && quest.failedAt
+              ? 'No tree this time. Start fresh when you’re ready.'
+              : ''}
+        </p>
+      </section>
+      <section className="card focus-garden">
+        <div className="section-title">
+          <Timer size={20} />
+          <h2>Your garden</h2>
+        </div>
+        <div className="garden-stats">
+          <strong>
+            {history.length}
+            <small>trees grown</small>
+          </strong>
+          <strong>
+            {history.reduce((sum, session) => sum + session.minutes, 0)}
+            <small>focused minutes</small>
+          </strong>
+        </div>
+        <div className="garden-plots">
+          {history.slice(-12).map((session) => (
+            <div
+              key={session.id}
+              title={`${session.taskTitle} · ${session.minutes} min`}
+            >
+              <PixelPlant stage={3} />
+            </div>
+          ))}
+          {!history.length && <PixelPlant stage={0} />}
+        </div>
+        <details>
+          <summary>Session history</summary>
+          <ul className="session-history">
+            {[...history]
+              .reverse()
+              .slice(0, 20)
+              .map((session) => (
+                <li key={session.id}>
+                  <Check size={14} />
+                  <span>
+                    {session.taskTitle}
+                    <small>
+                      {new Date(session.completedAt).toLocaleDateString()} ·{' '}
+                      {session.minutes} min
+                    </small>
+                  </span>
+                </li>
+              ))}
+            {!history.length && (
+              <li>Complete a session to grow your first tree.</li>
+            )}
+          </ul>
+        </details>
+      </section>
+    </div>
+  )
+}

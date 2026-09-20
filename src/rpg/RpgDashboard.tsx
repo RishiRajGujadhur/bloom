@@ -42,14 +42,19 @@ export function RpgDashboard({
   onReflect,
   showWeeklyRaid,
   showWalkthroughTour,
+  compact = false,
 }: {
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
   onReflect: () => void
   showWeeklyRaid: boolean
   showWalkthroughTour: boolean
+  compact?: boolean
 }) {
   const { t } = useTranslation(undefined, { i18n })
+  const [growthTab, setGrowthTab] = useState<'avatar' | 'skills' | 'rewards'>(
+    'avatar',
+  )
   const [clock, setClock] = useState(Date.now)
   const [showRules, setShowRules] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
@@ -175,285 +180,369 @@ export function RpgDashboard({
           <Info size={14} /> {t('rpg.howToPlay')}
         </button>
       </div>
-      <div className="adventure-grid">
-        <div className="character-card" id="avatar-card">
-          <div className="character-title">
-            <span className="level-tag">{t('rpg.level', { level: stats.level })}</span>
-            <div>
-              <h2>{titles[stats.tier]}</h2>
-              <p>{t('rpg.tagline')}</p>
-            </div>
+      {compact && (
+        <div className="segmented growth-tabs" aria-label="Growth areas">
+          {(['avatar', 'skills', 'rewards'] as const).map((tab) => (
             <button
-              className="inventory-button"
-              onClick={() => setShowInventory(true)}
+              key={tab}
+              aria-pressed={growthTab === tab}
+              onClick={() => setGrowthTab(tab)}
             >
-              {t('rpg.inventory')} <Sparkles size={14} />
+              {tab === 'avatar'
+                ? 'Seedling'
+                : tab === 'skills'
+                  ? 'Skill tree'
+                  : 'Rewards'}
             </button>
-          </div>
-          <div className="character-body">
-            <div className={`pixel-stage tier-${stats.tier}`}>
-              <div className="pixel-moon" />
-              <span className="pixel-star star-one">✦</span>
-              <span className="pixel-star star-two">✧</span>
-              <div className="pixel-ground" />
-              <div className={`avatar-aura aura-${stats.tier}`}>
-                <Sprite
-                  name={`hero-${stats.tier}`}
-                  label={t('rpg.pixelAvatar', { name: titles[stats.tier] })}
-                  row={row}
-                  size={128}
-                />
+          ))}
+        </div>
+      )}
+      {(!compact || growthTab === 'avatar') && (
+        <div className="adventure-grid">
+          <div className="character-card" id="avatar-card">
+            <div className="character-title">
+              <span className="level-tag">
+                {t('rpg.level', { level: stats.level })}
+              </span>
+              <div>
+                <h2>{titles[stats.tier]}</h2>
+                <p>{t('rpg.tagline')}</p>
               </div>
-              {data.rpg.companion !== 'none' &&
-                ((data.rpg.companion === 'fox' && owned.forest) ||
-                  (data.rpg.companion === 'spirit' && owned.amber)) && (
-                  <div className="companion-sprite">
-                    <Sprite
-                      name={data.rpg.companion}
-                      label={t('rpg.companionSprite', {
-                        name: companionNames[data.rpg.companion],
+              <button
+                className="inventory-button"
+                onClick={() => setShowInventory(true)}
+              >
+                {t('rpg.inventory')} <Sparkles size={14} />
+              </button>
+            </div>
+            <div className="character-body">
+              <div className={`pixel-stage tier-${stats.tier}`}>
+                <div className="pixel-moon" />
+                <span className="pixel-star star-one">✦</span>
+                <span className="pixel-star star-two">✧</span>
+                <div className="pixel-ground" />
+                <div className={`avatar-aura aura-${stats.tier}`}>
+                  <Sprite
+                    name={`hero-${stats.tier}`}
+                    label={t('rpg.pixelAvatar', { name: titles[stats.tier] })}
+                    row={row}
+                    size={128}
+                  />
+                </div>
+                {data.rpg.companion !== 'none' &&
+                  ((data.rpg.companion === 'fox' && owned.forest) ||
+                    (data.rpg.companion === 'spirit' && owned.amber)) && (
+                    <div className="companion-sprite">
+                      <Sprite
+                        name={data.rpg.companion}
+                        label={t('rpg.companionSprite', {
+                          name: companionNames[data.rpg.companion],
+                        })}
+                        size={64}
+                      />
+                    </div>
+                  )}
+                <span className="stage-caption">
+                  {stats.tier === 0
+                    ? t('rpg.stage0')
+                    : stats.tier === 1
+                      ? t('rpg.stage1')
+                      : t('rpg.stage2')}
+                </span>
+              </div>
+              <div className="character-details">
+                <div className="rpg-meter-label">
+                  <span>
+                    <HeartGlyph /> {t('rpg.vitality')}
+                  </span>
+                  <strong>{t('rpg.hp', { hp: stats.hp })}</strong>
+                </div>
+                <meter
+                  className="hp-meter"
+                  min={0}
+                  max={100}
+                  value={stats.hp}
+                  aria-label={t('rpg.avatarHealth')}
+                />
+                <div className="rpg-meter-label">
+                  <span>{t('rpg.experience')}</span>
+                  <strong>{t('rpg.expValue', { exp: stats.exp })}</strong>
+                </div>
+                <progress
+                  className="xp-meter"
+                  value={stats.exp % 100}
+                  max={100}
+                  aria-label={t('rpg.progressToNextLevel')}
+                />
+                <p className="level-next">
+                  {t('rpg.expToLevel', {
+                    exp: stats.nextLevel,
+                    level: stats.level + 1,
+                  })}
+                </p>
+                <div className="rpg-stats">
+                  {(Object.keys(statNames) as Stat[]).map((stat) => (
+                    <div key={stat} className={`stat-${stat}`}>
+                      <span>{statLabels[stat]}</span>
+                      <strong>{stats.stats[stat]}</strong>
+                      <small>{statShorts[stat]}</small>
+                    </div>
+                  ))}
+                </div>
+                <p className="evolution-note">
+                  {stats.tier === 2
+                    ? t('rpg.auraAwake')
+                    : t('rpg.statPointsUntil', {
+                        count:
+                          (stats.tier === 0 ? 100 : 300) -
+                          Object.values(stats.stats).reduce((a, b) => a + b, 0),
                       })}
-                      size={64}
-                    />
-                  </div>
-                )}
-              <span className="stage-caption">
-                {stats.tier === 0
-                  ? t('rpg.stage0')
-                  : stats.tier === 1
-                    ? t('rpg.stage1')
-                    : t('rpg.stage2')}
+                </p>
+              </div>
+            </div>
+          </div>
+          <aside className="combo-card">
+            <span className="combo-label">
+              <Flame size={16} /> {t('rpg.streakCombo')}
+            </span>
+            <div className="combo-multiplier">
+              {streak.multiplier.toFixed(2)}
+              <span>×</span>
+            </div>
+            <strong className="combo-time" aria-label={t('rpg.streakTime')}>
+              {elapsedLabel(streak.elapsed)}
+            </strong>
+            <p>
+              {streak.days
+                ? t('rpg.streakDays', { count: streak.days })
+                : t('rpg.streakStart')}
+            </p>
+            <div className="combo-anchors">
+              <span>
+                {t('rpg.days3')} <b>1.5×</b>
+              </span>
+              <i />
+              <span>
+                {t('rpg.days14')} <b>3×</b>
               </span>
             </div>
-            <div className="character-details">
-              <div className="rpg-meter-label">
-                <span>
-                  <HeartGlyph /> {t('rpg.vitality')}
-                </span>
-                <strong>{t('rpg.hp', { hp: stats.hp })}</strong>
-              </div>
-              <meter
-                className="hp-meter"
-                min={0}
-                max={100}
-                value={stats.hp}
-                aria-label={t('rpg.avatarHealth')}
-              />
-              <div className="rpg-meter-label">
-                <span>{t('rpg.experience')}</span>
-                <strong>{t('rpg.expValue', { exp: stats.exp })}</strong>
-              </div>
-              <progress
-                className="xp-meter"
-                value={stats.exp % 100}
-                max={100}
-                aria-label={t('rpg.progressToNextLevel')}
-              />
-              <p className="level-next">
-                {t('rpg.expToLevel', {
-                  exp: stats.nextLevel,
-                  level: stats.level + 1,
-                })}
-              </p>
-              <div className="rpg-stats">
-                {(Object.keys(statNames) as Stat[]).map((stat) => (
-                  <div key={stat} className={`stat-${stat}`}>
-                    <span>{statLabels[stat]}</span>
-                    <strong>{stats.stats[stat]}</strong>
-                    <small>{statShorts[stat]}</small>
-                  </div>
-                ))}
-              </div>
-              <p className="evolution-note">
-                {stats.tier === 2
-                  ? t('rpg.auraAwake')
-                  : t('rpg.statPointsUntil', {
-                      count:
-                        (stats.tier === 0 ? 100 : 300) -
-                        Object.values(stats.stats).reduce((a, b) => a + b, 0),
-                    })}
-              </p>
+            <div className="combo-status">
+              <span className={`tiny-dot ${streak.loggedToday ? 'lit' : ''}`} />
+              {streak.loggedToday
+                ? t('rpg.comboProtected')
+                : streak.days
+                  ? t('rpg.comboKeep')
+                  : t('rpg.comboStart')}
             </div>
-          </div>
+            <button className="rpg-reflect" onClick={onReflect}>
+              <BookOpen size={14} /> {t('rpg.reflect')}
+            </button>
+          </aside>
         </div>
-        <aside className="combo-card">
-          <span className="combo-label">
-            <Flame size={16} /> {t('rpg.streakCombo')}
-          </span>
-          <div className="combo-multiplier">
-            {streak.multiplier.toFixed(2)}
-            <span>×</span>
+      )}
+      {compact && growthTab === 'avatar' && (
+        <section className="card seedling-journey">
+          <h3>Your next chapter</h3>
+          <div className="evolution-path">
+            {[0, 1, 2].map((tier) => (
+              <div
+                key={tier}
+                className={stats.tier < tier ? 'evolution-locked' : ''}
+              >
+                <Sprite name={`hero-${tier}`} label={titles[tier]} size={64} />
+                <strong>{titles[tier]}</strong>
+                <small>
+                  {tier === 0
+                    ? 'Start here'
+                    : `${tier === 1 ? 100 : 300} attribute points`}
+                </small>
+              </div>
+            ))}
           </div>
-          <strong className="combo-time" aria-label={t('rpg.streakTime')}>
-            {elapsedLabel(streak.elapsed)}
-          </strong>
-          <p>
-            {streak.days
-              ? t('rpg.streakDays', { count: streak.days })
-              : t('rpg.streakStart')}
-          </p>
-          <div className="combo-anchors">
-            <span>
-              {t('rpg.days3')} <b>1.5×</b>
-            </span>
-            <i />
-            <span>
-              {t('rpg.days14')} <b>3×</b>
-            </span>
+          <progress
+            aria-label="Evolution progress"
+            max={stats.tier < 1 ? 100 : 300}
+            value={Object.values(stats.stats).reduce(
+              (sum, value) => sum + value,
+              0,
+            )}
+          />
+          <div className="feature-actions">
+            <button
+              className="primary"
+              onClick={() => {
+                window.location.hash = 'focus'
+              }}
+            >
+              Grow with focus
+            </button>
+            <button
+              className="quiet-button"
+              onClick={() => {
+                window.location.hash = 'challenges'
+              }}
+            >
+              Try a challenge
+            </button>
           </div>
-          <div className="combo-status">
-            <span className={`tiny-dot ${streak.loggedToday ? 'lit' : ''}`} />
-            {streak.loggedToday
-              ? t('rpg.comboProtected')
-              : streak.days
-                ? t('rpg.comboKeep')
-                : t('rpg.comboStart')}
-          </div>
-          <button className="rpg-reflect" onClick={onReflect}>
-            <BookOpen size={14} /> {t('rpg.reflect')}
-          </button>
-        </aside>
-      </div>
-      <div className={`daily-boss ${boss?.defeated ? 'boss-won' : ''}`}>
-        <div className="boss-art">
-          <Sprite name="boss" label={t('rpg.bossName')} size={96} />
-          {boss?.defeated && (
-            <span className="defeated-stamp">{t('rpg.bossDefeated')}</span>
-          )}
-        </div>
-        <div className="boss-content">
-          <div className="boss-title">
-            <div>
-              <span className="eyebrow">{t('rpg.bossEyebrow')}</span>
-              <h3>{t('rpg.bossName')}</h3>
+        </section>
+      )}
+      {(!compact || growthTab === 'rewards') && (
+        <>
+          <div className={`daily-boss ${boss?.defeated ? 'boss-won' : ''}`}>
+            <div className="boss-art">
+              <Sprite name="boss" label={t('rpg.bossName')} size={96} />
+              {boss?.defeated && (
+                <span className="defeated-stamp">{t('rpg.bossDefeated')}</span>
+              )}
             </div>
-            <span className="boss-reward">
-              <Trophy size={13} /> {t('rpg.bossReward')}
-            </span>
-          </div>
-          {boss && health ? (
-            <>
-              <div className="rpg-meter-label">
-                <span>
-                  {boss.defeated ? t('rpg.bossVictory') : t('rpg.bossAttack')}
+            <div className="boss-content">
+              <div className="boss-title">
+                <div>
+                  <span className="eyebrow">{t('rpg.bossEyebrow')}</span>
+                  <h3>{t('rpg.bossName')}</h3>
+                </div>
+                <span className="boss-reward">
+                  <Trophy size={13} /> {t('rpg.bossReward')}
                 </span>
-                <strong>
-                  {t('rpg.bossHp', {
-                    remaining: health.remaining,
-                    max: health.max,
-                  })}
-                </strong>
               </div>
-              <progress
-                className="boss-meter"
-                value={health.remaining}
-                max={health.max}
-                aria-label={t('rpg.bossHealth')}
-              />
-              <div className="boss-objectives">
-                {boss.priorityIds.map((id) => {
-                  const p = data.plans.find((p) => p.id === id)
-                  return (
-                    <span key={id} className={p?.done ? 'objective-done' : ''}>
-                      {p?.done ? '✓' : '◇'}{' '}
-                      {p?.title ?? t('rpg.committedIntention')}
-                    </span>
-                  )
-                })}
-              </div>
-              <small>
-                {t('rpg.bossSummary', {
-                  habitHits: health.habitHits,
-                  habitTotal: boss.habitIds.length,
-                  priorityHits: health.priorityHits,
-                  priorityTotal: boss.priorityIds.length,
-                })}
-              </small>
-            </>
-          ) : (
-            <>
-              <p>{t('rpg.bossIntro')}</p>
-              {priorities.length ? (
+              {boss && health ? (
                 <>
-                  <div className="boss-select">
-                    {priorities.map((p) => (
-                      <label key={p.id}>
-                        <input
-                          type="checkbox"
-                          checked={selection.includes(p.id)}
-                          disabled={
-                            !selection.includes(p.id) && selection.length >= 3
-                          }
-                          onChange={() =>
-                            setSelection((ids) =>
-                              ids.includes(p.id)
-                                ? ids.filter((id) => id !== p.id)
-                                : [...ids, p.id],
-                            )
-                          }
-                        />
-                        <span>{p.title}</span>
-                      </label>
-                    ))}
+                  <div className="rpg-meter-label">
+                    <span>
+                      {boss.defeated
+                        ? t('rpg.bossVictory')
+                        : t('rpg.bossAttack')}
+                    </span>
+                    <strong>
+                      {t('rpg.bossHp', {
+                        remaining: health.remaining,
+                        max: health.max,
+                      })}
+                    </strong>
                   </div>
-                  <button
-                    className="boss-start"
-                    disabled={!selection.length}
-                    onClick={() => setData((d) => commitBoss(d, selection))}
-                  >
-                    <Swords size={14} />{' '}
-                    {t('rpg.commitBoss', { count: selection.length })}
-                  </button>
-                  <small>{t('rpg.bossPenalty')}</small>
+                  <progress
+                    className="boss-meter"
+                    value={health.remaining}
+                    max={health.max}
+                    aria-label={t('rpg.bossHealth')}
+                  />
+                  <div className="boss-objectives">
+                    {boss.priorityIds.map((id) => {
+                      const p = data.plans.find((p) => p.id === id)
+                      return (
+                        <span
+                          key={id}
+                          className={p?.done ? 'objective-done' : ''}
+                        >
+                          {p?.done ? '✓' : '◇'}{' '}
+                          {p?.title ?? t('rpg.committedIntention')}
+                        </span>
+                      )
+                    })}
+                  </div>
+                  <small>
+                    {t('rpg.bossSummary', {
+                      habitHits: health.habitHits,
+                      habitTotal: boss.habitIds.length,
+                      priorityHits: health.priorityHits,
+                      priorityTotal: boss.priorityIds.length,
+                    })}
+                  </small>
                 </>
               ) : (
-                <button
-                  className="rpg-link"
-                  onClick={() =>
-                    document
-                      .getElementById('planning')
-                      ?.scrollIntoView({ block: 'start' })
-                  }
-                >
-                  {t('rpg.addIntention')}
-                </button>
+                <>
+                  <p>{t('rpg.bossIntro')}</p>
+                  {priorities.length ? (
+                    <>
+                      <div className="boss-select">
+                        {priorities.map((p) => (
+                          <label key={p.id}>
+                            <input
+                              type="checkbox"
+                              checked={selection.includes(p.id)}
+                              disabled={
+                                !selection.includes(p.id) &&
+                                selection.length >= 3
+                              }
+                              onChange={() =>
+                                setSelection((ids) =>
+                                  ids.includes(p.id)
+                                    ? ids.filter((id) => id !== p.id)
+                                    : [...ids, p.id],
+                                )
+                              }
+                            />
+                            <span>{p.title}</span>
+                          </label>
+                        ))}
+                      </div>
+                      <button
+                        className="boss-start"
+                        disabled={!selection.length}
+                        onClick={() => setData((d) => commitBoss(d, selection))}
+                      >
+                        <Swords size={14} />{' '}
+                        {t('rpg.commitBoss', { count: selection.length })}
+                      </button>
+                      <small>{t('rpg.bossPenalty')}</small>
+                    </>
+                  ) : (
+                    <button
+                      className="rpg-link"
+                      onClick={() => {
+                        window.location.hash = 'planning'
+                      }}
+                    >
+                      {t('rpg.addIntention')}
+                    </button>
+                  )}
+                </>
               )}
-            </>
-          )}
-        </div>
-      </div>
-      <div className="loot-row">
-        <div>
-          <Sparkles size={15} />
-          <span>{t('rpg.lootEyebrow')}</span>
-        </div>
-        {([7, 30] as const).map((m) => {
-          const loot = data.rpg.loot.find((l) => l.milestone === m)
-          return (
-            <button
-              key={m}
-              className={`loot-button ${loot && !loot.opened ? 'chest-drop' : ''}`}
-              disabled={!loot}
-              onClick={() => setLootModal(m)}
-            >
-              <Sprite name="chest" label={t('rpg.chest', { count: m })} size={40} />
-              <span>
-                {t('rpg.chest', { count: m })}
-                <small>
+            </div>
+          </div>
+          <div className="loot-row">
+            <div>
+              <Sparkles size={15} />
+              <span>{t('rpg.lootEyebrow')}</span>
+            </div>
+            {([7, 30] as const).map((m) => {
+              const loot = data.rpg.loot.find((l) => l.milestone === m)
+              return (
+                <button
+                  key={m}
+                  className={`loot-button ${loot && !loot.opened ? 'chest-drop' : ''}`}
+                  disabled={!loot}
+                  onClick={() => setLootModal(m)}
+                >
+                  <Sprite
+                    name="chest"
+                    label={t('rpg.chest', { count: m })}
+                    size={40}
+                  />
+                  <span>
+                    {t('rpg.chest', { count: m })}
+                    <small>
+                      {loot?.opened
+                        ? t('rpg.chestCollected')
+                        : loot
+                          ? t('rpg.chestReady')
+                          : m === 7
+                            ? t('rpg.chest7')
+                            : t('rpg.chest30')}
+                    </small>
+                  </span>
                   {loot?.opened
-                    ? t('rpg.chestCollected')
+                    ? '✓'
                     : loot
-                      ? t('rpg.chestReady')
-                      : m === 7
-                        ? t('rpg.chest7')
-                        : t('rpg.chest30')}
-                </small>
-              </span>
-              {loot?.opened ? '✓' : loot ? t('rpg.chestOpen') : t('rpg.chestLocked')}
-            </button>
-          )
-        })}
-      </div>
+                      ? t('rpg.chestOpen')
+                      : t('rpg.chestLocked')}
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )}
       {feedback && (
         <div
           key={feedback.nonce}
@@ -469,13 +558,18 @@ export function RpgDashboard({
           {t('rpg.lootNotice')}
         </div>
       )}
-      <GamificationShowcase
-        data={data}
-        setData={setData}
-        showWeeklyRaid={showWeeklyRaid}
-        showWalkthroughTour={showWalkthroughTour}
-      />
-      <MomentumFeatures data={data} setData={setData} />
+      {(!compact || growthTab !== 'avatar') && (
+        <GamificationShowcase
+          data={data}
+          setData={setData}
+          showWeeklyRaid={showWeeklyRaid}
+          showWalkthroughTour={showWalkthroughTour}
+          view={
+            compact ? (growthTab === 'skills' ? 'skills' : 'rewards') : 'all'
+          }
+        />
+      )}
+      {!compact && <MomentumFeatures data={data} setData={setData} />}
       {lootModal && (
         <Modal
           title={t('rpg.lootModalTitle', { count: lootModal })}
@@ -534,7 +628,9 @@ export function RpgDashboard({
                   <span />
                   {paletteNames[p]}
                   {p !== 'bloom' && !owned[p] && (
-                    <small>{t('rpg.chest', { count: p === 'forest' ? 7 : 30 })}</small>
+                    <small>
+                      {t('rpg.chest', { count: p === 'forest' ? 7 : 30 })}
+                    </small>
                   )}
                 </button>
               ))}
@@ -589,10 +685,7 @@ export function RpgDashboard({
         </Modal>
       )}
       {showRules && (
-        <Modal
-          title={t('rpg.rulesTitle')}
-          onClose={() => setShowRules(false)}
-        >
+        <Modal title={t('rpg.rulesTitle')} onClose={() => setShowRules(false)}>
           <div className="rpg-rules">
             <h3>{t('rpg.rulesGrowTitle')}</h3>
             <p>{t('rpg.rulesGrow')}</p>

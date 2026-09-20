@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
   Flower2,
-  Heart,
+  Timer,
+  Trophy,
+  Sprout,
+  CheckSquare,
   LayoutDashboard,
   Map,
-  Leaf,
   ListChecks,
   Menu,
   Pencil,
@@ -23,6 +23,10 @@ import styles from './Sidebar.module.css'
 
 /** Destinations the app knows how to reach; `settings` swaps the page. */
 export type NavKey =
+  | 'todos'
+  | 'challenges'
+  | 'focus'
+  | 'growth'
   | 'overview'
   | 'habits'
   | 'journal'
@@ -188,6 +192,10 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       Icon: Pencil,
       requires: 'daybookModes',
     },
+    { key: 'todos', title: 'To-dos', Icon: CheckSquare },
+    { key: 'challenges', title: 'Challenges', Icon: Trophy },
+    { key: 'focus', title: 'Focus', Icon: Timer },
+    { key: 'growth', title: 'Growth', Icon: Sprout, requires: 'rpgSkillTree' },
     { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
     {
       key: 'vision-board',
@@ -265,6 +273,22 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
             <X size={20} />
           </button>
         )}
+        <button
+          type="button"
+          className={styles.collapseToggle}
+          role="switch"
+          aria-label="Icon-only sidebar"
+          title={toggleLabel}
+          aria-checked={!isOpen}
+          aria-controls="app-sidebar"
+          tabIndex={isNarrow ? -1 : undefined}
+          onClick={() => setIsOpen((open) => !open)}
+        >
+          <span className={styles.switchTrack} data-checked={!isOpen}>
+            <span />
+          </span>
+          <span className={styles.toggleLabel}>Icons only</span>
+        </button>
         <div className="nav-caption">{t('navigation.space')}</div>
 
         <nav aria-label={t('navigation.main')}>
@@ -284,35 +308,6 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
             </button>
           ))}
         </nav>
-
-        <div className="sidebar-note">
-          <Leaf size={24} aria-hidden="true" />
-          <h3>{t('ui.growAtYourOwnPace')}</h3>
-          <p>{t('ui.progressMessage')}</p>
-          <span>{t('ui.oneSmallStep')} ✧</span>
-        </div>
-
-        <div className="sidebar-bottom">
-          <span className="avatar">Y</span>
-          <div className={styles.bottomText}>
-            <strong>{t('ui.personalSpace')}</strong>
-            <small>{t('ui.noAccount')}</small>
-          </div>
-          <Heart size={16} aria-hidden="true" />
-        </div>
-
-        <button
-          type="button"
-          className={styles.collapseToggle}
-          aria-label={toggleLabel}
-          aria-expanded={isOpen}
-          aria-controls="app-sidebar"
-          tabIndex={isNarrow ? -1 : undefined}
-          onClick={() => setIsOpen((open) => !open)}
-        >
-          {isOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
-          <span className={styles.toggleLabel}>{toggleLabel}</span>
-        </button>
       </aside>
     </>
   )
