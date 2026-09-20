@@ -8,6 +8,9 @@ beforeEach(() => {
 afterEach(() => jest.useRealTimers())
 test('journal saves one completed reflection and restores it after remount', async () => {
   const view = render(<App />)
+  fireEvent.click(
+    screen.getAllByRole('button', { name: 'Reflection journal' })[0],
+  )
   fireEvent.click(screen.getByRole('button', { name: /Begin a check-in/ }))
   fireEvent.click(screen.getByRole('button', { name: 'mood 4 of 5' }))
   fireEvent.click(screen.getByRole('button', { name: 'energy 3 of 5' }))
@@ -42,6 +45,9 @@ test('journal saves one completed reflection and restores it after remount', asy
 })
 test('pending journal timer resumes once after unmount and reload', async () => {
   const view = render(<App />)
+  fireEvent.click(
+    screen.getAllByRole('button', { name: 'Reflection journal' })[0],
+  )
   fireEvent.click(screen.getByRole('button', { name: /Begin a check-in/ }))
   fireEvent.click(screen.getByRole('button', { name: 'Feeling grounded' }))
   expect(
@@ -70,9 +76,7 @@ test('habit completion persists after reload', () => {
 })
 test('light/dark toggle switches palette mode and persists after reload', () => {
   const view = render(<App />)
-  fireEvent.click(
-    screen.getByRole('button', { name: 'Switch to dark mode' }),
-  )
+  fireEvent.click(screen.getByRole('button', { name: 'Switch to dark mode' }))
   // data-theme now names the palette; data-mode carries light/dark.
   expect(document.documentElement).toHaveAttribute('data-mode', 'dark')
   expect(document.documentElement).toHaveAttribute('data-theme', 'bloom-dark')

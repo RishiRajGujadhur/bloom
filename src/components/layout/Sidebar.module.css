@@ -132,3 +132,22 @@
     transition: none;
   }
 }
+.drawerClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+.collapseToggle {
+  min-height: 44px;
+  padding-bottom: 10px;
+  letter-spacing: 0.3px;
+  font-size: 11px;
+}

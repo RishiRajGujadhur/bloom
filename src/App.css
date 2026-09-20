@@ -1752,3 +1752,142 @@ html[data-mode='dark'] .storage-error button {
 html[data-mode='dark'] .daybook, html[data-mode='dark'] .daybook-mode, html[data-mode='dark'] .daybook-search, html[data-mode='dark'] .daybook-back { background: var(--bg-surface); border-color: var(--border-color); }
 html[data-mode='dark'] .daybook-heading h2, html[data-mode='dark'] .daybook-editor-header h2, html[data-mode='dark'] .daybook-mode-copy strong, html[data-mode='dark'] .focus-editor input { color: var(--text-primary); }
 @media (max-width: 700px) { .daybook-container { padding: 17px; } .daybook-heading, .daybook-editor-header { flex-direction: column; } .daybook-search { width: 100%; } .daybook-grid, .split-editor { grid-template-columns: 1fr; } .daybook-save { align-self: stretch; justify-content: center; } }
+
+/* Focused feature pages and restrained icon feedback. */
+.feature-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 8px 0 28px;
+}
+.feature-heading h1 {
+  font-family: var(--font-display);
+  font-size: clamp(25px, 3vw, 36px);
+  letter-spacing: -1px;
+  margin: 8px 0;
+}
+.feature-heading p,
+.reflection-shortcuts p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.guide-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 17px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.guide-button:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-color);
+}
+.page-habits .dashboard-grid,
+.page-planning .dashboard-grid {
+  display: block;
+  max-width: 900px;
+  margin: auto;
+}
+.page-journal > .journal {
+  max-width: 850px;
+  margin: auto;
+}
+.page-daybook > .daybook {
+  width: 100%;
+}
+.reflection-shortcuts {
+  display: grid;
+  gap: 14px;
+}
+.reflection-shortcuts h2,
+.reflection-shortcuts p {
+  margin: 0;
+}
+.reflection-shortcuts button {
+  min-height: 46px;
+  justify-content: space-between;
+}
+.sidebar {
+  overflow-y: auto;
+}
+.sidebar nav {
+  flex-shrink: 0;
+}
+.sidebar nav button {
+  min-height: 46px;
+}
+.sidebar nav button.active {
+  box-shadow: inset 3px 0 var(--accent-color);
+}
+.sidebar .nav-indicator {
+  background: var(--accent-color);
+}
+.sidebar .sidebar-note {
+  margin-top: 28px;
+  margin-bottom: 24px;
+}
+.app-shell svg.lucide {
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .app-shell :is(button, a):is(:hover, :focus-visible) svg.lucide,
+  .app-shell :is(.icon-tile, .stat-icon, .brand-icon):hover svg.lucide,
+  .daybook-mode:is(:hover, :focus-visible) .daybook-mode-icon {
+    animation: icon-greet 450ms ease both;
+  }
+  .app-shell :is(button, a):active svg.lucide {
+    transform: scale(0.9);
+  }
+  @keyframes icon-greet {
+    0%,
+    100% {
+      transform: rotate(0) scale(1);
+    }
+    40% {
+      transform: rotate(-9deg) scale(1.12);
+    }
+    70% {
+      transform: rotate(5deg) scale(1.06);
+    }
+  }
+}
+@media (max-width: 600px) {
+  .feature-heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .feature-heading p {
+    font-size: 12px;
+  }
+  .guide-button {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .app-shell svg.lucide:hover { animation:icon-greet 450ms ease both; }
+  .app-shell button:is(:hover,:focus-visible) :is(.lucide-settings,.lucide-sun,.lucide-compass) { animation:icon-turn 550ms ease both; }
+  .app-shell button:is(:hover,:focus-visible) :is(.lucide-arrow-right,.lucide-chevron-right) { animation:icon-forward 450ms ease both; }
+  @keyframes icon-turn { from { transform:rotate(-35deg); } to { transform:rotate(0); } }
+  @keyframes icon-forward { 0%,100% { transform:translateX(0); } 50% { transform:translateX(4px); } }
+}
+/* Keep the desktop rail and content offset in sync at every desktop width. */
+@media (min-width: 901px) {
+  html[data-sidebar='collapsed'] .sidebar { width:var(--sidebar-collapsed-width); padding:28px 12px 16px; }
+  html[data-sidebar='collapsed'] .sidebar :is(.nav-caption,.sidebar-note,.sidebar-bottom,.nav-indicator) { display:none; }
+  html[data-sidebar='collapsed'] .sidebar .brand { justify-content:center; padding:0; gap:0; margin-bottom:30px; }
+  html[data-sidebar='collapsed'] .sidebar .brand-icon { flex-shrink:0; }
+  html[data-sidebar='collapsed'] .sidebar nav button { justify-content:center; padding:14px 0; gap:0; }
+  .sidebar { transition:width var(--transition-drawer), transform var(--transition-drawer); }
+}
+@media (prefers-reduced-motion: reduce) { .sidebar, main { transition:none; } }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   BookOpen,
   ChevronLeft,
@@ -59,7 +59,27 @@ const isDrawerWidth = () =>
 export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
   const { t } = useTranslation(undefined, { i18n })
   const [isNarrow, setIsNarrow] = useState(isDrawerWidth)
-  const [isOpen, setIsOpen] = useState(() => !isDrawerWidth())
+  const [isOpen, setIsOpen] = useState(() => {
+    try {
+      return (
+        !isDrawerWidth() &&
+        localStorage.getItem('bloom-sidebar') !== 'collapsed'
+      )
+    } catch {
+      return !isDrawerWidth()
+    }
+  })
+  const sidebarRef = useRef<HTMLElement>(null)
+  const menuRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    if (!isNarrow) {
+      try {
+        localStorage.setItem('bloom-sidebar', isOpen ? 'open' : 'collapsed')
+      } catch {
+        /* Navigation still works without storage. */
+      }
+    }
+  }, [isOpen, isNarrow])
 
   const drawerOpen = isNarrow && isOpen
 
@@ -77,7 +97,14 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     const query = window.matchMedia(DRAWER_MEDIA_QUERY)
     const onChange = (event: MediaQueryListEvent) => {
       setIsNarrow(event.matches)
-      setIsOpen(!event.matches)
+      try {
+        setIsOpen(
+          !event.matches &&
+            localStorage.getItem('bloom-sidebar') !== 'collapsed',
+        )
+      } catch {
+        setIsOpen(!event.matches)
+      }
     }
     query.addEventListener('change', onChange)
     return () => query.removeEventListener('change', onChange)
@@ -86,11 +113,35 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
   // Escape closes the drawer while it is open.
   useEffect(() => {
     if (!drawerOpen) return
+    const menuButton = menuRef.current
+    const main = document.querySelector('main')
+    if (main) main.inert = true
+    sidebarRef.current?.querySelector<HTMLElement>('a, button')?.focus()
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsOpen(false)
+      if (event.key === 'Tab') {
+        const controls = Array.from(
+          sidebarRef.current?.querySelectorAll<HTMLElement>(
+            'a, button:not([tabindex="-1"])',
+          ) ?? [],
+        ).filter((el) => el.getClientRects().length)
+        const first = controls[0],
+          last = controls[controls.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last?.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first?.focus()
+        }
+      }
     }
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      if (main) main.inert = false
+      menuButton?.focus()
+    }
   }, [drawerOpen])
 
   // Keep the page behind an open drawer from scrolling under it.
@@ -114,7 +165,11 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     /** Feature that must be on for this destination to be reachable. */
     requires?: keyof FeatureFlags
   }[] = [
-    { key: 'overview', title: t('navigation.dashboard'), Icon: LayoutDashboard },
+    {
+      key: 'overview',
+      title: t('navigation.dashboard'),
+      Icon: LayoutDashboard,
+    },
     {
       key: 'habits',
       title: t('navigation.habits'),
@@ -134,7 +189,12 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       requires: 'daybookModes',
     },
     { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
-    { key: 'vision-board', title: t('settings.feature.visionBoard.title'), Icon: Map, requires: 'visionBoard' },
+    {
+      key: 'vision-board',
+      title: t('settings.feature.visionBoard.title'),
+      Icon: Map,
+      requires: 'visionBoard',
+    },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]
@@ -154,6 +214,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     <>
       <button
         type="button"
+        ref={menuRef}
         className={styles.hamburger}
         aria-label={isOpen ? t('sidebar.closeMenu') : t('sidebar.openMenu')}
         aria-expanded={isOpen}
@@ -172,11 +233,20 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       />
 
       <aside
+        ref={sidebarRef}
+        inert={isNarrow && !isOpen}
         className="sidebar"
         id="app-sidebar"
         data-state={isOpen ? 'open' : 'collapsed'}
       >
-        <a className="brand" href="#overview" onClick={closeIfDrawer}>
+        <a
+          className="brand"
+          href="#overview"
+          onClick={(event) => {
+            event.preventDefault()
+            handleNavigate('overview')
+          }}
+        >
           <span className="brand-icon">
             <Flower2 size={27} />
           </span>
@@ -186,6 +256,15 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
           </span>
         </a>
 
+        {drawerOpen && (
+          <button
+            className={styles.drawerClose}
+            onClick={() => setIsOpen(false)}
+            aria-label={t('sidebar.closeMenu')}
+          >
+            <X size={20} />
+          </button>
+        )}
         <div className="nav-caption">{t('navigation.space')}</div>
 
         <nav aria-label={t('navigation.main')}>

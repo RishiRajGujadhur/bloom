@@ -29,6 +29,11 @@ import { SummaryContent } from './components/journal/SessionSummaryModal'
 import { DashboardWelcome } from './components/DashboardWelcome'
 import { LanguageSelector } from './components/LanguageSelector'
 import './App.css'
+import {
+  FeatureGuide,
+  pageDetails,
+  readPage,
+} from './components/layout/FeatureGuide'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
@@ -118,16 +123,24 @@ function App() {
   >(null)
   const [editPlan, setEditPlan] = useState<string | null>(null)
   const [viewSession, setViewSession] = useState<Session | null>(null)
-  const [active, setActive] = useState('overview')
-  const [themeSettings, setThemeSettings] = useState<ThemeSettings>(
-    getStoredTheme,
-  )
+  const [active, setActive] = useState<NavKey>(readPage)
+  useEffect(() => {
+    const sync = () => setActive(readPage())
+    window.addEventListener('hashchange', sync)
+    return () => window.removeEventListener('hashchange', sync)
+  }, [])
+  useEffect(() => {
+    document.getElementById('page-heading')?.focus({ preventScroll: true })
+  }, [active])
+  const [themeSettings, setThemeSettings] =
+    useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
   useEffect(() => {
     document.documentElement.lang = i18n.resolvedLanguage ?? 'en'
     document.title = t('ui.documentTitle')
     const description = document.querySelector('meta[name="description"]')
-    if (description) description.setAttribute('content', t('ui.metaDescription'))
+    if (description)
+      description.setAttribute('content', t('ui.metaDescription'))
   }, [t])
   useEffect(() => {
     const timer = setInterval(() => setToday(dayKey()), 30000)
@@ -154,7 +167,9 @@ function App() {
     const key = dayKey(date)
     return {
       key,
-      label: date.toLocaleDateString(i18n.resolvedLanguage ?? 'en', { weekday: 'narrow' }),
+      label: date.toLocaleDateString(i18n.resolvedLanguage ?? 'en', {
+        weekday: 'narrow',
+      }),
       count: data.habits.filter((h) => h.dates.includes(key)).length,
     }
   })
@@ -178,27 +193,23 @@ function App() {
   }
   const jump = (target: NavKey) => {
     setActive(target)
-    const destination =
-      document.getElementById(target) ??
-      document.getElementById(target === 'journal' ? 'chat-journal' : target)
-    destination?.scrollIntoView({
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'instant'
-        : 'smooth',
-      block: 'start',
-    })
+    window.location.hash = target
+    window.scrollTo?.({ top: 0, behavior: 'instant' })
   }
   return (
     <MotionConfig reducedMotion="user">
       <div className="app-shell" data-palette={data.rpg.palette}>
-        <a className="skip-link" href="#overview">
+        <a
+          className="skip-link"
+          href="#overview"
+          onClick={(event) => {
+            event.preventDefault()
+            document.getElementById('page-heading')?.focus()
+          }}
+        >
           {t('ui.skipToDashboard')}
         </a>
-        <Sidebar
-          active={active}
-          onNavigate={jump}
-          flags={settings.features}
-        />
+        <Sidebar active={active} onNavigate={jump} flags={settings.features} />
         <main id="overview">
           <header className="topbar">
             <span>
@@ -209,7 +220,9 @@ function App() {
               <button
                 className="theme-toggle"
                 type="button"
-                aria-label={isDark ? t('ui.switchToLight') : t('ui.switchToDark')}
+                aria-label={
+                  isDark ? t('ui.switchToLight') : t('ui.switchToDark')
+                }
                 aria-pressed={isDark}
                 onClick={() => setThemeSettings(toggleThemeMode)}
               >
@@ -223,296 +236,363 @@ function App() {
               </button>
             </div>
           </header>
-          <div className="page-content">
-            {active === 'settings' ? (
+          <div className={`page-content feature-page page-${active}`}>
+            <div className="feature-heading">
+              <div>
+                <span className="eyebrow">YOUR EVERYDAY SPACE</span>
+                <h1 id="page-heading" tabIndex={-1}>
+                  {pageDetails[active].title}
+                </h1>
+                <p>{pageDetails[active].description}</p>
+              </div>
+              <FeatureGuide page={active} />
+            </div>
+            {error && (
+              <div className="storage-error" role="alert">
+                <strong>{t('ui.savingAttention')}</strong>
+                <p>{error}</p>
+                {blocked && (
+                  <>
+                    <button onClick={() => exportData(true)}>
+                      {t('ui.exportOriginal')}
+                    </button>
+                    <button onClick={resumeSaving}>
+                      {t('ui.useFreshData')}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+
+            {settings.features.daybookModes && (
+              <div hidden={active !== 'daybook'}>
+                <JournalContainer />
+              </div>
+            )}
+            {(active === 'habits' && !settings.features.habitTracker) ||
+            (active === 'journal' && !settings.features.chatJournal) ||
+            (active === 'daybook' && !settings.features.daybookModes) ||
+            (active === 'vision-board' && !settings.features.visionBoard) ? (
+              <section className="card">
+                <h2>This feature is turned off</h2>
+                <p>You can enable it in Settings.</p>
+                <button className="primary" onClick={() => jump('settings')}>
+                  Open settings
+                </button>
+              </section>
+            ) : active === 'settings' ? (
               <SettingsPage
                 settings={settings}
                 setSettings={setSettings}
                 theme={themeSettings}
                 setTheme={setThemeSettings}
               />
+            ) : active === 'daybook' &&
+              settings.features.daybookModes ? null : active === 'journal' &&
+              settings.features.chatJournal ? (
+              <ChatJournalContainer data={data} setData={setData} />
             ) : active === 'vision-board' && settings.features.visionBoard ? (
-              <Suspense fallback={<p role="status">Opening your Vision Board…</p>}>
+              <Suspense
+                fallback={<p role="status">Opening your Vision Board…</p>}
+              >
                 <VisionBoard badges={data.rpg.badges} />
               </Suspense>
             ) : (
               <>
-                <DashboardWelcome
-                  date={new Date(`${today}T12:00:00`).toLocaleDateString(
-                    i18n.resolvedLanguage ?? 'en',
-                    {
-                      weekday: 'long',
-                      month: 'long',
-                      day: 'numeric',
-                    },
-                  )}
-                />
-                {error && (
-                  <div className="storage-error" role="alert">
-                    <strong>{t('ui.savingAttention')}</strong>
-                    <p>{error}</p>
-                    {blocked && (
-                      <>
-                        <button onClick={() => exportData(true)}>
-                          {t('ui.exportOriginal')}
-                        </button>
-                        <button onClick={resumeSaving}>
-                          {t('ui.useFreshData')}
-                        </button>
-                      </>
+                {active === 'overview' && (
+                  <DashboardWelcome
+                    date={new Date(`${today}T12:00:00`).toLocaleDateString(
+                      i18n.resolvedLanguage ?? 'en',
+                      {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric',
+                      },
                     )}
-                  </div>
+                  />
                 )}
-                {settings.features.rpgSkillTree && (
+                {active === 'overview' && settings.features.rpgSkillTree && (
                   <RpgDashboard
                     data={data}
                     setData={setData}
                     onReflect={() => jump('journal')}
                     showWeeklyRaid={settings.features.weeklyRaidBoss}
-                    showWalkthroughTour={settings.features.walkthroughTour}
+                    showWalkthroughTour={false}
                   />
                 )}
-                <div className="stats">
-                  <div>
-                    <span className="stat-icon lavender">
-                      <ListChecks size={21} />
-                    </span>
+                {active === 'overview' && (
+                  <div className="stats">
                     <div>
-                      <strong>
-                        {completed}
-                        <small> / {data.habits.length}</small>
-                      </strong>
-                      <span>{t('ui.habitsToday')}</span>
+                      <span className="stat-icon lavender">
+                        <ListChecks size={21} />
+                      </span>
+                      <div>
+                        <strong>
+                          {completed}
+                          <small> / {data.habits.length}</small>
+                        </strong>
+                        <span>{t('ui.habitsToday')}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="stat-icon peach">
+                        <Sun size={21} />
+                      </span>
+                      <div>
+                        <strong>
+                          {plans.filter((p) => p.done).length}
+                          <small> / {plans.length}</small>
+                        </strong>
+                        <span>{t('ui.intentionsToday')}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="stat-icon mint">
+                        <BookOpen size={21} />
+                      </span>
+                      <div>
+                        <strong>{data.sessions.length}</strong>
+                        <span>{t('ui.reflections')}</span>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <span className="stat-icon peach">
-                      <Sun size={21} />
-                    </span>
-                    <div>
-                      <strong>
-                        {plans.filter((p) => p.done).length}
-                        <small> / {plans.length}</small>
-                      </strong>
-                      <span>{t('ui.intentionsToday')}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="stat-icon mint">
-                      <BookOpen size={21} />
-                    </span>
-                    <div>
-                      <strong>{data.sessions.length}</strong>
-                      <span>{t('ui.reflections')}</span>
-                    </div>
-                  </div>
-                </div>
+                )}
                 <div className="dashboard-grid">
                   <div className="left-column">
-                    {settings.features.habitTracker && (
-                      <section className="card" id="habits">
+                    {(active === 'overview' || active === 'habits') &&
+                      settings.features.habitTracker && (
+                        <section className="card" id="habits">
+                          <div className="card-heading">
+                            <div className="section-title">
+                              <span className="icon-tile purple">
+                                <ListChecks size={19} />
+                              </span>
+                              <div>
+                                <h2>{t('dashboard.quests')}</h2>
+                                <p>{t('ui.habitsSubtitle')}</p>
+                              </div>
+                            </div>
+                            <button
+                              className="icon-button"
+                              aria-label={t('ui.addHabit')}
+                              onClick={() => setModal('habit')}
+                            >
+                              <Plus size={20} />
+                            </button>
+                          </div>
+                          <div className="progress-label">
+                            <span>{t('ui.todaysProgress')}</span>
+                            <strong>{progress}%</strong>
+                          </div>
+                          <div className="progress-track">
+                            <motion.div
+                              initial={false}
+                              animate={{ width: `${progress}%` }}
+                            />
+                          </div>
+                          <div className="habit-list" id="habit-grid">
+                            {data.habits.map((h) => (
+                              <div className="habit-with-stat" key={h.id}>
+                                <button
+                                  className={`habit ${h.dates.includes(today) ? 'done' : ''}`}
+                                  aria-pressed={h.dates.includes(today)}
+                                  onClick={() =>
+                                    setData((d) =>
+                                      toggleHabit(d, h.id, dayKey()),
+                                    )
+                                  }
+                                >
+                                  <Checkmark
+                                    checked={h.dates.includes(today)}
+                                  />
+                                  <span>
+                                    <strong>{h.title}</strong>
+                                    <small>
+                                      {h.detail || t('ui.habitDetailDefault')}
+                                    </small>
+                                  </span>
+                                  <span className="habit-spark">
+                                    {h.dates.includes(today) ? '✦' : '＋'}
+                                  </span>
+                                </button>
+                                <label className="habit-stat-select">
+                                  +5
+                                  <select
+                                    aria-label={t('ui.statFor', {
+                                      title: h.title,
+                                    })}
+                                    value={h.stat}
+                                    onChange={(e) => {
+                                      const stat = e.target.value as Stat
+                                      setData((d) => ({
+                                        ...d,
+                                        habits: d.habits.map((item) =>
+                                          item.id === h.id
+                                            ? { ...item, stat }
+                                            : item,
+                                        ),
+                                      }))
+                                    }}
+                                  >
+                                    {(Object.keys(statNames) as Stat[]).map(
+                                      (stat) => (
+                                        <option key={stat} value={stat}>
+                                          {statNames[stat]}
+                                        </option>
+                                      ),
+                                    )}
+                                  </select>
+                                  <small>{t('ui.comboExp')}</small>
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                          <button
+                            className="add-line"
+                            onClick={() => setModal('habit')}
+                          >
+                            <Plus size={16} /> {t('ui.addSmallHabit')}
+                          </button>
+                          <div className="week-strip">
+                            <span>{t('ui.lastSevenDays')}</span>
+                            <div>
+                              {lastWeek.map((d) => (
+                                <div
+                                  key={d.key}
+                                  title={`${d.key}: ${t('ui.habitsCompleted', { count: d.count })}`}
+                                  className={d.key === today ? 'today' : ''}
+                                >
+                                  <span>{d.label}</span>
+                                  <i className={d.count ? 'has-progress' : ''}>
+                                    {d.count ? <Check size={12} /> : '·'}
+                                  </i>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </section>
+                      )}
+                    {(active === 'overview' || active === 'planning') && (
+                      <section className="card" id="planning">
                         <div className="card-heading">
                           <div className="section-title">
-                            <span className="icon-tile purple">
-                              <ListChecks size={19} />
+                            <span className="icon-tile orange">
+                              <Sun size={19} />
                             </span>
                             <div>
-                              <h2>{t('dashboard.quests')}</h2>
-                              <p>{t('ui.habitsSubtitle')}</p>
+                              <h2>{t('ui.intentionHeading')}</h2>
+                              <p>{t('ui.intentionDescription')}</p>
                             </div>
                           </div>
                           <button
                             className="icon-button"
-                            aria-label={t('ui.addHabit')}
-                            onClick={() => setModal('habit')}
+                            aria-label={t('ui.addIntention')}
+                            onClick={() => setModal('plan')}
                           >
                             <Plus size={20} />
                           </button>
                         </div>
-                        <div className="progress-label">
-                          <span>{t('ui.todaysProgress')}</span>
-                          <strong>{progress}%</strong>
-                        </div>
-                        <div className="progress-track">
-                          <motion.div
-                            initial={false}
-                            animate={{ width: `${progress}%` }}
-                          />
-                        </div>
-                        <div className="habit-list" id="habit-grid">
-                          {data.habits.map((h) => (
-                            <div className="habit-with-stat" key={h.id}>
-                              <button
-                                className={`habit ${h.dates.includes(today) ? 'done' : ''}`}
-                                aria-pressed={h.dates.includes(today)}
-                                onClick={() =>
-                                  setData((d) => toggleHabit(d, h.id, dayKey()))
-                                }
-                              >
-                                <Checkmark checked={h.dates.includes(today)} />
-                                <span>
-                                  <strong>{h.title}</strong>
-                                  <small>
-                                    {h.detail || t('ui.habitDetailDefault')}
-                                  </small>
-                                </span>
-                                <span className="habit-spark">
-                                  {h.dates.includes(today) ? '✦' : '＋'}
-                                </span>
-                              </button>
-                              <label className="habit-stat-select">
-                                +5
-                                <select
-                                  aria-label={t('ui.statFor', { title: h.title })}
-                                  value={h.stat}
-                                  onChange={(e) => {
-                                    const stat = e.target.value as Stat
+                        {plans.length === 0 ? (
+                          <div className="empty-plans">
+                            <Sun size={26} />
+                            <p>{t('ui.freshPage')}</p>
+                            <small>{t('ui.chooseMeaningful')}</small>
+                          </div>
+                        ) : (
+                          <div className="plan-list">
+                            {plans.map((p, i) => (
+                              <div className="plan" key={p.id}>
+                                <button
+                                  className={
+                                    p.done ? 'plan-toggle done' : 'plan-toggle'
+                                  }
+                                  aria-pressed={p.done}
+                                  onClick={() =>
                                     setData((d) => ({
                                       ...d,
-                                      habits: d.habits.map((item) =>
-                                        item.id === h.id
-                                          ? { ...item, stat }
+                                      plans: d.plans.map((item) =>
+                                        item.id === p.id
+                                          ? { ...item, done: !item.done }
                                           : item,
                                       ),
                                     }))
-                                  }}
+                                  }
                                 >
-                                  {(Object.keys(statNames) as Stat[]).map(
-                                    (stat) => (
-                                      <option key={stat} value={stat}>
-                                        {statNames[stat]}
-                                      </option>
-                                    ),
-                                  )}
-                                </select>
-                                <small>{t('ui.comboExp')}</small>
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                        <button
-                          className="add-line"
-                          onClick={() => setModal('habit')}
-                        >
-                          <Plus size={16} /> {t('ui.addSmallHabit')}
-                        </button>
-                        <div className="week-strip">
-                          <span>{t('ui.lastSevenDays')}</span>
-                          <div>
-                            {lastWeek.map((d) => (
-                              <div
-                                key={d.key}
-                                title={`${d.key}: ${t('ui.habitsCompleted', { count: d.count })}`}
-                                className={d.key === today ? 'today' : ''}
-                              >
-                                <span>{d.label}</span>
-                                <i className={d.count ? 'has-progress' : ''}>
-                                  {d.count ? <Check size={12} /> : '·'}
-                                </i>
+                                  <span>
+                                    {p.done ? (
+                                      <Check size={15} />
+                                    ) : (
+                                      String(i + 1).padStart(2, '0')
+                                    )}
+                                  </span>
+                                  <strong>{p.title}</strong>
+                                </button>
+                                <button
+                                  className="icon-button"
+                                  aria-label={t('ui.edit', { title: p.title })}
+                                  onClick={() => setEditPlan(p.id)}
+                                >
+                                  <Pencil size={14} />
+                                </button>
                               </div>
                             ))}
                           </div>
-                        </div>
-                      </section>
-                    )}
-                    <section className="card" id="planning">
-                      <div className="card-heading">
-                        <div className="section-title">
-                          <span className="icon-tile orange">
-                            <Sun size={19} />
-                          </span>
-                          <div>
-                            <h2>{t('ui.intentionHeading')}</h2>
-                            <p>{t('ui.intentionDescription')}</p>
-                          </div>
-                        </div>
+                        )}
                         <button
-                          className="icon-button"
-                          aria-label={t('ui.addIntention')}
+                          className="add-line"
                           onClick={() => setModal('plan')}
                         >
-                          <Plus size={20} />
+                          <Plus size={16} /> {t('ui.setIntention')}
                         </button>
-                      </div>
-                      {plans.length === 0 ? (
-                        <div className="empty-plans">
-                          <Sun size={26} />
-                          <p>{t('ui.freshPage')}</p>
-                          <small>{t('ui.chooseMeaningful')}</small>
-                        </div>
-                      ) : (
-                        <div className="plan-list">
-                          {plans.map((p, i) => (
-                            <div className="plan" key={p.id}>
-                              <button
-                                className={
-                                  p.done ? 'plan-toggle done' : 'plan-toggle'
-                                }
-                                aria-pressed={p.done}
-                                onClick={() =>
-                                  setData((d) => ({
-                                    ...d,
-                                    plans: d.plans.map((item) =>
-                                      item.id === p.id
-                                        ? { ...item, done: !item.done }
-                                        : item,
-                                    ),
-                                  }))
-                                }
-                              >
-                                <span>
-                                  {p.done ? (
-                                    <Check size={15} />
-                                  ) : (
-                                    String(i + 1).padStart(2, '0')
-                                  )}
-                                </span>
-                                <strong>{p.title}</strong>
-                              </button>
-                              <button
-                                className="icon-button"
-                                aria-label={t('ui.edit', { title: p.title })}
-                                onClick={() => setEditPlan(p.id)}
-                              >
-                                <Pencil size={14} />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <button
-                        className="add-line"
-                        onClick={() => setModal('plan')}
-                      >
-                        <Plus size={16} /> {t('ui.setIntention')}
-                      </button>
-                    </section>
-                  </div>
-                  <div className="right-column">
-                    {settings.features.chatJournal && (
-                      <ChatJournalContainer data={data} setData={setData} />
+                      </section>
                     )}
-                    {settings.features.daybookModes && <JournalContainer />}
-                    <section className="affirmation">
-                      <div className="card-heading">
-                        <span className="eyebrow">
-                          <Quote size={15} /> {t('ui.wordsToGrowWith')}
-                        </span>
-                        <button
-                          className="icon-button"
-                          aria-label={t('ui.editAffirmation')}
-                          onClick={() => setModal('affirmation')}
-                        >
-                          <Pencil size={16} />
-                        </button>
-                      </div>
-                      <blockquote>“{data.affirmation}”</blockquote>
-                      <div>
-                        <span>{t('ui.reminder')}</span>
-                        <Flower2 size={25} />
-                      </div>
-                    </section>
                   </div>
+                  {active === 'overview' && (
+                    <div className="right-column">
+                      <section className="card reflection-shortcuts">
+                        <span className="eyebrow">MAKE ROOM FOR YOURSELF</span>
+                        <h2>A moment to reflect</h2>
+                        <p>Choose the space that feels right today.</p>
+                        {settings.features.chatJournal && (
+                          <button
+                            className="primary"
+                            onClick={() => jump('journal')}
+                          >
+                            <BookOpen size={18} /> {t('navigation.journal')}{' '}
+                            <ArrowRight size={16} />
+                          </button>
+                        )}
+                        {settings.features.daybookModes && (
+                          <button
+                            className="quiet-button"
+                            onClick={() => jump('daybook')}
+                          >
+                            <Pencil size={18} /> {t('ui.daybookNav')}{' '}
+                            <ArrowRight size={16} />
+                          </button>
+                        )}
+                      </section>
+                      <section className="affirmation">
+                        <div className="card-heading">
+                          <span className="eyebrow">
+                            <Quote size={15} /> {t('ui.wordsToGrowWith')}
+                          </span>
+                          <button
+                            className="icon-button"
+                            aria-label={t('ui.editAffirmation')}
+                            onClick={() => setModal('affirmation')}
+                          >
+                            <Pencil size={16} />
+                          </button>
+                        </div>
+                        <blockquote>“{data.affirmation}”</blockquote>
+                        <div>
+                          <span>{t('ui.reminder')}</span>
+                          <Flower2 size={25} />
+                        </div>
+                      </section>
+                    </div>
+                  )}
                 </div>
                 <button
                   className="history-card"
@@ -644,9 +724,12 @@ function App() {
                 onClick={() => setViewSession(s)}
               >
                 <strong>
-                  {new Date(s.metadata.date).toLocaleDateString(i18n.resolvedLanguage ?? 'en', {
-                    dateStyle: 'medium',
-                  })}
+                  {new Date(s.metadata.date).toLocaleDateString(
+                    i18n.resolvedLanguage ?? 'en',
+                    {
+                      dateStyle: 'medium',
+                    },
+                  )}
                 </strong>
                 <span>
                   {s.messages.find(

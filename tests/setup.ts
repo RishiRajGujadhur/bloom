@@ -2,7 +2,11 @@ import '@testing-library/jest-dom'
 
 // The browser Lottie runtime needs a canvas implementation that JSDOM does not provide.
 jest.mock('@lottiefiles/react-lottie-player', () => ({
-  Player: ({ className }: { className?: string }) => require('react').createElement('div', { className, 'data-testid': 'lottie-player' }),
+  Player: ({ className }: { className?: string }) =>
+    require('react').createElement('div', {
+      className,
+      'data-testid': 'lottie-player',
+    }),
 }))
 
 /* --------------------------------------------------------------------------
@@ -61,7 +65,12 @@ export const setNarrowScreen = (narrow: boolean) =>
 
 /** Clear theme/sidebar attributes so cases cannot leak into one another. */
 export const resetThemeAttributes = () => {
-  for (const attribute of ['data-theme', 'data-font', 'data-mode', 'data-sidebar']) {
+  for (const attribute of [
+    'data-theme',
+    'data-font',
+    'data-mode',
+    'data-sidebar',
+  ]) {
     document.documentElement.removeAttribute(attribute)
   }
   document.documentElement.style.removeProperty('--accent-color')
@@ -80,3 +89,8 @@ HTMLDialogElement.prototype.close = function () {
 }
 Element.prototype.scrollTo = jest.fn()
 Element.prototype.scrollIntoView = jest.fn()
+
+beforeEach(() => {
+  window.history.replaceState(null, '', '/')
+})
+window.scrollTo = jest.fn()

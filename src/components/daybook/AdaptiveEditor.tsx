@@ -6,7 +6,7 @@ import TaskList from '@tiptap/extension-task-list'
 import { Player } from '@lottiefiles/react-lottie-player'
 import { ArrowLeft, Check, Save, Sparkles, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import { EditorToolbar } from './EditorToolbar'
@@ -49,8 +49,7 @@ export function AdaptiveEditor({ mode, entry, onBack, onSave }: { mode: JournalM
   const [saved, setSaved] = useState(Boolean(entry))
   const [celebrating, setCelebrating] = useState(false)
   const placeholder = useMemo(() => mode.editorType === 'bujo' ? t('journal.startRapid') : mode.editorType === 'focus' ? t('journal.oneThing') : t('journal.holdThought'), [mode.editorType, t])
-  useEffect(() => { setSaved(false); const timer = window.setTimeout(() => setSaved(true), 700); return () => window.clearTimeout(timer) }, [content])
-  const update = (key: string, value: DocumentValue) => setContent(current => ({ ...current, [key]: value }))
+  const update = (key: string, value: DocumentValue) => { setSaved(false); setContent(current => ({ ...current, [key]: value })) }
   const save = () => { if (celebrating) return; setCelebrating(true); window.setTimeout(() => onSave({ id: entry?.id ?? crypto.randomUUID(), modeId: mode.id, modeTitle: mode.title, createdAt: entry?.createdAt ?? new Date().toISOString(), updatedAt: new Date().toISOString(), content }), 900) }
   const ambient = mode.category === 'reflection'
   return <div className={`daybook-editor editor-${mode.editorType}`}>

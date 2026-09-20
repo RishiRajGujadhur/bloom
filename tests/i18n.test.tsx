@@ -22,8 +22,8 @@ function SettingsHarness() {
 
 const flatten = (value: unknown, prefix = ''): string[] => {
   if (value && typeof value === 'object' && !Array.isArray(value)) {
-    return Object.entries(value as Record<string, unknown>).flatMap(([key, child]) =>
-      flatten(child, `${prefix}${key}.`),
+    return Object.entries(value as Record<string, unknown>).flatMap(
+      ([key, child]) => flatten(child, `${prefix}${key}.`),
     )
   }
   return [prefix.replace(/\.$/, '')]
@@ -42,7 +42,9 @@ const sourceFiles = (dir: string): string[] =>
   fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) return sourceFiles(full)
-    return /\.(ts|tsx)$/.test(entry.name) && entry.name !== 'i18n.ts' ? [full] : []
+    return /\.(ts|tsx)$/.test(entry.name) && entry.name !== 'i18n.ts'
+      ? [full]
+      : []
   })
 
 const usedKeys = () => {
@@ -74,7 +76,9 @@ test('every literal translation key used in the source exists in English and Fre
 test('English remains the default language', () => {
   render(<App />)
   expect(document.documentElement.lang).toBe('en')
-  expect(screen.getAllByText(/YOUR EVERYDAY ADVENTURE/).length).toBeGreaterThan(0)
+  expect(screen.getAllByText(/YOUR EVERYDAY ADVENTURE/).length).toBeGreaterThan(
+    0,
+  )
   expect(screen.getAllByText(/Move with intention/).length).toBeGreaterThan(0)
 })
 
@@ -83,24 +87,37 @@ test('switching to French localizes the dashboard, RPG, gamification and daybook
   render(<App />)
 
   expect(document.documentElement.lang).toBe('fr')
-  expect(screen.getAllByText(/VOTRE AVENTURE QUOTIDIENNE/).length).toBeGreaterThan(0)
-  expect(screen.getAllByRole('button', { name: /Comment jouer/ }).length).toBeGreaterThan(0)
+  expect(
+    screen.getAllByText(/VOTRE AVENTURE QUOTIDIENNE/).length,
+  ).toBeGreaterThan(0)
+  expect(
+    screen.getAllByRole('button', { name: /Comment jouer/ }).length,
+  ).toBeGreaterThan(0)
   expect(screen.getAllByText('La Pousse').length).toBeGreaterThan(0)
   expect(screen.getAllByText('Vitalité').length).toBeGreaterThan(0)
   expect(screen.getAllByText(/MOTEUR D’ÉLAN/).length).toBeGreaterThan(0)
   expect(screen.getAllByText(/CHEMIN DE PRATIQUE/).length).toBeGreaterThan(0)
-  expect(screen.getAllByText('Votre arbre de compétences').length).toBeGreaterThan(0)
+  expect(
+    screen.getAllByText('Votre arbre de compétences').length,
+  ).toBeGreaterThan(0)
+  fireEvent.click(screen.getAllByRole('button', { name: /Modes de carnet/ })[0])
   expect(screen.getAllByText('Le carnet').length).toBeGreaterThan(0)
-  expect(screen.getAllByText('Intention du matin (la seule chose)').length).toBeGreaterThan(0)
-  expect(screen.getAllByText(/Bouger avec intention/).length).toBeGreaterThan(0)
+  expect(
+    screen.getAllByText('Intention du matin (la seule chose)').length,
+  ).toBeGreaterThan(0)
 })
 
 test('French journal prompts and chips come from the French resources', async () => {
   await i18n.changeLanguage('fr')
   render(<App />)
 
+  fireEvent.click(
+    screen.getAllByRole('button', { name: /Journal de réflexion/ })[0],
+  )
   await act(async () => {
-    fireEvent.click(screen.getAllByRole('button', { name: /Commencer un bilan/ })[0])
+    fireEvent.click(
+      screen.getAllByRole('button', { name: /Commencer un bilan/ })[0],
+    )
   })
 
   expect(screen.getAllByText(/Prenons un souffle/).length).toBeGreaterThan(0)
@@ -110,8 +127,12 @@ test('French journal prompts and chips come from the French resources', async ()
 test('pirate and slang English stay usable on the shared English sections', async () => {
   await i18n.changeLanguage('en-pirate')
   render(<App />)
-  expect(screen.getAllByText(/Main deck|Yer Stats|A wee bit better/).length).toBeGreaterThan(0)
-  expect(screen.getAllByRole('button', { name: /How to play/ }).length).toBeGreaterThan(0)
+  expect(
+    screen.getAllByText(/Main deck|Yer Stats|A wee bit better/).length,
+  ).toBeGreaterThan(0)
+  expect(
+    screen.getAllByRole('button', { name: /How to play/ }).length,
+  ).toBeGreaterThan(0)
 })
 test('French settings page renders translated feature copy', async () => {
   await i18n.changeLanguage('fr')
@@ -120,7 +141,9 @@ test('French settings page renders translated feature copy', async () => {
   expect(screen.getByText('Paramètres')).toBeInTheDocument()
   expect(screen.getByText('Fonctionnalités')).toBeInTheDocument()
   expect(screen.getByText('Suivi des habitudes')).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: /Copier le JSON/ })).toBeInTheDocument()
+  expect(
+    screen.getByRole('button', { name: /Copier le JSON/ }),
+  ).toBeInTheDocument()
   expect(screen.getByText('Importer du JSON')).toBeInTheDocument()
   expect(screen.getByText('Enregistré localement')).toBeInTheDocument()
 })
