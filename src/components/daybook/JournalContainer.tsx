@@ -76,7 +76,10 @@ export function JournalContainer() {
     { key: 'gamified', label: 'Explore', Icon: Sparkles },
   ] as const
   return (
-    <section className="card daybook daybook-wizard" id="daybook">
+    <section
+      className="card daybook daybook-wizard mx-auto w-full max-w-5xl rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6"
+      id="daybook"
+    >
       <div className="daybook-container">
         <ol className="wizard-steps" aria-label="Journal steps">
           {['Choose a direction', 'Pick a page', 'Write'].map(

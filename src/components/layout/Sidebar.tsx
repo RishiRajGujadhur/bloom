@@ -251,7 +251,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       <aside
         ref={sidebarRef}
         inert={isNarrow && !isOpen}
-        className="sidebar"
+        className="sidebar fixed inset-y-0 left-0 z-40 flex flex-col bg-sidebar text-foreground"
         id="app-sidebar"
         data-state={isOpen ? 'open' : 'collapsed'}
       >

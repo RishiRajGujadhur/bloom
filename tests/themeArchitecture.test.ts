@@ -103,3 +103,21 @@ describe('theme previews cannot drift from the stylesheet', () => {
     expect(picker).not.toMatch(/#[0-9a-fA-F]{6}/)
   })
 })
+
+describe('Tailwind stays connected to the runtime theme engine', () => {
+  test('Vite loads the Tailwind plugin', () => {
+    const config = read('vite.config.ts')
+    expect(config).toContain("from '@tailwindcss/vite'")
+    expect(config).toContain('tailwindcss()')
+  })
+
+  test('semantic utilities resolve through the existing theme tokens', () => {
+    const styles = read('src/index.css')
+    expect(styles).toContain("@import 'tailwindcss/utilities.css'")
+    expect(styles).toContain('--color-page: var(--bg-primary)')
+    expect(styles).toContain('--color-surface: var(--bg-surface)')
+    expect(styles).toContain('--color-foreground: var(--text-primary)')
+    expect(styles).toContain('--color-accent: var(--accent-color)')
+    expect(styles).toContain("[data-mode='dark']")
+  })
+})

@@ -169,7 +169,7 @@ export function RpgDashboard({
   }
   return (
     <section
-      className={`rpg-zone ${feedback?.kind === 'victory' ? 'victory-shake' : ''}`}
+      className={`rpg-zone flex min-w-0 flex-col gap-5 ${feedback?.kind === 'victory' ? 'victory-shake' : ''}`}
       aria-label={t('rpg.zoneAria')}
     >
       <div className="rpg-heading">

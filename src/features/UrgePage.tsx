@@ -90,7 +90,7 @@ export function UrgePage({ data, setData }: Props) {
   }
 
   return (
-    <section id="urge-page" className="urge-page">
+    <section id="urge-page" className="urge-page flex flex-col gap-5">
       <div className="segmented urge-tabs" aria-label="Urge tracker view">
         <button aria-pressed={view === 'log'} onClick={() => setView('log')}>
           <ShieldCheck size={16} /> Interrupt & log
@@ -105,8 +105,8 @@ export function UrgePage({ data, setData }: Props) {
       {view === 'patterns' ? (
         <UrgePatterns data={data} />
       ) : (
-        <div className="urge-log-layout">
-          <div className="card urge-logger">
+        <div className="urge-log-layout grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
+          <div className="card urge-logger rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
             <ol className="urge-progress" aria-label="Logging progress">
               {['Habit', 'Intensity', 'Context'].map((label, index) => (
                 <li
@@ -321,7 +321,7 @@ function UrgePatterns({ data }: { data: AppData }) {
 
   if (!data.urgeEvents.length)
     return (
-      <div className="card urge-empty">
+      <div className="card urge-empty rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
         <Activity size={34} />
         <h2>Your patterns will form here</h2>
         <p>
@@ -332,7 +332,7 @@ function UrgePatterns({ data }: { data: AppData }) {
     )
 
   return (
-    <div className="urge-patterns">
+    <div className="urge-patterns flex flex-col gap-5">
       <div className="pattern-filter">
         <label htmlFor="pattern-habit">Pattern for</label>
         <select
@@ -348,7 +348,7 @@ function UrgePatterns({ data }: { data: AppData }) {
           ))}
         </select>
       </div>
-      <div className="urge-stats">
+      <div className="urge-stats grid grid-cols-1 gap-3 sm:grid-cols-3">
         <article className="card">
           <span>Logged moments</span>
           <strong>{events.length}</strong>
@@ -380,7 +380,7 @@ function UrgePatterns({ data }: { data: AppData }) {
           </span>
         </article>
       )}
-      <div className="pattern-grid">
+      <div className="pattern-grid grid grid-cols-1 gap-5 lg:grid-cols-2">
         <section className="card trigger-list">
           <h2>Trigger strength</h2>
           <p>How often a context was present when an episode became a slip.</p>

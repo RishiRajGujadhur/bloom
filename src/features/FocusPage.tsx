@@ -116,8 +116,8 @@ export function FocusPage({
       },
     }))
   return (
-    <div id="focus-page" className="focus-layout">
-      <section className="card focus-room">
+    <div id="focus-page" className="focus-layout grid grid-cols-1 gap-5 xl:grid-cols-2">
+      <section className="card focus-room rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
         <PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />
         <h2>
           {active
@@ -247,7 +247,7 @@ export function FocusPage({
               : ''}
         </p>
       </section>
-      <section className="card focus-garden">
+      <section className="card focus-garden rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
         <div className="section-title">
           <Timer size={20} />
           <h2>Your garden</h2>

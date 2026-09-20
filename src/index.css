@@ -1,3 +1,5 @@
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 @import './styles/variables.css';
 @import './styles/themes.css';
 @import '@fontsource/caveat/400.css';
@@ -14,6 +16,35 @@
 @import '@fontsource/manrope/600.css';
 @import '@fontsource/manrope/700.css';
 @import '@fontsource/manrope/800.css';
+
+/*
+ * Tailwind is the responsive composition layer. Preflight is intentionally
+ * omitted because form controls, the canvas, and pixel-art surfaces have their
+ * own reset rules. Inline theme tokens keep every utility connected to the
+ * user's live palette, mode, accent, and font selections.
+ */
+@theme inline {
+  --color-page: var(--bg-primary);
+  --color-surface: var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
+  --color-sidebar: var(--bg-sidebar);
+  --color-foreground: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent-color);
+  --color-accent-soft: var(--accent-soft);
+  --color-ui-border: var(--border-color);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-app: var(--font-family);
+  --font-heading: var(--font-display);
+  --font-code: var(--font-mono);
+  --radius-ui-sm: var(--radius-sm);
+  --radius-ui-md: var(--radius-md);
+  --radius-ui-lg: var(--radius-lg);
+}
+
+@custom-variant dark (&:where([data-mode='dark'], [data-mode='dark'] *));
 :root {
   font-family: var(--font-family);
   color: var(--text-primary);

@@ -92,7 +92,10 @@ export function ChatJournalContainer({
     .sort((a, b) => Date.parse(b.metadata.date) - Date.parse(a.metadata.date))
     .slice(0, 3)
   return (
-    <section className="card journal" id="chat-journal">
+    <section
+      className="card journal mx-auto w-full max-w-5xl rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6"
+      id="chat-journal"
+    >
       <div className="card-heading">
         <div className="section-title">
           <span className="icon-tile purple">

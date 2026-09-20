@@ -30,7 +30,7 @@ export function Modal({
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="modal-inner">
+      <div className="modal-inner mx-4 w-full max-w-xl rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6">
         <div className="card-heading">
           <h2>{title}</h2>
           <button

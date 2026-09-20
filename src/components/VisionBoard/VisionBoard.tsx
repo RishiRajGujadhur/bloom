@@ -211,8 +211,11 @@ function Canvas({ badges }: { badges: string[] }) {
 
   return (
     <BoardContext.Provider value={{ journals, update, remove }}>
-      <section className={styles.page} aria-label="Vision Board">
-        <header className={styles.heading}>
+      <section
+        className={`${styles.page} mx-auto w-full max-w-[1600px]`}
+        aria-label="Vision Board"
+      >
+        <header className={`${styles.heading} flex flex-wrap items-start justify-between gap-4`}>
           <div>
             <span>YOUR WORLD, TAKING SHAPE</span>
             <h1>

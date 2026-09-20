@@ -51,6 +51,7 @@ import {
 import type { ThemeSettings } from './utils/themeEngine'
 
 import './features/features.css'
+import './styles/shared-ui.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
 
@@ -203,7 +204,10 @@ function App() {
   }
   return (
     <MotionConfig reducedMotion="user">
-      <div className="app-shell" data-palette={data.rpg.palette}>
+      <div
+        className="app-shell min-h-dvh bg-page font-app text-foreground"
+        data-palette={data.rpg.palette}
+      >
         <a
           className="skip-link"
           href="#overview"
@@ -215,12 +219,12 @@ function App() {
           {t('ui.skipToDashboard')}
         </a>
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
-        <main id="overview">
-          <header className="topbar">
+        <main id="overview" className="min-w-0 flex-1">
+          <header className="topbar flex flex-wrap items-center justify-between gap-3">
             <span>
               <span className="tiny-dot" /> {t('welcome.eyebrow')}
             </span>
-            <div className="topbar-actions">
+            <div className="topbar-actions flex flex-wrap items-center gap-2">
               {settings.features.languageSelector && <LanguageSelector />}
               <button
                 className="theme-toggle"
@@ -241,8 +245,10 @@ function App() {
               </button>
             </div>
           </header>
-          <div className={`page-content feature-page page-${active}`}>
-            <div className="feature-heading">
+          <div
+            className={`page-content feature-page page-${active} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
+          >
+            <div className="feature-heading flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h1 id="page-heading" tabIndex={-1}>
                   {pageDetails[active].title}
@@ -278,7 +284,7 @@ function App() {
             (active === 'daybook' && !settings.features.daybookModes) ||
             (active === 'urges' && !settings.features.urgeTracker) ||
             (active === 'vision-board' && !settings.features.visionBoard) ? (
-              <section className="card">
+              <section className="card rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
                 <h2>This feature is turned off</h2>
                 <p>You can enable it in Settings.</p>
                 <button className="primary" onClick={() => jump('settings')}>
@@ -326,7 +332,7 @@ function App() {
             ) : (
               <>
                 {active === 'overview' && (
-                  <div className="stats">
+                  <div className="stats grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     <div>
                       <span className="stat-icon lavender">
                         <ListChecks size={21} />
@@ -362,7 +368,7 @@ function App() {
                     </div>
                   </div>
                 )}
-                <div className="dashboard-grid">
+                <div className="dashboard-grid grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.75fr)]">
                   <div className="left-column">
                     {(active === 'overview' || active === 'habits') &&
                       settings.features.habitTracker && (

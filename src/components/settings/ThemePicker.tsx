@@ -26,12 +26,12 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
     settings.customAccent ?? activeTheme?.accent ?? THEMES[0].accent
 
   return (
-    <div className={styles.picker}>
+    <div className={`${styles.picker} flex flex-col gap-6`}>
       <section className={styles.block} aria-labelledby="settings-colors">
         <h3 id="settings-colors">{t('settings.colors')}</h3>
         <p className={styles.hint}>{t('settings.colorsHint')}</p>
 
-        <div className={styles.themeGrid}>
+        <div className={`${styles.themeGrid} grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3`}>
           {THEMES.map((theme) => {
             const isActive = theme.id === settings.themeId
             return (
@@ -119,7 +119,7 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
         <h3 id="settings-fonts">{t('settings.fonts')}</h3>
         <p className={styles.hint}>{t('settings.fontsHint')}</p>
 
-        <div className={styles.fontList}>
+        <div className={`${styles.fontList} grid grid-cols-1 gap-3 md:grid-cols-2`}>
           {FONTS.map((font) => {
             const isActive = font.id === settings.fontId
             return (

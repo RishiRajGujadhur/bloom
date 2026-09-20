@@ -166,14 +166,17 @@ export function SettingsPage({
   const formattedSettings = JSON.stringify(settings, null, 2)
 
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
+    <div className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}>
+      <header className={`${styles.header} flex flex-col gap-2`}>
         <p className={styles.eyebrow}>{t('settings.eyebrow')}</p>
         <h1>{t('settings.title')}</h1>
         <p className={styles.intro}>{t('settings.intro')}</p>
       </header>
 
-      <section className={styles.card} aria-labelledby="appearance-heading">
+      <section
+        className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
+        aria-labelledby="appearance-heading"
+      >
         <div className={styles.cardHeader}>
           <div>
             <h2 id="appearance-heading">{t('settings.appearanceHeading')}</h2>
@@ -183,7 +186,10 @@ export function SettingsPage({
         <ThemePicker settings={theme} onChange={setTheme} />
       </section>
 
-      <section className={styles.card} aria-labelledby="features-heading">
+      <section
+        className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
+        aria-labelledby="features-heading"
+      >
         <div className={styles.cardHeader}>
           <div>
             <h2 id="features-heading">{t('settings.featuresHeading')}</h2>
@@ -218,7 +224,10 @@ export function SettingsPage({
         </div>
       </section>
 
-      <section className={styles.card} aria-labelledby="json-heading">
+      <section
+        className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
+        aria-labelledby="json-heading"
+      >
         <div className={styles.cardHeader}>
           <div>
             <h2 id="json-heading">{t('settings.configurationHeading')}</h2>

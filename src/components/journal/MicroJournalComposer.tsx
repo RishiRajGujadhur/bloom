@@ -198,7 +198,7 @@ export function MicroJournalComposer({
   }
 
   return (
-    <div className="micro-journal">
+    <div className="micro-journal flex flex-col gap-4">
       <div className="micro-mood" aria-label={t('journal.feeling')}>
         {moods.map((label, index) => (
           <button

@@ -1,0 +1,86 @@
+@reference '../index.css';
+
+/* Unlayered component recipes intentionally follow legacy feature styles.
+   Tailwind utilities in a layer cannot override unlayered legacy selectors. */
+.app-shell .page-content > .feature-heading {
+  @apply mb-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-ui-border bg-surface px-5 py-5 sm:px-7;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--shadow-color) 18%, transparent);
+}
+.app-shell .feature-heading h1 {
+  @apply font-heading text-2xl font-bold tracking-tight sm:text-3xl;
+  color: var(--text-primary);
+}
+.app-shell .card,
+.app-shell .quest-card {
+  @apply rounded-2xl border border-ui-border bg-surface;
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--shadow-color) 22%, transparent);
+}
+.app-shell button.primary,
+.app-shell button.quiet-button,
+.app-shell button.theme-toggle,
+.app-shell button.guide-button {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-solid px-4 py-2.5 text-sm font-semibold;
+  transition: background 150ms, border-color 150ms, box-shadow 150ms;
+}
+.app-shell button.primary {
+  @apply border-transparent bg-accent;
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+.app-shell button.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-color) 88%, var(--text-primary));
+}
+.app-shell button.quiet-button,
+.app-shell button.theme-toggle,
+.app-shell button.guide-button {
+  @apply border-ui-border bg-surface text-foreground;
+}
+.app-shell button.quiet-button:hover:not(:disabled),
+.app-shell button.theme-toggle:hover,
+.app-shell button.guide-button:hover {
+  @apply border-accent bg-accent-soft;
+}
+.app-shell .segmented {
+  @apply max-w-full gap-1 rounded-2xl border border-ui-border bg-surface p-1.5;
+}
+.app-shell .segmented button {
+  @apply min-h-11 rounded-xl px-4 py-2 text-sm font-medium;
+}
+.app-shell .segmented button[aria-pressed='true'] {
+  @apply bg-accent font-semibold;
+  color: var(--text-on-accent);
+}
+.app-shell .sidebar nav {
+  @apply gap-1.5;
+}
+.app-shell .sidebar nav button {
+  @apply min-h-11 rounded-xl text-sm;
+}
+.app-shell .sidebar nav button.active {
+  @apply bg-accent font-semibold;
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-color) 22%, transparent);
+}
+.app-shell .sidebar nav button.active .nav-indicator {
+  background: currentColor;
+}
+.app-shell button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+@media (max-width: 650px) {
+  .app-shell .topbar {
+    @apply h-auto min-h-20 flex-wrap gap-3 py-3;
+  }
+  .app-shell .topbar-actions {
+    @apply flex-wrap;
+  }
+  .app-shell .feature-heading .guide-button {
+    @apply min-h-11;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell button {
+    transition: none;
+  }
+}

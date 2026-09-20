@@ -32,7 +32,7 @@ export function ChallengesPage({
   const [notice, setNotice] = useState('')
   return (
     <div id="challenges-page">
-      <div className="choice-grid">
+      <div className="choice-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {challenges.map((challenge) => {
           const accepted = data.challenges.find(
             (item) => item.id === challenge.id,
@@ -185,7 +185,10 @@ export function TodoPage({ data, setData }: Props) {
     setTags('')
   }
   return (
-    <section id="todo-page" className="card task-workspace">
+    <section
+      id="todo-page"
+      className="card task-workspace rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6"
+    >
       <form className="task-composer" onSubmit={add}>
         <div className="task-add">
           <input

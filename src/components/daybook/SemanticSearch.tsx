@@ -128,7 +128,10 @@ export function SemanticSearch({
   }, [enabled, entries, debounced, embed, retry])
 
   return (
-    <section className={styles.search} aria-label="Search your journal">
+    <section
+      className={`${styles.search} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-5`}
+      aria-label="Search your journal"
+    >
       <div className={styles.heading}>
         <Search size={20} aria-hidden="true" />
         <h3>Find a thought</h3>
