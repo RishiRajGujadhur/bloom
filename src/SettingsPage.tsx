@@ -8,6 +8,7 @@ import styles from './settings.module.css'
 
 export interface FeatureFlags {
   visionBoard: boolean
+  urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
   rpgSkillTree: boolean
@@ -26,6 +27,7 @@ export const SETTINGS_STORAGE_KEY = 'mindfulness-dashboard-settings'
 export const defaultSettings: AppSettings = {
   features: {
     visionBoard: true,
+    urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
     rpgSkillTree: true,
@@ -38,6 +40,7 @@ export const defaultSettings: AppSettings = {
 
 const featureKeys = [
   'visionBoard',
+  'urgeTracker',
   'habitTracker',
   'chatJournal',
   'rpgSkillTree',
@@ -60,11 +63,9 @@ function parseSettings(value: unknown): AppSettings | null {
   const candidate = value as Record<string, unknown>
   const features = candidate.features
   if (typeof features !== 'object' || features === null) return null
-  // Older exports predate the board; keep their existing feature choices.
-  const migrated = { visionBoard: defaultSettings.features.visionBoard, ...features }
-  return isFeatureFlags(migrated)
-    ? { features: { ...migrated } }
-    : null
+  // New flags default on without changing choices stored by older saves.
+  const migrated = { ...defaultSettings.features, ...features }
+  return isFeatureFlags(migrated) ? { features: { ...migrated } } : null
 }
 
 export function loadSettings(): AppSettings {
@@ -228,7 +229,9 @@ export function SettingsPage({
             type="button"
             onClick={handleCopy}
           >
-            {copyState === 'copied' ? t('settings.copied') : t('settings.copyJson')}
+            {copyState === 'copied'
+              ? t('settings.copied')
+              : t('settings.copyJson')}
           </button>
         </div>
         {copyState === 'failed' && (

@@ -5,6 +5,8 @@ import type { FeatureFlags } from '../src/SettingsPage'
 import { resetMatchMedia, resetThemeAttributes, setNarrowScreen } from './setup'
 
 const allOn: FeatureFlags = {
+  visionBoard: true,
+  urgeTracker: true,
   habitTracker: true,
   chatJournal: true,
   rpgSkillTree: true,
@@ -15,6 +17,8 @@ const allOn: FeatureFlags = {
 }
 
 const noneOn: FeatureFlags = {
+  visionBoard: false,
+  urgeTracker: false,
   habitTracker: false,
   chatJournal: false,
   rpgSkillTree: false,
@@ -46,6 +50,7 @@ test('every destination is offered when its feature is on', () => {
     'Daily habits',
     'Reflection journal',
     'Daybook modes',
+    'Urges',
     'My intentions',
     'Settings',
   ]) {
@@ -62,7 +67,9 @@ test('a disabled feature disappears from the navigation', () => {
   expect(
     screen.queryByRole('button', { name: 'Reflection journal' }),
   ).not.toBeInTheDocument()
-  expect(screen.getByRole('button', { name: 'My dashboard' })).toBeInTheDocument()
+  expect(
+    screen.getByRole('button', { name: 'My dashboard' }),
+  ).toBeInTheDocument()
 })
 
 test('Settings stays reachable with every feature switched off', () => {

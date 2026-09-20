@@ -104,6 +104,44 @@ export const taskSchema = z.object({
   seriesId: z.string().nullable().default(null),
   subtasks: z.array(subtaskSchema).default([]),
 })
+export const urgeHabitSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1).max(80),
+  archived: z.boolean().default(false),
+})
+export const urgeEventSchema = z.object({
+  id: z.string(),
+  habitId: z.string(),
+  kind: z.enum(['urge', 'slip']),
+  intensity: z.number().int().min(1).max(5),
+  tags: z.array(z.string().min(1).max(40)),
+  timestamp: z.number(),
+  timeBucket: z.enum([
+    'early-morning',
+    'morning',
+    'post-lunch',
+    'afternoon',
+    'evening',
+    'late-night',
+  ]),
+  dayType: z.enum(['weekday', 'weekend']),
+  dayOfWeek: z.enum([
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ]),
+  sessionSeconds: z.number().nonnegative(),
+  visibilityChanges: z.number().int().nonnegative(),
+})
+export const defaultUrgeHabits = [
+  { id: 'urge-phone', title: 'Mindless phone scrolling', archived: false },
+  { id: 'urge-procrastination', title: 'Procrastination', archived: false },
+  { id: 'urge-snacking', title: 'Stress snacking', archived: false },
+]
 export const challengeSchema = z.object({
   id: z.string(),
   acceptedAt: z.number(),
@@ -117,6 +155,8 @@ export const dataSchema = legacySchema.extend({
   rpg: rpgSchema,
   todos: z.array(taskSchema).default([]),
   challenges: z.array(challengeSchema).default([]),
+  urgeHabits: z.array(urgeHabitSchema).default(defaultUrgeHabits),
+  urgeEvents: z.array(urgeEventSchema).default([]),
 })
 export function parseData(input: unknown): AppData {
   if (
@@ -130,6 +170,8 @@ export function parseData(input: unknown): AppData {
       ...old,
       todos: [],
       challenges: [],
+      urgeHabits: defaultUrgeHabits,
+      urgeEvents: [],
       version: 2,
       habits: old.habits.map((h) => ({ ...h, stat: inferStat(h.title) })),
       rpg: initialRpg(),
@@ -141,6 +183,8 @@ export type JournalMessage = z.infer<typeof messageSchema>
 export type JournalAttachmentMeta = z.infer<typeof journalAttachmentSchema>
 export type Session = z.infer<typeof sessionSchema>
 export type Todo = z.infer<typeof taskSchema>
+export type UrgeHabit = z.infer<typeof urgeHabitSchema>
+export type UrgeEvent = z.infer<typeof urgeEventSchema>
 export type AppData = z.infer<typeof dataSchema>
 export function newSession(language = 'en'): Session {
   return {
@@ -228,6 +272,8 @@ export const defaults = (language = 'en'): AppData => {
     plans: [],
     todos: [],
     challenges: [],
+    urgeHabits: defaultUrgeHabits,
+    urgeEvents: [],
     affirmation: text('defaults.affirmation'),
     draft: null,
     sessions: [],

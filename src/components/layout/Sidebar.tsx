@@ -12,6 +12,7 @@ import {
   Menu,
   Pencil,
   Settings,
+  ShieldCheck,
   Sun,
   X,
 } from 'lucide-react'
@@ -34,6 +35,7 @@ export type NavKey =
   | 'planning'
   | 'settings'
   | 'vision-board'
+  | 'urges'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -193,6 +195,12 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       requires: 'daybookModes',
     },
     { key: 'todos', title: 'To-dos', Icon: CheckSquare },
+    {
+      key: 'urges',
+      title: 'Urges',
+      Icon: ShieldCheck,
+      requires: 'urgeTracker',
+    },
     { key: 'challenges', title: 'Challenges', Icon: Trophy },
     { key: 'focus', title: 'Focus', Icon: Timer },
     { key: 'growth', title: 'Growth', Icon: Sprout, requires: 'rpgSkillTree' },

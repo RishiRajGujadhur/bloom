@@ -282,6 +282,11 @@ const common = {
         description:
           'Arrange notes, reflections and badges on an infinite canvas. Turning this off keeps your board saved.',
       },
+      urgeTracker: {
+        title: 'Urge & trigger tracker',
+        description:
+          'Log urges and slips quickly, then reveal the contexts that make them more likely.',
+      },
       habitTracker: {
         title: 'Habit tracker',
         description: 'Keep small promises to yourself and track your progress.',
@@ -1051,6 +1056,11 @@ export const resources = {
             title: 'Tableau de vision',
             description:
               'Disposez notes, réflexions et badges sur un espace infini. Désactiver conserve votre tableau.',
+          },
+          urgeTracker: {
+            title: 'Suivi des envies et déclencheurs',
+            description:
+              'Notez rapidement les envies et écarts, puis révélez les contextes qui les rendent plus probables.',
           },
           habitTracker: {
             title: 'Suivi des habitudes',

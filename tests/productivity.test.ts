@@ -51,6 +51,8 @@ test('older saves receive empty task collections without losing intentions', () 
   ]
   const migrated = parseData(old)
   expect(migrated.todos).toEqual([])
+  expect(migrated.urgeHabits).toHaveLength(3)
+  expect(migrated.urgeEvents).toEqual([])
   expect(migrated.plans[0].title).toBe('Keep this')
   expect(migrated.rpg.focusQuest.durationMinutes).toBe(25)
 })

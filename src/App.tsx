@@ -28,6 +28,7 @@ import { JournalContainer } from './components/daybook/JournalContainer'
 import { SummaryContent } from './components/journal/SessionSummaryModal'
 import { ChallengesPage, TodoPage } from './features/ProductivityPages'
 import { FocusPage, useFocusLifecycle } from './features/FocusPage'
+import { UrgePage } from './features/UrgePage'
 import { LanguageSelector } from './components/LanguageSelector'
 import './App.css'
 import {
@@ -275,6 +276,7 @@ function App() {
             (active === 'habits' && !settings.features.habitTracker) ||
             (active === 'journal' && !settings.features.chatJournal) ||
             (active === 'daybook' && !settings.features.daybookModes) ||
+            (active === 'urges' && !settings.features.urgeTracker) ||
             (active === 'vision-board' && !settings.features.visionBoard) ? (
               <section className="card">
                 <h2>This feature is turned off</h2>
@@ -285,6 +287,8 @@ function App() {
               </section>
             ) : active === 'todos' ? (
               <TodoPage data={data} setData={setData} />
+            ) : active === 'urges' ? (
+              <UrgePage data={data} setData={setData} />
             ) : active === 'challenges' ? (
               <ChallengesPage
                 data={data}

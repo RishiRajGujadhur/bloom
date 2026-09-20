@@ -10,6 +10,10 @@ export const pageDetails: Record<
   { title: string; description: string }
 > = {
   todos: { title: 'To-dos', description: 'One thing at a time.' },
+  urges: {
+    title: 'Urges',
+    description: 'Notice the chain before it takes over.',
+  },
   challenges: {
     title: 'Challenges',
     description: 'Choose your next adventure.',
@@ -57,6 +61,23 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  urges: [
+    step(
+      '.urge-logger',
+      'Interrupt autopilot',
+      'Choose an urge or slip, its intensity, and the strongest context. The third tap saves your log.',
+    ),
+    step(
+      '.urge-tabs',
+      'Find the pattern',
+      'Open Patterns to see trigger probabilities, time windows, and your urge-to-action ratio.',
+    ),
+    step(
+      '.urge-privacy',
+      'Passive, private context',
+      'Bloom adds the time window, day type, session length, and tab-change count locally when you save.',
+    ),
+  ],
   todos: [
     step(
       '.task-add',

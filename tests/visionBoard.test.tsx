@@ -25,11 +25,13 @@ test('old settings retain disabled features when Vision Board is introduced', ()
     chatJournal: false,
   }
   delete features.visionBoard
+  delete features.urgeTracker
   localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ features }))
   expect(loadSettings().features).toMatchObject({
     habitTracker: false,
     chatJournal: false,
     visionBoard: true,
+    urgeTracker: true,
   })
 })
 
