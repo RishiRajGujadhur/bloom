@@ -15,6 +15,19 @@ import type { AppData } from '../model'
 import { dayKey, id } from '../model'
 import { Sprite } from '../rpg/Sprite'
 import {
+  PlanningTools,
+  TaskPlanningFields,
+  type PlanningFilter,
+} from './PlanningTools'
+import {
+  emptyPerspective,
+  emptyPlanning,
+  matchesPerspective,
+  planningOf,
+  projectPath,
+  taskAvailability,
+} from './planning'
+import {
   acceptChallenge,
   addSubtask,
   challenges,
@@ -109,6 +122,11 @@ export function ChallengesPage({
   )
 }
 export function TodoPage({ data, setData }: Props) {
+  const [planning, setPlanning] = useState({ ...emptyPlanning })
+  const [editPlanning, setEditPlanning] = useState({ ...emptyPlanning })
+  const [perspective, setPerspective] = useState<PlanningFilter>({
+    ...emptyPerspective,
+  })
   const [title, setTitle] = useState('')
   const [due, setDue] = useState(dayKey)
   const [priority, setPriority] = useState<'P1' | 'P2' | 'P3' | 'P4'>('P3')
@@ -151,7 +169,9 @@ export function TodoPage({ data, setData }: Props) {
             ? !task.done && task.due <= dayKey()
             : !task.done
       return (
-        matchesStatus && (tagFilter === 'all' || task.tags.includes(tagFilter))
+        matchesStatus &&
+        (tagFilter === 'all' || task.tags.includes(tagFilter)) &&
+        matchesPerspective(data, task, perspective)
       )
     })
     .sort(
@@ -178,6 +198,11 @@ export function TodoPage({ data, setData }: Props) {
           recurrence,
           seriesId: recurrence === 'none' ? null : id(),
           subtasks: [],
+          planning: {
+            ...planning,
+            context: planning.context.trim(),
+            order: Date.now(),
+          },
         },
       ],
     }))
@@ -185,10 +210,22 @@ export function TodoPage({ data, setData }: Props) {
     setTags('')
   }
   return (
-    <section
-      id="todo-page"
-      className="card task-workspace rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6"
-    >
+    <section id="todo-page" className="task-workspace planning-workspace">
+      <PlanningTools
+        data={data}
+        setData={setData}
+        filter={perspective}
+        setFilter={(next) => {
+          if (next.projectId !== perspective.projectId)
+            setPlanning((current) => ({
+              ...current,
+              projectId: data.projects.some((p) => p.id === next.projectId)
+                ? next.projectId
+                : null,
+            }))
+          setPerspective(next)
+        }}
+      />
       <form className="task-composer" onSubmit={add}>
         <div className="task-add">
           <input
@@ -212,55 +249,62 @@ export function TodoPage({ data, setData }: Props) {
           </button>
         </div>
         {showOptions && (
-          <div className="task-options">
-            <label>
-              Due
-              <input
-                aria-label="Due date"
-                type="date"
-                value={due}
-                onChange={(event) => setDue(event.target.value)}
-                required
-              />
-            </label>
-            <label>
-              Priority
-              <select
-                value={priority}
-                onChange={(event) =>
-                  setPriority(event.target.value as typeof priority)
-                }
-              >
-                <option value="P1">P1 · Urgent</option>
-                <option value="P2">P2 · Important</option>
-                <option value="P3">P3 · Normal</option>
-                <option value="P4">P4 · Low</option>
-              </select>
-            </label>
-            <label>
-              Repeat
-              <select
-                value={recurrence}
-                onChange={(event) =>
-                  setRecurrence(event.target.value as typeof recurrence)
-                }
-              >
-                <option value="none">Does not repeat</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-              </select>
-            </label>
-            <label className="tag-field">
-              Tags
-              <input
-                aria-label="Tags"
-                placeholder="#deep-work, #errands"
-                value={tags}
-                onChange={(event) => setTags(event.target.value)}
-              />
-            </label>
-          </div>
+          <>
+            <div className="task-options">
+              <label>
+                Due
+                <input
+                  aria-label="Due date"
+                  type="date"
+                  value={due}
+                  onChange={(event) => setDue(event.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Priority
+                <select
+                  value={priority}
+                  onChange={(event) =>
+                    setPriority(event.target.value as typeof priority)
+                  }
+                >
+                  <option value="P1">P1 · Urgent</option>
+                  <option value="P2">P2 · Important</option>
+                  <option value="P3">P3 · Normal</option>
+                  <option value="P4">P4 · Low</option>
+                </select>
+              </label>
+              <label>
+                Repeat
+                <select
+                  value={recurrence}
+                  onChange={(event) =>
+                    setRecurrence(event.target.value as typeof recurrence)
+                  }
+                >
+                  <option value="none">Does not repeat</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+              </label>
+              <label className="tag-field">
+                Tags
+                <input
+                  aria-label="Tags"
+                  placeholder="#deep-work, #errands"
+                  value={tags}
+                  onChange={(event) => setTags(event.target.value)}
+                />
+              </label>
+            </div>
+            <TaskPlanningFields
+              value={planning}
+              onChange={setPlanning}
+              projects={data.projects}
+            />
+          </>
         )}
       </form>
       <div className="segmented" aria-label="Filter tasks">
@@ -335,6 +379,16 @@ export function TodoPage({ data, setData }: Props) {
                   className={`task-check ${task.done ? 'done' : ''}`}
                   aria-label={`Complete ${task.title}`}
                   aria-pressed={task.done}
+                  disabled={
+                    !task.done && taskAvailability(data, task) !== 'available'
+                  }
+                  title={
+                    taskAvailability(data, task) === 'blocked'
+                      ? 'Complete earlier project actions first'
+                      : taskAvailability(data, task) === 'deferred'
+                        ? 'This action is deferred'
+                        : undefined
+                  }
                   onClick={() =>
                     setData((current) => toggleTodo(current, task.id))
                   }
@@ -358,6 +412,10 @@ export function TodoPage({ data, setData }: Props) {
                                 priority: editPriority,
                                 tags: parseTags(editTags),
                                 recurrence: editRecurrence,
+                                planning: {
+                                  ...editPlanning,
+                                  context: editPlanning.context.trim(),
+                                },
                                 seriesId:
                                   editRecurrence === 'none'
                                     ? null
@@ -427,6 +485,12 @@ export function TodoPage({ data, setData }: Props) {
                     >
                       <X size={16} />
                     </button>
+                    <TaskPlanningFields
+                      value={editPlanning}
+                      onChange={setEditPlanning}
+                      projects={data.projects}
+                      prefix="Edit "
+                    />
                   </form>
                 ) : (
                   <div className="task-copy">
@@ -440,6 +504,37 @@ export function TodoPage({ data, setData }: Props) {
                     </div>
                     <div className="task-meta">
                       <small>{task.due}</small>
+                      {task.planning && (
+                        <>
+                          <span>
+                            {projectPath(data.projects, task.planning.projectId)
+                              .map((p) => p.title)
+                              .join(' / ') || 'Inbox'}
+                          </span>
+                          {task.planning.context && (
+                            <span>@{task.planning.context}</span>
+                          )}
+                          {task.planning.energy !== 'any' && (
+                            <span>{task.planning.energy} energy</span>
+                          )}
+                          {task.planning.timeOfDay !== 'any' && (
+                            <span>{task.planning.timeOfDay}</span>
+                          )}
+                          <span>
+                            {task.planning.minutes} min
+                            {task.planning.deepWork ? ' / Deep work' : ''}
+                          </span>
+                        </>
+                      )}
+                      {!task.done &&
+                        taskAvailability(data, task) !== 'available' && (
+                          <span className="availability-badge">
+                            {taskAvailability(data, task)}
+                            {taskAvailability(data, task) === 'deferred'
+                              ? ` until ${[planningOf(task).deferUntil, ...projectPath(data.projects, planningOf(task).projectId).map((p) => p.deferUntil)].sort().at(-1)}`
+                              : ''}
+                          </span>
+                        )}
                       {task.recurrence !== 'none' && (
                         <span>
                           <Repeat2 size={12} /> {task.recurrence}
@@ -473,6 +568,7 @@ export function TodoPage({ data, setData }: Props) {
                       setEditPriority(task.priority)
                       setEditTags(task.tags.map((tag) => `#${tag}`).join(' '))
                       setEditRecurrence(task.recurrence)
+                      setEditPlanning(planningOf(task))
                     }}
                   >
                     <Pencil size={16} />

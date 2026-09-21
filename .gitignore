@@ -63,6 +63,8 @@ Desktop.ini
 
 # Coverage directories
 coverage
+test-results/
+playwright-report/
 .nyc_output
 
 # Dependency directories

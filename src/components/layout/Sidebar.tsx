@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   BookOpen,
+  CalendarDays,
   Flower2,
   Timer,
   Trophy,
@@ -24,6 +25,7 @@ import styles from './Sidebar.module.css'
 
 /** Destinations the app knows how to reach; `settings` swaps the page. */
 export type NavKey =
+  | 'calendar'
   | 'todos'
   | 'challenges'
   | 'focus'
@@ -195,6 +197,12 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       requires: 'daybookModes',
     },
     { key: 'todos', title: 'To-dos', Icon: CheckSquare },
+    {
+      key: 'calendar',
+      title: 'Full calendar',
+      Icon: CalendarDays,
+      requires: 'fullCalendar',
+    },
     {
       key: 'urges',
       title: 'Urges',

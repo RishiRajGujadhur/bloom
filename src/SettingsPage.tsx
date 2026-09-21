@@ -7,6 +7,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
+  fullCalendar: boolean
   visionBoard: boolean
   urgeTracker: boolean
   habitTracker: boolean
@@ -26,6 +27,7 @@ export const SETTINGS_STORAGE_KEY = 'mindfulness-dashboard-settings'
 
 export const defaultSettings: AppSettings = {
   features: {
+    fullCalendar: true,
     visionBoard: true,
     urgeTracker: true,
     habitTracker: true,
@@ -39,6 +41,7 @@ export const defaultSettings: AppSettings = {
 }
 
 const featureKeys = [
+  'fullCalendar',
   'visionBoard',
   'urgeTracker',
   'habitTracker',
@@ -166,7 +169,9 @@ export function SettingsPage({
   const formattedSettings = JSON.stringify(settings, null, 2)
 
   return (
-    <div className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}>
+    <div
+      className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
+    >
       <header className={`${styles.header} flex flex-col gap-2`}>
         <p className={styles.eyebrow}>{t('settings.eyebrow')}</p>
         <h1>{t('settings.title')}</h1>
@@ -202,12 +207,19 @@ export function SettingsPage({
 
         <div className={styles.featureList}>
           {featureKeys.map((key) => {
-            const title = t(`settings.feature.${key}.title`)
+            const title =
+              key === 'fullCalendar'
+                ? 'Full calendar'
+                : t(`settings.feature.${key}.title`)
             return (
               <label className={styles.feature} key={key}>
                 <span className={styles.featureCopy}>
                   <strong>{title}</strong>
-                  <span>{t(`settings.feature.${key}.description`)}</span>
+                  <span>
+                    {key === 'fullCalendar'
+                      ? 'Calendar, time blocking, and daily capacity.'
+                      : t(`settings.feature.${key}.description`)}
+                  </span>
                 </span>
                 <span className={styles.switch}>
                   <input

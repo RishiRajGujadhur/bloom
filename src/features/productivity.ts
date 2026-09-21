@@ -1,6 +1,7 @@
 import type { AppData } from '../model'
 import { id as createId } from '../model'
 import { dayKey } from '../dates'
+import { planningOf, taskAvailability } from './planning'
 
 export type Recurrence = 'none' | 'daily' | 'weekly' | 'monthly'
 
@@ -152,6 +153,8 @@ export function toggleTodo(
 ): AppData {
   const task = data.todos.find((item) => item.id === id)
   if (!task) return data
+  if (!task.done && taskAvailability(data, task, new Date(now)) !== 'available')
+    return data
   const earn = !task.done && !task.rewarded
   const completing = !task.done
   const seriesId = task.seriesId ?? task.id
@@ -180,6 +183,20 @@ export function toggleTodo(
               due: nextDue,
               done: false,
               rewarded: false,
+              ...(task.planning
+                ? {
+                    planning: {
+                      ...planningOf(task),
+                      order: now,
+                      deferUntil: task.planning.deferUntil
+                        ? nextRecurringDate(
+                            task.planning.deferUntil,
+                            task.recurrence,
+                          )
+                        : '',
+                    },
+                  }
+                : {}),
               seriesId,
               subtasks: task.subtasks.map((subtask) => ({
                 ...subtask,

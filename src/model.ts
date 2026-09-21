@@ -103,7 +103,55 @@ export const taskSchema = z.object({
   recurrence: z.enum(['none', 'daily', 'weekly', 'monthly']).default('none'),
   seriesId: z.string().nullable().default(null),
   subtasks: z.array(subtaskSchema).default([]),
+  planning: z
+    .object({
+      projectId: z.string().nullable().default(null),
+      deferUntil: z.string().default(''),
+      context: z.string().max(60).default(''),
+      energy: z.enum(['any', 'low', 'medium', 'high']).default('any'),
+      timeOfDay: z
+        .enum(['any', 'morning', 'afternoon', 'evening', 'night'])
+        .default('any'),
+      minutes: z.number().int().min(5).max(1440).default(30),
+      deepWork: z.boolean().default(false),
+      order: z.number().default(0),
+    })
+    .optional(),
 })
+export const projectSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1).max(120),
+  parentId: z.string().nullable().default(null),
+  mode: z.enum(['parallel', 'sequential']).default('parallel'),
+  order: z.number().default(0),
+  deferUntil: z.string().default(''),
+})
+export const perspectiveSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1).max(80),
+  projectId: z.string().default('all'),
+  context: z.string().default(''),
+  energy: z.enum(['any', 'low', 'medium', 'high']).default('any'),
+  timeOfDay: z
+    .enum(['any', 'morning', 'afternoon', 'evening', 'night'])
+    .default('any'),
+  availability: z
+    .enum(['all', 'available', 'deferred', 'blocked'])
+    .default('all'),
+})
+export const calendarBlockSchema = z
+  .object({
+    id: z.string(),
+    title: z.string().min(1).max(150),
+    taskId: z.string().nullable(),
+    start: z.iso.datetime({ offset: true }),
+    end: z.iso.datetime({ offset: true }),
+    deepWork: z.boolean(),
+  })
+  .refine(
+    (block) => Date.parse(block.end) > Date.parse(block.start),
+    'End must follow start',
+  )
 export const urgeHabitSchema = z.object({
   id: z.string(),
   title: z.string().min(1).max(80),
@@ -154,6 +202,16 @@ export const dataSchema = legacySchema.extend({
   ),
   rpg: rpgSchema,
   todos: z.array(taskSchema).default([]),
+  projects: z.array(projectSchema).default([]),
+  perspectives: z.array(perspectiveSchema).default([]),
+  calendarBlocks: z.array(calendarBlockSchema).default([]),
+  calendarHours: z
+    .object({
+      start: z.number().int().min(0).max(23),
+      end: z.number().int().min(1).max(24),
+    })
+    .refine((hours) => hours.end > hours.start)
+    .default({ start: 8, end: 18 }),
   challenges: z.array(challengeSchema).default([]),
   urgeHabits: z.array(urgeHabitSchema).default(defaultUrgeHabits),
   urgeEvents: z.array(urgeEventSchema).default([]),
@@ -169,6 +227,10 @@ export function parseData(input: unknown): AppData {
     return {
       ...old,
       todos: [],
+      projects: [],
+      perspectives: [],
+      calendarBlocks: [],
+      calendarHours: { start: 8, end: 18 },
       challenges: [],
       urgeHabits: defaultUrgeHabits,
       urgeEvents: [],
@@ -183,6 +245,10 @@ export type JournalMessage = z.infer<typeof messageSchema>
 export type JournalAttachmentMeta = z.infer<typeof journalAttachmentSchema>
 export type Session = z.infer<typeof sessionSchema>
 export type Todo = z.infer<typeof taskSchema>
+export type TaskPlanning = NonNullable<Todo['planning']>
+export type Project = z.infer<typeof projectSchema>
+export type Perspective = z.infer<typeof perspectiveSchema>
+export type CalendarBlock = z.infer<typeof calendarBlockSchema>
 export type UrgeHabit = z.infer<typeof urgeHabitSchema>
 export type UrgeEvent = z.infer<typeof urgeEventSchema>
 export type AppData = z.infer<typeof dataSchema>
@@ -271,6 +337,10 @@ export const defaults = (language = 'en'): AppData => {
     ],
     plans: [],
     todos: [],
+    projects: [],
+    perspectives: [],
+    calendarBlocks: [],
+    calendarHours: { start: 8, end: 18 },
     challenges: [],
     urgeHabits: defaultUrgeHabits,
     urgeEvents: [],

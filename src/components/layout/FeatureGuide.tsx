@@ -9,6 +9,10 @@ export const pageDetails: Record<
   NavKey,
   { title: string; description: string }
 > = {
+  calendar: {
+    title: 'Full calendar',
+    description: 'Make time for what matters.',
+  },
   todos: { title: 'To-dos', description: 'One thing at a time.' },
   urges: {
     title: 'Urges',
@@ -61,6 +65,18 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  calendar: [
+    step(
+      '.calendar-tray',
+      'Time blocking',
+      'Drag a task into a time slot, or use its schedule button. Resize a block to adjust its duration.',
+    ),
+    step(
+      '.calendar-capacity',
+      'Daily capacity',
+      'Review booked hours, available time, and deep work for the selected day.',
+    ),
+  ],
   urges: [
     step(
       '.urge-logger',

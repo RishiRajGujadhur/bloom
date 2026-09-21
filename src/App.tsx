@@ -54,6 +54,11 @@ import './features/features.css'
 import './styles/shared-ui.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
+const CalendarPage = lazy(() =>
+  import('./features/CalendarPage').then((module) => ({
+    default: module.CalendarPage,
+  })),
+)
 
 function Checkmark({ checked }: { checked: boolean }) {
   const reduced = useReducedMotion()
@@ -283,6 +288,7 @@ function App() {
             (active === 'journal' && !settings.features.chatJournal) ||
             (active === 'daybook' && !settings.features.daybookModes) ||
             (active === 'urges' && !settings.features.urgeTracker) ||
+            (active === 'calendar' && !settings.features.fullCalendar) ||
             (active === 'vision-board' && !settings.features.visionBoard) ? (
               <section className="card rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
                 <h2>This feature is turned off</h2>
@@ -291,6 +297,10 @@ function App() {
                   Open settings
                 </button>
               </section>
+            ) : active === 'calendar' ? (
+              <Suspense fallback={<p role="status">Loading calendar...</p>}>
+                <CalendarPage data={data} setData={setData} />
+              </Suspense>
             ) : active === 'todos' ? (
               <TodoPage data={data} setData={setData} />
             ) : active === 'urges' ? (
