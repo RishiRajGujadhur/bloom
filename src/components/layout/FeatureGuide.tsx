@@ -171,19 +171,19 @@ const guides: Record<NavKey, DriveStep[]> = {
   ],
   habits: [
     step(
-      '#habits .card-heading',
+      '.habits-toolbar',
       'Start small',
       'Use the plus button to add a habit you want to practice.',
     ),
     step(
-      '#habit-grid',
+      '.habit-contribution-grid',
       'Celebrate showing up',
-      'Select a habit to mark it complete. Select it again to undo.',
+      'Check in today or select a past day to update your history.',
     ),
     step(
-      '.week-strip',
+      '.habit-summary',
       'Notice your rhythm',
-      'Your last seven days show where you made time for your habits.',
+      'Follow your streaks, or open Routines for a timed daily ritual.',
     ),
   ],
   planning: [

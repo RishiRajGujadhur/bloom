@@ -20,7 +20,7 @@ test('habit click updates EXP and undo reverses it across pages', () => {
   growth()
   expect(screen.getByText('10 EXP')).toBeInTheDocument()
   go('Daily habits')
-  fireEvent.click(screen.getByRole('button', { name: /Move with intention/ }))
+  fireEvent.click(screen.getByRole('button', { name: 'Check in: Move with intention' }))
   growth()
   expect(screen.getByText('0 EXP')).toBeInTheDocument()
 })
@@ -43,7 +43,7 @@ test('committing a priority exposes boss HP; habits and priority trigger victory
     'Stay hydrated',
     'Take a mindful moment',
   ])
-    fireEvent.click(screen.getByRole('button', { name: new RegExp(name) }))
+    fireEvent.click(screen.getByRole('button', { name: `Check in: ${name}` }))
   growth('Rewards')
   expect(
     screen.getByRole('progressbar', { name: 'Daily boss health' }),
@@ -55,7 +55,7 @@ test('committing a priority exposes boss HP; habits and priority trigger victory
   go('Seedling')
   expect(screen.getByText('90 EXP')).toBeInTheDocument()
   go('Daily habits')
-  fireEvent.click(screen.getByRole('button', { name: /Move with intention/ }))
+  fireEvent.click(screen.getByRole('button', { name: 'Check in: Move with intention' }))
   growth('Rewards')
   expect(screen.queryByText('DEFEATED')).not.toBeInTheDocument()
   go('Seedling')

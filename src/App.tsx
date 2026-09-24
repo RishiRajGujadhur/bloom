@@ -40,6 +40,7 @@ import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
 import { SettingsPage, useAppSettings } from './SettingsPage'
+import { HabitsPage } from './features/HabitsPage'
 import { Sidebar } from './components/layout/Sidebar'
 import type { NavKey } from './components/layout/Sidebar'
 import {
@@ -278,6 +279,11 @@ function App() {
               </div>
             )}
 
+            {settings.features.habitTracker && (
+              <div hidden={active !== 'habits'}>
+                <HabitsPage data={data} setData={setData} today={today} />
+              </div>
+            )}
             {settings.features.daybookModes && (
               <div hidden={active !== 'daybook'}>
                 <JournalContainer />
@@ -297,7 +303,7 @@ function App() {
                   Open settings
                 </button>
               </section>
-            ) : active === 'calendar' ? (
+            ) : active === 'habits' ? null : active === 'calendar' ? (
               <Suspense fallback={<p role="status">Loading calendar...</p>}>
                 <CalendarPage data={data} setData={setData} />
               </Suspense>
@@ -380,7 +386,7 @@ function App() {
                 )}
                 <div className="dashboard-grid grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.75fr)]">
                   <div className="left-column">
-                    {(active === 'overview' || active === 'habits') &&
+                    {active === 'overview' &&
                       settings.features.habitTracker && (
                         <section className="card" id="habits">
                           <div className="card-heading">

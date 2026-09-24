@@ -289,7 +289,7 @@ const common = {
       },
       habitTracker: {
         title: 'Habit tracker',
-        description: 'Keep small promises to yourself and track your progress.',
+        description: 'Track daily habits, contribution grids and streaks, and follow timed routines.',
       },
       chatJournal: {
         title: 'Chat journal',

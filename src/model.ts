@@ -198,8 +198,31 @@ export const challengeSchema = z.object({
 export const dataSchema = legacySchema.extend({
   version: z.literal(2),
   habits: z.array(
-    legacySchema.shape.habits.element.extend({ stat: statSchema }),
+    legacySchema.shape.habits.element.extend({
+      stat: statSchema,
+      color: z.string().optional(),
+    }),
   ),
+  routines: z
+    .array(
+      z.object({
+        id: z.string(),
+        title: z.string().min(1).max(100),
+        period: z.enum(['morning', 'afternoon', 'evening', 'night']),
+        days: z.array(z.number().int().min(0).max(6)).min(1),
+        steps: z
+          .array(
+            z.object({
+              id: z.string(),
+              title: z.string().min(1).max(100),
+              minutes: z.number().int().min(1).max(180),
+            }),
+          )
+          .min(1),
+        dates: z.array(z.string()),
+      }),
+    )
+    .optional(),
   rpg: rpgSchema,
   todos: z.array(taskSchema).default([]),
   projects: z.array(projectSchema).default([]),
