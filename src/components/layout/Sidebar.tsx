@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   BookOpen,
+  CarFront,
   CalendarDays,
   Flower2,
   Timer,
@@ -25,6 +26,7 @@ import styles from './Sidebar.module.css'
 
 /** Destinations the app knows how to reach; `settings` swaps the page. */
 export type NavKey =
+  | 'collectibles'
   | 'calendar'
   | 'todos'
   | 'challenges'
@@ -211,6 +213,12 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     },
     { key: 'challenges', title: 'Challenges', Icon: Trophy },
     { key: 'focus', title: 'Focus', Icon: Timer },
+    {
+      key: 'collectibles',
+      title: 'My Collectibles',
+      Icon: CarFront,
+      requires: 'collectibles',
+    },
     { key: 'growth', title: 'Growth', Icon: Sprout, requires: 'rpgSkillTree' },
     { key: 'planning', title: t('navigation.intentions'), Icon: Sun },
     {

@@ -5,6 +5,9 @@ import type { FeatureFlags } from '../src/SettingsPage'
 import { resetMatchMedia, resetThemeAttributes, setNarrowScreen } from './setup'
 
 const allOn: FeatureFlags = {
+  dailySpin: true,
+  collectibles: true,
+  fullCalendar: true,
   visionBoard: true,
   urgeTracker: true,
   habitTracker: true,
@@ -17,6 +20,9 @@ const allOn: FeatureFlags = {
 }
 
 const noneOn: FeatureFlags = {
+  dailySpin: false,
+  collectibles: false,
+  fullCalendar: false,
   visionBoard: false,
   urgeTracker: false,
   habitTracker: false,
@@ -52,6 +58,7 @@ test('every destination is offered when its feature is on', () => {
     'Daybook modes',
     'Urges',
     'My intentions',
+    'My Collectibles',
     'Settings',
   ]) {
     expect(screen.getByRole('button', { name: label })).toBeInTheDocument()
@@ -76,6 +83,9 @@ test('Settings stays reachable with every feature switched off', () => {
   renderSidebar(noneOn)
 
   expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'My Collectibles' }),
+  ).not.toBeInTheDocument()
   expect(
     screen.queryByRole('button', { name: 'Daily habits' }),
   ).not.toBeInTheDocument()

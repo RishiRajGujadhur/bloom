@@ -1,0 +1,349 @@
+.daily-spin {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
+  gap: 18px 32px;
+  padding: 26px 0;
+  margin: 0 0 24px;
+  border-block: 1px solid var(--border-color);
+}
+.collectible-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.spin-copy h2,
+.collection-toolbar h2 {
+  font-size: 24px;
+  line-height: 1.3;
+  margin: 10px 0;
+}
+.spin-copy p,
+.spin-outcome p,
+.collection-toolbar p {
+  margin: 6px 0 10px;
+}
+.spin-copy small {
+  display: block;
+  font-size: 11px;
+  opacity: 0.8;
+  line-height: 1.8;
+}
+.spin-copy .text-button {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.spin-machine {
+  align-self: center;
+}
+.spin-reels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  background: #263e3c;
+  padding: 12px;
+  border-radius: 8px;
+  border-bottom: 5px solid #172b29;
+}
+.spin-reel {
+  height: 76px;
+  overflow: hidden;
+  text-align: center;
+  background: #f2f8f4;
+  color: #287c68;
+  border-radius: 4px;
+  box-shadow: inset 0 4px 0 #c6d9d0;
+}
+.spin-reel span {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font:
+    42px/1 'Press Start 2P',
+    monospace;
+}
+.reel-strip {
+  animation: reel-roll 0.3s linear infinite;
+}
+.reel-1 {
+  animation-duration: 0.36s;
+}
+.reel-2 {
+  animation-duration: 0.41s;
+}
+.spin-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+  justify-content: center;
+}
+.spin-button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+.spin-outcome {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  min-height: 24px;
+}
+.spin-outcome:empty {
+  display: none;
+}
+.spin-outcome .car-stage {
+  width: 140px;
+  flex: 0 0 140px;
+}
+.collection-page {
+  padding-bottom: 64px;
+}
+.collection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.collection-empty {
+  padding: 16px 0;
+  border-block: 1px solid var(--border-color);
+  margin-bottom: 22px;
+}
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.collectible-card {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  border-radius: 8px;
+  padding: 18px;
+  overflow: hidden;
+}
+.collectible-card.is-selected {
+  border-color: #4aab89;
+  box-shadow: inset 0 0 0 1px #4aab89;
+}
+.collectible-number {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  opacity: 0.8;
+}
+.collectible-number > span {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.collectible-caption {
+  padding: 12px 0 18px;
+}
+.collectible-caption h3 {
+  font-size: 18px;
+  margin: 5px 0 0;
+}
+.collectible-card > button {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  padding-inline: 8px;
+}
+.collectible-card > button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.car-stage {
+  width: 100%;
+  aspect-ratio: 128 / 72;
+  position: relative;
+}
+.car-sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  transition: transform 0.25s ease;
+  overflow: visible;
+}
+.car-body {
+  transform-origin: 64px 54px;
+}
+.car-sparks {
+  opacity: 0;
+}
+.is-locked .car-body {
+  filter: grayscale(1);
+  opacity: 0.2;
+}
+.collectible-card.is-owned:hover .car-sprite,
+.collectible-card.is-owned:focus-within .car-sprite {
+  transform: scale(1.12);
+}
+.collectible-card:is(:hover, :focus-within)
+  .car-stage:not(.is-locked)
+  .car-sparks {
+  animation: car-sparkle 1.3s steps(2) infinite;
+}
+.collectible-card:is(:hover, :focus-within)
+  .effect-bounce:not(.is-locked)
+  .car-body,
+.is-moving.effect-bounce .car-body {
+  animation: car-bounce 1s steps(4) infinite;
+}
+.collectible-card:is(:hover, :focus-within)
+  .effect-dash:not(.is-locked)
+  .car-body,
+.is-moving.effect-dash .car-body {
+  animation: car-dash 1s ease-in-out infinite;
+}
+.collectible-card:is(:hover, :focus-within)
+  .effect-sunshine:not(.is-locked)
+  .car-body,
+.is-moving.effect-sunshine .car-body {
+  animation: car-sunshine 2s ease-in-out infinite;
+}
+.collectible-card:is(:hover, :focus-within)
+  .effect-hover:not(.is-locked)
+  .car-body,
+.is-moving.effect-hover .car-body {
+  animation: car-hover 2s ease-in-out infinite;
+}
+.collectible-card:is(:hover, :focus-within)
+  .effect-neon:not(.is-locked)
+  .car-body,
+.is-moving.effect-neon .car-body {
+  animation: car-neon 1.8s ease-in-out infinite;
+}
+.collectible-card:is(:hover, :focus-within)
+  .effect-cruise:not(.is-locked)
+  .car-body,
+.is-moving.effect-cruise .car-body {
+  animation: car-cruise 2s ease-in-out infinite;
+}
+.focus-companion {
+  width: min(100%, 280px);
+  margin: 16px auto;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+.focus-companion label {
+  font-size: 12px;
+  font-weight: 600;
+}
+.focus-companion select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px;
+  background: var(--bg-surface);
+  color: inherit;
+}
+.focus-companion small {
+  font-size: 11px;
+}
+@keyframes reel-roll {
+  to {
+    transform: translateY(-304px);
+  }
+}
+@keyframes car-bounce {
+  50% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+}
+@keyframes car-dash {
+  50% {
+    transform: translateX(5px) skewX(-3deg);
+  }
+}
+@keyframes car-sunshine {
+  50% {
+    filter: drop-shadow(0 0 5px #e8b548);
+    transform: rotate(1deg);
+  }
+}
+@keyframes car-hover {
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes car-neon {
+  50% {
+    filter: drop-shadow(0 0 4px #f6a3d9) drop-shadow(0 2px 2px #66dced);
+  }
+}
+@keyframes car-cruise {
+  50% {
+    transform: translateX(4px) rotate(2deg);
+  }
+}
+@keyframes car-sparkle {
+  50% {
+    opacity: 1;
+  }
+}
+@media (max-width: 1100px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .daily-spin {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 22px 0;
+  }
+  .spin-machine {
+    width: min(100%, 300px);
+    justify-self: center;
+  }
+  .spin-outcome {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .collection-grid {
+    gap: 12px;
+  }
+  .collectible-card {
+    padding: 12px;
+  }
+  .collectible-number {
+    flex-wrap: wrap;
+  }
+  .collectible-caption h3 {
+    font-size: 16px;
+  }
+  .collectible-card > button {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 360px) {
+  .collection-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .car-stage *,
+  .reel-strip {
+    animation: none !important;
+    transition: none !important;
+  }
+  .collectible-card.is-owned:is(:hover, :focus-within) .car-sprite {
+    transform: none;
+  }
+}

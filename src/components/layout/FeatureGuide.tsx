@@ -9,6 +9,10 @@ export const pageDetails: Record<
   NavKey,
   { title: string; description: string }
 > = {
+  collectibles: {
+    title: 'My Collectibles',
+    description: 'A small fleet, one lucky day at a time.',
+  },
   calendar: {
     title: 'Full calendar',
     description: 'Make time for what matters.',
@@ -65,6 +69,13 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  collectibles: [
+    step(
+      '.collection-grid',
+      'Your garage',
+      'Daily jackpots unlock cars. Select an unlocked car to bring it to your focus timer. Select it again to remove it.',
+    ),
+  ],
   calendar: [
     step(
       '.calendar-tray',

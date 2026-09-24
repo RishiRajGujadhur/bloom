@@ -2,6 +2,7 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { Play, Square, Check, Timer } from 'lucide-react'
 import { toggleTodo } from './productivity'
 import type { AppData } from '../model'
+import { FocusCompanion } from './collectibles/Collectibles'
 import {
   completeFocusQuest,
   failFocusQuest,
@@ -87,9 +88,11 @@ export function useFocusLifecycle(
 export function FocusPage({
   data,
   setData,
+  showCollectibles = false,
 }: {
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
+  showCollectibles?: boolean
 }) {
   const [now, setNow] = useState(Date.now)
   const [confirmStop, setConfirmStop] = useState(false)
@@ -118,7 +121,11 @@ export function FocusPage({
   return (
     <div id="focus-page" className="focus-layout grid grid-cols-1 gap-5 xl:grid-cols-2">
       <section className="card focus-room rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
-        <PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />
+        {showCollectibles ? (
+          <FocusCompanion active={active} fallback={<PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />} />
+        ) : (
+          <PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />
+        )}
         <h2>
           {active
             ? 'One thing at a time.'

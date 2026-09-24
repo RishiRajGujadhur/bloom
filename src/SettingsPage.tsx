@@ -7,6 +7,8 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 
 export interface FeatureFlags {
+  dailySpin: boolean
+  collectibles: boolean
   fullCalendar: boolean
   visionBoard: boolean
   urgeTracker: boolean
@@ -27,6 +29,8 @@ export const SETTINGS_STORAGE_KEY = 'mindfulness-dashboard-settings'
 
 export const defaultSettings: AppSettings = {
   features: {
+    dailySpin: false,
+    collectibles: false,
     fullCalendar: true,
     visionBoard: true,
     urgeTracker: true,
@@ -41,6 +45,8 @@ export const defaultSettings: AppSettings = {
 }
 
 const featureKeys = [
+  'dailySpin',
+  'collectibles',
   'fullCalendar',
   'visionBoard',
   'urgeTracker',
@@ -66,7 +72,7 @@ function parseSettings(value: unknown): AppSettings | null {
   const candidate = value as Record<string, unknown>
   const features = candidate.features
   if (typeof features !== 'object' || features === null) return null
-  // New flags default on without changing choices stored by older saves.
+  // New flags use their defaults without changing choices stored by older saves.
   const migrated = { ...defaultSettings.features, ...features }
   return isFeatureFlags(migrated) ? { features: { ...migrated } } : null
 }
@@ -208,17 +214,25 @@ export function SettingsPage({
         <div className={styles.featureList}>
           {featureKeys.map((key) => {
             const title =
-              key === 'fullCalendar'
-                ? 'Full calendar'
-                : t(`settings.feature.${key}.title`)
+              key === 'dailySpin'
+                ? 'Daily 7-7-7 Spin'
+                : key === 'collectibles'
+                  ? 'My Collectibles'
+                  : key === 'fullCalendar'
+                    ? 'Full calendar'
+                    : t(`settings.feature.${key}.title`)
             return (
               <label className={styles.feature} key={key}>
                 <span className={styles.featureCopy}>
                   <strong>{title}</strong>
                   <span>
-                    {key === 'fullCalendar'
-                      ? 'Calendar, time blocking, and daily capacity.'
-                      : t(`settings.feature.${key}.description`)}
+                    {key === 'dailySpin'
+                      ? 'One free daily spin for a chance to unlock a pixel-art car.'
+                      : key === 'collectibles'
+                        ? 'Your car collection and a companion for focus sessions.'
+                        : key === 'fullCalendar'
+                          ? 'Calendar, time blocking, and daily capacity.'
+                          : t(`settings.feature.${key}.description`)}
                   </span>
                 </span>
                 <span className={styles.switch}>

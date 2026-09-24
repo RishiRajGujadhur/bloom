@@ -41,6 +41,7 @@ import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
 import { SettingsPage, useAppSettings } from './SettingsPage'
 import { HabitsPage } from './features/HabitsPage'
+import { CollectiblesPage, DailySpin } from './features/collectibles/Collectibles'
 import { Sidebar } from './components/layout/Sidebar'
 import type { NavKey } from './components/layout/Sidebar'
 import {
@@ -290,6 +291,7 @@ function App() {
               </div>
             )}
             {(active === 'growth' && !settings.features.rpgSkillTree) ||
+            (active === 'collectibles' && !settings.features.collectibles) ||
             (active === 'habits' && !settings.features.habitTracker) ||
             (active === 'journal' && !settings.features.chatJournal) ||
             (active === 'daybook' && !settings.features.daybookModes) ||
@@ -303,6 +305,8 @@ function App() {
                   Open settings
                 </button>
               </section>
+            ) : active === 'collectibles' ? (
+              <CollectiblesPage />
             ) : active === 'habits' ? null : active === 'calendar' ? (
               <Suspense fallback={<p role="status">Loading calendar...</p>}>
                 <CalendarPage data={data} setData={setData} />
@@ -318,7 +322,7 @@ function App() {
                 onTasks={() => jump('todos')}
               />
             ) : active === 'focus' ? (
-              <FocusPage data={data} setData={setData} />
+              <FocusPage data={data} setData={setData} showCollectibles={settings.features.collectibles} />
             ) : active === 'growth' ? (
               <RpgDashboard
                 compact
@@ -347,6 +351,7 @@ function App() {
               </Suspense>
             ) : (
               <>
+                {active === 'overview' && settings.features.dailySpin && <DailySpin onCollection={settings.features.collectibles ? () => jump('collectibles') : undefined} />}
                 {active === 'overview' && (
                   <div className="stats grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     <div>
