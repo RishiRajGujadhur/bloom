@@ -27,6 +27,7 @@
     "@fullcalendar/react": "^6.1.21",
     "@fullcalendar/timegrid": "^6.1.21",
     "@lottiefiles/react-lottie-player": "^3.6.0",
+    "@mlc-ai/web-llm": "^0.2.85",
     "@tailwindcss/vite": "^4.3.3",
     "@tiptap/extension-placeholder": "^3.31.3",
     "@tiptap/extension-task-item": "^3.31.3",

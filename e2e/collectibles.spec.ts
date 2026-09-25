@@ -19,6 +19,7 @@ test('enable rewards, win once, equip a car, and keep it through reload', async 
     page.getByRole('checkbox', { name: 'Enable My Collectibles' }),
   ).toBeChecked()
   await page.goto('/#overview')
+  await page.getByText('Your daily discovery · Free spin', { exact: true }).click()
   await page.screenshot({
     path: info.outputPath('daily-spin.png'),
     fullPage: true,
@@ -29,6 +30,7 @@ test('enable rewards, win once, equip a car, and keep it through reload', async 
     page.getByRole('button', { name: 'Come back tomorrow' }),
   ).toBeDisabled()
   await page.reload()
+  await page.getByText('Your daily discovery · Free spin', { exact: true }).click()
   await expect(
     page.getByRole('button', { name: 'Come back tomorrow' }),
   ).toBeDisabled()
@@ -86,6 +88,7 @@ test('all sprites render, effects respond to focus, and the grid fits each viewp
     cars.map((car) => car.id),
   )
   await page.goto('/#collectibles')
+  await page.getByRole('button', { name: 'Show all', exact: true }).click()
   await expect(page.locator('.car-sprite')).toHaveCount(6)
   for (const car of cars) {
     const card = page
@@ -132,6 +135,8 @@ test('a second tab cannot consume another spin', async ({ page, context }) => {
   await page.goto('/#overview')
   const other = await context.newPage()
   await other.goto('/#overview')
+  await page.getByText('Your daily discovery · Free spin', { exact: true }).click()
+  await other.getByText('Your daily discovery · Free spin', { exact: true }).click()
   await page.getByRole('button', { name: 'Daily 7-7-7 Spin' }).click()
   await expect(
     other.getByRole('button', { name: 'Come back tomorrow' }),

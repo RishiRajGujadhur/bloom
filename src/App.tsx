@@ -1,4 +1,5 @@
 import { BloomHeading, Disclosure } from './components/BloomExperience'
+import { BloomCompanion, BloomStory } from './companion/BloomCompanion'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -139,6 +140,7 @@ function App() {
   const [editPlan, setEditPlan] = useState<string | null>(null)
   const [viewSession, setViewSession] = useState<Session | null>(null)
   const [active, setActive] = useState<NavKey>(readPage)
+  const [companionOpen, setCompanionOpen] = useState(false)
   useEffect(() => {
     const sync = () => setActive(readPage())
     window.addEventListener('hashchange', sync)
@@ -351,6 +353,13 @@ function App() {
             ) : (
               <>
                 {active === 'overview' && settings.features.dailySpin && <Disclosure title="Your daily discovery · Free spin"><DailySpin onCollection={settings.features.collectibles ? () => jump('collectibles') : undefined} /></Disclosure>}
+                {active === 'overview' && (
+                  <BloomStory
+                    data={data}
+                    onTalk={() => setCompanionOpen(true)}
+                    onReflect={() => jump('journal')}
+                  />
+                )}
                 {active === 'overview' && (
                   <div className="stats grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     <div>
@@ -656,6 +665,15 @@ function App() {
             )}
           </div>
         </main>
+        <BloomCompanion
+          data={data}
+          setData={setData}
+          blocked={blocked}
+          navigate={jump}
+          open={companionOpen}
+          onOpen={() => setCompanionOpen(true)}
+          onClose={() => setCompanionOpen(false)}
+        />
       </div>
       {modal === 'habit' && (
         <Modal title={t('ui.plantHabit')} onClose={() => setModal(null)}>

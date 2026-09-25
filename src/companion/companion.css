@@ -1,0 +1,266 @@
+.modal:has(.bloom-companion) {
+  width: min(600px, calc(100vw - 32px));
+}
+.modal:has(.bloom-companion) .modal-inner {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+}
+.bloom-story {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  padding: 26px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--accent-color) 10%, var(--bg-surface)),
+    var(--bg-surface)
+  );
+  color: var(--text-primary);
+}
+.bloom-story h2 {
+  font-size: 22px;
+  margin: 8px 0;
+  letter-spacing: -0.6px;
+}
+.bloom-story p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 8px 0 16px;
+}
+.bloom-story-art {
+  display: grid;
+  gap: 15px;
+  justify-items: center;
+  color: var(--accent-color);
+}
+.bloom-story-art span {
+  font-size: 8px;
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 1.8;
+}
+.bloom-memory {
+  border-left: 1px solid var(--border-color);
+  padding-left: 24px;
+}
+.bloom-memory h3 {
+  margin-top: 9px;
+  font-size: 16px;
+}
+.bloom-companion-launch {
+  position: fixed;
+  right: 24px;
+  bottom: 82px;
+  z-index: 46;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 18px;
+  border-radius: 30px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 6px 28px #0002;
+  font-size: 13px;
+}
+.bloom-companion {
+  color: var(--text-primary);
+  display: grid;
+  gap: 15px;
+  text-align: left;
+}
+.companion-identity {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.companion-identity p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin: 4px 0;
+}
+.companion-leaf {
+  width: 48px;
+  height: 48px;
+  border-radius: 17px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--accent-color) 15%, var(--bg-surface));
+  color: var(--accent-color);
+}
+.companion-ai-options {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+}
+.companion-ai-options summary {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px;
+}
+.companion-ai-options p,
+.companion-plan-note {
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 10px 0;
+}
+.companion-feed {
+  max-height: 230px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.companion-message {
+  max-width: 92%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--bg-primary);
+  overflow-wrap: anywhere;
+}
+.companion-message.user {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--accent-color) 12%, var(--bg-surface));
+}
+.companion-message small {
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+.companion-message p,
+.companion-welcome,
+.companion-plan > p {
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.companion-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.companion-prompts button {
+  padding: 7px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+}
+.companion-composer {
+  display: flex;
+  gap: 8px;
+}
+.companion-composer input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 12px;
+  font-size: 13px;
+}
+.companion-plan {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 18px;
+  background: var(--bg-primary);
+}
+.companion-plan h3 {
+  font-size: 19px;
+  margin: 8px 0 14px;
+}
+.companion-plan-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.companion-plan-controls label {
+  display: grid;
+  gap: 6px;
+  font-size: 11px;
+  flex: 1;
+}
+.companion-plan-controls select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.companion-plan ol {
+  list-style: none;
+  margin: 15px 0;
+  padding: 0;
+}
+.companion-plan li {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+.companion-plan li span {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.companion-plan li strong {
+  white-space: nowrap;
+  font-size: 11px;
+}
+.companion-pause {
+  color: var(--text-secondary);
+  margin-top: 12px;
+}
+.companion-plan-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.companion-notice {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 10px;
+  background: var(--bg-primary);
+  border-radius: 9px;
+}
+.bloom-companion button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+@media (max-width: 700px) {
+  .bloom-story {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 20px;
+  }
+  .bloom-story-art {
+    display: none;
+  }
+  .bloom-memory {
+    border-left: 0;
+    border-top: 1px solid var(--border-color);
+    padding: 18px 0 0;
+  }
+  .bloom-companion-launch {
+    right: 16px;
+    bottom: 80px;
+  }
+  .companion-plan {
+    padding: 13px;
+  }
+}

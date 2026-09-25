@@ -31,7 +31,17 @@ Data is stored in this browser’s localStorage under `mindfulness-dashboard-v1`
 
 Malformed data is preserved: saving is disabled and you can export the original before choosing a fresh start. Storage failures display an alert and leave current edits in memory for export. Use one active editing tab; simultaneous edits in multiple tabs are not merged.
 
-Fonts are bundled locally; the app makes no external font or AI requests. Extensions such as Dark Reader may recolor the UI.
+Fonts are bundled locally. The companion makes no model requests until you choose **Download & enable local AI**. Extensions such as Dark Reader may recolor the UI.
+
+## Bloom companion
+
+Use **Plan with Bloom** on the home screen or **Talk to Bloom** from any page. The lightweight planner works without a model download. Ask for a session such as “I have 40 minutes and I’m tired”, adjust time and energy, then review and add the selected tasks to today's intentions. It respects task dependencies, deferral, estimates, and existing future calendar bookings. It does not move deadlines or book calendar time. Acceptance is idempotent and refuses changed or outdated proposals. Intentions use the existing save and export system.
+
+The optional open-source [WebLLM](https://webllm.mlc.ai/docs/) integration runs Qwen2.5 0.5B Instruct (4-bit) in a dedicated browser worker. It needs compatible WebGPU hardware and downloads several hundred MB from Hugging Face and WebLLM's model host on first use. Cached files may be reused by the browser. No API key or inference server is required. Enable it per app session; cancellation and **Turn off & free memory** terminate the worker. A failed or slow model falls back to the lightweight planner. Small-model understanding is experimental, and performance varies by device.
+
+Conversation text and a small summary of activity totals are processed locally. Journal bodies are not included. The conversation is kept in memory until refresh and is not part of the backup. Model output is validated against a limited intent schema; the model cannot write app data, award rewards, or call arbitrary tools. Every proposed change requires the user's Apply action.
+
+The home screen's weekly memory summarizes seven local calendar days of recorded habit check-ins, completed journal sessions, and focus minutes. It is a rolling view of existing records, not a newly stored journal entry or a mental-health assessment.
 
 Projects, perspectives, task estimates, and time blocks use the same local backup as other records. The calendar uses the browser's local timezone. Daily capacity counts occupied time within the availability hours you set; standalone events reserve time alongside tasks. Overlapping blocks are rejected. Sequential projects unlock actions after preceding sibling tasks or subprojects are completed; empty subprojects do not block progress. Project deletion keeps its actions under the parent project (or Inbox). Deferral is separate from a due date. Calendar integration is local to Bloom; there is no Google or Outlook synchronization.
 
