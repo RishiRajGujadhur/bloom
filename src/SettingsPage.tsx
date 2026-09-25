@@ -198,107 +198,108 @@ export function SettingsPage({
         <ThemePicker settings={theme} onChange={setTheme} />
       </section>
 
-      <section
-        className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
-        aria-labelledby="features-heading"
-      >
-        <div className={styles.cardHeader}>
-          <div>
-            <h2 id="features-heading">{t('settings.featuresHeading')}</h2>
-            <p>{t('settings.featuresDescription')}</p>
+      <Disclosure title={t('settings.featuresHeading')}>
+        <section
+          className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
+          aria-labelledby="features-heading"
+        >
+          <div className={styles.cardHeader}>
+            <div>
+              <h2 id="features-heading">Choose your tools</h2>
+              <p>{t('settings.featuresDescription')}</p>
+            </div>
+            <span className={styles.savedStatus} role="status">
+              {t('settings.savedLocally')}
+            </span>
           </div>
-          <span className={styles.savedStatus} role="status">
-            {t('settings.savedLocally')}
-          </span>
-        </div>
 
-        <div className={styles.featureList}>
-          {featureKeys.map((key) => {
-            const title =
-              key === 'dailySpin'
-                ? 'Daily 7-7-7 Spin'
-                : key === 'collectibles'
-                  ? 'My Collectibles'
-                  : key === 'fullCalendar'
-                    ? 'Full calendar'
-                    : t(`settings.feature.${key}.title`)
-            return (
-              <label className={styles.feature} key={key}>
-                <span className={styles.featureCopy}>
-                  <strong>{title}</strong>
-                  <span>
-                    {key === 'dailySpin'
-                      ? 'One free daily spin for a chance to unlock a pixel-art car.'
-                      : key === 'collectibles'
-                        ? 'Your car collection and a companion for focus sessions.'
-                        : key === 'fullCalendar'
-                          ? 'Calendar, time blocking, and daily capacity.'
-                          : t(`settings.feature.${key}.description`)}
+          <div className={styles.featureList}>
+            {featureKeys.map((key) => {
+              const title =
+                key === 'dailySpin'
+                  ? 'Daily 7-7-7 Spin'
+                  : key === 'collectibles'
+                    ? 'My Collectibles'
+                    : key === 'fullCalendar'
+                      ? 'Full calendar'
+                      : t(`settings.feature.${key}.title`)
+              return (
+                <label className={styles.feature} key={key}>
+                  <span className={styles.featureCopy}>
+                    <strong>{title}</strong>
+                    <span>
+                      {key === 'dailySpin'
+                        ? 'One free daily spin for a chance to unlock a pixel-art car.'
+                        : key === 'collectibles'
+                          ? 'Your car collection and a companion for focus sessions.'
+                          : key === 'fullCalendar'
+                            ? 'Calendar, time blocking, and daily capacity.'
+                            : t(`settings.feature.${key}.description`)}
+                    </span>
                   </span>
-                </span>
-                <span className={styles.switch}>
-                  <input
-                    type="checkbox"
-                    checked={settings.features[key]}
-                    onChange={() => handleToggleFeature(key)}
-                    aria-label={t('settings.enableFeature', { title })}
-                  />
-                  <span className={styles.slider} aria-hidden="true" />
-                </span>
-              </label>
-            )
-          })}
-        </div>
-      </section>
-
-      <Disclosure title={t('settings.configurationHeading')}>
-      <section
-        className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
-        aria-labelledby="json-heading"
-      >
-        <div className={styles.cardHeader}>
-          <div>
-            <h2 id="json-heading">{t('settings.configurationHeading')}</h2>
-            <p>{t('settings.configurationDescription')}</p>
+                  <span className={styles.switch}>
+                    <input
+                      type="checkbox"
+                      checked={settings.features[key]}
+                      onChange={() => handleToggleFeature(key)}
+                      aria-label={t('settings.enableFeature', { title })}
+                    />
+                    <span className={styles.slider} aria-hidden="true" />
+                  </span>
+                </label>
+              )
+            })}
           </div>
-          <button
-            className={styles.copyButton}
-            type="button"
-            onClick={handleCopy}
-          >
-            {copyState === 'copied'
-              ? t('settings.copied')
-              : t('settings.copyJson')}
-          </button>
-        </div>
-        {copyState === 'failed' && (
-          <p className={styles.error} role="alert">
-            {t('settings.clipboardError')}
-          </p>
-        )}
-        <pre className={styles.preview}>
-          <code>{formattedSettings}</code>
-        </pre>
+        </section>
+      </Disclosure>
+      <Disclosure title={t('settings.configurationHeading')}>
+        <section
+          className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
+          aria-labelledby="json-heading"
+        >
+          <div className={styles.cardHeader}>
+            <div>
+              <h2 id="json-heading">{t('settings.configurationHeading')}</h2>
+              <p>{t('settings.configurationDescription')}</p>
+            </div>
+            <button
+              className={styles.copyButton}
+              type="button"
+              onClick={handleCopy}
+            >
+              {copyState === 'copied'
+                ? t('settings.copied')
+                : t('settings.copyJson')}
+            </button>
+          </div>
+          {copyState === 'failed' && (
+            <p className={styles.error} role="alert">
+              {t('settings.clipboardError')}
+            </p>
+          )}
+          <pre className={styles.preview}>
+            <code>{formattedSettings}</code>
+          </pre>
 
-        <label className={styles.importLabel} htmlFor="settings-import">
-          {t('settings.importJson')}
-          <span>{t('settings.importHint')}</span>
-        </label>
-        <textarea
-          id="settings-import"
-          className={styles.importInput}
-          value={importValue}
-          onChange={(event) => handleImport(event.target.value)}
-          placeholder={formattedSettings}
-          rows={8}
-          aria-describedby={importError ? 'settings-import-error' : undefined}
-        />
-        {importError && (
-          <p className={styles.error} id="settings-import-error" role="alert">
-            {importError}
-          </p>
-        )}
-      </section>
+          <label className={styles.importLabel} htmlFor="settings-import">
+            {t('settings.importJson')}
+            <span>{t('settings.importHint')}</span>
+          </label>
+          <textarea
+            id="settings-import"
+            className={styles.importInput}
+            value={importValue}
+            onChange={(event) => handleImport(event.target.value)}
+            placeholder={formattedSettings}
+            rows={8}
+            aria-describedby={importError ? 'settings-import-error' : undefined}
+          />
+          {importError && (
+            <p className={styles.error} id="settings-import-error" role="alert">
+              {importError}
+            </p>
+          )}
+        </section>
       </Disclosure>
     </div>
   )

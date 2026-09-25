@@ -172,7 +172,12 @@ export function toggleTodo(
     todos: [
       ...data.todos.map((item) =>
         item.id === id
-          ? { ...item, done: !item.done, rewarded: item.rewarded || earn }
+          ? {
+              ...item,
+              done: !item.done,
+              completedAt: completing ? now : null,
+              rewarded: item.rewarded || earn,
+            }
           : item,
       ),
       ...(nextDue && !recurrenceExists
@@ -182,6 +187,7 @@ export function toggleTodo(
               id: `recurrence:${seriesId}:${nextDue}`,
               due: nextDue,
               done: false,
+              completedAt: null,
               rewarded: false,
               ...(task.planning
                 ? {

@@ -96,6 +96,7 @@ export const taskSchema = z.object({
   title: z.string().min(1).max(150),
   done: z.boolean(),
   due: z.string(),
+  completedAt: z.number().nullable().optional(),
   challengeId: z.string().nullable(),
   rewarded: z.boolean().default(false),
   priority: z.enum(['P1', 'P2', 'P3', 'P4']).default('P3'),
@@ -224,6 +225,7 @@ export const dataSchema = legacySchema.extend({
     )
     .optional(),
   rpg: rpgSchema,
+  savedMemories: z.array(z.string()).optional(),
   todos: z.array(taskSchema).default([]),
   projects: z.array(projectSchema).default([]),
   perspectives: z.array(perspectiveSchema).default([]),

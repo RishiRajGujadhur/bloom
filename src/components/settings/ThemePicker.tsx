@@ -1,4 +1,4 @@
-import { CardRail } from '../BloomExperience'
+import { CardRail, Disclosure } from '../BloomExperience'
 import { Check, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FONTS, THEMES } from '../../utils/themeEngine'
@@ -116,44 +116,48 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
         </div>
       </section>
 
-      <section className={styles.block} aria-labelledby="settings-fonts">
-        <h3 id="settings-fonts">{t('settings.fonts')}</h3>
-        <p className={styles.hint}>{t('settings.fontsHint')}</p>
+      <Disclosure
+        title={`${t('settings.fonts')} · ${FONTS.find((font) => font.id === settings.fontId)?.name ?? 'Choose a font'}`}
+      >
+        <section className={styles.block} aria-labelledby="settings-fonts">
+          <h3 id="settings-fonts">{t('settings.fonts')}</h3>
+          <p className={styles.hint}>{t('settings.fontsHint')}</p>
 
-        <CardRail label={t('settings.fonts')}>
-          {FONTS.map((font) => {
-            const isActive = font.id === settings.fontId
-            return (
-              <button
-                key={font.id}
-                type="button"
-                className={styles.fontOption}
-                data-active={isActive}
-                aria-pressed={isActive}
-                onClick={() => onChange({ ...settings, fontId: font.id })}
-              >
-                <span className={styles.fontName}>{font.name}</span>
-                {/* data-font on the sample makes the fonts block in themes.css
-                    supply --font-family locally — no duplicated stacks. */}
-                <span
-                  className={styles.fontSample}
-                  data-font={font.id}
-                  aria-hidden="true"
+          <CardRail label={t('settings.fonts')}>
+            {FONTS.map((font) => {
+              const isActive = font.id === settings.fontId
+              return (
+                <button
+                  key={font.id}
+                  type="button"
+                  className={styles.fontOption}
+                  data-active={isActive}
+                  aria-pressed={isActive}
+                  onClick={() => onChange({ ...settings, fontId: font.id })}
                 >
-                  {font.sample}
-                </span>
-                {isActive && (
-                  <Check
-                    size={15}
-                    className={styles.check}
+                  <span className={styles.fontName}>{font.name}</span>
+                  {/* data-font on the sample makes the fonts block in themes.css
+                    supply --font-family locally — no duplicated stacks. */}
+                  <span
+                    className={styles.fontSample}
+                    data-font={font.id}
                     aria-hidden="true"
-                  />
-                )}
-              </button>
-            )
-          })}
-        </CardRail>
-      </section>
+                  >
+                    {font.sample}
+                  </span>
+                  {isActive && (
+                    <Check
+                      size={15}
+                      className={styles.check}
+                      aria-hidden="true"
+                    />
+                  )}
+                </button>
+              )
+            })}
+          </CardRail>
+        </section>
+      </Disclosure>
     </div>
   )
 }
