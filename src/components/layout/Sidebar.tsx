@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import type { FeatureFlags } from '../../SettingsPage'
 import styles from './Sidebar.module.css'
+import sidebarPlant from '../../assets/bloom/sidebar-plant.webp'
 
 /** Destinations the app knows how to reach; `settings` swaps the page. */
 export type NavKey =
@@ -292,7 +293,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
           </span>
           <span className={styles.brandText}>
             bloom
-            <small>{t('ui.everydaySpace')}</small>
+            <small>{t('welcome.eyebrow')}</small>
           </span>
         </a>
 
@@ -340,6 +341,13 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
             </button>
           ))}
         </nav>
+        <div className="sidebar-encourage" aria-hidden={!isOpen}>
+          <p>
+            You’re doing better than you think.{' '}
+            <span aria-hidden="true">🌱</span>
+          </p>
+          <img src={sidebarPlant} alt="" />
+        </div>
       </aside>
     </>
   )

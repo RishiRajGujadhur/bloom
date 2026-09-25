@@ -6,7 +6,10 @@ module.exports = {
   transform: { '^.+\\.[tj]sx?$': 'babel-jest' },
   moduleNameMapper: {
     '\\.(css)$': '<rootDir>/tests/styleMock.cjs',
+    '\\.(webp|png|jpe?g|svg)$': '<rootDir>/tests/fileMock.cjs',
     '\\?worker$': '<rootDir>/tests/workerMock.cjs',
   },
   clearMocks: true,
+  // Full-App renders are slow on a cold module graph when run in-band.
+  testTimeout: 15000,
 }

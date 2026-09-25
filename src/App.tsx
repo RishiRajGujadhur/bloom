@@ -1,6 +1,13 @@
 import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
-import { BloomCompanion, BloomStory } from './companion/BloomCompanion'
+import { BloomCompanion } from './companion/BloomCompanion'
+import {
+  FocusCard,
+  ReflectionCard,
+  RecentMemories,
+  SoundscapeCard,
+  StatsRow,
+} from './components/dashboard/Overview'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -9,18 +16,18 @@ import { motion, MotionConfig, useReducedMotion } from 'framer-motion'
 import {
   ArrowDownToLine,
   ArrowRight,
+  MessageCircle,
+  Sparkles,
   Check,
   ChevronRight,
   Leaf,
   ListChecks,
   Moon,
   Plus,
-  Quote,
   Sun,
   X,
   BookOpen,
   Pencil,
-  Flower2,
 } from 'lucide-react'
 import { dayKey, id, STORAGE_KEY, toggleHabit } from './model'
 import type { Session } from './model'
@@ -50,6 +57,12 @@ import {
   DailySpin,
 } from './features/collectibles/Collectibles'
 import { Sidebar } from './components/layout/Sidebar'
+import {
+  PageSearch,
+  QuickAdd,
+  StreakPill,
+} from './components/layout/TopbarExtras'
+import type { FeatureFlags } from './SettingsPage'
 import type { NavKey } from './components/layout/Sidebar'
 import {
   applyTheme,
@@ -61,6 +74,19 @@ import type { ThemeSettings } from './utils/themeEngine'
 
 import './features/features.css'
 import './styles/shared-ui.css'
+
+/** Pages that disappear when their feature is switched off. */
+const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
+  habits: 'habitTracker',
+  journal: 'chatJournal',
+  daybook: 'daybookModes',
+  calendar: 'fullCalendar',
+  urges: 'urgeTracker',
+  collectibles: 'collectibles',
+  growth: 'rpgSkillTree',
+  'vision-board': 'visionBoard',
+  world: 'bloomWorld',
+}
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
 const WorldPage = lazy(() =>
@@ -244,10 +270,22 @@ function App() {
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
         <main id="overview" className="min-w-0 flex-1">
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
-            <span>
-              <span className="tiny-dot" /> {t('welcome.eyebrow')}
-            </span>
-            <div className="topbar-actions flex flex-wrap items-center gap-2">
+            <PageSearch
+              pages={(Object.keys(pageDetails) as NavKey[]).filter(
+                (key) => {
+                  const need = pageFlags[key]
+                  return !need || settings.features[need]
+                },
+              )}
+              onNavigate={jump}
+            />
+            <div className="topbar-actions flex flex-wrap items-center gap-3">
+              <QuickAdd
+                onHabit={() => setModal('habit')}
+                onIntention={() => setModal('plan')}
+                onNavigate={jump}
+              />
+              <StreakPill data={data} today={today} />
               {settings.features.languageSelector && <LanguageSelector />}
               <button
                 className="theme-toggle"
@@ -264,17 +302,66 @@ function App() {
                 </span>
               </button>
               <button className="quiet-button" onClick={() => exportData()}>
-                <ArrowDownToLine size={16} /> {t('actions.exportData')}
+                <ArrowDownToLine size={16} aria-hidden="true" />{' '}
+                <span className="topbar-label">{t('actions.exportData')}</span>
               </button>
             </div>
           </header>
           <div
             className={`page-content feature-page page-${active} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
           >
-            <BloomHeading title={pageDetails[active].title} page={active}>
+            {active === 'overview' && (
+              <div className="overview-bar">
+                <nav className="overview-switch" aria-label="Overview sections">
+                  {(['today', 'insights', 'memories'] as const).map((panel) => (
+                    <button
+                      key={panel}
+                      aria-pressed={overviewPanel === panel}
+                      onClick={() => setOverviewPanel(panel)}
+                    >
+                      {panel === 'today'
+                        ? 'Today'
+                        : panel === 'insights'
+                          ? 'Personal Insights'
+                          : 'Memory Timeline'}
+                    </button>
+                  ))}
+                </nav>
+                <span className="overview-date">
+                  {new Date(`${today}T12:00:00`).toLocaleDateString(
+                    i18n.resolvedLanguage ?? 'en',
+                    { dateStyle: 'full' },
+                  )}
+                </span>
+              </div>
+            )}
+            <BloomHeading
+              title={pageDetails[active].title}
+              page={active}
+              actions={
+                active === 'overview' ? (
+                  <>
+                    <button
+                      className="ov-primary"
+                      onClick={() => setCompanionOpen(true)}
+                    >
+                      <Sparkles size={17} aria-hidden="true" /> Plan with
+                      Bloom <ArrowRight size={16} aria-hidden="true" />
+                    </button>
+                    <button
+                      className="ov-secondary"
+                      onClick={() => setCompanionOpen(true)}
+                    >
+                      <MessageCircle size={17} aria-hidden="true" /> Talk to
+                      Bloom
+                    </button>
+                  </>
+                ) : undefined
+              }
+            >
               <FeatureGuide page={active} />
             </BloomHeading>
-            {settings.features.rpgSkillTree && (
+            {settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}
                 setData={setData}
@@ -386,28 +473,6 @@ function App() {
               </Suspense>
             ) : (
               <>
-                {active === 'overview' && (
-                  <nav
-                    className="overview-switch"
-                    aria-label="Overview sections"
-                  >
-                    {(['today', 'insights', 'memories'] as const).map(
-                      (panel) => (
-                        <button
-                          key={panel}
-                          aria-pressed={overviewPanel === panel}
-                          onClick={() => setOverviewPanel(panel)}
-                        >
-                          {panel === 'today'
-                            ? 'Today'
-                            : panel === 'insights'
-                              ? 'Personal Insights'
-                              : 'Memory Timeline'}
-                        </button>
-                      ),
-                    )}
-                  </nav>
-                )}
                 {active === 'overview' && overviewPanel !== 'today' && (
                   <PersonalInsights
                     key={overviewPanel}
@@ -431,50 +496,15 @@ function App() {
                     </Disclosure>
                   )}
                   {active === 'overview' && (
-                    <BloomStory
-                      data={data}
-                      onTalk={() => setCompanionOpen(true)}
-                      onReflect={() => jump('journal')}
-                    />
+                    <StatsRow data={data} today={today} onNavigate={jump} />
                   )}
-                  {active === 'overview' && (
-                    <div className="stats grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                      <div>
-                        <span className="stat-icon lavender">
-                          <ListChecks size={21} />
-                        </span>
-                        <div>
-                          <strong>
-                            {completed}
-                            <small> / {data.habits.length}</small>
-                          </strong>
-                          <span>{t('ui.habitsToday')}</span>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="stat-icon peach">
-                          <Sun size={21} />
-                        </span>
-                        <div>
-                          <strong>
-                            {plans.filter((p) => p.done).length}
-                            <small> / {plans.length}</small>
-                          </strong>
-                          <span>{t('ui.intentionsToday')}</span>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="stat-icon mint">
-                          <BookOpen size={21} />
-                        </span>
-                        <div>
-                          <strong>{data.sessions.length}</strong>
-                          <span>{t('ui.reflections')}</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div className="dashboard-grid grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.75fr)]">
+                  <div
+                    className={
+                      active === 'overview'
+                        ? 'overview-grid'
+                        : 'dashboard-grid grid grid-cols-1 gap-5'
+                    }
+                  >
                     <div className="left-column">
                       {active === 'overview' &&
                         settings.features.habitTracker && (
@@ -599,6 +629,15 @@ function App() {
                             </div>
                           </section>
                         )}
+                      {active === 'overview' && (
+                        <ReflectionCard
+                          onNavigate={jump}
+                          showJournal={settings.features.chatJournal}
+                          showDaybook={settings.features.daybookModes}
+                        />
+                      )}
+                    </div>
+                    <div className="middle-column">
                       {(active === 'overview' || active === 'planning') && (
                         <section className="card" id="planning">
                           <div className="card-heading">
@@ -619,8 +658,20 @@ function App() {
                               <Plus size={20} />
                             </button>
                           </div>
+                          {active === 'overview' && (
+                            <div className="ov-affirmation">
+                              <blockquote>“{data.affirmation}”</blockquote>
+                              <button
+                                className="icon-button"
+                                aria-label={t('ui.editAffirmation')}
+                                onClick={() => setModal('affirmation')}
+                              >
+                                <Pencil size={16} />
+                              </button>
+                            </div>
+                          )}
                           {plans.length === 0 ? (
-                            <div className="empty-plans">
+                            active === 'overview' ? null : <div className="empty-plans">
                               <Sun size={26} />
                               <p>{t('ui.freshPage')}</p>
                               <small>{t('ui.chooseMeaningful')}</small>
@@ -688,56 +739,34 @@ function App() {
                           </button>
                         </section>
                       )}
+                      {active === 'overview' && (
+                        <RecentMemories
+                          data={data}
+                          onViewAll={() => setOverviewPanel('memories')}
+                        />
+                      )}
                     </div>
                     {active === 'overview' && (
                       <div className="right-column">
-                        <section className="card reflection-shortcuts">
-                          <span className="eyebrow">
-                            MAKE ROOM FOR YOURSELF
-                          </span>
-                          <h2>A moment to reflect</h2>
-                          <p>Choose the space that feels right today.</p>
-                          {settings.features.chatJournal && (
-                            <button
-                              className="primary"
-                              onClick={() => jump('journal')}
-                            >
-                              <BookOpen size={18} /> {t('navigation.journal')}{' '}
-                              <ArrowRight size={16} />
-                            </button>
-                          )}
-                          {settings.features.daybookModes && (
-                            <button
-                              className="quiet-button"
-                              onClick={() => jump('daybook')}
-                            >
-                              <Pencil size={18} /> {t('ui.daybookNav')}{' '}
-                              <ArrowRight size={16} />
-                            </button>
-                          )}
-                        </section>
-                        <section className="affirmation">
-                          <div className="card-heading">
-                            <span className="eyebrow">
-                              <Quote size={15} /> {t('ui.wordsToGrowWith')}
-                            </span>
-                            <button
-                              className="icon-button"
-                              aria-label={t('ui.editAffirmation')}
-                              onClick={() => setModal('affirmation')}
-                            >
-                              <Pencil size={16} />
-                            </button>
-                          </div>
-                          <blockquote>“{data.affirmation}”</blockquote>
-                          <div>
-                            <span>{t('ui.reminder')}</span>
-                            <Flower2 size={25} />
-                          </div>
-                        </section>
+                        <FocusCard
+                          data={data}
+                          setData={setData}
+                          onNavigate={jump}
+                        />
+                        <SoundscapeCard />
                       </div>
                     )}
                   </div>
+                  {active === 'overview' && settings.features.rpgSkillTree && (
+                    <GrowthRewards
+                      data={data}
+                      setData={setData}
+                      today={today}
+                      active={active}
+                      flags={settings.features}
+                      onNavigate={jump}
+                    />
+                  )}
                   <button
                     className="history-card"
                     onClick={() => setModal('history')}

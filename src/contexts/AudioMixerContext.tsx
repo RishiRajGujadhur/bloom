@@ -217,3 +217,8 @@ export function useAudioMixer() {
     throw new Error('useAudioMixer must be used within AudioMixerProvider')
   return context
 }
+
+/** For optional widgets (e.g. the overview card) rendered outside the provider. */
+export function useOptionalAudioMixer() {
+  return useContext(AudioMixerContext)
+}

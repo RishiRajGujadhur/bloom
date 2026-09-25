@@ -7,7 +7,8 @@ import {
   type CSSProperties,
   type ReactNode,
 } from 'react'
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Leaf, Pause, Play } from 'lucide-react'
+import heroLandscape from '../assets/bloom/hero-landscape.webp'
 import type { NavKey } from './layout/Sidebar'
 import './bloom-experience.css'
 
@@ -137,7 +138,7 @@ export function Disclosure({
 }
 
 const captions: Record<NavKey, string> = {
-  overview: 'A little intention. A little room to grow.',
+  overview: 'Small steps create a brighter tomorrow.',
   habits: 'Small rituals, lasting roots.',
   focus: 'One thing at a time. Give it room.',
   challenges: 'Discover your next small adventure.',
@@ -158,11 +159,15 @@ export function BloomHeading({
   title,
   page,
   children,
+  actions,
 }: {
   title: string
   page: NavKey
   children: ReactNode
+  /** Call-to-action buttons; the overview uses them to make the heading a hero. */
+  actions?: ReactNode
 }) {
+  const hero = page === 'overview'
   const [paused, setPaused] = useState(() => {
     try {
       return localStorage.getItem('bloom-motion') === 'paused'
@@ -182,7 +187,10 @@ export function BloomHeading({
     }
   }, [paused])
   return (
-    <div className="bloom-heading feature-heading">
+    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}`}>
+      {hero && (
+        <img className="bloom-hero-art" src={heroLandscape} alt="" aria-hidden="true" />
+      )}
       <svg
         className="bloom-contours"
         viewBox="0 0 800 160"
@@ -197,7 +205,10 @@ export function BloomHeading({
         ))}
       </svg>
       <div className="bloom-heading-copy" key={page}>
-        <span className="bloom-kicker">YOUR SPACE TO BLOOM</span>
+        <span className="bloom-kicker">
+          {hero ? 'WELCOME BACK' : 'YOUR SPACE TO BLOOM'}
+          {hero && <Leaf size={16} aria-hidden="true" />}
+        </span>
         <h1 id="page-heading" tabIndex={-1}>
           {title.split(' ').map((word, i) => (
             <span
@@ -210,6 +221,7 @@ export function BloomHeading({
           ))}
         </h1>
         <p>{captions[page]}</p>
+        {actions && <div className="bloom-hero-actions">{actions}</div>}
       </div>
       <div className="bloom-sculpture" aria-hidden="true">
         <div className="bloom-orbit" />

@@ -108,18 +108,18 @@
 /* ---- Bloom: the app's original soft-purple identity, preserved ------ */
 [data-theme='bloom-light'] {
   --mode: light;
-  --bg-primary: #f8f7fb;
-  --bg-surface: #ffffff;
-  --bg-sidebar: #ffffff;
-  --accent-color: #7044ac;
+  --bg-primary: #fbf6f1;
+  --bg-surface: #fffdfb;
+  --bg-sidebar: #fdf8f3;
+  --accent-color: #d0643f;
 }
 
 [data-theme='bloom-dark'] {
   --mode: dark;
-  --bg-primary: #17141f;
-  --bg-surface: #211d2c;
-  --bg-sidebar: #211d2c;
-  --accent-color: #a78bc5;
+  --bg-primary: #1a1512;
+  --bg-surface: #251e1a;
+  --bg-sidebar: #211a16;
+  --accent-color: #ec8a62;
 }
 
 /* ==========================================================================

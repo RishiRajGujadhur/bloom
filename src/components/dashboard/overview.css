@@ -1,0 +1,657 @@
+/* ==========================================================================
+   Overview — calm, card-first dashboard (Headspace / Calm inspired).
+   Everything reads from theme tokens so all palettes keep working.
+   ========================================================================== */
+
+.page-overview {
+  --ov-radius: 22px;
+  --ov-shadow: 0 1px 2px color-mix(in oklab, var(--text-primary) 5%, transparent),
+    0 10px 28px -18px color-mix(in oklab, var(--accent-color) 35%, transparent);
+  --tone-sage: #5f8f5a;
+  --tone-sun: #e39a3b;
+  --tone-rose: #d86a5c;
+  --tone-clay: var(--accent-color);
+}
+
+/* ---- Tabs + date ---------------------------------------------------- */
+.overview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 4px 0 16px;
+}
+.overview-bar .overview-switch {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+.overview-bar .overview-switch button {
+  border-radius: 999px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+.overview-bar .overview-switch button:hover {
+  transform: translateY(-1px);
+}
+.overview-bar .overview-switch button[aria-pressed='true'] {
+  background: var(--accent-color);
+  border-color: transparent;
+  color: var(--text-on-accent, #fff);
+  box-shadow: 0 8px 18px -10px var(--accent-color);
+}
+.overview-date {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* ---- Hero (BloomHeading on the overview) ---------------------------- */
+.bloom-heading.feature-heading.is-hero {
+  min-height: 230px;
+  padding: 34px 36px;
+  border-radius: 26px;
+  border-color: transparent;
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--bg-surface) 70%, var(--accent-soft)) 30%,
+    color-mix(in oklab, var(--accent-soft) 70%, var(--bg-primary))
+  );
+  box-shadow: var(--ov-shadow);
+}
+.bloom-hero-art {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(62%, 780px);
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  z-index: -1;
+  mask-image: linear-gradient(90deg, transparent, #000 26%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 26%);
+}
+html[data-mode='dark'] .bloom-hero-art {
+  opacity: 0.55;
+  filter: saturate(0.8) brightness(0.8);
+}
+.is-hero .bloom-contours {
+  display: none;
+}
+.is-hero .bloom-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--text-secondary);
+}
+.is-hero .bloom-kicker svg {
+  color: var(--tone-sage);
+}
+.bloom-heading.feature-heading.is-hero h1 {
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  max-width: 17em;
+}
+.bloom-heading.feature-heading.is-hero p {
+  font-size: 16px;
+}
+.is-hero .bloom-heading-copy {
+  max-width: 560px;
+}
+/* The 3D bloom sits in front of the painted sun. */
+.is-hero .bloom-sculpture {
+  position: absolute;
+  right: 22%;
+  top: 50%;
+  transform: translateY(-58%) scale(0.9);
+  z-index: 0;
+  filter: drop-shadow(0 12px 18px color-mix(in oklab, var(--accent-color) 35%, transparent));
+}
+.is-hero .bloom-heading-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+.bloom-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+/* ---- Buttons -------------------------------------------------------- */
+.ov-primary,
+.ov-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+.ov-primary {
+  border: 0;
+  background: var(--accent-color);
+  color: var(--text-on-accent, #fff);
+  box-shadow: 0 10px 20px -12px var(--accent-color);
+}
+.ov-primary:hover {
+  transform: translateY(-1px);
+  background: var(--accent-hover, var(--accent-color));
+}
+.ov-secondary {
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+.ov-secondary:hover {
+  transform: translateY(-1px);
+}
+.ov-link {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: none;
+  padding: 4px;
+  color: var(--accent-color);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ov-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Icon chips ----------------------------------------------------- */
+.ov-icon {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  --tone: var(--tone-clay);
+  color: var(--tone);
+  background: color-mix(in oklab, var(--tone) 14%, var(--bg-surface));
+}
+.ov-icon-lg {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+}
+.ov-icon-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.tone-sage {
+  --tone: var(--tone-sage);
+}
+.tone-sun {
+  --tone: var(--tone-sun);
+}
+.tone-rose {
+  --tone: var(--tone-rose);
+}
+.tone-clay {
+  --tone: var(--tone-clay);
+}
+
+/* ---- Stat tiles ----------------------------------------------------- */
+.ov-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.ov-stat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--ov-radius);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-align: left;
+  box-shadow: var(--ov-shadow);
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.ov-stat:hover {
+  transform: translateY(-3px);
+}
+.ov-stat-copy {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+.ov-stat-copy strong {
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+.ov-stat-copy strong small {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.ov-stat-copy > span {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.ov-bar {
+  display: block;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--tone) 16%, var(--bg-surface));
+  overflow: hidden;
+}
+.ov-bar i {
+  display: block;
+  height: 100%;
+  min-width: 6px;
+  border-radius: inherit;
+  background: var(--tone);
+  transition: width 0.8s ease;
+}
+.ov-spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 44px;
+}
+.ov-spark i {
+  width: 7px;
+  border-radius: 3px;
+  background: var(--tone-sage);
+}
+.ov-spark i[data-empty='true'] {
+  opacity: 0.3;
+}
+.ov-chevron {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  color: var(--text-muted);
+}
+
+/* ---- Grid ----------------------------------------------------------- */
+.overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.overview-grid > div {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.overview-grid .card,
+.ov-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--ov-radius);
+  background: var(--bg-surface);
+  box-shadow: var(--ov-shadow);
+  padding: 20px;
+  margin: 0;
+}
+.ov-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.ov-card-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+.dashboard-grid .left-column:empty {
+  display: none;
+}
+
+/* Existing habit / intention cards adopt the same calm shell. */
+.page-overview .overview-grid .card-heading h2 {
+  font-size: 18px;
+}
+.page-overview .overview-grid .icon-tile {
+  border-radius: 12px;
+  color: var(--accent-color);
+  background: color-mix(in oklab, var(--accent-color) 12%, var(--bg-surface));
+}
+.page-overview .habit {
+  border-radius: 14px;
+}
+.page-overview .add-line {
+  color: var(--accent-color);
+}
+.ov-affirmation {
+  position: relative;
+  padding: 18px 44px 18px 20px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--tone-sun) 10%, var(--bg-surface));
+  margin-bottom: 8px;
+}
+.ov-affirmation blockquote {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+.ov-affirmation .icon-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--accent-color);
+}
+
+/* ---- Reflection ----------------------------------------------------- */
+.ov-reflect-body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 18px 0 0 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(
+    120deg,
+    color-mix(in oklab, var(--accent-color) 7%, var(--bg-surface)),
+    color-mix(in oklab, var(--accent-color) 14%, var(--bg-surface))
+  );
+}
+.ov-reflect-body > div {
+  padding-bottom: 18px;
+}
+.ov-reflect-body h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+.ov-reflect-body p {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.ov-reflect-body img {
+  width: 150px;
+  max-width: 40%;
+  mix-blend-mode: multiply;
+}
+
+/* ---- Memories ------------------------------------------------------- */
+.ov-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 4px;
+  display: grid;
+  gap: 14px;
+  position: relative;
+}
+.ov-timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  border-left: 1px dashed color-mix(in oklab, var(--accent-color) 45%, transparent);
+}
+.ov-timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding-left: 16px;
+}
+.ov-timeline li::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-color);
+}
+.ov-timeline time {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.ov-timeline strong,
+.ov-timeline small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ov-timeline strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.ov-timeline small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---- Focus ---------------------------------------------------------- */
+.ov-focus-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ov-focus-body select {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 15px;
+}
+.ov-clock {
+  margin: 8px 0 12px;
+  font-size: clamp(40px, 3.6vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.ov-focus-body img {
+  width: 48%;
+  max-width: 220px;
+  border-radius: 16px;
+  mix-blend-mode: multiply;
+}
+html[data-mode='dark'] .ov-reflect-body img,
+html[data-mode='dark'] .ov-focus-body img {
+  mix-blend-mode: normal;
+  opacity: 0.85;
+  border-radius: 14px;
+}
+
+/* ---- Soundscape ----------------------------------------------------- */
+.ov-sound-player {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 84px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background-size: cover;
+  background-position: 20% 62%;
+  background-size: 180% auto;
+  color: #fff;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ov-sound-player::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgb(28 34 30 / 0.78), rgb(28 34 30 / 0.25));
+}
+.ov-sound-player strong {
+  display: block;
+  font-size: 18px;
+}
+.ov-sound-player small {
+  opacity: 0.85;
+}
+.ov-play {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background: #fff;
+  color: var(--accent-color);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.ov-play:hover {
+  transform: scale(1.06);
+}
+.ov-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ov-chips button {
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+}
+.ov-chips button[aria-pressed='true'] {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: color-mix(in oklab, var(--accent-color) 10%, var(--bg-surface));
+}
+
+.ov-primary:focus-visible,
+.ov-secondary:focus-visible,
+.ov-link:focus-visible,
+.ov-stat:focus-visible,
+.ov-play:focus-visible,
+.ov-chips button:focus-visible,
+.overview-bar button:focus-visible {
+  outline: 3px solid var(--focus-ring, var(--accent-color));
+  outline-offset: 2px;
+}
+
+/* ---- Responsive ----------------------------------------------------- */
+@media (max-width: 1280px) {
+  .overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .overview-grid > .right-column {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1100px) {
+  .ov-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .overview-grid,
+  .overview-grid > .right-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ov-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bloom-heading.feature-heading.is-hero {
+    padding: 26px 22px;
+    min-height: 0;
+  }
+  .bloom-hero-art {
+    width: 100%;
+    opacity: 0.35;
+  }
+  .is-hero .bloom-sculpture {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ov-stat,
+  .ov-primary,
+  .ov-secondary,
+  .ov-play,
+  .ov-bar i,
+  .overview-bar .overview-switch button {
+    transition: none;
+  }
+}
+
+/* Beat the older two-up overview rules in insights.css. */
+.page-overview .overview-grid > .left-column,
+.page-overview .overview-grid > .middle-column {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+@media (min-width: 1281px) {
+  .page-overview .overview-grid > .right-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Daily Quests rows (reuse the habit buttons, calmer rhythm) ----- */
+.page-overview .habit-with-stat .habit {
+  padding: 13px 4px;
+  gap: 14px;
+}
+.page-overview .overview-grid .habit strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.page-overview .overview-grid .habit small {
+  font-size: 13px;
+  margin-top: 2px;
+}
+.page-overview .overview-grid .progress-label,
+.page-overview .overview-grid .add-line,
+.page-overview .overview-grid .card-heading p {
+  font-size: 13px;
+}
+.page-overview .overview-grid .add-line {
+  font-size: 14px;
+  font-weight: 500;
+}
+#page-heading:focus:not(:focus-visible) {
+  outline: none;
+}

@@ -29,7 +29,7 @@ export const pageDetails: Record<
   focus: { title: 'Focus', description: 'Grow your attention.' },
   growth: { title: 'Growth', description: 'Your small steps add up.' },
   overview: {
-    title: 'Your daily space',
+    title: 'A little intention. A lot of good ahead.',
     description: 'Small steps. A little reflection. Room to grow.',
   },
   habits: {

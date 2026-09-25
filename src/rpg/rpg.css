@@ -1,4 +1,4 @@
-.app-shell{--game-accent:#8154ac;--game-soft:#f0e8fa;--game-deep:#45306c;--game-mid:#715298;--game-ink:#503c65;--game-light:#e6d8f8}
+.app-shell{--game-accent:var(--accent-color);--game-soft:var(--accent-soft);--game-deep:color-mix(in oklab,var(--accent-color) 55%,#1a1210);--game-mid:color-mix(in oklab,var(--accent-color) 80%,#1a1210);--game-ink:color-mix(in oklab,var(--accent-color) 60%,var(--text-primary));--game-light:color-mix(in oklab,var(--accent-color) 25%,var(--bg-surface))}
 .app-shell[data-palette=forest]{--game-accent:#337c6c;--game-soft:#e3f2e9;--game-deep:#1e4b46;--game-mid:#3a7469;--game-ink:#275b4d;--game-light:#c8ead8;background:#f2f8f4}
 .app-shell[data-palette=amber]{--game-accent:#966a29;--game-soft:#f8edcf;--game-deep:#543b36;--game-mid:#987247;--game-ink:#72552c;--game-light:#f6e0b0;background:#fcf8ed}
 .app-shell .primary,.app-shell .brand-icon,.app-shell .checkmark.checked{background:var(--game-accent)}.app-shell nav button.active,.app-shell .affirmation{background:var(--game-soft);color:var(--game-ink)}.app-shell .welcome h1 em{color:var(--game-accent)}

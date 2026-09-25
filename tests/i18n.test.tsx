@@ -76,7 +76,7 @@ test('every literal translation key used in the source exists in English and Fre
 test('English remains the default language', () => {
   render(<App />)
   expect(document.documentElement.lang).toBe('en')
-  expect(screen.getByRole('heading', { name: 'Your daily space' })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'A little intention. A lot of good ahead.' })).toBeInTheDocument()
   expect(screen.getAllByText(/Move with intention/).length).toBeGreaterThan(0)
 })
 
