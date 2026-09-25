@@ -2,8 +2,11 @@ import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
 import { BloomCompanion } from './companion/BloomCompanion'
 import {
+  CustomizeMenu,
   FocusCard,
   ReflectionCard,
+  useOverviewModules,
+  WorldTeaser,
   RecentMemories,
   SoundscapeCard,
   StatsRow,
@@ -57,12 +60,16 @@ import {
   DailySpin,
 } from './features/collectibles/Collectibles'
 import { Sidebar } from './components/layout/Sidebar'
+import { Carousel } from './components/ui/Carousel'
 import {
-  PageSearch,
   QuickAdd,
+  SearchTrigger,
   StreakPill,
 } from './components/layout/TopbarExtras'
-import type { FeatureFlags } from './SettingsPage'
+import {
+  CommandPalette,
+  rememberPage,
+} from './components/layout/CommandPalette'
 import type { NavKey } from './components/layout/Sidebar'
 import {
   applyTheme,
@@ -74,19 +81,6 @@ import type { ThemeSettings } from './utils/themeEngine'
 
 import './features/features.css'
 import './styles/shared-ui.css'
-
-/** Pages that disappear when their feature is switched off. */
-const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
-  habits: 'habitTracker',
-  journal: 'chatJournal',
-  daybook: 'daybookModes',
-  calendar: 'fullCalendar',
-  urges: 'urgeTracker',
-  collectibles: 'collectibles',
-  growth: 'rpgSkillTree',
-  'vision-board': 'visionBoard',
-  world: 'bloomWorld',
-}
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
 const WorldPage = lazy(() =>
@@ -179,6 +173,11 @@ function App() {
   const [viewSession, setViewSession] = useState<Session | null>(null)
   const [active, setActive] = useState<NavKey>(readPage)
   const [companionOpen, setCompanionOpen] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
+  const [showDoneHabits, setShowDoneHabits] = useState(false)
+  // Habits ticked during this visit stay in place; earlier ones fold away.
+  const [justChecked, setJustChecked] = useState<Set<string>>(() => new Set())
+  const [modules, setModules] = useOverviewModules()
   useEffect(() => {
     const sync = () => setActive(readPage())
     window.addEventListener('hashchange', sync)
@@ -212,6 +211,9 @@ function App() {
     applyTheme(themeSettings)
   }, [themeSettings])
   const completed = data.habits.filter((h) => h.dates.includes(today)).length
+  const justCheckedDone = data.habits.filter(
+    (h) => justChecked.has(h.id) && h.dates.includes(today),
+  ).length
   const progress = data.habits.length
     ? Math.round((completed / data.habits.length) * 100)
     : 0
@@ -247,6 +249,7 @@ function App() {
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
   const jump = (target: NavKey) => {
+    rememberPage(target)
     setActive(target)
     window.location.hash = target
     window.scrollTo?.({ top: 0, behavior: 'instant' })
@@ -270,15 +273,7 @@ function App() {
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
         <main id="overview" className="min-w-0 flex-1">
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
-            <PageSearch
-              pages={(Object.keys(pageDetails) as NavKey[]).filter(
-                (key) => {
-                  const need = pageFlags[key]
-                  return !need || settings.features[need]
-                },
-              )}
-              onNavigate={jump}
-            />
+            <SearchTrigger onOpen={() => setPaletteOpen(true)} />
             <div className="topbar-actions flex flex-wrap items-center gap-3">
               <QuickAdd
                 onHabit={() => setModal('habit')}
@@ -332,6 +327,7 @@ function App() {
                     i18n.resolvedLanguage ?? 'en',
                     { dateStyle: 'full' },
                   )}
+                  <CustomizeMenu modules={modules} setModules={setModules} />
                 </span>
               </div>
             )}
@@ -495,7 +491,7 @@ function App() {
                       />
                     </Disclosure>
                   )}
-                  {active === 'overview' && (
+                  {active === 'overview' && modules.stats && (
                     <StatsRow data={data} today={today} onNavigate={jump} />
                   )}
                   <div
@@ -538,16 +534,27 @@ function App() {
                               />
                             </div>
                             <div className="habit-list" id="habit-grid">
-                              {data.habits.slice(0, 3).map((h) => (
+                              {data.habits
+                                .filter(
+                                  (h) =>
+                                    showDoneHabits ||
+                                    justChecked.has(h.id) ||
+                                    !h.dates.includes(today),
+                                )
+                                .slice(0, 3)
+                                .map((h) => (
                                 <div className="habit-with-stat" key={h.id}>
                                   <button
                                     className={`habit ${h.dates.includes(today) ? 'done' : ''}`}
                                     aria-pressed={h.dates.includes(today)}
-                                    onClick={() =>
+                                    onClick={() => {
+                                      setJustChecked((set) =>
+                                        new Set(set).add(h.id),
+                                      )
                                       setData((d) =>
                                         toggleHabit(d, h.id, dayKey()),
                                       )
-                                    }
+                                    }}
                                   >
                                     <Checkmark
                                       checked={h.dates.includes(today)}
@@ -594,6 +601,18 @@ function App() {
                                 </div>
                               ))}
                             </div>
+                            {completed > justCheckedDone && (
+                              <button
+                                className="add-line done-toggle"
+                                aria-expanded={showDoneHabits}
+                                onClick={() => setShowDoneHabits((v) => !v)}
+                              >
+                                <Check size={16} aria-hidden="true" />{' '}
+                                {showDoneHabits
+                                  ? 'Hide completed'
+                                  : `${completed - justCheckedDone} completed earlier · show`}
+                              </button>
+                            )}
                             {data.habits.length > 3 && (
                               <button
                                 className="add-line"
@@ -629,13 +648,6 @@ function App() {
                             </div>
                           </section>
                         )}
-                      {active === 'overview' && (
-                        <ReflectionCard
-                          onNavigate={jump}
-                          showJournal={settings.features.chatJournal}
-                          showDaybook={settings.features.daybookModes}
-                        />
-                      )}
                     </div>
                     <div className="middle-column">
                       {(active === 'overview' || active === 'planning') && (
@@ -739,34 +751,56 @@ function App() {
                           </button>
                         </section>
                       )}
-                      {active === 'overview' && (
+                    </div>
+                    {active === 'overview' && (
+                      <div className="right-column">
+                        {modules.focus && (
+                          <FocusCard
+                            data={data}
+                            setData={setData}
+                            onNavigate={jump}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {active === 'overview' && (
+                    <Carousel
+                      label="More for you"
+                      title="More for you"
+                      description="A few gentle next steps. Swipe or use the arrows."
+                    >
+                      {modules.reflection && (
+                        <ReflectionCard
+                          onNavigate={jump}
+                          showJournal={settings.features.chatJournal}
+                          showDaybook={settings.features.daybookModes}
+                        />
+                      )}
+                      {modules.memories && (
                         <RecentMemories
                           data={data}
                           onViewAll={() => setOverviewPanel('memories')}
                         />
                       )}
-                    </div>
-                    {active === 'overview' && (
-                      <div className="right-column">
-                        <FocusCard
-                          data={data}
-                          setData={setData}
-                          onNavigate={jump}
-                        />
-                        <SoundscapeCard />
-                      </div>
-                    )}
-                  </div>
-                  {active === 'overview' && settings.features.rpgSkillTree && (
-                    <GrowthRewards
-                      data={data}
-                      setData={setData}
-                      today={today}
-                      active={active}
-                      flags={settings.features}
-                      onNavigate={jump}
-                    />
+                      {modules.soundscape && <SoundscapeCard />}
+                      {modules.world && settings.features.bloomWorld && (
+                        <WorldTeaser onOpen={() => jump('world')} />
+                      )}
+                    </Carousel>
                   )}
+                  {active === 'overview' &&
+                    modules.growth &&
+                    settings.features.rpgSkillTree && (
+                      <GrowthRewards
+                        data={data}
+                        setData={setData}
+                        today={today}
+                        active={active}
+                        flags={settings.features}
+                        onNavigate={jump}
+                      />
+                    )}
                   <button
                     className="history-card"
                     onClick={() => setModal('history')}
@@ -799,6 +833,18 @@ function App() {
             )}
           </div>
         </main>
+        <CommandPalette
+          open={paletteOpen}
+          onOpenChange={setPaletteOpen}
+          data={data}
+          flags={settings.features}
+          isDark={isDark}
+          onNavigate={jump}
+          onAddHabit={() => setModal('habit')}
+          onAddIntention={() => setModal('plan')}
+          onToggleTheme={() => setThemeSettings(toggleThemeMode)}
+          onTalk={() => setCompanionOpen(true)}
+        />
         <BloomCompanion
           data={data}
           setData={setData}

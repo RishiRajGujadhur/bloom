@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { DAYBOOK_STORAGE_KEY } from './storage'
+import { OPEN_DAYBOOK_EVENT } from '../layout/CommandPalette'
 import {
   ArrowLeft,
   ArrowRight,
@@ -14,8 +16,9 @@ import { localizedJournalModes } from './mockData'
 import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
 import { SemanticSearch } from './SemanticSearch'
+import './daybook.css'
 
-export const DAYBOOK_STORAGE_KEY = 'mindfulness-dashboard-daybook-v1'
+export { DAYBOOK_STORAGE_KEY }
 export function JournalContainer() {
   const { t } = useTranslation(undefined, { i18n })
   const [category, setCategory] = useState<JournalCategory | null>(null)
@@ -49,7 +52,8 @@ export function JournalContainer() {
     }
   })
   const [entries, setEntries] = useState(initial.entries)
-  const modes = localizedJournalModes(i18n.resolvedLanguage ?? 'en')
+  const language = i18n.resolvedLanguage ?? 'en'
+  const modes = useMemo(() => localizedJournalModes(language), [language])
   const entry = selected
     ? entries.find((item) => item.modeId === selected.id)
     : undefined
@@ -65,6 +69,27 @@ export function JournalContainer() {
       setStorageError(t('daybook.storageError'))
     }
   }
+  // Search (command palette) can open a saved page directly.
+  useEffect(() => {
+    const open = (modeId: string | null) => {
+      const mode = modeId && modes.find((m) => m.id === modeId)
+      if (!mode) return
+      try {
+        sessionStorage.removeItem(OPEN_DAYBOOK_EVENT)
+      } catch {
+        /* nothing to clear */
+      }
+      setSelected(mode)
+    }
+    try {
+      open(sessionStorage.getItem(OPEN_DAYBOOK_EVENT))
+    } catch {
+      /* storage unavailable */
+    }
+    const onOpen = (event: Event) => open((event as CustomEvent<string>).detail)
+    window.addEventListener(OPEN_DAYBOOK_EVENT, onOpen)
+    return () => window.removeEventListener(OPEN_DAYBOOK_EVENT, onOpen)
+  }, [modes])
   const back = () => {
     setCategory(null)
     setBrowse(false)
@@ -77,11 +102,11 @@ export function JournalContainer() {
   ] as const
   return (
     <section
-      className="card daybook daybook-wizard mx-auto w-full max-w-5xl rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6"
+      className={`card daybook daybook-wizard mx-auto w-full rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6 ${selected ? 'is-writing max-w-[1180px]' : 'max-w-5xl'}`}
       id="daybook"
     >
       <div className="daybook-container">
-        <ol className="wizard-steps" aria-label="Journal steps">
+        <ol className="wizard-steps" aria-label="Journal steps" hidden={Boolean(selected)}>
           {['Choose a direction', 'Pick a page', 'Write'].map(
             (label, index) => (
               <li

@@ -13,6 +13,8 @@ import {
   Castle,
   ListChecks,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Pencil,
   Settings,
   ShieldCheck,
@@ -95,6 +97,25 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
   }, [isOpen, isNarrow])
 
   const drawerOpen = isNarrow && isOpen
+
+  // "[" toggles the sidebar, like many productivity apps (ignored while typing).
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      if (
+        event.key !== '[' ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey ||
+        target?.isContentEditable ||
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName ?? '')
+      )
+        return
+      setIsOpen((open) => !open)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   // Publish the state for the global layout rules in App.css.
   useEffect(() => {
@@ -309,18 +330,18 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
         <button
           type="button"
           className={styles.collapseToggle}
-          role="switch"
-          aria-label="Icon-only sidebar"
-          title={toggleLabel}
-          aria-checked={!isOpen}
+          aria-label={toggleLabel}
+          title={`${toggleLabel} ([)`}
+          aria-expanded={isOpen}
           aria-controls="app-sidebar"
           tabIndex={isNarrow ? -1 : undefined}
           onClick={() => setIsOpen((open) => !open)}
         >
-          <span className={styles.switchTrack} data-checked={!isOpen}>
-            <span />
-          </span>
-          <span className={styles.toggleLabel}>Icons only</span>
+          {isOpen ? (
+            <PanelLeftClose size={19} aria-hidden="true" />
+          ) : (
+            <PanelLeftOpen size={19} aria-hidden="true" />
+          )}
         </button>
         <div className="nav-caption">{t('navigation.space')}</div>
 

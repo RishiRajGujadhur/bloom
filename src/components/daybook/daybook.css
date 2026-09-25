@@ -1,0 +1,208 @@
+/* Daybook writing page — document layout (breadcrumb, big title, meta row,
+   floating toolbar, wide canvas). Overrides the older wizard styling. */
+.daybook.is-writing {
+  padding: 22px clamp(18px, 4vw, 56px) 34px !important;
+  border-radius: 22px;
+}
+.daybook.is-writing .daybook-container {
+  max-width: none;
+}
+.daybook-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+.daybook-crumbs .daybook-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+}
+.daybook.is-writing .daybook-editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  max-width: 820px;
+  margin: 0 auto 10px;
+  padding: 0;
+  text-align: left;
+}
+.daybook-title {
+  flex: 1 1 380px;
+  min-width: 0;
+}
+.daybook.is-writing .daybook-title h2 {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+.daybook-title > p {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 60ch;
+}
+.daybook-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.daybook-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.daybook-meta span + span::before {
+  content: '·';
+  margin-right: 10px;
+  color: var(--border-color);
+}
+.daybook-meta .is-saved {
+  color: #3f8a5a;
+}
+.daybook-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.daybook-actions .quiet-button {
+  font-size: 14px;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+}
+.daybook.is-writing .daybook-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent-color);
+  color: var(--text-on-accent, #fff);
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 1;
+}
+.daybook.is-writing .daybook-ambient {
+  position: fixed;
+  right: 96px;
+  bottom: 24px;
+  width: 64px;
+  height: 64px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+}
+.daybook.is-writing :is(.guided-editor, .split-editor, .freeform-editor, .bujo-editor) {
+  display: block;
+  max-width: none;
+  margin: 18px 0 0;
+}
+.daybook-prompt > span,
+.split-editor label > span {
+  display: block;
+  max-width: 760px;
+  margin: 0 auto 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.daybook.is-writing .prompt-navigation {
+  max-width: 760px;
+  margin: 8px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.prompt-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.prompt-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--accent-color) 25%, var(--bg-primary));
+  transition: width 200ms ease;
+}
+.prompt-dots i[data-on='true'] {
+  width: 22px;
+  background: var(--accent-color);
+}
+.prompt-dots small {
+  margin-left: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.daybook.is-writing .leave-draft {
+  max-width: 760px;
+  margin: 16px auto 0;
+}
+
+/* Focus writing: the page takes the whole window. */
+html[data-writing='focus'] .sidebar,
+html[data-writing='focus'] .topbar,
+html[data-writing='focus'] .bloom-heading,
+html[data-writing='focus'] .bloom-companion-launch,
+html[data-writing='focus'] aside[aria-label='Ambient audio'],
+html[data-writing='focus'] [class*='hamburger'] {
+  display: none !important;
+}
+html[data-writing='focus'] main {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+html[data-writing='focus'] .daybook.is-writing {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+  margin-top: 12px;
+}
+@media (max-width: 700px) {
+  .daybook-actions {
+    width: 100%;
+  }
+  .daybook-actions > * {
+    flex: 1;
+    justify-content: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prompt-dots i {
+    transition: none;
+  }
+}
+.wizard-steps[hidden] {
+  display: none !important;
+}
+.daybook.is-writing .daybook-crumbs {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.daybook-prompt > span,
+.split-editor label > span {
+  text-align: left;
+}

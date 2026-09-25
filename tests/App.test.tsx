@@ -94,6 +94,11 @@ test('habit completion persists after reload', () => {
   fireEvent.click(screen.getByRole('button', { name: /Move with intention/ }))
   view.unmount()
   render(<App />)
+  // Habits completed on an earlier visit fold into "completed earlier".
+  expect(
+    screen.queryByRole('button', { name: /Move with intention/ }),
+  ).not.toBeInTheDocument()
+  fireEvent.click(screen.getByRole('button', { name: /1 completed earlier/ }))
   expect(
     screen.getByRole('button', { name: /Move with intention/ }),
   ).toHaveAttribute('aria-pressed', 'true')

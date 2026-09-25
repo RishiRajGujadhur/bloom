@@ -105,10 +105,10 @@ test('collapsing publishes the state the layout rules key off', () => {
   renderSidebar()
   expect(document.documentElement.dataset.sidebar).toBe('open')
 
-  fireEvent.click(screen.getByRole('switch', { name: 'Icon-only sidebar' }))
+  fireEvent.click(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ }))
   expect(document.documentElement.dataset.sidebar).toBe('collapsed')
 
-  fireEvent.click(screen.getByRole('switch', { name: 'Icon-only sidebar' }))
+  fireEvent.click(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ }))
   expect(document.documentElement.dataset.sidebar).toBe('open')
 })
 

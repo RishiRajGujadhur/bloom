@@ -94,3 +94,20 @@ beforeEach(() => {
   window.history.replaceState(null, '', '/')
 })
 window.scrollTo = jest.fn()
+
+// jsdom lacks the observers Embla (carousel) and Radix (menus) rely on.
+class ObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return []
+  }
+}
+for (const name of ['IntersectionObserver', 'ResizeObserver'] as const)
+  if (!(name in globalThis))
+    Object.defineProperty(globalThis, name, {
+      configurable: true,
+      writable: true,
+      value: ObserverStub,
+    })

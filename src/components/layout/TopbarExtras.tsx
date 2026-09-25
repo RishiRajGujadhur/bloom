@@ -1,66 +1,36 @@
-import { useId, useMemo, useRef, useState } from 'react'
-import { BookOpen, ChevronDown, Flame, ListChecks, Plus, Search, Sun, Timer } from 'lucide-react'
+import { useMemo } from 'react'
+import {
+  BookOpen,
+  CheckSquare,
+  ChevronDown,
+  Flame,
+  ListChecks,
+  Plus,
+  Search,
+  Sun,
+  Timer,
+} from 'lucide-react'
+import { Menu, type MenuItem } from '../ui/Menu'
 import type { AppData } from '../../model'
 import { dayKey } from '../../dates'
 import { activityDays } from '../../features/insights'
 import { activityStreak } from '../../features/world/worldModel'
-import { pageDetails } from './FeatureGuide'
 import type { NavKey } from './Sidebar'
 
 type Navigate = (key: NavKey) => void
 
-/** "Search your space": jump straight to any page by name. */
-export function PageSearch({
-  pages,
-  onNavigate,
-}: {
-  pages: NavKey[]
-  onNavigate: Navigate
-}) {
-  const listId = useId()
-  const [query, setQuery] = useState('')
-  const titles = pages.map((key) => ({ key, title: pageDetails[key].title }))
-  const go = (value: string) => {
-    const needle = value.trim().toLowerCase()
-    if (!needle) return
-    const match =
-      titles.find((p) => p.title.toLowerCase() === needle) ??
-      titles.find(
-        (p) => p.title.toLowerCase().includes(needle) || p.key.includes(needle),
-      )
-    if (match) {
-      onNavigate(match.key)
-      setQuery('')
-    }
-  }
+/** Looks like a search field; opens the command palette (autocomplete). */
+export function SearchTrigger({ onOpen }: { onOpen: () => void }) {
+  const mac =
+    typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
   return (
-    <form
-      className="topbar-search"
-      role="search"
-      onSubmit={(e) => {
-        e.preventDefault()
-        go(query)
-      }}
-    >
+    <button type="button" className="topbar-search" onClick={onOpen}>
       <Search size={18} aria-hidden="true" />
-      <input
-        type="search"
-        aria-label="Search your space"
-        placeholder="Search your space…"
-        list={listId}
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value)
-          // Picking a suggestion from the list navigates immediately.
-          if (titles.some((p) => p.title === e.target.value)) go(e.target.value)
-        }}
-      />
-      <datalist id={listId}>
-        {titles.map((p) => (
-          <option key={p.key} value={p.title} />
-        ))}
-      </datalist>
-    </form>
+      <span>Search your space…</span>
+      <kbd className="kbd" aria-hidden="true">
+        {mac ? '⌘' : 'Ctrl'} K
+      </kbd>
+    </button>
   )
 }
 
@@ -73,35 +43,25 @@ export function QuickAdd({
   onIntention: () => void
   onNavigate: Navigate
 }) {
-  const menu = useRef<HTMLDetailsElement>(null)
-  const pick = (action: () => void) => () => {
-    menu.current?.removeAttribute('open')
-    action()
-  }
+  const items: MenuItem[] = [
+    { label: 'A small habit', icon: <ListChecks size={17} />, onSelect: onHabit },
+    { label: 'An intention for today', icon: <Sun size={17} />, onSelect: onIntention },
+    { label: 'A to-do', icon: <CheckSquare size={17} />, onSelect: () => onNavigate('todos') },
+    { kind: 'separator' },
+    { label: 'A journal entry', icon: <BookOpen size={17} />, onSelect: () => onNavigate('journal') },
+    { label: 'A focus session', icon: <Timer size={17} />, onSelect: () => onNavigate('focus') },
+  ]
   return (
-    <details className="quick-add" ref={menu}>
-      <summary>
-        <Plus size={18} aria-hidden="true" /> Quick add
-        <ChevronDown size={16} aria-hidden="true" />
-      </summary>
-      <div className="quick-add-menu">
-        <button onClick={pick(onHabit)}>
-          <ListChecks size={17} aria-hidden="true" /> A small habit
+    <Menu
+      label="Quick add"
+      items={items}
+      trigger={
+        <button type="button" className="quick-add">
+          <Plus size={18} aria-hidden="true" /> Quick add
+          <ChevronDown className="quick-add-chevron" size={16} aria-hidden="true" />
         </button>
-        <button onClick={pick(onIntention)}>
-          <Sun size={17} aria-hidden="true" /> An intention for today
-        </button>
-        <button onClick={pick(() => onNavigate('todos'))}>
-          <Plus size={17} aria-hidden="true" /> A to-do
-        </button>
-        <button onClick={pick(() => onNavigate('journal'))}>
-          <BookOpen size={17} aria-hidden="true" /> A journal entry
-        </button>
-        <button onClick={pick(() => onNavigate('focus'))}>
-          <Timer size={17} aria-hidden="true" /> A focus session
-        </button>
-      </div>
-    </details>
+      }
+    />
   )
 }
 

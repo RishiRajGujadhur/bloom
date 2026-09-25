@@ -154,77 +154,54 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
   gap: 10px;
   flex: 1 1 260px;
   max-width: 460px;
-  padding: 10px 16px;
+  min-height: 46px;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid transparent;
   border-radius: 14px;
   background: color-mix(in oklab, var(--text-primary) 5%, var(--bg-primary));
   color: var(--text-muted);
-}
-.topbar-search input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  background: none;
-  color: var(--text-primary);
   font: inherit;
   font-size: 15px;
-  outline: none;
+  text-align: left;
+  cursor: text;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
 }
-.topbar-search:focus-within {
-  outline: 2px solid var(--accent-color);
+.topbar-search > span {
+  flex: 1;
 }
-.quick-add {
-  position: relative;
+.topbar-search:hover {
+  border-color: color-mix(in oklab, var(--accent-color) 30%, var(--border-color));
+  background: var(--bg-surface);
 }
-.quick-add > summary {
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: 14px;
-  background: var(--accent-color);
-  color: var(--text-on-accent, #fff);
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  box-shadow: 0 10px 20px -12px var(--accent-color);
-}
-.quick-add > summary::-webkit-details-marker {
-  display: none;
-}
-.quick-add > summary:focus-visible {
+.topbar-search:focus-visible {
   outline: 3px solid var(--focus-ring, var(--accent-color));
   outline-offset: 2px;
 }
-.quick-add-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  z-index: 30;
-  display: grid;
-  min-width: 210px;
-  padding: 6px;
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-surface);
-  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.35);
-}
-.quick-add-menu button {
-  display: flex;
+.quick-add {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-height: 46px;
+  padding: 10px 16px 10px 18px;
   border: 0;
-  background: none;
-  padding: 10px 12px;
-  border-radius: 10px;
-  color: var(--text-primary);
-  font-size: 14px;
-  text-align: left;
+  border-radius: 14px;
+  background: var(--accent-color);
+  color: var(--text-on-accent, #fff);
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
   cursor: pointer;
+  box-shadow: 0 10px 20px -12px var(--accent-color);
 }
-.quick-add-menu button:hover,
-.quick-add-menu button:focus-visible {
-  background: var(--accent-soft);
+.quick-add-chevron {
+  transition: transform 180ms ease;
+}
+.quick-add[data-state='open'] .quick-add-chevron {
+  transform: rotate(180deg);
 }
 .streak-pill {
   display: inline-flex;
@@ -255,6 +232,9 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
   }
 }
 @media (max-width: 700px) {
+  .topbar-search kbd {
+    display: none;
+  }
   .topbar-search {
     order: 10;
     flex-basis: 100%;
@@ -281,23 +261,17 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
   gap: 10px;
 }
 .app-shell .topbar .theme-toggle,
-.app-shell .topbar .quiet-button,
-.app-shell .language-selector select {
+.app-shell .topbar .quiet-button {
   border-radius: 12px;
   font-size: 13px;
   background: var(--bg-surface);
 }
 .app-shell .topbar .theme-toggle,
 .app-shell .topbar .quiet-button {
+  min-height: 42px;
+  min-width: 42px;
+  justify-content: center;
   padding: 10px 12px;
-}
-.app-shell .language-selector > span,
-.app-shell .language-selector label > span:first-child {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
 }
 /* Labels fold to icons when the bar gets busy; names stay for screen readers. */
 @media (max-width: 1560px) {
@@ -336,5 +310,210 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
   }
   .streak-pill {
     font-size: 13px;
+  }
+}
+
+/* ==========================================================================
+   Interaction layer — every clickable thing answers hover, press and focus.
+   150–250 ms, subtle, and fully removed for reduced motion.
+   ========================================================================== */
+.app-shell :is(button, [role='button'], a, summary):not(:disabled) {
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell
+  :is(
+    .primary,
+    .ov-primary,
+    .ov-secondary,
+    .quick-add,
+    .quiet-button,
+    .theme-toggle,
+    .feature-primary,
+    .feature-secondary,
+    .icon-button,
+    .direction-card,
+    .ov-stat,
+    .world-district,
+    .habit,
+    .plan-toggle,
+    .add-line,
+    .ov-link,
+    .ov-chips button,
+    .overview-switch button,
+    .segmented button,
+    .daybook-save,
+    .daybook-back
+  ) {
+  transition:
+    transform 180ms cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+.app-shell
+  :is(
+    .primary,
+    .ov-primary,
+    .quick-add,
+    .feature-primary,
+    .daybook-save
+  ):hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px -14px var(--accent-color);
+  filter: saturate(1.08);
+}
+.app-shell
+  :is(.ov-secondary, .quiet-button, .theme-toggle, .feature-secondary, .daybook-back):hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--accent-color) 40%, var(--border-color));
+}
+.app-shell :is(.direction-card, .ov-stat, .world-district):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -22px color-mix(in oklab, var(--accent-color) 70%, transparent);
+  border-color: color-mix(in oklab, var(--accent-color) 35%, var(--border-color));
+}
+.app-shell .icon-button:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
+}
+.app-shell
+  :is(
+    .primary,
+    .ov-primary,
+    .ov-secondary,
+    .quick-add,
+    .quiet-button,
+    .theme-toggle,
+    .feature-primary,
+    .feature-secondary,
+    .icon-button,
+    .ov-chips button,
+    .overview-switch button,
+    .segmented button,
+    .daybook-save,
+    .daybook-back,
+    .plan-toggle,
+    .habit
+  ):active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 90ms;
+}
+.app-shell :is(.direction-card, .ov-stat, .world-district):active {
+  transform: translateY(-1px) scale(0.99);
+}
+.app-shell .sidebar nav button:hover:not(.active) {
+  background: color-mix(in oklab, var(--accent-color) 7%, var(--bg-sidebar));
+  color: var(--text-primary);
+}
+.app-shell .sidebar nav button:hover svg {
+  transform: translateX(2px);
+}
+.app-shell .sidebar nav button svg {
+  transition: transform 180ms ease;
+}
+.app-shell .sidebar nav button:active {
+  transform: scale(0.98);
+}
+.app-shell :is(button, a, [role='button'], input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--focus-ring, var(--accent-color));
+  outline-offset: 2px;
+}
+/* Comfortable targets (≈44px) for the main actions. */
+.app-shell :is(.primary, .ov-primary, .ov-secondary, .quiet-button, .daybook-save) {
+  min-height: 44px;
+}
+
+/* Page headers: the full hero is for the overview; elsewhere it gets out of
+   the way so the page's own content starts in the first viewport. */
+.app-shell .bloom-heading.feature-heading:not(.is-hero) {
+  min-height: 0;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+}
+.app-shell .bloom-heading.feature-heading:not(.is-hero) h1 {
+  font-size: 26px;
+}
+.app-shell .bloom-heading.feature-heading:not(.is-hero) .bloom-kicker {
+  display: none;
+}
+.app-shell .bloom-heading.feature-heading:not(.is-hero) p {
+  font-size: 14px;
+  margin-top: 4px;
+}
+.app-shell .bloom-heading.feature-heading:not(.is-hero) .bloom-sculpture {
+  transform: scale(0.55);
+  height: 64px;
+  width: 96px;
+  margin: -12px 0;
+}
+.app-shell .bloom-heading.feature-heading:not(.is-hero) .bloom-heading-actions {
+  align-self: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell *,
+  .app-shell *::before,
+  .app-shell *::after {
+    transition-duration: 1ms !important;
+  }
+  .app-shell :is(button, .ov-stat, .direction-card, .world-district):hover,
+  .app-shell :is(button, .ov-stat, .direction-card, .world-district):active {
+    transform: none !important;
+  }
+}
+
+/* Floating helpers: compact round buttons whose label slides out on hover or
+   focus, so they never sit on top of page content. */
+.bloom-companion-launch,
+aside[aria-label='Ambient audio'] > button {
+  gap: 0 !important;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 15px !important;
+  border-radius: 999px !important;
+  overflow: hidden;
+  transition:
+    gap 220ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease !important;
+}
+.bloom-companion-launch {
+  right: max(20px, env(safe-area-inset-right)) !important;
+  bottom: calc(max(20px, env(safe-area-inset-bottom)) + 64px) !important;
+  font-size: 14px !important;
+}
+.bloom-companion-launch > span,
+aside[aria-label='Ambient audio'] > button > span:not([aria-hidden]) {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  transition:
+    max-width 240ms ease,
+    opacity 180ms ease;
+}
+.bloom-companion-launch:is(:hover, :focus-visible),
+aside[aria-label='Ambient audio'] > button:is(:hover, :focus-visible, [aria-expanded='true']) {
+  gap: 9px !important;
+  transform: translateY(-2px);
+}
+.bloom-companion-launch:is(:hover, :focus-visible) > span,
+aside[aria-label='Ambient audio'] > button:is(:hover, :focus-visible, [aria-expanded='true']) > span:not([aria-hidden]) {
+  max-width: 160px;
+  opacity: 1;
+}
+.bloom-companion-launch svg,
+aside[aria-label='Ambient audio'] > button svg {
+  flex-shrink: 0;
+  color: var(--accent-color);
+}
+
+.app-shell .brand {
+  padding-right: 48px;
+}
+@media (max-width: 1560px) {
+  .app-shell .topbar .language-selector > span:not(.ui-select-icon) {
+    display: none;
   }
 }

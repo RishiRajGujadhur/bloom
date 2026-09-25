@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Search, ShieldCheck } from 'lucide-react'
-import {
-  db,
-  EMBEDDING_MODEL,
-  journalText,
-  type SearchEntry,
-} from '../../search/db'
 import { useAIWorker } from '../../search/useAIWorker'
-import { calculateCosineSimilarity } from '../../utils/cosineSimilarity'
+import {
+  semanticSearch,
+  syncSemanticIndex,
+  type SemanticResult,
+} from '../../search/semantic'
 import type { JournalEntry } from './types'
-import { journalModes } from './mockData'
 import styles from './search.module.css'
 
-type Result = SearchEntry & { score: number }
+type Result = SemanticResult
 export function SemanticSearch({
   entries,
   onOpen,
@@ -45,69 +42,10 @@ export function SemanticSearch({
     setCoach(false)
     async function run() {
       // Preserve original pages; this database is a rebuildable search index.
-      const activeIds = new Set(entries.map((entry) => entry.id))
-      const existing = await db.entries.toArray()
-      if (cancelled) return
-      await db.entries.bulkDelete(
-        existing
-          .filter((entry) => !activeIds.has(entry.id))
-          .map((entry) => entry.id),
-      )
-      for (const entry of entries) {
-        if (cancelled) return
-        const text = journalText(entry.content).trim()
-        const previous = await db.entries.get(entry.id)
-        if (cancelled) return
-        if (!text) {
-          await db.entries.delete(entry.id)
-          continue
-        }
-        const record: SearchEntry = {
-          id: entry.id,
-          text,
-          timestamp: Date.parse(entry.updatedAt),
-          category:
-            journalModes.find((mode) => mode.id === entry.modeId)?.category ??
-            'reflection',
-          title: entry.modeTitle,
-          modeId: entry.modeId,
-        }
-        if (
-          previous?.text === text &&
-          previous.model === EMBEDDING_MODEL &&
-          previous.embedding?.length === 384
-        ) {
-          await db.entries.put({
-            ...record,
-            embedding: previous.embedding,
-            model: previous.model,
-          })
-          continue
-        }
-        await db.entries.put(record)
-        const embedding = await embed(text)
-        if (cancelled) return
-        await db.entries.put({ ...record, embedding, model: EMBEDDING_MODEL })
-      }
-      if (!debounced || cancelled) return
-      const vector = await embed(debounced)
-      if (cancelled) return
-      const rows = await db.entries.toArray()
-      if (cancelled) return
-      setResults(
-        rows
-          .filter(
-            (row) =>
-              row.embedding?.length === vector.length &&
-              row.model === EMBEDDING_MODEL,
-          )
-          .map((row) => ({
-            ...row,
-            score: calculateCosineSimilarity(vector, row.embedding!),
-          }))
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 5),
-      )
+      const synced = await syncSemanticIndex(entries, embed, () => cancelled)
+      if (!synced || !debounced || cancelled) return
+      const found = await semanticSearch(debounced, embed)
+      if (!cancelled) setResults(found)
     }
     void run()
       .then(() => {

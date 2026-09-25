@@ -3,8 +3,18 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import Highlight from '@tiptap/extension-highlight'
 import { Player } from '@lottiefiles/react-lottie-player'
-import { ArrowLeft, Check, Save, Sparkles, X } from 'lucide-react'
+import {
+  ArrowLeft,
+  Check,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  Save,
+  Sparkles,
+} from 'lucide-react'
+import { journalText } from '../../search/db'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -98,6 +108,7 @@ function useJournalEditor({
     {
       extensions: [
         StarterKit,
+        Highlight,
         Placeholder.configure({ placeholder }),
         TaskList,
         TaskItem.configure({ nested: true }),
@@ -194,6 +205,24 @@ export function AdaptiveEditor({
   const saveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   useEffect(() => () => clearTimeout(saveTimer.current), [])
   const leave = () => (dirty ? setLeaving(true) : onBack())
+  // Focus writing hides the app chrome (sidebar, topbar, floating buttons).
+  const [immersive, setImmersive] = useState(false)
+  useEffect(() => {
+    if (!immersive) return
+    document.documentElement.dataset.writing = 'focus'
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setImmersive(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      delete document.documentElement.dataset.writing
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [immersive])
+  const words = useMemo(() => {
+    const text = journalText(content).trim()
+    return text ? text.split(/\s+/).length : 0
+  }, [content])
   const steps =
     mode.editorType === 'guided'
       ? (mode.prompts?.length ?? 1)
@@ -235,29 +264,64 @@ export function AdaptiveEditor({
       ref={editorRoot}
       className={`daybook-editor editor-${mode.editorType}`}
     >
-      <header className="daybook-editor-header">
+      <nav className="daybook-crumbs" aria-label="Breadcrumb">
         <button className="daybook-back" onClick={leave}>
-          <ArrowLeft size={16} /> {t('journal.allModes')}
+          <ArrowLeft size={16} aria-hidden="true" /> {t('journal.allModes')}
         </button>
-        <div>
-          <span className="daybook-kicker">
-            {t(`daybook.category.${mode.category}`)}
-          </span>
+        <ChevronRight size={14} aria-hidden="true" />
+        <span>{t(`daybook.category.${mode.category}`)}</span>
+      </nav>
+      <header className="daybook-editor-header">
+        <div className="daybook-title">
           <h2>{mode.title}</h2>
+          <p>{mode.description}</p>
+          <div className="daybook-meta" aria-live="polite">
+            <span>
+              {new Date(entry?.createdAt ?? Date.now()).toLocaleDateString(
+                i18n.resolvedLanguage ?? 'en',
+                { weekday: 'long', month: 'long', day: 'numeric' },
+              )}
+            </span>
+            <span>
+              {words} {words === 1 ? 'word' : 'words'}
+            </span>
+            <span className={saved ? 'is-saved' : 'is-unsaved'}>
+              {saved ? (
+                <>
+                  <Check size={13} aria-hidden="true" />{' '}
+                  {t('journal.savedPrivately')}
+                </>
+              ) : (
+                t('journal.unsaved')
+              )}
+            </span>
+          </div>
         </div>
-        <button
-          className="daybook-save daybook-complete"
-          onClick={save}
-          disabled={celebrating}
-        >
-          <Save size={15} />{' '}
-          {celebrating ? 'Saving your page…' : 'Complete journal'}
-        </button>
+        <div className="daybook-actions">
+          <button
+            type="button"
+            className="quiet-button"
+            aria-pressed={immersive}
+            onClick={() => setImmersive((value) => !value)}
+            title={immersive ? 'Exit focus writing (Esc)' : 'Focus writing'}
+          >
+            {immersive ? (
+              <Minimize2 size={16} aria-hidden="true" />
+            ) : (
+              <Maximize2 size={16} aria-hidden="true" />
+            )}
+            {immersive ? 'Exit focus' : 'Focus writing'}
+          </button>
+          <button
+            className="daybook-save daybook-complete"
+            onClick={save}
+            disabled={celebrating}
+          >
+            <Save size={16} aria-hidden="true" />{' '}
+            {celebrating ? 'Saving your page…' : 'Complete journal'}
+          </button>
+        </div>
       </header>
-      <details className="writing-help">
-        <summary>About this page</summary>
-        <p>{mode.description}</p>
-      </details>
       {ambient && (
         <aside
           className="daybook-ambient"
@@ -279,10 +343,8 @@ export function AdaptiveEditor({
         <div className="guided-editor">
           {(mode.prompts ?? []).map((prompt, index) =>
             index === promptStep ? (
-              <label key={prompt}>
-                <span>
-                  {index + 1}. {prompt}
-                </span>
+              <label key={prompt} className="daybook-prompt">
+                <span>{prompt}</span>
                 <RichField
                   value={content[`prompt-${index}`]}
                   onChange={(json) => update(`prompt-${index}`, json)}
@@ -352,8 +414,16 @@ export function AdaptiveEditor({
           >
             Back
           </button>
-          <span>
-            Prompt {promptStep + 1} of {steps}
+          <span className="prompt-dots">
+            {Array.from({ length: steps }, (_, i) => (
+              <i key={i} aria-hidden="true" data-on={i === promptStep} />
+            ))}
+            <small aria-hidden="true">
+              {promptStep + 1} / {steps}
+            </small>
+            <span className="sr-only">
+              Prompt {promptStep + 1} of {steps}
+            </span>
           </span>
           {promptStep < steps - 1 ? (
             <button
@@ -383,20 +453,6 @@ export function AdaptiveEditor({
           </button>
         </div>
       )}
-      <footer className="daybook-editor-footer">
-        <span>
-          {saved ? (
-            <>
-              <Check size={14} /> {t('journal.savedPrivately')}
-            </>
-          ) : (
-            t('journal.unsaved')
-          )}
-        </span>
-        <button className="text-button" onClick={leave}>
-          <X size={14} /> {t('journal.closePage')}
-        </button>
-      </footer>
       <AnimatePresence>
         {celebrating && (
           <motion.div

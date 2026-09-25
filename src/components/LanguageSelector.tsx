@@ -1,34 +1,30 @@
+import { Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Select } from './ui/Menu'
 
 const languages = [
-  { code: 'en', label: 'English' },
-  { code: 'fr', label: 'Français' },
-  { code: 'en-pirate', label: 'Pirate English' },
-  { code: 'en-slang', label: 'Slang English' },
-] as const
+  { value: 'en', label: 'English' },
+  { value: 'fr', label: 'Français' },
+  { value: 'en-pirate', label: 'Pirate English' },
+  { value: 'en-slang', label: 'Slang English' },
+]
 
 export function LanguageSelector() {
   const { i18n, t } = useTranslation()
-  const selectedLanguage = languages.some(({ code }) => code === i18n.language)
+  const selectedLanguage = languages.some(({ value }) => value === i18n.language)
     ? i18n.language
     : 'en'
 
   return (
-    <label className="language-selector">
-      <span>{t('actions.language')}</span>
-      <select
-        aria-label={t('actions.language')}
-        value={selectedLanguage}
-        onChange={(event) => {
-          void i18n.changeLanguage(event.target.value)
-        }}
-      >
-        {languages.map(({ code, label }) => (
-          <option key={code} value={code}>
-            {label}
-          </option>
-        ))}
-      </select>
-    </label>
+    <Select
+      className="language-selector"
+      label={t('actions.language')}
+      value={selectedLanguage}
+      options={languages}
+      icon={<Languages size={16} aria-hidden="true" />}
+      onValueChange={(value) => {
+        void i18n.changeLanguage(value)
+      }}
+    />
   )
 }

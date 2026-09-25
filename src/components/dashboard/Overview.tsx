@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import {
   ArrowRight,
   BookOpen,
+  Castle,
   CheckCircle2,
   ChevronRight,
   Headphones,
@@ -9,6 +11,7 @@ import {
   ListChecks,
   Pause,
   Play,
+  SlidersHorizontal,
   Sun,
   Timer,
 } from 'lucide-react'
@@ -20,6 +23,7 @@ import { startFocusQuest } from '../../rpg/engine'
 import { useOptionalAudioMixer } from '../../contexts/AudioMixerContext'
 import { mixerPresets } from '../../types/audio'
 import type { NavKey } from '../layout/Sidebar'
+import { Menu, Select } from '../ui/Menu'
 import focusStones from '../../assets/bloom/focus-stones.webp'
 import journalBook from '../../assets/bloom/journal-book.webp'
 import landscape from '../../assets/bloom/hero-landscape.webp'
@@ -319,18 +323,16 @@ export function FocusCard({
     >
       <div className="ov-focus-body">
         <div>
-          <select
-            aria-label="Focus length"
-            value={quest.durationMinutes}
+          <Select
+            label="Focus length"
+            value={String(quest.durationMinutes)}
             disabled={running}
-            onChange={(e) => setMinutes(Number(e.target.value))}
-          >
-            {[5, 15, 25, 50].map((m) => (
-              <option key={m} value={m}>
-                {m} min
-              </option>
-            ))}
-          </select>
+            onValueChange={(value) => setMinutes(Number(value))}
+            options={[5, 15, 25, 50].map((m) => ({
+              value: String(m),
+              label: `${m} min`,
+            }))}
+          />
           <p className="ov-clock" aria-live="off">
             {String(quest.durationMinutes).padStart(2, '0')}:00
           </p>
@@ -396,6 +398,106 @@ export function SoundscapeCard() {
           </button>
         ))}
       </div>
+    </OverviewCard>
+  )
+}
+
+/** Which overview modules are visible; remembered per browser. */
+export type OverviewModules = Record<
+  'stats' | 'focus' | 'reflection' | 'memories' | 'soundscape' | 'world' | 'growth',
+  boolean
+>
+const MODULES_KEY = 'bloom-overview-modules'
+const defaultModules: OverviewModules = {
+  stats: true,
+  focus: true,
+  reflection: true,
+  memories: true,
+  soundscape: true,
+  world: true,
+  growth: true,
+}
+
+export function useOverviewModules() {
+  const [modules, setModules] = useState<OverviewModules>(() => {
+    try {
+      return {
+        ...defaultModules,
+        ...(JSON.parse(localStorage.getItem(MODULES_KEY) ?? '{}') as Partial<OverviewModules>),
+      }
+    } catch {
+      return defaultModules
+    }
+  })
+  useEffect(() => {
+    try {
+      localStorage.setItem(MODULES_KEY, JSON.stringify(modules))
+    } catch {
+      /* Preference only. */
+    }
+  }, [modules])
+  return [modules, setModules] as const
+}
+
+const moduleLabels: Record<keyof OverviewModules, string> = {
+  stats: 'Today at a glance',
+  focus: 'Focus timer',
+  reflection: 'Reflection journal',
+  memories: 'Recent memories',
+  soundscape: 'Soundscape',
+  world: 'Bloom World',
+  growth: 'Your growth',
+}
+
+/** "Customize": show only the modules you use (hide what you never touch). */
+export function CustomizeMenu({
+  modules,
+  setModules,
+}: {
+  modules: OverviewModules
+  setModules: Dispatch<SetStateAction<OverviewModules>>
+}) {
+  return (
+    <Menu
+      label="Customize your dashboard"
+      items={[
+        { kind: 'label', label: 'Show on my dashboard' },
+        ...(Object.keys(moduleLabels) as (keyof OverviewModules)[]).map(
+          (key) => ({
+            kind: 'checkbox' as const,
+            label: moduleLabels[key],
+            checked: modules[key],
+            onCheckedChange: (checked: boolean) =>
+              setModules((m) => ({ ...m, [key]: checked })),
+          }),
+        ),
+      ]}
+      trigger={
+        <button type="button" className="ov-secondary ov-customize">
+          <SlidersHorizontal size={17} aria-hidden="true" /> Customize
+        </button>
+      }
+    />
+  )
+}
+
+/** A small window into Bloom World from the dashboard slider. */
+export function WorldTeaser({ onOpen }: { onOpen: () => void }) {
+  return (
+    <OverviewCard
+      icon={Castle}
+      tone="sage"
+      title="Bloom World"
+      labelledBy="ov-world"
+      className="ov-world"
+      action={<CardLink onClick={onOpen}>Visit</CardLink>}
+    >
+      <p className="ov-muted">
+        Every task, focus session and journal entry grows your little island.
+      </p>
+      <button className="ov-primary" onClick={onOpen}>
+        See what grew today <ArrowRight size={16} aria-hidden="true" />
+      </button>
     </OverviewCard>
   )
 }

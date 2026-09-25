@@ -74,11 +74,11 @@ test('guide highlights only the current feature and cleans up on navigation', ()
 
 test('collapsed sidebar preference survives remount', () => {
   const view = render(<App />)
-  fireEvent.click(screen.getByRole('switch', { name: 'Icon-only sidebar' }))
+  fireEvent.click(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ }))
   view.unmount()
   render(<App />)
-  expect(screen.getByRole('switch', { name: 'Icon-only sidebar' })).toHaveAttribute(
-    'aria-checked',
-    'true',
+  expect(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ })).toHaveAttribute(
+    'aria-expanded',
+    'false',
   )
 })
