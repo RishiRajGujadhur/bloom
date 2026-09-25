@@ -86,6 +86,36 @@ test('failed generation frees the model and falls back to a useful plan', async 
   expect(
     screen.getByText('Lightweight planner · no model needed'),
   ).toBeVisible()
+  expect(
+    screen.getByRole('button', { name: 'I have 40 minutes' }),
+  ).toBeEnabled()
+})
+
+test('shows generation activity until the local response finishes', async () => {
+  let finish!: (value: unknown) => void
+  mockLoad.mockResolvedValue(undefined)
+  mockInterpret.mockImplementation((_text, _context, _history, onActivity) => {
+    onActivity(1)
+    return new Promise((resolve) => {
+      finish = resolve
+    })
+  })
+  mount()
+  fireEvent.click(screen.getByText('Try private, local AI'))
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Download & enable local AI' }),
+  )
+  await screen.findByText('Local AI · running on this device')
+  fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))
+  await screen.findByText('Bloom is writing…')
+  finish({
+    intent: 'chat',
+    minutes: 40,
+    energy: 'medium',
+    message: 'Hello there.',
+  })
+  await screen.findByText('Hello there.')
+  expect(screen.queryByText('Bloom is writing…')).not.toBeInTheDocument()
 })
 
 test('cancelling a download ignores a late model completion', async () => {

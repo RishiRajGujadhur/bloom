@@ -86,6 +86,8 @@ export function BloomCompanion({
   const [energy, setEnergy] = useState<Intent['energy']>('medium')
   const [status, setStatus] = useState<'off' | 'loading' | 'ready'>('off')
   const [progress, setProgress] = useState(0)
+  const [loadingStage, setLoadingStage] = useState('')
+  const [generatedTokens, setGeneratedTokens] = useState(0)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
   const [applied, setApplied] = useState(false)
@@ -117,14 +119,18 @@ export function BloomCompanion({
     const current = revision.current
     setStatus('loading')
     setProgress(0)
+    setLoadingStage('')
     setNotice('')
     try {
       const { LocalCompanion } = await import('./localAI')
       if (current !== revision.current) return
       const runtime = new LocalCompanion()
       ai.current = runtime
-      await runtime.load((value) => {
-        if (current === revision.current) setProgress(value)
+      await runtime.load((value, stage) => {
+        if (current === revision.current) {
+          setProgress(value)
+          setLoadingStage(stage ?? '')
+        }
       })
       if (current === revision.current) setStatus('ready')
     } catch (error) {
@@ -149,6 +155,7 @@ export function BloomCompanion({
     if (!input.trim() || pending.current) return
     pending.current = true
     setBusy(true)
+    setGeneratedTokens(0)
     setText('')
     setNotice('')
     setProposal(null)
@@ -167,9 +174,13 @@ export function BloomCompanion({
             weeklyActivity: weeklyMemory(data).text,
           }),
           turns,
+          (tokens) => {
+            if (current === revision.current) setGeneratedTokens(tokens)
+          },
         )
-      } catch {
+      } catch (error) {
         if (current !== revision.current) return
+        console.warn('Bloom local AI response failed:', error)
         ai.current?.dispose()
         ai.current = null
         setStatus('off')
@@ -271,7 +282,10 @@ export function BloomCompanion({
             </details>
             {status === 'loading' && (
               <div role="status">
-                <p>Preparing local AI… {Math.round(progress * 100)}%</p>
+                <p>
+                  {loadingStage ||
+                    `Preparing local AI… ${Math.round(progress * 100)}%`}
+                </p>
                 <progress
                   value={progress}
                   max={1}
@@ -298,7 +312,13 @@ export function BloomCompanion({
                   <p>{turn.content}</p>
                 </div>
               ))}
-              {busy && <p role="status">Bloom is thinking…</p>}
+              {busy && (
+                <p role="status">
+                  {generatedTokens > 0
+                    ? 'Bloom is writing…'
+                    : 'Bloom is thinking… The first response can take a little longer.'}
+                </p>
+              )}
             </div>
             <div className="companion-prompts">
               {[

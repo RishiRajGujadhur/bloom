@@ -1,4 +1,5 @@
 import type { WebWorkerMLCEngine } from '@mlc-ai/web-llm'
+import CompanionWorker from './worker?worker'
 import { intentSchema, type Intent } from './planner'
 
 export const MODEL = 'Qwen2.5-0.5B-Instruct-q4f16_1-MLC'
@@ -14,24 +15,20 @@ export class LocalCompanion {
     return new Promise((resolve, reject) => {
       const cancel = () => {
         cleanup()
-        reject(new Error('Local AI stopped.'))
+        reject(signal.reason)
       }
       const timer = setTimeout(() => {
         cleanup()
-        reject(
-          new Error('Local AI took too long. Try the lightweight planner.'),
+        const error = new Error(
+          'Local AI took too long. Try the lightweight planner.',
         )
-        this.dispose()
+        reject(error)
+        this.dispose(error)
       }, milliseconds)
       const cleanup = () => {
         clearTimeout(timer)
         signal.removeEventListener('abort', cancel)
       }
-      if (signal.aborted) {
-        cancel()
-        return
-      }
-      signal.addEventListener('abort', cancel, { once: true })
       promise.then(
         (value) => {
           cleanup()
@@ -42,19 +39,22 @@ export class LocalCompanion {
           reject(error)
         },
       )
+      if (signal.aborted) cancel()
+      else signal.addEventListener('abort', cancel, { once: true })
     })
   }
 
-  async load(onProgress: (progress: number) => void) {
+  async load(onProgress: (progress: number, stage?: string) => void) {
     if (!('gpu' in navigator))
       throw new Error(
         'This browser does not support local AI. The lightweight planner is ready to use.',
       )
     const { CreateWebWorkerMLCEngine } = await import('@mlc-ai/web-llm')
     if (this.controller.signal.aborted) throw new Error('Local AI stopped.')
-    this.worker = new Worker(new URL('./worker.ts', import.meta.url), {
-      type: 'module',
-    })
+    this.worker = new CompanionWorker()
+    // WebLLM's RPC promises do not reject when the worker crashes.
+    this.worker.addEventListener('error', () => this.dispose())
+    this.worker.addEventListener('messageerror', () => this.dispose())
     this.engine = await this.bounded(
       CreateWebWorkerMLCEngine(
         this.worker,
@@ -67,16 +67,21 @@ export class LocalCompanion {
       ),
       300_000,
     )
+    onProgress(1, 'Checking the first response…')
+    // Download completion alone does not prove that generation works on this GPU.
+    await this.interpret('Say hello in a short sentence.', '{}', [])
   }
 
   async interpret(
     text: string,
     context: string,
     history: { role: 'user' | 'assistant'; content: string }[],
+    onActivity?: (tokens: number) => void,
   ): Promise<Intent> {
     if (!this.engine) throw new Error('Local AI is not ready.')
-    const response = await this.bounded(
+    const stream = await this.bounded(
       this.engine.chat.completions.create({
+        stream: true,
         messages: [
           {
             role: 'system',
@@ -98,24 +103,41 @@ export class LocalCompanion {
                 type: 'string',
                 enum: ['plan', 'reflect', 'progress', 'chat'],
               },
-              minutes: { type: 'integer', minimum: 5, maximum: 240 },
+              minutes: { type: 'integer' },
               energy: { type: 'string', enum: ['low', 'medium', 'high'] },
-              message: { type: 'string', maxLength: 600 },
+              message: { type: 'string' },
             },
             required: ['intent', 'minutes', 'energy', 'message'],
             additionalProperties: false,
           }),
         },
       }),
-      60_000,
+      30_000,
     )
-    return intentSchema.parse(
-      JSON.parse(response.choices[0]?.message.content ?? ''),
+    const content = await this.bounded(
+      (async () => {
+        let result = ''
+        let tokens = 0
+        const iterator = stream[Symbol.asyncIterator]()
+        while (true) {
+          // Bound each chunk too: an unresponsive GPU must not hold the chat open.
+          const chunk = await this.bounded(iterator.next(), 30_000)
+          if (chunk.done) break
+          const delta = chunk.value.choices[0]?.delta.content
+          if (delta) {
+            result += delta
+            onActivity?.(++tokens)
+          }
+        }
+        return result
+      })(),
+      120_000,
     )
+    return intentSchema.parse(JSON.parse(content))
   }
 
-  dispose() {
-    this.controller.abort()
+  dispose(reason = new Error('Local AI stopped.')) {
+    this.controller.abort(reason)
     this.worker?.terminate()
     this.worker = null
     this.engine = null
