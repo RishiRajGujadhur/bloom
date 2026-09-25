@@ -11,6 +11,9 @@ import {
   LayoutDashboard,
   Map,
   Castle,
+  Heart,
+  Smile,
+  Wind,
   ListChecks,
   Menu,
   PanelLeftClose,
@@ -45,6 +48,9 @@ export type NavKey =
   | 'vision-board'
   | 'urges'
   | 'world'
+  | 'breathe'
+  | 'mood'
+  | 'gratitude'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -256,6 +262,14 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       title: t('settings.feature.bloomWorld.title'),
       Icon: Castle,
       requires: 'bloomWorld',
+    },
+    { key: 'breathe', title: 'Breathe', Icon: Wind, requires: 'breathe' },
+    { key: 'mood', title: 'Mood check-in', Icon: Smile, requires: 'moodCheckin' },
+    {
+      key: 'gratitude',
+      title: 'Gratitude jar',
+      Icon: Heart,
+      requires: 'gratitude',
     },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },

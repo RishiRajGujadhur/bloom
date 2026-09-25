@@ -277,6 +277,22 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      breathe: {
+        title: 'Breathe',
+        description: 'Guided box and 4-7-8 breathing with a calming animation.',
+      },
+      moodCheckin: {
+        title: 'Mood check-in',
+        description: 'Log how you feel in two taps and see your week.',
+      },
+      gratitude: {
+        title: 'Gratitude jar',
+        description: 'Drop in one good thing a day and revisit them later.',
+      },
+      compactMode: {
+        title: 'Compact layout',
+        description: 'Tighter spacing so more fits on screen.',
+      },
       bloomWorld: {
         title: 'Bloom World',
         description:
@@ -1057,6 +1073,22 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          breathe: {
+            title: 'Respirer',
+            description: 'Respiration carrée et 4-7-8 guidées, avec une animation apaisante.',
+          },
+          moodCheckin: {
+            title: 'Humeur du jour',
+            description: 'Notez votre humeur en deux gestes et voyez votre semaine.',
+          },
+          gratitude: {
+            title: 'Bocal de gratitude',
+            description: 'Une bonne chose par jour, à relire plus tard.',
+          },
+          compactMode: {
+            title: 'Affichage compact',
+            description: 'Des espacements plus serrés pour voir davantage.',
+          },
           bloomWorld: {
             title: 'Monde Bloom',
             description:

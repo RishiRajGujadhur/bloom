@@ -11,10 +11,10 @@ import {
   ChevronRight,
   Maximize2,
   Minimize2,
-  Save,
   Sparkles,
 } from 'lucide-react'
 import { journalText } from '../../search/db'
+import { LottieIcon } from '../ui/LottieIcon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,6 +31,7 @@ type RichFieldProps = {
   compact?: boolean
   focus?: boolean
   bujo?: boolean
+  autoFocus?: boolean
   onChange: (json: DocumentValue) => void
 }
 
@@ -102,6 +103,7 @@ function useJournalEditor({
   placeholder,
   ariaLabel,
   bujo,
+  autoFocus,
   onChange,
 }: Omit<RichFieldProps, 'compact' | 'focus'>) {
   return useEditor(
@@ -121,7 +123,8 @@ function useJournalEditor({
       editorProps: {
         attributes: { role: 'textbox', 'aria-label': ariaLabel ?? placeholder },
       },
-      autofocus: bujo ? 'end' : false,
+      // Focus once the editor exists, so the first keystrokes are never lost.
+      autofocus: bujo || autoFocus ? 'end' : false,
       onCreate: ({ editor }) => {
         if (bujo && editor.isEmpty)
           editor.chain().focus().toggleTaskList().run()
@@ -139,6 +142,7 @@ function RichField({
   compact,
   focus,
   bujo,
+  autoFocus = true,
   onChange,
 }: RichFieldProps) {
   const editor = useJournalEditor({
@@ -146,6 +150,7 @@ function RichField({
     placeholder,
     ariaLabel,
     bujo,
+    autoFocus,
     onChange,
   })
   return (
@@ -183,11 +188,15 @@ export function AdaptiveEditor({
   entry,
   onBack,
   onSave,
+  onAutosave,
 }: {
   mode: JournalMode
   entry?: JournalEntry
   onBack: () => void
+  /** "Complete journal": save and close. */
   onSave: (entry: JournalEntry) => void
+  /** Quiet background save while writing; keeps the page open. */
+  onAutosave?: (entry: JournalEntry) => void
 }) {
   const { t } = useTranslation(undefined, { i18n })
   const [content, setContent] = useState<Record<string, unknown>>(() =>
@@ -199,9 +208,6 @@ export function AdaptiveEditor({
   const [dirty, setDirty] = useState(false)
   const [leaving, setLeaving] = useState(false)
   const editorRoot = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    editorRoot.current?.querySelector<HTMLElement>('[role="textbox"]')?.focus()
-  }, [promptStep])
   const saveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   useEffect(() => () => clearTimeout(saveTimer.current), [])
   const leave = () => (dirty ? setLeaving(true) : onBack())
@@ -243,18 +249,35 @@ export function AdaptiveEditor({
     setSaved(false)
     setContent((current) => ({ ...current, [key]: value }))
   }
+  // One id for the life of this page, so autosaves update rather than duplicate.
+  const pageId = useRef(entry?.id ?? crypto.randomUUID())
+  const createdAt = useRef(entry?.createdAt ?? new Date().toISOString())
+  const snapshot = (): JournalEntry => ({
+    id: pageId.current,
+    modeId: mode.id,
+    modeTitle: mode.title,
+    createdAt: createdAt.current,
+    updatedAt: new Date().toISOString(),
+    content,
+  })
+  // Autosave shortly after typing stops; empty pages are never stored.
+  useEffect(() => {
+    if (!dirty || !onAutosave) return
+    const timer = setTimeout(() => {
+      if (!journalText(content).trim()) return
+      onAutosave(snapshot())
+      setSaved(true)
+      setDirty(false)
+    }, 900)
+    return () => clearTimeout(timer)
+    // snapshot reads the latest content; re-run only when content changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [content, dirty])
   const save = () => {
     if (celebrating) return
     setCelebrating(true)
     saveTimer.current = window.setTimeout(() => {
-      onSave({
-        id: entry?.id ?? crypto.randomUUID(),
-        modeId: mode.id,
-        modeTitle: mode.title,
-        createdAt: entry?.createdAt ?? new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        content,
-      })
+      onSave(snapshot())
       setCelebrating(false)
     }, 500)
   }
@@ -317,7 +340,7 @@ export function AdaptiveEditor({
             onClick={save}
             disabled={celebrating}
           >
-            <Save size={16} aria-hidden="true" />{' '}
+            <LottieIcon name="check" size={17} />{' '}
             {celebrating ? 'Saving your page…' : 'Complete journal'}
           </button>
         </div>

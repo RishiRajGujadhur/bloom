@@ -517,3 +517,94 @@ aside[aria-label='Ambient audio'] > button svg {
     display: none;
   }
 }
+
+/* ==========================================================================
+   Dialogs — soft scale/fade in, blurred backdrop (exit handled in Modal.tsx).
+   ========================================================================== */
+.modal[open] {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+.modal::backdrop {
+  background: color-mix(in oklab, var(--bg-primary) 30%, rgb(24 14 8 / 0.5));
+  backdrop-filter: blur(6px);
+  animation: modal-backdrop-in 220ms ease-out;
+}
+.modal[open] .modal-inner {
+  max-height: min(86dvh, 820px);
+  overflow-y: auto;
+  border-radius: 24px !important;
+  padding: 24px 26px 26px !important;
+  box-shadow:
+    0 2px 6px rgb(0 0 0 / 0.06),
+    0 40px 90px -30px color-mix(in oklab, var(--accent-color) 45%, rgb(0 0 0 / 0.55));
+  animation: modal-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+.modal-heading {
+  position: sticky;
+  top: -24px;
+  z-index: 2;
+  margin: -24px -26px 16px;
+  padding: 20px 20px 12px 26px;
+  background: linear-gradient(var(--bg-surface) 75%, transparent);
+}
+.modal-heading h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+.modal-close:hover svg {
+  transform: rotate(90deg);
+}
+.modal-close svg {
+  transition: transform 200ms ease;
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+}
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .modal::backdrop,
+  .modal[open] .modal-inner {
+    animation: none;
+  }
+}
+
+/* Compact layout (Settings → Compact layout). */
+html[data-density='compact'] .app-shell .ov-card,
+html[data-density='compact'] .app-shell .card,
+html[data-density='compact'] .app-shell .wb-card {
+  padding: 14px 16px !important;
+}
+html[data-density='compact'] .app-shell :is(.overview-grid, .overview-grid > div, .ov-stats, .page-content > *) {
+  gap: 10px;
+}
+html[data-density='compact'] .app-shell .bloom-heading.feature-heading {
+  padding: 12px 18px;
+  margin-bottom: 12px;
+}
+html[data-density='compact'] .app-shell .bloom-heading.feature-heading.is-hero {
+  min-height: 150px;
+}
+html[data-density='compact'] .app-shell .sidebar nav button {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}

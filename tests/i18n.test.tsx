@@ -133,7 +133,7 @@ test('French settings page renders translated feature copy', async () => {
   await i18n.changeLanguage('fr')
   render(<SettingsHarness />)
 
-  expect(screen.getByText('Paramètres')).toBeInTheDocument()
+  expect(screen.getByText('Apparence')).toBeInTheDocument()
   expect(screen.getByText('Fonctionnalités')).toBeInTheDocument()
   expect(screen.getByText('Suivi des habitudes')).toBeInTheDocument()
   expect(

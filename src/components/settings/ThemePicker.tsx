@@ -1,4 +1,4 @@
-import { CardRail, Disclosure } from '../BloomExperience'
+import { Carousel } from '../ui/Carousel'
 import { Check, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FONTS, THEMES } from '../../utils/themeEngine'
@@ -29,10 +29,10 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
   return (
     <div className={`${styles.picker} flex flex-col gap-6`}>
       <section className={styles.block} aria-labelledby="settings-colors">
-        <h3 id="settings-colors">{t('settings.colors')}</h3>
-        <p className={styles.hint}>{t('settings.colorsHint')}</p>
-
-        <CardRail label={t('settings.colors')}>
+        <h3 id="settings-colors" className="sr-only">
+          {t('settings.colors')}
+        </h3>
+        <Carousel label={t('settings.colors')} title={t('settings.colors')} perView={4}>
           {THEMES.map((theme) => {
             const isActive = theme.id === settings.themeId
             return (
@@ -81,12 +81,11 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
               </button>
             )
           })}
-        </CardRail>
+        </Carousel>
 
         <div className={styles.accentRow}>
           <label htmlFor="custom-accent">
             <span>{t('settings.customAccent')}</span>
-            <small>{t('settings.customAccentHint')}</small>
           </label>
           <div className={styles.accentControls}>
             <input
@@ -116,14 +115,12 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
         </div>
       </section>
 
-      <Disclosure
-        title={`${t('settings.fonts')} · ${FONTS.find((font) => font.id === settings.fontId)?.name ?? 'Choose a font'}`}
-      >
+      <>
         <section className={styles.block} aria-labelledby="settings-fonts">
-          <h3 id="settings-fonts">{t('settings.fonts')}</h3>
-          <p className={styles.hint}>{t('settings.fontsHint')}</p>
-
-          <CardRail label={t('settings.fonts')}>
+          <h3 id="settings-fonts" className="sr-only">
+            {t('settings.fonts')}
+          </h3>
+          <Carousel label={t('settings.fonts')} title={t('settings.fonts')} perView={5}>
             {FONTS.map((font) => {
               const isActive = font.id === settings.fontId
               return (
@@ -155,9 +152,9 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
                 </button>
               )
             })}
-          </CardRail>
+          </Carousel>
         </section>
-      </Disclosure>
+      </>
     </div>
   )
 }

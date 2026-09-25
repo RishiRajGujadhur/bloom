@@ -236,3 +236,34 @@
   grid-auto-columns: minmax(155px, 24%);
   gap: 12px;
 }
+
+/* Slider-friendly cards. */
+.picker {
+  min-width: 0;
+}
+.block {
+  min-width: 0;
+}
+.themeCard {
+  width: 100%;
+  padding: 10px 10px 12px !important;
+  border-radius: 16px !important;
+}
+.swatchBg {
+  height: 84px !important;
+  border-radius: 12px !important;
+}
+.themeMeta strong {
+  font-size: 14px !important;
+}
+.themeMeta small {
+  font-size: 11px !important;
+}
+.fontOption {
+  width: 100%;
+  min-height: 96px;
+  border-radius: 16px !important;
+}
+.accentRow label span {
+  font-size: 14px !important;
+}

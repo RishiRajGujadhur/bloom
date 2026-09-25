@@ -44,6 +44,9 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   growth: 'rpgSkillTree',
   'vision-board': 'visionBoard',
   world: 'bloomWorld',
+  breathe: 'breathe',
+  mood: 'moodCheckin',
+  gratitude: 'gratitude',
 }
 
 export function readRecentPages(): NavKey[] {
@@ -69,13 +72,13 @@ export function rememberPage(key: NavKey) {
 
 /** Opens a saved Daybook page; the Daybook listens for this. */
 export const OPEN_DAYBOOK_EVENT = 'bloom:open-daybook'
-export function openDaybookPage(modeId: string) {
+export function openDaybookPage(id: string) {
   try {
-    sessionStorage.setItem(OPEN_DAYBOOK_EVENT, modeId)
+    sessionStorage.setItem(OPEN_DAYBOOK_EVENT, id)
   } catch {
     /* The event below still works while the Daybook is mounted. */
   }
-  window.dispatchEvent(new CustomEvent(OPEN_DAYBOOK_EVENT, { detail: modeId }))
+  window.dispatchEvent(new CustomEvent(OPEN_DAYBOOK_EVENT, { detail: id }))
 }
 
 function readDaybook(): JournalEntry[] {
@@ -294,7 +297,7 @@ export function CommandPalette({
                   onSelect={() =>
                     go(() => {
                       onNavigate('daybook')
-                      openDaybookPage(entry.modeId)
+                      openDaybookPage(entry.id)
                     })
                   }
                 >
@@ -377,7 +380,7 @@ export function CommandPalette({
                 onSelect={() =>
                   go(() => {
                     onNavigate('daybook')
-                    openDaybookPage(result.modeId)
+                    openDaybookPage(result.id)
                   })
                 }
               >

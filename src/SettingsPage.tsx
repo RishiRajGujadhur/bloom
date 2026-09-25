@@ -6,6 +6,48 @@ import i18n from './i18n'
 import { ThemePicker } from './components/settings/ThemePicker'
 import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
+import {
+  CalendarDays,
+  CarFront,
+  Castle,
+  Dices,
+  Gauge,
+  Heart,
+  Languages,
+  LayoutGrid,
+  ListChecks,
+  Map,
+  MessageCircle,
+  NotebookPen,
+  Palette,
+  Rows3,
+  ShieldCheck,
+  Smile,
+  Sprout,
+  Swords,
+  Wind,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
+const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
+  dailySpin: Dices,
+  collectibles: CarFront,
+  fullCalendar: CalendarDays,
+  visionBoard: Map,
+  bloomWorld: Castle,
+  breathe: Wind,
+  moodCheckin: Smile,
+  gratitude: Heart,
+  compactMode: Rows3,
+  urgeTracker: ShieldCheck,
+  habitTracker: ListChecks,
+  chatJournal: MessageCircle,
+  rpgSkillTree: Sprout,
+  weeklyRaidBoss: Swords,
+  daybookModes: NotebookPen,
+  languageSelector: Languages,
+  walkthroughTour: Gauge,
+}
 
 export interface FeatureFlags {
   dailySpin: boolean
@@ -13,6 +55,10 @@ export interface FeatureFlags {
   fullCalendar: boolean
   visionBoard: boolean
   bloomWorld: boolean
+  breathe: boolean
+  moodCheckin: boolean
+  gratitude: boolean
+  compactMode: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -36,6 +82,10 @@ export const defaultSettings: AppSettings = {
     fullCalendar: true,
     visionBoard: true,
     bloomWorld: true,
+    breathe: true,
+    moodCheckin: true,
+    gratitude: true,
+    compactMode: false,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -53,6 +103,10 @@ const featureKeys = [
   'fullCalendar',
   'visionBoard',
   'bloomWorld',
+  'breathe',
+  'moodCheckin',
+  'gratitude',
+  'compactMode',
   'urgeTracker',
   'habitTracker',
   'chatJournal',
@@ -182,79 +236,74 @@ export function SettingsPage({
     <div
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
-      <header className={`${styles.header} flex flex-col gap-2`}>
-        <p className={styles.eyebrow}>{t('settings.eyebrow')}</p>
-        <h1>{t('settings.title')}</h1>
-        <p className={styles.intro}>{t('settings.intro')}</p>
-      </header>
-
       <section
-        className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
+        className={styles.card}
         aria-labelledby="appearance-heading"
       >
-        <div className={styles.cardHeader}>
-          <div>
-            <h2 id="appearance-heading">{t('settings.appearanceHeading')}</h2>
-            <p>{t('settings.appearanceDescription')}</p>
-          </div>
-        </div>
+        <h2 id="appearance-heading" className={styles.sectionTitle}>
+          <Palette size={18} aria-hidden="true" />
+          {t('settings.appearanceHeading')}
+        </h2>
         <ThemePicker settings={theme} onChange={setTheme} />
       </section>
 
-      <Disclosure title={t('settings.featuresHeading')}>
-        <section
-          className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
-          aria-labelledby="features-heading"
-        >
-          <div className={styles.cardHeader}>
-            <div>
-              <h2 id="features-heading">Choose your tools</h2>
-              <p>{t('settings.featuresDescription')}</p>
-            </div>
-            <span className={styles.savedStatus} role="status">
-              {t('settings.savedLocally')}
-            </span>
-          </div>
+      <section className={styles.card} aria-labelledby="features-heading">
+        <div className={styles.cardHeader}>
+          <h2 id="features-heading" className={styles.sectionTitle}>
+            <LayoutGrid size={18} aria-hidden="true" />
+            {t('settings.featuresHeading')}
+          </h2>
+          <span className={styles.savedStatus} role="status">
+            {t('settings.savedLocally')}
+          </span>
+        </div>
+        <div className={styles.featureGrid}>
+          {featureKeys.map((key) => {
+            const title =
+              key === 'dailySpin'
+                ? 'Daily 7-7-7 Spin'
+                : key === 'collectibles'
+                  ? 'My Collectibles'
+                  : key === 'fullCalendar'
+                    ? 'Full calendar'
+                    : t(`settings.feature.${key}.title`)
+            const Icon = featureIcons[key]
+            return (
+              <label
+                className={styles.feature}
+                key={key}
+                data-on={settings.features[key]}
+              >
+                <span className={styles.featureIcon} aria-hidden="true">
+                  <Icon size={19} />
+                </span>
+                <span className={styles.featureCopy}>
+                  <strong>{title}</strong>
+                  <span>
+                    {key === 'dailySpin'
+                      ? 'A free daily spin for pixel cars.'
+                      : key === 'collectibles'
+                        ? 'Your car collection.'
+                        : key === 'fullCalendar'
+                          ? 'Time blocking and capacity.'
+                          : t(`settings.feature.${key}.description`)}
+                  </span>
+                </span>
+                <span className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={settings.features[key]}
+                    onChange={() => handleToggleFeature(key)}
+                    aria-label={t('settings.enableFeature', { title })}
+                  />
+                  <span className={styles.slider} aria-hidden="true" />
+                </span>
+              </label>
+            )
+          })}
+        </div>
+      </section>
 
-          <div className={styles.featureList}>
-            {featureKeys.map((key) => {
-              const title =
-                key === 'dailySpin'
-                  ? 'Daily 7-7-7 Spin'
-                  : key === 'collectibles'
-                    ? 'My Collectibles'
-                    : key === 'fullCalendar'
-                      ? 'Full calendar'
-                      : t(`settings.feature.${key}.title`)
-              return (
-                <label className={styles.feature} key={key}>
-                  <span className={styles.featureCopy}>
-                    <strong>{title}</strong>
-                    <span>
-                      {key === 'dailySpin'
-                        ? 'One free daily spin for a chance to unlock a pixel-art car.'
-                        : key === 'collectibles'
-                          ? 'Your car collection and a companion for focus sessions.'
-                          : key === 'fullCalendar'
-                            ? 'Calendar, time blocking, and daily capacity.'
-                            : t(`settings.feature.${key}.description`)}
-                    </span>
-                  </span>
-                  <span className={styles.switch}>
-                    <input
-                      type="checkbox"
-                      checked={settings.features[key]}
-                      onChange={() => handleToggleFeature(key)}
-                      aria-label={t('settings.enableFeature', { title })}
-                    />
-                    <span className={styles.slider} aria-hidden="true" />
-                  </span>
-                </label>
-              )
-            })}
-          </div>
-        </section>
-      </Disclosure>
       <Disclosure title={t('settings.configurationHeading')}>
         <section
           className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}

@@ -1,0 +1,174 @@
+/* Guided tour popover with the pixel wizard narrator. */
+.driver-popover.bloom-guide {
+  max-width: 360px;
+  min-width: 290px;
+  padding: 18px 20px 16px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-app, inherit);
+  box-shadow: 0 30px 70px -28px color-mix(in oklab, var(--accent-color) 55%, rgb(0 0 0 / 0.55));
+  animation: guide-pop 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+@keyframes guide-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+.bloom-guide .wz-avatar {
+  position: absolute;
+  top: -46px;
+  left: 16px;
+  width: 64px;
+  height: 72px;
+  padding: 4px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--accent-color) 14%, var(--bg-surface));
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 24px -14px var(--accent-color);
+}
+.bloom-guide .wz-sprite {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  animation: wz-idle 2.4s ease-in-out infinite;
+}
+.bloom-guide .is-talking .wz-sprite {
+  animation: wz-bob 0.36s steps(2) infinite;
+}
+.bloom-guide .is-talking .wz-mouth {
+  animation: wz-talk 0.18s steps(2) infinite;
+}
+.bloom-guide .wz-orb {
+  animation: wz-glow 1.2s ease-in-out infinite;
+}
+@keyframes wz-idle {
+  50% {
+    transform: translateY(-2px);
+  }
+}
+@keyframes wz-bob {
+  50% {
+    transform: translateY(-1px);
+  }
+}
+@keyframes wz-talk {
+  50% {
+    transform: scaleY(2);
+    transform-origin: center 9.5px;
+  }
+}
+@keyframes wz-glow {
+  50% {
+    fill: #fff6a8;
+  }
+}
+.bloom-guide .driver-popover-title {
+  margin: 30px 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.bloom-guide .driver-popover-description {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.bloom-guide .wz-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(3px);
+  animation: wz-word-in 320ms ease-out forwards;
+  animation-delay: calc(var(--w) * 55ms);
+}
+@keyframes wz-word-in {
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.bloom-guide .driver-popover-footer {
+  margin-top: 16px;
+  align-items: center;
+}
+.bloom-guide .driver-popover-progress-text {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.bloom-guide .driver-popover-footer button {
+  min-height: 38px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: none;
+  transition:
+    transform 150ms ease,
+    background 150ms ease;
+}
+.bloom-guide .driver-popover-footer button:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--accent-color) 10%, var(--bg-surface));
+}
+.bloom-guide .driver-popover-footer .driver-popover-next-btn {
+  border-color: transparent;
+  background: var(--accent-color);
+  color: var(--text-on-accent, #fff);
+}
+.bloom-guide .driver-popover-close-btn {
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: var(--text-muted);
+}
+.bloom-guide .driver-popover-close-btn:hover {
+  background: color-mix(in oklab, var(--accent-color) 10%, transparent);
+  color: var(--text-primary);
+}
+.bloom-guide .driver-popover-arrow {
+  border-color: var(--bg-surface);
+}
+.bloom-guide .driver-popover-arrow-side-left,
+.bloom-guide .driver-popover-arrow-side-right,
+.bloom-guide .driver-popover-arrow-side-top,
+.bloom-guide .driver-popover-arrow-side-bottom {
+  border-color: transparent;
+}
+.bloom-guide .driver-popover-arrow-side-left {
+  border-left-color: var(--bg-surface);
+}
+.bloom-guide .driver-popover-arrow-side-right {
+  border-right-color: var(--bg-surface);
+}
+.bloom-guide .driver-popover-arrow-side-top {
+  border-top-color: var(--bg-surface);
+}
+.bloom-guide .driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--bg-surface);
+}
+.driver-active-element {
+  border-radius: 14px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .driver-popover.bloom-guide,
+  .bloom-guide .wz-sprite,
+  .bloom-guide .wz-mouth,
+  .bloom-guide .wz-orb,
+  .bloom-guide .wz-word {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

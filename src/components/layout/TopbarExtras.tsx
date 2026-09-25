@@ -5,12 +5,12 @@ import {
   ChevronDown,
   Flame,
   ListChecks,
-  Plus,
   Search,
   Sun,
   Timer,
 } from 'lucide-react'
 import { Menu, type MenuItem } from '../ui/Menu'
+import { LottieIcon } from '../ui/LottieIcon'
 import type { AppData } from '../../model'
 import { dayKey } from '../../dates'
 import { activityDays } from '../../features/insights'
@@ -57,7 +57,7 @@ export function QuickAdd({
       items={items}
       trigger={
         <button type="button" className="quick-add">
-          <Plus size={18} aria-hidden="true" /> Quick add
+          <LottieIcon name="plus" size={18} /> Quick add
           <ChevronDown className="quick-add-chevron" size={16} aria-hidden="true" />
         </button>
       }

@@ -1,5 +1,5 @@
 import { Children, useCallback, useEffect, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import './ui.css'
@@ -13,7 +13,10 @@ export function Carousel({
   description,
   children,
   label,
+  perView,
 }: {
+  /** Slides visible at once on wide screens (defaults to 3). */
+  perView?: number
   title?: string
   description?: string
   children: ReactNode
@@ -48,6 +51,13 @@ export function Carousel({
       className="ui-carousel"
       aria-roledescription="carousel"
       aria-label={label}
+      style={
+        perView
+          ? ({
+              '--slide': `calc((100% - ${(perView - 1) * 18}px) / ${perView})`,
+            } as CSSProperties)
+          : undefined
+      }
       onKeyDown={(event) => {
         if (event.target !== event.currentTarget) return
         if (event.key === 'ArrowRight') embla?.scrollNext()

@@ -24,6 +24,7 @@ import { useOptionalAudioMixer } from '../../contexts/AudioMixerContext'
 import { mixerPresets } from '../../types/audio'
 import type { NavKey } from '../layout/Sidebar'
 import { Menu, Select } from '../ui/Menu'
+import { LottieIcon } from '../ui/LottieIcon'
 import focusStones from '../../assets/bloom/focus-stones.webp'
 import journalBook from '../../assets/bloom/journal-book.webp'
 import landscape from '../../assets/bloom/hero-landscape.webp'
@@ -236,7 +237,7 @@ export function ReflectionCard({
           <p>Choose the space that feels right today.</p>
           {showJournal && (
             <button className="ov-primary" onClick={() => onNavigate('journal')}>
-              Write in journal <ArrowRight size={16} aria-hidden="true" />
+              Write in journal <LottieIcon name="arrow" size={17} />
             </button>
           )}
         </div>
@@ -344,7 +345,7 @@ export function FocusCard({
               onNavigate('focus')
             }}
           >
-            <Play size={16} aria-hidden="true" />
+            <LottieIcon name="play" size={17} />
             {running ? 'Continue focus' : 'Start focus'}
           </button>
         </div>

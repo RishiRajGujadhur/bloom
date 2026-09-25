@@ -345,6 +345,9 @@
   flex: 0 0 var(--slide, calc((100% - 36px) / 3));
   min-width: 0;
 }
+.ui-carousel[style] .ui-carousel-slide {
+  flex-basis: var(--slide);
+}
 .ui-carousel-slide > * {
   height: 100%;
 }
@@ -371,13 +374,15 @@
   background: var(--accent-color);
 }
 @media (max-width: 1100px) {
-  .ui-carousel-slide {
-    --slide: calc((100% - 18px) / 2);
+  .ui-carousel-slide,
+  .ui-carousel[style] .ui-carousel-slide {
+    flex-basis: calc((100% - 18px) / 2);
   }
 }
 @media (max-width: 700px) {
-  .ui-carousel-slide {
-    --slide: 88%;
+  .ui-carousel-slide,
+  .ui-carousel[style] .ui-carousel-slide {
+    flex-basis: 82%;
   }
 }
 

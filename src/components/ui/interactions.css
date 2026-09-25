@@ -1,0 +1,105 @@
+/* Micro-interactions driven by interactions.ts. Hover-in and hover-out use
+   different motion on purpose: in = lift and tilt, out = squash and settle. */
+
+.lottie-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  line-height: 0;
+  color: inherit;
+}
+.lottie-icon svg path {
+  stroke: currentColor;
+}
+
+/* Icons inside actions */
+[data-hover='in'] > svg.lucide,
+[data-hover='in'] > span > svg.lucide {
+  animation: icon-in 360ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+[data-hover='out'] > svg.lucide,
+[data-hover='out'] > span > svg.lucide {
+  animation: icon-out 380ms cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+@keyframes icon-in {
+  0% {
+    transform: none;
+  }
+  45% {
+    transform: translateY(-2px) scale(1.2) rotate(-10deg);
+  }
+  100% {
+    transform: translateY(-1px) scale(1.1) rotate(0deg);
+  }
+}
+@keyframes icon-out {
+  0% {
+    transform: translateY(-1px) scale(1.1);
+  }
+  40% {
+    transform: translateY(1px) scale(1.08, 0.86);
+  }
+  70% {
+    transform: scale(0.97, 1.04);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* Cards and pills: a gentle settle wobble when the pointer leaves. */
+:is(.ov-stat, .direction-card, .daybook-page-card, .wb-note, .world-district, .ov-chips button, .overview-switch button, .wb-chips button)[data-hover='out'] {
+  animation: card-settle 380ms ease-out;
+}
+@keyframes card-settle {
+  0% {
+    transform: translateY(-3px);
+  }
+  55% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* Press ripple */
+.ui-ripple-host {
+  position: relative;
+}
+.ui-ripple-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.ui-ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, currentColor 28%, transparent) 0,
+    color-mix(in oklab, currentColor 12%, transparent) 40%,
+    transparent 70%
+  );
+  transform: scale(0);
+  animation: ripple 560ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes ripple {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hover] > svg.lucide,
+  [data-hover] > span > svg.lucide,
+  [data-hover] {
+    animation: none !important;
+  }
+  .ui-ripple {
+    display: none;
+  }
+}

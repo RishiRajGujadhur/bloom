@@ -74,7 +74,8 @@ test('downloads nothing until enabled, indexes saved pages, and opens ranked res
     target: { value: 'burnt out' },
   })
   fireEvent.click(await screen.findByRole('button', { name: /A hard day/ }))
-  expect(onOpen).toHaveBeenCalledWith('free-writing')
+  // Results open the exact saved page, not just its mode.
+  expect(onOpen).toHaveBeenCalledWith('one')
   expect(mockEmbed).toHaveBeenCalledTimes(2)
   fireEvent.click(screen.getByRole('button', { name: /Ask Local Coach/ }))
   expect(screen.getByText(/No agent is connected/)).toBeInTheDocument()

@@ -152,6 +152,9 @@ const captions: Record<NavKey, string> = {
   'vision-board': 'Give your possibilities a place to grow.',
   urges: 'A pause is a powerful beginning.',
   world: 'Every small step builds your little world.',
+  breathe: 'Slow down, one breath at a time.',
+  mood: 'Two taps. No judgement.',
+  gratitude: 'Collect the good things.',
   settings: 'Make this space your own.',
 }
 

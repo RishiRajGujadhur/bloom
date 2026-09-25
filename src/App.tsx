@@ -20,7 +20,6 @@ import {
   ArrowDownToLine,
   ArrowRight,
   MessageCircle,
-  Sparkles,
   Check,
   ChevronRight,
   Leaf,
@@ -61,6 +60,7 @@ import {
 } from './features/collectibles/Collectibles'
 import { Sidebar } from './components/layout/Sidebar'
 import { Carousel } from './components/ui/Carousel'
+import { LottieIcon } from './components/ui/LottieIcon'
 import {
   QuickAdd,
   SearchTrigger,
@@ -87,6 +87,14 @@ const WorldPage = lazy(() =>
   import('./features/world/WorldPage').then((module) => ({
     default: module.WorldPage,
   })),
+)
+const wellbeing = () => import('./features/wellbeing/WellbeingPages')
+const BreathePage = lazy(() =>
+  wellbeing().then((m) => ({ default: m.BreathePage })),
+)
+const MoodPage = lazy(() => wellbeing().then((m) => ({ default: m.MoodPage })))
+const GratitudePage = lazy(() =>
+  wellbeing().then((m) => ({ default: m.GratitudePage })),
 )
 const CalendarPage = lazy(() =>
   import('./features/CalendarPage').then((module) => ({
@@ -210,6 +218,11 @@ function App() {
   useEffect(() => {
     applyTheme(themeSettings)
   }, [themeSettings])
+  useEffect(() => {
+    document.documentElement.dataset.density = settings.features.compactMode
+      ? 'compact'
+      : 'comfortable'
+  }, [settings.features.compactMode])
   const completed = data.habits.filter((h) => h.dates.includes(today)).length
   const justCheckedDone = data.habits.filter(
     (h) => justChecked.has(h.id) && h.dates.includes(today),
@@ -341,8 +354,8 @@ function App() {
                       className="ov-primary"
                       onClick={() => setCompanionOpen(true)}
                     >
-                      <Sparkles size={17} aria-hidden="true" /> Plan with
-                      Bloom <ArrowRight size={16} aria-hidden="true" />
+                      <LottieIcon name="sparkle" size={18} /> Plan with
+                      Bloom
                     </button>
                     <button
                       className="ov-secondary"
@@ -402,7 +415,10 @@ function App() {
             (active === 'urges' && !settings.features.urgeTracker) ||
             (active === 'calendar' && !settings.features.fullCalendar) ||
             (active === 'vision-board' && !settings.features.visionBoard) ||
-            (active === 'world' && !settings.features.bloomWorld) ? (
+            (active === 'world' && !settings.features.bloomWorld) ||
+            (active === 'breathe' && !settings.features.breathe) ||
+            (active === 'mood' && !settings.features.moodCheckin) ||
+            (active === 'gratitude' && !settings.features.gratitude) ? (
               <section className="card rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
                 <h2>This feature is turned off</h2>
                 <p>You can enable it in Settings.</p>
@@ -410,6 +426,18 @@ function App() {
                   Open settings
                 </button>
               </section>
+            ) : active === 'breathe' ? (
+              <Suspense fallback={null}>
+                <BreathePage />
+              </Suspense>
+            ) : active === 'mood' ? (
+              <Suspense fallback={null}>
+                <MoodPage />
+              </Suspense>
+            ) : active === 'gratitude' ? (
+              <Suspense fallback={null}>
+                <GratitudePage />
+              </Suspense>
             ) : active === 'world' ? (
               <Suspense fallback={<p role="status">Growing your world…</p>}>
                 <WorldPage
@@ -768,7 +796,6 @@ function App() {
                     <Carousel
                       label="More for you"
                       title="More for you"
-                      description="A few gentle next steps. Swipe or use the arrows."
                     >
                       {modules.reflection && (
                         <ReflectionCard

@@ -3,6 +3,8 @@ import { Compass } from 'lucide-react'
 import { driver } from 'driver.js'
 import type { DriveStep, Driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
+import { revealText, wizardSvg } from './guideWizard'
+import './guide.css'
 import type { NavKey } from './Sidebar'
 
 export const pageDetails: Record<
@@ -52,6 +54,9 @@ export const pageDetails: Record<
     title: 'Vision Board',
     description: 'Bring your ideas together and give your future some space.',
   },
+  breathe: { title: 'Breathe', description: 'Slow down, one breath at a time.' },
+  mood: { title: 'Mood check-in', description: 'Two taps. No judgement.' },
+  gratitude: { title: 'Gratitude jar', description: 'Collect the good things.' },
   world: {
     title: 'Bloom World',
     description: 'Every small step builds your little world.',
@@ -73,6 +78,18 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  breathe: [
+    step('.wb-chips', 'Pick a rhythm', 'Box, 4-7-8 or Calm.'),
+    step('.wb-orb-stage', 'Follow the orb', 'Breathe in as it grows, out as it shrinks.'),
+  ],
+  mood: [
+    step('.wb-moods', 'Tap a mood', 'Add a word if you like.'),
+    step('.wb-week', 'See your week', 'Patterns appear over time.'),
+  ],
+  gratitude: [
+    step('.wb-inline-form', 'Add one good thing', 'Small counts.'),
+    step('.wb-jar', 'Watch the jar fill', 'Revisit notes any time.'),
+  ],
   world: [
     step(
       '.world-canvas',
@@ -325,9 +342,32 @@ export function FeatureGuide({ page }: { page: NavKey }) {
         typeof item.element === 'string' &&
         document.querySelector(item.element),
     )
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let talkTimer: ReturnType<typeof setTimeout> | undefined
     tour.current = driver({
-      animate: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      animate: !reduced,
+      popoverClass: 'bloom-guide',
+      stagePadding: 8,
+      stageRadius: 14,
+      overlayOpacity: 0.55,
       showProgress: true,
+      progressText: '{{current}} / {{total}}',
+      // Each step: the pixel wizard "speaks" the tip while its words reveal.
+      onPopoverRender: (popover) => {
+        clearTimeout(talkTimer)
+        const wrapper = popover.wrapper
+        wrapper.querySelector('.wz-avatar')?.remove()
+        const avatar = document.createElement('div')
+        avatar.className = 'wz-avatar is-talking'
+        avatar.innerHTML = wizardSvg()
+        wrapper.prepend(avatar)
+        revealText(popover.title, reduced)
+        const talking = revealText(popover.description, reduced)
+        talkTimer = setTimeout(
+          () => avatar.classList.remove('is-talking'),
+          reduced ? 0 : talking + 400,
+        )
+      },
       allowClose: true,
       nextBtnText: 'Next',
       prevBtnText: 'Back',

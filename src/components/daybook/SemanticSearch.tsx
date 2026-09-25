@@ -15,7 +15,7 @@ export function SemanticSearch({
   onOpen,
 }: {
   entries: JournalEntry[]
-  onOpen: (modeId: string) => void
+  onOpen: (id: string) => void
 }) {
   const [enabled, setEnabled] = useState(false)
   const [query, setQuery] = useState('')
@@ -129,7 +129,7 @@ export function SemanticSearch({
                   <button
                     type="button"
                     className={styles.result}
-                    onClick={() => onOpen(result.modeId)}
+                    onClick={() => onOpen(result.id)}
                   >
                     <span>{result.title}</span>
                     <time dateTime={new Date(result.timestamp).toISOString()}>

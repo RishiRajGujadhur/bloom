@@ -1,0 +1,245 @@
+.wb-page {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.wb-card {
+  padding: 22px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  background: var(--bg-surface);
+}
+.wb-card h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+.wb-muted {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
+}
+.wb-chips {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.wb-chips button {
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+.wb-chips button[aria-checked='true'] {
+  background: var(--accent-color);
+  border-color: transparent;
+  color: var(--text-on-accent, #fff);
+}
+.wb-breathe {
+  justify-items: center;
+  padding: 28px 16px;
+  border-radius: 26px;
+  background: radial-gradient(
+    circle at 50% 45%,
+    color-mix(in oklab, var(--accent-color) 14%, var(--bg-surface)),
+    var(--bg-surface) 70%
+  );
+  border: 1px solid var(--border-color);
+}
+.wb-orb-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(340px, 78vw);
+  aspect-ratio: 1;
+}
+.wb-orb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #fff8,
+    color-mix(in oklab, var(--accent-color) 55%, #ffd9c2) 45%,
+    color-mix(in oklab, var(--accent-color) 85%, #7a3b20)
+  );
+  box-shadow:
+    0 30px 60px -25px var(--accent-color),
+    inset 0 -12px 30px #0002;
+}
+.wb-orb-copy {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  color: #fff;
+  text-shadow: 0 2px 8px #0004;
+}
+.wb-orb-copy strong {
+  font-size: 30px;
+}
+.wb-orb-copy span {
+  font-size: 44px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.wb-actions {
+  display: flex;
+  gap: 10px;
+}
+.wb-moods {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.wb-moods button {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 14px 6px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+.wb-moods button span {
+  font-size: clamp(28px, 4vw, 40px);
+  transition: transform 220ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.wb-moods button:hover span {
+  transform: scale(1.18) rotate(-6deg);
+}
+.wb-moods button[aria-checked='true'] {
+  border-color: var(--accent-color);
+  background: color-mix(in oklab, var(--accent-color) 10%, var(--bg-surface));
+  color: var(--text-primary);
+}
+.wb-inline-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+.wb-inline-form input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+}
+.wb-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  height: 150px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wb-week li {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  justify-items: center;
+  align-items: end;
+  gap: 4px;
+}
+.wb-week-bar {
+  width: 70%;
+  max-width: 36px;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, var(--accent-color), color-mix(in oklab, var(--accent-color) 40%, var(--bg-surface)));
+}
+.wb-week li[data-empty='true'] .wb-week-bar {
+  background: color-mix(in oklab, var(--text-primary) 8%, var(--bg-surface));
+}
+.wb-week small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.wb-note {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-height: 130px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--accent-color) 5%, var(--bg-surface));
+}
+.wb-note > span {
+  font-size: 26px;
+}
+.wb-note p {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.wb-note small {
+  margin-top: auto;
+  color: var(--text-muted);
+}
+.wb-note .icon-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+.wb-note:hover .icon-button,
+.wb-note:focus-within .icon-button {
+  opacity: 1;
+}
+.wb-jar-card {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+}
+.wb-jar {
+  position: relative;
+  height: 170px;
+  border: 3px solid color-mix(in oklab, var(--accent-color) 35%, var(--border-color));
+  border-top-width: 10px;
+  border-radius: 22px 22px 34px 34px;
+  background: color-mix(in oklab, var(--accent-color) 5%, transparent);
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-content: flex-start;
+  gap: 4px;
+  padding: 10px;
+  overflow: hidden;
+}
+.wb-jar i {
+  width: 26px;
+  height: 18px;
+  border-radius: 6px;
+  background: hsl(calc(var(--i) * 37 + 10) 75% 72%);
+  box-shadow: inset 0 -3px 0 #0001;
+}
+@media (max-width: 600px) {
+  .wb-jar-card {
+    grid-template-columns: 1fr;
+  }
+  .wb-jar {
+    height: 120px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wb-moods button,
+  .wb-moods button span,
+  .wb-note .icon-button {
+    transition: none;
+  }
+}

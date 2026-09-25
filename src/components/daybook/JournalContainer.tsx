@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Carousel } from '../ui/Carousel'
+import { journalText } from '../../search/db'
 import { DAYBOOK_STORAGE_KEY } from './storage'
 import { OPEN_DAYBOOK_EVENT } from '../layout/CommandPalette'
 import {
@@ -52,33 +54,69 @@ export function JournalContainer() {
     }
   })
   const [entries, setEntries] = useState(initial.entries)
+  const entriesRef = useRef(entries)
+  useEffect(() => {
+    entriesRef.current = entries
+  }, [entries])
+  const recentPages = useMemo(
+    () =>
+      [...entries].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
+    [entries],
+  )
   const language = i18n.resolvedLanguage ?? 'en'
   const modes = useMemo(() => localizedJournalModes(language), [language])
-  const entry = selected
-    ? entries.find((item) => item.modeId === selected.id)
+  // Each page is its own entry: choosing a mode starts a fresh page, while
+  // "Your pages" (and search) reopen a specific saved one.
+  const [entryId, setEntryId] = useState<string | null>(null)
+  const entry = entryId
+    ? entries.find((item) => item.id === entryId)
     : undefined
-  const save = (next: JournalEntry) => {
+  const persist = (next: JournalEntry, close: boolean) => {
     if (initial.error) return
-    const updated = [next, ...entries.filter((item) => item.id !== next.id)]
-    try {
-      localStorage.setItem(DAYBOOK_STORAGE_KEY, JSON.stringify(updated))
-      setEntries(updated)
+    setEntries((current) => {
+      const updated = [next, ...current.filter((item) => item.id !== next.id)]
+      try {
+        localStorage.setItem(DAYBOOK_STORAGE_KEY, JSON.stringify(updated))
+        setStorageError('')
+      } catch {
+        setStorageError(t('daybook.storageError'))
+        return current
+      }
+      return updated
+    })
+    if (close) {
       setSelected(null)
-      setStorageError('')
-    } catch {
-      setStorageError(t('daybook.storageError'))
-    }
+      setEntryId(null)
+    } else setEntryId(next.id)
+  }
+  const openPage = (page: JournalEntry) => {
+    setEntryId(page.id)
+    setSelected(
+      modes.find((m) => m.id === page.modeId) ?? {
+        ...modes[0],
+        id: page.modeId,
+        title: page.modeTitle,
+      },
+    )
+  }
+  const startPage = (mode: JournalMode | null) => {
+    setEntryId(null)
+    setSelected(mode)
   }
   // Search (command palette) can open a saved page directly.
   useEffect(() => {
-    const open = (modeId: string | null) => {
-      const mode = modeId && modes.find((m) => m.id === modeId)
+    // Accepts a saved page id (preferred) or a mode id (starts a new page).
+    const open = (id: string | null) => {
+      if (!id) return
+      const page = entriesRef.current.find((item) => item.id === id)
+      const mode = modes.find((m) => m.id === (page?.modeId ?? id))
       if (!mode) return
       try {
         sessionStorage.removeItem(OPEN_DAYBOOK_EVENT)
       } catch {
         /* nothing to clear */
       }
+      setEntryId(page?.id ?? null)
       setSelected(mode)
     }
     try {
@@ -128,11 +166,12 @@ export function JournalContainer() {
         )}
         {selected ? (
           <AdaptiveEditor
-            key={selected.id}
+            key={`${selected.id}:${entry?.id ?? 'new'}`}
             mode={selected}
             entry={entry}
-            onBack={() => setSelected(null)}
-            onSave={save}
+            onBack={() => startPage(null)}
+            onSave={(next) => persist(next, true)}
+            onAutosave={(next) => persist(next, false)}
           />
         ) : category || browse ? (
           <>
@@ -145,11 +184,42 @@ export function JournalContainer() {
                   ? modes.filter((mode) => mode.category === category)
                   : modes
               }
-              onSelect={setSelected}
+              onSelect={startPage}
             />
           </>
         ) : (
           <div className="journal-direction">
+            {recentPages.length > 0 && (
+              <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
+                {recentPages.map((page) => {
+                  const text = journalText(page.content).trim()
+                  const words = text ? text.split(/\s+/).length : 0
+                  return (
+                    <button
+                      key={page.id}
+                      type="button"
+                      className="daybook-page-card"
+                      onClick={() => openPage(page)}
+                    >
+                      <span className="daybook-page-date">
+                        {new Date(page.updatedAt).toLocaleDateString(language, {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </span>
+                      <strong>{page.modeTitle}</strong>
+                      <span className="daybook-page-preview">
+                        {text.slice(0, 160) || 'Empty page'}
+                      </span>
+                      <small>
+                        {words} {words === 1 ? 'word' : 'words'}
+                      </small>
+                    </button>
+                  )
+                })}
+              </Carousel>
+            )}
             <h2>What do you need today?</h2>
             <div className="choice-grid">
               {choices.map(({ key, label, Icon }) => (
@@ -164,22 +234,25 @@ export function JournalContainer() {
                 </button>
               ))}
             </div>
-            <button className="quiet-button" onClick={() => setBrowse(true)}>
-              Browse all pages
-            </button>
-            <button
-              className="quiet-button"
-              aria-expanded={libraryOpen}
-              onClick={() => setLibraryOpen(!libraryOpen)}
-            >
-              Saved pages · {entries.length}
-            </button>
+            <div className="daybook-home-actions">
+              <button className="quiet-button" onClick={() => setBrowse(true)}>
+                Browse all pages
+              </button>
+              <button
+                className="quiet-button"
+                aria-expanded={libraryOpen}
+                onClick={() => setLibraryOpen(!libraryOpen)}
+              >
+                Search pages
+              </button>
+            </div>
             {libraryOpen && (
               <SemanticSearch
                 entries={entries}
-                onOpen={(modeId) =>
-                  setSelected(modes.find((mode) => mode.id === modeId) ?? null)
-                }
+                onOpen={(id) => {
+                  const page = entries.find((item) => item.id === id)
+                  if (page) openPage(page)
+                }}
               />
             )}
           </div>
