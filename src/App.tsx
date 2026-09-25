@@ -1,3 +1,4 @@
+import { BloomHeading, Disclosure } from './components/BloomExperience'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -256,14 +257,9 @@ function App() {
           <div
             className={`page-content feature-page page-${active} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
           >
-            <div className="feature-heading flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h1 id="page-heading" tabIndex={-1}>
-                  {pageDetails[active].title}
-                </h1>
-              </div>
+            <BloomHeading title={pageDetails[active].title} page={active}>
               <FeatureGuide page={active} />
-            </div>
+            </BloomHeading>
             {settings.features.rpgSkillTree && <GrowthRewards data={data} setData={setData} today={today} active={active} flags={settings.features} onNavigate={jump} />}
             {error && (
               <div className="storage-error" role="alert">
@@ -354,7 +350,7 @@ function App() {
               </Suspense>
             ) : (
               <>
-                {active === 'overview' && settings.features.dailySpin && <DailySpin onCollection={settings.features.collectibles ? () => jump('collectibles') : undefined} />}
+                {active === 'overview' && settings.features.dailySpin && <Disclosure title="Your daily discovery · Free spin"><DailySpin onCollection={settings.features.collectibles ? () => jump('collectibles') : undefined} /></Disclosure>}
                 {active === 'overview' && (
                   <div className="stats grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     <div>

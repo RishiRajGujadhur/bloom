@@ -1,3 +1,4 @@
+import { CardRail } from '../BloomExperience'
 import { Check, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FONTS, THEMES } from '../../utils/themeEngine'
@@ -31,7 +32,7 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
         <h3 id="settings-colors">{t('settings.colors')}</h3>
         <p className={styles.hint}>{t('settings.colorsHint')}</p>
 
-        <div className={`${styles.themeGrid} grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3`}>
+        <CardRail label={t('settings.colors')}>
           {THEMES.map((theme) => {
             const isActive = theme.id === settings.themeId
             return (
@@ -80,7 +81,7 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
               </button>
             )
           })}
-        </div>
+        </CardRail>
 
         <div className={styles.accentRow}>
           <label htmlFor="custom-accent">
@@ -119,7 +120,7 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
         <h3 id="settings-fonts">{t('settings.fonts')}</h3>
         <p className={styles.hint}>{t('settings.fontsHint')}</p>
 
-        <div className={`${styles.fontList} grid grid-cols-1 gap-3 md:grid-cols-2`}>
+        <CardRail label={t('settings.fonts')}>
           {FONTS.map((font) => {
             const isActive = font.id === settings.fontId
             return (
@@ -151,7 +152,7 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
               </button>
             )
           })}
-        </div>
+        </CardRail>
       </section>
     </div>
   )

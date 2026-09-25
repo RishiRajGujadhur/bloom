@@ -1,3 +1,4 @@
+import { Disclosure } from '../components/BloomExperience'
 import { useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
@@ -189,6 +190,7 @@ export function GrowthRewards({
               Explore skills <ArrowUpRight size={16} />
             </button>
           </div>
+          <Disclosure title="Weekly goals · See your progress" open={active === 'growth'}>
           <div className="growth-goals">
             {goals.map((goal) => {
               const complete = goal.current >= goal.target
@@ -239,6 +241,7 @@ export function GrowthRewards({
               )
             })}
           </div>
+          </Disclosure>
         </section>
       )}
       <div

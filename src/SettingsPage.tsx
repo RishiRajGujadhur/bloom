@@ -1,3 +1,4 @@
+import { Disclosure } from './components/BloomExperience'
 import { useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -250,6 +251,7 @@ export function SettingsPage({
         </div>
       </section>
 
+      <Disclosure title={t('settings.configurationHeading')}>
       <section
         className={`${styles.card} rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6`}
         aria-labelledby="json-heading"
@@ -297,6 +299,7 @@ export function SettingsPage({
           </p>
         )}
       </section>
+      </Disclosure>
     </div>
   )
 }

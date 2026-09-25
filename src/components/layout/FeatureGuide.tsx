@@ -71,7 +71,7 @@ const step = (
 const guides: Record<NavKey, DriveStep[]> = {
   collectibles: [
     step(
-      '.collection-grid',
+      '.collection-page .bloom-rail',
       'Your garage',
       'Daily jackpots unlock cars. Select an unlocked car to bring it to your focus timer. Select it again to remove it.',
     ),

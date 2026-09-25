@@ -1,3 +1,4 @@
+import { CardRail } from '../../components/BloomExperience'
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useReducedMotion } from 'framer-motion'
@@ -210,7 +211,7 @@ export function CollectiblesPage() {
           unlocks a car.
         </p>
       )}
-      <div className="collection-grid">
+      <CardRail label="Your collection">
         {cars
           .filter(
             (car) => filter === 'all' || collection.owned.includes(car.id),
@@ -265,7 +266,7 @@ export function CollectiblesPage() {
               </article>
             )
           })}
-      </div>
+      </CardRail>
     </div>
   )
 }

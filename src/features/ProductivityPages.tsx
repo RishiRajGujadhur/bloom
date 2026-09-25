@@ -1,3 +1,4 @@
+import { CardRail } from '../components/BloomExperience'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import {
   ArrowRight,
@@ -45,7 +46,7 @@ export function ChallengesPage({
   const [notice, setNotice] = useState('')
   return (
     <div id="challenges-page">
-      <div className="choice-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <CardRail label="Challenges">
         {challenges.map((challenge) => {
           const accepted = data.challenges.find(
             (item) => item.id === challenge.id,
@@ -116,7 +117,7 @@ export function ChallengesPage({
             </article>
           )
         })}
-      </div>
+      </CardRail>
       <p role="status">{notice}</p>
     </div>
   )

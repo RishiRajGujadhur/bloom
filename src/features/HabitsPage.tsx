@@ -1,3 +1,4 @@
+import { CardRail } from '../components/BloomExperience'
 import { useEffect, useState } from 'react'
 import type { CSSProperties, Dispatch, SetStateAction } from 'react'
 import {
@@ -260,7 +261,7 @@ export function HabitsPage({
           {!data.habits.length && (
             <p>No habits yet. Start with one small daily commitment.</p>
           )}
-          <div className="habit-grid-list">
+          <CardRail label="Your habits">
             {data.habits.map((h, index) => {
               const stats = habitStats(h.dates, today)
               const done = h.dates.includes(today)
@@ -351,7 +352,7 @@ export function HabitsPage({
                 </article>
               )
             })}
-          </div>
+          </CardRail>
         </>
       ) : (
         <>
@@ -375,7 +376,7 @@ export function HabitsPage({
           ).length && (
             <p>No routines here yet. Make time for your next daily ritual.</p>
           )}
-          <div className="habit-grid-list">
+          <CardRail label="Your routines">
             {(data.routines ?? [])
               .filter((r) => period === 'all' || r.period === period)
               .map((r) => (
@@ -454,7 +455,7 @@ export function HabitsPage({
                   </footer>
                 </article>
               ))}
-          </div>
+          </CardRail>
         </>
       )}
       {habit && (
