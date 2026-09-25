@@ -150,6 +150,7 @@ const captions: Record<NavKey, string> = {
   calendar: 'Find a rhythm that feels like you.',
   'vision-board': 'Give your possibilities a place to grow.',
   urges: 'A pause is a powerful beginning.',
+  world: 'Every small step builds your little world.',
   settings: 'Make this space your own.',
 }
 

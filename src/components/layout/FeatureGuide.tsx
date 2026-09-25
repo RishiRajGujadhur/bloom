@@ -52,6 +52,10 @@ export const pageDetails: Record<
     title: 'Vision Board',
     description: 'Bring your ideas together and give your future some space.',
   },
+  world: {
+    title: 'Bloom World',
+    description: 'Every small step builds your little world.',
+  },
   settings: {
     title: 'Make it yours',
     description: 'Choose the appearance and tools that support your practice.',
@@ -69,6 +73,18 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  world: [
+    step(
+      '.world-canvas',
+      'Your living island',
+      'Drag to orbit, scroll to zoom. Every district grows from real activity.',
+    ),
+    step(
+      '.world-districts',
+      'Districts',
+      'See what each district needs next and fly the camera there.',
+    ),
+  ],
   collectibles: [
     step(
       '.collection-page .bloom-rail',

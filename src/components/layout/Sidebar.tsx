@@ -10,6 +10,7 @@ import {
   CheckSquare,
   LayoutDashboard,
   Map,
+  Castle,
   ListChecks,
   Menu,
   Pencil,
@@ -40,6 +41,7 @@ export type NavKey =
   | 'settings'
   | 'vision-board'
   | 'urges'
+  | 'world'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -226,6 +228,12 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       title: t('settings.feature.visionBoard.title'),
       Icon: Map,
       requires: 'visionBoard',
+    },
+    {
+      key: 'world',
+      title: t('settings.feature.bloomWorld.title'),
+      Icon: Castle,
+      requires: 'bloomWorld',
     },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },

@@ -63,6 +63,11 @@ import './features/features.css'
 import './styles/shared-ui.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
+const WorldPage = lazy(() =>
+  import('./features/world/WorldPage').then((module) => ({
+    default: module.WorldPage,
+  })),
+)
 const CalendarPage = lazy(() =>
   import('./features/CalendarPage').then((module) => ({
     default: module.CalendarPage,
@@ -313,7 +318,8 @@ function App() {
             (active === 'daybook' && !settings.features.daybookModes) ||
             (active === 'urges' && !settings.features.urgeTracker) ||
             (active === 'calendar' && !settings.features.fullCalendar) ||
-            (active === 'vision-board' && !settings.features.visionBoard) ? (
+            (active === 'vision-board' && !settings.features.visionBoard) ||
+            (active === 'world' && !settings.features.bloomWorld) ? (
               <section className="card rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
                 <h2>This feature is turned off</h2>
                 <p>You can enable it in Settings.</p>
@@ -321,6 +327,14 @@ function App() {
                   Open settings
                 </button>
               </section>
+            ) : active === 'world' ? (
+              <Suspense fallback={<p role="status">Growing your world…</p>}>
+                <WorldPage
+                  data={data}
+                  today={today}
+                  onNavigate={jump}
+                />
+              </Suspense>
             ) : active === 'collectibles' ? (
               <CollectiblesPage />
             ) : active === 'habits' ? null : active === 'calendar' ? (

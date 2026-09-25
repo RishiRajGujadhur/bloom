@@ -12,6 +12,7 @@ export interface FeatureFlags {
   collectibles: boolean
   fullCalendar: boolean
   visionBoard: boolean
+  bloomWorld: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -34,6 +35,7 @@ export const defaultSettings: AppSettings = {
     collectibles: false,
     fullCalendar: true,
     visionBoard: true,
+    bloomWorld: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -50,6 +52,7 @@ const featureKeys = [
   'collectibles',
   'fullCalendar',
   'visionBoard',
+  'bloomWorld',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

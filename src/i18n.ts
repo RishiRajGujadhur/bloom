@@ -277,6 +277,11 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      bloomWorld: {
+        title: 'Bloom World',
+        description:
+          'A living 3D island that grows from your tasks, focus, journals and habits.',
+      },
       visionBoard: {
         title: 'Vision Board',
         description:
@@ -1052,6 +1057,11 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          bloomWorld: {
+            title: 'Monde Bloom',
+            description:
+              'Une île 3D vivante qui grandit avec vos tâches, votre concentration, votre journal et vos habitudes.',
+          },
           visionBoard: {
             title: 'Tableau de vision',
             description:
