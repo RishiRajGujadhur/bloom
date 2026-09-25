@@ -43,6 +43,7 @@ export function RpgDashboard({
   showWeeklyRaid,
   showWalkthroughTour,
   compact = false,
+  externalFeedback = false,
 }: {
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
@@ -50,6 +51,7 @@ export function RpgDashboard({
   showWeeklyRaid: boolean
   showWalkthroughTour: boolean
   compact?: boolean
+  externalFeedback?: boolean
 }) {
   const { t } = useTranslation(undefined, { i18n })
   const [growthTab, setGrowthTab] = useState<'avatar' | 'skills' | 'rewards'>(
@@ -116,8 +118,8 @@ export function RpgDashboard({
     })
     clearTimeout(timer.current)
     timer.current = setTimeout(() => setFeedback(null), 2200)
-    if (kind === 'victory' && data.rpg.sound && audioReady) victoryChord()
-  }, [data.rpg, audioReady, t])
+    if (!externalFeedback && kind === 'victory' && data.rpg.sound && audioReady) victoryChord()
+  }, [data.rpg, audioReady, t, externalFeedback])
   const now = Math.max(clock, data.rpg.lastSeenAt)
   const today = dayKey(new Date(now)),
     stats = totals(data.rpg),
@@ -543,7 +545,7 @@ export function RpgDashboard({
           </div>
         </>
       )}
-      {feedback && (
+      {feedback && !externalFeedback && (
         <div
           key={feedback.nonce}
           className="pixel-feedback"

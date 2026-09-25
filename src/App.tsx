@@ -36,6 +36,7 @@ import {
   pageDetails,
   readPage,
 } from './components/layout/FeatureGuide'
+import { GrowthRewards } from './rpg/GrowthRewards'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
@@ -263,6 +264,7 @@ function App() {
               </div>
               <FeatureGuide page={active} />
             </div>
+            {settings.features.rpgSkillTree && <GrowthRewards data={data} setData={setData} today={today} active={active} flags={settings.features} onNavigate={jump} />}
             {error && (
               <div className="storage-error" role="alert">
                 <strong>{t('ui.savingAttention')}</strong>
@@ -326,6 +328,7 @@ function App() {
             ) : active === 'growth' ? (
               <RpgDashboard
                 compact
+                externalFeedback
                 data={data}
                 setData={setData}
                 onReflect={() => jump('journal')}
