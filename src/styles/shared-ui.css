@@ -608,3 +608,37 @@ html[data-density='compact'] .app-shell .sidebar nav button {
   padding-top: 6px;
   padding-bottom: 6px;
 }
+
+/* Filter chips (Headspace-style category filters). */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.filter-chips button {
+  min-height: 38px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+.filter-chips button:hover {
+  color: var(--text-primary);
+  border-color: color-mix(in oklab, var(--accent-color) 35%, var(--border-color));
+}
+.filter-chips button[aria-selected='true'],
+.filter-chips button[aria-pressed='true'] {
+  background: var(--accent-color);
+  border-color: transparent;
+  color: var(--text-on-accent, #fff);
+}

@@ -19,6 +19,7 @@ import { totals } from './engine'
 import { enableAudio, victoryChord } from './audio'
 import { earnedFeedback, weeklyGoals } from './rewards'
 import './rewards.css'
+import { Carousel } from '../components/ui/Carousel'
 
 export function GrowthRewards({
   data,
@@ -191,7 +192,7 @@ export function GrowthRewards({
             </button>
           </div>
           <Disclosure title="Weekly goals · See your progress" open={active === 'growth'}>
-          <div className="growth-goals">
+          <Carousel label="Weekly goals" perView={3}>
             {goals.map((goal) => {
               const complete = goal.current >= goal.target
               const percent = Math.min(
@@ -240,7 +241,7 @@ export function GrowthRewards({
                 </motion.button>
               )
             })}
-          </div>
+          </Carousel>
           </Disclosure>
         </section>
       )}

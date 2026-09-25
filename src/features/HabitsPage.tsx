@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { CSSProperties, Dispatch, SetStateAction } from 'react'
 import {
   Check,
+  LibraryBig,
   Plus,
   Pencil,
   Trash2,
@@ -19,6 +20,7 @@ import { dayKey, id, toggleHabit } from '../model'
 import type { AppData } from '../model'
 import { inferStat } from '../rpg/schema'
 import { Modal } from '../components/Modal'
+import { HabitLibrary, RoutineLibrary } from './AdoptLibrary'
 import { gridDays, habitStats } from './habits'
 import './habits.css'
 
@@ -53,6 +55,11 @@ export function HabitsPage({
   const [period, setPeriod] = useState('all')
   const [run, setRun] = useState<Run | null>(null)
   const [message, setMessage] = useState('')
+  const [library, setLibrary] = useState(false)
+  const adoptedHabits = new Set(data.habits.map((h) => h.title.toLowerCase()))
+  const adoptedRoutines = new Set(
+    (data.routines ?? []).map((r) => r.title.toLowerCase()),
+  )
   useEffect(() => {
     if (!run?.deadline) return
     const timer = window.setInterval(
@@ -125,6 +132,10 @@ export function HabitsPage({
             Routines
           </button>
         </div>
+        <div className="habits-actions">
+        <button className="quiet-button" onClick={() => setLibrary(true)}>
+          <LibraryBig size={16} aria-hidden="true" /> Browse library
+        </button>
         <button
           className="primary"
           onClick={() =>
@@ -150,7 +161,58 @@ export function HabitsPage({
           <Plus size={16} />
           {tab === 'habits' ? 'New habit' : 'New routine'}
         </button>
+        </div>
       </div>
+      {library && (
+        <Modal
+          title={tab === 'habits' ? 'Habit library' : 'Routine library'}
+          onClose={() => setLibrary(false)}
+        >
+          {tab === 'habits' ? (
+            <HabitLibrary
+              adopted={adoptedHabits}
+              onAdopt={(h) => {
+                setData((current) => ({
+                  ...current,
+                  habits: [
+                    ...current.habits,
+                    {
+                      id: id(),
+                      title: h.title,
+                      detail: h.detail,
+                      dates: [],
+                      stat: h.stat,
+                      color: h.color,
+                    },
+                  ],
+                }))
+                setMessage(`${h.title} added to your habits.`)
+              }}
+            />
+          ) : (
+            <RoutineLibrary
+              adopted={adoptedRoutines}
+              onAdopt={(r) => {
+                setData((current) => ({
+                  ...current,
+                  routines: [
+                    ...(current.routines ?? []),
+                    {
+                      id: id(),
+                      title: r.title,
+                      period: r.period,
+                      days: r.days,
+                      steps: r.steps.map((step) => ({ id: id(), ...step })),
+                      dates: [],
+                    },
+                  ],
+                }))
+                setMessage(`${r.title} added to your routines.`)
+              }}
+            />
+          )}
+        </Modal>
+      )}
       <p role="status" className="habit-message">
         {message}
       </p>

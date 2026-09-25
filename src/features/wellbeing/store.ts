@@ -24,7 +24,28 @@ export function useStoredList<T>(key: string) {
 }
 
 export type MoodEntry = { id: string; at: number; mood: number; note: string }
-export type GratitudeEntry = { id: string; at: number; text: string }
+export type GratitudeEntry = { id: string; at: number; text: string; jarId?: string }
+export type GratitudeJar = { id: string; name: string; emoji: string; color: string }
+export const GRATITUDE_JARS_KEY = 'bloom-gratitude-jars-v1'
+/** Notes a jar holds before it looks full; it keeps accepting more. */
+export const JAR_CAPACITY = 30
+export const defaultJars: GratitudeJar[] = [
+  { id: 'moments', name: 'Little moments', emoji: '✨', color: '#f2a65a' },
+  { id: 'people', name: 'People', emoji: '🤝', color: '#e27396' },
+  { id: 'nature', name: 'Nature', emoji: '🌿', color: '#6bbf7a' },
+  { id: 'self', name: 'Myself', emoji: '🌱', color: '#8f7ae5' },
+  { id: 'growth', name: 'Lessons', emoji: '📚', color: '#5aa9e6' },
+  { id: 'comfort', name: 'Comforts', emoji: '☕', color: '#c98b5b' },
+]
+/** Notes per jar, most-filled first. Older notes without a jar go to "moments". */
+export function jarTotals(jars: GratitudeJar[], entries: GratitudeEntry[]) {
+  return jars
+    .map((jar) => ({
+      jar,
+      count: entries.filter((e) => (e.jarId ?? 'moments') === jar.id).length,
+    }))
+    .sort((a, b) => b.count - a.count)
+}
 export type BreathSession = { id: string; at: number; pattern: string; cycles: number }
 
 export const MOOD_KEY = 'bloom-mood-v1'

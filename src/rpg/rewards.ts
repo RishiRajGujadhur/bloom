@@ -40,6 +40,65 @@ export function weeklyGoals(data: AppData, today: string) {
         .reduce((sum, s) => sum + s.minutes, 0),
       page: 'focus' as const,
     },
+    {
+      id: 'tasks',
+      title: 'Clear the path',
+      unit: 'tasks done',
+      target: 8,
+      current: data.todos.filter(
+        (t) => t.done && t.completedAt && inWeek(dayKey(new Date(t.completedAt))),
+      ).length,
+      page: 'todos' as const,
+    },
+    {
+      id: 'intentions',
+      title: 'Follow through gently',
+      unit: 'intentions kept',
+      target: 5,
+      current: data.plans.filter((p) => p.done && inWeek(p.date)).length,
+      page: 'planning' as const,
+    },
+    {
+      id: 'routines',
+      title: 'Rituals that hold you',
+      unit: 'routine runs',
+      target: 3,
+      current: (data.routines ?? []).reduce(
+        (sum, r) => sum + new Set(r.dates.filter(inWeek)).size,
+        0,
+      ),
+      page: 'habits' as const,
+    },
+    {
+      id: 'deep-focus',
+      title: 'Go a little deeper',
+      unit: 'focus sessions',
+      target: 5,
+      current: (data.rpg.focusHistory ?? []).filter((s) =>
+        inWeek(dayKey(new Date(s.completedAt))),
+      ).length,
+      page: 'focus' as const,
+    },
+    {
+      id: 'show-up',
+      title: 'Show up most days',
+      unit: 'active days',
+      target: 5,
+      current: new Set([
+        ...data.habits.flatMap((h) => h.dates.filter(inWeek)),
+        ...data.sessions
+          .map((s) => dayKey(new Date(s.metadata.date)))
+          .filter(inWeek),
+        ...data.todos
+          .filter((t) => t.done && t.completedAt)
+          .map((t) => dayKey(new Date(t.completedAt!)))
+          .filter(inWeek),
+        ...(data.rpg.focusHistory ?? [])
+          .map((s) => dayKey(new Date(s.completedAt)))
+          .filter(inWeek),
+      ]).size,
+      page: 'overview' as const,
+    },
   ]
 }
 

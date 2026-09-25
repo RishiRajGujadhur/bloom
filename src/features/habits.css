@@ -223,3 +223,8 @@
     gap: 3px;
   }
 }
+.habits-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

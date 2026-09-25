@@ -31,6 +31,7 @@ import {
 import {
   acceptChallenge,
   addSubtask,
+  challengeCategories,
   challenges,
   toggleSubtask,
   toggleTodo,
@@ -44,10 +45,26 @@ export function ChallengesPage({
 }: Props & { onTasks: () => void }) {
   const [selected, setSelected] = useState<string | null>(null)
   const [notice, setNotice] = useState('')
+  const [category, setCategory] = useState<string>('all')
+  const shown = challenges.filter(
+    (c) => category === 'all' || c.category === category,
+  )
   return (
     <div id="challenges-page">
-      <CardRail label="Challenges">
-        {challenges.map((challenge) => {
+      <div className="filter-chips" role="tablist" aria-label="Challenge type">
+        {challengeCategories.map((c) => (
+          <button
+            key={c.id}
+            role="tab"
+            aria-selected={category === c.id}
+            onClick={() => setCategory(c.id)}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+      <CardRail label="Challenges" key={category}>
+        {shown.map((challenge) => {
           const accepted = data.challenges.find(
             (item) => item.id === challenge.id,
           )

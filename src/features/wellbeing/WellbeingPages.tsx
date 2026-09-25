@@ -4,7 +4,12 @@ import { Heart, Pause, RotateCcw, Trash2 } from 'lucide-react'
 import { Carousel } from '../../components/ui/Carousel'
 import {
   BREATH_KEY,
+  GRATITUDE_JARS_KEY,
   GRATITUDE_KEY,
+  JAR_CAPACITY,
+  defaultJars,
+  jarTotals,
+  type GratitudeJar,
   MOOD_KEY,
   moods,
   moodWeek,
@@ -19,15 +24,31 @@ import { LottieIcon } from '../../components/ui/LottieIcon'
 /* ------------------------------------------------------------------ */
 /* Breathe — Calm/Headspace-style paced breathing                      */
 /* ------------------------------------------------------------------ */
-const patterns = [
-  { id: 'box', name: 'Box', phases: [['In', 4], ['Hold', 4], ['Out', 4], ['Hold', 4]] },
-  { id: '478', name: '4-7-8', phases: [['In', 4], ['Hold', 7], ['Out', 8]] },
-  { id: 'calm', name: 'Calm', phases: [['In', 4], ['Out', 6]] },
-] as const
+type Phase = readonly [label: string, seconds: number]
+const patterns: readonly {
+  id: string
+  name: string
+  emoji: string
+  benefit: string
+  phases: readonly Phase[]
+}[] = [
+  { id: 'box', name: 'Box', emoji: '⬜', benefit: 'Steady focus under pressure', phases: [['In', 4], ['Hold', 4], ['Out', 4], ['Hold', 4]] },
+  { id: '478', name: '4-7-8', emoji: '🌙', benefit: 'Wind down for sleep', phases: [['In', 4], ['Hold', 7], ['Out', 8]] },
+  { id: 'sigh', name: 'Physiological sigh', emoji: '😮‍💨', benefit: 'Fastest way to calm down', phases: [['In', 2], ['In more', 1], ['Out', 6]] },
+  { id: 'coherent', name: 'Coherent', emoji: '🌊', benefit: 'Balance, about 6 breaths a minute', phases: [['In', 5], ['Out', 5]] },
+  { id: 'calm', name: 'Extended exhale', emoji: '🍃', benefit: 'Ease anxiety gently', phases: [['In', 4], ['Out', 6]] },
+  { id: '7-11', name: '7-11', emoji: '🕊️', benefit: 'Slow, deep relaxation', phases: [['In', 7], ['Out', 11]] },
+  { id: 'triangle', name: 'Triangle', emoji: '🔺', benefit: 'Simple rhythm for beginners', phases: [['In', 4], ['Hold', 4], ['Out', 4]] },
+  { id: 'resonant-hold', name: 'Resonant hold', emoji: '🪷', benefit: 'Deepen calm and patience', phases: [['In', 5], ['Hold', 2], ['Out', 7], ['Hold', 2]] },
+  { id: 'energize', name: 'Energize', emoji: '⚡', benefit: 'A quick, alert lift', phases: [['In', 3], ['Out', 2]] },
+  { id: 'nostril', name: 'Alternate nostril', emoji: '👃', benefit: 'Centre and settle the mind', phases: [['In · left', 4], ['Hold', 4], ['Out · right', 4], ['In · right', 4], ['Hold', 4], ['Out · left', 4]] },
+]
+const roundOptions = [4, 8, 12] as const
 
 export function BreathePage() {
   const reduced = useReducedMotion()
-  const [patternId, setPatternId] = useState<(typeof patterns)[number]['id']>('box')
+  const [patternId, setPatternId] = useState<string>('box')
+  const [rounds, setRounds] = useState<number>(8)
   const pattern = patterns.find((p) => p.id === patternId)!
   const [running, setRunning] = useState(false)
   // One pure state transition per second: count down, then move to the next
@@ -64,25 +85,54 @@ export function BreathePage() {
     stop()
     setTick({ phase: 0, left: pattern.phases[0][1], cycles: 0 })
   }
+  // Finish automatically once the chosen number of rounds is done.
+  useEffect(() => {
+    if (running && cycles >= rounds) stop()
+    // stop() is recreated each render; run only when the count changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cycles, rounds, running])
   const [label, seconds] = pattern.phases[phase]
-  const scale = label === 'In' ? 1 : label === 'Out' ? 0.62 : undefined
+  const scale = label.startsWith('In more')
+    ? 1.08
+    : label.startsWith('In')
+      ? 1
+      : label.startsWith('Out')
+        ? 0.62
+        : undefined
 
   return (
     <section className="wb-page wb-breathe" aria-labelledby="breathe-title">
       <h2 id="breathe-title" className="sr-only">Breathe</h2>
-      <div className="wb-chips" role="radiogroup" aria-label="Breathing pattern">
+      <Carousel label="Breathing techniques" perView={4}>
         {patterns.map((p) => (
           <button
             key={p.id}
-            role="radio"
-            aria-checked={p.id === patternId}
+            type="button"
+            className="wb-technique"
+            aria-pressed={p.id === patternId}
             disabled={running}
             onClick={() => {
               setPatternId(p.id)
               setTick({ phase: 0, left: p.phases[0][1], cycles: 0 })
             }}
           >
-            {p.name}
+            <span aria-hidden="true">{p.emoji}</span>
+            <strong>{p.name}</strong>
+            <small>{p.benefit}</small>
+            <em>{p.phases.map((ph) => ph[1]).join(' · ')}</em>
+          </button>
+        ))}
+      </Carousel>
+      <div className="wb-chips" role="radiogroup" aria-label="Rounds">
+        {roundOptions.map((n) => (
+          <button
+            key={n}
+            role="radio"
+            aria-checked={rounds === n}
+            disabled={running}
+            onClick={() => setRounds(n)}
+          >
+            {n} rounds
           </button>
         ))}
       </div>
@@ -100,7 +150,7 @@ export function BreathePage() {
         />
         <div className="wb-orb-copy" aria-live="polite">
           <strong>{running ? label : 'Ready'}</strong>
-          <span>{running ? left : `${pattern.phases.map((p) => p[1]).join('·')}`}</span>
+          <span>{running ? left : pattern.name}</span>
         </div>
       </div>
       <div className="wb-actions">
@@ -112,7 +162,9 @@ export function BreathePage() {
           <RotateCcw size={18} />
         </button>
       </div>
-      <p className="wb-muted">{cycles} {cycles === 1 ? 'cycle' : 'cycles'}</p>
+      <p className="wb-muted">
+        {cycles} / {rounds} rounds
+      </p>
     </section>
   )
 }
@@ -215,18 +267,107 @@ export function MoodPage() {
 /* ------------------------------------------------------------------ */
 export function GratitudePage() {
   const [entries, setEntries] = useStoredList<GratitudeEntry>(GRATITUDE_KEY)
+  const [custom, setCustom] = useStoredList<GratitudeJar>(GRATITUDE_JARS_KEY)
+  const jars = [...defaultJars, ...custom]
+  const [jarId, setJarId] = useState(jars[0].id)
   const [text, setText] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [newJar, setNewJar] = useState({ name: '', emoji: '🫙' })
+  const jar = jars.find((j) => j.id === jarId) ?? jars[0]
+  const inJar = entries.filter((e) => (e.jarId ?? 'moments') === jar.id)
+  const totals = jarTotals(jars, entries)
+  const top = totals[0]
+  const fill = (count: number) => Math.min(100, (count / JAR_CAPACITY) * 100)
   const add = () => {
     const value = text.trim()
     if (!value) return
-    setEntries((list) => [{ id: crypto.randomUUID(), at: Date.now(), text: value }, ...list])
+    setEntries((list) => [
+      { id: crypto.randomUUID(), at: Date.now(), text: value, jarId: jar.id },
+      ...list,
+    ])
     setText('')
+  }
+  const createJar = () => {
+    const name = newJar.name.trim()
+    if (!name) return
+    const created = {
+      id: `custom-${crypto.randomUUID()}`,
+      name,
+      emoji: newJar.emoji || '🫙',
+      color: `hsl(${Math.round(Math.random() * 360)} 65% 65%)`,
+    }
+    setCustom((list) => [...list, created])
+    setJarId(created.id)
+    setNewJar({ name: '', emoji: '🫙' })
+    setCreating(false)
   }
   return (
     <section className="wb-page" aria-labelledby="gratitude-title">
-      <div className="wb-card wb-jar-card">
+      <h2 id="gratitude-title" className="sr-only">
+        Gratitude jars
+      </h2>
+      <div className="wb-jar-shelf" role="tablist" aria-label="Your jars">
+        {jars.map((j) => {
+          const count = entries.filter((e) => (e.jarId ?? 'moments') === j.id).length
+          return (
+            <button
+              key={j.id}
+              role="tab"
+              aria-selected={j.id === jar.id}
+              className="wb-mini-jar"
+              style={{ ['--jar' as string]: j.color, ['--fill' as string]: `${fill(count)}%` }}
+              onClick={() => setJarId(j.id)}
+            >
+              <span className="wb-mini-glass" aria-hidden="true">
+                <i />
+                <b>{j.emoji}</b>
+              </span>
+              <strong>{j.name}</strong>
+              <small>{count}</small>
+            </button>
+          )
+        })}
+        <button
+          className="wb-mini-jar wb-new-jar"
+          aria-expanded={creating}
+          onClick={() => setCreating((v) => !v)}
+        >
+          <span className="wb-mini-glass" aria-hidden="true">
+            <b>+</b>
+          </span>
+          <strong>New jar</strong>
+        </button>
+      </div>
+      {creating && (
+        <form
+          className="wb-card wb-inline-form"
+          onSubmit={(e) => {
+            e.preventDefault()
+            createJar()
+          }}
+        >
+          <input
+            aria-label="Jar emoji"
+            className="wb-emoji-input"
+            value={newJar.emoji}
+            maxLength={4}
+            onChange={(e) => setNewJar((j) => ({ ...j, emoji: e.target.value }))}
+          />
+          <input
+            aria-label="Jar name"
+            placeholder="Name your jar (e.g. Music)"
+            value={newJar.name}
+            maxLength={30}
+            onChange={(e) => setNewJar((j) => ({ ...j, name: e.target.value }))}
+          />
+          <button className="ov-primary" type="submit">
+            Create
+          </button>
+        </form>
+      )}
+      <div className="wb-card wb-jar-card" style={{ ['--jar' as string]: jar.color }}>
         <div className="wb-jar" aria-hidden="true">
-          {entries.slice(0, 18).map((entry, i) => (
+          {inJar.slice(0, 24).map((entry, i) => (
             <motion.i
               key={entry.id}
               initial={{ y: -60, opacity: 0 }}
@@ -236,7 +377,9 @@ export function GratitudePage() {
           ))}
         </div>
         <div>
-          <h2 id="gratitude-title">One good thing today</h2>
+          <h3 className="wb-jar-title">
+            {jar.emoji} {jar.name}
+          </h3>
           <form
             className="wb-inline-form"
             onSubmit={(e) => {
@@ -245,8 +388,8 @@ export function GratitudePage() {
             }}
           >
             <input
-              aria-label="Something you're grateful for"
-              placeholder="A kind word, warm tea, sunlight…"
+              aria-label={`Add to ${jar.name}`}
+              placeholder="One good thing…"
               value={text}
               maxLength={200}
               onChange={(e) => setText(e.target.value)}
@@ -256,16 +399,44 @@ export function GratitudePage() {
             </button>
           </form>
           <p className="wb-muted">
-            <Heart size={14} aria-hidden="true" /> {entries.length} in your jar
+            <Heart size={14} aria-hidden="true" /> {inJar.length} / {JAR_CAPACITY}
           </p>
         </div>
       </div>
-      {entries.length > 0 && (
-        <Carousel label="Your gratitude notes" title="In the jar" perView={4}>
-          {entries.map((entry) => (
+      <div className="wb-card">
+        <h3 className="wb-jar-title">
+          Compare jars
+          {top && top.count > 0 && (
+            <small>
+              {top.jar.emoji} {top.jar.name} is fullest
+            </small>
+          )}
+        </h3>
+        <ol className="wb-compare">
+          {totals.map(({ jar: j, count }) => (
+            <li key={j.id} style={{ ['--jar' as string]: j.color }}>
+              <span>
+                {j.emoji} {j.name}
+              </span>
+              <span className="wb-compare-track" aria-hidden="true">
+                <motion.i
+                  initial={false}
+                  animate={{ width: `${Math.max(fill(count), count ? 4 : 0)}%` }}
+                />
+              </span>
+              <strong>{count}</strong>
+            </li>
+          ))}
+        </ol>
+      </div>
+      {inJar.length > 0 && (
+        <Carousel label={`Notes in ${jar.name}`} title="In this jar" perView={4}>
+          {inJar.map((entry) => (
             <article key={entry.id} className="wb-note">
               <p>{entry.text}</p>
-              <small>{new Date(entry.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</small>
+              <small>
+                {new Date(entry.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+              </small>
               <button
                 className="icon-button"
                 aria-label={`Remove “${entry.text}”`}

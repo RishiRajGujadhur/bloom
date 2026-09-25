@@ -61,11 +61,8 @@ import {
 import { Sidebar } from './components/layout/Sidebar'
 import { Carousel } from './components/ui/Carousel'
 import { LottieIcon } from './components/ui/LottieIcon'
-import {
-  QuickAdd,
-  SearchTrigger,
-  StreakPill,
-} from './components/layout/TopbarExtras'
+import { QuickAdd, SearchTrigger } from './components/layout/TopbarExtras'
+import { StreakRewards } from './features/rewards/StreakRewards'
 import {
   CommandPalette,
   rememberPage,
@@ -293,7 +290,7 @@ function App() {
                 onIntention={() => setModal('plan')}
                 onNavigate={jump}
               />
-              <StreakPill data={data} today={today} />
+              <StreakRewards data={data} today={today} />
               {settings.features.languageSelector && <LanguageSelector />}
               <button
                 className="theme-toggle"

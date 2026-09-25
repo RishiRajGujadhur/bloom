@@ -66,10 +66,11 @@ test('weekly goals use local Monday boundaries, unique habit dates and completed
       taskTitle: 'Reading',
     },
   ]
-  expect(weeklyGoals(data, '2026-09-25').map((g) => g.current)).toEqual([
-    0, 2, 25,
-  ])
-  expect(weeklyGoals(data, '2026-09-28').map((g) => g.current)).toEqual([
-    0, 0, 0,
-  ])
+  const thisWeek = weeklyGoals(data, '2026-09-25')
+  expect(thisWeek.slice(0, 3).map((g) => g.current)).toEqual([0, 2, 25])
+  expect(thisWeek.find((g) => g.id === 'deep-focus')?.current).toBe(1)
+  expect(thisWeek.find((g) => g.id === 'show-up')?.current).toBe(2)
+  expect(
+    weeklyGoals(data, '2026-09-28').every((g) => g.current === 0),
+  ).toBe(true)
 })

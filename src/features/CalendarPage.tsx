@@ -13,6 +13,8 @@ import interactionPlugin, { Draggable } from '@fullcalendar/interaction'
 import {
   CalendarDays,
   Check,
+  Maximize2,
+  Minimize2,
   ChevronLeft,
   ChevronRight,
   GripVertical,
@@ -40,6 +42,43 @@ const hours = (minutes: number) => `${Math.round(minutes / 6) / 10}h`
 
 export function CalendarPage({ data, setData }: Props) {
   const calendar = useRef<FullCalendar>(null)
+  // Full screen: the browser Fullscreen API when available, otherwise a
+  // fixed overlay. Esc (or the button) returns to the normal layout.
+  const workspace = useRef<HTMLElement>(null)
+  const [fullscreen, setFullscreen] = useState(false)
+  useEffect(() => {
+    const sync = () => {
+      if (!document.fullscreenElement) setFullscreen(false)
+    }
+    document.addEventListener('fullscreenchange', sync)
+    return () => document.removeEventListener('fullscreenchange', sync)
+  }, [])
+  useEffect(() => {
+    if (!fullscreen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !document.fullscreenElement)
+        setFullscreen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [fullscreen])
+  useEffect(() => {
+    // Let FullCalendar re-measure after the layout changes.
+    const timer = setTimeout(() => calendar.current?.getApi().updateSize(), 60)
+    return () => clearTimeout(timer)
+  }, [fullscreen])
+  const toggleFullscreen = () => {
+    const node = workspace.current
+    if (!fullscreen) {
+      setFullscreen(true)
+      node?.requestFullscreen?.().catch(() => {
+        /* Overlay fallback stays active. */
+      })
+    } else {
+      setFullscreen(false)
+      if (document.fullscreenElement) void document.exitFullscreen()
+    }
+  }
   const tray = useRef<HTMLDivElement>(null)
   const [selectedDay, setSelectedDay] = useState(dayKey)
   const [view, setView] = useState(() =>
@@ -134,7 +173,11 @@ export function CalendarPage({ data, setData }: Props) {
   }
 
   return (
-    <section className="calendar-workspace" id="calendar-page">
+    <section
+      ref={workspace}
+      className={`calendar-workspace${fullscreen ? ' is-fullscreen' : ''}`}
+      id="calendar-page"
+    >
       <div className="calendar-toolbar">
         <div className="planning-toolbar">
           <button
@@ -187,6 +230,15 @@ export function CalendarPage({ data, setData }: Props) {
             }}
           >
             <Plus size={16} /> New block
+          </button>
+          <button
+            className="icon-button calendar-fullscreen"
+            aria-pressed={fullscreen}
+            aria-label={fullscreen ? 'Exit full screen' : 'Full screen'}
+            title={fullscreen ? 'Exit full screen (Esc)' : 'Full screen'}
+            onClick={toggleFullscreen}
+          >
+            {fullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
         </div>
       </div>
@@ -346,7 +398,7 @@ export function CalendarPage({ data, setData }: Props) {
             initialView={view}
             initialDate={selectedDay}
             headerToolbar={false}
-            height={680}
+            height={fullscreen ? 'calc(100dvh - 190px)' : 680}
             nowIndicator
             firstDay={1}
             allDaySlot={false}
