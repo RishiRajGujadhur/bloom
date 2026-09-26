@@ -3,6 +3,7 @@ import { taskWeight } from './impact/impactModel'
 import { burst } from '../components/ui/celebrate'
 import { loadSettings } from '../SettingsPage'
 import { subOn } from './subFeatures'
+import { TodosQuick } from './quick/TodosQuick'
 
 /** Only heavy tasks drop by default; switching "Heavy tasks only" off lets any task fall. */
 const impactThreshold = () => (subOn('impactTasks', 'heavyOnly') ? 1 : 0)
@@ -237,6 +238,7 @@ export function TodoPage({ data, setData }: Props) {
   }
   return (
     <section id="todo-page" className="task-workspace planning-workspace">
+      <TodosQuick data={data} setData={setData} />
       <PlanningTools
         data={data}
         setData={setData}

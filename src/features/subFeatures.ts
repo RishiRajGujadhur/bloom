@@ -310,6 +310,11 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'shake', title: 'Screen shake', description: 'A little rumble when it shatters.' },
     { id: 'hint', title: 'How-to hint', description: '“Grab it and throw it…”' },
     { id: 'heavyOnly', title: 'Heavy tasks only', description: 'Off: every completed task falls.' },
+    { id: 'naturalAdd', title: 'To-dos: natural quick-add', description: 'Type dates, !priority and #tags in plain words.' },
+    { id: 'moodMatch', title: 'To-dos: energy match', description: 'Pick a mood, get tasks that fit it.' },
+    { id: 'triage', title: 'To-dos: swipe triage', description: 'Swipe overdue tasks to today or later.' },
+    { id: 'triageToday', title: 'To-dos: include today', description: 'Also triage tasks due today.' },
+    { id: 'somedayOnNo', title: 'To-dos: someday list', description: 'Old tasks swiped left go to #someday.' },
   ],
   dietTracker: [
     { id: 'macros', title: 'Macros', description: 'Protein, carbs and fat alongside calories.' },

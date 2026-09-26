@@ -265,3 +265,17 @@
   justify-content: space-between;
   gap: 8px;
 }
+
+.quick-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-add input {
+  flex: 1 1 220px;
+}
+
+.quick-add small {
+  flex-basis: 100%;
+}
