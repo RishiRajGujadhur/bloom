@@ -31,6 +31,10 @@ import type { Stat } from './schema'
 import { GamificationShowcase } from './GamificationShowcase'
 import { MomentumFeatures } from './MomentumFeatures'
 import './rpg.css'
+import { LivingSeedling } from './LivingSeedling'
+import { subOn } from '../features/subFeatures'
+import { readStore, writeStore } from '../components/studio/Studio'
+import type { ReactNode } from 'react'
 
 const elapsedLabel = (elapsed: number) => {
   const minutes = Math.floor(elapsed / 60000)
@@ -44,6 +48,7 @@ export function RpgDashboard({
   showWalkthroughTour,
   compact = false,
   externalFeedback = false,
+  constellation,
 }: {
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
@@ -52,11 +57,19 @@ export function RpgDashboard({
   showWalkthroughTour: boolean
   compact?: boolean
   externalFeedback?: boolean
+  /** The 3D constellation, shown instead of the skill tree when chosen. */
+  constellation?: ReactNode
 }) {
   const { t } = useTranslation(undefined, { i18n })
   const [growthTab, setGrowthTab] = useState<'avatar' | 'skills' | 'rewards'>(
     'avatar',
   )
+  const [skillView, setSkillViewState] = useState<'tree' | 'constellation'>(() => readStore('bloom-growth-skill-view-v1', 'tree'))
+  const setSkillView = (v: 'tree' | 'constellation') => {
+    setSkillViewState(v)
+    writeStore('bloom-growth-skill-view-v1', v)
+  }
+  const showConstellation = compact && growthTab === 'skills' && !!constellation && skillView === 'constellation'
   const [clock, setClock] = useState(Date.now)
   const [showRules, setShowRules] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
@@ -342,6 +355,14 @@ export function RpgDashboard({
           </aside>
         </div>
       )}
+      {compact && growthTab === 'avatar' && subOn('rpgSkillTree', 'livingSeedling') && <LivingSeedling data={data} />}
+      {compact && growthTab === 'skills' && constellation && (
+        <div className="segmented growth-tabs" aria-label="Skill view">
+          <button aria-pressed={skillView === 'tree'} onClick={() => setSkillView('tree')}>Tree</button>
+          <button aria-pressed={skillView === 'constellation'} onClick={() => setSkillView('constellation')}>Constellation</button>
+        </div>
+      )}
+      {showConstellation && constellation}
       {compact && growthTab === 'avatar' && (
         <section className="card seedling-journey">
           <h3>Your next chapter</h3>
@@ -560,7 +581,7 @@ export function RpgDashboard({
           {t('rpg.lootNotice')}
         </div>
       )}
-      {(!compact || growthTab !== 'avatar') && (
+      {(!compact || growthTab !== 'avatar') && !showConstellation && (
         <GamificationShowcase
           data={data}
           setData={setData}

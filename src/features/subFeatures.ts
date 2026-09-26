@@ -271,6 +271,10 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'levelBar', title: 'Level bar', description: 'XP progress to the next level.' },
     { id: 'sound', title: 'Sound toggle', description: 'Turn reward sounds on or off.' },
     { id: 'skillsLink', title: 'Explore skills link', description: 'Shortcut to the skill tree.' },
+    { id: 'livingSeedling', title: 'Living seedling', description: 'Grows from habits, focus, journals, tasks and moods.' },
+    { id: 'seasons', title: 'Seasonal leaves', description: 'Leaf colours follow the season.' },
+    { id: 'thirst', title: 'Thirst hint', description: 'Shows when no habit has watered it today.' },
+    { id: 'feedLinks', title: 'Feed links', description: 'Each part links to the feature that feeds it.' },
   ],
   weeklyRaidBoss: [
     { id: 'hp', title: 'Boss health bar', description: 'Show the raid boss HP.' },

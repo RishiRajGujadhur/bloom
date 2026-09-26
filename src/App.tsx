@@ -925,13 +925,14 @@ function App() {
                 }
               />
             ) : active === 'growth' ? (
-              <>
-              {settings.features.skillConstellation && hasWebGL() && (
-                <Suspense fallback={null}>
-                  <SkillConstellation rpg={data.rpg} />
-                </Suspense>
-              )}
               <RpgDashboard
+                constellation={
+                  settings.features.skillConstellation && hasWebGL() ? (
+                    <Suspense fallback={null}>
+                      <SkillConstellation rpg={data.rpg} />
+                    </Suspense>
+                  ) : undefined
+                }
                 compact
                 externalFeedback
                 data={data}
@@ -940,7 +941,6 @@ function App() {
                 showWeeklyRaid={settings.features.weeklyRaidBoss}
                 showWalkthroughTour={false}
               />
-              </>
             ) : active === 'settings' ? (
               <SettingsPage
                 settings={settings}
