@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { addActive, challengeMinutes, inWindDown, minutesOn, week as screenWeek } from '../src/features/screen/screenModel'
 import { describe as ruleText, occursOn, streak as rtStreak, templates as rtTemplates, totalMinutes, upcoming } from '../src/features/routines/routineModel'
 import { ganttTasks, goalProgress, onTrack, reviewDue, sampleGoal } from '../src/features/roadmap/roadmapModel'
 import { dailyWorkout, isTarget, mathsProblem, memoryPattern, memorySetup, nbackSequence, nextLevel, reactionScore, rng, scoreNback, skillScores, stroopTrial } from '../src/features/games/gamesModel'
@@ -35,7 +36,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -343,4 +344,17 @@ test('routines: rrule schedules, text, occurrences and streaks', () => {
   expect(totalMinutes(morning)).toBe(16)
   morning.log = ['2026-09-24', '2026-09-25'].map((date) => ({ date, done: 4 }))
   expect(rtStreak(morning, '2026-09-26')).toBe(2)
+})
+
+test('screen time: hourly usage, week, wind-down, challenges', () => {
+  const at = new Date('2026-09-26T14:10:00').getTime()
+  let u = addActive({}, at, 600)
+  u = addActive(u, at + 60000, 300)
+  expect(u['2026-09-26'][14]).toBe(900)
+  expect(minutesOn(u, '2026-09-26')).toBe(15)
+  expect(screenWeek(u, '2026-09-26').at(-1)?.minutes).toBe(15)
+  expect(inWindDown(22, 23)).toBe(true)
+  expect(inWindDown(22, 3)).toBe(true)
+  expect(inWindDown(22, 12)).toBe(false)
+  expect(challengeMinutes({ start: 0, end: 90 * 60000 })).toBe(90)
 })

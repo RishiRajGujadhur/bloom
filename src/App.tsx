@@ -69,6 +69,7 @@ import { JuiceLayer, juice, pointer } from './features/juice/PixelJuice'
 import { CoreEngine } from './features/core/CoreEngine'
 import { MomentHost } from './features/core/MomentReveal'
 import { NudgeHost } from './components/studio/Nudges'
+const ScreenTracker = lazy(() => import('./features/screen/ScreenTracker').then((m) => ({ default: m.ScreenTracker })))
 import { GrowthGarden, NowCard, Onboarding, WelcomeBack } from './features/core/CoreHome'
 import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
@@ -191,6 +192,9 @@ const RoadmapPage = lazy(() =>
 )
 const RoutinesPage = lazy(() =>
   import('./features/routines/RoutinesPage').then((m) => ({ default: m.RoutinesPage })),
+)
+const ScreenPage = lazy(() =>
+  import('./features/screen/ScreenPage').then((m) => ({ default: m.ScreenPage })),
 )
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
@@ -648,6 +652,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'screen' && !settings.features.digitalWellbeing) ||
             (active === 'routines' && !settings.features.routineScheduler) ||
             (active === 'roadmap' && !settings.features.goalRoadmap) ||
             (active === 'games' && !settings.features.brainGames) ||
@@ -827,6 +832,10 @@ function App() {
             ) : active === 'routines' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <RoutinesPage />
+              </Suspense>
+            ) : active === 'screen' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <ScreenPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
@@ -1324,6 +1333,11 @@ function App() {
         {settings.features.bloomCore && <CoreEngine data={data} today={today} />}
         {settings.features.bloomCore && <MomentHost />}
         <NudgeHost onNavigate={jump} />
+        {settings.features.digitalWellbeing && (
+          <Suspense fallback={null}>
+            <ScreenTracker />
+          </Suspense>
+        )}
         {settings.features.postureGuard && postureTouched && (
           <Suspense fallback={null}>
             <PostureGuardian setData={setData} />

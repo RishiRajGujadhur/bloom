@@ -1,0 +1,103 @@
+html.bloom-detox body {
+  filter: grayscale(0.9) contrast(0.95);
+}
+html.bloom-detox *,
+html.bloom-detox *::before,
+html.bloom-detox *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+}
+html.bloom-winddown body {
+  filter: sepia(0.35) brightness(0.9) saturate(0.85);
+}
+html.bloom-winddown.bloom-detox body {
+  filter: grayscale(0.9) brightness(0.88);
+}
+/* Focus-only: sidebar keeps only the Today section. */
+html.bloom-focus-only .sidebar nav [data-section]:not([data-section='0']):not(.active) {
+  display: none;
+}
+.sw-break,
+.sw-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 40%, #e8f6ef, #cfe8dd);
+  color: #1f3d33;
+  text-align: center;
+  animation: sw-in 600ms ease both;
+}
+.sw-break h2,
+.sw-gate h2 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+}
+.sw-break p,
+.sw-gate p {
+  margin: 0;
+  max-width: 440px;
+}
+.sw-break .studio-go,
+.sw-gate .studio-go {
+  --studio: #3f8a76;
+}
+.sw-break-orb {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #6bbf9a);
+  box-shadow: 0 0 60px #6bbf9a88;
+  animation: sw-breathe 8s ease-in-out infinite;
+}
+.sw-ring {
+  width: 200px;
+}
+.sw-hours {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  width: 100%;
+  height: 90px;
+}
+.sw-hours span {
+  flex: 1;
+  border-radius: 3px 3px 1px 1px;
+  background: color-mix(in oklab, var(--studio) 40%, transparent);
+}
+.sw-hours span[data-now='true'] {
+  background: var(--studio);
+}
+.sw-big {
+  font-size: 56px;
+}
+.sw-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  height: 220px;
+  margin-bottom: 16px;
+}
+@keyframes sw-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sw-breathe {
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+  45% {
+    transform: scale(1.15);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sw-break-orb {
+    animation: none;
+  }
+}

@@ -413,6 +413,10 @@ const common = {
         title: "Routine builder",
         description: "Step-by-step routines on flexible schedules with a guided player.",
       },
+      digitalWellbeing: {
+        title: "Digital wellbeing",
+        description: "Active time, break reminders, detox and wind-down modes, phone-free challenges.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1448,6 +1452,10 @@ export const resources = {
           routineScheduler: {
             title: "Créateur de routines",
             description: "Routines pas à pas, horaires flexibles et lecteur guidé.",
+          },
+          digitalWellbeing: {
+            title: "Bien-être numérique",
+            description: "Temps actif, pauses, modes détox et soirée, défis sans téléphone.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

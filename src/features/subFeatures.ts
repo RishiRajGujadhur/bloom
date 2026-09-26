@@ -637,6 +637,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "week", title: "Week view", description: "What’s coming over seven days." },
     { id: "log", title: "Completion log", description: "Streaks from completed runs." },
   ],
+  digitalWellbeing: [
+    { id: "tracking", title: "Active time", description: "Counts time you’re actually using Bloom." },
+    { id: "hourly", title: "Hourly chart", description: "When in the day you’re on screen." },
+    { id: "limit", title: "Daily limit", description: "A ring for your own time budget." },
+    { id: "breaks", title: "Break reminders", description: "A calm full-screen pause after long stretches." },
+    { id: "detox", title: "Detox mode", description: "Greyscale and still, to make screens less sticky." },
+    { id: "windDown", title: "Wind-down dimming", description: "Warmer, dimmer colours in the evening." },
+    { id: "pauseGate", title: "Pause before opening", description: "One breath and an intention when Bloom opens." },
+    { id: "challenge", title: "Phone-free challenge", description: "Time yourself away from the phone." },
+    { id: "focusOnly", title: "Focus-only mode", description: "Hide everything but today’s essentials." },
+    { id: "trend", title: "Weekly trend", description: "Seven days against your limit." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

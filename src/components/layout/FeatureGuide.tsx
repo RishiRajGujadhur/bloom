@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'screen': { title: "Screen time", description: "Use tech, don’t let it use you." },
   'routines': { title: "Routines", description: "Small steps, same time, every time." },
   'roadmap': { title: "Goal roadmap", description: "See the road, take the next step." },
   'games': { title: "Brain games", description: "Play your mind awake." },
@@ -202,6 +203,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'routines': [
     step(".rt-card", "Start a routine", "Tap to play it step by step."),
     step(".rt-week", "Your week", "Every routine you’ve scheduled."),
+  ],
+  'screen': [
+    step(".sw-ring", "Today", "Your active time against your limit."),
+    step(".rm-side", "Modes", "Detox, wind-down, focus-only and more."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

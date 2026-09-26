@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { MonitorSmartphone as MonitorSmartphoneF_digitalWellbeing } from 'lucide-react'
 import { Repeat as RepeatF_routineScheduler } from 'lucide-react'
 import { CalendarRange as CalendarRangeF_goalRoadmap } from 'lucide-react'
 import { Gamepad2 as Gamepad2F_brainGames } from 'lucide-react'
@@ -102,6 +103,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'screen'
   | 'routines'
   | 'roadmap'
   | 'games'
@@ -137,7 +139,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps'] },
 ]
@@ -369,6 +371,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'screen', title: "Screen time", Icon: MonitorSmartphoneF_digitalWellbeing, requires: 'digitalWellbeing' },
     { key: 'routines', title: "Routines", Icon: RepeatF_routineScheduler, requires: 'routineScheduler' },
     { key: 'roadmap', title: "Goal roadmap", Icon: CalendarRangeF_goalRoadmap, requires: 'goalRoadmap' },
     { key: 'games', title: "Brain games", Icon: Gamepad2F_brainGames, requires: 'brainGames' },
@@ -488,7 +491,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
             <Fragment key={key}>
             {(index === 0 || visibleItems[index - 1].section !== section) &&
               section < navSections.length && (
-                <div className="nav-caption nav-section" aria-hidden="true">
+                <div className="nav-caption nav-section" aria-hidden="true" data-section={section}>
                   {index === 0 ? t('navigation.space') : navSections[section].label}
                 </div>
               )}
@@ -496,6 +499,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
               key={key}
               type="button"
               className={active === key ? 'active' : ''}
+              data-section={section}
               aria-current={active === key ? 'page' : undefined}
               // Without the visible label the icon needs its own name.
               {...(isOpen ? {} : { 'aria-label': title, title })}
