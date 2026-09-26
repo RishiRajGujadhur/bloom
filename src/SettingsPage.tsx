@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Repeat as RepeatF_routineScheduler } from 'lucide-react'
 import { CalendarRange as CalendarRangeF_goalRoadmap } from 'lucide-react'
 import { Gamepad2 as Gamepad2F_brainGames } from 'lucide-react'
 import { Layers as LayersF_flashcards } from 'lucide-react'
@@ -127,6 +128,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  routineScheduler: RepeatF_routineScheduler,
   goalRoadmap: CalendarRangeF_goalRoadmap,
   brainGames: Gamepad2F_brainGames,
   flashcards: LayersF_flashcards,
@@ -205,6 +207,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  routineScheduler: boolean
   goalRoadmap: boolean
   brainGames: boolean
   flashcards: boolean
@@ -292,6 +295,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    routineScheduler: true,
     goalRoadmap: true,
     brainGames: true,
     flashcards: true,
@@ -371,6 +375,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'routineScheduler',
   'goalRoadmap',
   'brainGames',
   'flashcards',

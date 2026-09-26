@@ -625,6 +625,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "linkTasks", title: "Link to tasks", description: "Send a milestone to your to-dos." },
     { id: "onTrack", title: "On-track check", description: "Compares progress with the time passed." },
   ],
+  routineScheduler: [
+    { id: "steps", title: "Timed steps", description: "Each step with its own length." },
+    { id: "schedule", title: "Recurring schedules", description: "Daily, weekly on chosen days, or monthly." },
+    { id: "preview", title: "Plain-language rule", description: "“Every weekday at 07:00.”" },
+    { id: "upcoming", title: "Next occurrences", description: "The next five times it’s due." },
+    { id: "player", title: "Routine player", description: "One step at a time with a draining timer." },
+    { id: "anchors", title: "Habit stacking", description: "Anchor a routine to something you already do." },
+    { id: "skip", title: "Skip a day", description: "Pause today without breaking anything." },
+    { id: "templates", title: "Templates", description: "Morning, evening, workout and weekly reset." },
+    { id: "week", title: "Week view", description: "What’s coming over seven days." },
+    { id: "log", title: "Completion log", description: "Streaks from completed runs." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

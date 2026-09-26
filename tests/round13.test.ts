@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { describe as ruleText, occursOn, streak as rtStreak, templates as rtTemplates, totalMinutes, upcoming } from '../src/features/routines/routineModel'
 import { ganttTasks, goalProgress, onTrack, reviewDue, sampleGoal } from '../src/features/roadmap/roadmapModel'
 import { dailyWorkout, isTarget, mathsProblem, memoryPattern, memorySetup, nbackSequence, nextLevel, reactionScore, rng, scoreNback, skillScores, stroopTrial } from '../src/features/games/gamesModel'
 import { clozeBack, clozeFront, dueCards, newCard, parseImport, render as mdRender, review as cardReview, stats as cardStats } from '../src/features/cards/cardsModel'
@@ -34,7 +35,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -330,4 +331,16 @@ test('roadmap: progress, on-track, reviews and gantt tasks', () => {
   const t = ganttTasks([g])
   expect(t).toHaveLength(3)
   expect(t[1].dependencies).toBe(g.milestones[0].id)
+})
+
+test('routines: rrule schedules, text, occurrences and streaks', () => {
+  const morning = { ...rtTemplates[0], id: 'm', log: [] as { date: string; done: number }[] }
+  expect(ruleText(morning.repeat)).toBe('Every weekday at 07:00')
+  expect(occursOn(morning, '2026-09-28')).toBe(true)
+  expect(occursOn(morning, '2026-09-27')).toBe(false)
+  expect(occursOn({ ...morning, paused: ['2026-09-28'] }, '2026-09-28')).toBe(false)
+  expect(upcoming(morning, new Date('2026-09-26T10:00:00Z'), 2).map((d) => d.toISOString().slice(0, 10))).toEqual(['2026-09-28', '2026-09-29'])
+  expect(totalMinutes(morning)).toBe(16)
+  morning.log = ['2026-09-24', '2026-09-25'].map((date) => ({ date, done: 4 }))
+  expect(rtStreak(morning, '2026-09-26')).toBe(2)
 })

@@ -1,0 +1,120 @@
+.rt-card {
+  border-top: 5px solid var(--rt) !important;
+}
+.rt-card[data-done='true'] {
+  background: color-mix(in oklab, var(--rt) 14%, var(--bg-surface)) !important;
+}
+.rt-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.rt-day {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 6px;
+  min-height: 110px;
+  padding: 10px 6px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--bg-surface) 80%, transparent);
+  border: 1px solid var(--border-color);
+}
+.rt-day[data-today='true'] {
+  border-color: var(--studio);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--studio) 25%, transparent);
+}
+.rt-day small {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.rt-day span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: #fff;
+}
+.rt-side {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+.rt-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rt-rule {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--studio-soft);
+  font-weight: 700;
+}
+.rt-player {
+  --rt: var(--studio);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 20px;
+  height: 100%;
+}
+.rt-steps {
+  display: flex;
+  gap: 8px;
+}
+.rt-steps span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  font-size: 20px;
+  transition: transform 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.rt-steps span[data-state='done'] {
+  opacity: 0.45;
+}
+.rt-steps span[data-state='now'] {
+  border-color: var(--rt);
+  transform: scale(1.18);
+}
+.rt-now {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: min(460px, 100%);
+  padding: 28px;
+  border-radius: 28px;
+  background: radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--rt) 22%, transparent), transparent 70%), var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 28px 50px -30px #0005;
+}
+.rt-emoji {
+  font-size: 56px;
+}
+.rt-now h3 {
+  margin: 0;
+  font-size: 26px;
+}
+.rt-now strong {
+  font-size: 44px;
+  font-variant-numeric: tabular-nums;
+}
+.rt-drain {
+  width: 100%;
+  height: 10px;
+  border-radius: 99px;
+  background: var(--studio-soft);
+  overflow: hidden;
+}
+.rt-drain span {
+  display: block;
+  height: 100%;
+  background: var(--rt);
+  transition: width 1s linear;
+}

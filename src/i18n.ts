@@ -409,6 +409,10 @@ const common = {
         title: "Goal roadmap",
         description: "Long-term goals on a Gantt timeline with key results and weekly reviews.",
       },
+      routineScheduler: {
+        title: "Routine builder",
+        description: "Step-by-step routines on flexible schedules with a guided player.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1440,6 +1444,10 @@ export const resources = {
           goalRoadmap: {
             title: "Feuille de route",
             description: "Objectifs à long terme sur une frise, résultats clés et revues hebdomadaires.",
+          },
+          routineScheduler: {
+            title: "Créateur de routines",
+            description: "Routines pas à pas, horaires flexibles et lecteur guidé.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
