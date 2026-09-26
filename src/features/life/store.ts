@@ -15,6 +15,7 @@ const recordSchema = z.object({
 const schema = z.object({
   version: z.literal(1),
   records: z.array(recordSchema),
+  drafts: z.record(z.string(), recordSchema).default({}),
   preferences: z.record(
     z.string(),
     z.object({
@@ -25,7 +26,12 @@ const schema = z.object({
   ),
 })
 export type LifeStore = z.infer<typeof schema>
-const empty: LifeStore = { version: 1, records: [], preferences: {} }
+const empty: LifeStore = {
+  version: 1,
+  records: [],
+  drafts: {},
+  preferences: {},
+}
 type Snapshot = { data: LifeStore; error: string; blocked: boolean }
 let snapshot: Snapshot | undefined
 let lastRaw: string | null | undefined
@@ -41,6 +47,7 @@ function read(): Snapshot {
     lastRaw = raw
     snapshot = { data: raw ? parseLife(raw) : empty, error: '', blocked: false }
   } catch {
+    if (snapshot?.blocked) return snapshot
     snapshot = {
       data: empty,
       error:

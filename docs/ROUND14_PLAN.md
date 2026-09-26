@@ -214,8 +214,8 @@ Use: `planned → implementing → validated → committed → pushed`. A commit
 
 | # | Feature | Status | Tests / visual QA | Commit | Push |
 |---|---|---|---|---|---|
-| 01 | Decision studio | Validated | 9 Jest tests; build/lint; browser save/reload/task handoff | See feature commit | Pending |
-| 02 | Personal boundaries | Planned | — | — | — |
+| 01 | Decision studio | Pushed | 9 Jest tests; build/lint; browser save/reload/task handoff | e1fe55c | Confirmed |
+| 02 | Personal boundaries | Validated | TypeScript, lint, 11 tests; draft recovery added | See feature commit | Pending |
 | 03 | Connection garden | Planned | — | — | — |
 | 04 | Skill practice planner | Planned | — | — | — |
 | 05 | Reading companion | Planned | — | — | — |

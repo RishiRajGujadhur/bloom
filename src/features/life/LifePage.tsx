@@ -131,17 +131,44 @@ function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
   const records = store.records.filter((r) => r.tool === tool.id)
   const initial = () =>
     Object.fromEntries(tool.fields.map((f) => [f.key, f.initial ?? '']))
-  const [selected, setSelected] = useState<string | null>(null)
-  const [title, setTitle] = useState('')
-  const [values, setValues] = useState(initial)
-  const [next, setNext] = useState('')
-  const [dirty, setDirty] = useState(false)
+  const draft = store.drafts[tool.id]
+  const [selected, setSelected] = useState<string | null>(draft?.id || null)
+  const [title, setTitle] = useState(draft?.title ?? '')
+  const [values, setValues] = useState(draft?.values ?? initial())
+  const [next, setNext] = useState(draft?.next ?? '')
+  const [dirty, setDirty] = useState(Boolean(draft))
   const [result, setResult] = useState<Analysis | null>(null)
   const [status, setStatus] = useState('')
   const [busy, setBusy] = useState(false)
   const [recordSearch, setRecordSearch] = useState('')
   const [showDone, setShowDone] = useState(false)
   const [deleted, setDeleted] = useState<LifeRecord | null>(null)
+  useEffect(() => {
+    if (!dirty) return
+    updateLife((state) => ({
+      ...state,
+      drafts: {
+        ...state.drafts,
+        [tool.id]: {
+          id: selected ?? '',
+          tool: tool.id,
+          title,
+          values,
+          next,
+          done: false,
+          created: Date.now(),
+          updated: Date.now(),
+        },
+      },
+    }))
+  }, [dirty, title, values, next, selected, tool.id])
+  const clearDraft = () =>
+    updateLife((state) => ({
+      ...state,
+      drafts: Object.fromEntries(
+        Object.entries(state.drafts).filter(([key]) => key !== tool.id),
+      ),
+    }))
   const active = records.find((r) => r.id === selected)
   const taskId = selected ? `life-${selected}` : ''
   const handed = props.data.todos.some((t) => t.id === taskId)
@@ -158,6 +185,7 @@ function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
   function load(record?: LifeRecord) {
     if (dirty && !window.confirm('Discard unsaved changes to this draft?'))
       return
+    clearDraft()
     setSelected(record?.id ?? null)
     setTitle(record?.title ?? '')
     setValues(record?.values ?? initial())
@@ -189,6 +217,7 @@ function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
       }))
     )
       return null
+    clearDraft()
     setSelected(record.id)
     setDirty(false)
     setStatus('Saved on this device.')
