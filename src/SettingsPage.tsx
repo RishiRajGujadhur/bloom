@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { PersonStanding as PersonStandingF_mobility } from 'lucide-react'
 import { Flower2 as Flower2F_yogaFlow } from 'lucide-react'
 import { TimerReset as TimerResetF_intervalCoach } from 'lucide-react'
 import { BicepsFlexed as BicepsFlexedF_workoutLog } from 'lucide-react'
@@ -111,6 +112,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  mobility: PersonStandingF_mobility,
   yogaFlow: Flower2F_yogaFlow,
   intervalCoach: TimerResetF_intervalCoach,
   workoutLog: BicepsFlexedF_workoutLog,
@@ -173,6 +175,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  mobility: boolean
   yogaFlow: boolean
   intervalCoach: boolean
   workoutLog: boolean
@@ -244,6 +247,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    mobility: true,
     yogaFlow: true,
     intervalCoach: true,
     workoutLog: true,
@@ -307,6 +311,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'mobility',
   'yogaFlow',
   'intervalCoach',
   'workoutLog',

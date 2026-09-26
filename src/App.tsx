@@ -68,6 +68,7 @@ import { ImpactLayer } from './features/impact/ImpactLayer'
 import { JuiceLayer, juice, pointer } from './features/juice/PixelJuice'
 import { CoreEngine } from './features/core/CoreEngine'
 import { MomentHost } from './features/core/MomentReveal'
+import { NudgeHost } from './components/studio/Nudges'
 import { GrowthGarden, NowCard, Onboarding, WelcomeBack } from './features/core/CoreHome'
 import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
@@ -139,6 +140,9 @@ const IntervalPage = lazy(() =>
 )
 const YogaPage = lazy(() =>
   import('./features/yoga/YogaPage').then((m) => ({ default: m.YogaPage })),
+)
+const StretchPage = lazy(() =>
+  import('./features/stretch/StretchPage').then((m) => ({ default: m.StretchPage })),
 )
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
@@ -596,6 +600,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'stretch' && !settings.features.mobility) ||
             (active === 'yoga' && !settings.features.yogaFlow) ||
             (active === 'intervals' && !settings.features.intervalCoach) ||
             (active === 'workouts' && !settings.features.workoutLog) ||
@@ -690,6 +695,10 @@ function App() {
             ) : active === 'yoga' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <YogaPage />
+              </Suspense>
+            ) : active === 'stretch' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <StretchPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
@@ -1186,6 +1195,7 @@ function App() {
         {settings.features.pixelJuice && <JuiceLayer />}
         {settings.features.bloomCore && <CoreEngine data={data} today={today} />}
         {settings.features.bloomCore && <MomentHost />}
+        <NudgeHost onNavigate={jump} />
         {settings.features.postureGuard && postureTouched && (
           <Suspense fallback={null}>
             <PostureGuardian setData={setData} />

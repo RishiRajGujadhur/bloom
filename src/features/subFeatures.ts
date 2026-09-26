@@ -431,6 +431,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "timeline", title: "Flow timeline", description: "See where you are in the sequence." },
     { id: "benefits", title: "Benefits", description: "Why each pose helps." },
   ],
+  mobility: [
+    { id: "bodyMap", title: "Body map", description: "Tap where it feels tight." },
+    { id: "routines", title: "Routines", description: "Desk reset, morning, runner, low back, full body." },
+    { id: "circleTimer", title: "Circle timer", description: "A colour-shifting countdown ring." },
+    { id: "switchSides", title: "Switch sides", description: "Left then right, with a prompt." },
+    { id: "deskMode", title: "Desk breaks", description: "Reminders to stretch while you work." },
+    { id: "autoAdvance", title: "Auto-advance", description: "Move to the next stretch automatically." },
+    { id: "voice", title: "Voice", description: "Hear each stretch and its cue." },
+    { id: "chime", title: "Chime", description: "A soft bell between stretches." },
+    { id: "stiffness", title: "Stiffness check-in", description: "Before and after, zero to ten." },
+    { id: "history", title: "History", description: "Sessions and how much you loosened." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'stretch': { title: "Stretch", description: "Loosen what the day tightened." },
   'yoga': { title: "Yoga", description: "Breathe, then move." },
   'intervals': { title: "Intervals", description: "Work hard, rest well." },
   'workouts': { title: "Workouts", description: "Stronger than last week." },
@@ -117,6 +118,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'yoga': [
     step(".yg-stage", "Follow the figure", "It flows into each pose with your breath."),
     step(".yg-breath", "Breathe with the orb", "Inhale as it grows, exhale as it settles."),
+  ],
+  'stretch': [
+    step(".st-stage", "Follow along", "The figure and glowing area show where to feel it."),
+    step(".st-timer", "Hold", "The ring counts down each stretch."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

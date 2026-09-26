@@ -345,6 +345,10 @@ const common = {
         title: "Yoga flow",
         description: "Build flows by drag and drop and practise with a morphing guide and breath cue.",
       },
+      mobility: {
+        title: "Stretch & mobility",
+        description: "Guided stretches with circle timers, a body map and desk-break reminders.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1312,6 +1316,10 @@ export const resources = {
           yogaFlow: {
             title: "Flow de yoga",
             description: "Composez des enchaînements en glisser-déposer et pratiquez avec guide et souffle.",
+          },
+          mobility: {
+            title: "Étirements & mobilité",
+            description: "Étirements guidés, minuteurs circulaires, carte du corps et pauses bureau.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

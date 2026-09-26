@@ -2,6 +2,8 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { forAreas, routines as stRoutines, steps as stSteps, totalSeconds as stTotal } from '../src/features/stretch/stretchModel'
+import { isDue } from '../src/components/studio/Nudges'
 import { flowSeconds, newStep, poses, presetFlows, stepAt } from '../src/features/yoga/yogaModel'
 import { c25kProgram, calories, position, presets as ivPresets, segments, total } from '../src/features/interval/intervalModel'
 import { e1rm, plates, progress, prsFor, volume, weeklyMuscleSets, type Workout } from '../src/features/workout/workoutModel'
@@ -18,7 +20,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -80,4 +82,22 @@ test('yoga: poses, flow length and the live step', () => {
   expect(stepAt(sun, 5, flowSeconds(sun, 5))).toBeNull()
   expect(newStep('tree').key).not.toBe(newStep('tree').key)
   for (const f of presetFlows) for (const s of f.steps) expect(poses.some((p) => p.id === s.poseId)).toBe(true)
+})
+
+test('stretch: sides expand, areas map to stretches; nudges respect quiet hours', () => {
+  const desk = stRoutines.find((r) => r.id === 'desk')!
+  const both = stSteps(desk.ids)
+  expect(both.length).toBeGreaterThan(desk.ids.length)
+  expect(stSteps(desk.ids, false)).toHaveLength(desk.ids.length)
+  expect(both.filter((s) => s.stretch.id === 'neckTilt').map((s) => s.side)).toEqual(['left', 'right'])
+  expect(stTotal(stSteps(['chinTuck'], false), 2)).toBe(60)
+  expect(forAreas(['wrists'])).toEqual(['wristFlex', 'prayer'])
+  const base = { id: 'x', title: '', body: '', page: 'stretch' as const, every: 30, enabled: true, lastAt: 0 }
+  const noon = new Date('2026-09-26T12:00:00').getTime()
+  const night = new Date('2026-09-26T23:00:00').getTime()
+  expect(isDue(base, noon)).toBe(true)
+  expect(isDue({ ...base, enabled: false }, noon)).toBe(false)
+  expect(isDue({ ...base, lastAt: noon - 10 * 60000 }, noon)).toBe(false)
+  expect(isDue({ ...base, quietStart: 21, quietEnd: 7 }, night)).toBe(false)
+  expect(isDue({ ...base, quietStart: 21, quietEnd: 7 }, noon)).toBe(true)
 })
