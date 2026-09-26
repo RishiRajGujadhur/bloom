@@ -26,6 +26,7 @@ import {
   urgeInterruptionRate,
 } from './urgeEngine'
 import './urge.css'
+import { UrgesQuick } from './quick/UrgesQuick'
 
 type Props = {
   data: AppData
@@ -96,6 +97,7 @@ export function UrgePage({ data, setData }: Props) {
 
   return (
     <section id="urge-page" className="urge-page flex flex-col gap-5">
+      <UrgesQuick />
       {loadSettings().features.urgeClock && (
         <UrgeClocks habits={habits} events={data.urgeEvents} />
       )}

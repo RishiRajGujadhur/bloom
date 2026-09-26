@@ -217,6 +217,11 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'intensity', title: 'Intensity step', description: 'Rate how strong the urge was.' },
     { id: 'manage', title: 'Manage habits', description: 'Add or archive urge habits.' },
     { id: 'contextCard', title: 'Context card', description: 'Explains what is captured.' },
+    { id: 'surfWave', title: 'Urge-surfing wave', description: 'A 90-second animated wave to ride out an urge.' },
+    { id: 'passedCheck', title: 'Did it pass?', description: 'Ask after the wave and count wins.' },
+    { id: 'surfStats', title: 'Surf stats', description: 'How often urges passed.' },
+    { id: 'alternatives', title: 'Swipe alternatives', description: 'Swipe right on something to do instead.' },
+    { id: 'moodTag', title: 'What is under it?', description: 'One-tap mood; alternatives match it.' },
   ],
   habitTracker: [
     { id: 'library', title: 'Habit & routine library', description: 'Adopt ready-made cards.' },
