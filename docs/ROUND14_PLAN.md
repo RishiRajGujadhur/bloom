@@ -218,8 +218,8 @@ Use: `planned → implementing → validated → committed → pushed`. A commit
 | 02 | Personal boundaries | Pushed | TypeScript, lint, 11 tests; browser template preview | 3bd94f9 | Confirmed |
 | 03 | Connection garden | Pushed | TypeScript, lint, 13 tests; seated-only library verified in browser | 28eb7b7 | Confirmed |
 | 04 | Skill practice planner | Validated | 14 tests, TypeScript, lint; memory route enhancement | See feature commit | Pending |
-| 05 | Reading companion | Validated | TypeScript, lint, domain tests | Feature commit below | Pending |
-| 06 | Clear writing lab | Planned | — | — | — |
+| 05 | Reading companion | Pushed | TypeScript, lint, domain tests | 5b3b1ca | Confirmed |
+| 06 | Clear writing lab | Validated | TypeScript, lint, domain tests | Feature commit below | Pending |
 | 07 | Programmer shutdown desk | Planned | — | — | — |
 | 08 | Meeting preparation | Planned | — | — | — |
 | 09 | Timezone bridge | Planned | — | — | — |

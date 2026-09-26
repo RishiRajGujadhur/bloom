@@ -22,7 +22,9 @@ export type Analysis = {
   title: string
   lines: string[]
   bars?: { label: string; value: number }[]
-  download?: { name: string; text: string; mime: string }
+  image?: string
+  imports?: { title: string; values: Record<string, string> }[]
+  download?: { name: string; text: string; mime: string; save?: () => void }
 }
 export type Tool = {
   id: string

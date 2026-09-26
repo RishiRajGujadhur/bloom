@@ -27,7 +27,7 @@ import type { NavKey } from '../../components/layout/Sidebar'
 import { pageDetails } from '../../components/layout/FeatureGuide'
 import './life.css'
 
-function Results({ result, animate }: { result: Analysis; animate: boolean }) {
+function Results({ result, animate, onImport }: { result: Analysis; animate: boolean; onImport?: () => void }) {
   const ref = useRef<SVGSVGElement>(null)
   useEffect(() => {
     const media = gsap.matchMedia()
@@ -104,6 +104,7 @@ function Results({ result, animate }: { result: Analysis; animate: boolean }) {
           </g>
         )}
       </svg>
+      {result.image && <img className="life-output-image" src={result.image} alt={result.title} />}
       <ul>
         {result.lines.map((line, i) => (
           <li key={i}>{line}</li>
@@ -114,13 +115,15 @@ function Results({ result, animate }: { result: Analysis; animate: boolean }) {
           type="button"
           onClick={() => {
             const d = result.download!
-            download(new Blob([d.text], { type: d.mime }), d.name)
+            if (d.save) d.save()
+            else download(new Blob([d.text], { type: d.mime }), d.name)
           }}
         >
           <Download size={16} />
           Download {result.download.name}
         </button>
       )}
+      {result.imports && <button type="button" onClick={onImport}>Import {result.imports.length} previewed records</button>}
     </section>
   )
 }
@@ -504,7 +507,18 @@ function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
             )}
           </div>
         </form>
-        {result && <Results result={result} animate={prefs.animate} />}
+        {result && <Results result={result} animate={prefs.animate} onImport={() => {
+ const incoming=result.imports ?? []
+ let count=0
+ const ok=updateLife(s => {
+  const seen=new Set(s.records.filter(r=>r.tool===tool.id).map(r=>r.title.trim().toLowerCase()))
+  const added: LifeRecord[]=[]
+  for(const entry of incoming){ const normalized=entry.title.trim().toLowerCase(); if(seen.has(normalized))continue;seen.add(normalized);added.push({id:crypto.randomUUID(),tool:tool.id,title:entry.title.trim().slice(0,150),values:entry.values,created:Date.now(),updated:Date.now(),done:false,next:''}) }
+  count=added.length
+  return {...s,records:[...s.records,...added]}
+ })
+ if(ok)setStatus(`${count} records imported. Existing titles were skipped.`)
+}} />}
         <section className="life-next">
           <span className="life-eyebrow">Turn clarity into action</span>
           <label>

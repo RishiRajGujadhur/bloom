@@ -389,3 +389,5 @@
 .life-palace > label {
   margin: 20px 0;
 }
+
+.life-output-image{display:block;max-width:100%;max-height:600px;margin:20px auto;background:#fff;border-radius:12px}

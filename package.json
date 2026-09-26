@@ -65,6 +65,7 @@
     "canvas-confetti": "^1.9.4",
     "chart.js": "^4.5.1",
     "cmdk": "^1.1.1",
+    "compromise": "14.17.0",
     "d3-shape": "^3.2.0",
     "date-fns": "^4.4.0",
     "decimal.js": "10.6.0",
