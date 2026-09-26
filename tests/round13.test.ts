@@ -268,15 +268,9 @@ test('mood mirror: sentiment, daily tone, words, agreement, reframes', () => {
 
 test('mind maps: outlines, titles and journal conversion', () => {
   expect(titleOf(mapTemplates[0].md)).toBe('My goal')
-  expect(branches('# A
-## B
-- c
-- d')).toBe(3)
-  const md = fromText('Nightly', 'Work was busy. I felt tired. I need rest.
-
-Dinner with Sam was lovely.')
-  expect(md.split('
-')[0]).toBe('# Nightly')
+  expect(branches(['# A', '## B', '- c', '- d'].join('\n'))).toBe(3)
+  const md = fromText('Nightly', 'Work was busy. I felt tired. I need rest.\n\nDinner with Sam was lovely.')
+  expect(md.split('\n')[0]).toBe('# Nightly')
   expect(md).toContain('## Work was busy.')
   expect(md).toContain('- I felt tired.')
 })
