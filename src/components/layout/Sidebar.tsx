@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Map,
   Castle,
+  Lightbulb,
   PersonStanding,
   Armchair,
   BookMarked,
@@ -71,6 +72,7 @@ export type NavKey =
   | 'journey'
   | 'places'
   | 'posture'
+  | 'epiphanies'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -85,7 +87,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook'] },
 ]
 
@@ -309,6 +311,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'journey', title: 'Streak journey', Icon: Route, requires: 'streakJourney' },
     { key: 'places', title: 'Places', Icon: MapPinned, requires: 'placesMap' },
     { key: 'posture', title: 'Posture guard', Icon: PersonStanding, requires: 'postureGuard' },
+    { key: 'epiphanies', title: 'Epiphanies', Icon: Lightbulb, requires: 'epiphanies' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]

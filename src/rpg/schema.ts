@@ -50,7 +50,7 @@ const contractSchema = z.object({
 export const rpgSchema = z.object({
   createdAt: stamp,
   lastSeenAt: stamp,
-  ledger: z.record(z.string(), z.object({ day: z.string(), at: stamp, exp: z.number().int().nonnegative(), stat: statSchema.nullable(), points: z.number().int().nonnegative(), gold: z.number().int().nonnegative().default(0), active: z.boolean(), kind: z.enum(['habit','journal','priority','boss']), sourceId: z.string() })),
+  ledger: z.record(z.string(), z.object({ day: z.string(), at: stamp, exp: z.number().int().nonnegative(), stat: statSchema.nullable(), points: z.number().int().nonnegative(), gold: z.number().int().nonnegative().default(0), active: z.boolean(), kind: z.enum(['habit','journal','priority','boss','impact']), sourceId: z.string() })),
   bosses: z.record(z.string(), z.object({ day: z.string(), habitIds: z.array(z.string()), priorityIds: z.array(z.string()).min(1).max(3), startedAt: stamp, defeated: z.boolean(), settled: z.boolean(), penalty: z.number().int().min(0).max(5) })),
   loot: z.array(z.object({ milestone: z.union([z.literal(7), z.literal(30)]), earnedAt: stamp, opened: z.boolean() })),
   palette: z.enum(['bloom','forest','amber']),

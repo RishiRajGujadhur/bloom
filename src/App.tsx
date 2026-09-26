@@ -12,7 +12,8 @@ import {
   SoundscapeCard,
   StatsRow,
 } from './components/dashboard/Overview'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react'
+import gsap from 'gsap'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
 import { useFormik } from 'formik'
@@ -63,6 +64,9 @@ import { Sidebar } from './components/layout/Sidebar'
 import { Carousel } from './components/ui/Carousel'
 import { burst, streakMilestone } from './components/ui/celebrate'
 import { AchievementHost } from './features/achievements/DrawnAchievement'
+import { ImpactLayer } from './features/impact/ImpactLayer'
+import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
+import { EpiphaniesPage, EpiphanyGate } from './features/epiphany/EpiphanyUI'
 import { habitStats } from './features/habits'
 import { TimeCapsuleCard } from './features/timeCapsule'
 import { TimeSinceCard } from './features/timeSince/TimeSinceCard'
@@ -240,6 +244,25 @@ function App() {
   }, [])
   useEffect(() => {
     document.getElementById('page-heading')?.focus({ preventScroll: true })
+  }, [active])
+  // Page entrance: the new page's blocks settle in with a soft stagger.
+  useLayoutEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const blocks = document.querySelectorAll(
+      '.page-content > :not(.bloom-heading):not([hidden]), .overview-grid > div > *, .ov-stats > *',
+    )
+    if (!blocks.length) return
+    const tween = gsap.from(blocks, {
+      y: 14,
+      opacity: 0,
+      duration: 0.45,
+      stagger: 0.04,
+      ease: 'power2.out',
+      clearProps: 'transform,opacity',
+    })
+    return () => {
+      tween.progress(1).kill()
+    }
   }, [active])
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(getStoredTheme)
@@ -457,12 +480,14 @@ function App() {
 
             {settings.features.habitTracker && (
               <div hidden={active !== 'habits'}>
+                <EpiphanyGate today={today} enabled={settings.features.epiphanies}>
                 <HabitsPage
                   data={data}
                   setData={setData}
                   today={today}
                   reminders={settings.features.reminders}
                 />
+                </EpiphanyGate>
               </div>
             )}
             {settings.features.daybookModes && (
@@ -484,6 +509,7 @@ function App() {
             (active === 'gratitude' && !settings.features.gratitude) ||
             (active === 'sleep' && !settings.features.sleepTracker) ||
             (active === 'posture' && !settings.features.postureGuard) ||
+            (active === 'epiphanies' && !settings.features.epiphanies) ||
             (active === 'shop' && !settings.features.petalShop) ||
             (active === 'release' && !settings.features.burnRelease) ||
             (active === 'focus-room' && !settings.features.focusRoom) ||
@@ -539,6 +565,8 @@ function App() {
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <PlacesPage />
               </Suspense>
+            ) : active === 'epiphanies' ? (
+              <EpiphaniesPage today={today} />
             ) : active === 'posture' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <PosturePage data={data} setData={setData} today={today} onNavigate={jump} />
@@ -648,6 +676,14 @@ function App() {
                       />
                     </Disclosure>
                   )}
+                  {active === 'overview' && settings.features.dailyFlow && (
+                    <DailyFlowCard
+                      data={data}
+                      today={today}
+                      flags={settings.features}
+                      onNavigate={jump}
+                    />
+                  )}
                   {active === 'overview' && modules.stats && (
                     <StatsRow data={data} today={today} onNavigate={jump} />
                   )}
@@ -661,6 +697,7 @@ function App() {
                     <div className="left-column">
                       {active === 'overview' &&
                         settings.features.habitTracker && (
+<EpiphanyGate today={today} enabled={settings.features.epiphanies}>
                           <section className="card" id="habits">
                             <div className="card-heading">
                               <div className="section-title">
@@ -811,6 +848,7 @@ function App() {
                               </div>
                             </div>
                           </section>
+                          </EpiphanyGate>
                         )}
                     </div>
                     <div className="middle-column">
@@ -1001,6 +1039,7 @@ function App() {
           </div>
         </main>
         {settings.features.drawnAchievements && <AchievementHost />}
+        {settings.features.impactTasks && <ImpactLayer setData={setData} />}
         {settings.features.postureGuard && postureTouched && (
           <Suspense fallback={null}>
             <PostureGuardian setData={setData} />

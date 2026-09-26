@@ -1,3 +1,5 @@
+import { NextStep } from '../dailyFlow/DailyFlow'
+import { PenLine, Sun, Wind } from 'lucide-react'
 import { subOn } from '../subFeatures'
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
@@ -21,6 +23,7 @@ import {
   type MoodEntry,
 } from './store'
 import './wellbeing.css'
+import { GratitudeJarSvg, MiniJarSvg } from './GratitudeJarSvg'
 import { orbToMood } from './moodOrbModel'
 
 // The orb pulls in Three.js, so it loads only when Orb mode is opened.
@@ -301,8 +304,10 @@ export function MoodPage() {
   const [emotions, setEmotions] = useState<string[]>([])
   const [energy, setEnergy] = useState(3)
   const week = moodWeek(entries)
+  const [lastMood, setLastMood] = useState<number | null>(null)
   const save = () => {
     if (picked === null) return
+    setLastMood(picked)
     setEntries((list) => [
       {
         id: crypto.randomUUID(),
@@ -443,6 +448,15 @@ export function MoodPage() {
             </label>
           </div>
         )}
+        {lastMood !== null && picked === null && (
+          lastMood <= 2 ? (
+            <NextStep icon={<Wind size={18} />} text="That sounds heavy. A physiological sigh can soften it in about a minute." action="Breathe" page="breathe" />
+          ) : lastMood >= 4 ? (
+            <NextStep icon={<Heart size={18} />} text="Bottle this feeling — what made today good?" action="Gratitude jar" page="gratitude" />
+          ) : (
+            <NextStep icon={<Sun size={18} />} text="A steady day. Set one intention to give it shape." action="Set an intention" page="planning" />
+          )
+        )}
         <AnimatePresence>
           {picked !== null && (
             <motion.div
@@ -525,6 +539,7 @@ export function GratitudePage() {
   const [jarId, setJarId] = useState(jars[0].id)
   const [text, setText] = useState('')
   const [creating, setCreating] = useState(false)
+  const [added, setAdded] = useState(0)
   const [newJar, setNewJar] = useState({ name: '', emoji: '🫙' })
   const jar = jars.find((j) => j.id === jarId) ?? jars[0]
   const inJar = entries.filter((e) => (e.jarId ?? 'moments') === jar.id)
@@ -551,6 +566,7 @@ export function GratitudePage() {
       ...list,
     ])
     setText('')
+    setAdded((n) => n + 1)
   }
   const createJar = () => {
     const name = newJar.name.trim()
@@ -583,10 +599,7 @@ export function GratitudePage() {
               style={{ ['--jar' as string]: j.color, ['--fill' as string]: `${fill(count)}%` }}
               onClick={() => setJarId(j.id)}
             >
-              <span className="wb-mini-glass" aria-hidden="true">
-                <i />
-                <b>{j.emoji}</b>
-              </span>
+              <MiniJarSvg fill={fill(count) / 100} color={j.color} emoji={j.emoji} />
               <strong>{j.name}</strong>
               <small>{count}</small>
             </button>
@@ -633,16 +646,13 @@ export function GratitudePage() {
         </form>
       )}
       <div className="wb-card wb-jar-card" style={{ ['--jar' as string]: jar.color }}>
-        <div className={`wb-jar${shaking ? ' is-shaking' : ''}`} aria-hidden="true">
-          {inJar.slice(0, 24).map((entry, i) => (
-            <motion.i
-              key={entry.id}
-              initial={{ y: -60, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              style={{ ['--i' as string]: i }}
-            />
-          ))}
-        </div>
+        <GratitudeJarSvg
+          count={inJar.length}
+          color={jar.color}
+          shaking={shaking}
+          label={`${jar.name} jar with ${inJar.length} notes`}
+          capacity={JAR_CAPACITY}
+        />
         <div>
           <h3 className="wb-jar-title">
             {jar.emoji} {jar.name}
@@ -668,9 +678,17 @@ export function GratitudePage() {
           <p className="wb-muted">
             <Heart size={14} aria-hidden="true" /> {inJar.length} / {JAR_CAPACITY}
           </p>
+          {added > 0 && (
+            <NextStep
+              icon={<PenLine size={18} />}
+              text="Want to stay with this feeling a little longer? Write a few lines about it."
+              action="Reflect"
+              page="daybook"
+            />
+          )}
           {inJar.length > 0 && subOn('gratitude', 'shake') && (
             <button type="button" className="ov-secondary wb-shake" onClick={shake}>
-              🫙 Shake for a memory
+              ✨ Shake for a memory
             </button>
           )}
           <AnimatePresence>

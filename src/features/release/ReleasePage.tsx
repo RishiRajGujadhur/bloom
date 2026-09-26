@@ -1,8 +1,9 @@
+import { NextStep } from '../dailyFlow/DailyFlow'
 import { subOn } from '../subFeatures'
 import { useRef, useState } from 'react'
 import { useDrag } from '@use-gesture/react'
 import { animated, useSpring } from '@react-spring/web'
-import { Flame, RotateCcw } from 'lucide-react'
+import { Flame, Heart, RotateCcw } from 'lucide-react'
 import { useStoredValue } from '../sleep/useStoredValue'
 import { burst } from '../../components/ui/celebrate'
 import './release.css'
@@ -149,6 +150,14 @@ export function ReleasePage() {
           </div>
         </div>
       </div>
+      {stats.released > 0 && !card && !burning && (
+        <NextStep
+          icon={<Heart size={18} />}
+          text="Space made. Fill it with something good that happened today."
+          action="Gratitude jar"
+          page="gratitude"
+        />
+      )}
       <p className="release-count" role="status">
         {burning
           ? 'Letting it go…'

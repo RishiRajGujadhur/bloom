@@ -19,6 +19,7 @@ import {
 import { journalText } from '../../search/db'
 import { loadSettings } from '../../SettingsPage'
 import { ThoughtDiffPanel } from './ThoughtDiff'
+import { ExtractEpiphany } from '../../features/epiphany/EpiphanyUI'
 import { FlowMountain, useKeystrokeFlow } from '../../features/flow/FlowMountain'
 
 /** Pages about fears and shadows offer the Burn & release ritual. */
@@ -347,6 +348,13 @@ export function AdaptiveEditor({
           </div>
         </div>
         <div className="daybook-actions">
+          {loadSettings().features.epiphanies && subOn('epiphanies', 'extract') && (
+            <ExtractEpiphany
+              today={new Date().toISOString().slice(0, 10)}
+              source={{ kind: 'daybook', title: mode.title, date: (entry?.createdAt ?? new Date().toISOString()).slice(0, 10) }}
+              fallbackText={() => journalText(content)}
+            />
+          )}
           {canCompare && (
             <button
               type="button"

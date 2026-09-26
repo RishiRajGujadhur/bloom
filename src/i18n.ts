@@ -277,6 +277,18 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      impactTasks: {
+        title: 'Destructible tasks',
+        description: 'Heavy tasks fall, bounce and shatter for bonus EXP.',
+      },
+      epiphanies: {
+        title: 'Epiphanies',
+        description: 'Spaced repetition brings your insights back before you forget them.',
+      },
+      dailyFlow: {
+        title: 'Daily flow',
+        description: 'Morning setup and evening wind-down that connect your tools.',
+      },
       flowTopography: {
         title: 'Flow topography',
         description: 'Your typing rhythm drawn as a mountain range under each page.',
@@ -1161,6 +1173,18 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          impactTasks: {
+            title: 'Tâches destructibles',
+            description: 'Les tâches lourdes tombent, rebondissent et éclatent pour de l’EXP bonus.',
+          },
+          epiphanies: {
+            title: 'Épiphanies',
+            description: 'La répétition espacée ramène vos idées avant que vous ne les oubliiez.',
+          },
+          dailyFlow: {
+            title: 'Flux quotidien',
+            description: 'Rituel du matin et du soir qui relient vos outils.',
+          },
           flowTopography: {
             title: 'Topographie du flow',
             description: 'Votre rythme de frappe dessiné en chaîne de montagnes sous chaque page.',

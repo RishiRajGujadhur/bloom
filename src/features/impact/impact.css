@@ -1,0 +1,55 @@
+.impact-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 94;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  cursor: grab;
+}
+.impact-canvas[data-active='true'] {
+  pointer-events: auto;
+}
+.impact-canvas:active {
+  cursor: grabbing;
+}
+.impact-hint {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  z-index: 95;
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  translate: -50% 0;
+  background: #2b2230e6;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+  animation: impact-hint 400ms ease-out both;
+}
+@keyframes impact-hint {
+  from {
+    opacity: 0;
+    translate: -50% -10px;
+  }
+}
+html.impact-shake body {
+  animation: impact-shake 320ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes impact-shake {
+  20%,
+  60% {
+    transform: translate(-6px, 3px);
+  }
+  40%,
+  80% {
+    transform: translate(6px, -3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.impact-shake body {
+    animation: none;
+  }
+}

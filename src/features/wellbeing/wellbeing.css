@@ -592,3 +592,83 @@
 .wb-moods[hidden] {
   display: none;
 }
+
+/* SVG jars */
+.wb-jar-card {
+  grid-template-columns: 190px minmax(0, 1fr);
+}
+.gj-svg {
+  width: 190px;
+  height: 260px;
+  overflow: visible;
+  cursor: pointer;
+  filter: drop-shadow(0 18px 22px color-mix(in oklab, var(--jar) 35%, transparent));
+}
+.gj-glow {
+  animation: gj-glow 4s ease-in-out infinite;
+  transform-origin: 50% 70%;
+}
+@keyframes gj-glow {
+  50% {
+    transform: scale(1.06);
+    opacity: 0.8;
+  }
+}
+.gj-mini {
+  width: 44px;
+  height: 52px;
+  overflow: visible;
+  transition: transform 260ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.wb-mini-jar:hover .gj-mini {
+  transform: translateY(-3px) rotate(-6deg);
+}
+.gj-wave {
+  animation: gj-wave 3.2s linear infinite;
+}
+@keyframes gj-wave {
+  to {
+    transform: translateX(44px);
+  }
+}
+@media (max-width: 600px) {
+  .wb-jar-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .gj-svg {
+    width: 150px;
+    height: 205px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gj-glow,
+  .gj-wave {
+    animation: none;
+  }
+}
+.mood-orb-stage {
+  position: relative;
+}
+.mood-orb-stage::before {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--aura, #f2b35a) 0, transparent 70%);
+  opacity: 0.45;
+  filter: blur(18px);
+  animation: orb-aura 3.2s ease-in-out infinite;
+  transition: background 800ms ease;
+}
+@keyframes orb-aura {
+  50% {
+    transform: scale(1.12);
+    opacity: 0.65;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mood-orb-stage::before {
+    animation: none;
+  }
+}

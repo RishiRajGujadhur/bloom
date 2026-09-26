@@ -1,3 +1,5 @@
+import { NextStep } from '../dailyFlow/DailyFlow'
+import { Wind } from 'lucide-react'
 import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
@@ -20,6 +22,17 @@ import {
   type SleepSettings,
 } from './sleepModel'
 import './sleep.css'
+import { NightSky } from './NightSky'
+
+export const WIND_DOWN_KEY = 'bloom-winddown-v1'
+/** Records tonight's completed wind-down (read by the Daily flow). */
+function markWindDown() {
+  try {
+    localStorage.setItem(WIND_DOWN_KEY, new Date().toISOString().slice(0, 10))
+  } catch {
+    /* optional */
+  }
+}
 
 const qualities = ['😫', '😕', '😐', '🙂', '😴'] as const
 type Tab = 'log' | 'wind-down' | 'insights'
@@ -34,12 +47,14 @@ export function SleepPage() {
   const stats = sleepStats(entries, settings)
   return (
     <section className="sleep-page" aria-label="Sleep">
+      <NightSky quality={stats.count ? stats.quality : 3}>
       <div className="sleep-stats">
         <Stat label="Avg sleep" value={stats.count ? `${stats.average}h` : '—'} hint={`Goal ${settings.targetHours}h`} />
         <Stat label="Quality" value={stats.count ? `${stats.quality}/5` : '—'} />
         <Stat label="Consistency" value={stats.count ? `${stats.consistency}%` : '—'} hint="Bedtime regularity" />
         <Stat label="Sleep debt" value={stats.count ? `${stats.debt}h` : '—'} hint="Last 7 nights" />
       </div>
+      </NightSky>
       <div className="filter-chips" role="tablist" aria-label="Sleep views">
         {(
           [
@@ -97,6 +112,7 @@ function SleepLog({
   const [quality, setQuality] = useState<SleepEntry['quality']>(4)
   const [factors, setFactors] = useState<string[]>([])
   const [saved, setSaved] = useState(false)
+  const [lastQuality, setLastQuality] = useState<number | null>(null)
   const hours = duration(bedtime, wake)
   return (
     <form
@@ -105,6 +121,7 @@ function SleepLog({
         e.preventDefault()
         onSave({ id: crypto.randomUUID(), date: dayKey(), bedtime, wake, quality, factors })
         setSaved(true)
+        setLastQuality(quality)
         setFactors([])
       }}
     >
@@ -162,6 +179,13 @@ function SleepLog({
           <Check size={15} aria-hidden="true" /> Saved. Sleep well tonight.
         </p>
       )}
+      {saved && lastQuality !== null && (
+        lastQuality <= 2 ? (
+          <NextStep icon={<Wind size={18} />} text="A rough night. Go easy today — a short breathing break helps more than coffee." action="Breathe" page="breathe" />
+        ) : (
+          <NextStep icon={<Sparkles size={18} />} text="Well rested! Protect a deep-work block while your energy is high." action="Focus room" page="focus-room" />
+        )
+      )}
     </form>
   )
 }
@@ -180,6 +204,10 @@ function WindDown({
     const timer = setInterval(() => setNow(new Date()), 30000)
     return () => clearInterval(timer)
   }, [])
+  const complete = done.length === windDownSteps.length
+  useEffect(() => {
+    if (complete) markWindDown()
+  }, [complete])
   const left = minutesUntilBedtime(settings.bedtime, now)
   const progress = done.length / windDownSteps.length
   return (

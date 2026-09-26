@@ -1,0 +1,186 @@
+.forget-curve {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+.fc-axis {
+  stroke: var(--border-color);
+}
+.fc-review {
+  stroke: var(--accent-color);
+  stroke-dasharray: 3 4;
+}
+.fc-line {
+  fill: none;
+  stroke: #8f7ae5;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.fc-label {
+  fill: var(--accent-color);
+  font-size: 10px;
+  font-weight: 700;
+}
+.extract-epiphany {
+  position: relative;
+}
+.extract-form {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 8px;
+  width: min(380px, 80vw);
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  box-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.4);
+  animation: ui-pop 200ms ease-out;
+}
+.extract-form label {
+  font-weight: 600;
+  font-size: 14px;
+}
+.extract-form textarea {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+}
+.extract-form div {
+  display: flex;
+  gap: 8px;
+}
+.extract-saved {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  white-space: nowrap;
+  color: #3f8a5a;
+  font-size: 12.5px;
+}
+.epiphany-gate {
+  position: relative;
+}
+.epiphany-gate-under {
+  filter: blur(5px) saturate(0.7);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.epiphany-card {
+  position: absolute;
+  inset: 10px;
+  z-index: 3;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid color-mix(in oklab, #8f7ae5 40%, var(--border-color));
+  background: radial-gradient(circle at 20% 0%, color-mix(in oklab, #8f7ae5 16%, var(--bg-surface)), var(--bg-surface) 70%);
+  box-shadow: 0 30px 60px -30px #8f7ae5;
+}
+.epiphany-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #6d5bd0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.epiphany-source {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.epiphany-text {
+  margin: 0;
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.5;
+}
+.epiphany-hidden {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 70px;
+  border: 2px dashed color-mix(in oklab, #8f7ae5 50%, var(--border-color));
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+.epiphany-grades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.epiphany-grades button {
+  flex: 1;
+  justify-content: center;
+  min-height: 40px !important;
+  padding: 8px 12px;
+}
+.epiphanies-page {
+  display: grid;
+  gap: 16px;
+}
+.epiphany-add {
+  display: flex;
+  gap: 10px;
+}
+.epiphany-add input {
+  flex: 1;
+  min-height: 46px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+}
+.epiphany-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.epiphany-list li {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+.epiphany-list li[data-due='true'] {
+  border-color: #8f7ae5;
+}
+.epiphany-list blockquote {
+  margin: 0 30px 0 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+.epiphany-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.epiphany-list .icon-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

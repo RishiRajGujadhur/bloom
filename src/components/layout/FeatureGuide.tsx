@@ -58,6 +58,7 @@ export const pageDetails: Record<
   breathe: { title: 'Breathe', description: 'Slow down, one breath at a time.' },
   sleep: { title: 'Sleep', description: 'Rest is part of the work.' },
   posture: { title: 'Posture guard', description: 'Sit tall, level up.' },
+  epiphanies: { title: 'Epiphanies', description: 'Your wisdom, remembered.' },
   'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
   'focus-room': { title: 'Focus room', description: 'One task. Soft strings. Deep work.' },
   'explore': { title: 'Explore data', description: 'Ask your own questions.' },
@@ -89,6 +90,10 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  epiphanies: [
+    step('.epiphany-add', 'Add an insight', 'Or extract one from a Daybook page.'),
+    step('.epiphany-list', 'Spaced reviews', 'Each returns right before you would forget it.'),
+  ],
   posture: [
     step('.posture-stage', 'Your posture', 'Green when upright, red when slouching.'),
     step('.posture-side', 'Calibrate and play', 'Sit tall, calibrate, then earn stamina.'),

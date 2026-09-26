@@ -1,3 +1,11 @@
+import { launchImpact } from './impact/ImpactLayer'
+import { taskWeight } from './impact/impactModel'
+import { burst } from '../components/ui/celebrate'
+import { loadSettings } from '../SettingsPage'
+import { subOn } from './subFeatures'
+
+/** Only heavy tasks drop by default; switching "Heavy tasks only" off lets any task fall. */
+const impactThreshold = () => (subOn('impactTasks', 'heavyOnly') ? 1 : 0)
 import { CardRail } from '../components/BloomExperience'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import {
@@ -407,9 +415,20 @@ export function TodoPage({ data, setData }: Props) {
                         ? 'This action is deferred'
                         : undefined
                   }
-                  onClick={() =>
+                  onClick={(event) => {
+                    // Heavy tasks become physics objects when completed.
+                    const weight = task.done ? 0 : taskWeight(task)
+                    const row = event.currentTarget.closest('.task-row')
+                    if (
+                      weight >= impactThreshold() &&
+                      row &&
+                      loadSettings().features.impactTasks &&
+                      launchImpact({ taskId: task.id, title: task.title, rect: row.getBoundingClientRect(), weight })
+                    ) {
+                      // The physics body takes over; skip the small burst.
+                    } else if (!task.done) burst(event.currentTarget)
                     setData((current) => toggleTodo(current, task.id))
-                  }
+                  }}
                 >
                   <Check size={18} />
                 </button>

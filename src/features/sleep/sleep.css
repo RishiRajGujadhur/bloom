@@ -294,3 +294,50 @@
     transition: none;
   }
 }
+
+/* Night sky header with glass stat cards */
+.night-sky {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  isolation: isolate;
+}
+.night-sky > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.night-sky-content {
+  padding: 58px 18px 22px;
+}
+.night-sky .sleep-stat {
+  border-color: #ffffff26;
+  background: #ffffff14;
+  backdrop-filter: blur(6px);
+  color: #f3eefc;
+  transition: transform 200ms ease, background 200ms ease;
+}
+.night-sky .sleep-stat:hover {
+  transform: translateY(-3px);
+  background: #ffffff22;
+}
+.night-sky .sleep-stat span,
+.night-sky .sleep-stat small {
+  color: #d8d0ea;
+}
+.sleep-hours {
+  animation: sleep-float 4s ease-in-out infinite;
+}
+@keyframes sleep-float {
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 36px -18px #6b7fd7;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sleep-hours {
+    animation: none;
+  }
+}

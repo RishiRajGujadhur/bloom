@@ -288,6 +288,27 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'ravines', title: 'Ravines', description: 'Backspacing carves jagged ravines.' },
     { id: 'stats', title: 'WPM and flow %', description: 'Typing speed and time in flow.' },
   ],
+  impactTasks: [
+    { id: 'shatter', title: 'Shatter on impact', description: 'Hard wall hits break the task into debris.' },
+    { id: 'bonusExp', title: 'Bonus EXP', description: 'Shattering grants extra EXP by weight.' },
+    { id: 'shake', title: 'Screen shake', description: 'A little rumble when it shatters.' },
+    { id: 'hint', title: 'How-to hint', description: '“Grab it and throw it…”' },
+    { id: 'heavyOnly', title: 'Heavy tasks only', description: 'Off: every completed task falls.' },
+  ],
+  epiphanies: [
+    { id: 'obstruct', title: 'Review before habits', description: 'Due insights cover your habits until graded.' },
+    { id: 'recallFirst', title: 'Recall first', description: 'Hide the text until you try to remember it.' },
+    { id: 'curve', title: 'Forgetting curve', description: 'See how recall fades until the next review.' },
+    { id: 'extract', title: 'Extract from Daybook', description: 'Save a highlighted sentence as an epiphany.' },
+    { id: 'capsule', title: 'In the Time capsule', description: 'Epiphanies can resurface as memories.' },
+  ],
+  dailyFlow: [
+    { id: 'morning', title: 'Morning setup', description: 'Insight, check-in, intention, habit, focus.' },
+    { id: 'evening', title: 'Evening wind-down', description: 'Gratitude, reflection, breath, tomorrow, sleep.' },
+    { id: 'autoSwitch', title: 'Follow the clock', description: 'Show morning or evening by time of day.' },
+    { id: 'ring', title: 'Progress ring', description: 'Animated ring for the routine.' },
+    { id: 'suggestions', title: 'Next-step nudges', description: 'Suggestions that link features after you act.' },
+  ],
   postureGuard: [
     { id: 'warnings', title: 'Slouch warnings', description: 'A warning after 5 minutes of slouching.' },
     { id: 'poison', title: 'Poison damage', description: 'Ignored warnings cost HP.' },

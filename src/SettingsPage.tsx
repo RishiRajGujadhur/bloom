@@ -13,6 +13,9 @@ import {
   CarFront,
   Castle,
   PenTool,
+  Hammer,
+  Lightbulb,
+  Workflow,
   Mountain,
   PersonStanding,
   Timer,
@@ -84,6 +87,9 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   drawnAchievements: PenTool,
   flowTopography: Mountain,
   postureGuard: PersonStanding,
+  impactTasks: Hammer,
+  epiphanies: Lightbulb,
+  dailyFlow: Workflow,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -126,6 +132,9 @@ export interface FeatureFlags {
   drawnAchievements: boolean
   flowTopography: boolean
   postureGuard: boolean
+  impactTasks: boolean
+  epiphanies: boolean
+  dailyFlow: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -177,6 +186,9 @@ export const defaultSettings: AppSettings = {
     drawnAchievements: true,
     flowTopography: true,
     postureGuard: true,
+    impactTasks: true,
+    epiphanies: true,
+    dailyFlow: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -220,6 +232,9 @@ const featureKeys = [
   'drawnAchievements',
   'flowTopography',
   'postureGuard',
+  'impactTasks',
+  'epiphanies',
+  'dailyFlow',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

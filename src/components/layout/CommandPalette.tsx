@@ -49,6 +49,7 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   gratitude: 'gratitude',
   sleep: 'sleepTracker',
   posture: 'postureGuard',
+  epiphanies: 'epiphanies',
   shop: 'petalShop',
   'release': 'burnRelease',
   'focus-room': 'focusRoom',

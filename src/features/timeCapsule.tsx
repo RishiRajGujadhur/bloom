@@ -87,7 +87,15 @@ export function collectMemories(data: AppData): Memory[] {
       .map((m) => m.text)
       .join(' '),
   }))
-  return [...daybook, ...chats]
+  const insights =
+    subOn('epiphanies', 'capsule')
+      ? readJson<{ text: string; source: { date: string } }>('bloom-epiphanies-v1').map((e) => ({
+          date: e.source.date,
+          title: 'An epiphany',
+          text: e.text,
+        }))
+      : []
+  return [...daybook, ...chats, ...insights]
 }
 
 export function TimeCapsuleCard({ data, today }: { data: AppData; today: string }) {

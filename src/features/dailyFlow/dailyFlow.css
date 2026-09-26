@@ -1,0 +1,188 @@
+.daily-flow {
+  --df: #e3a857;
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in oklab, var(--df) 18%, transparent), transparent 55%),
+    var(--bg-surface);
+}
+.daily-flow.is-evening {
+  --df: #7c83e6;
+}
+.daily-flow header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.daily-flow header > div:not(.wb-chips) {
+  flex: 1;
+  min-width: 180px;
+}
+.daily-flow h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.daily-flow header p {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.daily-flow header .wb-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.df-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+}
+.df-ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.df-ring-track {
+  fill: none;
+  stroke: color-mix(in oklab, var(--df) 18%, var(--bg-surface));
+  stroke-width: 6;
+}
+.df-ring-arc {
+  fill: none;
+  stroke: var(--df);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.df-ring > span {
+  font-size: 13px;
+  font-weight: 800;
+}
+.df-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.df-steps button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.df-steps li[data-next='true'] button {
+  border-color: var(--df);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--df) 20%, transparent);
+}
+.df-steps li[data-done='true'] button {
+  background: color-mix(in oklab, var(--df) 9%, var(--bg-surface));
+}
+.df-dot {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--df) 16%, var(--bg-surface));
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+li[data-done='true'] .df-dot {
+  background: var(--df);
+}
+.df-check {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: df-draw 450ms 120ms ease-out forwards;
+}
+@keyframes df-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.df-copy {
+  display: grid;
+  min-width: 0;
+}
+.df-copy strong {
+  font-size: 13.5px;
+}
+.df-copy small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+li[data-done='true'] .df-copy strong {
+  color: var(--text-secondary);
+}
+.df-next {
+  justify-self: start;
+}
+.df-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-secondary);
+}
+.next-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px dashed color-mix(in oklab, var(--accent-color) 45%, var(--border-color));
+  background: color-mix(in oklab, var(--accent-color) 6%, var(--bg-surface));
+  font-size: 14px;
+}
+.next-step > span:nth-child(2) {
+  flex: 1;
+  min-width: 180px;
+}
+.next-step-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--bg-surface);
+  color: var(--accent-color);
+}
+.next-step .ov-secondary {
+  text-decoration: none;
+  min-height: 38px;
+  padding: 7px 12px;
+  font-size: 13.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .df-check {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,7 +1,8 @@
 import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Color, type ShaderMaterial } from 'three'
+import { Color, type Mesh, type ShaderMaterial } from 'three'
+import { Sparkles } from '@react-three/drei'
 import gsap from 'gsap'
 import { Scene3D } from '../../components/ui/Scene3D'
 import { orbLabel } from './moodOrbModel'
@@ -87,14 +88,36 @@ function Orb({ value }: { value: number }) {
     }
   }, [value, uniforms])
   const liquid = subOn('moodOrb', 'liquid')
-  useFrame((_, delta) => {
+  // A springy "pop" whenever the mood changes, plus a slow idle breath.
+  const mesh = useRef<Mesh>(null)
+  const pop = useMemo(() => ({ value: 1 }), [])
+  useEffect(() => {
+    const tween = gsap.fromTo(pop, { value: 1.14 }, { value: 1, duration: 0.9, ease: 'elastic.out(1, 0.35)' })
+    return () => {
+      tween.kill()
+    }
+  }, [value, pop])
+  useFrame(({ clock }, delta) => {
     if (liquid) uniforms.uTime.value += delta
+    const breath = liquid ? 1 + Math.sin(clock.getElapsedTime() * 1.1) * 0.035 : 1
+    mesh.current?.scale.setScalar(pop.value * breath)
+    if (mesh.current && liquid) mesh.current.rotation.y += delta * (0.15 + (1 - value) * 0.6)
   })
   return (
-    <mesh>
-      <icosahedronGeometry args={[1.4, 64]} />
-      <shaderMaterial ref={material} vertexShader={vertex} fragmentShader={fragment} uniforms={uniforms} transparent />
-    </mesh>
+    <>
+      <mesh ref={mesh}>
+        <icosahedronGeometry args={[1.4, 64]} />
+        <shaderMaterial ref={material} vertexShader={vertex} fragmentShader={fragment} uniforms={uniforms} transparent />
+      </mesh>
+      <Sparkles
+        count={40}
+        scale={[4.2, 4.2, 4.2]}
+        size={2.6}
+        speed={0.25 + (1 - value) * 1.2}
+        color={`#${orbColor(value).getHexString()}`}
+        opacity={0.8}
+      />
+    </>
   )
 }
 
@@ -102,7 +125,11 @@ function Orb({ value }: { value: number }) {
 export function MoodOrb({ value, onChange }: { value: number; onChange: (value: number) => void }) {
   return (
     <div className="mood-orb">
-      <div className="mood-orb-stage" aria-hidden="true">
+      <div
+        className="mood-orb-stage"
+        aria-hidden="true"
+        style={{ ['--aura' as string]: `#${orbColor(value).getHexString()}` }}
+      >
         <Scene3D fallback={<div className="mood-orb-fallback" style={{ ['--calm' as string]: value }} />}>
           <Canvas camera={{ position: [0, 0, 4.4], fov: 45 }} dpr={[1, 2]} gl={{ alpha: true }}>
             <Orb value={value} />

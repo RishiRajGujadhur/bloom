@@ -63,6 +63,9 @@ export function PostureGuardian({ setData }: { setData: Dispatch<SetStateAction<
           <button className="ov-primary" onClick={acknowledgePosture}>
             I’m sitting up
           </button>
+          <a className="ov-secondary posture-move" href="#habits" onClick={acknowledgePosture}>
+            Movement snack
+          </a>
         </motion.div>
       )}
       {flash && (
