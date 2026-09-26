@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Carousel } from '../ui/Carousel'
 import { journalText } from '../../search/db'
@@ -198,7 +199,7 @@ export function JournalContainer() {
           </>
         ) : (
           <div className="journal-direction">
-            {recentPages.length > 0 && (
+            {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
               <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
                 {recentPages.map((page) => {
                   const text = journalText(page.content).trim()

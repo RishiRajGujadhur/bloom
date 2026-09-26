@@ -6,10 +6,14 @@ import i18n from './i18n'
 import { ThemePicker } from './components/settings/ThemePicker'
 import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
+import { SETTINGS_STORAGE_KEY } from './settingsKey'
+import { subFeatures } from './features/subFeatures'
 import {
   CalendarDays,
   CarFront,
   Castle,
+  PenTool,
+  Timer,
   Armchair,
   BookMarked,
   Boxes,
@@ -74,6 +78,8 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   streakJourney: Route,
   moodOrb: CircleDot,
   placesMap: MapPinned,
+  timeSince: Timer,
+  drawnAchievements: PenTool,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -112,6 +118,8 @@ export interface FeatureFlags {
   streakJourney: boolean
   moodOrb: boolean
   placesMap: boolean
+  timeSince: boolean
+  drawnAchievements: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -124,9 +132,11 @@ export interface FeatureFlags {
 
 export interface AppSettings {
   features: FeatureFlags
+  /** Sub-feature switches, keyed "feature.option"; missing means on. */
+  sub?: Record<string, boolean>
 }
 
-export const SETTINGS_STORAGE_KEY = 'mindfulness-dashboard-settings'
+export { SETTINGS_STORAGE_KEY }
 
 export const defaultSettings: AppSettings = {
   features: {
@@ -157,6 +167,8 @@ export const defaultSettings: AppSettings = {
     streakJourney: true,
     moodOrb: true,
     placesMap: true,
+    timeSince: true,
+    drawnAchievements: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -196,6 +208,8 @@ const featureKeys = [
   'streakJourney',
   'moodOrb',
   'placesMap',
+  'timeSince',
+  'drawnAchievements',
   'urgeTracker',
   'habitTracker',
   'chatJournal',
@@ -221,7 +235,17 @@ function parseSettings(value: unknown): AppSettings | null {
   if (typeof features !== 'object' || features === null) return null
   // New flags use their defaults without changing choices stored by older saves.
   const migrated = { ...defaultSettings.features, ...features }
-  return isFeatureFlags(migrated) ? { features: { ...migrated } } : null
+  const sub =
+    candidate.sub && typeof candidate.sub === 'object'
+      ? Object.fromEntries(
+          Object.entries(candidate.sub as Record<string, unknown>).filter(
+            ([, v]) => typeof v === 'boolean',
+          ),
+        )
+      : {}
+  return isFeatureFlags(migrated)
+    ? { features: { ...migrated }, sub: sub as Record<string, boolean> }
+    : null
 }
 
 export function loadSettings(): AppSettings {
@@ -357,10 +381,11 @@ export function SettingsPage({
                     ? 'Full calendar'
                     : t(`settings.feature.${key}.title`)
             const Icon = featureIcons[key]
+            const options = subFeatures[key]
             return (
+              <div className={styles.featureCard} key={key} data-on={settings.features[key]}>
               <label
                 className={styles.feature}
-                key={key}
                 data-on={settings.features[key]}
               >
                 <span className={styles.featureIcon} aria-hidden="true">
@@ -388,6 +413,45 @@ export function SettingsPage({
                   <span className={styles.slider} aria-hidden="true" />
                 </span>
               </label>
+              {options.length > 0 && (
+                <details className={styles.subOptions}>
+                  <summary>
+                    {options.length} options
+                  </summary>
+                  <ul>
+                    {options.map((option) => {
+                      const id = `${key}.${option.id}`
+                      const on = settings.sub?.[id] !== false
+                      return (
+                        <li key={option.id}>
+                          <label className={styles.subOption}>
+                            <span>
+                              <strong>{option.title}</strong>
+                              <small>{option.description}</small>
+                            </span>
+                            <span className={styles.switch} data-size="small">
+                              <input
+                                type="checkbox"
+                                checked={on && settings.features[key]}
+                                disabled={!settings.features[key]}
+                                onChange={() =>
+                                  setSettings((current) => ({
+                                    ...current,
+                                    sub: { ...current.sub, [id]: !on },
+                                  }))
+                                }
+                                aria-label={`${option.title} (${title})`}
+                              />
+                              <span className={styles.slider} aria-hidden="true" />
+                            </span>
+                          </label>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </details>
+              )}
+              </div>
             )
           })}
         </div>

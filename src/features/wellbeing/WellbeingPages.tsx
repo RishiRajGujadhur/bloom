@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Heart, Pause, RotateCcw, Trash2 } from 'lucide-react'
@@ -177,6 +178,7 @@ export function BreathePage() {
             <em>{p.phases.map((ph) => ph[1]).join(' · ')}</em>
           </button>
         ))}
+        {subOn('breathe', 'customPattern') && (
         <button
           type="button"
           className="wb-technique"
@@ -192,6 +194,7 @@ export function BreathePage() {
           <small>Build your own rhythm</small>
           <em>{customPattern.phases.map((ph) => ph[1]).join(' · ')}</em>
         </button>
+        )}
       </Carousel>
       {patternId === 'custom' && (
         <div className="wb-custom" aria-label="Custom pattern">
@@ -224,12 +227,16 @@ export function BreathePage() {
         </div>
       )}
       <div className="wb-chips" role="group" aria-label="Cues">
-        <button type="button" aria-pressed={cues.sound} onClick={() => setCues((c) => ({ ...c, sound: !c.sound }))}>
-          🔔 Sound cue
-        </button>
-        <button type="button" aria-pressed={cues.vibrate} onClick={() => setCues((c) => ({ ...c, vibrate: !c.vibrate }))}>
-          📳 Vibrate
-        </button>
+        {subOn('breathe', 'soundCue') && (
+          <button type="button" aria-pressed={cues.sound} onClick={() => setCues((c) => ({ ...c, sound: !c.sound }))}>
+            🔔 Sound cue
+          </button>
+        )}
+        {subOn('breathe', 'vibrate') && (
+          <button type="button" aria-pressed={cues.vibrate} onClick={() => setCues((c) => ({ ...c, vibrate: !c.vibrate }))}>
+            📳 Vibrate
+          </button>
+        )}
       </div>
       <div className="wb-chips" role="radiogroup" aria-label="Rounds">
         {roundOptions.map((n) => (
@@ -335,6 +342,7 @@ export function MoodPage() {
             >
               Quick
             </button>
+            {subOn('moodCheckin', 'detailed') && (
             <button
               type="button"
               aria-pressed={detailed && !orb}
@@ -345,6 +353,7 @@ export function MoodPage() {
             >
               Detailed
             </button>
+            )}
             {orbEnabled && (
               <button
                 type="button"
@@ -475,7 +484,7 @@ export function MoodPage() {
           })}
         </ol>
       </div>
-      {topEmotions.length > 0 && (
+      {topEmotions.length > 0 && subOn('moodCheckin', 'wordCloud') && (
         <div className="wb-card">
           <h2>Words you use most</h2>
           <div className="wb-word-cloud">
@@ -487,7 +496,7 @@ export function MoodPage() {
           </div>
         </div>
       )}
-      {entries.length > 0 && (
+      {entries.length > 0 && subOn('moodCheckin', 'recent') && (
         <Carousel label="Recent check-ins" title="Recent" perView={4}>
           {entries.slice(0, 20).map((entry) => (
             <article key={entry.id} className="wb-note">
@@ -583,6 +592,7 @@ export function GratitudePage() {
             </button>
           )
         })}
+        {subOn('gratitude', 'customJars') && (
         <button
           className="wb-mini-jar wb-new-jar"
           aria-expanded={creating}
@@ -593,6 +603,7 @@ export function GratitudePage() {
           </span>
           <strong>New jar</strong>
         </button>
+        )}
       </div>
       {creating && (
         <form
@@ -657,7 +668,7 @@ export function GratitudePage() {
           <p className="wb-muted">
             <Heart size={14} aria-hidden="true" /> {inJar.length} / {JAR_CAPACITY}
           </p>
-          {inJar.length > 0 && (
+          {inJar.length > 0 && subOn('gratitude', 'shake') && (
             <button type="button" className="ov-secondary wb-shake" onClick={shake}>
               🫙 Shake for a memory
             </button>
@@ -679,6 +690,7 @@ export function GratitudePage() {
           </AnimatePresence>
         </div>
       </div>
+      {subOn('gratitude', 'compare') && (
       <div className="wb-card">
         <h3 className="wb-jar-title">
           Compare jars
@@ -705,6 +717,7 @@ export function GratitudePage() {
           ))}
         </ol>
       </div>
+      )}
       {inJar.length > 0 && (
         <Carousel label={`Notes in ${jar.name}`} title="In this jar" perView={4}>
           {inJar.map((entry) => (

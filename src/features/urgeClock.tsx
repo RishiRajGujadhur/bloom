@@ -1,3 +1,4 @@
+import { subOn } from './subFeatures'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Hourglass, Trophy } from 'lucide-react'
@@ -61,7 +62,7 @@ export function UrgeClocks({ habits, events }: { habits: UrgeHabit[]; events: Ur
             <header>
               <Hourglass size={16} aria-hidden="true" />
               <strong>{habit.title}</strong>
-              {stats!.isRecord && (
+              {stats!.isRecord && subOn('urgeClock', 'highScore') && (
                 <motion.span className="urge-record" initial={{ scale: 0.6 }} animate={{ scale: 1 }}>
                   <Trophy size={13} aria-hidden="true" /> New best
                 </motion.span>
@@ -75,7 +76,9 @@ export function UrgeClocks({ habits, events }: { habits: UrgeHabit[]; events: Ur
                   [t.minutes, 'm'],
                   [t.seconds, 's'],
                 ] as const
-              ).map(([value, unit]) => (
+              )
+                .filter(([, unit]) => unit !== 's' || subOn('urgeClock', 'seconds'))
+                .map(([value, unit]) => (
                 <span key={unit}>
                   <b>{unit === 'd' ? value : pad(value)}</b>
                   <small>{unit}</small>
@@ -85,7 +88,7 @@ export function UrgeClocks({ habits, events }: { habits: UrgeHabit[]; events: Ur
             <div className="urge-best-track" aria-hidden="true">
               <i style={{ width: `${progress * 100}%` }} />
             </div>
-            <p>
+            <p hidden={!subOn('urgeClock', 'highScore')}>
               Best {best.days}d {best.hours}h {best.minutes}m · {stats!.resisted} urges resisted this run
             </p>
           </article>

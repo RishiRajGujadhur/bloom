@@ -1,3 +1,4 @@
+import { subOn } from './features/subFeatures'
 import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
 import { BloomCompanion } from './companion/BloomCompanion'
@@ -60,13 +61,11 @@ import {
 } from './features/collectibles/Collectibles'
 import { Sidebar } from './components/layout/Sidebar'
 import { Carousel } from './components/ui/Carousel'
-import {
-  burst,
-  fountain,
-  isMilestoneStreak,
-} from './components/ui/celebrate'
+import { burst, streakMilestone } from './components/ui/celebrate'
+import { AchievementHost } from './features/achievements/DrawnAchievement'
 import { habitStats } from './features/habits'
 import { TimeCapsuleCard } from './features/timeCapsule'
+import { TimeSinceCard } from './features/timeSince/TimeSinceCard'
 import { hasWebGL } from './components/ui/Scene3D'
 import { LottieIcon } from './components/ui/LottieIcon'
 import { QuickAdd, SearchTrigger } from './components/layout/TopbarExtras'
@@ -258,7 +257,13 @@ function App() {
     document.documentElement.dataset.density = settings.features.compactMode
       ? 'compact'
       : 'comfortable'
-  }, [settings.features.compactMode])
+    document.documentElement.dataset.compactSidebar = String(
+      settings.features.compactMode && subOn('compactMode', 'sidebar'),
+    )
+    document.documentElement.dataset.compactCards = String(
+      settings.features.compactMode && subOn('compactMode', 'cards'),
+    )
+  }, [settings])
   const completed = data.habits.filter((h) => h.dates.includes(today)).length
   const justCheckedDone = data.habits.filter(
     (h) => justChecked.has(h.id) && h.dates.includes(today),
@@ -556,7 +561,10 @@ function App() {
               <FocusPage
                 data={data}
                 setData={setData}
-                showCollectibles={settings.features.collectibles}
+                showCollectibles={
+                  settings.features.collectibles &&
+                  subOn('collectibles', 'focusCompanion')
+                }
               />
             ) : active === 'growth' ? (
               <>
@@ -590,7 +598,9 @@ function App() {
               <Suspense
                 fallback={<p role="status">Opening your Vision Board…</p>}
               >
-                <VisionBoard badges={data.rpg.badges} />
+                <VisionBoard
+                  badges={subOn('visionBoard', 'badgeNodes') ? data.rpg.badges : []}
+                />
               </Suspense>
             ) : (
               <>
@@ -605,7 +615,7 @@ function App() {
                 <div
                   hidden={active === 'overview' && overviewPanel !== 'today'}
                 >
-                  {active === 'overview' && settings.features.dailySpin && (
+                  {active === 'overview' && settings.features.dailySpin && subOn('dailySpin', 'dashboard') && (
                     <Disclosure title="Your daily discovery · Free spin">
                       <DailySpin
                         onCollection={
@@ -675,12 +685,10 @@ function App() {
                                     onClick={(event) => {
                                       if (!h.dates.includes(today)) {
                                         burst(event.currentTarget)
-                                        if (
-                                          isMilestoneStreak(
-                                            habitStats(h.dates, today).current + 1,
-                                          )
+                                        streakMilestone(
+                                          habitStats(h.dates, today).current + 1,
+                                          h.title,
                                         )
-                                          fountain()
                                       }
                                       setJustChecked((set) =>
                                         new Set(set).add(h.id),
@@ -903,6 +911,7 @@ function App() {
                       label="More for you"
                       title="More for you"
                     >
+                      {settings.features.timeSince && <TimeSinceCard data={data} />}
                       {settings.features.timeCapsule && (
                         <TimeCapsuleCard data={data} today={today} />
                       )}
@@ -969,6 +978,7 @@ function App() {
             )}
           </div>
         </main>
+        {settings.features.drawnAchievements && <AchievementHost />}
         {settings.features.reminders && (
           <ReminderCenter
             data={data}

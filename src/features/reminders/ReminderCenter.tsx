@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -44,6 +45,7 @@ export function ReminderButton({ id, title }: { id: string; title: string }) {
         <button
           className="icon-button reminder-bell"
           data-on={on}
+          data-ring={subOn('reminders', 'bellAnimation')}
           aria-label={on ? `Reminder for ${title} at ${reminder.time}` : `Set a reminder for ${title}`}
           title={on ? `Reminder at ${reminder.time}` : 'Set reminder'}
         >
@@ -140,6 +142,7 @@ export function ReminderCenter({
       if (
         typeof Notification !== 'undefined' &&
         Notification.permission === 'granted' &&
+        subOn('reminders', 'system') &&
         document.visibilityState === 'hidden'
       )
         for (const item of due)

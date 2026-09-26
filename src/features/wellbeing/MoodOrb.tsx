@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Color, type ShaderMaterial } from 'three'
@@ -76,7 +77,7 @@ function Orb({ value }: { value: number }) {
     [],
   )
   useEffect(() => {
-    const target = orbColor(value)
+    const target = subOn('moodOrb', 'colorShift') ? orbColor(value) : orbColor(0.5)
     const tl = gsap.timeline()
     tl.to(uniforms.uChaos, { value: 1 - value, duration: 1.2, ease: 'power2.out' }, 0)
       .to(uniforms.uGloss, { value, duration: 1.2, ease: 'power2.out' }, 0)
@@ -85,8 +86,9 @@ function Orb({ value }: { value: number }) {
       tl.kill()
     }
   }, [value, uniforms])
+  const liquid = subOn('moodOrb', 'liquid')
   useFrame((_, delta) => {
-    uniforms.uTime.value += delta
+    if (liquid) uniforms.uTime.value += delta
   })
   return (
     <mesh>

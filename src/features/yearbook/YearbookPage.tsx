@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useMemo, useState } from 'react'
 import { BookMarked, Download, Loader2 } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
@@ -75,7 +76,7 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
   }
   return (
     <section className="yearbook-page" aria-label="Year book">
-      <div className="yearbook-preview" aria-hidden="true">
+      <div className="yearbook-preview" aria-hidden="true" hidden={!subOn('yearbook', 'coverPreview')}>
         <div className="yearbook-cover">
           <span>{year}</span>
           <strong>{title || 'My year'}</strong>
@@ -114,7 +115,7 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
             </label>
           ))}
         </fieldset>
-        <ul className="yearbook-stats">
+        <ul className="yearbook-stats" hidden={!subOn('yearbook', 'stats')}>
           {book.stats.map((stat) => (
             <li key={stat.label}>
               <strong>{stat.value}</strong>

@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useMemo, useState } from 'react'
 import { QueryBuilder, type Field, type RuleGroupType } from 'react-querybuilder'
 import 'react-querybuilder/dist/query-builder.css'
@@ -134,7 +135,7 @@ export function ExplorePage({ data }: FeaturePageProps) {
 
   return (
     <section className="explore-page" aria-label="Explore your data">
-      <div className="explore-presets filter-chips" aria-label="Example questions">
+      <div className="explore-presets filter-chips" aria-label="Example questions" hidden={!subOn('queryBuilder', 'presets')}>
         {presets.map((p) => (
           <button key={p.label} onClick={() => setQuery(p.query)}>
             {p.label}
@@ -158,7 +159,7 @@ export function ExplorePage({ data }: FeaturePageProps) {
           <strong>
             {results.length} of {records.length} entries match
           </strong>
-          <span>Average mood {avgMood}</span>
+          {subOn('queryBuilder', 'moodAverage') && <span>Average mood {avgMood}</span>}
         </header>
         <ul>
           {results.slice(0, 60).map((r) => (

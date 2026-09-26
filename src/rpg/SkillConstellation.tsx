@@ -1,3 +1,4 @@
+import { subOn } from '../features/subFeatures'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Line, OrbitControls, Stars } from '@react-three/drei'
@@ -67,7 +68,11 @@ function Flight({ target, controls }: { target: StarNode | null; controls: React
  * there while its details stagger in over the canvas.
  */
 export function SkillConstellation({ rpg }: { rpg: Rpg }) {
-  const nodes = useMemo(() => constellation(rpg), [rpg])
+  const branches = subOn('skillConstellation', 'statBranches')
+  const nodes = useMemo(
+    () => constellation(rpg).filter((n) => branches || n.group === 'core'),
+    [rpg, branches],
+  )
   const byId = new Map(nodes.map((n) => [n.id, n]))
   const [selected, setSelected] = useState<StarNode | null>(null)
   const controls = useRef<OrbitControlsImpl | null>(null)
@@ -101,7 +106,9 @@ export function SkillConstellation({ rpg }: { rpg: Rpg }) {
           <color attach="background" args={['#0d0b1a']} />
           <ambientLight intensity={0.4} />
           <pointLight position={[0, 6, 6]} intensity={40} />
-          <Stars radius={60} depth={30} count={1500} factor={3} fade />
+          {subOn('skillConstellation', 'starfield') && (
+            <Stars radius={60} depth={30} count={1500} factor={3} fade />
+          )}
           {nodes.flatMap((node) =>
             node.links.map((link) => {
               const other = byId.get(link)

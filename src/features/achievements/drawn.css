@@ -1,0 +1,55 @@
+.drawn-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: color-mix(in oklab, var(--bg-primary) 30%, rgb(20 12 8 / 0.55));
+  backdrop-filter: blur(6px);
+}
+.drawn-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: min(380px, 100%);
+  padding: 28px 24px 24px;
+  border-radius: 26px;
+  background: radial-gradient(circle at 50% 30%, color-mix(in oklab, var(--accent-color) 14%, var(--bg-surface)), var(--bg-surface) 70%);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.55);
+  text-align: center;
+}
+.drawn-card strong {
+  font-size: 22px;
+}
+.drawn-card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+.drawn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.drawn-art {
+  width: 220px;
+  height: 220px;
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.drawn-art .d-fill {
+  stroke: none;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+.drawn-art.is-filled .d-fill {
+  opacity: 1;
+}
+.drawn-art.is-filled {
+  filter: drop-shadow(0 10px 24px color-mix(in oklab, var(--accent-color) 45%, transparent));
+}

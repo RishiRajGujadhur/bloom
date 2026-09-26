@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useRef, useState } from 'react'
 import { useDrag } from '@use-gesture/react'
 import { animated, useSpring } from '@react-spring/web'
@@ -75,7 +76,7 @@ export function ReleasePage() {
       fire.current?.classList.remove('is-hungry')
       if (overFire()) release()
       // A flick towards the fire with momentum also counts.
-      else if (vx > 1.2 && dx > 0 && mx > 120) release()
+      else if (subOn('burnRelease', 'flick') && vx > 1.2 && dx > 0 && mx > 120) release()
       else api.start({ x: 0, y: 0, scale: 1, rotate: 0 })
     },
     { filterTaps: true },

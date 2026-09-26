@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
@@ -117,12 +118,14 @@ export function ChatJournalContainer({
         </span>
       </div>
       <div className="journal-mode-switch" aria-label="Journal style">
-        <button
-          aria-pressed={mode === 'quick'}
-          onClick={() => setMode('quick')}
-        >
-          <Sparkles size={15} /> {t('journal.quickEntry')}
-        </button>
+        {subOn('chatJournal', 'quickEntry') && (
+          <button
+            aria-pressed={mode === 'quick'}
+            onClick={() => setMode('quick')}
+          >
+            <Sparkles size={15} /> {t('journal.quickEntry')}
+          </button>
+        )}
         <button
           aria-pressed={mode === 'guided'}
           onClick={() => setMode('guided')}
@@ -130,7 +133,7 @@ export function ChatJournalContainer({
           <Clock3 size={15} /> {t('journal.guided')}
         </button>
       </div>
-      {mode === 'quick' ? (
+      {mode === 'quick' && subOn('chatJournal', 'quickEntry') ? (
         <>
           <MicroJournalComposer
             onSave={(entry) =>
@@ -212,7 +215,7 @@ export function ChatJournalContainer({
           {!session.flow.complete ? (
             <>
               <PromptChips
-                chips={stepChips(session.flow.step, language)}
+                chips={subOn('chatJournal', 'promptChips') ? stepChips(session.flow.step, language) : []}
                 disabled={session.flow.typing}
                 onChoose={send}
               />

@@ -1,3 +1,4 @@
+import { subOn } from './subFeatures'
 import { UrgeClocks } from './urgeClock'
 import { loadSettings } from '../SettingsPage'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -70,7 +71,9 @@ export function UrgePage({ data, setData }: Props) {
     if (!habitId || !kind || !intensity) return
     const event = createUrgeEvent(
       { habitId, kind, intensity, tags: [tag] },
-      snapshotContext(),
+      subOn('urgeTracker', 'context')
+        ? snapshotContext()
+        : { sessionSeconds: 0, visibilityChanges: 0 },
     )
     setData((current) => ({
       ...current,
@@ -100,14 +103,16 @@ export function UrgePage({ data, setData }: Props) {
         <button aria-pressed={view === 'log'} onClick={() => setView('log')}>
           <ShieldCheck size={16} /> Interrupt & log
         </button>
-        <button
-          aria-pressed={view === 'patterns'}
-          onClick={() => setView('patterns')}
-        >
-          <BarChart3 size={16} /> Patterns
-        </button>
+        {subOn('urgeTracker', 'patterns') && (
+          <button
+            aria-pressed={view === 'patterns'}
+            onClick={() => setView('patterns')}
+          >
+            <BarChart3 size={16} /> Patterns
+          </button>
+        )}
       </div>
-      {view === 'patterns' ? (
+      {view === 'patterns' && subOn('urgeTracker', 'patterns') ? (
         <UrgePatterns data={data} />
       ) : (
         <div className="urge-log-layout grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">

@@ -72,3 +72,33 @@ Status legend: ✅ done · 🔁 changed from original idea (reason noted)
   capsule selection, diff counts, AND/OR/NOT evaluation, TipTap → book
   blocks, palace snapping, constellation lighting, journey milestones, orb
   mapping, place clustering and milestone streaks.
+
+---
+
+# Round 7 — Counters, drawn achievements and sub-features
+
+| ✅ | Feature | Flag | Where | Library |
+|---|---|---|---|---|
+| ✅ | **Time since** — split-flap boards that flip every second: “With Bloom”, time since last slip per urge, and your own counters (count up since / count down until, e.g. an apartment handover) | `timeSince` | Dashboard “More for you” | `react-flip-numbers` + `date-fns` |
+| ✅ | **Drawn achievements** — a sword (skill unlock), a medal (level-up) or a tree (7/30/100/365-day streak) is drawn stroke by stroke, then fills with colour | `drawnAchievements` | Global overlay | `vivus` |
+
+## Sub-features
+
+Every feature now has **2–3 sub-features** (74 in total), listed in
+`src/features/subFeatures.ts` and switchable under each feature card in
+Settings (“N options”). Stored as `settings.sub["feature.option"]`; a missing
+entry means *on*, so new options appear without migrating saved settings, and
+turning a parent feature off disables its options. Imported/exported with the
+settings JSON.
+
+Findings:
+- 🔁 Weekly raid “rewards” became **damage labels** — rewards are shared with
+  other systems, so hiding them would be misleading.
+- 🔁 Guide wizard/reveal options live under *Walkthrough tour* but ignore that
+  parent flag (it is off by default and controls the first-run tour, not
+  **Guide me**).
+- 🔁 Urge *context capture* off records zeros for session length and tab
+  switches; time-of-day buckets are still derived from the timestamp.
+- `react-flip-numbers` is CommonJS; its default export is unwrapped for Vite.
+- Tests: `tests/subFeatures.test.ts` checks every feature has ≥2 unique
+  options, default-on/parent semantics, and counter maths.

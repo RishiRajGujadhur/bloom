@@ -1,3 +1,4 @@
+import { subOn } from './subFeatures'
 import { CardRail } from '../components/BloomExperience'
 import { useEffect, useState } from 'react'
 import type { CSSProperties, Dispatch, SetStateAction } from 'react'
@@ -21,7 +22,7 @@ import type { AppData } from '../model'
 import { inferStat } from '../rpg/schema'
 import { Modal } from '../components/Modal'
 import { HabitLibrary, RoutineLibrary } from './AdoptLibrary'
-import { burst, fountain, isMilestoneStreak } from '../components/ui/celebrate'
+import { burst, streakMilestone } from '../components/ui/celebrate'
 import { ReminderButton } from './reminders/ReminderCenter'
 import { gridDays, habitStats } from './habits'
 import './habits.css'
@@ -129,6 +130,7 @@ export function HabitsPage({
           >
             Habits
           </button>
+          {subOn('habitTracker', 'routines') && (
           <button
             role="tab"
             aria-selected={tab === 'routines'}
@@ -137,11 +139,14 @@ export function HabitsPage({
           >
             Routines
           </button>
+          )}
         </div>
         <div className="habits-actions">
+        {subOn('habitTracker', 'library') && (
         <button className="quiet-button" onClick={() => setLibrary(true)}>
           <LibraryBig size={16} aria-hidden="true" /> Browse library
         </button>
+        )}
         <button
           className="primary"
           onClick={() =>
@@ -368,6 +373,7 @@ export function HabitsPage({
                       </button>
                     </div>
                   </header>
+                  {subOn('habitTracker', 'grid') && (<>
                   <div className="habit-grid-caption">
                     <span>
                       {new Date(`${days[0]}T12:00:00`).toLocaleDateString(
@@ -400,6 +406,7 @@ export function HabitsPage({
                       />
                     ))}
                   </div>
+                  </>)}
                   <footer>
                     <span>
                       <Flame size={15} />
@@ -413,7 +420,7 @@ export function HabitsPage({
                       onClick={(event) => {
                         if (!done) {
                           burst(event.currentTarget)
-                          if (isMilestoneStreak(stats.current + 1)) fountain()
+                          streakMilestone(stats.current + 1, h.title)
                         }
                         setData((d) => toggleHabit(d, h.id, today))
                       }}

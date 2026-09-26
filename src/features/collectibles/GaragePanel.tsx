@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useState } from 'react'
 import { ShoppingBag, X } from 'lucide-react'
 import { cars, findCar } from './catalog'
@@ -16,7 +17,10 @@ export function GaragePanel({ owned, onShop }: { owned: string[]; onShop?: () =>
   const layout = sanitizeGarage(stored, owned)
   const [picked, setPicked] = useState<string | null>(null)
   const { shop } = useShop()
-  const has = (id: string) => shop.owned.includes(id)
+  const has = (id: string) =>
+    shop.owned.includes(id) &&
+    subOn('garage', 'upgrades') &&
+    (id !== 'garage-turntable' || subOn('garage', 'turntable'))
   const ownedCars = cars.filter((car) => owned.includes(car.id))
   const parked = new Set(layout.pads.filter(Boolean))
 

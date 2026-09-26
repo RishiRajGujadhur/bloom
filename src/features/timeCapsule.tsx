@@ -1,3 +1,4 @@
+import { subOn } from './subFeatures'
 import { Hourglass, Shuffle } from 'lucide-react'
 import { useState } from 'react'
 import type { AppData } from '../model'
@@ -38,20 +39,21 @@ export function pickCapsule(
   gratitude: GratitudeEntry[],
   today: string,
   salt = 0,
+  options = { onThisDay: true, gratitude: true },
 ): Capsule | null {
   const windows = [
     { kind: 'year' as const, label: 'One year ago today', date: shift(today, 0, 0, 1) },
     { kind: 'month' as const, label: 'One month ago today', date: shift(today, 0, 1) },
     { kind: 'week' as const, label: 'One week ago', date: shift(today, 7) },
   ]
-  for (const w of windows) {
+  for (const w of options.onThisDay ? windows : []) {
     const found = memories.filter((m) => m.date === w.date && m.text.trim())
     if (found.length) {
       const m = found[daySeed(today, salt) % found.length]
       return { kind: w.kind, label: w.label, date: m.date, title: m.title, text: m.text }
     }
   }
-  if (!gratitude.length) return null
+  if (!gratitude.length || !options.gratitude) return null
   const note = gratitude[daySeed(today, salt) % gratitude.length]
   return {
     kind: 'gratitude',
@@ -90,7 +92,10 @@ export function collectMemories(data: AppData): Memory[] {
 
 export function TimeCapsuleCard({ data, today }: { data: AppData; today: string }) {
   const [salt, setSalt] = useState(0)
-  const capsule = pickCapsule(collectMemories(data), readJson<GratitudeEntry>(GRATITUDE_KEY), today, salt)
+  const capsule = pickCapsule(collectMemories(data), readJson<GratitudeEntry>(GRATITUDE_KEY), today, salt, {
+    onThisDay: subOn('timeCapsule', 'onThisDay'),
+    gratitude: subOn('timeCapsule', 'gratitude'),
+  })
   const morning = new Date().getHours() < 12
   return (
     <OverviewCard
@@ -100,7 +105,7 @@ export function TimeCapsuleCard({ data, today }: { data: AppData; today: string 
       labelledBy="ov-capsule"
       className="ov-capsule"
       action={
-        capsule ? (
+        capsule && subOn('timeCapsule', 'shuffle') ? (
           <button className="icon-button" aria-label="Another memory" onClick={() => setSalt((s) => s + 1)}>
             <Shuffle size={16} />
           </button>

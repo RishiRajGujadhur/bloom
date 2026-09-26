@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { BedDouble, Check, Moon, Sparkles, Sunrise, Trash2 } from 'lucide-react'
@@ -46,7 +47,9 @@ export function SleepPage() {
             ['wind-down', 'Wind-down'],
             ['insights', 'Insights'],
           ] as const
-        ).map(([id, label]) => (
+        )
+          .filter(([id]) => id === 'log' || subOn('sleepTracker', id === 'wind-down' ? 'windDown' : 'insights'))
+          .map(([id, label]) => (
           <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}>
             {label}
           </button>
@@ -132,7 +135,7 @@ function SleepLog({
           </button>
         ))}
       </fieldset>
-      <fieldset className="sleep-factors">
+      <fieldset className="sleep-factors" hidden={!subOn('sleepTracker', 'factors')}>
         <legend>Anything that played a part?</legend>
         <div className="filter-chips">
           {sleepFactors.map((f) => (

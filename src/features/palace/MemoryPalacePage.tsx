@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
 import { Color, Object3D, type Group, type InstancedMesh } from 'three'
@@ -85,7 +86,7 @@ function Ring({
         <meshStandardMaterial emissive="#ff9a5c" emissiveIntensity={0.35} roughness={0.4} />
       </instancedMesh>
       {/* Month markers on the floor ring */}
-      {Array.from({ length: 12 }, (_, m) => {
+      {subOn('memoryPalace', 'monthMarkers') && Array.from({ length: 12 }, (_, m) => {
         const theta = (m / 12) * Math.PI * 2
         return (
           <mesh key={m} position={[Math.sin(theta) * (RADIUS + 1.4), -1.5, Math.cos(theta) * (RADIUS + 1.4)]}>
@@ -139,7 +140,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
   // Drag / wheel / touch spin the ring with inertia, then snap to a day.
   useEffect(() => {
     const target = stage.current
-    if (!target) return
+    if (!target || !subOn('memoryPalace', 'inertia')) return
     let velocity = 0
     const observer = Observer.create({
       target,

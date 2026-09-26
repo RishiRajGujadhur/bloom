@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useEffect, useState } from 'react'
 import { Music, Pause, Play } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
@@ -23,7 +24,8 @@ const lengths = [15, 25, 50, 90] as const
 export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const quest = data.rpg.focusQuest
   const running = quest.startedAt !== null && !quest.completedAt && !quest.failedAt
-  const mixer = useOptionalAudioMixer()
+  const audio = useOptionalAudioMixer()
+  const mixer = subOn('focusRoom', 'soundtrack') ? audio : null
   const { shop } = useShop()
   const [now, setNow] = useState(() => Date.now())
   const [track, setTrack] = useState<(typeof soundtracks)[number]['id']>('classical')
@@ -67,7 +69,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
           <span className="room-laptop" />
           <span className="room-mug" />
         </div>
-        <div className="room-avatar" aria-hidden="true">
+        <div className="room-avatar" aria-hidden="true" hidden={!subOn('focusRoom', 'avatar')}>
           <AvatarPreview equipped={shop.equipped} size={132} />
         </div>
         {running && (

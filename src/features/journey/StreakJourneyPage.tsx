@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { CatmullRomCurve3, Vector3 } from 'three'
@@ -40,7 +41,7 @@ function Path({ steps, curve }: { steps: JourneyStep[]; curve: CatmullRomCurve3 
             <boxGeometry args={[1.6, 0.2, 1.6]} />
             <meshStandardMaterial color={steps[i].milestone ? '#ffd166' : '#e8d3a2'} />
           </mesh>
-          {steps[i].milestone && (
+          {steps[i].milestone && subOn('streakJourney', 'monuments') && (
             <group position={[1.6, 0, 0]}>
               <mesh position={[0, 0.9, 0]}>
                 <boxGeometry args={[0.5, 1.8, 0.5]} />
@@ -154,7 +155,7 @@ export function StreakJourneyPage({ data, today }: FeaturePageProps) {
               })}
             </strong>
             {step.milestone && <span className="journey-badge">🏛️ {step.index + 1}-day monument</span>}
-            {notes(step.date) && <p>“{notes(step.date).slice(0, 180)}”</p>}
+            {subOn('streakJourney', 'quotes') && notes(step.date) && <p>“{notes(step.date).slice(0, 180)}”</p>}
           </li>
         ))}
       </ol>

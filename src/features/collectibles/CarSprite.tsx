@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import type { CSSProperties } from 'react'
 import type { Car } from './catalog'
 
@@ -18,7 +19,7 @@ export function CarSprite({
   const hatch = car.body === 'hatch'
   return (
     <div
-      className={`car-stage effect-${car.effect}${locked ? ' is-locked' : ''}${moving ? ' is-moving' : ''}`}
+      className={`car-stage ${subOn('collectibles', 'carEffects') ? `effect-${car.effect}` : 'no-effect'}${locked ? ' is-locked' : ''}${moving ? ' is-moving' : ''}`}
       style={{ '--car-accent': car.accent } as CSSProperties}
     >
       <svg

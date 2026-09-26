@@ -1,7 +1,7 @@
 .reminder-bell[data-on='true'] {
   color: var(--accent-color);
 }
-.reminder-bell[data-on='true'] svg {
+.reminder-bell[data-on='true'][data-ring='true'] svg {
   animation: bell-ring 2.8s ease-in-out infinite;
   transform-origin: 50% 10%;
 }

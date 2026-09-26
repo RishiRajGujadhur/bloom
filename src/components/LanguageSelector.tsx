@@ -1,3 +1,4 @@
+import { subOn } from '../features/subFeatures'
 import { Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Select } from './ui/Menu'
@@ -20,7 +21,11 @@ export function LanguageSelector() {
       className="language-selector"
       label={t('actions.language')}
       value={selectedLanguage}
-      options={languages}
+      options={languages.filter(
+        (l) =>
+          l.value === 'en' ||
+          (l.value === 'fr' ? subOn('languageSelector', 'french') : subOn('languageSelector', 'dialects')),
+      )}
       icon={<Languages size={16} aria-hidden="true" />}
       onValueChange={(value) => {
         void i18n.changeLanguage(value)

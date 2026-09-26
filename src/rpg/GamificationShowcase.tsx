@@ -1,3 +1,4 @@
+import { subOn } from '../features/subFeatures'
 import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { driver } from 'driver.js'
@@ -411,12 +412,14 @@ function RaidPanel({
           {t('rpg.raidLevel', { level: '07' })}
         </span>
       </div>
-      <LiquidProgressBar
-        label={t('rpg.bossVitality')}
-        value={hp}
-        max={maxHp}
-        tone="hp"
-      />
+      {subOn('weeklyRaidBoss', 'hp') && (
+        <LiquidProgressBar
+          label={t('rpg.bossVitality')}
+          value={hp}
+          max={maxHp}
+          tone="hp"
+        />
+      )}
       <div className="raid-tasks">
         <button
           disabled={data.rpg.weeklyRaid?.defeated}
@@ -425,7 +428,7 @@ function RaidPanel({
             setAttacked(true)
           }}
         >
-          <Sword size={14} /> {t('rpg.raidHabit')} <span>-12 HP</span>
+          <Sword size={14} /> {t('rpg.raidHabit')} {subOn('weeklyRaidBoss', 'damage') && <span>-12 HP</span>}
         </button>
         <button
           disabled={data.rpg.weeklyRaid?.defeated}
@@ -434,7 +437,7 @@ function RaidPanel({
             setAttacked(true)
           }}
         >
-          <Zap size={14} /> {t('rpg.raidReflect')} <span>-20 HP</span>
+          <Zap size={14} /> {t('rpg.raidReflect')} {subOn('weeklyRaidBoss', 'damage') && <span>-20 HP</span>}
         </button>
       </div>
       {attacked && (

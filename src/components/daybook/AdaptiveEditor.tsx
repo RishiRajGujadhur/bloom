@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -235,7 +236,7 @@ export function AdaptiveEditor({
       window.removeEventListener('keydown', onKey)
     }
   }, [immersive])
-  const [comparing, setComparing] = useState(false)
+  const [comparing, setComparing] = useState(() => subOn('thoughtDiff', 'autoOpen'))
   const canCompare = Boolean(previous) && loadSettings().features.thoughtDiff
   const words = useMemo(() => {
     const text = journalText(content).trim()
@@ -274,7 +275,7 @@ export function AdaptiveEditor({
   })
   // Autosave shortly after typing stops; empty pages are never stored.
   useEffect(() => {
-    if (!dirty || !onAutosave) return
+    if (!dirty || !onAutosave || !subOn('daybookModes', 'autosave')) return
     const timer = setTimeout(() => {
       if (!journalText(content).trim()) return
       onAutosave(snapshot())
@@ -343,11 +344,12 @@ export function AdaptiveEditor({
               <GitCompare size={16} aria-hidden="true" /> Compare with last time
             </button>
           )}
-          {releaseModes.has(mode.id) && loadSettings().features.burnRelease && (
+          {releaseModes.has(mode.id) && loadSettings().features.burnRelease && subOn('burnRelease', 'daybookShortcut') && (
             <a className="quiet-button" href="#release">
               <Flame size={16} aria-hidden="true" /> Burn & release
             </a>
           )}
+          {subOn('daybookModes', 'focusWriting') && (
           <button
             type="button"
             className="quiet-button"
@@ -362,6 +364,7 @@ export function AdaptiveEditor({
             )}
             {immersive ? 'Exit focus' : 'Focus writing'}
           </button>
+          )}
           <button
             className="daybook-save daybook-complete"
             onClick={save}

@@ -1,3 +1,4 @@
+import { subOn } from '../features/subFeatures'
 import { Disclosure } from '../components/BloomExperience'
 import { useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
@@ -20,6 +21,7 @@ import { enableAudio, victoryChord } from './audio'
 import { earnedFeedback, weeklyGoals } from './rewards'
 import './rewards.css'
 import { Carousel } from '../components/ui/Carousel'
+import { announceAchievement } from '../features/achievements/DrawnAchievement'
 
 export function GrowthRewards({
   data,
@@ -48,7 +50,8 @@ export function GrowthRewards({
   } | null>(null)
   const [soundError, setSoundError] = useState('')
   const stats = totals(data.rpg)
-  const goals = weeklyGoals(data, today, flags.adaptiveGoals).filter((goal) =>
+  const stretch = subOn('adaptiveGoals', 'stretch') ? 1.1 : 1
+  const goals = weeklyGoals(data, today, flags.adaptiveGoals, stretch).filter((goal) =>
     goal.id === 'journal'
       ? flags.chatJournal
       : goal.id === 'habits'
@@ -57,6 +60,19 @@ export function GrowthRewards({
   )
   useEffect(() => {
     const result = earnedFeedback(previous.current, data.rpg)
+    if (result.leveledUp)
+      announceAchievement({
+        kind: 'levels',
+        title: `Level ${result.level}`,
+        subtitle: 'Small steps, stacked up. Keep going.',
+      })
+    for (const [id, skill] of Object.entries(data.rpg.skills))
+      if (skill.state === 'unlocked' && previous.current.skills[id]?.state !== 'unlocked')
+        announceAchievement({
+          kind: 'skills',
+          title: `${id[0].toUpperCase()}${id.slice(1)} unlocked`,
+          subtitle: 'A new branch of your skill tree is open.',
+        })
     const oldGoals = weeklyGoals(previousData.current, today, flags.adaptiveGoals)
     const completedGoals = weeklyGoals(data, today, flags.adaptiveGoals).filter((goal, index) => {
       const week = new Date(`${today}T12:00:00`)
@@ -81,6 +97,7 @@ export function GrowthRewards({
     previous.current = data.rpg
     previousData.current = data
     if (!result.xp && !result.badges.length && !completedGoals.length) return
+    if (!subOn('rpgSkillTree', 'notices')) return
     setNotice({
       title: result.leveledUp
         ? `Level ${result.level} reached!`
@@ -192,6 +209,7 @@ export function GrowthRewards({
             </button>
           </div>
           <Disclosure title="Weekly goals · See your progress" open={active === 'growth'}>
+          {subOn('rpgSkillTree', 'weeklyGoals') && (
           <Carousel label="Weekly goals" perView={3}>
             {goals.map((goal) => {
               const complete = goal.current >= goal.target
@@ -214,7 +232,7 @@ export function GrowthRewards({
                     <strong>{percent}%</strong>
                   </span>
                   <h3>{goal.title}</h3>
-                  {goal.adapted && (
+                  {goal.adapted && subOn('adaptiveGoals', 'badge') && (
                     <span className="growth-adapted" title={`Default target ${goal.baseTarget}`}>
                       Adapted to your pace
                     </span>
@@ -247,6 +265,7 @@ export function GrowthRewards({
               )
             })}
           </Carousel>
+          )}
           </Disclosure>
         </section>
       )}

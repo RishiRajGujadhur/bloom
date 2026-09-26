@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useState } from 'react'
 import { MapContainer, Circle, CircleMarker, Tooltip, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -23,7 +24,7 @@ function CachedTiles() {
         const url = (this as L.TileLayer).getTileUrl(coords)
         const load = async () => {
           try {
-            if ('caches' in window) {
+            if ('caches' in window && subOn('placesMap', 'offlineTiles')) {
               const cache = await caches.open('bloom-map-tiles')
               let response = await cache.match(url)
               if (!response) {
@@ -122,7 +123,7 @@ export function PlacesPage() {
         <MapContainer center={[51.5, -0.12]} zoom={3} scrollWheelZoom style={{ height: '100%', width: '100%' }}>
           <CachedTiles />
           <FitTo points={clusters} />
-          {clusters.map((c) => (
+          {subOn('placesMap', 'heat') && clusters.map((c) => (
             <Circle
               key={`heat-${c.key}`}
               center={[c.lat, c.lng]}

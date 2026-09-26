@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import { diffWords } from 'diff'
 import { journalText } from '../../search/db'
 import type { JournalEntry } from './types'
@@ -34,8 +35,12 @@ export function ThoughtDiffPanel({
           Compared with{' '}
           {new Date(previous.updatedAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}
         </strong>
-        <span className="thought-diff-stat is-added">+{added} new</span>
-        <span className="thought-diff-stat is-removed">−{removed} faded</span>
+        {subOn('thoughtDiff', 'counts') && (
+          <>
+            <span className="thought-diff-stat is-added">+{added} new</span>
+            <span className="thought-diff-stat is-removed">−{removed} faded</span>
+          </>
+        )}
       </header>
       <p className="thought-diff-body">
         {parts.map((part, i) =>

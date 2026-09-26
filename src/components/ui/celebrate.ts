@@ -1,4 +1,5 @@
 import { loadSettings } from '../../SettingsPage'
+import { subOn } from '../../features/subFeatures'
 
 /**
  * "Juicy" completion feedback: pixel coins and stars burst from the element
@@ -51,7 +52,7 @@ const stars = ['#ffffff', '#fff6a8', '#9fd6ff', '#ffb3d1']
 
 /** A small localized burst, e.g. for a habit check-in. */
 export function burst(from?: Origin, kind: 'coins' | 'stars' = 'coins') {
-  if (!enabled()) return
+  if (!enabled() || !subOn('celebrations', 'checkins')) return
   void load().then((confetti) => {
     const [coin, star] = pixelShapes(confetti)
     confetti({
@@ -74,7 +75,7 @@ export function burst(from?: Origin, kind: 'coins' | 'stars' = 'coins') {
 
 /** A big gold fountain for milestones (e.g. a 30-day streak). */
 export function fountain() {
-  if (!enabled()) return
+  if (!enabled() || !subOn('celebrations', 'milestones')) return
   void load().then((confetti) => {
     const [coin, star] = pixelShapes(confetti)
     const end = Date.now() + 1200
@@ -103,3 +104,18 @@ export function fountain() {
 /** True when a streak length deserves the big fountain. */
 export const isMilestoneStreak = (days: number) =>
   days > 0 && (days % 30 === 0 || days === 7 || days === 100 || days === 365)
+
+/** Streak lengths that also earn a drawn illustration. */
+const drawnStreaks = new Set([7, 30, 100, 365])
+export function streakMilestone(days: number, habit: string) {
+  if (!isMilestoneStreak(days)) return
+  fountain()
+  if (drawnStreaks.has(days))
+    void import('../../features/achievements/DrawnAchievement').then(({ announceAchievement }) =>
+      announceAchievement({
+        kind: 'streaks',
+        title: `${days}-day streak`,
+        subtitle: `${habit}: your roots are growing deep.`,
+      }),
+    )
+}

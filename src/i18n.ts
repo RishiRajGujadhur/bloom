@@ -277,6 +277,14 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      timeSince: {
+        title: 'Time since',
+        description: 'Split-flap counters for streaks and countdowns.',
+      },
+      drawnAchievements: {
+        title: 'Drawn achievements',
+        description: 'Illustrations that draw themselves when you level up.',
+      },
       celebrations: {
         title: 'Celebrations',
         description: 'Pixel coin and star bursts when you complete things.',
@@ -1145,6 +1153,14 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          timeSince: {
+            title: 'Compteurs',
+            description: 'Compteurs à palettes pour séries et comptes à rebours.',
+          },
+          drawnAchievements: {
+            title: 'Succès dessinés',
+            description: 'Des illustrations qui se dessinent à chaque niveau.',
+          },
           celebrations: {
             title: 'Célébrations',
             description: 'Des pluies de pièces et d’étoiles quand vous accomplissez quelque chose.',

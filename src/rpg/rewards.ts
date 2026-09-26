@@ -107,7 +107,13 @@ function goalsForWeek(data: AppData, today: string) {
  * about 10% above your average over the previous three weeks, never below
  * half the default nor above triple it. With no history the default applies.
  */
-export function weeklyGoals(data: AppData, today: string, adaptive = false) {
+export function weeklyGoals(
+  data: AppData,
+  today: string,
+  adaptive = false,
+  /** Target multiplier over recent pace (1.1 = gentle stretch). */
+  stretch = 1.1,
+) {
   const goals = goalsForWeek(data, today)
   if (!adaptive) return goals.map((g) => ({ ...g, baseTarget: g.target, adapted: false }))
   const monday = new Date(`${today}T12:00:00`)
@@ -122,7 +128,7 @@ export function weeklyGoals(data: AppData, today: string, adaptive = false) {
     if (average <= 0) return { ...goal, baseTarget: goal.target, adapted: false }
     const target = Math.min(
       goal.target * 3,
-      Math.max(Math.ceil(goal.target / 2), Math.ceil(average * 1.1)),
+      Math.max(Math.ceil(goal.target / 2), Math.ceil(average * stretch)),
     )
     return { ...goal, baseTarget: goal.target, target, adapted: target !== goal.target }
   })

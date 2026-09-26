@@ -1,3 +1,4 @@
+import { subOn } from './subFeatures'
 import {
   useEffect,
   useRef,
@@ -231,6 +232,7 @@ export function CalendarPage({ data, setData }: Props) {
           >
             <Plus size={16} /> New block
           </button>
+          {subOn('fullCalendar', 'fullscreen') && (
           <button
             className="icon-button calendar-fullscreen"
             aria-pressed={fullscreen}
@@ -240,9 +242,10 @@ export function CalendarPage({ data, setData }: Props) {
           >
             {fullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
+          )}
         </div>
       </div>
-      <div className="calendar-capacity">
+      <div className="calendar-capacity" hidden={!subOn('fullCalendar', 'capacity')}>
         <label>
           Day
           <input
@@ -280,7 +283,7 @@ export function CalendarPage({ data, setData }: Props) {
         />
       </div>
       <div className="calendar-layout">
-        <aside className="calendar-tray">
+        <aside className="calendar-tray" hidden={!subOn('fullCalendar', 'taskTray')}>
           <h3>
             Task list <small>{tasks.length}</small>
           </h3>

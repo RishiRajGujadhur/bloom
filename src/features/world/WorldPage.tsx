@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { Component, useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useReducedMotion } from 'framer-motion'
@@ -69,7 +70,7 @@ export function WorldPage({
   const [focus, setFocus] = useState<DistrictId | null>(null)
   const [peek, setPeek] = useState(false)
   const shown = useMemo(() => (peek ? futureWorld(world) : world), [peek, world])
-  const [time] = useState(timeOfDay)
+  const [time] = useState(() => (subOn('bloomWorld', 'dayNight') ? timeOfDay() : 'day'))
   // Captured once on arrival, so the note describes this visit's growth.
   const [grown] = useState(() => growthSince(readSnapshot(), world.scene))
   const cards = useRef<HTMLUListElement>(null)
@@ -145,7 +146,7 @@ export function WorldPage({
             <WorldScene
               key={peek ? 'future' : 'now'}
               world={shown}
-              shop={worldShop}
+              shop={subOn('bloomWorld', 'avatar') ? worldShop : undefined}
               focus={focus}
               onSelect={(id) => setFocus((f) => (f === id ? null : id))}
               reduced={reduced}
@@ -179,9 +180,11 @@ export function WorldPage({
           </aside>
         )}
         <div className="world-controls">
-          <button aria-pressed={peek} onClick={() => setPeek((p) => !p)}>
-            {peek ? 'Back to today' : '✨ Peek at your future world'}
-          </button>
+          {subOn('bloomWorld', 'futurePeek') && (
+            <button aria-pressed={peek} onClick={() => setPeek((p) => !p)}>
+              {peek ? 'Back to today' : '✨ Peek at your future world'}
+            </button>
+          )}
           {focus && (
             <button onClick={() => setFocus(null)}>Whole island</button>
           )}

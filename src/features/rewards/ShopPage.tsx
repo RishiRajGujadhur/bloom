@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Lock, ShoppingBag } from 'lucide-react'
@@ -89,7 +90,10 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
   const { shop, balance, update } = useShop()
   const [kind, setKind] = useState<(typeof kinds)[number]['id']>('all')
   const [flash, setFlash] = useState<ShopItem | null>(null)
-  const shown = shopItems.filter((i) => kind === 'all' || i.kind === kind)
+  const allowed = (item: ShopItem) =>
+    item.kind === 'garage' ||
+    (item.kind === 'decor' ? subOn('petalShop', 'decor') : subOn('petalShop', 'wearables'))
+  const shown = shopItems.filter((i) => allowed(i) && (kind === 'all' || i.kind === kind))
   const purchase = (item: ShopItem) => {
     const next = buy(shop, shop.spent + balance, item.id)
     if (!next) return

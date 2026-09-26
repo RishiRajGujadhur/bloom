@@ -589,9 +589,9 @@ aside[aria-label='Ambient audio'] > button svg {
 }
 
 /* Compact layout (Settings → Compact layout). */
-html[data-density='compact'] .app-shell .ov-card,
-html[data-density='compact'] .app-shell .card,
-html[data-density='compact'] .app-shell .wb-card {
+html[data-compact-cards='true'] .app-shell .ov-card,
+html[data-compact-cards='true'] .app-shell .card,
+html[data-compact-cards='true'] .app-shell .wb-card {
   padding: 14px 16px !important;
 }
 html[data-density='compact'] .app-shell :is(.overview-grid, .overview-grid > div, .ov-stats, .page-content > *) {
@@ -604,7 +604,7 @@ html[data-density='compact'] .app-shell .bloom-heading.feature-heading {
 html[data-density='compact'] .app-shell .bloom-heading.feature-heading.is-hero {
   min-height: 150px;
 }
-html[data-density='compact'] .app-shell .sidebar nav button {
+html[data-compact-sidebar='true'] .app-shell .sidebar nav button {
   padding-top: 6px;
   padding-bottom: 6px;
 }
@@ -688,4 +688,11 @@ html[data-sidebar='collapsed'] .app-shell .sidebar .nav-section {
   background: var(--accent-color);
   border-color: transparent;
   color: var(--text-on-accent, #fff);
+}
+
+html[data-compact-sidebar='true'] .app-shell .sidebar .nav-section {
+  margin: 8px 14px 2px;
+}
+.car-stage.no-effect * {
+  animation: none !important;
 }

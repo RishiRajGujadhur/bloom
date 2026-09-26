@@ -1,3 +1,5 @@
+import { subOn } from '../subFeatures'
+import { fountain } from '../../components/ui/celebrate'
 import { CardRail } from '../../components/BloomExperience'
 import { GaragePanel } from './GaragePanel'
 import { loadSettings } from '../../SettingsPage'
@@ -53,6 +55,9 @@ export function DailySpin({ onCollection }: { onCollection?: () => void }) {
   const complete = collection.owned.length === cars.length
   const result = collection.lastSpin?.day === today ? collection.lastSpin : null
   const reward = findCar(result?.reward ?? null)
+  useEffect(() => {
+    if (reward && subOn('dailySpin', 'jackpotFountain')) fountain()
+  }, [reward])
   const eligible = canSpin(collection) && !error && !spinning
   const spin = async () => {
     if (busy.current || !eligible) return

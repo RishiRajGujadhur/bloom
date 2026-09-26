@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Background,
@@ -290,12 +291,14 @@ function Canvas({ badges }: { badges: string[] }) {
           >
             <Background color="var(--border-color)" gap={20} size={1} />
             <Controls showInteractive={false} />
+            {subOn('visionBoard', 'minimap') && (
             <MiniMap
               pannable
               zoomable
               nodeColor="var(--accent-color)"
               maskColor="var(--bg-primary)"
             />
+            )}
           </ReactFlow>
           {ready && nodes.length === 0 && (
             <div className={styles.empty}>

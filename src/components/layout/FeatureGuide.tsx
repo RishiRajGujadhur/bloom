@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import { useEffect, useRef } from 'react'
 import { Compass } from 'lucide-react'
 import { driver } from 'driver.js'
@@ -405,9 +406,12 @@ export function FeatureGuide({ page }: { page: NavKey }) {
         const avatar = document.createElement('div')
         avatar.className = 'wz-avatar is-talking'
         avatar.innerHTML = wizardSvg()
-        wrapper.prepend(avatar)
-        revealText(popover.title, reduced)
-        const talking = revealText(popover.description, reduced)
+        const wizard = subOn('walkthroughTour', 'wizard', { ignoreParent: true })
+        const reveal = subOn('walkthroughTour', 'reveal', { ignoreParent: true }) && !reduced
+        wrapper.classList.toggle('no-wizard', !wizard)
+        if (wizard) wrapper.prepend(avatar)
+        revealText(popover.title, !reveal)
+        const talking = revealText(popover.description, !reveal)
         talkTimer = setTimeout(
           () => avatar.classList.remove('is-talking'),
           reduced ? 0 : talking + 400,
