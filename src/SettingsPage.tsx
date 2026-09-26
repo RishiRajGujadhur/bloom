@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Ruler as RulerF_bodyProgress } from 'lucide-react'
 import { Footprints as FootprintsF_runTracker } from 'lucide-react'
 import { PersonStanding as PersonStandingF_mobility } from 'lucide-react'
 import { Flower2 as Flower2F_yogaFlow } from 'lucide-react'
@@ -113,6 +114,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  bodyProgress: RulerF_bodyProgress,
   runTracker: FootprintsF_runTracker,
   mobility: PersonStandingF_mobility,
   yogaFlow: Flower2F_yogaFlow,
@@ -177,6 +179,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  bodyProgress: boolean
   runTracker: boolean
   mobility: boolean
   yogaFlow: boolean
@@ -250,6 +253,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    bodyProgress: true,
     runTracker: true,
     mobility: true,
     yogaFlow: true,
@@ -315,6 +319,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'bodyProgress',
   'runTracker',
   'mobility',
   'yogaFlow',

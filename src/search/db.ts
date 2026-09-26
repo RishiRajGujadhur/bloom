@@ -23,6 +23,13 @@ export interface BoardNode {
   height?: number
 }
 
+export interface ProgressPhoto {
+  id: string
+  date: string
+  pose: 'front' | 'side' | 'back'
+  blob: Blob
+}
+
 export interface BoardEdge {
   id: string
   source: string
@@ -58,6 +65,7 @@ class JournalDatabase extends Dexie {
   foods!: Table<FoodRow, string>
   recipes!: Table<Recipe, string>
   board_edges!: Table<BoardEdge, string>
+  progress_photos!: Table<ProgressPhoto, string>
   entries!: Table<SearchEntry, string>
   vision_board_nodes!: Table<BoardNode, string>
   journal_attachments!: Table<JournalAttachment, string>
@@ -88,6 +96,16 @@ class JournalDatabase extends Dexie {
       foods: 'id, group, plant, name',
       recipes: 'id, createdAt',
       board_edges: 'id, source, target',
+    })
+    this.version(6).stores({
+      entries: 'id, timestamp, category',
+      vision_board_nodes: 'id, type',
+      journal_attachments: 'id, sessionId, kind, createdAt',
+      voice_memos: 'id, createdAt',
+      foods: 'id, group, plant, name',
+      recipes: 'id, createdAt',
+      board_edges: 'id, source, target',
+      progress_photos: 'id, date, pose',
     })
   }
 }

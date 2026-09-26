@@ -147,6 +147,9 @@ const StretchPage = lazy(() =>
 const RunPage = lazy(() =>
   import('./features/run/RunPage').then((m) => ({ default: m.RunPage })),
 )
+const BodyPage = lazy(() =>
+  import('./features/body/BodyPage').then((m) => ({ default: m.BodyPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -603,6 +606,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'body' && !settings.features.bodyProgress) ||
             (active === 'run' && !settings.features.runTracker) ||
             (active === 'stretch' && !settings.features.mobility) ||
             (active === 'yoga' && !settings.features.yogaFlow) ||
@@ -707,6 +711,10 @@ function App() {
             ) : active === 'run' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <RunPage />
+              </Suspense>
+            ) : active === 'body' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <BodyPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

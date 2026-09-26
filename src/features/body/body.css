@@ -1,0 +1,107 @@
+.bd-sliders,
+.bd-side {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+.bd-trends {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+  height: 100%;
+}
+.bd-chart {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+.bd-line {
+  fill: none;
+  stroke: var(--studio);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bd-dot {
+  fill: color-mix(in oklab, var(--studio) 35%, transparent);
+}
+.bd-goal {
+  stroke: #6bbf7a;
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+}
+.bd-goal-text,
+.bd-axis {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+.bd-photos {
+  display: grid;
+  gap: 12px;
+}
+.bd-photo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.bd-photo {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+.bd-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: filter 400ms ease;
+}
+.bd-photo[data-blur='true'] img,
+.bd-compare[data-blur='true'] img {
+  filter: blur(18px) saturate(0.6);
+}
+.bd-photo figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.bd-photo figcaption span {
+  display: flex;
+  gap: 4px;
+}
+.bd-compare {
+  position: relative;
+  width: min(520px, 100%);
+  height: 100%;
+  margin: 0 auto;
+  border-radius: 22px;
+  overflow: hidden;
+}
+.bd-compare img {
+  transition: filter 400ms ease;
+}
+.bd-compare-labels {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.bd-compare-labels span {
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: #0008;
+  color: #fff;
+  font-size: 12px;
+}

@@ -455,6 +455,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "replay", title: "Route replay", description: "Watch a past route redraw on the map." },
     { id: "weeklyGoal", title: "Weekly goal", description: "A ring for this week’s distance." },
   ],
+  bodyProgress: [
+    { id: "measurements", title: "Measurements", description: "Waist, chest, hips, arm, thigh, body fat." },
+    { id: "trendLine", title: "Trend lines", description: "A chart that draws itself for each measure." },
+    { id: "photos", title: "Progress photos", description: "Kept only on this device." },
+    { id: "compare", title: "Before / after", description: "Drag a slider across two photos." },
+    { id: "ratios", title: "BMI & waist-to-height", description: "Simple health ratios from your height." },
+    { id: "goal", title: "Goal & projection", description: "A goal line and projected date." },
+    { id: "privacyBlur", title: "Privacy blur", description: "Photos stay blurred until you reveal them." },
+    { id: "checkIn", title: "Weekly reminder", description: "A gentle weekly nudge to check in." },
+    { id: "units", title: "Units", description: "Metric or imperial." },
+    { id: "smoothing", title: "Trend smoothing", description: "Smooth out daily water-weight noise." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

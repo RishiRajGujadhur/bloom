@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'body': { title: "Body progress", description: "Trends, not single days." },
   'run': { title: "Run & walk", description: "One step, then the next." },
   'stretch': { title: "Stretch", description: "Loosen what the day tightened." },
   'yoga': { title: "Yoga", description: "Breathe, then move." },
@@ -127,6 +128,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'run': [
     step(".run-map", "Your route", "Drawn live while you move."),
     step(".run-side", "Start", "Or try the demo route."),
+  ],
+  'body': [
+    step(".bd-sliders", "Check in", "Pick what to measure and slide."),
+    step(".bd-side", "Ratios", "BMI and waist-to-height at a glance."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

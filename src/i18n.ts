@@ -353,6 +353,10 @@ const common = {
         title: "Run & walk",
         description: "GPS tracking on a live map with splits, pace, bests and a weekly goal.",
       },
+      bodyProgress: {
+        title: "Body progress",
+        description: "Measurements, trend lines, private progress photos and a before/after slider.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1328,6 +1332,10 @@ export const resources = {
           runTracker: {
             title: "Course & marche",
             description: "Suivi GPS sur carte avec temps intermédiaires, allure, records et objectif.",
+          },
+          bodyProgress: {
+            title: "Progrès corporels",
+            description: "Mensurations, tendances, photos privées et comparaison avant/après.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

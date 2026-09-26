@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { bmi, bmiBand, display, projection, trend, whtr, whtrBand } from '../src/features/body/bodyModel'
 import { bests, demoRoute, distanceKm, fmtPace, pace, pointAt, splits, weekKm } from '../src/features/run/runModel'
 import { forAreas, routines as stRoutines, steps as stSteps, totalSeconds as stTotal } from '../src/features/stretch/stretchModel'
 import { isDue } from '../src/components/studio/Nudges'
@@ -21,7 +22,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -118,4 +119,20 @@ test('run: turf distance, splits, pace, replay point and bests', () => {
   const runs = [{ id: 'a', at: Date.now(), kind: 'run' as const, km, seconds: 1000, points: route }]
   expect(bests(runs).longest?.id).toBe('a')
   expect(weekKm(runs)).toBeCloseTo(km)
+})
+
+test('body: trend smoothing, ratios, units and goal projection', () => {
+  expect(trend([80, 80, 80])).toEqual([80, 80, 80])
+  expect(trend([80, 90], 0.1)[1]).toBeCloseTo(81)
+  expect(bmi(80, 180)).toBeCloseTo(24.7, 1)
+  expect(bmiBand(24.7)).toBe('Healthy range')
+  expect(whtrBand(whtr(90, 180))).toBe('Increased')
+  expect(display(100, 'kg', 'imperial').value).toBeCloseTo(220.46, 1)
+  expect(display(10, 'cm', 'imperial').unit).toBe('in')
+  const entries = Array.from({ length: 10 }, (_, i) => ({ date: `2026-09-${String(i * 2 + 1).padStart(2, '0')}`, weight: 80 - i * 0.2 }))
+  const p = projection(entries, 75)!
+  expect(p.perWeek).toBeLessThan(0)
+  expect(p.date).toBeInstanceOf(Date)
+  expect(projection(entries, 90)?.date).toBeNull()
+  expect(projection(entries.slice(0, 2), 75)).toBeNull()
 })
