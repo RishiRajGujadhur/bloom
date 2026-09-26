@@ -28,6 +28,7 @@ import { orbToMood } from './moodOrbModel'
 
 // The orb pulls in Three.js, so it loads only when Orb mode is opened.
 const MoodOrb = lazy(() => import('./MoodOrb').then((m) => ({ default: m.MoodOrb })))
+const BreathSilkCard = lazy(() => import('../taichi/TaiChiPage').then((m) => ({ default: m.BreathSilkCard })))
 import { capturePlace } from '../places/placesStore'
 import { loadSettings } from '../../SettingsPage'
 import { LottieIcon } from '../../components/ui/LottieIcon'
@@ -162,6 +163,11 @@ export function BreathePage() {
   return (
     <section className="wb-page wb-breathe" aria-labelledby="breathe-title">
       <h2 id="breathe-title" className="sr-only">Breathe</h2>
+      {loadSettings().features.breathSilk && subOn('breathSilk', 'breathePage') && (
+        <Suspense fallback={null}>
+          <BreathSilkCard />
+        </Suspense>
+      )}
       <Carousel label="Breathing techniques" perView={4}>
         {patterns.map((p) => (
           <button

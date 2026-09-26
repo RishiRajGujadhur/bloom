@@ -161,6 +161,7 @@ const captions: Record<NavKey, string> = {
   voice: 'Think out loud.',
   energy: 'Debug your week.',
   lab: 'What moves together.',
+  taichi: 'Root down. Breathe low.',
   'release': 'Write it, then let it burn.',
   'focus-room': 'One task. Soft strings. Deep work.',
   'explore': 'Ask your own questions.',

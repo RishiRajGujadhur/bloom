@@ -1,4 +1,6 @@
 import Dexie, { type Table } from 'dexie'
+import type { FoodRow } from '../features/diet/nutrients'
+import type { Recipe } from '../features/diet/recipeModel'
 
 export const EMBEDDING_MODEL = 'Xenova/all-MiniLM-L6-v2'
 export interface SearchEntry {
@@ -14,11 +16,18 @@ export interface SearchEntry {
 
 export interface BoardNode {
   id: string
-  type: 'sticky' | 'journal' | 'badge'
+  type: 'sticky' | 'journal' | 'badge' | 'image' | 'goal' | 'habit'
   position: { x: number; y: number }
   data: Record<string, unknown>
   width?: number
   height?: number
+}
+
+export interface BoardEdge {
+  id: string
+  source: string
+  target: string
+  label?: string
 }
 
 export interface JournalAttachment {
@@ -46,6 +55,9 @@ export interface VoiceMemo {
 
 class JournalDatabase extends Dexie {
   voice_memos!: Table<VoiceMemo, string>
+  foods!: Table<FoodRow, string>
+  recipes!: Table<Recipe, string>
+  board_edges!: Table<BoardEdge, string>
   entries!: Table<SearchEntry, string>
   vision_board_nodes!: Table<BoardNode, string>
   journal_attachments!: Table<JournalAttachment, string>
@@ -67,6 +79,15 @@ class JournalDatabase extends Dexie {
       vision_board_nodes: 'id, type',
       journal_attachments: 'id, sessionId, kind, createdAt',
       voice_memos: 'id, createdAt',
+    })
+    this.version(5).stores({
+      entries: 'id, timestamp, category',
+      vision_board_nodes: 'id, type',
+      journal_attachments: 'id, sessionId, kind, createdAt',
+      voice_memos: 'id, createdAt',
+      foods: 'id, group, plant, name',
+      recipes: 'id, createdAt',
+      board_edges: 'id, source, target',
     })
   }
 }

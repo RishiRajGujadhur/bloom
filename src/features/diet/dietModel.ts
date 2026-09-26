@@ -1,4 +1,5 @@
 import { dayKey } from '../../dates'
+import { emptyNutrients, foods, nutrientIds, scale, type Nutrients } from './nutrients'
 
 export const DIET_KEY = 'bloom-diet-v1'
 export const DIET_EVENT = 'bloom:diet-changed'
@@ -18,6 +19,8 @@ export type Meal = {
   hunger?: number
   fullness?: number
   feeling?: 'energised' | 'steady' | 'sluggish'
+  /** Raw weights of the ingredients, for micronutrients and plant diversity. */
+  ingredients?: { foodId: string; grams: number }[]
 }
 export type DietTargets = { kcal: number; protein: number; carbs: number; fat: number; water: number }
 export type DietState = { meals: Meal[]; water: Record<string, number>; targets: DietTargets }
@@ -29,22 +32,23 @@ export const defaultDiet: DietState = {
 }
 
 export type Food = Omit<Meal, 'id' | 'at' | 'date' | 'kind' | 'hunger' | 'fullness' | 'feeling'> & { emoji: string }
+const ing = (...pairs: [string, number][]) => pairs.map(([foodId, grams]) => ({ foodId, grams }))
 export const foodLibrary: Food[] = [
-  { emoji: '🥣', name: 'Oats with berries', kcal: 320, protein: 11, carbs: 54, fat: 7 },
-  { emoji: '🍳', name: 'Two eggs on toast', kcal: 360, protein: 20, carbs: 28, fat: 18 },
-  { emoji: '🥑', name: 'Avocado toast', kcal: 290, protein: 8, carbs: 30, fat: 16 },
-  { emoji: '🥗', name: 'Chicken salad', kcal: 420, protein: 38, carbs: 18, fat: 22 },
-  { emoji: '🍛', name: 'Rice and curry', kcal: 620, protein: 24, carbs: 88, fat: 18 },
-  { emoji: '🍝', name: 'Pasta bowl', kcal: 580, protein: 20, carbs: 90, fat: 14 },
-  { emoji: '🍣', name: 'Salmon and greens', kcal: 480, protein: 36, carbs: 12, fat: 30 },
-  { emoji: '🌯', name: 'Wrap', kcal: 450, protein: 22, carbs: 50, fat: 17 },
-  { emoji: '🍲', name: 'Lentil soup', kcal: 260, protein: 16, carbs: 38, fat: 5 },
-  { emoji: '🍌', name: 'Banana', kcal: 105, protein: 1, carbs: 27, fat: 0 },
-  { emoji: '🍎', name: 'Apple', kcal: 95, protein: 0, carbs: 25, fat: 0 },
-  { emoji: '🥜', name: 'Handful of nuts', kcal: 180, protein: 6, carbs: 6, fat: 16 },
-  { emoji: '🥛', name: 'Greek yoghurt', kcal: 150, protein: 15, carbs: 8, fat: 6 },
-  { emoji: '🍫', name: 'Chocolate', kcal: 210, protein: 3, carbs: 24, fat: 12 },
-  { emoji: '☕', name: 'Latte', kcal: 140, protein: 8, carbs: 12, fat: 6 },
+  { emoji: '🥣', name: 'Oats with berries', kcal: 320, protein: 11, carbs: 54, fat: 7, ingredients: ing(['oats', 50], ['berries', 80], ['milk', 150]) },
+  { emoji: '🍳', name: 'Two eggs on toast', kcal: 360, protein: 20, carbs: 28, fat: 18, ingredients: ing(['egg', 100], ['bread', 70]) },
+  { emoji: '🥑', name: 'Avocado toast', kcal: 290, protein: 8, carbs: 30, fat: 16, ingredients: ing(['avocado', 70], ['bread', 70], ['tomato', 40]) },
+  { emoji: '🥗', name: 'Chicken salad', kcal: 420, protein: 38, carbs: 18, fat: 22, ingredients: ing(['chicken', 160], ['spinach', 60], ['tomato', 80], ['pepper', 60], ['olive-oil', 12]) },
+  { emoji: '🍛', name: 'Rice and curry', kcal: 620, protein: 24, carbs: 88, fat: 18, ingredients: ing(['rice', 80], ['chickpeas', 150], ['onion', 60], ['tomato', 100], ['spinach', 40], ['olive-oil', 10]) },
+  { emoji: '🍝', name: 'Pasta bowl', kcal: 580, protein: 20, carbs: 90, fat: 14, ingredients: ing(['pasta', 100], ['tomato', 150], ['garlic', 6], ['cheese', 20], ['olive-oil', 10]) },
+  { emoji: '🍣', name: 'Salmon and greens', kcal: 480, protein: 36, carbs: 12, fat: 30, ingredients: ing(['salmon', 150], ['broccoli', 100], ['kale', 40], ['potato', 100]) },
+  { emoji: '🌯', name: 'Wrap', kcal: 450, protein: 22, carbs: 50, fat: 17, ingredients: ing(['bread', 70], ['black-beans', 100], ['pepper', 50], ['cheese', 25], ['avocado', 40]) },
+  { emoji: '🍲', name: 'Lentil soup', kcal: 260, protein: 16, carbs: 38, fat: 5, ingredients: ing(['lentils', 60], ['carrot', 60], ['onion', 50], ['tomato', 80]) },
+  { emoji: '🍌', name: 'Banana', kcal: 105, protein: 1, carbs: 27, fat: 0, ingredients: ing(['banana', 118]) },
+  { emoji: '🍎', name: 'Apple', kcal: 95, protein: 0, carbs: 25, fat: 0, ingredients: ing(['apple', 182]) },
+  { emoji: '🥜', name: 'Handful of nuts', kcal: 180, protein: 6, carbs: 6, fat: 16, ingredients: ing(['almonds', 15], ['walnuts', 15]) },
+  { emoji: '🥛', name: 'Greek yoghurt', kcal: 150, protein: 15, carbs: 8, fat: 6, ingredients: ing(['yoghurt', 150]) },
+  { emoji: '🍫', name: 'Chocolate', kcal: 210, protein: 3, carbs: 24, fat: 12, ingredients: ing(['dark-chocolate', 35]) },
+  { emoji: '☕', name: 'Latte', kcal: 140, protein: 8, carbs: 12, fat: 6, ingredients: ing(['coffee', 60], ['milk', 250]) },
   { emoji: '🍕', name: 'Pizza slices', kcal: 570, protein: 24, carbs: 64, fat: 24 },
 ]
 
@@ -109,4 +113,34 @@ export function saveDiet(state: DietState) {
     /* Keeps working for this visit. */
   }
   window.dispatchEvent(new Event(DIET_EVENT))
+}
+
+/** Micronutrients eaten on a day (meals without ingredients contribute nothing). */
+export function dayNutrients(meals: Meal[], date: string): Nutrients {
+  const out = emptyNutrients()
+  for (const m of meals)
+    if (m.date === date)
+      for (const i of m.ingredients ?? []) {
+        const food = foods.find((f) => f.id === i.foodId)
+        if (!food) continue
+        const s = scale(food, i.grams)
+        for (const k of nutrientIds) out[k] += s[k]
+      }
+  return out
+}
+
+export const PLANT_GOAL = 30
+
+/** Distinct plant foods over the last 7 days: the "30 plants a week" gut-diversity idea. */
+export function plantDiversity(meals: Meal[], today: string) {
+  const days = new Set(lastDays(today, 7))
+  const plants = new Map<string, number>()
+  for (const m of meals)
+    if (days.has(m.date))
+      for (const i of m.ingredients ?? []) {
+        const food = foods.find((f) => f.id === i.foodId)
+        if (food?.plant && food.group !== 'other' && food.group !== 'fat') plants.set(food.id, (plants.get(food.id) ?? 0) + 1)
+      }
+  const groups = new Set([...plants.keys()].map((id) => foods.find((f) => f.id === id)!.group))
+  return { count: plants.size, ids: [...plants.keys()], groups: [...groups], score: Math.min(100, Math.round((plants.size / PLANT_GOAL) * 100)) }
 }

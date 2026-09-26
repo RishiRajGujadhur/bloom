@@ -12,7 +12,7 @@ import {
   SoundscapeCard,
   StatsRow,
 } from './components/dashboard/Overview'
-import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -65,6 +65,7 @@ import { Carousel } from './components/ui/Carousel'
 import { burst, streakMilestone } from './components/ui/celebrate'
 import { AchievementHost } from './features/achievements/DrawnAchievement'
 import { ImpactLayer } from './features/impact/ImpactLayer'
+import { JuiceLayer, juice, pointer } from './features/juice/PixelJuice'
 import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
@@ -123,6 +124,9 @@ const EnergyPage = lazy(() =>
 )
 const LabPage = lazy(() =>
   import('./features/lab/LabPage').then((m) => ({ default: m.LabPage })),
+)
+const TaiChiPage = lazy(() =>
+  import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
 const ReleasePage = lazy(() =>
   import('./features/release/ReleasePage').then((m) => ({ default: m.ReleasePage })),
@@ -323,6 +327,16 @@ function App() {
     )
   }, [settings])
   const completed = data.habits.filter((h) => h.dates.includes(today)).length
+  // Pixel juice: any new habit tick today (from any page) pops loot.
+  const prevCompleted = useRef(completed)
+  useEffect(() => {
+    if (completed > prevCompleted.current && settings.features.pixelJuice) {
+      const at = pointer()
+      const milestone = data.habits.some((h) => h.dates.includes(today) && habitStats(h.dates, today).current % 7 === 0)
+      juice({ ...at, big: milestone, label: milestone ? 'Loot!' : '+EXP', seed: completed })
+    }
+    prevCompleted.current = completed
+  }, [completed, data.habits, today, settings.features.pixelJuice])
   const justCheckedDone = data.habits.filter(
     (h) => justChecked.has(h.id) && h.dates.includes(today),
   ).length
@@ -564,6 +578,7 @@ function App() {
             (active === 'voice' && !settings.features.voiceMemos) ||
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
+            (active === 'taichi' && !settings.features.wuXing) ||
             (active === 'shop' && !settings.features.petalShop) ||
             (active === 'release' && !settings.features.burnRelease) ||
             (active === 'focus-room' && !settings.features.focusRoom) ||
@@ -621,7 +636,7 @@ function App() {
               </Suspense>
             ) : active === 'diet' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
-                <DietPage today={today} />
+                <DietPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'monk' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
@@ -638,6 +653,10 @@ function App() {
             ) : active === 'lab' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <LabPage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'taichi' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <TaiChiPage />
               </Suspense>
             ) : active === 'epiphanies' ? (
               <EpiphaniesPage today={today} />
@@ -724,6 +743,7 @@ function App() {
               >
                 <VisionBoard
                   badges={subOn('visionBoard', 'badgeNodes') ? data.rpg.badges : []}
+                  habits={data.habits}
                 />
               </Suspense>
             ) : (
@@ -1114,6 +1134,7 @@ function App() {
         </main>
         {settings.features.drawnAchievements && <AchievementHost />}
         {settings.features.impactTasks && <ImpactLayer setData={setData} />}
+        {settings.features.pixelJuice && <JuiceLayer />}
         {settings.features.postureGuard && postureTouched && (
           <Suspense fallback={null}>
             <PostureGuardian setData={setData} />

@@ -8,6 +8,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
+import { Swords as SwordsRound11, Leaf as LeafRound11, ChefHat as ChefHatRound11, Waves as WavesRound11, Mountain as MountainRound11 } from 'lucide-react'
 import { Apple as AppleIcon, Feather as FeatherIcon, Zap as ZapIcon, Mic as MicIcon, FlaskConical as FlaskConicalIcon, ScanSearch as ScanSearchIcon, SquareTerminal as SquareTerminalIcon } from 'lucide-react'
 import {
   CalendarDays,
@@ -98,6 +99,11 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   insightsLab: FlaskConicalIcon,
   smartSearch: ScanSearchIcon,
   omnibox: SquareTerminalIcon,
+  pixelJuice: SwordsRound11,
+  microNutrients: LeafRound11,
+  recipeBuilder: ChefHatRound11,
+  breathSilk: WavesRound11,
+  wuXing: MountainRound11,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -150,6 +156,11 @@ export interface FeatureFlags {
   insightsLab: boolean
   smartSearch: boolean
   omnibox: boolean
+  pixelJuice: boolean
+  microNutrients: boolean
+  recipeBuilder: boolean
+  breathSilk: boolean
+  wuXing: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -211,6 +222,11 @@ export const defaultSettings: AppSettings = {
     insightsLab: true,
     smartSearch: true,
     omnibox: true,
+    pixelJuice: true,
+    microNutrients: true,
+    recipeBuilder: true,
+    breathSilk: true,
+    wuXing: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -264,6 +280,11 @@ const featureKeys = [
   'insightsLab',
   'smartSearch',
   'omnibox',
+  'pixelJuice',
+  'microNutrients',
+  'recipeBuilder',
+  'breathSilk',
+  'wuXing',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

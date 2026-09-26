@@ -1,0 +1,71 @@
+.px-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  pointer-events: none;
+}
+.px-pop {
+  position: fixed;
+  display: grid;
+  justify-items: center;
+  translate: -50% -50%;
+  filter: drop-shadow(0 6px 0 #0000001f);
+}
+.px-sprite {
+  image-rendering: pixelated;
+  overflow: visible;
+}
+.px-sprite .px-shadow {
+  transform: translate(calc(var(--px, 0) * -1.2px + 0.8px), calc(var(--py, 0) * -1.2px + 0.8px));
+  transition: transform 120ms ease-out;
+}
+.px-sprite .px-shine {
+  transform: translate(calc(var(--px, 0) * 0.6px), calc(var(--py, 0) * 0.6px));
+  transition: transform 120ms ease-out;
+}
+.px-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+.px-ring i {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  background: #f2c14e;
+  box-shadow: 0 0 0 1px #2b2230;
+  transform: scale(0.4);
+}
+.px-ring i:nth-child(2n) {
+  background: #7fd1e8;
+}
+.px-ring i:nth-child(3n) {
+  background: #e27396;
+}
+.px-label {
+  margin-top: 4px;
+  padding: 2px 6px;
+  background: #2b2230;
+  color: #fff6c8;
+  font: 700 12px/1.2 'Courier New', ui-monospace, monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 #f2c14e;
+}
+.px-pop[data-big='true'] .px-label {
+  font-size: 15px;
+}
+/* A loot shelf of sprites that respond to the cursor. */
+.px-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+}
+.px-shelf .px-sprite {
+  transition: transform 200ms steps(3);
+}
+.px-shelf .px-sprite:hover {
+  transform: translateY(-6px) scale(1.12);
+}

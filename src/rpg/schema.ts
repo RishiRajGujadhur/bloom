@@ -11,7 +11,7 @@ const skillProgressSchema = z.object({
   expCost: z.number().int().nonnegative(),
 })
 const buffSchema = z.object({
-  kind: z.enum(['streak-shield', 'focus-elixir']),
+  kind: z.enum(['streak-shield', 'focus-elixir', 'hydrated']),
   expiresAt: stamp.nullable(),
   quantity: z.number().int().positive(),
 })

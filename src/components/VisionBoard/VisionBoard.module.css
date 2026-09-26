@@ -333,3 +333,177 @@
     display: none;
   }
 }
+
+/* Whiteboard mode */
+.port {
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid var(--bg-surface) !important;
+  background: var(--accent-color) !important;
+  opacity: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+:global(.react-flow__node:hover) .port,
+:global(.react-flow__node.selected) .port,
+:global(.react-flow.connecting) .port {
+  opacity: 1;
+}
+.port:hover {
+  transform: scale(1.4);
+}
+.image,
+.goal,
+.habit {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 12px 25px #0002;
+}
+.image header,
+.goal header,
+.habit header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.image header button,
+.goal header button,
+.habit header button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.image {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.image img {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.image input,
+.goal input:not([type='range']) {
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+}
+.goal {
+  width: 280px;
+  border-top: 4px solid #8f7ae5;
+}
+.goal[data-done='true'] {
+  border-top-color: #6bbf7a;
+  box-shadow: 0 0 0 3px #6bbf7a55, 0 12px 25px #0002;
+}
+.goalBody {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+.goalBody input:first-child {
+  margin-top: 0;
+  font-weight: 700;
+}
+.goalRing text {
+  fill: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+.goalTrack {
+  fill: none;
+  stroke: color-mix(in oklab, #8f7ae5 18%, transparent);
+  stroke-width: 7;
+}
+.goalArc {
+  fill: none;
+  stroke: #8f7ae5;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.goal[data-done='true'] .goalArc {
+  stroke: #6bbf7a;
+}
+.goal input[type='range'] {
+  width: 100%;
+  margin-top: 10px;
+  accent-color: #8f7ae5;
+}
+.habit {
+  width: 250px;
+  border-top: 4px solid #6bbf7a;
+}
+.habit h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+.habitDots {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 3px;
+}
+.habitDots i {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--text-muted) 16%, transparent);
+}
+.habitDots i[data-on='true'] {
+  background: #6bbf7a;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+.edgeLabel {
+  position: fixed;
+  z-index: 20;
+  translate: -50% -50%;
+  width: 160px;
+  padding: 6px 10px;
+  border-radius: 99px;
+  border: 2px solid var(--accent-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  text-align: center;
+  box-shadow: 0 10px 24px #0003;
+}
+:global(.board-edge) :global(.react-flow__edge-path) {
+  stroke: var(--accent-color);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 3px color-mix(in oklab, var(--accent-color) 60%, transparent));
+}
+:global(.board-edge.selected) :global(.react-flow__edge-path) {
+  stroke-width: 3.5;
+}
+:global(.board-edge) :global(.react-flow__edge-textbg) {
+  fill: var(--bg-surface);
+}
+:global(.board-edge) :global(.react-flow__edge-text) {
+  fill: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}

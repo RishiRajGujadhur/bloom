@@ -309,6 +309,26 @@ const common = {
         title: 'Omnibox commands',
         description: 'Type > in Ctrl K to log habits, meals, water, mood or change theme.',
       },
+      pixelJuice: {
+        title: 'Pixel juice',
+        description: 'Pixel-art loot, chiptune sounds and sparks when you complete habits.',
+      },
+      microNutrients: {
+        title: 'Micronutrients',
+        description: 'Vitamins, minerals, gut diversity and the Hydrated buff.',
+      },
+      recipeBuilder: {
+        title: 'Recipe builder',
+        description: 'Drag ingredients onto a kitchen scale; cook loss and servings handled.',
+      },
+      breathSilk: {
+        title: 'Breath silk',
+        description: 'A WebGL silk surface that rises and falls with your breathing.',
+      },
+      wuXing: {
+        title: 'Tai Chi soundscape',
+        description: 'Five-element generative sound that deepens as your stance grounds.',
+      },
       epiphanies: {
         title: 'Epiphanies',
         description: 'Spaced repetition brings your insights back before you forget them.',
@@ -1236,6 +1256,26 @@ export const resources = {
           omnibox: {
             title: 'Commandes Omnibox',
             description: 'Tapez > dans Ctrl K pour noter habitudes, repas, eau, humeur ou thème.',
+          },
+          pixelJuice: {
+            title: 'Effets pixel',
+            description: 'Butin en pixel art, sons chiptune et étincelles quand vous accomplissez une habitude.',
+          },
+          microNutrients: {
+            title: 'Micronutriments',
+            description: 'Vitamines, minéraux, diversité intestinale et bonus Hydraté.',
+          },
+          recipeBuilder: {
+            title: 'Créateur de recettes',
+            description: 'Glissez les ingrédients sur une balance ; cuisson et portions calculées.',
+          },
+          breathSilk: {
+            title: 'Soie du souffle',
+            description: 'Une soie WebGL qui monte et descend avec votre respiration.',
+          },
+          wuXing: {
+            title: 'Paysage sonore Tai Chi',
+            description: 'Son génératif des cinq éléments qui s’approfondit avec votre posture.',
           },
           epiphanies: {
             title: 'Épiphanies',

@@ -18,6 +18,10 @@ import {
   type Meal,
   type MealKind,
 } from './dietModel'
+import { NutrientsPanel } from './NutrientsPanel'
+import { RecipeBuilder } from './RecipeBuilder'
+import { loadSettings } from '../../SettingsPage'
+import type { FeaturePageProps } from '../shared/pageProps'
 import './diet.css'
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -161,8 +165,10 @@ const kinds: { id: MealKind; label: string; emoji: string }[] = [
 ]
 const blank = { name: '', kcal: '', protein: '', carbs: '', fat: '' }
 
-export function DietPage({ today }: { today: string }) {
+export function DietPage({ today, data, setData }: FeaturePageProps) {
   const [state, update] = useDiet()
+  const flags = loadSettings().features
+  const [tab, setTab] = useState<'today' | 'nutrients' | 'recipes'>('today')
   const [form, setForm] = useState(blank)
   const [kind, setKind] = useState<MealKind>(() => kindFor(new Date().getHours()))
   const [hunger, setHunger] = useState(3)
@@ -199,8 +205,29 @@ export function DietPage({ today }: { today: string }) {
   const setWater = (n: number) => update((s) => ({ ...s, water: { ...s.water, [today]: n } }))
   const insights = dietInsights(state, today)
 
+  const tabs = [
+    { id: 'today' as const, label: 'Today' },
+    ...(flags.microNutrients ? [{ id: 'nutrients' as const, label: 'Nutrients' }] : []),
+    ...(flags.recipeBuilder ? [{ id: 'recipes' as const, label: 'Recipes' }] : []),
+  ]
+  const logMeal = (meal: Meal) => {
+    update((s) => ({ ...s, meals: [...s.meals, meal] }))
+    setTab('today')
+  }
   return (
     <div className="diet-page">
+      {tabs.length > 1 && (
+        <div className="diet-tabs" role="tablist" aria-label="Nourish">
+          {tabs.map((t) => (
+            <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
+      {tab === 'nutrients' && <NutrientsPanel state={state} today={today} data={data} setData={setData} />}
+      {tab === 'recipes' && <RecipeBuilder state={state} today={today} onLog={logMeal} />}
+      {tab === 'today' && (<>
       <section className="diet-hero">
         <PlateRing value={totals.kcal} target={state.targets.kcal} />
         <div className="diet-hero-side">
@@ -343,6 +370,7 @@ export function DietPage({ today }: { today: string }) {
           </details>
         </section>
       </div>
+      </>)}
     </div>
   )
 }

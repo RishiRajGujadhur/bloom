@@ -64,6 +64,7 @@ export const pageDetails: Record<
   voice: { title: 'Voice memos', description: 'Think out loud.' },
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
+  taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
   'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
   'focus-room': { title: 'Focus room', description: 'One task. Soft strings. Deep work.' },
   'explore': { title: 'Explore data', description: 'Ask your own questions.' },
@@ -95,6 +96,10 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  taichi: [
+    step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
+    step('.tc-ground', 'Grounding', 'Sink into your stance and the bass deepens.'),
+  ],
   diet: [
     step('.diet-hero', 'Your plate', 'Calories fill the ring; macros and water sit beside it.'),
     step('.diet-library', 'Quick add', 'Tap a common meal, or type your own below.'),

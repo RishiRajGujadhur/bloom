@@ -6,8 +6,14 @@ import {
   MiniMap,
   ReactFlow,
   ReactFlowProvider,
+  MarkerType,
+  addEdge,
+  useEdgesState,
   useNodesState,
   useReactFlow,
+  type Connection,
+  type Edge,
+  type EdgeChange,
   type NodeChange,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
@@ -17,19 +23,58 @@ import { BoardContext, type CanvasNode } from './BoardContext'
 import { StickyNode } from './nodes/StickyNode'
 import { JournalNode } from './nodes/JournalNode'
 import { BadgeNode } from './nodes/BadgeNode'
+import { GoalNode, HabitNode, ImageNode } from './nodes/WhiteboardNodes'
 import styles from './VisionBoard.module.css'
 
-const nodeTypes = { sticky: StickyNode, journal: JournalNode, badge: BadgeNode }
+const nodeTypes = { sticky: StickyNode, journal: JournalNode, badge: BadgeNode, image: ImageNode, goal: GoalNode, habit: HabitNode }
+type Habit = { id: string; title: string; dates: string[] }
+const edgeStyle = (row: { id: string; source: string; target: string; label?: string; sourceHandle?: string | null; targetHandle?: string | null }): Edge => ({
+  ...row,
+  type: 'smoothstep',
+  animated: subOn('visionBoard', 'flowingArrows'),
+  markerEnd: { type: MarkerType.ArrowClosed, width: 18, height: 18 },
+  className: 'board-edge',
+})
+/** New cards fan out on a golden-angle spiral instead of stacking. */
+const spiral = (rect: DOMRect, n: number) => {
+  const angle = n * 2.39996
+  const r = 190 * Math.sqrt(n)
+  return { x: rect.left + rect.width / 2 - 120 + Math.cos(angle) * r * 1.6, y: rect.top + rect.height / 2 - 110 + Math.sin(angle) * r }
+}
+/** Downscale an uploaded image so boards stay light in IndexedDB. */
+function readImage(file: File, max = 900): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const url = URL.createObjectURL(file)
+    img.onload = () => {
+      const k = Math.min(1, max / Math.max(img.width, img.height))
+      const c = document.createElement('canvas')
+      c.width = Math.round(img.width * k)
+      c.height = Math.round(img.height * k)
+      c.getContext('2d')!.drawImage(img, 0, 0, c.width, c.height)
+      URL.revokeObjectURL(url)
+      resolve(c.toDataURL('image/jpeg', 0.85))
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('Not an image'))
+    }
+    img.src = url
+  })
+}
 const mime = 'application/bloom-board'
 const journalKey = 'mindfulness-dashboard-daybook-v1'
 
-function Canvas({ badges }: { badges: string[] }) {
+function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] }) {
   const [nodes, setNodes, onNodesChange] = useNodesState<CanvasNode>([])
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
+  const [labelEdit, setLabelEdit] = useState<{ id: string; x: number; y: number; text: string } | null>(null)
+  const fileInput = useRef<HTMLInputElement>(null)
   const [journals, setJournals] = useState<JournalEntry[]>([])
   const [ready, setReady] = useState(false)
   const [error, setError] = useState('')
   const [pending, setPending] = useState(0)
-  const [library, setLibrary] = useState<'journal' | 'badge' | null>(null)
+  const [library, setLibrary] = useState<'journal' | 'badge' | 'habit' | null>(null)
   const area = useRef<HTMLDivElement>(null)
   const queue = useRef(Promise.resolve())
   const { screenToFlowPosition, fitView } = useReactFlow<CanvasNode>()
@@ -49,6 +94,10 @@ function Canvas({ badges }: { badges: string[] }) {
           })),
         )
         setReady(true)
+      })
+      .then(() => db.board_edges.toArray())
+      .then((rows) => {
+        if (!cancelled && rows) setEdges(rows.map(edgeStyle))
       })
       .catch(() => {
         if (!cancelled)
@@ -86,7 +135,7 @@ function Canvas({ badges }: { badges: string[] }) {
       cancelled = true
       window.removeEventListener('storage', readJournals)
     }
-  }, [setNodes])
+  }, [setNodes, setEdges])
 
   // Serialize writes, including edits followed immediately by deletion.
   const save = useCallback((operation: () => Promise<unknown>) => {
@@ -125,10 +174,29 @@ function Canvas({ badges }: { badges: string[] }) {
   const remove = useCallback(
     (id: string) => {
       setNodes((current) => current.filter((node) => node.id !== id))
+      setEdges((current) => current.filter((e) => e.source !== id && e.target !== id))
       save(() => db.vision_board_nodes.delete(id))
+      save(() => db.board_edges.where('source').equals(id).or('target').equals(id).delete())
     },
-    [save, setNodes],
+    [save, setNodes, setEdges],
   )
+  const connect = (c: Connection) => {
+    if (!c.source || !c.target || c.source === c.target) return
+    const row = { id: crypto.randomUUID(), source: c.source, target: c.target, sourceHandle: c.sourceHandle, targetHandle: c.targetHandle, label: '' }
+    setEdges((list) => addEdge(edgeStyle(row), list))
+    save(() => db.board_edges.put(row as never))
+  }
+  const changeEdges = (changes: EdgeChange<Edge>[]) => {
+    onEdgesChange(changes)
+    for (const c of changes) if (c.type === 'remove') save(() => db.board_edges.delete(c.id))
+  }
+  const saveLabel = () => {
+    if (!labelEdit) return
+    const { id, text } = labelEdit
+    setEdges((list) => list.map((e) => (e.id === id ? { ...e, label: text } : e)))
+    save(() => db.board_edges.update(id, { label: text }))
+    setLabelEdit(null)
+  }
 
   const changeNodes = (changes: NodeChange<CanvasNode>[]) => {
     onNodesChange(changes)
@@ -164,10 +232,7 @@ function Canvas({ badges }: { badges: string[] }) {
     if (!ready) return
     const rect = area.current!.getBoundingClientRect()
     const position = screenToFlowPosition(
-      point ?? {
-        x: rect.left + rect.width / 2 - 100 + Math.random() * 60,
-        y: rect.top + rect.height / 2 - 100 + Math.random() * 60,
-      },
+      point ?? spiral(rect, nodes.length),
     )
     const row: BoardNode = {
       id: crypto.randomUUID(),
@@ -176,10 +241,14 @@ function Canvas({ badges }: { badges: string[] }) {
       data:
         type === 'sticky'
           ? { text: '', color: 'gold' }
-          : referenceId
-            ? { referenceId }
-            : { title: 'My next milestone' },
-      ...(type === 'sticky' ? { width: 260, height: 240 } : {}),
+          : type === 'image'
+            ? { src: referenceId, caption: '' }
+            : type === 'goal'
+              ? { title: '', progress: 0, due: '' }
+              : referenceId
+                ? { referenceId }
+                : { title: 'My next milestone' },
+      ...(type === 'sticky' ? { width: 260, height: 240 } : type === 'image' ? { width: 260, height: 240 } : {}),
     }
     setNodes((current) => [
       ...current,
@@ -211,7 +280,7 @@ function Canvas({ badges }: { badges: string[] }) {
   }
 
   return (
-    <BoardContext.Provider value={{ journals, update, remove }}>
+    <BoardContext.Provider value={{ journals, update, remove, habits }}>
       <section
         className={`${styles.page} mx-auto w-full max-w-[1600px]`}
         aria-label="Vision Board"
@@ -247,13 +316,19 @@ function Canvas({ badges }: { badges: string[] }) {
             snapToGrid={subOn('visionBoard', 'snap')}
             snapGrid={[20, 20]}
             nodes={nodes}
-            edges={[]}
+            edges={edges}
             nodeTypes={nodeTypes}
             onNodesChange={changeNodes}
-            nodesConnectable={false}
+            onEdgesChange={changeEdges}
+            onConnect={connect}
+            nodesConnectable={subOn('visionBoard', 'connect')}
+            connectionLineStyle={{ stroke: 'var(--accent-color)', strokeWidth: 2 }}
+            onEdgeDoubleClick={(event, edge) => setLabelEdit({ id: edge.id, x: event.clientX, y: event.clientY, text: String(edge.label ?? '') })}
+            deleteKeyCode={['Backspace', 'Delete']}
             minZoom={0.15}
             maxZoom={2.5}
             fitView
+            fitViewOptions={{ maxZoom: 1, padding: 0.3 }}
             onNodeDragStop={(_event, _node, moved) => {
               for (const node of moved)
                 save(() =>
@@ -281,6 +356,8 @@ function Canvas({ badges }: { badges: string[] }) {
                     x: event.clientX,
                     y: event.clientY,
                   })
+                if (item.type === 'habit' && habits.some((h) => h.id === item.referenceId))
+                  add('habit', item.referenceId, { x: event.clientX, y: event.clientY })
                 if (item.type === 'badge' && badges.includes(item.referenceId))
                   add('badge', item.referenceId, {
                     x: event.clientX,
@@ -337,8 +414,37 @@ function Canvas({ badges }: { badges: string[] }) {
             >
               ✧ Add Badge
             </button>
+            {subOn('visionBoard', 'whiteboardCards') && (
+              <>
+                <button disabled={!ready} onClick={() => add('goal')}>
+                  ◎ Add Goal
+                </button>
+                <button disabled={!ready} aria-pressed={library === 'habit'} onClick={() => setLibrary(library === 'habit' ? null : 'habit')}>
+                  ✓ Add Habit
+                </button>
+                <button disabled={!ready} onClick={() => fileInput.current?.click()}>
+                  ▣ Add Image
+                </button>
+                <input
+                  ref={fileInput}
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={async (event) => {
+                    const file = event.target.files?.[0]
+                    event.target.value = ''
+                    if (!file) return
+                    try {
+                      add('image', await readImage(file))
+                    } catch {
+                      setError('That file could not be read as an image.')
+                    }
+                  }}
+                />
+              </>
+            )}
             <button
-              onClick={() => void fitView({ padding: 0.25, duration: 300 })}
+              onClick={() => void fitView({ padding: 0.25, duration: 300, maxZoom: 1.2 })}
             >
               Fit board
             </button>
@@ -347,14 +453,16 @@ function Canvas({ badges }: { badges: string[] }) {
             <aside
               className={styles.library}
               aria-label={
-                library === 'journal' ? 'Journal library' : 'Badge library'
+                library === 'journal' ? 'Journal library' : library === 'habit' ? 'Habit library' : 'Badge library'
               }
             >
               <header>
                 <h2>
                   {library === 'journal'
                     ? 'Your reflections'
-                    : 'Your milestones'}
+                    : library === 'habit'
+                      ? 'Your habits'
+                      : 'Your milestones'}
                 </h2>
                 <button
                   aria-label="Close library"
@@ -364,7 +472,18 @@ function Canvas({ badges }: { badges: string[] }) {
                 </button>
               </header>
               <p>Drag onto your board, or click to add.</p>
-              {library === 'journal' ? (
+              {library === 'habit' ? (
+                habits.map((h) => (
+                  <button
+                    key={h.id}
+                    draggable
+                    onDragStart={(event) => event.dataTransfer.setData(mime, JSON.stringify({ type: 'habit', referenceId: h.id }))}
+                    onClick={() => add('habit', h.id)}
+                  >
+                    ✓ {h.title}
+                  </button>
+                ))
+              ) : library === 'journal' ? (
                 journals.length ? (
                   journals.map((entry) => (
                     <button
@@ -420,8 +539,24 @@ function Canvas({ badges }: { badges: string[] }) {
               )}
             </aside>
           )}
+          {labelEdit && (
+            <input
+              className={styles.edgeLabel}
+              style={{ left: labelEdit.x, top: labelEdit.y }}
+              aria-label="Arrow label"
+              placeholder="leads to…"
+              autoFocus
+              value={labelEdit.text}
+              onChange={(e) => setLabelEdit({ ...labelEdit, text: e.target.value })}
+              onBlur={saveLabel}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') saveLabel()
+                if (e.key === 'Escape') setLabelEdit(null)
+              }}
+            />
+          )}
           <span className={styles.hint}>
-            Drag to explore · Scroll to zoom · Select a note to resize
+            Drag to explore · Scroll to zoom · {subOn('visionBoard', 'connect') ? 'Drag from a card edge to draw an arrow · Double-click an arrow to label it' : 'Select a note to resize'}
           </span>
         </div>
       </section>
@@ -429,7 +564,7 @@ function Canvas({ badges }: { badges: string[] }) {
   )
 }
 
-export default function VisionBoard(props: { badges: string[] }) {
+export default function VisionBoard(props: { badges: string[]; habits?: Habit[] }) {
   return (
     <ReactFlowProvider>
       <Canvas {...props} />

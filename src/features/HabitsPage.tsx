@@ -1,3 +1,6 @@
+import { PixelSprite } from './juice/PixelJuice'
+import { pickSprite } from './juice/sprites'
+import { loadSettings } from '../SettingsPage'
 import { subOn } from './subFeatures'
 import { CardRail } from '../components/BloomExperience'
 import { useEffect, useState } from 'react'
@@ -118,8 +121,19 @@ export function HabitsPage({
       })
     }
   }
+  const lootCount = data.habits.filter((h) => h.dates.includes(today)).length
   return (
     <div className="habits-workspace">
+      {loadSettings().features.pixelJuice && subOn('pixelJuice', 'parallax') && lootCount > 0 && (
+        <div className="habits-loot" aria-label={`Today's loot: ${lootCount}`}>
+          <span>Today’s loot</span>
+          <div className="px-shelf">
+            {Array.from({ length: lootCount }, (_, i) => (
+              <PixelSprite key={i} sprite={pickSprite(i + 1)} size={40} />
+            ))}
+          </div>
+        </div>
+      )}
       <div className="habits-toolbar">
         <div className="segmented" role="tablist" aria-label="Habit views">
           <button

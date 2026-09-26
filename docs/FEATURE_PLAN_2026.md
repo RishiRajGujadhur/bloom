@@ -168,3 +168,23 @@ Findings:
 - 🐛 Fixed: GSAP entrance tweens killed mid-flight by React strict mode left bars/cells at scale 0; cleanups now finish (`progress(1)`) before killing.
 - 🐛 Sub-features default on, so "linger 20 s" was inverted to "Crumble after 10 s".
 - New Daybook mode "Voice note" (21 modes total).
+
+---
+
+# Round 11 — Whiteboard, pixel juice, micronutrients, recipes, breath silk, Wu Xing
+
+| ✅ | Feature | Flag | Where | Library |
+|---|---|---|---|---|
+| ✅ | **Whiteboard mode** — labelled arrows between cards (saved), long-term goal cards with progress rings, live habit cards, image cards; new cards fan out on a spiral | `visionBoard` (+3 options) | Vision Board | React Flow (`@xyflow/react`) |
+| ✅ | **Pixel juice** — hand-drawn pixel sprites pop from a habit tick with chiptune and square sparks; streak milestones open a chest; "Today's loot" shelf with cursor parallax | `pixelJuice` | Everywhere / Habits | `canvas-confetti`, GSAP, WebAudio |
+| ✅ | **Micronutrients & gut diversity** — 13 nutrients from a bundled USDA subset (Dexie), 8-axis radar, 30-plants-a-week ring, Hydrated buff (+5 HP) | `microNutrients` | Nourish › Nutrients | `@nivo/radar`, Dexie |
+| ✅ | **Recipe builder** — drag ingredients onto a kitchen scale, “1 1/2 tbsp”/cups/oz → grams, cook-loss yield, servings, macro split, saved recipes | `recipeBuilder` | Nourish › Recipes | `mathjs`, `@hello-pangea/dnd` |
+| ✅ | **Breath silk** — WebGL silk that swells on inhale and settles on exhale, driven by mic breath noise (or a pacer) | `breathSilk` | Tai Chi, Breathe | `meyda`, `@react-three/fiber` |
+| ✅ | **Wu Xing soundscape** — five-element generative bowls/chimes; stance camera measures grounding and the bass deepens as you sink | `wuXing` | New **Tai Chi** page | `tone`, `@mediapipe/tasks-vision` |
+
+Findings:
+- 🔁 `pxlkit` isn't published on npm; sprites are hand-drawn as character grids and rendered as crisp SVG rects in three parallax layers.
+- 🔁 `tldraw` requires a licence key in production, so the existing React Flow board was extended instead.
+- 🔁 USDA FoodData Central is large; a curated 46-ingredient subset (per 100 g, 13 micronutrients plus cook yield, density and piece weight) is bundled and seeded into Dexie.
+- 🔁 Breath detection: breath is broadband noise (high spectral flatness); each burst after a pause flips inhale/exhale.
+- 🐛 Emoji 🫘/🫛 don't render on Windows 10; replaced.
