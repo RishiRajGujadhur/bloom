@@ -1,0 +1,96 @@
+.fs-ring {
+  width: min(100%, 360px);
+  max-height: 100%;
+}
+.fs-track {
+  fill: none;
+  stroke: var(--studio-soft);
+  stroke-width: 18;
+}
+.fs-arc {
+  fill: none;
+  stroke: url(#fs-grad);
+  stroke-width: 18;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px #e2703f66);
+}
+.fs-mark {
+  fill: var(--bg-surface);
+  stroke: var(--border-color);
+  stroke-width: 2;
+}
+.fs-mark[data-past='true'] {
+  stroke: var(--studio);
+  fill: color-mix(in oklab, var(--studio) 18%, var(--bg-surface));
+}
+.fs-time {
+  fill: var(--text-primary);
+  font-size: 38px;
+  font-weight: 800;
+}
+.fs-stage {
+  fill: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+}
+.fs-time-big {
+  font-size: 64px;
+}
+.fs-side {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+.fs-stage-name {
+  margin: 0 !important;
+  font-size: 28px !important;
+}
+.fs-ended {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--studio-soft);
+}
+.fs-ended p {
+  margin: 0;
+  font-weight: 600;
+}
+.fs-history {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  height: 100%;
+}
+.fs-heat svg {
+  width: 100%;
+}
+.fs-heat .react-calendar-heatmap text {
+  fill: var(--text-muted);
+  font-size: 8px;
+}
+.fs-heat .react-calendar-heatmap rect {
+  rx: 2;
+}
+.fs-heat .color-empty {
+  fill: color-mix(in oklab, var(--text-muted) 14%, transparent);
+}
+.fs-heat .fs-scale-0 {
+  fill: #fde3c8;
+}
+.fs-heat .fs-scale-1 {
+  fill: #f7b27a;
+}
+.fs-heat .fs-scale-2 {
+  fill: #e2703f;
+}
+.fs-heat .fs-scale-3 {
+  fill: #b24a8f;
+}
+.fs-heat .fs-scale-4 {
+  fill: #6b4ad6;
+}
+.fs-settings {
+  max-width: 520px;
+  margin: 0 auto;
+}

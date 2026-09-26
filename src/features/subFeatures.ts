@@ -479,6 +479,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "compare", title: "Compare", description: "Two products side by side." },
     { id: "productPhoto", title: "Product photo", description: "Show the pack image." },
   ],
+  fasting: [
+    { id: "protocols", title: "Protocols", description: "14:10, 16:8, 18:6, 20:4, OMAD and 36 h." },
+    { id: "ring", title: "Live ring", description: "A glowing ring that fills as you fast." },
+    { id: "stages", title: "Body stages", description: "Fed, fat burning, ketosis, autophagy." },
+    { id: "adjustStart", title: "Adjust start", description: "Slide back if you began earlier." },
+    { id: "heatmap", title: "History heatmap", description: "Months of fasts at a glance." },
+    { id: "weeklyAvg", title: "Weekly stats", description: "Average, longest and goals reached." },
+    { id: "hydration", title: "Water reminders", description: "Gentle sips while you fast." },
+    { id: "endEarly", title: "Kind endings", description: "Ending early still counts." },
+    { id: "notes", title: "Feelings & notes", description: "How the fast felt." },
+    { id: "windowReminder", title: "Window reminder", description: "When your eating window closes." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

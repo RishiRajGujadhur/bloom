@@ -361,6 +361,10 @@ const common = {
         title: "Food scanner",
         description: "Scan barcodes for Nutri-Score, additives, allergens and sugar, then log a portion.",
       },
+      fasting: {
+        title: "Fasting",
+        description: "Intermittent fasting with a live ring, body stages and a history heatmap.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1344,6 +1348,10 @@ export const resources = {
           foodScanner: {
             title: "Scanner alimentaire",
             description: "Scannez les codes-barres : Nutri-Score, additifs, allergènes et sucre, puis ajoutez une portion.",
+          },
+          fasting: {
+            title: "Jeûne",
+            description: "Jeûne intermittent : anneau en direct, étapes du corps et carte de chaleur.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

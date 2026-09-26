@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { endMessage, fmtH, perDay, stageAt, stats as fastStats } from '../src/features/fasting/fastingModel'
 import { allergenHits, forPortion, light, parseProduct, sugarCubes, validCode } from '../src/features/scan/scanModel'
 import { bmi, bmiBand, display, projection, trend, whtr, whtrBand } from '../src/features/body/bodyModel'
 import { bests, demoRoute, distanceKm, fmtPace, pace, pointAt, splits, weekKm } from '../src/features/run/runModel'
@@ -23,7 +24,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -152,4 +153,23 @@ test('food scanner: parses Open Food Facts, portions, cubes, lights, allergens',
   expect(allergenHits(p, ['nuts', 'gluten'])).toEqual(['nuts'])
   expect(validCode('3017620422003')).toBe(true)
   expect(validCode('12ab')).toBe(false)
+})
+
+test('fasting: stages, per-day hours, stats and kind endings', () => {
+  expect(stageAt(2).name).toBe('Fed')
+  expect(stageAt(13).name).toBe('Fat burning')
+  expect(stageAt(30).name).toBe('Autophagy')
+  expect(fmtH(13.5)).toBe('13h 30m')
+  const now = new Date('2026-09-26T12:00:00').getTime()
+  const h = [
+    { start: now - 20 * 3600000, end: now - 4 * 3600000, goal: 16 },
+    { start: now - 2 * 86400000 - 12 * 3600000, end: now - 2 * 86400000, goal: 16 },
+  ]
+  expect(perDay(h)).toHaveLength(2)
+  const st = fastStats(h, now)
+  expect(st.weekCount).toBe(2)
+  expect(st.longest).toBe(16)
+  expect(st.rate).toBe(0.5)
+  expect(endMessage(16, 16)).toMatch(/Goal reached/)
+  expect(endMessage(6, 16)).toMatch(/still a real fast/)
 })
