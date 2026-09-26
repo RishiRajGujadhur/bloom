@@ -150,6 +150,9 @@ const RunPage = lazy(() =>
 const BodyPage = lazy(() =>
   import('./features/body/BodyPage').then((m) => ({ default: m.BodyPage })),
 )
+const ScanPage = lazy(() =>
+  import('./features/scan/ScanPage').then((m) => ({ default: m.ScanPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -606,6 +609,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'scan' && !settings.features.foodScanner) ||
             (active === 'body' && !settings.features.bodyProgress) ||
             (active === 'run' && !settings.features.runTracker) ||
             (active === 'stretch' && !settings.features.mobility) ||
@@ -715,6 +719,10 @@ function App() {
             ) : active === 'body' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <BodyPage />
+              </Suspense>
+            ) : active === 'scan' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <ScanPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

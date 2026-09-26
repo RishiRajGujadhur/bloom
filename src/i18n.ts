@@ -357,6 +357,10 @@ const common = {
         title: "Body progress",
         description: "Measurements, trend lines, private progress photos and a before/after slider.",
       },
+      foodScanner: {
+        title: "Food scanner",
+        description: "Scan barcodes for Nutri-Score, additives, allergens and sugar, then log a portion.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1336,6 +1340,10 @@ export const resources = {
           bodyProgress: {
             title: "Progrès corporels",
             description: "Mensurations, tendances, photos privées et comparaison avant/après.",
+          },
+          foodScanner: {
+            title: "Scanner alimentaire",
+            description: "Scannez les codes-barres : Nutri-Score, additifs, allergènes et sucre, puis ajoutez une portion.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

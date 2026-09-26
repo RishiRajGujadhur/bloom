@@ -467,6 +467,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "units", title: "Units", description: "Metric or imperial." },
     { id: "smoothing", title: "Trend smoothing", description: "Smooth out daily water-weight noise." },
   ],
+  foodScanner: [
+    { id: "camera", title: "Camera scanning", description: "Point your camera at a barcode." },
+    { id: "manual", title: "Type a barcode", description: "When the camera can’t read it." },
+    { id: "grades", title: "Scores", description: "Nutri-Score, NOVA processing and Eco-Score." },
+    { id: "additives", title: "Additives", description: "E-numbers listed plainly." },
+    { id: "allergens", title: "Allergen alerts", description: "Warns about the allergens you choose." },
+    { id: "sugarCubes", title: "Sugar cubes", description: "See sugar as cubes for your portion." },
+    { id: "addToMeal", title: "Add to today", description: "Log a portion straight to Nourish." },
+    { id: "history", title: "History & offline", description: "Scanned products are remembered." },
+    { id: "compare", title: "Compare", description: "Two products side by side." },
+    { id: "productPhoto", title: "Product photo", description: "Show the pack image." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

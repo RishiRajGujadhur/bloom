@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { allergenHits, forPortion, light, parseProduct, sugarCubes, validCode } from '../src/features/scan/scanModel'
 import { bmi, bmiBand, display, projection, trend, whtr, whtrBand } from '../src/features/body/bodyModel'
 import { bests, demoRoute, distanceKm, fmtPace, pace, pointAt, splits, weekKm } from '../src/features/run/runModel'
 import { forAreas, routines as stRoutines, steps as stSteps, totalSeconds as stTotal } from '../src/features/stretch/stretchModel'
@@ -22,7 +23,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -135,4 +136,20 @@ test('body: trend smoothing, ratios, units and goal projection', () => {
   expect(p.date).toBeInstanceOf(Date)
   expect(projection(entries, 90)?.date).toBeNull()
   expect(projection(entries.slice(0, 2), 75)).toBeNull()
+})
+
+test('food scanner: parses Open Food Facts, portions, cubes, lights, allergens', () => {
+  const p = parseProduct('123', {
+    status: 1,
+    product: { product_name: 'Spread', brands: 'Acme, Other', nutriscore_grade: 'e', nova_group: 4, nutriments: { 'energy-kcal_100g': 539, sugars_100g: 56.3, fat_100g: 30.9, proteins_100g: 6.3, carbohydrates_100g: 57.5, salt_100g: 0.1 }, additives_tags: ['en:e322'], allergens_tags: ['en:milk', 'en:nuts'] },
+  })!
+  expect(p).toMatchObject({ name: 'Spread', brand: 'Acme', nutriscore: 'e', nova: 4, additives: ['E322'], allergens: ['milk', 'nuts'] })
+  expect(parseProduct('1', { status: 0 })).toBeNull()
+  expect(forPortion(p, 30).kcal).toBe(162)
+  expect(sugarCubes(56.3, 30)).toBe(4)
+  expect(light('sugars', 56.3)).toBe('high')
+  expect(light('salt', 0.1)).toBe('low')
+  expect(allergenHits(p, ['nuts', 'gluten'])).toEqual(['nuts'])
+  expect(validCode('3017620422003')).toBe(true)
+  expect(validCode('12ab')).toBe(false)
 })

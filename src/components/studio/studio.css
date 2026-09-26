@@ -307,3 +307,16 @@
 .studio-chip-row .studio-chip {
   flex: none;
 }
+.studio .voice-spin {
+  animation: studio-spin 1s linear infinite;
+}
+.studio .voice-error {
+  margin: 0;
+  color: #c2410c;
+  font-size: 14px;
+}
+@keyframes studio-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
