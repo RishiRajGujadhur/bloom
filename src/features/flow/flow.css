@@ -58,3 +58,50 @@ html[data-mode='dark'] .flow-mountain {
     transition: none;
   }
 }
+
+/* Smart search: related pages while writing */
+.related-pages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 12px;
+  animation: related-in 500ms ease both;
+}
+.related-pages > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.related-pages button {
+  display: grid;
+  gap: 2px;
+  flex: 1 1 180px;
+  max-width: 280px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px dashed color-mix(in oklab, #8f7ae5 50%, var(--border-color));
+  background: color-mix(in oklab, #8f7ae5 6%, var(--bg-surface));
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+.related-pages button:hover {
+  transform: translateY(-2px);
+}
+.related-pages small,
+.related-pages em {
+  color: var(--text-muted);
+}
+@keyframes related-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

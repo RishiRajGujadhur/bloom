@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { calculateCosineSimilarity } from '../src/utils/cosineSimilarity'
 import { journalText, db } from '../src/search/db'
 import { SemanticSearch } from '../src/components/daybook/SemanticSearch'
+import { tagPrototypes } from '../src/search/hybrid'
 
 jest.mock('../src/search/useAIWorker', () => ({
   useAIWorker: () => ({ embed: mockEmbed, status: 'Ready' }),
@@ -76,7 +77,8 @@ test('downloads nothing until enabled, indexes saved pages, and opens ranked res
   fireEvent.click(await screen.findByRole('button', { name: /A hard day/ }))
   // Results open the exact saved page, not just its mode.
   expect(onOpen).toHaveBeenCalledWith('one')
-  expect(mockEmbed).toHaveBeenCalledTimes(2)
+  // One page, one query, plus each auto-tag theme embedded once.
+  expect(mockEmbed).toHaveBeenCalledTimes(2 + Object.keys(tagPrototypes).length)
   fireEvent.click(screen.getByRole('button', { name: /Ask Local Coach/ }))
   expect(screen.getByText(/No agent is connected/)).toBeInTheDocument()
   jest.restoreAllMocks()

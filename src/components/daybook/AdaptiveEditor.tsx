@@ -20,6 +20,7 @@ import { journalText } from '../../search/db'
 import { loadSettings } from '../../SettingsPage'
 import { ThoughtDiffPanel } from './ThoughtDiff'
 import { ExtractEpiphany } from '../../features/epiphany/EpiphanyUI'
+import { RelatedPages } from './RelatedPages'
 import { FlowMountain, useKeystrokeFlow } from '../../features/flow/FlowMountain'
 
 /** Pages about fears and shadows offer the Burn & release ritual. */
@@ -221,7 +222,7 @@ export function AdaptiveEditor({
   const [dirty, setDirty] = useState(false)
   const [leaving, setLeaving] = useState(false)
   const editorRoot = useRef<HTMLDivElement>(null)
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const saveTimer = useRef<number | undefined>(undefined)
   useEffect(() => () => clearTimeout(saveTimer.current), [])
   const leave = () => (dirty ? setLeaving(true) : onBack())
   // Focus writing hides the app chrome (sidebar, topbar, floating buttons).
@@ -491,6 +492,9 @@ export function AdaptiveEditor({
           <span className="flow-live-label">Your flow right now</span>
           <FlowMountain fp={flow.current} />
         </div>
+      )}
+      {loadSettings().features.smartSearch && subOn('smartSearch', 'related') && (
+        <RelatedPages text={journalText(content)} excludeId={entry?.id} />
       )}
       {steps > 1 && (
         <div className="prompt-navigation">

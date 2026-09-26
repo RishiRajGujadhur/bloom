@@ -65,6 +65,9 @@ import { Carousel } from './components/ui/Carousel'
 import { burst, streakMilestone } from './components/ui/celebrate'
 import { AchievementHost } from './features/achievements/DrawnAchievement'
 import { ImpactLayer } from './features/impact/ImpactLayer'
+import type { OmniAction } from './components/layout/omnibox'
+import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
+import { MOOD_KEY } from './features/wellbeing/store'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
 import { EpiphaniesPage, EpiphanyGate } from './features/epiphany/EpiphanyUI'
 import { habitStats } from './features/habits'
@@ -105,6 +108,21 @@ const BreathePage = lazy(() =>
 const MoodPage = lazy(() => wellbeing().then((m) => ({ default: m.MoodPage })))
 const GratitudePage = lazy(() =>
   wellbeing().then((m) => ({ default: m.GratitudePage })),
+)
+const DietPage = lazy(() =>
+  import('./features/diet/DietPage').then((m) => ({ default: m.DietPage })),
+)
+const MonkModePage = lazy(() =>
+  import('./features/monk/MonkMode').then((m) => ({ default: m.MonkModePage })),
+)
+const VoicePage = lazy(() =>
+  import('./features/voice/VoicePage').then((m) => ({ default: m.VoicePage })),
+)
+const EnergyPage = lazy(() =>
+  import('./features/energy/EnergyPage').then((m) => ({ default: m.EnergyPage })),
+)
+const LabPage = lazy(() =>
+  import('./features/lab/LabPage').then((m) => ({ default: m.LabPage })),
 )
 const ReleasePage = lazy(() =>
   import('./features/release/ReleasePage').then((m) => ({ default: m.ReleasePage })),
@@ -348,6 +366,37 @@ function App() {
     window.location.hash = target
     window.scrollTo?.({ top: 0, behavior: 'instant' })
   }
+  /** Omnibox ("> …" in Ctrl K) commands. */
+  const runCommand = (action: OmniAction) => {
+    if (action.type === 'logHabit') {
+      setData((d) => (d.habits.find((h) => h.id === action.habitId)?.dates.includes(today) ? d : toggleHabit(d, action.habitId, today)))
+    } else if (action.type === 'addTask') {
+      setData((d) => ({
+        ...d,
+        todos: [
+          ...d.todos,
+          { id: id(), title: action.title, done: false, due: today, completedAt: null, challengeId: null, rewarded: false, priority: 'P3', tags: [], recurrence: 'none', seriesId: null, subtasks: [] },
+        ],
+      }))
+    } else if (action.type === 'water' || action.type === 'meal') {
+      const diet = readDiet()
+      saveDiet(
+        action.type === 'water'
+          ? { ...diet, water: { ...diet.water, [today]: (diet.water[today] ?? 0) + action.glasses } }
+          : { ...diet, meals: [...diet.meals, { id: id(), at: Date.now(), date: today, name: action.name, kind: kindFor(new Date().getHours()), kcal: action.kcal, protein: 0, carbs: 0, fat: 0 }] },
+      )
+    } else if (action.type === 'mood') {
+      try {
+        const list: unknown = JSON.parse(localStorage.getItem(MOOD_KEY) ?? '[]')
+        localStorage.setItem(MOOD_KEY, JSON.stringify([...(Array.isArray(list) ? list : []), { id: id(), at: Date.now(), mood: action.value, note: '' }]))
+      } catch {
+        /* Mood still shows next time the page loads. */
+      }
+    } else if (action.type === 'theme') {
+      setThemeSettings((s) => ({ ...s, themeId: action.themeId }))
+    }
+    burst(null, 'stars')
+  }
   return (
     <MotionConfig reducedMotion="user">
       <div
@@ -510,6 +559,11 @@ function App() {
             (active === 'sleep' && !settings.features.sleepTracker) ||
             (active === 'posture' && !settings.features.postureGuard) ||
             (active === 'epiphanies' && !settings.features.epiphanies) ||
+            (active === 'diet' && !settings.features.dietTracker) ||
+            (active === 'monk' && !settings.features.monkMode) ||
+            (active === 'voice' && !settings.features.voiceMemos) ||
+            (active === 'energy' && !settings.features.energySankey) ||
+            (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'shop' && !settings.features.petalShop) ||
             (active === 'release' && !settings.features.burnRelease) ||
             (active === 'focus-room' && !settings.features.focusRoom) ||
@@ -564,6 +618,26 @@ function App() {
             ) : active === 'places' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <PlacesPage />
+              </Suspense>
+            ) : active === 'diet' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <DietPage today={today} />
+              </Suspense>
+            ) : active === 'monk' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <MonkModePage />
+              </Suspense>
+            ) : active === 'voice' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <VoicePage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'energy' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <EnergyPage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'lab' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <LabPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'epiphanies' ? (
               <EpiphaniesPage today={today} />
@@ -1064,6 +1138,8 @@ function App() {
           onAddIntention={() => setModal('plan')}
           onToggleTheme={() => setThemeSettings(toggleThemeMode)}
           onTalk={() => setCompanionOpen(true)}
+          today={today}
+          onCommand={runCommand}
         />
         <BloomCompanion
           data={data}

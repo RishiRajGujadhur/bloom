@@ -1,0 +1,213 @@
+.lab-page {
+  --lab-empty: color-mix(in oklab, var(--text-muted) 8%, transparent);
+  --lab-self: color-mix(in oklab, var(--text-muted) 18%, transparent);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  min-width: 0;
+}
+.lab-card {
+  padding: 22px 24px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  min-width: 0;
+}
+.lab-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+.lab-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lab-range {
+  display: flex;
+  gap: 6px;
+}
+.lab-range button {
+  min-height: 38px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.lab-range button[aria-checked='true'] {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #fff;
+}
+.lab-findings {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 18px;
+  padding: 0;
+  list-style: none;
+}
+.lab-findings button {
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-left: 3px solid #e0703f;
+  border-radius: 10px;
+  background: color-mix(in oklab, #e0703f 8%, transparent);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+.lab-findings button[data-sign='neg'] {
+  border-left-color: #3f7fd0;
+  background: color-mix(in oklab, #3f7fd0 8%, transparent);
+}
+.lab-findings button:hover {
+  transform: translateX(4px);
+}
+.lab-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.lab-heat {
+  display: grid;
+  gap: 3px;
+  font-size: 11px;
+  overflow-x: auto;
+}
+.lab-col {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  justify-self: center;
+  color: var(--text-muted);
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+.lab-row {
+  align-self: center;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lab-cell {
+  aspect-ratio: 1;
+  min-width: 22px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.lab-cell:disabled {
+  cursor: default;
+}
+.lab-cell:not(:disabled):hover {
+  transform: scale(1.18);
+  z-index: 1;
+  box-shadow: 0 6px 14px -6px #0006;
+}
+.lab-cell[data-on='true'] {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 1px;
+}
+.lab-scatter-card {
+  padding: 12px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--bg-primary) 60%, var(--bg-surface));
+}
+.lab-pick {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+.lab-pick strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.lab-scatter {
+  width: 100%;
+}
+.lab-scatter text {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+.lab-axis {
+  stroke: var(--border-color);
+}
+.lab-dot {
+  fill: #e0703f;
+  fill-opacity: 0.65;
+  stroke: #fff;
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lab-pop 450ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+.lab-fit {
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+.lab-note,
+.lab-empty {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.lab-export {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(120deg, color-mix(in oklab, var(--accent-color) 8%, var(--bg-surface)), var(--bg-surface));
+}
+.lab-export p {
+  margin: 0;
+  max-width: 560px;
+  color: var(--text-secondary);
+}
+.lab-export-actions {
+  display: flex;
+  gap: 8px;
+}
+.lab-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+@keyframes lab-pop {
+  from {
+    transform: scale(0);
+  }
+}
+@media (max-width: 1000px) {
+  .lab-split {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-dot {
+    animation: none;
+  }
+}

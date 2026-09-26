@@ -59,6 +59,11 @@ export const pageDetails: Record<
   sleep: { title: 'Sleep', description: 'Rest is part of the work.' },
   posture: { title: 'Posture guard', description: 'Sit tall, level up.' },
   epiphanies: { title: 'Epiphanies', description: 'Your wisdom, remembered.' },
+  diet: { title: 'Nourish', description: 'Eat with attention.' },
+  monk: { title: 'Monk mode', description: 'Write it. Let it go.' },
+  voice: { title: 'Voice memos', description: 'Think out loud.' },
+  energy: { title: 'Energy flow', description: 'Debug your week.' },
+  lab: { title: 'Correlations', description: 'What moves together.' },
   'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
   'focus-room': { title: 'Focus room', description: 'One task. Soft strings. Deep work.' },
   'explore': { title: 'Explore data', description: 'Ask your own questions.' },
@@ -90,6 +95,23 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  diet: [
+    step('.diet-hero', 'Your plate', 'Calories fill the ring; macros and water sit beside it.'),
+    step('.diet-library', 'Quick add', 'Tap a common meal, or type your own below.'),
+  ],
+  monk: [step('.monk-intro', 'Let it go', 'Words crumble after a few seconds. Nothing is saved.')],
+  voice: [
+    step('.voice-rec', 'Record', 'Ramble freely; it stays on this device.'),
+    step('.voice-list', 'Transcribe', 'Whisper turns speech into text, key points and ideas.'),
+  ],
+  energy: [
+    step('.energy-sankey', 'Your week as a flow', 'Hours on the left flow into stats, recovery and burnout.'),
+    step('.energy-form', 'Add hours', 'Log scrolling, leisure or exercise to complete the picture.'),
+  ],
+  lab: [
+    step('.lab-heat', 'Every metric vs every other', 'Warm cells rise together; blue ones move opposite.'),
+    step('.lab-export', 'Export', 'A PDF report or a full backup zip.'),
+  ],
   epiphanies: [
     step('.epiphany-add', 'Add an insight', 'Or extract one from a Daybook page.'),
     step('.epiphany-list', 'Spaced reviews', 'Each returns right before you would forget it.'),

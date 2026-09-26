@@ -98,3 +98,29 @@
     transform: none !important;
   }
 }
+.cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.search .cloud button {
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  animation: cloud-in 400ms ease both;
+}
+.cloud small {
+  color: var(--text-muted);
+}
+.tags {
+  display: block;
+  font-style: normal;
+  font-size: 0.8rem;
+  color: #8f7ae5;
+}
+@keyframes cloud-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}

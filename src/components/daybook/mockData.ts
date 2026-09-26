@@ -26,6 +26,7 @@ const seeds: ModeSeed[] = [
   { id: 'fear-setting', category: 'vision', icon: '△', editorType: 'split-pane' },
   { id: 'stoic-visualization', category: 'vision', icon: '◇', editorType: 'guided' },
   { id: 'dream-journal', category: 'vision', icon: '☁', editorType: 'freeform' },
+  { id: 'voice-note', category: 'reflection', icon: '🎙', editorType: 'freeform' },
   { id: 'rpg-quest-log', category: 'gamified', icon: '⚔', editorType: 'guided' },
   { id: 'peak-experience', category: 'gamified', icon: '★', editorType: 'guided' },
   { id: 'habit-autopsy', category: 'gamified', icon: '⌁', editorType: 'split-pane' },

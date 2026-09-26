@@ -14,6 +14,7 @@ import {
   Search,
   Sparkles,
   Sun,
+  Terminal,
   Timer,
 } from 'lucide-react'
 import type { AppData } from '../../model'
@@ -28,6 +29,8 @@ import {
 import { DAYBOOK_STORAGE_KEY } from '../daybook/storage'
 import type { JournalEntry } from '../daybook/types'
 import { pageDetails } from './FeatureGuide'
+import { commandGroup, isCommand, parseCommand, type OmniAction } from './omnibox'
+import { subOn } from '../../features/subFeatures'
 import type { NavKey } from './Sidebar'
 import '../ui/ui.css'
 
@@ -50,6 +53,11 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   sleep: 'sleepTracker',
   posture: 'postureGuard',
   epiphanies: 'epiphanies',
+  diet: 'dietTracker',
+  monk: 'monkMode',
+  voice: 'voiceMemos',
+  energy: 'energySankey',
+  lab: 'insightsLab',
   shop: 'petalShop',
   'release': 'burnRelease',
   'focus-room': 'focusRoom',
@@ -118,6 +126,8 @@ export function CommandPalette({
   onAddIntention,
   onToggleTheme,
   onTalk,
+  onCommand,
+  today = new Date().toISOString().slice(0, 10),
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -129,6 +139,9 @@ export function CommandPalette({
   onAddIntention: () => void
   onToggleTheme: () => void
   onTalk: () => void
+  /** Runs an Omnibox command (">" prefix). */
+  onCommand?: (action: OmniAction) => void
+  today?: string
 }) {
   const [search, setSearch] = useState('')
   const [daybook, setDaybook] = useState<JournalEntry[]>([])
@@ -136,6 +149,7 @@ export function CommandPalette({
   const [meaningBusy, setMeaningBusy] = useState(false)
   const [meaningError, setMeaningError] = useState('')
   const { embed, status } = useAIWorker()
+  const [selected, setSelected] = useState('')
 
   // Global shortcut: Ctrl/Cmd + K toggles, "/" opens when not typing.
   useEffect(() => {
@@ -188,6 +202,22 @@ export function CommandPalette({
     [data.sessions],
   )
   const query = search.trim()
+  const commandMode = Boolean(onCommand) && flags.omnibox && isCommand(search)
+  const commands = commandMode ? parseCommand(search, data, today).filter((c) => subOn('omnibox', commandGroup(c.id))) : []
+  const previewOn = flags.omnibox && subOn('omnibox', 'previews')
+  const preview = (() => {
+    if (!previewOn || commandMode) return null
+    const [kind, id] = selected.split(' ')
+    if (kind === 'daybook' || kind === 'meaning') {
+      const entry = daybook.find((e) => e.id === id)
+      return entry ? { title: entry.modeTitle, date: entry.updatedAt, text: journalText(entry.content).trim() } : null
+    }
+    if (kind === 'journal') {
+      const session = sessions.find((x) => x.id === id)
+      return session ? { title: 'Reflection', date: session.date, text: session.text } : null
+    }
+    return null
+  })()
   const go = (action: () => void) => {
     onOpenChange(false)
     action()
@@ -211,8 +241,11 @@ export function CommandPalette({
       onOpenChange={onOpenChange}
       label="Search your space"
       overlayClassName="cmdk-overlay"
-      contentClassName="cmdk-panel"
+      contentClassName={`cmdk-panel${preview ? ' has-preview' : ''}`}
       loop
+      shouldFilter={!commandMode}
+      value={selected}
+      onValueChange={setSelected}
     >
       <div className="cmdk-input-row">
         <Search size={20} aria-hidden="true" />
@@ -222,12 +255,33 @@ export function CommandPalette({
             setSearch(value)
             setMeaning(null)
           }}
-          placeholder="Search pages, journal entries, habits, tasks…"
+          placeholder={flags.omnibox ? 'Search, or type > for commands…' : 'Search pages, journal entries, habits, tasks…'}
         />
         <kbd>Esc</kbd>
       </div>
+      <div className="cmdk-body">
       <Command.List>
+        {commandMode && (
+          <Command.Group heading="Commands">
+            {commands.map((c) => (
+              <Command.Item
+                key={c.id}
+                value={`cmd ${c.id}`}
+                disabled={!c.action}
+                onSelect={() => c.action && go(() => onCommand?.(c.action!))}
+              >
+                <Terminal size={17} aria-hidden="true" />
+                <span className="cmdk-item-text">
+                  {c.label}
+                  <small>{c.hint}</small>
+                </span>
+              </Command.Item>
+            ))}
+          </Command.Group>
+        )}
+        {!commandMode && (<>
         <Command.Empty>
+
           Nothing matches “{query}”. Try fewer words, or search by meaning.
         </Command.Empty>
 
@@ -381,7 +435,8 @@ export function CommandPalette({
           </Command.Group>
         )}
 
-        {meaning && meaning.length > 0 && (
+        </>)}
+        {!commandMode && meaning && meaning.length > 0 && (
           <Command.Group heading="Closest in meaning" forceMount>
             {meaning.map((result) => (
               <Command.Item
@@ -406,6 +461,14 @@ export function CommandPalette({
           </Command.Group>
         )}
       </Command.List>
+      {preview && (
+        <aside className="cmdk-preview" aria-label="Preview">
+          <strong>{preview.title}</strong>
+          <time>{new Date(preview.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</time>
+          <p>{preview.text.slice(0, 900) || 'Empty page'}</p>
+        </aside>
+      )}
+      </div>
 
       {query.length >= 3 && flags.daybookModes && (
         <div className="cmdk-semantic" role="status" aria-live="polite">
@@ -439,6 +502,11 @@ export function CommandPalette({
         <span>
           <span className="kbd">Ctrl K</span> anywhere
         </span>
+        {flags.omnibox && (
+          <span>
+            <span className="kbd">&gt;</span> commands
+          </span>
+        )}
       </div>
     </Command.Dialog>
   )

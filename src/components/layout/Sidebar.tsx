@@ -35,6 +35,7 @@ import {
   Sun,
   X,
 } from 'lucide-react'
+import { Apple as AppleNav, Feather as FeatherNav, Mic as MicNav, Zap as ZapNav, FlaskConical as FlaskConicalNav } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
@@ -73,6 +74,11 @@ export type NavKey =
   | 'places'
   | 'posture'
   | 'epiphanies'
+  | 'diet'
+  | 'monk'
+  | 'voice'
+  | 'energy'
+  | 'lab'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -86,9 +92,9 @@ interface SidebarProps {
 /** Sidebar sections, in display order. Unlisted keys (settings) come last. */
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
-  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies'] },
-  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook'] },
+  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice'] },
+  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
 ]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
@@ -312,6 +318,11 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'places', title: 'Places', Icon: MapPinned, requires: 'placesMap' },
     { key: 'posture', title: 'Posture guard', Icon: PersonStanding, requires: 'postureGuard' },
     { key: 'epiphanies', title: 'Epiphanies', Icon: Lightbulb, requires: 'epiphanies' },
+    { key: 'diet', title: 'Nourish', Icon: AppleNav, requires: 'dietTracker' },
+    { key: 'monk', title: 'Monk mode', Icon: FeatherNav, requires: 'monkMode' },
+    { key: 'voice', title: 'Voice memos', Icon: MicNav, requires: 'voiceMemos' },
+    { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
+    { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]

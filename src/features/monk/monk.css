@@ -1,0 +1,170 @@
+.monk-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  background: radial-gradient(circle at 20% 40%, #e0c08f33, transparent 60%), var(--bg-surface);
+}
+.monk-intro h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.monk-intro p,
+.monk-intro li {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.monk-intro ul {
+  margin: 0 0 18px;
+  padding-left: 18px;
+}
+.monk-intro-art {
+  position: relative;
+  aspect-ratio: 1;
+}
+.monk-intro-art .monk-mandala {
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+}
+.monk-mandala {
+  fill: none;
+  stroke: #c9a36b;
+  stroke-width: 1.4;
+}
+.monk-session .monk-mandala {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(90vmin, 760px);
+  translate: -50% -50%;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.monk-session {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 70vh;
+  margin-top: 16px;
+  border-radius: 24px;
+  background: radial-gradient(circle at 50% 45%, #fbf6ec, #efe4d0);
+  color: #4a3b2a;
+  overflow: hidden;
+  cursor: text;
+}
+.monk-session[data-zen='true'] {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  margin: 0;
+  border-radius: 0;
+  animation: monk-enter 900ms ease both;
+}
+:root[data-theme='dark'] .monk-session {
+  background: radial-gradient(circle at 50% 45%, #2a2419, #16130e);
+  color: #eadcc4;
+}
+.monk-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  pointer-events: none;
+}
+.monk-page {
+  position: relative;
+  width: min(720px, calc(100% - 32px));
+}
+.monk-flow {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.8;
+  text-align: center;
+}
+.monk-word {
+  display: inline-block;
+  margin-right: 0.3em;
+  animation: monk-word-in 500ms ease both, monk-word-age var(--ttl) linear both;
+}
+.monk-input {
+  min-width: 2ch;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  caret-color: #c9a36b;
+}
+.monk-input::placeholder {
+  color: color-mix(in oklab, currentColor 40%, transparent);
+}
+.monk-exit {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in oklab, currentColor 25%, transparent);
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.monk-exit:hover {
+  opacity: 1;
+}
+.monk-foot {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.55;
+}
+@keyframes monk-enter {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes monk-word-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(6px);
+  }
+}
+/* Words age: they warm to sand colour just before crumbling. */
+@keyframes monk-word-age {
+  0%,
+  70% {
+    color: inherit;
+  }
+  100% {
+    color: #c9a36b;
+  }
+}
+@media (max-width: 800px) {
+  .monk-intro {
+    grid-template-columns: 1fr;
+  }
+  .monk-intro-art {
+    max-width: 220px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .monk-word,
+  .monk-session {
+    animation: none;
+  }
+}

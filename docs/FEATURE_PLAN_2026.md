@@ -133,3 +133,38 @@ Findings:
 - 🔁 “Extra goals” (adaptive goals) ignores its parent switch so turning off
   adaptive targets doesn’t hide goals.
 - Jest now transforms the ESM-only `d3-shape`/`d3-path`.
+
+---
+
+# Round 9 — Epiphanies, destructible tasks, daily flow, animation pass
+
+| ✅ | Feature | Flag | Library |
+|---|---|---|---|
+| ✅ | **Epiphany engine** — save insights (or extract from Daybook); due reviews obstruct habits until graded (recall first, SM-2 scheduling, forgetting curve) | `epiphanies` | `supermemo` |
+| ✅ | **Destructible tasks** — heavy tasks fall on completion, can be thrown, shatter on hard wall hits for bonus EXP | `impactTasks` | `matter-js` |
+| ✅ | **Daily flow** — morning setup / evening wind-down ring linking features, plus next-step nudges after mood, sleep, gratitude and release | `dailyFlow` | GSAP |
+| ✅ | Animation pass — SVG gratitude jar (hover lid/sparkles, note drop), night sky on Sleep, breathing/sparkling mood orb, page entrance stagger | — | GSAP, drei |
+
+---
+
+# Round 10 — Diet, letting go, systems flow, voice, statistics, smarter search
+
+Plan (each is a Settings switch with 5 sub-options):
+
+| ✅ | Feature | Flag | Where | Library |
+|---|---|---|---|---|
+| ✅ | **Diet tracker** — meals with calories and macros, water, quick-add food library, mindful-eating hunger/fullness, weekly chart; feeds the correlations lab | `dietTracker` | New **Nourish** page | — |
+| ✅ | **Monk mode (sand mandala)** — distraction-free page; each word stays for 10 s, then crumbles into sand/smoke particles from its exact position. Nothing is saved | `monkMode` | New **Monk mode** page | canvas particles (lighter than `react-tsparticles`) |
+| ✅ | **Energy flow (Sankey)** — this week's hours (sleep, deep work, habits, journaling, logged leisure…) flow into RPG stats EXP and burnout | `energySankey` | New **Energy flow** page | `@nivo/sankey` |
+| ✅ | **Voice memos** — record with a live level meter, scrub the waveform, transcribe on-device (Whisper tiny.en in a worker), extract bullets, habit ideas and mood tags, send to the Daybook | `voiceMemos` | New **Voice memos** page | `wavesurfer.js`, `@xenova/transformers`, Dexie |
+| ✅ | **Correlations lab & export** — Pearson matrix heatmap across daily metrics, scatter with regression line, PDF book, zip backup of everything | `insightsLab` | New **Correlations** page | `simple-statistics`, `@react-pdf/renderer`, `jszip` |
+| ✅ | **Smart search** — hybrid keyword (MiniSearch) + meaning scores, instant keyword results without the model, auto-tags, related pages | `smartSearch` | Daybook search, palette | `minisearch`, Transformers.js |
+| ✅ | **Omnibox commands** — `>` commands with arguments: log habit, add task, log water/meal, set theme, go to | `omnibox` | Ctrl K palette | `cmdk` |
+
+Findings:
+- 🔁 `react-tsparticles` was replaced by a small canvas particle system: each word's glyph pixels are sampled into grains at its exact screen position, so the text itself crumbles (tsparticles can only emit shapes).
+- 🔁 Semantic search already existed (Transformers.js + Dexie); Round 10 adds MiniSearch keyword results that work before the model loads, hybrid ranking, embedding-based auto-tags and a theme cloud.
+- 🔁 Voice memos are stored in Dexie (`voice_memos`, schema v4); Whisper tiny.en (~40 MB) downloads only when you first press Transcribe.
+- 🐛 Fixed: GSAP entrance tweens killed mid-flight by React strict mode left bars/cells at scale 0; cleanups now finish (`progress(1)`) before killing.
+- 🐛 Sub-features default on, so "linger 20 s" was inverted to "Crumble after 10 s".
+- New Daybook mode "Voice note" (21 modes total).

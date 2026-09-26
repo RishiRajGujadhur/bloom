@@ -32,7 +32,20 @@ export interface JournalAttachment {
   blob: Blob
 }
 
+export interface VoiceMemo {
+  id: string
+  createdAt: number
+  duration: number
+  mimeType: string
+  blob: Blob
+  title: string
+  transcript?: string
+  /** Whisper chunks with [start, end] seconds, linked to waveform playback. */
+  chunks?: { text: string; start: number; end: number | null }[]
+}
+
 class JournalDatabase extends Dexie {
+  voice_memos!: Table<VoiceMemo, string>
   entries!: Table<SearchEntry, string>
   vision_board_nodes!: Table<BoardNode, string>
   journal_attachments!: Table<JournalAttachment, string>
@@ -48,6 +61,12 @@ class JournalDatabase extends Dexie {
       entries: 'id, timestamp, category',
       vision_board_nodes: 'id, type',
       journal_attachments: 'id, sessionId, kind, createdAt',
+    })
+    this.version(4).stores({
+      entries: 'id, timestamp, category',
+      vision_board_nodes: 'id, type',
+      journal_attachments: 'id, sessionId, kind, createdAt',
+      voice_memos: 'id, createdAt',
     })
   }
 }

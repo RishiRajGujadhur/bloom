@@ -8,6 +8,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
+import { Apple as AppleIcon, Feather as FeatherIcon, Zap as ZapIcon, Mic as MicIcon, FlaskConical as FlaskConicalIcon, ScanSearch as ScanSearchIcon, SquareTerminal as SquareTerminalIcon } from 'lucide-react'
 import {
   CalendarDays,
   CarFront,
@@ -90,6 +91,13 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   impactTasks: Hammer,
   epiphanies: Lightbulb,
   dailyFlow: Workflow,
+  dietTracker: AppleIcon,
+  monkMode: FeatherIcon,
+  energySankey: ZapIcon,
+  voiceMemos: MicIcon,
+  insightsLab: FlaskConicalIcon,
+  smartSearch: ScanSearchIcon,
+  omnibox: SquareTerminalIcon,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -135,6 +143,13 @@ export interface FeatureFlags {
   impactTasks: boolean
   epiphanies: boolean
   dailyFlow: boolean
+  dietTracker: boolean
+  monkMode: boolean
+  energySankey: boolean
+  voiceMemos: boolean
+  insightsLab: boolean
+  smartSearch: boolean
+  omnibox: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -189,6 +204,13 @@ export const defaultSettings: AppSettings = {
     impactTasks: true,
     epiphanies: true,
     dailyFlow: true,
+    dietTracker: true,
+    monkMode: true,
+    energySankey: true,
+    voiceMemos: true,
+    insightsLab: true,
+    smartSearch: true,
+    omnibox: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -235,6 +257,13 @@ const featureKeys = [
   'impactTasks',
   'epiphanies',
   'dailyFlow',
+  'dietTracker',
+  'monkMode',
+  'energySankey',
+  'voiceMemos',
+  'insightsLab',
+  'smartSearch',
+  'omnibox',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

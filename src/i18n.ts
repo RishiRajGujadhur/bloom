@@ -281,6 +281,34 @@ const common = {
         title: 'Destructible tasks',
         description: 'Heavy tasks fall, bounce and shatter for bonus EXP.',
       },
+      dietTracker: {
+        title: 'Diet tracker',
+        description: 'Meals, macros, water and mindful eating.',
+      },
+      monkMode: {
+        title: 'Monk mode',
+        description: 'Write it out, watch it crumble to sand. Nothing is saved.',
+      },
+      energySankey: {
+        title: 'Energy flow',
+        description: 'A Sankey diagram of where your hours and energy went.',
+      },
+      voiceMemos: {
+        title: 'Voice memos',
+        description: 'Record, transcribe on-device and extract key points.',
+      },
+      insightsLab: {
+        title: 'Correlations lab',
+        description: 'Statistics across your habits, sleep, mood and diet, plus exports.',
+      },
+      smartSearch: {
+        title: 'Smart search',
+        description: 'Hybrid keyword and meaning search, auto-tags, related pages.',
+      },
+      omnibox: {
+        title: 'Omnibox commands',
+        description: 'Type > in Ctrl K to log habits, meals, water, mood or change theme.',
+      },
       epiphanies: {
         title: 'Epiphanies',
         description: 'Spaced repetition brings your insights back before you forget them.',
@@ -566,6 +594,10 @@ const common = {
           'What would you miss?',
           'How can you meet this moment fully?',
         ],
+      },
+      'voice-note': {
+        title: 'Voice note',
+        description: 'A transcribed voice memo with key points and ideas.',
       },
       'dream-journal': {
         title: 'Dream Journal',
@@ -1177,6 +1209,34 @@ export const resources = {
             title: 'Tâches destructibles',
             description: 'Les tâches lourdes tombent, rebondissent et éclatent pour de l’EXP bonus.',
           },
+          dietTracker: {
+            title: 'Suivi alimentaire',
+            description: 'Repas, macros, eau et alimentation consciente.',
+          },
+          monkMode: {
+            title: 'Mode moine',
+            description: 'Écrivez, regardez les mots s’effriter en sable. Rien n’est enregistré.',
+          },
+          energySankey: {
+            title: 'Flux d’énergie',
+            description: 'Un diagramme de Sankey de vos heures et de votre énergie.',
+          },
+          voiceMemos: {
+            title: 'Mémos vocaux',
+            description: 'Enregistrez, transcrivez sur l’appareil et extrayez l’essentiel.',
+          },
+          insightsLab: {
+            title: 'Labo des corrélations',
+            description: 'Statistiques entre habitudes, sommeil, humeur et alimentation, plus exports.',
+          },
+          smartSearch: {
+            title: 'Recherche intelligente',
+            description: 'Recherche hybride mots et sens, étiquettes automatiques, pages liées.',
+          },
+          omnibox: {
+            title: 'Commandes Omnibox',
+            description: 'Tapez > dans Ctrl K pour noter habitudes, repas, eau, humeur ou thème.',
+          },
           epiphanies: {
             title: 'Épiphanies',
             description: 'La répétition espacée ramène vos idées avant que vous ne les oubliiez.',
@@ -1468,6 +1528,10 @@ export const resources = {
               'Que regretteriez-vous ?',
               'Comment accueillir pleinement ce moment ?',
             ],
+          },
+          'voice-note': {
+            title: 'Note vocale',
+            description: 'Un mémo vocal transcrit avec points clés et idées.',
           },
           'dream-journal': {
             title: 'Journal de rêves',
