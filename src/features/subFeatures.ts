@@ -740,6 +740,11 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'curve', title: 'Forgetting curve', description: 'See how recall fades until the next review.' },
     { id: 'extract', title: 'Extract from Daybook', description: 'Save a highlighted sentence as an epiphany.' },
     { id: 'capsule', title: 'In the Time capsule', description: 'Epiphanies can resurface as memories.' },
+    { id: 'swipeReview', title: 'Swipe review', description: 'Right if you remembered, left if you forgot.' },
+    { id: 'bulbGlow', title: 'Glowing bulb', description: 'The bulb brightens as you remember more.' },
+    { id: 'moodLift', title: 'Mood lift', description: 'Low days show uplifting insights first.' },
+    { id: 'dailyPick', title: 'Insight of the day', description: 'One epiphany pinned each day.' },
+    { id: 'reviewStreak', title: 'Review streak', description: 'Days in a row you reviewed.' },
   ],
   dailyFlow: [
     { id: 'morning', title: 'Morning setup', description: 'Insight, check-in, intention, habit, focus.' },

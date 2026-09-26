@@ -292,3 +292,19 @@
   border-radius: 14px;
   background: linear-gradient(#e8f6fb, #fff0);
 }
+
+.epi-quick-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.epi-bulb {
+  flex: 0 0 64px;
+  width: 64px;
+}
+
+.epi-pick {
+  margin: 0 0 4px;
+  font-style: italic;
+}

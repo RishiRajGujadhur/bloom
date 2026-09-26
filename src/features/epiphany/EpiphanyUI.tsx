@@ -5,6 +5,7 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { createEpiphany, dueToday, grades, retention, review, type Epiphany } from './epiphanyModel'
 import { addEpiphany, useEpiphanies } from './epiphanyStore'
+import { EpiphaniesQuick } from '../quick/EpiphaniesQuick'
 import './epiphany.css'
 
 /** The forgetting curve for an insight, drawn on with GSAP. */
@@ -157,6 +158,7 @@ export function EpiphaniesPage({ today }: { today: string }) {
   const sorted = [...list].sort((a, b) => a.due.localeCompare(b.due))
   return (
     <section className="epiphanies-page" aria-label="Epiphanies">
+      <EpiphaniesQuick today={today} />
       <form
         className="epiphany-add"
         onSubmit={(e) => {
