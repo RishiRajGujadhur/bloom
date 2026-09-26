@@ -6,7 +6,13 @@ import { SETTINGS_STORAGE_KEY } from '../settingsKey'
  * stored as `sub["feature.option"]`; a missing entry means "on", so new
  * options appear enabled without migrating anyone's saved settings.
  */
-export type SubFeature = { id: string; title: string; description: string }
+export type SubFeature = {
+  id: string
+  title: string
+  description: string
+  /** Works even when its feature's main switch is off (shown as such in Settings). */
+  independent?: boolean
+}
 
 export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
   dailySpin: [
@@ -120,7 +126,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'stretch', title: 'Gentle stretch', description: 'Aim 10% above your pace (off = match it).' },
     { id: 'badge', title: '“Adapted” badge', description: 'Label goals that changed.' },
     { id: 'longHistory', title: 'Six-week memory', description: 'Use 6 weeks of history instead of 3.' },
-    { id: 'extraGoals', title: 'Extra goals', description: 'Tasks, intentions, routines, sessions, active days.' },
+    { id: 'extraGoals', title: 'Extra goals', description: 'Tasks, intentions, routines, sessions, active days.', independent: true },
     { id: 'floor', title: 'Keep a floor', description: 'Never go below half the default target.' },
   ],
   celebrations: [
@@ -159,10 +165,6 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'nightSky', title: 'Day and night', description: 'The window follows the time of day.' },
     { id: 'notes', title: 'Music notes', description: 'Floating notes while working.' },
     { id: 'progress', title: 'Progress bar', description: 'Session progress along the floor.' },
-    { id: 'moodLength', title: 'Focus: mood-sized sessions', description: 'Pick your energy; the session length follows.' },
-    { id: 'taskSwipe', title: 'Focus: swipe a task', description: 'Swipe right on the task to focus on.' },
-    { id: 'growScenes', title: 'Focus: grow scenes', description: 'Tree, flower bed, city, treasure, reef or space station.' },
-    { id: 'sceneScale', title: 'Focus: scenes that scale', description: 'Each session today makes the next scene bigger.' },
   ],
   timeCapsule: [
     { id: 'onThisDay', title: 'On this day', description: 'Entries from a week, month or year ago.' },
@@ -306,11 +308,11 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'nativeNames', title: 'Native names', description: '“Français” instead of “French”.' },
   ],
   walkthroughTour: [
-    { id: 'wizard', title: 'Pixel wizard narrator', description: 'The wizard in guide pop-ups.' },
-    { id: 'reveal', title: 'Animated text', description: 'Words reveal one by one.' },
+    { id: 'wizard', title: 'Pixel wizard narrator', description: 'The wizard in guide pop-ups.', independent: true },
+    { id: 'reveal', title: 'Animated text', description: 'Words reveal one by one.', independent: true },
     { id: 'progress', title: 'Step progress', description: '“2 / 5” in guides.' },
     { id: 'back', title: 'Back button', description: 'Go to the previous step.' },
-    { id: 'dim', title: 'Dim the page', description: 'Darken everything but the highlight.' },
+    { id: 'dim', title: 'Dim the page', description: 'Darken everything but the highlight.', independent: true },
   ],
   timeSince: [
     { id: 'splitFlap', title: 'Split-flap digits', description: 'Train-station flip animation.' },
@@ -341,10 +343,6 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'shake', title: 'Screen shake', description: 'A little rumble when it shatters.' },
     { id: 'hint', title: 'How-to hint', description: '“Grab it and throw it…”' },
     { id: 'heavyOnly', title: 'Heavy tasks only', description: 'Off: every completed task falls.' },
-    { id: 'naturalAdd', title: 'To-dos: natural quick-add', description: 'Type dates, !priority and #tags in plain words.' },
-    { id: 'moodMatch', title: 'To-dos: energy match', description: 'Pick a mood, get tasks that fit it.' },
-    { id: 'triage', title: 'To-dos: swipe triage', description: 'Swipe overdue tasks to today or later.' },
-    { id: 'somedayOnNo', title: 'To-dos: someday list', description: 'Old tasks swiped left go to #someday.' },
   ],
   dietTracker: [
     { id: 'macros', title: 'Macros', description: 'Protein, carbs and fat alongside calories.' },
@@ -794,7 +792,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'evening', title: 'Evening wind-down', description: 'Gratitude, reflection, breath, tomorrow, sleep.' },
     { id: 'autoSwitch', title: 'Follow the clock', description: 'Show morning or evening by time of day.' },
     { id: 'ring', title: 'Progress ring', description: 'Animated ring for the routine.' },
-    { id: 'suggestions', title: 'Next-step nudges', description: 'Suggestions that link features after you act.' },
+    { id: 'suggestions', title: 'Next-step nudges', description: 'Suggestions that link features after you act.', independent: true },
   ],
   postureGuard: [
     { id: 'warnings', title: 'Slouch warnings', description: 'A warning after 5 minutes of slouching.' },
@@ -829,6 +827,37 @@ function read() {
 /** True unless the user switched this option (or its parent feature) off. */
 export function subOn(feature: keyof FeatureFlags, id: string, options?: { ignoreParent?: boolean }) {
   const { sub, features } = read()
-  if (!options?.ignoreParent && features[feature] === false) return false
+  const independent = options?.ignoreParent || subFeatures[feature]?.some((o) => o.id === id && o.independent)
+  if (!independent && features[feature] === false) return false
   return sub[`${feature}.${id}`] !== false
+}
+
+/**
+ * Options for everyday pages that are always on (they have no main switch).
+ * Stored as `sub["page.<page>.<option>"]`, missing = on.
+ */
+export const pageOptions: Record<string, { title: string; emoji: string; options: SubFeature[] }> = {
+  todos: {
+    title: 'To-dos',
+    emoji: '✅',
+    options: [
+      { id: 'naturalAdd', title: 'Natural quick-add', description: 'Type dates, !priority and #tags in plain words.' },
+      { id: 'moodMatch', title: 'Energy match', description: 'Pick a mood, get tasks that fit it.' },
+      { id: 'triage', title: 'Swipe triage', description: 'Swipe overdue tasks to today or later.' },
+      { id: 'somedayOnNo', title: 'Someday list', description: 'Old tasks swiped left go to #someday.' },
+    ],
+  },
+  focus: {
+    title: 'Focus timer',
+    emoji: '⏱️',
+    options: [
+      { id: 'moodLength', title: 'Mood-sized sessions', description: 'Pick your energy; the session length follows.' },
+      { id: 'taskSwipe', title: 'Swipe a task', description: 'Swipe right on the task to focus on.' },
+      { id: 'growScenes', title: 'Grow scenes', description: 'Tree, flower bed, city, treasure, reef or space station.' },
+      { id: 'sceneScale', title: 'Scenes that scale', description: 'Each session today makes the next scene bigger.' },
+    ],
+  },
+}
+export function pageOn(page: keyof typeof pageOptions, id: string) {
+  return read().sub[`page.${page}.${id}`] !== false
 }

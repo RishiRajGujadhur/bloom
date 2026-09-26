@@ -5,10 +5,9 @@ import { dayKey, id, type AppData } from '../../model'
 import { SwipeDeck } from '../../components/ui/SwipeDeck'
 import { MoodGuide } from '../../components/ui/MoodGuide'
 import { QuickPanel, lastMood, logMood } from '../../components/ui/QuickPanel'
-import { subOn } from '../subFeatures'
+import { pageOn } from '../subFeatures'
 
-/** To-do options live with the To-dos page's own impact feature in Settings. */
-const on = (opt: string) => subOn('impactTasks', opt, { ignoreParent: true })
+const on = (opt: string) => pageOn('todos', opt)
 type P = 'P1' | 'P2' | 'P3' | 'P4'
 
 /** Which priorities suit a mood: high energy → hard things, low → easy wins. */

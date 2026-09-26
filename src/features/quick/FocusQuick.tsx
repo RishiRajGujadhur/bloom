@@ -4,10 +4,10 @@ import { MoodGuide } from '../../components/ui/MoodGuide'
 import { QuickPanel, lastMood, logMood } from '../../components/ui/QuickPanel'
 import { writeStore } from '../../components/studio/Studio'
 import type { AppData } from '../../model'
-import { subOn } from '../subFeatures'
+import { pageOn } from '../subFeatures'
 import { scenes, type SceneId } from './GrowScene'
 
-export const focusOn = (id: string) => subOn('focusRoom', id, { ignoreParent: true })
+export const focusOn = (id: string) => pageOn('focus', id)
 export const SCENE_KEY = 'bloom-focus-scene-v1'
 
 /** Session length that suits a mood. */

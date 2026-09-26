@@ -507,3 +507,31 @@ html[data-mode='dark'] .importInput {
 .featureRail > * {
   scroll-snap-align: start;
 }
+.optionActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+.optionActions button {
+  padding: 3px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.optionActions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.optionNote {
+  margin: 0 0 8px;
+  color: var(--text-muted, #777);
+  font-size: 12px;
+}
+.subOptions li[data-hit] .subOption {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+}

@@ -7,7 +7,7 @@ import { ThemePicker } from './components/settings/ThemePicker'
 import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
-import { subFeatures } from './features/subFeatures'
+import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
 import { Swords as SwordsF_dojo } from 'lucide-react'
@@ -498,6 +498,82 @@ interface SettingsPageProps {
   setTheme: Dispatch<SetStateAction<ThemeSettings>>
 }
 
+const matches = (text: string, query: string) => text.toLowerCase().includes(query.trim().toLowerCase())
+
+/**
+ * One consistent options list for every feature and page: the same switch,
+ * the same bulk actions, and options that keep working when the feature is off
+ * are labelled instead of greyed out.
+ */
+function OptionList({
+  prefix,
+  options,
+  parentOn,
+  parentTitle,
+  query,
+  sub,
+  setSub,
+}: {
+  prefix: string
+  options: SubFeature[]
+  parentOn: boolean
+  parentTitle: string
+  query: string
+  sub: Record<string, boolean>
+  setSub: (sub: Record<string, boolean>) => void
+}) {
+  const hit = query.trim() ? options.filter((o) => matches(o.title, query)) : []
+  const onCount = options.filter((o) => sub[`${prefix}.${o.id}`] !== false).length
+  const setAll = (value: boolean | null) =>
+    setSub({
+      ...Object.fromEntries(Object.entries(sub).filter(([k]) => !k.startsWith(`${prefix}.`))),
+      ...(value === null ? {} : Object.fromEntries(options.map((o) => [`${prefix}.${o.id}`, value]))),
+    })
+  return (
+    <details className={styles.subOptions} open={hit.length > 0 || undefined}>
+      <summary>
+        {options.length} options · {onCount} on
+      </summary>
+      <div className={styles.optionActions}>
+        <button type="button" onClick={() => setAll(true)} disabled={onCount === options.length}>All on</button>
+        <button type="button" onClick={() => setAll(false)} disabled={onCount === 0}>All off</button>
+        <button type="button" onClick={() => setAll(null)}>Reset</button>
+      </div>
+      {!parentOn && <p className={styles.optionNote}>{parentTitle} is off — its options wait until you turn it back on.</p>}
+      <ul>
+        {options.map((option) => {
+          const id = `${prefix}.${option.id}`
+          const on = sub[id] !== false
+          const live = parentOn || !!option.independent
+          return (
+            <li key={option.id} data-hit={hit.includes(option) || undefined}>
+              <label className={styles.subOption}>
+                <span>
+                  <strong>{option.title}</strong>
+                  <small>
+                    {option.description}
+                    {option.independent && !parentOn ? ' Works even with the feature off.' : ''}
+                  </small>
+                </span>
+                <span className={styles.switch} data-size="small">
+                  <input
+                    type="checkbox"
+                    checked={on && live}
+                    disabled={!live}
+                    onChange={() => setSub({ ...sub, [id]: !on })}
+                    aria-label={`${option.title} (${parentTitle})`}
+                  />
+                  <span className={styles.slider} aria-hidden="true" />
+                </span>
+              </label>
+            </li>
+          )
+        })}
+      </ul>
+    </details>
+  )
+}
+
 export function SettingsPage({
   settings,
   setSettings,
@@ -614,7 +690,9 @@ export function SettingsPage({
         </div>
         {categories.map((category) => {
           const keys = featureKeys.filter(
-            (key) => featureCategory[key] === category.id && (!query.trim() || titleOf(key).toLowerCase().includes(query.trim().toLowerCase())),
+            (key) =>
+              featureCategory[key] === category.id &&
+              (!query.trim() || matches(titleOf(key), query) || subFeatures[key].some((o) => matches(o.title, query))),
           )
           if (!keys.length) return null
           const onCount = keys.filter((k) => settings.features[k]).length
@@ -673,42 +751,15 @@ export function SettingsPage({
                 </span>
               </label>
               {options.length > 0 && (
-                <details className={styles.subOptions}>
-                  <summary>
-                    {options.length} options
-                  </summary>
-                  <ul>
-                    {options.map((option) => {
-                      const id = `${key}.${option.id}`
-                      const on = settings.sub?.[id] !== false
-                      return (
-                        <li key={option.id}>
-                          <label className={styles.subOption}>
-                            <span>
-                              <strong>{option.title}</strong>
-                              <small>{option.description}</small>
-                            </span>
-                            <span className={styles.switch} data-size="small">
-                              <input
-                                type="checkbox"
-                                checked={on && settings.features[key]}
-                                disabled={!settings.features[key]}
-                                onChange={() =>
-                                  setSettings((current) => ({
-                                    ...current,
-                                    sub: { ...current.sub, [id]: !on },
-                                  }))
-                                }
-                                aria-label={`${option.title} (${title})`}
-                              />
-                              <span className={styles.slider} aria-hidden="true" />
-                            </span>
-                          </label>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </details>
+                <OptionList
+                  prefix={key}
+                  options={options}
+                  parentOn={settings.features[key]}
+                  parentTitle={title}
+                  query={query}
+                  sub={settings.sub ?? {}}
+                  setSub={(sub) => setSettings((c) => ({ ...c, sub }))}
+                />
               )}
               </div>
             )
@@ -717,6 +768,39 @@ export function SettingsPage({
             </section>
           )
         })}
+        {Object.entries(pageOptions).some(([, p]) => !query.trim() || matches(p.title, query) || p.options.some((o) => matches(o.title, query))) && (
+          <section className={styles.category} aria-label="Everyday pages">
+            <header className={styles.categoryHead}>
+              <h3>
+                <span aria-hidden="true">📌</span> Everyday pages <small>always on</small>
+              </h3>
+            </header>
+            <div className={styles.featureRail}>
+              {Object.entries(pageOptions)
+                .filter(([, p]) => !query.trim() || matches(p.title, query) || p.options.some((o) => matches(o.title, query)))
+                .map(([page, p]) => (
+                  <div className={styles.featureCard} key={page} data-on>
+                    <div className={styles.feature} data-on>
+                      <span className={styles.featureIcon} aria-hidden="true">{p.emoji}</span>
+                      <span className={styles.featureCopy}>
+                        <strong>{p.title}</strong>
+                        <span>Always available; choose its extras.</span>
+                      </span>
+                    </div>
+                    <OptionList
+                      prefix={`page.${page}`}
+                      options={p.options}
+                      parentOn
+                      parentTitle={p.title}
+                      query={query}
+                      sub={settings.sub ?? {}}
+                      setSub={(sub) => setSettings((c) => ({ ...c, sub }))}
+                    />
+                  </div>
+                ))}
+            </div>
+          </section>
+        )}
       </section>
 
       <section
