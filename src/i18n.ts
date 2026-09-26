@@ -349,6 +349,10 @@ const common = {
         title: "Stretch & mobility",
         description: "Guided stretches with circle timers, a body map and desk-break reminders.",
       },
+      runTracker: {
+        title: "Run & walk",
+        description: "GPS tracking on a live map with splits, pace, bests and a weekly goal.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1320,6 +1324,10 @@ export const resources = {
           mobility: {
             title: "Étirements & mobilité",
             description: "Étirements guidés, minuteurs circulaires, carte du corps et pauses bureau.",
+          },
+          runTracker: {
+            title: "Course & marche",
+            description: "Suivi GPS sur carte avec temps intermédiaires, allure, records et objectif.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

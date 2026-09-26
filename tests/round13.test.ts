@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { bests, demoRoute, distanceKm, fmtPace, pace, pointAt, splits, weekKm } from '../src/features/run/runModel'
 import { forAreas, routines as stRoutines, steps as stSteps, totalSeconds as stTotal } from '../src/features/stretch/stretchModel'
 import { isDue } from '../src/components/studio/Nudges'
 import { flowSeconds, newStep, poses, presetFlows, stepAt } from '../src/features/yoga/yogaModel'
@@ -20,7 +21,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -100,4 +101,21 @@ test('stretch: sides expand, areas map to stretches; nudges respect quiet hours'
   expect(isDue({ ...base, lastAt: noon - 10 * 60000 }, noon)).toBe(false)
   expect(isDue({ ...base, quietStart: 21, quietEnd: 7 }, night)).toBe(false)
   expect(isDue({ ...base, quietStart: 21, quietEnd: 7 }, noon)).toBe(true)
+})
+
+test('run: turf distance, splits, pace, replay point and bests', () => {
+  const route = demoRoute(undefined, 3, 0)
+  const km = distanceKm(route)
+  expect(km).toBeGreaterThan(2.7)
+  expect(km).toBeLessThan(3.6)
+  const sp = splits(route)
+  expect(sp).toHaveLength(Math.floor(km))
+  for (const s of sp) expect(s).toBeGreaterThan(200)
+  expect(splits(route, 'mi')).toHaveLength(Math.floor(km / 1.609344))
+  expect(fmtPace(pace(5, 1500))).toBe(`5'00"`)
+  expect(pace(1.609344, 480, 'mi')).toBeCloseTo(480)
+  expect(pointAt(route, 0)?.lat).toBeCloseTo(route[0].lat, 5)
+  const runs = [{ id: 'a', at: Date.now(), kind: 'run' as const, km, seconds: 1000, points: route }]
+  expect(bests(runs).longest?.id).toBe('a')
+  expect(weekKm(runs)).toBeCloseTo(km)
 })

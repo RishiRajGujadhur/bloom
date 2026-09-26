@@ -443,6 +443,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "stiffness", title: "Stiffness check-in", description: "Before and after, zero to ten." },
     { id: "history", title: "History", description: "Sessions and how much you loosened." },
   ],
+  runTracker: [
+    { id: "gps", title: "GPS tracking", description: "Record your route live." },
+    { id: "map", title: "Live map", description: "Your route drawn as you move." },
+    { id: "splits", title: "Splits", description: "Time for every kilometre or mile." },
+    { id: "paceChart", title: "Pace chart", description: "Bars for each split; fastest glows." },
+    { id: "manual", title: "Manual entry", description: "Log with sliders when you had no phone." },
+    { id: "bests", title: "Personal bests", description: "Longest, fastest pace, fastest split." },
+    { id: "units", title: "Kilometres or miles", description: "Pick your units." },
+    { id: "voiceSplits", title: "Voice splits", description: "Hear each split as you pass it." },
+    { id: "replay", title: "Route replay", description: "Watch a past route redraw on the map." },
+    { id: "weeklyGoal", title: "Weekly goal", description: "A ring for this week’s distance." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

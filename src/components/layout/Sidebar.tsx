@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Footprints as FootprintsF_runTracker } from 'lucide-react'
 import { PersonStanding as PersonStandingF_mobility } from 'lucide-react'
 import { Flower2 as Flower2F_yogaFlow } from 'lucide-react'
 import { TimerReset as TimerResetF_intervalCoach } from 'lucide-react'
@@ -86,6 +87,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'run'
   | 'stretch'
   | 'yoga'
   | 'intervals'
@@ -106,7 +108,7 @@ const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi'] },
-  { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch'] },
+  { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
 ]
 
@@ -337,6 +339,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'run', title: "Run & walk", Icon: FootprintsF_runTracker, requires: 'runTracker' },
     { key: 'stretch', title: "Stretch", Icon: PersonStandingF_mobility, requires: 'mobility' },
     { key: 'yoga', title: "Yoga", Icon: Flower2F_yogaFlow, requires: 'yogaFlow' },
     { key: 'intervals', title: "Intervals", Icon: TimerResetF_intervalCoach, requires: 'intervalCoach' },

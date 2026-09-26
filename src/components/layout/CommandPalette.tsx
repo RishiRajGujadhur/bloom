@@ -59,6 +59,7 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   energy: 'energySankey',
   lab: 'insightsLab',
   taichi: 'wuXing',
+  'run': 'runTracker',
   'stretch': 'mobility',
   'yoga': 'yogaFlow',
   'intervals': 'intervalCoach',
