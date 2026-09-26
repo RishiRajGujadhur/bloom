@@ -1,3 +1,4 @@
+import { LifeSettings } from './features/life/LifeSettings'
 import { Disclosure } from './components/BloomExperience'
 import { useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
@@ -85,6 +86,7 @@ import {
 import type { LucideIcon } from 'lucide-react'
 
 const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
+  lifeTools: Sprout,
   dailySpin: Dices,
   collectibles: CarFront,
   fullCalendar: CalendarDays,
@@ -168,6 +170,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
 }
 
 export interface FeatureFlags {
+  lifeTools: boolean
   dailySpin: boolean
   collectibles: boolean
   fullCalendar: boolean
@@ -260,6 +263,7 @@ export { SETTINGS_STORAGE_KEY }
 
 export const defaultSettings: AppSettings = {
   features: {
+    lifeTools: true,
     dailySpin: false,
     collectibles: false,
     fullCalendar: true,
@@ -344,6 +348,7 @@ export const defaultSettings: AppSettings = {
 }
 
 export const featureKeys = [
+  'lifeTools',
   'dailySpin',
   'collectibles',
   'fullCalendar',
@@ -553,7 +558,7 @@ export function SettingsPage({
   const [query, setQuery] = useState('')
   const current = matchPreset(settings.features, featureKeys, defaultSettings.features)
   const titleOf = (key: (typeof featureKeys)[number]) =>
-    key === 'dailySpin'
+    key === 'lifeTools' ? 'Life tools' : key === 'dailySpin'
       ? 'Daily 7-7-7 Spin'
       : key === 'collectibles'
         ? 'My Collectibles'
@@ -568,6 +573,7 @@ export function SettingsPage({
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
 
+      <LifeSettings />
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>
           <h2 id="features-heading" className={styles.sectionTitle}>

@@ -138,6 +138,7 @@ export function Disclosure({
 }
 
 const captions: Record<NavKey, string> = {
+  life: 'Make room for what matters.',
   overview: 'Small steps create a brighter tomorrow.',
   habits: 'Small rituals, lasting roots.',
   focus: 'One thing at a time. Give it room.',
@@ -298,3 +299,4 @@ export function BloomHeading({
     </div>
   )
 }
+

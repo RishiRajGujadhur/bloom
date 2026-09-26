@@ -9,6 +9,7 @@ import { SETTINGS_STORAGE_KEY } from '../settingsKey'
 export type SubFeature = { id: string; title: string; description: string }
 
 export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
+  lifeTools: [],
   dailySpin: [
     { id: 'dashboard', title: 'Show on dashboard', description: 'The spin card appears on Today.' },
     { id: 'jackpotFountain', title: 'Jackpot fountain', description: 'Gold burst when a car is won.' },

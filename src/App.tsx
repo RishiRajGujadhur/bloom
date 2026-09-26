@@ -1,3 +1,4 @@
+const LifePage = lazy(() => import('./features/life/LifePage').then(m => ({ default: m.LifePage })))
 import { subOn } from './features/subFeatures'
 import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
@@ -661,6 +662,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'life' && !settings.features.lifeTools) ||
             (active === 'affirm' && !settings.features.affirmations) ||
             (active === 'daylight' && !settings.features.daylight) ||
             (active === 'eyes' && !settings.features.eyeCare) ||
@@ -701,6 +703,8 @@ function App() {
                   Open settings
                 </button>
               </section>
+            ) : active === 'life' ? (
+              <Suspense fallback={<p role="status">Loading life tools…</p>}><LifePage data={data} setData={setData} today={today} onNavigate={jump} /></Suspense>
             ) : active === 'breathe' ? (
               <Suspense fallback={null}>
                 <BreathePage />

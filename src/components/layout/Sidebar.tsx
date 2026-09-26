@@ -71,6 +71,7 @@ import sidebarPlant from '../../assets/bloom/sidebar-plant.webp'
 
 /** Destinations the app knows how to reach; `settings` swaps the page. */
 export type NavKey =
+  | 'life'
   | 'collectibles'
   | 'calendar'
   | 'todos'
@@ -143,7 +144,7 @@ interface SidebarProps {
 
 /** Sidebar sections, in display order. Unlisted keys (settings) come last. */
 const navSections: { label: string; keys: NavKey[] }[] = [
-  { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
+  { label: 'Today', keys: ['life', 'overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight'] },
@@ -294,6 +295,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     /** Feature that must be on for this destination to be reachable. */
     requires?: keyof FeatureFlags
   }[] = [
+    { key: 'life', title: 'Life tools', Icon: LayoutDashboard, requires: 'lifeTools' },
     {
       key: 'overview',
       title: t('navigation.dashboard'),
