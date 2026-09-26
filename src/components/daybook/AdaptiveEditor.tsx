@@ -21,6 +21,8 @@ import { loadSettings } from '../../SettingsPage'
 import { ThoughtDiffPanel } from './ThoughtDiff'
 import { ExtractEpiphany } from '../../features/epiphany/EpiphanyUI'
 import { RelatedPages } from './RelatedPages'
+import { JournalAssist } from './JournalAssist'
+import { InkFlourish } from './InkFlourish'
 import { FlowMountain, useKeystrokeFlow } from '../../features/flow/FlowMountain'
 
 /** Pages about fears and shadows offer the Burn & release ritual. */
@@ -325,6 +327,7 @@ export function AdaptiveEditor({
       <header className="daybook-editor-header">
         <div className="daybook-title">
           <h2>{mode.title}</h2>
+          {subOn('daybookModes', 'flourish') && <InkFlourish seed={[...mode.id].reduce((a, c) => a + c.charCodeAt(0), 0)} />}
           <p>{mode.description}</p>
           <div className="daybook-meta" aria-live="polite">
             <span>
@@ -493,6 +496,7 @@ export function AdaptiveEditor({
           <FlowMountain fp={flow.current} />
         </div>
       )}
+      <JournalAssist modeId={mode.id} text={journalText(content)} />
       {loadSettings().features.smartSearch && subOn('smartSearch', 'related') && (
         <RelatedPages text={journalText(content)} excludeId={entry?.id} />
       )}

@@ -719,6 +719,36 @@ const common = {
           'How can you meet this moment fully?',
         ],
       },
+      'boundary-setting': {
+        title: "Boundary setting",
+        description: "Name what you need and practise saying it kindly.",
+        prompts: ["What happened, in plain facts?", "What do I need or value here?", "What will I say? (one or two sentences)", "What will I do if it continues?"],
+      },
+      'connection-check-in': {
+        title: "Connection check-in",
+        description: "Tend the relationships that matter to you.",
+        prompts: ["Who is on my mind?", "What do I appreciate about them?", "When did we last really connect?", "One small gesture I can make this week"],
+      },
+      'reading-notes': {
+        title: "Reading notes",
+        description: "Turn what you read into something you keep.",
+        prompts: ["What did I read? (title, pages)", "The key idea, in my own words", "How does it connect to my life?", "Something I will try", "Recall it without looking"],
+      },
+      'clear-writing': {
+        title: "Clear writing",
+        description: "Plan a message so it lands: audience, point, action.",
+        prompts: ["Who is this for, and what do they need?", "My main point in one sentence", "The draft", "What can I cut?", "What should the reader do next?"],
+      },
+      'work-shutdown': {
+        title: "Work shutdown",
+        description: "Close the workday on purpose and leave a trail for tomorrow.",
+        prompts: ["Where did I leave off?", "What is blocking me, if anything?", "The smallest next step for tomorrow", "What can I let go of tonight?"],
+      },
+      'meeting-prep': {
+        title: "Meeting prep",
+        description: "Walk in with a purpose, walk out with decisions.",
+        prompts: ["What is this meeting for?", "Agenda (item · minutes)", "Decisions we need", "Questions I will ask", "Actions and owners afterwards"],
+      },
       'voice-note': {
         title: 'Voice note',
         description: 'A transcribed voice memo with key points and ideas.',
@@ -1776,6 +1806,36 @@ export const resources = {
               'Que regretteriez-vous ?',
               'Comment accueillir pleinement ce moment ?',
             ],
+          },
+          'boundary-setting': {
+            title: "Poser une limite",
+            description: "Nommez ce dont vous avez besoin et entraînez-vous à le dire avec douceur.",
+            prompts: ["Que s’est-il passé, factuellement ?", "De quoi ai-je besoin ici ?", "Que vais-je dire ?", "Que ferai-je si cela continue ?"],
+          },
+          'connection-check-in': {
+            title: "Lien avec les autres",
+            description: "Prenez soin des relations qui comptent.",
+            prompts: ["À qui est-ce que je pense ?", "Qu’est-ce que j’apprécie chez cette personne ?", "Quand avons-nous vraiment échangé ?", "Un petit geste cette semaine"],
+          },
+          'reading-notes': {
+            title: "Notes de lecture",
+            description: "Transformez ce que vous lisez en quelque chose qui reste.",
+            prompts: ["Qu’ai-je lu ?", "L’idée clé, avec mes mots", "Quel lien avec ma vie ?", "Ce que je vais essayer", "Me le rappeler sans regarder"],
+          },
+          'clear-writing': {
+            title: "Écrire clairement",
+            description: "Préparez un message qui porte : public, idée, action.",
+            prompts: ["Pour qui, et de quoi ont-ils besoin ?", "Mon idée en une phrase", "Le brouillon", "Que puis-je couper ?", "Que doit faire le lecteur ensuite ?"],
+          },
+          'work-shutdown': {
+            title: "Fin de journée de travail",
+            description: "Terminez la journée consciemment et laissez une piste pour demain.",
+            prompts: ["Où en suis-je resté ?", "Qu’est-ce qui me bloque ?", "La plus petite prochaine étape", "Que puis-je lâcher ce soir ?"],
+          },
+          'meeting-prep': {
+            title: "Préparer une réunion",
+            description: "Arrivez avec un objectif, repartez avec des décisions.",
+            prompts: ["À quoi sert cette réunion ?", "Ordre du jour", "Décisions à prendre", "Mes questions", "Actions et responsables"],
           },
           'voice-note': {
             title: 'Note vocale',

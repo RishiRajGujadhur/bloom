@@ -7,8 +7,14 @@ import { AudioMixerProvider } from './contexts/AudioMixerContext'
 import { AudioMixer } from './components/AudioMixer'
 import { installInteractions } from './components/ui/interactions'
 import './components/ui/interactions.css'
+import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
+try {
+  migrateLifeTools()
+} catch {
+  /* storage unavailable */
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -399,3 +399,14 @@ test('affirmations: decks, mix, favourites, daily card', () => {
   expect(dailyCard(new Date('2026-09-26'))).toBe(dailyCard(new Date('2026-09-26T20:00:00')))
   expect(deckOf('I trust myself.')?.id).toBe('confidence')
 })
+
+test('life tools migrate into Daybook pages once', async () => {
+  const { migrateLifeTools, DAYBOOK_STORAGE_KEY } = await import('../src/components/daybook/storage')
+  localStorage.setItem('bloom-life-tools-v1', JSON.stringify({ version: 1, records: [{ id: 'a', tool: 'boundaries', title: 'Work calls', values: { need: 'Quiet evenings', script: '' }, created: 0, updated: 1, done: false, next: 'Tell my manager' }] }))
+  expect(migrateLifeTools()).toBe(1)
+  const pages = JSON.parse(localStorage.getItem(DAYBOOK_STORAGE_KEY)!)
+  expect(pages[0]).toMatchObject({ modeId: 'boundary-setting', modeTitle: 'Boundary setting' })
+  expect(pages[0].content['prompt-0']).toContain('Need: Quiet evenings')
+  expect(localStorage.getItem('bloom-life-tools-v1')).toBeNull()
+  expect(migrateLifeTools()).toBe(0)
+})

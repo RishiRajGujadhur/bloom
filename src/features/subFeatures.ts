@@ -9,7 +9,6 @@ import { SETTINGS_STORAGE_KEY } from '../settingsKey'
 export type SubFeature = { id: string; title: string; description: string }
 
 export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
-  lifeTools: [],
   dailySpin: [
     { id: 'dashboard', title: 'Show on dashboard', description: 'The spin card appears on Today.' },
     { id: 'jackpotFountain', title: 'Jackpot fountain', description: 'Gold burst when a car is won.' },
@@ -176,7 +175,6 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'gratitudeChapter', title: 'Good things chapter', description: 'Offer the gratitude chapter.' },
   ],
   memoryPalace: [
-    { id: 'lociPractice', title: 'Memory routes and recall', description: 'Create familiar locations, practice recall, and schedule reviews with FSRS.' },
     { id: 'inertia', title: 'Drag and scroll', description: 'Spin the ring with momentum.' },
     { id: 'monthMarkers', title: 'Month markers', description: 'Glowing dots at each month.' },
     { id: 'moodColors', title: 'Mood colours', description: 'Colour days by mood.' },
@@ -256,6 +254,13 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'extraTools', title: 'Extra formatting', description: 'Highlight, code, quote and divider.' },
     { id: 'search', title: 'Page search', description: 'Search pages by meaning.' },
     { id: 'ambient', title: 'Breathing glow', description: 'Calm animation on reflection pages.' },
+    { id: 'lifeJournals', title: 'Life journals', description: 'Boundaries, connection, reading notes, clear writing, work shutdown and meeting prep.' },
+    { id: 'assist', title: 'Page helpers', description: 'Small tools under each page.' },
+    { id: 'wordGoal', title: 'Word goal ring', description: 'A ring that fills toward your word goal.' },
+    { id: 'readingTime', title: 'Reading time', description: 'How long the page takes to read.' },
+    { id: 'writingCoach', title: 'Clear-writing coach', description: 'Long sentences, adverbs and passive voice on Clear writing pages.' },
+    { id: 'meetingExport', title: 'Meeting to calendar', description: 'Export Meeting prep pages as a calendar event.' },
+    { id: 'flourish', title: 'Ink flourish', description: 'A hand-drawn line inks itself under each title.' },
   ],
   languageSelector: [
     { id: 'dialects', title: 'Fun dialects', description: 'Pirate and slang English.' },

@@ -12,7 +12,6 @@ export const pageDetails: Record<
   NavKey,
   { title: string; description: string }
 > = {
-  life: { title: 'Life tools', description: 'Small tools for meaningful days.' },
   collectibles: {
     title: 'My Collectibles',
     description: 'A small fleet, one lucky day at a time.',
@@ -122,7 +121,6 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
-  life: [step('.life-hero', 'Life tools', 'Choose a tool, save a step, and connect it to your day.')],
   'exercises': [
     step(".ex-library", "Pick a move", "Filter by muscle or kit, then open it."),
     step(".ex-stage", "Watch the form", "Mirror it, slow it down, follow the tempo."),

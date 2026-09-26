@@ -3,8 +3,8 @@ import { journalModes } from '../src/components/daybook/mockData'
 import { JournalLibrary } from '../src/components/daybook/JournalLibrary'
 import { AdaptiveEditor } from '../src/components/daybook/AdaptiveEditor'
 
-test('daybook contains the twenty requested modes plus Voice note across four categories', () => {
-  expect(journalModes).toHaveLength(21)
+test('daybook contains the requested modes plus Voice note and six life journals across four categories', () => {
+  expect(journalModes).toHaveLength(27)
   expect(new Set(journalModes.map(mode => mode.category)).size).toBe(4)
   expect(journalModes.map(mode => mode.title)).toEqual(expect.arrayContaining(['Morning Intentionality (The One Thing)', 'Bullet Journal (BuJo) Rapid Logging', 'Decision Matrix Journal']))
 })

@@ -49,7 +49,7 @@ test('recognition speaks to what you did, compared with past-you', () => {
   const r = recognise(prev, next, today)!
   expect(r.headline).toMatch(/postponing/)
   expect(r.meaningful).toBe(true)
-  const next2: AppData = { ...prev, todos: prev.todos.map((t) => (t.id === 'p1' ? { ...t, done: true, completedAt: Date.now() } : t)) }
+  const next2: AppData = { ...prev, todos: prev.todos.map((t) => (t.id === 'p1' ? { ...t, done: true, completedAt: new Date(`${today}T11:00`).getTime() } : t)) }
   expect(recognise(prev, next2, today)!.headline).toBe('The hardest thing on your list, done.')
   const h = defaults()
   const habit = h.habits[0]

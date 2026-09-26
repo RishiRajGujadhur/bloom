@@ -1,3 +1,5 @@
+import { subOn } from '../../features/subFeatures'
+const LIFE_JOURNALS = new Set(['boundary-setting', 'connection-check-in', 'reading-notes', 'clear-writing', 'work-shutdown', 'meeting-prep'])
 import { ArrowRight, Clock3, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +12,7 @@ export function JournalLibrary({ modes, onSelect }: { modes: JournalMode[]; onSe
   const { t } = useTranslation(undefined, { i18n })
   const [query, setQuery] = useState('')
   const filtered = useMemo(() => modes.filter(mode => {
+    if (!subOn('daybookModes', 'lifeJournals') && LIFE_JOURNALS.has(mode.id)) return false
     const category = t(`daybook.category.${mode.category}`)
     return `${mode.title} ${mode.description} ${category}`.toLowerCase().includes(query.trim().toLowerCase())
   }), [modes, query, t])

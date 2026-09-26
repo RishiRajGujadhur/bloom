@@ -326,3 +326,75 @@ html[data-mode='dark'] .thought-diff del {
   background: #5a2020;
   color: #ffc9c9;
 }
+
+/* Round 15: ink flourish + page helpers */
+.ink-flourish {
+  display: block;
+  width: min(440px, 100%);
+  height: 30px;
+  margin: 2px 0 4px;
+}
+.ja {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ja-goal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.ja-goal input {
+  width: 56px;
+  padding: 2px 4px;
+  border: 0;
+  border-bottom: 1px dashed var(--border-color);
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+.ja-ring {
+  width: 34px;
+  height: 34px;
+}
+.ja-ring-track {
+  fill: none;
+  stroke: color-mix(in oklab, var(--accent-color) 16%, transparent);
+  stroke-width: 4;
+}
+.ja-ring-arc {
+  fill: none;
+  stroke: var(--accent-color);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.ja-ring-arc[data-done='true'] {
+  stroke: #3f8a5a;
+}
+.ja-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12px;
+  animation: ja-in 400ms ease both;
+}
+.ja-btn {
+  cursor: pointer;
+  color: var(--accent-color);
+}
+@keyframes ja-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

@@ -17,7 +17,6 @@ export type CategoryId = (typeof categories)[number]['id']
 type Key = keyof FeatureFlags
 
 export const featureCategory: Record<Key, CategoryId> = {
-  lifeTools: 'today',
   bloomCore: 'today',
   affirmations: 'mind',
   daylight: 'body',
