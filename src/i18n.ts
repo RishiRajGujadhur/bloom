@@ -429,6 +429,10 @@ const common = {
         title: "Affirmation deck",
         description: "Swipeable affirmation cards with decks, favourites, your own words and a slideshow.",
       },
+      dojo: {
+        title: "Dojo",
+        description: "Martial arts training: karate, kung fu, taekwondo, boxing and Muay Thai techniques, forms, a combo caller and belts.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1510,6 +1514,10 @@ export const resources = {
           affirmations: {
             title: "Cartes d’affirmation",
             description: "Cartes à faire glisser : paquets, favoris, vos propres mots et diaporama.",
+          },
+          dojo: {
+            title: "Dojo",
+            description: "Arts martiaux : techniques de karaté, kung-fu, taekwondo, boxe et boxe thaï, formes, appel de combinaisons et ceintures.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

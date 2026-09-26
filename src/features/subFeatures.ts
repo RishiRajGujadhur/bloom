@@ -740,6 +740,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "daily", title: "Today’s card", description: "A new card each day." },
     { id: "mix", title: "Mix", description: "Shuffle every deck together." },
   ],
+  dojo: [
+    { id: "styleFilter", title: "Style filter", description: "Karate, kung fu, taekwondo, boxing, Muay Thai." },
+    { id: "seated", title: "Seated dojo", description: "Punches, blocks and strikes from a chair or wheelchair." },
+    { id: "forms", title: "Forms", description: "Kata-style sequences with the figure leading." },
+    { id: "comboCaller", title: "Combo caller", description: "Random combos called aloud in timed rounds." },
+    { id: "belts", title: "Belt progression", description: "White to black belt as you practise." },
+    { id: "beltNotation", title: "Hand-drawn belt label", description: "A rough-notation box around your belt." },
+    { id: "voice", title: "Voice coach", description: "Calls techniques and counts reps." },
+    { id: "southpaw", title: "Southpaw mirror", description: "Flip the figure for left-handed stances." },
+    { id: "bell", title: "Round bell", description: "Bell at the start and end of rounds." },
+    { id: "safety", title: "Safety notes", description: "Warm-up and stop-if-it-hurts reminders." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

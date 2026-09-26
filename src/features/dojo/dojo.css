@@ -1,0 +1,164 @@
+.dojo-lib {
+  display: grid;
+  gap: 12px;
+}
+
+.dojo-filters {
+  display: grid;
+  gap: 10px;
+}
+
+.dojo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.dojo-card {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  text-align: center;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dojo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px #c6282822;
+}
+
+.dojo-card small,
+.dojo-form small,
+.dojo-belt small {
+  color: var(--text-muted);
+}
+
+.dojo-coach {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+}
+
+.dojo-coach ul {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dojo-count {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #c62828;
+}
+
+.dojo-form {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.dojo-form h3,
+.dojo-form p {
+  margin: 0;
+}
+
+.dojo-form ol {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.85rem;
+}
+
+.dojo-belt {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  align-items: center;
+  gap: 4px 14px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border, #0001);
+}
+
+.dojo-belt svg {
+  grid-row: span 2;
+  width: 160px;
+}
+
+.dojo-belt p {
+  display: grid;
+  margin: 0;
+}
+
+.dojo-belt-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border, #0001);
+  overflow: hidden;
+}
+
+.dojo-belt-bar i {
+  display: block;
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.dojo-caller {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+}
+
+.dojo-clock {
+  display: grid;
+  padding: 12px 28px;
+  border-radius: 18px;
+  background: #c62828;
+  color: #fff;
+}
+
+.dojo-clock.rest {
+  background: #2e7d32;
+}
+
+.dojo-clock b {
+  font-size: 2.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dojo-call {
+  min-height: 3em;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+@media (max-width: 520px) {
+  .dojo-belt {
+    grid-template-columns: 1fr;
+  }
+
+  .dojo-belt svg {
+    grid-row: auto;
+  }
+}
+
+.dojo-belt strong {
+  justify-self: start;
+  width: fit-content;
+}
+
+.dojo-coach .ef {
+  width: 100%;
+  max-width: 300px;
+}
+
+.dojo-card .ef {
+  width: 100%;
+  max-width: 150px;
+}
