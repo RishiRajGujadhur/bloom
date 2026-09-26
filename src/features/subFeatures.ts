@@ -101,6 +101,10 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'garageItems', title: 'Garage upgrades', description: 'Upgrades for your car garage.' },
     { id: 'avatarPreview', title: 'Avatar preview', description: 'See your avatar in the shop.' },
     { id: 'toast', title: 'Purchase toast', description: '“It’s yours!” message.' },
+    { id: 'wishSwipe', title: 'Swipe wishlist', description: 'Swipe right on items you want.' },
+    { id: 'wishRings', title: 'Savings rings', description: 'Animated progress rings toward each wish.' },
+    { id: 'affordEta', title: 'Days to afford', description: 'Estimate from your average petals a day.' },
+    { id: 'flipBalance', title: 'Flip-counter balance', description: 'Animated petal counter.' },
   ],
   reminders: [
     { id: 'system', title: 'System notifications', description: 'Notify when Bloom is in the background.' },

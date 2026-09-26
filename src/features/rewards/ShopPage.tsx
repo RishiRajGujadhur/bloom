@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Lock, ShoppingBag } from 'lucide-react'
 import { buy, shopItems, toggleEquip, useShop, type ShopItem, type ShopState } from './shop'
 import './shop.css'
+import { ShopQuick } from '../quick/ShopQuick'
 import { burst } from '../../components/ui/celebrate'
 
 const kinds = [
@@ -104,6 +105,7 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
   }
   return (
     <section className="shop-page" aria-label="Petal shop">
+      <ShopQuick owned={shop.owned} balance={balance} onBuy={(item) => purchase(item)} />
       <div className="shop-hero">
         <AvatarPreview equipped={shop.equipped} />
         <div>

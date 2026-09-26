@@ -340,3 +340,62 @@
   width: 100%;
   max-height: 110px;
 }
+
+.shop-flip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.wish-rings {
+  display: grid;
+  gap: 8px;
+}
+
+.wish-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wish-ring {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+}
+
+.wish-ring svg {
+  width: 52px;
+  height: 52px;
+}
+
+.wish-ring circle {
+  fill: none;
+  stroke-width: 5;
+}
+
+.wish-ring .track {
+  stroke: var(--border, #0001);
+}
+
+.wish-ring .arc {
+  stroke: #f48fb1;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.wish-ring text {
+  font-size: 18px;
+  text-anchor: middle;
+}
+
+.wish-ring span {
+  display: grid;
+}
+
+.wish-ring small {
+  color: var(--text-muted);
+}
