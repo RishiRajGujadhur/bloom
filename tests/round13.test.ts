@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { cities as dlCities, dayFraction, hm as dlHm, moonName, plan as dlPlan, sunTimes, yearDayLengths } from '../src/features/daylight/daylightModel'
 import { blinkClosed, exerciseById, nearFar, routine as eyeRoutine } from '../src/features/eyes/eyesModel'
 import { addActive, challengeMinutes, inWindDown, minutesOn, week as screenWeek } from '../src/features/screen/screenModel'
 import { describe as ruleText, occursOn, streak as rtStreak, templates as rtTemplates, totalMinutes, upcoming } from '../src/features/routines/routineModel'
@@ -37,7 +38,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing', 'eyeCare'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing', 'eyeCare', 'daylight'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -366,4 +367,23 @@ test('eye care: routine, near/far and blink timing', () => {
   expect(nearFar(5)).toBeCloseTo(1)
   expect(blinkClosed(2.8)).toBe(true)
   expect(blinkClosed(1)).toBe(false)
+})
+
+test('daylight: sun times, plan, moon and seasons', () => {
+  const london = dlCities.find((c) => c.name === 'London')!
+  const t = sunTimes(new Date('2026-06-21T12:00:00Z'), london)
+  expect(t.dayLength).toBeGreaterThan(16)
+  expect(dlHm(t.sunrise, london.tz)).toMatch(/^04:4\d$/)
+  const w = sunTimes(new Date('2026-12-21T12:00:00Z'), london)
+  expect(w.dayLength).toBeLessThan(8.5)
+  const y = yearDayLengths(london, 2026)
+  expect(y[5]).toBeGreaterThan(y[11])
+  expect(dayFraction(new Date(t.noon), t.sunrise, t.sunset)).toBeCloseTo(0.5, 1)
+  const p = dlPlan({ wake: '07:00', caffeineGap: 8, windDownGap: 60 }, t.sunrise, t.sunset, new Date('2026-06-21T12:00:00'))
+  expect(p.sleep.getTime() - p.wake.getTime()).toBe(16 * 3600000)
+  expect(p.sleep.getTime() - p.caffeineCurfew.getTime()).toBe(8 * 3600000)
+  expect(moonName(0.5)).toBe('Full moon')
+  expect(moonName(0.01)).toBe('New moon')
+  // Polar night still yields usable times.
+  expect(sunTimes(new Date('2026-12-21T12:00:00Z'), { name: 'Pole', lat: 89, lng: 0 }).dayLength).toBe(12)
 })

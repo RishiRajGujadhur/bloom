@@ -661,6 +661,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "sounds", title: "Chimes", description: "A soft tone between exercises." },
     { id: "history", title: "History", description: "Breaks taken and your streak." },
   ],
+  daylight: [
+    { id: "sunArc", title: "Sun arc", description: "A live sky with the sun where it really is." },
+    { id: "golden", title: "Golden hour", description: "When the light is softest." },
+    { id: "lightGoal", title: "Morning light goal", description: "Minutes outside to anchor your body clock." },
+    { id: "caffeine", title: "Caffeine curfew", description: "Your last-coffee time." },
+    { id: "windDown", title: "Wind-down window", description: "When to start slowing down." },
+    { id: "walk", title: "Best walk time", description: "Before the light fades." },
+    { id: "moon", title: "Moon phase", description: "Tonight’s moon." },
+    { id: "yearChart", title: "Day length", description: "Daylight through the year." },
+    { id: "gps", title: "Use my location", description: "Precise sunrise for where you are." },
+    { id: "cities", title: "Cities", description: "Or pick a city." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

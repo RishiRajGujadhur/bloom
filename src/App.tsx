@@ -199,6 +199,9 @@ const ScreenPage = lazy(() =>
 const EyesPage = lazy(() =>
   import('./features/eyes/EyesPage').then((m) => ({ default: m.EyesPage })),
 )
+const DaylightPage = lazy(() =>
+  import('./features/daylight/DaylightPage').then((m) => ({ default: m.DaylightPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -655,6 +658,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'daylight' && !settings.features.daylight) ||
             (active === 'eyes' && !settings.features.eyeCare) ||
             (active === 'screen' && !settings.features.digitalWellbeing) ||
             (active === 'routines' && !settings.features.routineScheduler) ||
@@ -844,6 +848,10 @@ function App() {
             ) : active === 'eyes' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <EyesPage />
+              </Suspense>
+            ) : active === 'daylight' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <DaylightPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

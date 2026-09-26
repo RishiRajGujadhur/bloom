@@ -421,6 +421,10 @@ const common = {
         title: "Eye care",
         description: "20-20-20 reminders and hand-drawn eye exercises to follow.",
       },
+      daylight: {
+        title: "Daylight & circadian",
+        description: "Your sun, your body clock: morning light, caffeine curfew, wind-down and moon.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1464,6 +1468,10 @@ export const resources = {
           eyeCare: {
             title: "Soin des yeux",
             description: "Rappels 20-20-20 et exercices des yeux dessinés à la main.",
+          },
+          daylight: {
+            title: "Lumière & rythme",
+            description: "Votre soleil et votre horloge : lumière du matin, café, coucher et lune.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

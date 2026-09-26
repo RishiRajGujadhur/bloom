@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'daylight': { title: "Daylight", description: "Live with the light." },
   'eyes': { title: "Eye care", description: "Give your eyes a horizon." },
   'screen': { title: "Screen time", description: "Use tech, don’t let it use you." },
   'routines': { title: "Routines", description: "Small steps, same time, every time." },
@@ -212,6 +213,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'eyes': [
     step(".ey-stage", "Follow along", "Keep your head still; move only your eyes."),
     step(".rm-side", "Start the routine", "Two minutes, five exercises."),
+  ],
+  'daylight': [
+    step(".dl-sky", "The sky now", "The sun moves as the day does."),
+    step(".dl-light", "Morning light", "Log minutes outside."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
