@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { BicepsFlexed as BicepsFlexedF_workoutLog } from 'lucide-react'
 import { Dumbbell as DumbbellF_exerciseGuides } from 'lucide-react'
 import { Apple as AppleNav, Feather as FeatherNav, Mic as MicNav, Zap as ZapNav, FlaskConical as FlaskConicalNav } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -82,6 +83,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'workouts'
   | 'exercises'
 
 interface SidebarProps {
@@ -98,7 +100,7 @@ const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi'] },
-  { label: 'Body', keys: ['exercises'] },
+  { label: 'Body', keys: ['exercises', 'workouts'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
 ]
 
@@ -329,6 +331,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'workouts', title: "Workouts", Icon: BicepsFlexedF_workoutLog, requires: 'workoutLog' },
     { key: 'exercises', title: "Exercises", Icon: DumbbellF_exerciseGuides, requires: 'exerciseGuides' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },

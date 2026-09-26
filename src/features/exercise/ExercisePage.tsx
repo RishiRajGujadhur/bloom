@@ -116,7 +116,7 @@ export function ExercisePage() {
     <div className="ex-library">
       {on('filters') && (
         <div className="ex-filters">
-          <div className="ex-chip-row" role="group" aria-label="Muscle">
+          <div className="studio-chip-row" role="group" aria-label="Muscle">
             {(['all', ...muscles] as const).map((m) => (
               <button key={m} type="button" className="studio-chip" aria-pressed={muscle === m} onClick={() => setMuscle(m)}>
                 {m === 'all' ? 'All muscles' : muscleNames[m]}
@@ -251,10 +251,12 @@ export function ExercisePage() {
           {exercises
             .filter((e) => e.id !== pick.id && e.primary.some((m) => pick.primary.includes(m)))
             .map((e) => (
-              <button key={e.id} type="button" role="listitem" className="ex-card ex-card-main" onClick={() => choose(e)}>
-                <ExerciseFigure exercise={e} playing={false} animate={false} small />
-                <strong>{e.name}</strong>
-              </button>
+              <div key={e.id} role="listitem">
+                <button type="button" className="ex-card ex-card-main" onClick={() => choose(e)}>
+                  <ExerciseFigure exercise={e} playing={false} animate={false} small />
+                  <strong>{e.name}</strong>
+                </button>
+              </div>
             ))}
         </Rail>
       </div>

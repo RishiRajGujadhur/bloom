@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { BicepsFlexed as BicepsFlexedF_workoutLog } from 'lucide-react'
 import { Dumbbell as DumbbellF_exerciseGuides } from 'lucide-react'
 import { Swords as SwordsRound11, Leaf as LeafRound11, ChefHat as ChefHatRound11, Waves as WavesRound11, Mountain as MountainRound11 } from 'lucide-react'
 import { Apple as AppleIcon, Feather as FeatherIcon, Zap as ZapIcon, Mic as MicIcon, FlaskConical as FlaskConicalIcon, ScanSearch as ScanSearchIcon, SquareTerminal as SquareTerminalIcon } from 'lucide-react'
@@ -108,6 +109,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  workoutLog: BicepsFlexedF_workoutLog,
   exerciseGuides: DumbbellF_exerciseGuides,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
@@ -167,6 +169,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  workoutLog: boolean
   exerciseGuides: boolean
   urgeTracker: boolean
   habitTracker: boolean
@@ -235,6 +238,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    workoutLog: true,
     exerciseGuides: true,
     urgeTracker: true,
     habitTracker: true,
@@ -295,6 +299,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'workoutLog',
   'exerciseGuides',
   'urgeTracker',
   'habitTracker',

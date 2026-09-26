@@ -131,6 +131,9 @@ const LabPage = lazy(() =>
 const ExercisePage = lazy(() =>
   import('./features/exercise/ExercisePage').then((m) => ({ default: m.ExercisePage })),
 )
+const WorkoutPage = lazy(() =>
+  import('./features/workout/WorkoutPage').then((m) => ({ default: m.WorkoutPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -587,6 +590,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'workouts' && !settings.features.workoutLog) ||
             (active === 'exercises' && !settings.features.exerciseGuides) ||
             (active === 'shop' && !settings.features.petalShop) ||
             (active === 'release' && !settings.features.burnRelease) ||
@@ -666,6 +670,10 @@ function App() {
             ) : active === 'exercises' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <ExercisePage />
+              </Suspense>
+            ) : active === 'workouts' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <WorkoutPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

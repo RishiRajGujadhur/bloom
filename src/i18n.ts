@@ -333,6 +333,10 @@ const common = {
         title: "Exercise guides",
         description: "Animated form guides, muscle maps, tempo and a rep coach.",
       },
+      workoutLog: {
+        title: "Workout log",
+        description: "Log sets with sliders, rest timer, PRs, charts and a plate calculator.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1288,6 +1292,10 @@ export const resources = {
           exerciseGuides: {
             title: "Guides d’exercices",
             description: "Guides animés, carte musculaire, tempo et coach de répétitions.",
+          },
+          workoutLog: {
+            title: "Journal d’entraînement",
+            description: "Séries aux curseurs, repos, records, graphiques et calculateur de disques.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

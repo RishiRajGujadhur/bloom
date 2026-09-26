@@ -395,6 +395,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "favourites", title: "Favourites", description: "Star the moves you like." },
     { id: "voice", title: "Voice coach", description: "Counts reps and calls cues aloud." },
   ],
+  workoutLog: [
+    { id: "templates", title: "Templates", description: "Push, pull, legs, full body and home." },
+    { id: "restTimer", title: "Rest timer", description: "Counts down after every set." },
+    { id: "rpe", title: "Effort (RPE)", description: "Rate how hard each set felt." },
+    { id: "prs", title: "Personal records", description: "Celebrate new bests as they happen." },
+    { id: "e1rm", title: "Estimated max", description: "Epley one-rep max for each set." },
+    { id: "volumeChart", title: "Volume chart", description: "Total kilograms per workout." },
+    { id: "progressChart", title: "Progress chart", description: "Your estimated max over time." },
+    { id: "plates", title: "Plate calculator", description: "Which plates go on the bar." },
+    { id: "muscleVolume", title: "Weekly muscle sets", description: "Hard sets per muscle this week." },
+    { id: "history", title: "History", description: "Every workout you have logged." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

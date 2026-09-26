@@ -144,14 +144,14 @@
   display: grid;
   gap: 8px;
 }
-.ex-chip-row {
+.studio-chip-row {
   display: flex;
   gap: 6px;
   overflow-x: auto;
   padding-bottom: 4px;
   scrollbar-width: none;
 }
-.ex-chip-row .studio-chip {
+.studio-chip-row .studio-chip {
   flex: none;
 }
 .ex-filter-line {

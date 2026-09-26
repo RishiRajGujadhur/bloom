@@ -297,3 +297,13 @@
     transition: none;
   }
 }
+.studio-chip-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.studio-chip-row .studio-chip {
+  flex: none;
+}
