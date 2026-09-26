@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { PenLine as PenLineF_inkJournal } from 'lucide-react'
 import { CircleDot as CircleDotF_mala } from 'lucide-react'
 import { Wind as WindF_breathwork } from 'lucide-react'
 import { Sparkles as SparklesF_meditation } from 'lucide-react'
@@ -95,6 +96,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'ink'
   | 'mala'
   | 'breathwork'
   | 'meditate'
@@ -123,7 +125,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
 ]
@@ -355,6 +357,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'ink', title: "Ink journal", Icon: PenLineF_inkJournal, requires: 'inkJournal' },
     { key: 'mala', title: "Mala", Icon: CircleDotF_mala, requires: 'mala' },
     { key: 'breathwork', title: "Breathwork", Icon: WindF_breathwork, requires: 'breathwork' },
     { key: 'meditate', title: "Meditate", Icon: SparklesF_meditation, requires: 'meditation' },

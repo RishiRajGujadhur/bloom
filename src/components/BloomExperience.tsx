@@ -162,6 +162,7 @@ const captions: Record<NavKey, string> = {
   energy: 'Debug your week.',
   lab: 'What moves together.',
   taichi: 'Root down. Breathe low.',
+  'ink': "Some thoughts need a pen.",
   'mala': "One bead, one breath.",
   'breathwork': "Breathe big. Then be still.",
   'meditate': "Sit. Breathe. Arrive.",

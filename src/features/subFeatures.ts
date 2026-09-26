@@ -553,6 +553,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "chant", title: "Spoken chant", description: "Hear the mantra with each bead." },
     { id: "log", title: "Practice log", description: "Rounds and days practised." },
   ],
+  inkJournal: [
+    { id: "pressure", title: "Pressure-sensitive pen", description: "Lines swell and taper naturally." },
+    { id: "colours", title: "Colours", description: "Six ink colours." },
+    { id: "highlighter", title: "Highlighter", description: "Soft translucent marker." },
+    { id: "eraser", title: "Eraser", description: "Rub out whole strokes." },
+    { id: "undo", title: "Undo & redo", description: "Ctrl+Z and Ctrl+Shift+Z work too." },
+    { id: "paper", title: "Paper styles", description: "Blank, lined, dotted or grid." },
+    { id: "pages", title: "Pages", description: "Keep many pages, saved on this device." },
+    { id: "replay", title: "Stroke replay", description: "Watch your page draw itself again." },
+    { id: "prompts", title: "Daily prompt", description: "A gentle idea for today’s page." },
+    { id: "export", title: "Export PNG", description: "Save a page as an image." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

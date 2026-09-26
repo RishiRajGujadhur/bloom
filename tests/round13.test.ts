@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { hit, pathFor, promptFor, push as inkPush, redo as inkRedo, undo as inkUndo } from '../src/features/ink/inkModel'
 import { beadOf, isQuarter, roundsOf } from '../src/features/mala/malaModel'
 import { best as bwBest, defaultSettings as bwDefaults, initial as bwInitial, lung, step as bwStep } from '../src/features/breathwork/breathworkModel'
 import { bells, courses, currentLine, sessionById, streakDays, timed } from '../src/features/meditate/meditateModel'
@@ -28,7 +29,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -233,4 +234,18 @@ test('mala: quarters, rounds and bead position', () => {
   expect(isQuarter(28)).toBe(false)
   expect(roundsOf(250)).toBe(2)
   expect(beadOf(250)).toBe(34)
+})
+
+test('ink: freehand path, eraser hit, undo/redo, prompts', () => {
+  const stroke = { id: 'a', tool: 'pen' as const, color: '#000', size: 8, t0: 0, points: [[0, 0, 0.5], [50, 10, 0.5], [100, 0, 0.5]] as [number, number, number][] }
+  expect(pathFor(stroke)).toMatch(/^M /)
+  expect(hit([stroke], 50, 12)).toEqual(['a'])
+  expect(hit([stroke], 50, 80)).toEqual([])
+  let h = inkPush({ past: [], future: [] }, [])
+  const u = inkUndo(h, [stroke])!
+  expect(u.strokes).toEqual([])
+  h = u.history
+  expect(inkRedo(h, [])!.strokes).toEqual([stroke])
+  expect(inkUndo({ past: [], future: [] }, [])).toBeNull()
+  expect(promptFor('2026-09-26')).toBe(promptFor('2026-09-26'))
 })

@@ -171,6 +171,9 @@ const BreathworkPage = lazy(() =>
 const MalaPage = lazy(() =>
   import('./features/mala/MalaPage').then((m) => ({ default: m.MalaPage })),
 )
+const InkPage = lazy(() =>
+  import('./features/ink/InkPage').then((m) => ({ default: m.InkPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -627,6 +630,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'ink' && !settings.features.inkJournal) ||
             (active === 'mala' && !settings.features.mala) ||
             (active === 'breathwork' && !settings.features.breathwork) ||
             (active === 'meditate' && !settings.features.meditation) ||
@@ -771,6 +775,10 @@ function App() {
             ) : active === 'mala' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <MalaPage />
+              </Suspense>
+            ) : active === 'ink' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <InkPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

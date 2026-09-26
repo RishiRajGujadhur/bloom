@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { PenLine as PenLineF_inkJournal } from 'lucide-react'
 import { CircleDot as CircleDotF_mala } from 'lucide-react'
 import { Wind as WindF_breathwork } from 'lucide-react'
 import { Sparkles as SparklesF_meditation } from 'lucide-react'
@@ -121,6 +122,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  inkJournal: PenLineF_inkJournal,
   mala: CircleDotF_mala,
   breathwork: WindF_breathwork,
   meditation: SparklesF_meditation,
@@ -193,6 +195,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  inkJournal: boolean
   mala: boolean
   breathwork: boolean
   meditation: boolean
@@ -274,6 +277,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    inkJournal: true,
     mala: true,
     breathwork: true,
     meditation: true,
@@ -347,6 +351,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'inkJournal',
   'mala',
   'breathwork',
   'meditation',

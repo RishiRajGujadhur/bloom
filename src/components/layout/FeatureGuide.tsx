@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'ink': { title: "Ink journal", description: "Some thoughts need a pen." },
   'mala': { title: "Mala", description: "One bead, one breath." },
   'breathwork': { title: "Breathwork", description: "Breathe big. Then be still." },
   'meditate': { title: "Meditate", description: "Sit. Breathe. Arrive." },
@@ -167,6 +168,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'mala': [
     step(".ml-stage", "Tap to count", "Or press space. The ring turns bead by bead."),
     step(".ml-side", "Choose a mantra", "Or let it count for you."),
+  ],
+  'ink': [
+    step(".ink-sheet", "Write or draw", "Use a stylus, finger or mouse."),
+    step(".ink-tools", "Tools", "Pen, highlighter, eraser and paper."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

@@ -385,6 +385,10 @@ const common = {
         title: "Mala & mantra",
         description: "A 3D 108-bead mala you tap through, with mantras, bells and rounds.",
       },
+      inkJournal: {
+        title: "Ink journal",
+        description: "Handwrite and sketch with a pressure-sensitive pen on paper you choose.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1392,6 +1396,10 @@ export const resources = {
           mala: {
             title: "Mala & mantra",
             description: "Un mala 3D de 108 perles à égrener, avec mantras, cloches et tours.",
+          },
+          inkJournal: {
+            title: "Journal à l’encre",
+            description: "Écrivez et dessinez à la main avec un stylo sensible à la pression.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
