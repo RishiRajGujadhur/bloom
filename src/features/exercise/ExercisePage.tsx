@@ -37,6 +37,9 @@ import {
   type Muscle,
 } from './exercises'
 import './exercise.css'
+import { areaNames, filterLibrary, library as allMoves, positionNames } from './moves'
+import { Programs } from './Programs'
+import type { Area, Position } from './exercises'
 
 const KEY = 'bloom-exercise-v1'
 type Prefs = {
@@ -131,9 +134,13 @@ export function ExercisePage() {
       return next
     })
   const [search, setSearch] = useState('')
-  const available = prefs.wheelchair
-    ? seatedExercises
-    : [...exercises, ...seatedExercises]
+  const [area, setArea] = useState<Area | 'all'>('all')
+  const [position, setPosition] = useState<Position | 'all'>('all')
+  const everything = on('moreMoves') ? allMoves : [...exercises, ...seatedExercises]
+  const available = filterLibrary(
+    prefs.wheelchair ? everything.filter((e) => e.wheelchair) : everything,
+    { area: on('areaFilter') ? area : 'all', position: on('positionFilter') && !prefs.wheelchair ? position : 'all' },
+  )
   const [tab, setTab] = useState('library')
   const [pick, setPick] = useState<Exercise>(
     prefs.wheelchair ? seatedExercises[0] : exercises[0],
@@ -253,6 +260,27 @@ export function ExercisePage() {
           <p>No movements match. Clear your search or filters.</p>
         )}
       </div>
+      {(on('areaFilter') || on('positionFilter')) && (
+        <div className="ex-filters">
+          {on('areaFilter') && (
+            <div className="studio-chip-row" role="group" aria-label="Body area">
+              {(['all', ...Object.keys(areaNames)] as (Area | 'all')[]).map((a) => (
+                <button key={a} type="button" className="studio-chip" aria-pressed={area === a} onClick={() => setArea(a)}>
+                  {a === 'all' ? 'Whole body' : areaNames[a]}
+                </button>
+              ))}
+            </div>
+          )}
+          {on('positionFilter') && !prefs.wheelchair && (
+            <Segmented
+              label="Position"
+              value={position}
+              onChange={setPosition}
+              options={[{ id: 'all', label: 'Any position' }, ...(Object.keys(positionNames) as Position[]).map((id) => ({ id, label: positionNames[id] }))]}
+            />
+          )}
+        </div>
+      )}
       {on('filters') && (
         <div className="ex-filters">
           <div className="studio-chip-row" role="group" aria-label="Muscle">
@@ -572,6 +600,16 @@ export function ExercisePage() {
           icon: <Target size={15} />,
           render: coach,
         },
+        ...(on('programs')
+          ? [
+              {
+                id: 'programs',
+                label: 'Programs',
+                icon: <Target size={15} />,
+                render: () => <Programs seatedOnly={!!prefs.wheelchair} />,
+              },
+            ]
+          : []),
         ...(on('muscleMap')
           ? [
               {

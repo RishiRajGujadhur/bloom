@@ -17,6 +17,13 @@ export type Joint =
   | 'knL'
   | 'hipR'
   | 'knR'
+  /** Head nod / tilt (degrees) */
+  | 'neck'
+  /** Mouth opening, percent (0 closed, 100 wide) */
+  | 'jaw'
+  /** Hand openness, percent (-60 fist … 60 spread) */
+  | 'wrL'
+  | 'wrR'
 export type Pose = Partial<Record<Joint, number>>
 export type Muscle =
   | 'chest'
@@ -32,9 +39,13 @@ export type Muscle =
   | 'hamstrings'
   | 'calves'
 
+export type Area = 'neck' | 'face' | 'shoulders' | 'arms' | 'hands' | 'core' | 'legs' | 'full'
+export type Position = 'standing' | 'seated' | 'floor'
 export type Exercise = {
   id: string
   wheelchair?: boolean
+  area?: Area
+  position?: Position
   name: string
   emoji: string
   level: 'beginner' | 'intermediate'

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { createTimeline, type Timeline } from 'animejs'
 import type { Exercise, Joint, Pose } from './exercises'
+import { subOn } from '../subFeatures'
 
 /**
  * Side-view figure animated with anime.js. Every limb is a nested <g> that
@@ -20,16 +21,25 @@ const joints: Joint[] = [
   'knL',
   'hipR',
   'knR',
+  'neck',
+  'jaw',
+  'wrL',
+  'wrR',
 ]
 const at = (p: Pose, j: Joint) => p[j] ?? 0
 const origin = (x: number, y: number) =>
   ({ transformBox: 'view-box', transformOrigin: `${x}px ${y}px` }) as const
+const scaled = (j: Joint) => j === 'jaw' || j === 'wrL' || j === 'wrR'
 const transformOf = (j: Joint, v: number) =>
   j === 'drop'
     ? `translateY(${v}px)`
     : j === 'shift'
       ? `translateX(${v}px)`
-      : `rotate(${v}deg)`
+      : j === 'jaw'
+        ? `scaleY(${0.15 + v / 100})`
+        : scaled(j)
+          ? `scale(${1 + v / 100})`
+          : `rotate(${v}deg)`
 
 function Leg({
   side,
@@ -90,7 +100,17 @@ function Arm({
         }}
       >
         <line x1="110" y1="110" x2="110" y2="136" />
-        <circle cx="110" cy="138" r="4" />
+        <g
+          className="ef-hand"
+          ref={(el) => void (refs.current[`wr${side}`] = el)}
+          style={{ ...origin(110, 137), transform: transformOf(`wr${side}`, at(pose, `wr${side}`)) }}
+        >
+          <circle cx="110" cy="139" r="4.5" />
+          <line x1="110" y1="141" x2="104" y2="150" />
+          <line x1="110" y1="142" x2="108" y2="152" />
+          <line x1="110" y1="142" x2="112" y2="152" />
+          <line x1="110" y1="141" x2="116" y2="150" />
+        </g>
       </g>
     </g>
   )
@@ -145,14 +165,15 @@ export function ExerciseFigure({
       const b = at(exercise.b, j)
       if (!el || (a === 0 && b === 0)) continue
       const prop =
-        j === 'drop' ? 'translateY' : j === 'shift' ? 'translateX' : 'rotate'
+        j === 'drop' ? 'translateY' : j === 'shift' ? 'translateX' : j === 'jaw' ? 'scaleY' : scaled(j) ? 'scale' : 'rotate'
+      const v = (x: number) => (j === 'jaw' ? 0.15 + x / 100 : scaled(j) ? 1 + x / 100 : x)
       timeline.add(
         el,
         {
           [prop]: [
-            { to: [a, b], duration: down, ease: 'inOutSine' },
-            { to: b, duration: hold },
-            { to: a, duration: up, ease: 'inOutSine' },
+            { to: [v(a), v(b)], duration: down, ease: 'inOutSine' },
+            { to: v(b), duration: hold },
+            { to: v(a), duration: up, ease: 'inOutSine' },
           ],
         },
         0,
@@ -217,24 +238,29 @@ export function FigureSvg({
   const refs = given ?? own
   return (
     <svg
-      className={`ef ${className ?? ''}`}
+      className={`ef ${className ?? ''} ${subOn('exerciseGuides', 'faceHands') ? '' : 'ef-plain'}`}
       data-small={small}
       viewBox="0 0 220 230"
       role="img"
       aria-label={label}
       style={{ transform: mirror ? 'scaleX(-1)' : undefined }}
     >
-      {wheelchair && (
-        <g fill="none" stroke="currentColor" strokeWidth="3" opacity=".6">
-          <circle cx="110" cy="177" r="29" />
-          <circle cx="174" cy="198" r="9" />
-          <path d="M93 93V141H158L170 189H183 M96 146L113 177H165" />
+      {wheelchair && subOn('exerciseGuides', 'seatedFigure') && (
+        <g className="ef-chair" aria-hidden="true">
+          <path className="ef-chair-frame" d="M86 84 V136 H156 L168 184 M92 136 L104 178 M156 136 V112" />
+          <rect className="ef-chair-seat" x="86" y="131" width="72" height="8" rx="4" />
+          <rect className="ef-chair-back" x="82" y="80" width="9" height="56" rx="4" />
+          <g className="ef-wheel">
+            <circle cx="104" cy="178" r="28" />
+            <path d="M104 150 V206 M76 178 H132 M84 158 L124 198 M124 158 L84 198" />
+          </g>
+          <circle className="ef-caster" cx="168" cy="200" r="8" />
         </g>
       )}
       <line className="ef-floor" x1="10" y1="208" x2="210" y2="208" />
       <g
         className="ef-floorshift"
-        style={{ transform: floor ? 'translateX(-55px)' : 'none' }}
+        style={{ transform: floor ? 'translateX(-55px)' : wheelchair ? 'translateY(8px)' : 'none' }}
       >
         <g
           ref={(el) => void (refs.current.root = el)}
@@ -261,7 +287,20 @@ export function FigureSvg({
               >
                 <Arm side="R" refs={refs} pose={pose} />
                 <line className="ef-spine" x1="110" y1="125" x2="110" y2="76" />
-                <circle className="ef-head" cx="110" cy="58" r="13" />
+                <g
+                  className="ef-headgroup"
+                  ref={(el) => void (refs.current.neck = el)}
+                  style={{ ...origin(110, 74), transform: transformOf('neck', at(pose, 'neck')) }}
+                >
+                  <circle className="ef-head" cx="110" cy="58" r="13" />
+                  <circle className="ef-eye" cx="116" cy="55" r="1.8" />
+                  <g
+                    ref={(el) => void (refs.current.jaw = el)}
+                    style={{ ...origin(117, 63), transform: transformOf('jaw', at(pose, 'jaw')) }}
+                  >
+                    <ellipse className="ef-mouth" cx="117" cy="63" rx="3.2" ry="3.2" />
+                  </g>
+                </g>
                 <Arm side="L" refs={refs} pose={pose} />
               </g>
               <Leg side="L" refs={refs} pose={pose} />

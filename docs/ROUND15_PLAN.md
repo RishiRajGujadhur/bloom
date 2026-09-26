@@ -39,3 +39,4 @@ Each item is its own commit and push. Status is tracked below.
 | # | Status |
 |---|---|
 | 1 Daybook + Life migration | ✅ pushed |
+| 2 Exercises (moves, filters, programs, visible wheelchair) | ✅ pushed |

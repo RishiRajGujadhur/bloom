@@ -277,3 +277,135 @@
     animation: none;
   }
 }
+
+/* Round 15: face, hands and a clearly visible wheelchair */
+.ef .ef-headgroup .ef-eye {
+  fill: var(--text-primary);
+  stroke: none;
+}
+.ef .ef-mouth {
+  fill: #7a2e2e;
+  stroke: var(--text-primary);
+  stroke-width: 1.2;
+}
+.ef .ef-hand line {
+  stroke-width: 3.2;
+}
+.ef .ef-hand circle {
+  stroke-width: 2;
+  fill: var(--text-primary);
+}
+.ef .ef-chair path,
+.ef .ef-chair circle,
+.ef .ef-chair rect {
+  stroke: #3f7fd0;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.ef .ef-chair .ef-chair-seat,
+.ef .ef-chair .ef-chair-back {
+  fill: color-mix(in oklab, #3f7fd0 35%, var(--bg-surface));
+  stroke-width: 3;
+}
+.ef .ef-chair .ef-wheel circle {
+  stroke-width: 6;
+  fill: color-mix(in oklab, #3f7fd0 8%, transparent);
+}
+.ef .ef-chair .ef-wheel path {
+  stroke-width: 2;
+  opacity: 0.6;
+}
+.ef .ef-chair .ef-caster {
+  stroke-width: 4;
+  fill: var(--bg-surface);
+}
+
+.ef.ef-plain .ef-eye,
+.ef.ef-plain .ef-mouth,
+.ef.ef-plain .ef-hand line {
+  display: none;
+}
+
+.ex-prog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.ex-prog {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ex-prog h3 {
+  margin: 0 0 4px;
+}
+
+.ex-prog p,
+.ex-prog small {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+}
+
+.ex-prog ul {
+  margin: 6px 0;
+  padding-left: 16px;
+  font-size: 0.85rem;
+}
+
+.ex-prog-art {
+  position: relative;
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+}
+
+.ex-prog-art svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ex-prog-art b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+}
+
+.ex-player-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ex-player-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-muted, #0001);
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.ex-player-bar i {
+  display: block;
+  height: 100%;
+  background: #e0703f;
+  transition: width 0.4s ease;
+}
+
+.ex-rest {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 0;
+}
+
+.ex-rest b {
+  font-size: 2.4rem;
+}

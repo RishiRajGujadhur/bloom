@@ -33,7 +33,7 @@ export function JournalAssist({ modeId, text }: { modeId: string; text: string }
 
   useEffect(() => {
     let live = true
-    void import('reading-time').then(({ default: rt }) => live && setMinutes(rt(text).minutes))
+    void import('reading-time/lib/reading-time.js').then(({ default: rt }) => live && setMinutes(rt(text).minutes))
     return () => {
       live = false
     }
