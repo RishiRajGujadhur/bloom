@@ -47,6 +47,8 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   breathe: 'breathe',
   mood: 'moodCheckin',
   gratitude: 'gratitude',
+  sleep: 'sleepTracker',
+  shop: 'petalShop',
 }
 
 export function readRecentPages(): NavKey[] {

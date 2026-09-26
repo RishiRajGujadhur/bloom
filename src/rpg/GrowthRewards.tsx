@@ -48,7 +48,7 @@ export function GrowthRewards({
   } | null>(null)
   const [soundError, setSoundError] = useState('')
   const stats = totals(data.rpg)
-  const goals = weeklyGoals(data, today).filter((goal) =>
+  const goals = weeklyGoals(data, today, flags.adaptiveGoals).filter((goal) =>
     goal.id === 'journal'
       ? flags.chatJournal
       : goal.id === 'habits'
@@ -57,8 +57,8 @@ export function GrowthRewards({
   )
   useEffect(() => {
     const result = earnedFeedback(previous.current, data.rpg)
-    const oldGoals = weeklyGoals(previousData.current, today)
-    const completedGoals = weeklyGoals(data, today).filter((goal, index) => {
+    const oldGoals = weeklyGoals(previousData.current, today, flags.adaptiveGoals)
+    const completedGoals = weeklyGoals(data, today, flags.adaptiveGoals).filter((goal, index) => {
       const week = new Date(`${today}T12:00:00`)
       week.setDate(week.getDate() - ((week.getDay() + 6) % 7))
       const key = `${week.getFullYear()}-${week.getMonth()}-${week.getDate()}:${goal.id}`
@@ -100,7 +100,7 @@ export function GrowthRewards({
       id: Date.now(),
     })
     if (data.rpg.sound) victoryChord()
-  }, [data, today, flags.chatJournal, flags.habitTracker])
+  }, [data, today, flags.chatJournal, flags.habitTracker, flags.adaptiveGoals])
   useEffect(() => {
     if (!data.rpg.sound) return
     const resume = () => {
@@ -214,6 +214,11 @@ export function GrowthRewards({
                     <strong>{percent}%</strong>
                   </span>
                   <h3>{goal.title}</h3>
+                  {goal.adapted && (
+                    <span className="growth-adapted" title={`Default target ${goal.baseTarget}`}>
+                      Adapted to your pace
+                    </span>
+                  )}
                   <p>
                     {complete
                       ? 'Weekly goal complete. Nicely done.'

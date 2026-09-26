@@ -200,3 +200,14 @@
     min-height: 0;
   }
 }
+.growth-adapted {
+  justify-self: start;
+  display: inline-block;
+  margin: -2px 0 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--accent-color) 14%, var(--bg-surface));
+  color: var(--accent-color);
+  font-size: 11.5px;
+  font-weight: 600;
+}

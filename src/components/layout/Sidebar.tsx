@@ -11,6 +11,8 @@ import {
   LayoutDashboard,
   Map,
   Castle,
+  BedDouble,
+  ShoppingBag,
   Heart,
   Smile,
   Wind,
@@ -51,6 +53,8 @@ export type NavKey =
   | 'breathe'
   | 'mood'
   | 'gratitude'
+  | 'sleep'
+  | 'shop'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -271,6 +275,8 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       Icon: Heart,
       requires: 'gratitude',
     },
+    { key: 'sleep', title: 'Sleep', Icon: BedDouble, requires: 'sleepTracker' },
+    { key: 'shop', title: 'Petal shop', Icon: ShoppingBag, requires: 'petalShop' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]

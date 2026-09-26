@@ -10,6 +10,10 @@ import {
   CalendarDays,
   CarFront,
   Castle,
+  BellRing,
+  Moon,
+  ShoppingBag,
+  TrendingUp,
   Dices,
   Gauge,
   Heart,
@@ -39,6 +43,10 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   moodCheckin: Smile,
   gratitude: Heart,
   compactMode: Rows3,
+  sleepTracker: Moon,
+  petalShop: ShoppingBag,
+  reminders: BellRing,
+  adaptiveGoals: TrendingUp,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -59,6 +67,10 @@ export interface FeatureFlags {
   moodCheckin: boolean
   gratitude: boolean
   compactMode: boolean
+  sleepTracker: boolean
+  petalShop: boolean
+  reminders: boolean
+  adaptiveGoals: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -86,6 +98,10 @@ export const defaultSettings: AppSettings = {
     moodCheckin: true,
     gratitude: true,
     compactMode: false,
+    sleepTracker: true,
+    petalShop: true,
+    reminders: true,
+    adaptiveGoals: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -107,6 +123,10 @@ const featureKeys = [
   'moodCheckin',
   'gratitude',
   'compactMode',
+  'sleepTracker',
+  'petalShop',
+  'reminders',
+  'adaptiveGoals',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

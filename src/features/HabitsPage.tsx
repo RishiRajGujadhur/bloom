@@ -21,6 +21,7 @@ import type { AppData } from '../model'
 import { inferStat } from '../rpg/schema'
 import { Modal } from '../components/Modal'
 import { HabitLibrary, RoutineLibrary } from './AdoptLibrary'
+import { ReminderButton } from './reminders/ReminderCenter'
 import { gridDays, habitStats } from './habits'
 import './habits.css'
 
@@ -40,10 +41,13 @@ export function HabitsPage({
   data,
   setData,
   today,
+  reminders = false,
 }: {
   data: AppData
   setData: Dispatch<SetStateAction<AppData>>
   today: string
+  /** Show the reminder bell on habit and routine cards. */
+  reminders?: boolean
 }) {
   const [tab, setTab] = useState('habits')
   const [habit, setHabit] = useState<Habit | null>(null)
@@ -343,6 +347,7 @@ export function HabitsPage({
                       <p>{h.detail || 'Daily practice'}</p>
                     </div>
                     <div className="habit-actions">
+                      {reminders && <ReminderButton id={h.id} title={h.title} />}
                       <button
                         className="icon-button"
                         title="Edit habit"
@@ -449,6 +454,7 @@ export function HabitsPage({
                       <h2>{r.title}</h2>
                     </div>
                     <div className="habit-actions">
+                      {reminders && <ReminderButton id={r.id} title={r.title} />}
                       <button
                         className="icon-button"
                         title="Edit routine"

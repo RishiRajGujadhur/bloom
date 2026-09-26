@@ -1,0 +1,296 @@
+.sleep-page {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.sleep-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.sleep-stat {
+  display: grid;
+  gap: 2px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: linear-gradient(160deg, color-mix(in oklab, #6b7fd7 10%, var(--bg-surface)), var(--bg-surface));
+}
+.sleep-stat strong {
+  font-size: 26px;
+}
+.sleep-stat span {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.sleep-stat small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.sleep-card {
+  padding: 22px 24px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+.sleep-card h3 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+.sleep-log {
+  display: grid;
+  gap: 18px;
+}
+.sleep-log fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.sleep-log legend {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.sleep-times {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 16px;
+}
+.sleep-times label,
+.sleep-settings label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.sleep-times label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+.sleep-times input {
+  grid-column: 1 / -1;
+}
+.sleep-page input[type='time'],
+.sleep-page input[type='number'] {
+  min-height: 46px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 18px;
+}
+.sleep-hours {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c8d0ff, #6b7fd7);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: 0 16px 30px -18px #6b7fd7;
+}
+.sleep-quality {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sleep-quality button {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 200ms cubic-bezier(0.3, 1.6, 0.5, 1), border-color 150ms ease;
+}
+.sleep-quality button:hover {
+  transform: scale(1.1) rotate(-5deg);
+}
+.sleep-quality button[aria-pressed='true'] {
+  border-color: var(--accent-color);
+  background: color-mix(in oklab, var(--accent-color) 12%, var(--bg-surface));
+}
+.sleep-log > .ov-primary {
+  justify-self: start;
+}
+.sleep-saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: #3f8a5a;
+}
+.sleep-wind {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  background: linear-gradient(160deg, color-mix(in oklab, #2b3270 12%, var(--bg-surface)), var(--bg-surface));
+}
+.sleep-moon {
+  --p: 0;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(#8e9cf0 calc(var(--p) * 360deg), color-mix(in oklab, #8e9cf0 18%, var(--bg-surface)) 0);
+  transition: background 400ms ease;
+}
+.sleep-moon span {
+  display: grid;
+  place-items: center;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  font-size: 54px;
+}
+.sleep-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.sleep-settings label {
+  grid-auto-flow: column;
+  align-items: center;
+}
+.sleep-settings input[type='number'] {
+  width: 84px;
+}
+.sleep-steps {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sleep-steps button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sleep-steps button span {
+  width: 24px;
+  text-align: center;
+}
+.sleep-steps button small {
+  margin-left: auto;
+  color: var(--text-muted);
+}
+.sleep-steps button[aria-pressed='true'] {
+  background: color-mix(in oklab, #6b7fd7 12%, var(--bg-surface));
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+.sleep-insights {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 16px;
+}
+.sleep-chart {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 200px;
+  padding-bottom: 20px;
+}
+.sleep-goal-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed color-mix(in oklab, var(--accent-color) 60%, transparent);
+}
+.sleep-bar-wrap {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+.sleep-bar {
+  width: 100%;
+  max-width: 34px;
+  border-radius: 10px 10px 4px 4px;
+  background: #6b7fd7;
+}
+.sleep-bar[data-quality='1'],
+.sleep-bar[data-quality='2'] {
+  background: #e27396;
+}
+.sleep-bar[data-quality='3'] {
+  background: #e3a857;
+}
+.sleep-bar-wrap small {
+  position: absolute;
+  bottom: -20px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.sleep-impact,
+.sleep-history {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.sleep-impact li,
+.sleep-history li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+}
+.sleep-impact li[data-good='true'] strong {
+  color: #3f8a5a;
+}
+.sleep-impact li[data-good='false'] strong {
+  color: #c2410c;
+}
+.sleep-history li span:first-child {
+  color: var(--text-muted);
+}
+.sleep-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+@media (max-width: 900px) {
+  .sleep-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sleep-wind,
+  .sleep-insights {
+    grid-template-columns: 1fr;
+  }
+  .sleep-wind .sleep-moon {
+    width: 140px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sleep-quality button,
+  .sleep-moon {
+    transition: none;
+  }
+}

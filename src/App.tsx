@@ -63,6 +63,7 @@ import { Carousel } from './components/ui/Carousel'
 import { LottieIcon } from './components/ui/LottieIcon'
 import { QuickAdd, SearchTrigger } from './components/layout/TopbarExtras'
 import { StreakRewards } from './features/rewards/StreakRewards'
+import { ReminderCenter } from './features/reminders/ReminderCenter'
 import {
   CommandPalette,
   rememberPage,
@@ -92,6 +93,12 @@ const BreathePage = lazy(() =>
 const MoodPage = lazy(() => wellbeing().then((m) => ({ default: m.MoodPage })))
 const GratitudePage = lazy(() =>
   wellbeing().then((m) => ({ default: m.GratitudePage })),
+)
+const SleepPage = lazy(() =>
+  import('./features/sleep/SleepPage').then((m) => ({ default: m.SleepPage })),
+)
+const ShopPage = lazy(() =>
+  import('./features/rewards/ShopPage').then((m) => ({ default: m.ShopPage })),
 )
 const CalendarPage = lazy(() =>
   import('./features/CalendarPage').then((module) => ({
@@ -396,7 +403,12 @@ function App() {
 
             {settings.features.habitTracker && (
               <div hidden={active !== 'habits'}>
-                <HabitsPage data={data} setData={setData} today={today} />
+                <HabitsPage
+                  data={data}
+                  setData={setData}
+                  today={today}
+                  reminders={settings.features.reminders}
+                />
               </div>
             )}
             {settings.features.daybookModes && (
@@ -415,7 +427,9 @@ function App() {
             (active === 'world' && !settings.features.bloomWorld) ||
             (active === 'breathe' && !settings.features.breathe) ||
             (active === 'mood' && !settings.features.moodCheckin) ||
-            (active === 'gratitude' && !settings.features.gratitude) ? (
+            (active === 'gratitude' && !settings.features.gratitude) ||
+            (active === 'sleep' && !settings.features.sleepTracker) ||
+            (active === 'shop' && !settings.features.petalShop) ? (
               <section className="card rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
                 <h2>This feature is turned off</h2>
                 <p>You can enable it in Settings.</p>
@@ -434,6 +448,18 @@ function App() {
             ) : active === 'gratitude' ? (
               <Suspense fallback={null}>
                 <GratitudePage />
+              </Suspense>
+            ) : active === 'sleep' ? (
+              <Suspense fallback={null}>
+                <SleepPage />
+              </Suspense>
+            ) : active === 'shop' ? (
+              <Suspense fallback={null}>
+                <ShopPage
+                  onVisitWorld={
+                    settings.features.bloomWorld ? () => jump('world') : undefined
+                  }
+                />
               </Suspense>
             ) : active === 'world' ? (
               <Suspense fallback={<p role="status">Growing your world…</p>}>
@@ -857,6 +883,14 @@ function App() {
             )}
           </div>
         </main>
+        {settings.features.reminders && (
+          <ReminderCenter
+            data={data}
+            setData={setData}
+            today={today}
+            onOpen={() => jump('habits')}
+          />
+        )}
         <CommandPalette
           open={paletteOpen}
           onOpenChange={setPaletteOpen}

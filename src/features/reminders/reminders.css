@@ -1,0 +1,114 @@
+.reminder-bell[data-on='true'] {
+  color: var(--accent-color);
+}
+.reminder-bell[data-on='true'] svg {
+  animation: bell-ring 2.8s ease-in-out infinite;
+  transform-origin: 50% 10%;
+}
+@keyframes bell-ring {
+  0%,
+  88%,
+  100% {
+    transform: rotate(0);
+  }
+  91% {
+    transform: rotate(14deg);
+  }
+  94% {
+    transform: rotate(-12deg);
+  }
+  97% {
+    transform: rotate(6deg);
+  }
+}
+.reminder-pop {
+  z-index: 85;
+  display: grid;
+  gap: 10px;
+  width: 230px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 20px 44px -20px color-mix(in oklab, var(--accent-color) 50%, rgb(0 0 0 / 0.4));
+  animation: ui-pop 180ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.reminder-pop input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 18px;
+}
+.reminder-pop-actions {
+  display: flex;
+  gap: 8px;
+}
+.reminder-pop-actions button {
+  flex: 1;
+  justify-content: center;
+  min-height: 40px !important;
+  padding: 8px 10px;
+  font-size: 13.5px;
+}
+.reminder-pop small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.reminder-arrow {
+  fill: var(--bg-surface);
+}
+.reminder-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 150px;
+  z-index: 80;
+  display: grid;
+  gap: 10px;
+  width: min(360px, calc(100vw - 40px));
+}
+.reminder-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  box-shadow: 0 20px 44px -20px color-mix(in oklab, var(--accent-color) 55%, rgb(0 0 0 / 0.45));
+}
+.reminder-toast > span {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.reminder-toast small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.reminder-toast strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reminder-toast .ov-primary {
+  min-height: 38px !important;
+  padding: 8px 12px;
+  font-size: 13.5px;
+}
+.reminder-ring {
+  color: var(--accent-color);
+  animation: bell-ring 1.4s ease-in-out 2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reminder-bell[data-on='true'] svg,
+  .reminder-ring,
+  .reminder-pop {
+    animation: none;
+  }
+}

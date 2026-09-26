@@ -277,6 +277,22 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      sleepTracker: {
+        title: 'Sleep & wind-down',
+        description: 'Log nights, see patterns and follow a bedtime routine.',
+      },
+      petalShop: {
+        title: 'Petal shop',
+        description: 'Spend daily petals on world decor and avatar items.',
+      },
+      reminders: {
+        title: 'Reminders',
+        description: 'Gentle nudges for habits and routines at times you choose.',
+      },
+      adaptiveGoals: {
+        title: 'Adaptive goals',
+        description: 'Weekly targets that scale to your recent pace.',
+      },
       breathe: {
         title: 'Breathe',
         description: 'Guided box and 4-7-8 breathing with a calming animation.',
@@ -1073,6 +1089,22 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          sleepTracker: {
+            title: 'Sommeil et détente',
+            description: 'Notez vos nuits, voyez les tendances, suivez un rituel du soir.',
+          },
+          petalShop: {
+            title: 'Boutique de pétales',
+            description: 'Dépensez vos pétales en décor et accessoires d’avatar.',
+          },
+          reminders: {
+            title: 'Rappels',
+            description: 'Des rappels doux pour vos habitudes et routines.',
+          },
+          adaptiveGoals: {
+            title: 'Objectifs adaptatifs',
+            description: 'Des objectifs hebdomadaires ajustés à votre rythme.',
+          },
           breathe: {
             title: 'Respirer',
             description: 'Respiration carrée et 4-7-8 guidées, avec une animation apaisante.',

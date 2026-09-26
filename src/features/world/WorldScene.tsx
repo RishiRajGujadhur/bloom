@@ -643,18 +643,165 @@ function CameraRig({
   return null
 }
 
+/* ------------------------------------------------------------------ */
+/* Petal-shop decorations and the avatar                               */
+/* ------------------------------------------------------------------ */
+export type WorldShop = {
+  owned: string[]
+  equipped: { hat: string | null; outfit: string | null; pet: string | null }
+  outfitColor?: string
+}
+
+function ShopDecor({ owned, reduced, night }: { owned: string[]; reduced: boolean; night: boolean }) {
+  const has = (id: string) => owned.includes(id)
+  return (
+    <>
+      {has('cherry-tree') && (
+        <Grow position={[-2.7, 0, -2.1]} reduced={reduced}>
+          <Box p={[0, 0, 0]} s={[0.24, 1.1, 0.24]} c="#6b4226" />
+          <Box p={[0, 1, 0]} s={[1.1, 0.7, 1.1]} c="#f7b3cf" />
+          <Box p={[0.2, 1.55, -0.1]} s={[0.7, 0.45, 0.7]} c="#f9c7dc" />
+          <Box p={[-0.4, 0.9, 0.3]} s={[0.4, 0.35, 0.4]} c="#f29cc0" />
+        </Grow>
+      )}
+      {has('lamp-posts') &&
+        ([
+          [2.8, -0.9],
+          [-1.6, -3.0],
+        ] as const).map(([x, z], i) => (
+          <Grow key={i} position={[x, 0, z]} reduced={reduced} delay={i * 0.1}>
+            <Box p={[0, 0, 0]} s={[0.1, 1.3, 0.1]} c="#2f2f36" />
+            <Box p={[0, 1.3, 0]} s={[0.3, 0.3, 0.3]} c="#ffe19a" emissive={night ? 2 : 0.5} />
+            {night && <pointLight position={[0, 1.4, 0]} color="#ffd98a" intensity={3} distance={3.5} />}
+          </Grow>
+        ))}
+      {has('bench') && (
+        <Grow position={[1.9, 0, -2.3]} reduced={reduced}>
+          <Box p={[0, 0.3, 0]} s={[1.1, 0.08, 0.4]} c="#a0703f" />
+          <Box p={[0, 0.38, -0.18]} s={[1.1, 0.35, 0.06]} c="#a0703f" />
+          <Box p={[-0.45, 0, 0]} s={[0.08, 0.3, 0.35]} c="#3b3b3b" />
+          <Box p={[0.45, 0, 0]} s={[0.08, 0.3, 0.35]} c="#3b3b3b" />
+        </Grow>
+      )}
+      {has('campfire') && (
+        <Grow position={[-2.8, 0, 0.7]} reduced={reduced}>
+          {[0, 1, 2, 3].map((i) => (
+            <Box key={i} p={[Math.cos(i * 1.57) * 0.3, 0, Math.sin(i * 1.57) * 0.3]} s={[0.22, 0.15, 0.22]} c="#8c8c8c" />
+          ))}
+          <Box p={[0, 0, 0]} s={[0.5, 0.08, 0.12]} c="#6b4226" rot={[0, 0.6, 0]} />
+          <group position={[0, 0.35, 0]}>
+            <Flame reduced={reduced} />
+          </group>
+        </Grow>
+      )}
+      {has('well') && (
+        <Grow position={[6.2, 0, -6.2]} reduced={reduced}>
+          <Box p={[0, 0, 0]} s={[0.9, 0.5, 0.9]} c="#a9a49a" />
+          <Box p={[0, 0.5, 0]} s={[0.6, 0.02, 0.6]} c="#4fb3e8" />
+          <Box p={[-0.4, 0.5, 0]} s={[0.08, 0.7, 0.08]} c="#8b5a2b" />
+          <Box p={[0.4, 0.5, 0]} s={[0.08, 0.7, 0.08]} c="#8b5a2b" />
+          <Roof p={[0, 1.2, 0]} w={1.1} d={1.1} h={0.4} c="#b83f36" />
+        </Grow>
+      )}
+      {has('statue') && (
+        <Grow position={[-6.2, 0, -2.4]} reduced={reduced}>
+          <Box p={[0, 0, 0]} s={[0.7, 0.4, 0.7]} c="#cfc9bd" />
+          <Box p={[0, 0.4, 0]} s={[0.36, 0.7, 0.3]} c="#e3ddd0" />
+          <Box p={[0, 1.1, 0]} s={[0.3, 0.3, 0.3]} c="#e3ddd0" />
+          <Box p={[0.25, 0.8, 0]} s={[0.1, 0.5, 0.1]} c="#e3ddd0" rot={[0, 0, -0.5]} />
+        </Grow>
+      )}
+      {has('arch') && (
+        <Grow position={[0.1, 0, 6.2]} reduced={reduced}>
+          <Box p={[-0.7, 0, 0]} s={[0.14, 1.5, 0.14]} c="#6fb83b" />
+          <Box p={[0.7, 0, 0]} s={[0.14, 1.5, 0.14]} c="#6fb83b" />
+          <Box p={[0, 1.45, 0]} s={[1.6, 0.16, 0.18]} c="#6fb83b" />
+          {[-0.6, -0.2, 0.2, 0.6].map((x, i) => (
+            <Box key={x} p={[x, 1.55, 0.05]} s={[0.16, 0.14, 0.16]} c={['#ff7eb6', '#ffd23f', '#ffffff', '#9b8cff'][i]} />
+          ))}
+        </Grow>
+      )}
+      {has('lighthouse') && (
+        <Grow position={[6.4, 0, 5.1]} reduced={reduced}>
+          <Box p={[0, 0, 0]} s={[0.8, 0.8, 0.8]} c="#f4f1ea" />
+          <Box p={[0, 0.8, 0]} s={[0.7, 0.8, 0.7]} c="#d9574a" />
+          <Box p={[0, 1.6, 0]} s={[0.6, 0.8, 0.6]} c="#f4f1ea" />
+          <Box p={[0, 2.4, 0]} s={[0.5, 0.35, 0.5]} c="#ffe19a" emissive={night ? 2.5 : 0.8} />
+          <Roof p={[0, 2.75, 0]} w={0.7} d={0.7} h={0.4} c="#d9574a" />
+          {night && <pointLight position={[0, 2.6, 0]} color="#ffe19a" intensity={6} distance={6} />}
+        </Grow>
+      )}
+    </>
+  )
+}
+
+/** The player's avatar, standing by the front door wearing equipped items. */
+function Avatar({ shop, reduced }: { shop: WorldShop; reduced: boolean }) {
+  const ref = useRef<Group>(null)
+  useFrame(({ clock }) => {
+    if (reduced || !ref.current) return
+    const t = clock.getElapsedTime()
+    ref.current.position.y = Math.abs(Math.sin(t * 2)) * 0.06
+    ref.current.rotation.y = Math.sin(t * 0.6) * 0.4
+  })
+  const body = shop.outfitColor ?? '#d0643f'
+  const hat = shop.equipped.hat
+  return (
+    <group position={[0.7, 0, 2.9]}>
+      <group ref={ref}>
+        <Box p={[-0.09, 0, 0]} s={[0.12, 0.3, 0.12]} c="#4a3a2e" />
+        <Box p={[0.09, 0, 0]} s={[0.12, 0.3, 0.12]} c="#4a3a2e" />
+        <Box p={[0, 0.3, 0]} s={[0.38, 0.4, 0.26]} c={body} />
+        <Box p={[0, 0.7, 0]} s={[0.32, 0.32, 0.3]} c="#f6c9a6" />
+        {!hat && <Box p={[0, 0.98, 0]} s={[0.34, 0.08, 0.32]} c="#6b4226" />}
+        {hat === 'hat-straw' && (
+          <>
+            <Box p={[0, 1.0, 0]} s={[0.6, 0.04, 0.6]} c="#e8c872" />
+            <Box p={[0, 1.02, 0]} s={[0.3, 0.14, 0.3]} c="#e8c872" />
+          </>
+        )}
+        {hat === 'hat-beanie' && <Box p={[0, 0.98, 0]} s={[0.34, 0.16, 0.32]} c="#d9574a" />}
+        {hat === 'hat-wizard' && (
+          <mesh position={[0, 1.2, 0]} castShadow>
+            <coneGeometry args={[0.22, 0.45, 6]} />
+            <meshStandardMaterial color="#6a5acd" flatShading />
+          </mesh>
+        )}
+        {hat === 'hat-crown' && <Box p={[0, 1.0, 0]} s={[0.3, 0.12, 0.28]} c="#ffcf40" emissive={0.3} />}
+      </group>
+      {shop.equipped.pet && (
+        <group position={[0.45, 0, 0.2]}>
+          <Box
+            p={[0, 0, 0]}
+            s={[0.3, 0.18, 0.18]}
+            c={shop.equipped.pet === 'pet-fox' ? '#e8743b' : '#6b6b6b'}
+          />
+          <Box
+            p={[0.14, 0.12, 0]}
+            s={[0.14, 0.14, 0.14]}
+            c={shop.equipped.pet === 'pet-fox' ? '#e8743b' : '#6b6b6b'}
+          />
+        </group>
+      )}
+    </group>
+  )
+}
+
 export function WorldScene({
   world,
   focus,
   onSelect,
   reduced,
   time,
+  shop,
 }: {
   world: WorldState
   focus: DistrictId | null
   onSelect: (id: DistrictId) => void
   reduced: boolean
   time: TimeOfDay
+  /** Items bought with petals (decor + avatar). */
+  shop?: WorldShop
 }) {
   const controls = useRef<OrbitControlsImpl | null>(null)
   const light = lighting[time]
@@ -712,6 +859,12 @@ export function WorldScene({
         <TrophyHall trophies={scene.trophies} reduced={reduced} />
       </group>
       <Decorations world={world} reduced={reduced} night={time === 'night' || time === 'dusk'} />
+      {shop && (
+        <>
+          <ShopDecor owned={shop.owned} reduced={reduced} night={time === 'night' || time === 'dusk'} />
+          <Avatar shop={shop} reduced={reduced} />
+        </>
+      )}
       <Clouds reduced={reduced} />
       <SelectionRing id={focus} reduced={reduced} />
       <OrbitControls

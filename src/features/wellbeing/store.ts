@@ -23,7 +23,23 @@ export function useStoredList<T>(key: string) {
   return [items, setItems] as const
 }
 
-export type MoodEntry = { id: string; at: number; mood: number; note: string }
+export type MoodEntry = {
+  id: string
+  at: number
+  mood: number
+  note: string
+  /** Detailed mode only. */
+  emotions?: string[]
+  energy?: number
+}
+/** A compact emotion wheel: core feelings and the finer words inside them. */
+export const emotionWheel = [
+  { core: 'Joy', color: '#f2c14e', words: ['Grateful', 'Proud', 'Hopeful', 'Playful', 'Content'] },
+  { core: 'Calm', color: '#6bbf7a', words: ['Relaxed', 'Safe', 'Grounded', 'Peaceful', 'Relieved'] },
+  { core: 'Sad', color: '#5aa9e6', words: ['Lonely', 'Disappointed', 'Tired', 'Hurt', 'Low'] },
+  { core: 'Anxious', color: '#8f7ae5', words: ['Worried', 'Overwhelmed', 'Restless', 'Nervous', 'Unsure'] },
+  { core: 'Angry', color: '#e27396', words: ['Frustrated', 'Irritated', 'Resentful', 'Annoyed', 'Stressed'] },
+] as const
 export type GratitudeEntry = { id: string; at: number; text: string; jarId?: string }
 export type GratitudeJar = { id: string; name: string; emoji: string; color: string }
 export const GRATITUDE_JARS_KEY = 'bloom-gratitude-jars-v1'

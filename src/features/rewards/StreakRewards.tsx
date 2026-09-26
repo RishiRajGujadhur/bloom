@@ -16,6 +16,7 @@ import {
   type LoginResult,
 } from './loginRewards'
 import './rewards.css'
+import { SHOP_EVENT, useShop } from './shop'
 
 /**
  * Topbar streak counter. Opening Bloom each day earns petals; hovering (or
@@ -33,6 +34,7 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
     if (!result.reward) return
     saveLogin(result.state)
     setLogin(result.state)
+    window.dispatchEvent(new Event(SHOP_EVENT))
     setReward(result.reward)
   }, [today])
   // Dismiss the reward toast on its own timer (independent of re-renders).
@@ -42,6 +44,7 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
     return () => clearTimeout(timer)
   }, [reward])
 
+  const { balance } = useShop()
   const streak = loginStreak(login, today)
   const activeStreak = useMemo(() => {
     const active = new Set(
@@ -70,8 +73,8 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
           >
             <Flame size={18} className="streak-flame" aria-hidden="true" />
             <span>{streak} day streak</span>
-            <span className="streak-petals" aria-label={`${login.petals} petals`}>
-              🌸 {login.petals}
+            <span className="streak-petals" aria-label={`${balance} petals`}>
+              🌸 {balance}
             </span>
           </button>
         </HoverCard.Trigger>
@@ -90,8 +93,8 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
                 <span>day streak</span>
               </div>
               <div>
-                <strong>🌸 {login.petals}</strong>
-                <span>petals</span>
+                <strong>🌸 {balance}</strong>
+                <span>petals · {login.petals} earned</span>
               </div>
               <div>
                 <strong>

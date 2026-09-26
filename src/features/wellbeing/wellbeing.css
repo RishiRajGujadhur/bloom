@@ -421,3 +421,134 @@
 .wb-orb-stage {
   width: min(250px, 64vw);
 }
+.wb-custom {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px dashed var(--border-color);
+}
+.wb-custom label {
+  display: grid;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+.wb-custom input[type='range'] {
+  accent-color: var(--accent-color);
+}
+.wb-chips button[aria-pressed='true'] {
+  background: var(--accent-color);
+  border-color: transparent;
+  color: var(--text-on-accent, #fff);
+}
+@media (max-width: 700px) {
+  .wb-custom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mood detailed mode + gratitude shake */
+.wb-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.wb-card-head h2 {
+  margin: 0;
+}
+.wb-wheel {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+.wb-wheel-core {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wb-wheel-core button {
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2px solid color-mix(in oklab, var(--tint) 45%, transparent);
+  background: color-mix(in oklab, var(--tint) 14%, var(--bg-surface));
+  color: var(--text-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+.wb-wheel-core button:hover {
+  transform: translateY(-2px);
+}
+.wb-wheel-core button[aria-checked='true'] {
+  background: var(--tint);
+  color: #1d1a18;
+}
+.wb-energy {
+  display: grid;
+  gap: 6px;
+  max-width: 360px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.wb-energy input {
+  accent-color: var(--accent-color);
+}
+.wb-word-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+.wb-note-tags {
+  color: var(--accent-color) !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+.wb-shake {
+  margin-top: 10px;
+}
+.wb-jar.is-shaking {
+  animation: jar-shake 650ms ease-in-out;
+}
+@keyframes jar-shake {
+  15%,
+  45%,
+  75% {
+    transform: rotate(-8deg);
+  }
+  30%,
+  60%,
+  90% {
+    transform: rotate(8deg);
+  }
+}
+.wb-memory {
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--jar, var(--accent-color)) 14%, var(--bg-surface));
+  font-size: 17px;
+  font-style: italic;
+}
+.wb-memory small {
+  display: block;
+  margin-top: 6px;
+  font-style: normal;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wb-jar.is-shaking {
+    animation: none;
+  }
+}

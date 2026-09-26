@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Heart, Pause, RotateCcw, Trash2 } from 'lucide-react'
 import { Carousel } from '../../components/ui/Carousel'
@@ -11,6 +11,7 @@ import {
   jarTotals,
   type GratitudeJar,
   MOOD_KEY,
+  emotionWheel,
   moods,
   moodWeek,
   useStoredList,
@@ -45,11 +46,51 @@ const patterns: readonly {
 ]
 const roundOptions = [4, 8, 12] as const
 
+/** A soft sine tone: higher for inhale, lower for exhale, mid for holds. */
+let audio: AudioContext | null = null
+function playCue(label: string) {
+  try {
+    audio ??= new AudioContext()
+    const osc = audio.createOscillator()
+    const gain = audio.createGain()
+    osc.frequency.value = label.startsWith('In') ? 528 : label.startsWith('Out') ? 396 : 440
+    gain.gain.setValueAtTime(0.0001, audio.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.12, audio.currentTime + 0.05)
+    gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.6)
+    osc.connect(gain).connect(audio.destination)
+    osc.start()
+    osc.stop(audio.currentTime + 0.65)
+  } catch {
+    /* Audio unavailable: the visual cue still guides the breath. */
+  }
+}
+
 export function BreathePage() {
   const reduced = useReducedMotion()
   const [patternId, setPatternId] = useState<string>('box')
   const [rounds, setRounds] = useState<number>(8)
-  const pattern = patterns.find((p) => p.id === patternId)!
+  // Advanced mode: build your own pattern, with optional sound and vibration cues.
+  const [custom, setCustom] = useState({ in: 4, hold: 2, out: 6, rest: 0 })
+  const [cues, setCues] = useState({ sound: false, vibrate: false })
+  const customPattern = useMemo(
+    () => ({
+      id: 'custom',
+      name: 'Custom',
+      emoji: '🎛️',
+      benefit: 'Your own rhythm',
+      phases: (
+        [
+          ['In', custom.in],
+          ['Hold', custom.hold],
+          ['Out', custom.out],
+          ['Hold', custom.rest],
+        ] as const
+      ).filter(([, seconds]) => seconds > 0) as readonly Phase[],
+    }),
+    [custom],
+  )
+  const pattern =
+    patternId === 'custom' ? customPattern : patterns.find((p) => p.id === patternId)!
   const [running, setRunning] = useState(false)
   // One pure state transition per second: count down, then move to the next
   // phase. Cycles are counted each time the pattern wraps back to "In".
@@ -91,7 +132,15 @@ export function BreathePage() {
     // stop() is recreated each render; run only when the count changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cycles, rounds, running])
-  const [label, seconds] = pattern.phases[phase]
+  // Cue each new phase with a soft tone and/or a short vibration.
+  useEffect(() => {
+    if (!running) return
+    if (cues.vibrate) navigator.vibrate?.(60)
+    if (cues.sound) playCue(pattern.phases[phase][0])
+    // Only when the phase changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, running])
+  const [label, seconds] = pattern.phases[phase] ?? pattern.phases[0]
   const scale = label.startsWith('In more')
     ? 1.08
     : label.startsWith('In')
@@ -122,7 +171,60 @@ export function BreathePage() {
             <em>{p.phases.map((ph) => ph[1]).join(' · ')}</em>
           </button>
         ))}
+        <button
+          type="button"
+          className="wb-technique"
+          aria-pressed={patternId === 'custom'}
+          disabled={running}
+          onClick={() => {
+            setPatternId('custom')
+            setTick({ phase: 0, left: customPattern.phases[0][1], cycles: 0 })
+          }}
+        >
+          <span aria-hidden="true">🎛️</span>
+          <strong>Custom</strong>
+          <small>Build your own rhythm</small>
+          <em>{customPattern.phases.map((ph) => ph[1]).join(' · ')}</em>
+        </button>
       </Carousel>
+      {patternId === 'custom' && (
+        <div className="wb-custom" aria-label="Custom pattern">
+          {(
+            [
+              ['in', 'Inhale', 2, 10],
+              ['hold', 'Hold', 0, 10],
+              ['out', 'Exhale', 2, 12],
+              ['rest', 'Rest', 0, 10],
+            ] as const
+          ).map(([key, label, min, max]) => (
+            <label key={key}>
+              <span>
+                {label} <strong>{custom[key]}s</strong>
+              </span>
+              <input
+                type="range"
+                min={min}
+                max={max}
+                value={custom[key]}
+                disabled={running}
+                onChange={(e) => {
+                  const next = { ...custom, [key]: Number(e.target.value) }
+                  setCustom(next)
+                  setTick({ phase: 0, left: next.in, cycles: 0 })
+                }}
+              />
+            </label>
+          ))}
+        </div>
+      )}
+      <div className="wb-chips" role="group" aria-label="Cues">
+        <button type="button" aria-pressed={cues.sound} onClick={() => setCues((c) => ({ ...c, sound: !c.sound }))}>
+          🔔 Sound cue
+        </button>
+        <button type="button" aria-pressed={cues.vibrate} onClick={() => setCues((c) => ({ ...c, vibrate: !c.vibrate }))}>
+          📳 Vibrate
+        </button>
+      </div>
       <div className="wb-chips" role="radiogroup" aria-label="Rounds">
         {roundOptions.map((n) => (
           <button
@@ -176,20 +278,50 @@ export function MoodPage() {
   const [entries, setEntries] = useStoredList<MoodEntry>(MOOD_KEY)
   const [note, setNote] = useState('')
   const [picked, setPicked] = useState<number | null>(null)
+  // Advanced mode: name the feeling precisely and rate energy.
+  const [detailed, setDetailed] = useState(false)
+  const [core, setCore] = useState<string | null>(null)
+  const [emotions, setEmotions] = useState<string[]>([])
+  const [energy, setEnergy] = useState(3)
   const week = moodWeek(entries)
   const save = () => {
     if (picked === null) return
     setEntries((list) => [
-      { id: crypto.randomUUID(), at: Date.now(), mood: picked, note: note.trim() },
+      {
+        id: crypto.randomUUID(),
+        at: Date.now(),
+        mood: picked,
+        note: note.trim(),
+        ...(detailed ? { emotions, energy } : {}),
+      },
       ...list,
     ])
     setPicked(null)
     setNote('')
+    setEmotions([])
+    setCore(null)
   }
+  const topEmotions = Object.entries(
+    entries
+      .flatMap((e) => e.emotions ?? [])
+      .reduce<Record<string, number>>((acc, word) => ({ ...acc, [word]: (acc[word] ?? 0) + 1 }), {}),
+  )
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
   return (
     <section className="wb-page" aria-labelledby="mood-title">
       <div className="wb-card">
-        <h2 id="mood-title">How are you right now?</h2>
+        <div className="wb-card-head">
+          <h2 id="mood-title">How are you right now?</h2>
+          <div className="wb-chips" role="group" aria-label="Check-in mode">
+            <button type="button" aria-pressed={!detailed} onClick={() => setDetailed(false)}>
+              Quick
+            </button>
+            <button type="button" aria-pressed={detailed} onClick={() => setDetailed(true)}>
+              Detailed
+            </button>
+          </div>
+        </div>
         <div className="wb-moods" role="radiogroup" aria-label="Mood">
           {moods.map((m) => (
             <button
@@ -203,6 +335,56 @@ export function MoodPage() {
             </button>
           ))}
         </div>
+        {detailed && (
+          <div className="wb-wheel">
+            <div className="wb-wheel-core" role="radiogroup" aria-label="Core feeling">
+              {emotionWheel.map((e) => (
+                <button
+                  key={e.core}
+                  type="button"
+                  role="radio"
+                  aria-checked={core === e.core}
+                  style={{ ['--tint' as string]: e.color }}
+                  onClick={() => setCore(e.core)}
+                >
+                  {e.core}
+                </button>
+              ))}
+            </div>
+            {core && (
+              <div className="filter-chips" aria-label={`${core} feelings`}>
+                {emotionWheel
+                  .find((e) => e.core === core)!
+                  .words.map((word) => (
+                    <button
+                      key={word}
+                      type="button"
+                      aria-pressed={emotions.includes(word)}
+                      onClick={() =>
+                        setEmotions((list) =>
+                          list.includes(word) ? list.filter((w) => w !== word) : [...list, word],
+                        )
+                      }
+                    >
+                      {word}
+                    </button>
+                  ))}
+              </div>
+            )}
+            <label className="wb-energy">
+              <span>
+                Energy <strong>{['Drained', 'Low', 'Steady', 'Good', 'Buzzing'][energy - 1]}</strong>
+              </span>
+              <input
+                type="range"
+                min={1}
+                max={5}
+                value={energy}
+                onChange={(e) => setEnergy(Number(e.target.value))}
+              />
+            </label>
+          </div>
+        )}
         <AnimatePresence>
           {picked !== null && (
             <motion.div
@@ -244,12 +426,25 @@ export function MoodPage() {
           })}
         </ol>
       </div>
+      {topEmotions.length > 0 && (
+        <div className="wb-card">
+          <h2>Words you use most</h2>
+          <div className="wb-word-cloud">
+            {topEmotions.map(([word, count]) => (
+              <span key={word} style={{ fontSize: `${14 + count * 3}px` }}>
+                {word}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
       {entries.length > 0 && (
         <Carousel label="Recent check-ins" title="Recent" perView={4}>
           {entries.slice(0, 20).map((entry) => (
             <article key={entry.id} className="wb-note">
               <span aria-hidden="true">{moods[entry.mood - 1]?.emoji}</span>
               <strong>{moods[entry.mood - 1]?.label}</strong>
+              {entry.emotions?.length ? <p className="wb-note-tags">{entry.emotions.join(' · ')}</p> : null}
               {entry.note && <p>{entry.note}</p>}
               <small>
                 {new Date(entry.at).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' })}
@@ -278,6 +473,18 @@ export function GratitudePage() {
   const totals = jarTotals(jars, entries)
   const top = totals[0]
   const fill = (count: number) => Math.min(100, (count / JAR_CAPACITY) * 100)
+  // Advanced mode: shake the jar to resurface a random memory.
+  const [memory, setMemory] = useState<GratitudeEntry | null>(null)
+  const [shaking, setShaking] = useState(false)
+  const shake = () => {
+    if (!inJar.length) return
+    setShaking(true)
+    setMemory(null)
+    setTimeout(() => {
+      setShaking(false)
+      setMemory(inJar[Math.floor(Math.random() * inJar.length)])
+    }, 650)
+  }
   const add = () => {
     const value = text.trim()
     if (!value) return
@@ -366,7 +573,7 @@ export function GratitudePage() {
         </form>
       )}
       <div className="wb-card wb-jar-card" style={{ ['--jar' as string]: jar.color }}>
-        <div className="wb-jar" aria-hidden="true">
+        <div className={`wb-jar${shaking ? ' is-shaking' : ''}`} aria-hidden="true">
           {inJar.slice(0, 24).map((entry, i) => (
             <motion.i
               key={entry.id}
@@ -401,6 +608,26 @@ export function GratitudePage() {
           <p className="wb-muted">
             <Heart size={14} aria-hidden="true" /> {inJar.length} / {JAR_CAPACITY}
           </p>
+          {inJar.length > 0 && (
+            <button type="button" className="ov-secondary wb-shake" onClick={shake}>
+              🫙 Shake for a memory
+            </button>
+          )}
+          <AnimatePresence>
+            {memory && (
+              <motion.blockquote
+                className="wb-memory"
+                initial={{ opacity: 0, y: 10, rotate: -2 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                “{memory.text}”
+                <small>
+                  {new Date(memory.at).toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                </small>
+              </motion.blockquote>
+            )}
+          </AnimatePresence>
         </div>
       </div>
       <div className="wb-card">

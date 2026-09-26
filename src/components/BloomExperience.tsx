@@ -153,6 +153,8 @@ const captions: Record<NavKey, string> = {
   urges: 'A pause is a powerful beginning.',
   world: 'Every small step builds your little world.',
   breathe: 'Slow down, one breath at a time.',
+  sleep: 'Rest is part of the work.',
+  shop: 'Treat your world.',
   mood: 'Two taps. No judgement.',
   gratitude: 'Collect the good things.',
   settings: 'Make this space your own.',

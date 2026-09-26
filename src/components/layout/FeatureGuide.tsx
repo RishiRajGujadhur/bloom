@@ -55,6 +55,8 @@ export const pageDetails: Record<
     description: 'Bring your ideas together and give your future some space.',
   },
   breathe: { title: 'Breathe', description: 'Slow down, one breath at a time.' },
+  sleep: { title: 'Sleep', description: 'Rest is part of the work.' },
+  shop: { title: 'Petal shop', description: 'Treat your world.' },
   mood: { title: 'Mood check-in', description: 'Two taps. No judgement.' },
   gratitude: { title: 'Gratitude jar', description: 'Collect the good things.' },
   world: {
@@ -78,6 +80,14 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  sleep: [
+    step('.sleep-stats', 'Your week of sleep', 'Average, quality, consistency and debt.'),
+    step('.sleep-page .filter-chips', 'Three modes', 'Log a night, wind down, or read your insights.'),
+  ],
+  shop: [
+    step('.shop-hero', 'Your petals', 'Earned by visiting each day.'),
+    step('.shop-grid', 'Treat yourself', 'Decor shows up in Bloom World; outfits dress your avatar.'),
+  ],
   breathe: [
     step('.wb-chips', 'Pick a rhythm', 'Box, 4-7-8 or Calm.'),
     step('.wb-orb-stage', 'Follow the orb', 'Breathe in as it grows, out as it shrinks.'),

@@ -3,7 +3,7 @@ import { dayKey } from '../dates'
 import { totals } from './engine'
 import type { Rpg } from './schema'
 
-export function weeklyGoals(data: AppData, today: string) {
+function goalsForWeek(data: AppData, today: string) {
   const start = new Date(`${today}T12:00:00`)
   start.setDate(start.getDate() - ((start.getDay() + 6) % 7))
   const from = dayKey(start)
@@ -100,6 +100,32 @@ export function weeklyGoals(data: AppData, today: string) {
       page: 'overview' as const,
     },
   ]
+}
+
+/**
+ * Weekly goals. With `adaptive`, each target scales to your recent pace:
+ * about 10% above your average over the previous three weeks, never below
+ * half the default nor above triple it. With no history the default applies.
+ */
+export function weeklyGoals(data: AppData, today: string, adaptive = false) {
+  const goals = goalsForWeek(data, today)
+  if (!adaptive) return goals.map((g) => ({ ...g, baseTarget: g.target, adapted: false }))
+  const monday = new Date(`${today}T12:00:00`)
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
+  const history = [1, 2, 3].map((weeksAgo) => {
+    const sunday = new Date(monday)
+    sunday.setDate(sunday.getDate() - 7 * weeksAgo + 6)
+    return goalsForWeek(data, dayKey(sunday))
+  })
+  return goals.map((goal, index) => {
+    const average = history.reduce((sum, week) => sum + week[index].current, 0) / history.length
+    if (average <= 0) return { ...goal, baseTarget: goal.target, adapted: false }
+    const target = Math.min(
+      goal.target * 3,
+      Math.max(Math.ceil(goal.target / 2), Math.ceil(average * 1.1)),
+    )
+    return { ...goal, baseTarget: goal.target, target, adapted: target !== goal.target }
+  })
 }
 
 // Existing ledger identities prevent undo/redo and page visits from replaying rewards.

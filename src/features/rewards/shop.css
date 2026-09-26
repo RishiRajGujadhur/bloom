@@ -1,0 +1,125 @@
+.shop-page {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.shop-hero {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 24px;
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  background: radial-gradient(circle at 12% 50%, color-mix(in oklab, var(--accent-color) 16%, var(--bg-surface)), var(--bg-surface) 55%);
+}
+.avatar-preview {
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  animation: avatar-bob 2.6s ease-in-out infinite;
+}
+@keyframes avatar-bob {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+.shop-balance {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+.shop-balance strong {
+  font-size: 36px;
+  color: var(--text-primary);
+}
+.shop-hero .wb-muted {
+  margin-bottom: 12px;
+}
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.shop-card {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 18px 14px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  text-align: center;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.shop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -22px var(--accent-color);
+}
+.shop-card[data-owned='true'] {
+  background: color-mix(in oklab, var(--accent-color) 6%, var(--bg-surface));
+}
+.shop-emoji {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: color-mix(in oklab, var(--tint) 18%, var(--bg-surface));
+  font-size: 34px;
+  transition: transform 260ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.shop-card:hover .shop-emoji {
+  transform: rotate(-8deg) scale(1.1);
+}
+.shop-card strong {
+  font-size: 14.5px;
+}
+.shop-price {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.shop-card button {
+  width: 100%;
+  justify-content: center;
+  min-height: 40px !important;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.shop-owned {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  color: #3f8a5a;
+  font-size: 13px;
+}
+.shop-flash {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  z-index: 90;
+  translate: -50% 0;
+  padding: 14px 22px;
+  border-radius: 18px;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 20px 40px -18px rgb(0 0 0 / 0.5);
+}
+.shop-flash span {
+  font-size: 22px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .avatar-preview,
+  .shop-card,
+  .shop-emoji {
+    animation: none;
+    transition: none;
+  }
+}

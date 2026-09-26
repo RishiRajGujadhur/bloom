@@ -7,6 +7,7 @@ import type { NavKey } from '../../components/layout/Sidebar'
 import { buildWorld, futureWorld, growthSince } from './worldModel'
 import type { DistrictId, WorldState } from './worldModel'
 import { WorldScene, timeOfDay } from './WorldScene'
+import { shopItems, useShop } from '../rewards/shop'
 import './world.css'
 
 const SNAPSHOT_KEY = 'bloom-world-snapshot-v1'
@@ -58,6 +59,12 @@ export function WorldPage({
   onNavigate: (key: NavKey) => void
 }) {
   const reduced = useReducedMotion() ?? false
+  const { shop } = useShop()
+  const worldShop = {
+    owned: shop.owned,
+    equipped: shop.equipped,
+    outfitColor: shopItems.find((i) => i.id === shop.equipped.outfit)?.color,
+  }
   const world = useMemo(() => buildWorld(data, today), [data, today])
   const [focus, setFocus] = useState<DistrictId | null>(null)
   const [peek, setPeek] = useState(false)
@@ -138,6 +145,7 @@ export function WorldPage({
             <WorldScene
               key={peek ? 'future' : 'now'}
               world={shown}
+              shop={worldShop}
               focus={focus}
               onSelect={(id) => setFocus((f) => (f === id ? null : id))}
               reduced={reduced}
