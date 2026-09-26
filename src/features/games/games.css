@@ -1,0 +1,104 @@
+.bg-stage,
+.bg-game {
+  height: 100%;
+}
+.bg-game {
+  position: relative;
+}
+.bg-quit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.bg-play {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr);
+  gap: 20px;
+  align-items: center;
+  height: 100%;
+}
+.bg-board {
+  justify-self: center;
+  width: min(100%, 440px);
+  aspect-ratio: 1;
+  max-height: 100%;
+}
+.bg-controls {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+.bg-controls p {
+  margin: 0;
+  font-size: 18px;
+}
+.bg-stroop {
+  place-items: center;
+}
+.bg-word {
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  animation: bg-pop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+.bg-sum {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.bg-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.bg-options .studio-chip {
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
+}
+.bg-answer {
+  width: 180px;
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+}
+.bg-result {
+  display: grid;
+  gap: 10px;
+  animation: bg-pop 500ms cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+.bg-daily h3 {
+  margin: 0 0 8px;
+}
+.bg-radar {
+  width: min(100%, 420px);
+}
+.bg-radar-grid {
+  fill: none;
+  stroke: var(--border-color);
+}
+.bg-radar-shape {
+  fill: color-mix(in oklab, var(--studio) 30%, transparent);
+  stroke: var(--studio);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  animation: bg-pop 700ms ease both;
+  transform-origin: 150px 130px;
+}
+.bg-radar text {
+  fill: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+@keyframes bg-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+@media (max-width: 800px) {
+  .bg-play {
+    grid-template-columns: 1fr;
+  }
+}

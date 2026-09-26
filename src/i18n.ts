@@ -401,6 +401,10 @@ const common = {
         title: "Flashcards",
         description: "Spaced-repetition cards in Markdown with 3D flips, cloze and decks.",
       },
+      brainGames: {
+        title: "Brain games",
+        description: "N-back, memory, colour clash, reaction and maths that adapt to you.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1424,6 +1428,10 @@ export const resources = {
           flashcards: {
             title: "Cartes mémoire",
             description: "Cartes à répétition espacée en Markdown, retournement 3D, texte à trous et paquets.",
+          },
+          brainGames: {
+            title: "Jeux cérébraux",
+            description: "N-back, mémoire, couleurs, réflexes et calcul qui s’adaptent à vous.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

@@ -601,6 +601,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "tags", title: "Tags", description: "Label cards." },
     { id: "stats", title: "Stats", description: "New, learning, mature and what’s due." },
   ],
+  brainGames: [
+    { id: "nback", title: "N-back", description: "A classic working-memory trainer." },
+    { id: "memoryGrid", title: "Memory grid", description: "Recall lit tiles on a growing grid." },
+    { id: "stroop", title: "Colour clash", description: "Stroop test for focus." },
+    { id: "reaction", title: "Reaction time", description: "How fast you respond." },
+    { id: "speedMaths", title: "Speed maths", description: "Mental arithmetic against the clock." },
+    { id: "adaptive", title: "Adaptive difficulty", description: "Levels rise and fall with your accuracy." },
+    { id: "daily", title: "Daily workout", description: "Three games picked for today." },
+    { id: "history", title: "History", description: "Your recent scores." },
+    { id: "skillRadar", title: "Skill radar", description: "Memory, attention, speed and maths." },
+    { id: "sounds", title: "Sounds", description: "Blips for right and wrong." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

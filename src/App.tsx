@@ -183,6 +183,9 @@ const MindMapPage = lazy(() =>
 const CardsPage = lazy(() =>
   import('./features/cards/CardsPage').then((m) => ({ default: m.CardsPage })),
 )
+const GamesPage = lazy(() =>
+  import('./features/games/GamesPage').then((m) => ({ default: m.GamesPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -639,6 +642,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'games' && !settings.features.brainGames) ||
             (active === 'cards' && !settings.features.flashcards) ||
             (active === 'mindmaps' && !settings.features.mindMaps) ||
             (active === 'mirror' && !settings.features.moodMirror) ||
@@ -803,6 +807,10 @@ function App() {
             ) : active === 'cards' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <CardsPage />
+              </Suspense>
+            ) : active === 'games' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <GamesPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

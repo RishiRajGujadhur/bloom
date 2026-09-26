@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'games': { title: "Brain games", description: "Play your mind awake." },
   'cards': { title: "Flashcards", description: "Remember what matters." },
   'mindmaps': { title: "Mind maps", description: "Untangle your thoughts." },
   'mirror': { title: "Mood mirror", description: "What your words say about you." },
@@ -187,6 +188,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'cards': [
     step(".fc-scene", "Tap to flip", "Or press space."),
     step(".fc-grades", "Grade honestly", "1–4 on the keyboard."),
+  ],
+  'games': [
+    step(".bg-daily", "Today’s workout", "Three games, a few minutes."),
+    step(".studio-rail", "Pick any game", "Each adapts to your level."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

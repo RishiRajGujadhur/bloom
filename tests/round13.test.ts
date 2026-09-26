@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { dailyWorkout, isTarget, mathsProblem, memoryPattern, memorySetup, nbackSequence, nextLevel, reactionScore, rng, scoreNback, skillScores, stroopTrial } from '../src/features/games/gamesModel'
 import { clozeBack, clozeFront, dueCards, newCard, parseImport, render as mdRender, review as cardReview, stats as cardStats } from '../src/features/cards/cardsModel'
 import { branches, fromText, templates as mapTemplates, titleOf } from '../src/features/mindmap/mindmapModel'
 import { agreement, daily as mrDaily, label as mrLabel, reframesFor, score as mrScore, topWords } from '../src/features/mirror/mirrorModel'
@@ -32,7 +33,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -290,4 +291,29 @@ test('flashcards: SM-2, cloze, safe markdown, import, stats', () => {
   expect(html).not.toMatch(/script|onclick|javascript:/)
   expect(parseImport('a;b\nc\td\nbad')).toEqual([{ front: 'a', back: 'b' }, { front: 'c', back: 'd' }])
   expect(cardStats([c, good], '2026-09-26')).toMatchObject({ fresh: 1, young: 1, total: 2 })
+})
+
+test('brain games: n-back, memory, stroop, maths, adaptivity, skills', () => {
+  const r = rng(42)
+  const seq = nbackSequence(2, 40, r)
+  const targets = seq.map((_, i) => i).filter((i) => isTarget(seq, i, 2))
+  expect(targets.length).toBeGreaterThan(4)
+  expect(scoreNback(seq, 2, new Set(targets)).accuracy).toBe(1)
+  expect(scoreNback(seq, 2, new Set()).hits).toBe(0)
+  expect(memorySetup(1)).toEqual({ size: 3, tiles: 4 })
+  expect(memoryPattern(4, 6, r).size).toBe(6)
+  for (let i = 0; i < 30; i++) {
+    const t = stroopTrial(5, r)
+    expect(t.options).toContain(t.ink)
+    const p = mathsProblem(8, r)
+    expect(Number.isInteger(p.answer)).toBe(true)
+    expect(p.answer).toBeGreaterThanOrEqual(0)
+  }
+  expect(nextLevel(3, 0.9)).toBe(4)
+  expect(nextLevel(3, 0.3)).toBe(2)
+  expect(nextLevel(1, 0.1)).toBe(1)
+  expect(reactionScore(150)).toBe(100)
+  expect(reactionScore(500)).toBe(0)
+  expect(skillScores([{ at: 0, game: 'stroop', level: 2, score: 50, accuracy: 1 }]).attention).toBe(68)
+  expect(dailyWorkout('2026-09-26')).toHaveLength(3)
 })
