@@ -1,0 +1,131 @@
+.mr-overview {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+.mr-face {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 20px;
+  border-radius: 22px;
+  background: radial-gradient(circle, var(--face, #c9b8ff55), transparent 70%);
+}
+.mr-face[data-tone='Bright'] {
+  --face: #f2c14e66;
+}
+.mr-face[data-tone='Warm'] {
+  --face: #f7b27a55;
+}
+.mr-face[data-tone='Cloudy'] {
+  --face: #9fb4d855;
+}
+.mr-face[data-tone='Heavy'] {
+  --face: #5a7aa655;
+}
+.mr-face span {
+  font-size: 64px;
+  animation: mr-float 4s ease-in-out infinite;
+}
+.mr-face strong {
+  font-size: 26px;
+}
+.mr-face small {
+  color: var(--text-muted);
+}
+.mr-trend {
+  width: 100%;
+}
+.mr-zero {
+  stroke: var(--border-color);
+  stroke-dasharray: 4 6;
+}
+.mr-line {
+  fill: none;
+  stroke: var(--studio);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.mr-dot {
+  fill: var(--bg-surface);
+  stroke: var(--studio);
+  stroke-width: 2;
+}
+.mr-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding: 10px 0;
+}
+.mr-cloud span {
+  font-weight: 700;
+  line-height: 1.1;
+}
+.mr-cloud[data-tone='pos'] span {
+  color: #b7791f;
+}
+.mr-cloud[data-tone='neg'] span {
+  color: #5a7aa6;
+}
+.mr-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  height: 240px;
+}
+.mr-day {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: end;
+  justify-items: center;
+  gap: 6px;
+}
+.mr-bar {
+  width: 70%;
+  border-radius: 12px;
+  background: #c9b8ff;
+  transition: height 700ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.mr-bar[data-tone='Bright'] {
+  background: #f2c14e;
+}
+.mr-bar[data-tone='Warm'] {
+  background: #f7b27a;
+}
+.mr-bar[data-tone='Cloudy'] {
+  background: #9fb4d8;
+}
+.mr-bar[data-tone='Heavy'] {
+  background: #5a7aa6;
+}
+.mr-bar[data-tone='none'] {
+  background: var(--border-color);
+}
+.mr-reframe {
+  display: grid;
+  gap: 4px;
+}
+.mr-reframe p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+@keyframes mr-float {
+  50% {
+    transform: translateY(-6px) rotate(-4deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mr-face span {
+    animation: none;
+  }
+}
+.mr-scores {
+  margin-top: 12px;
+}
+.mr-scores span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

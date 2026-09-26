@@ -565,6 +565,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "prompts", title: "Daily prompt", description: "A gentle idea for today’s page." },
     { id: "export", title: "Export PNG", description: "Save a page as an image." },
   ],
+  moodMirror: [
+    { id: "trend", title: "Tone over time", description: "A line that draws your writing’s mood." },
+    { id: "wordCloud", title: "Word clouds", description: "Words that lift you and words that weigh." },
+    { id: "weekday", title: "Weekday pattern", description: "Which days read brighter." },
+    { id: "compare", title: "Compare with mood", description: "How well your words match the mood you log." },
+    { id: "reframes", title: "Gentle reframes", description: "Kind ways to see heavy words." },
+    { id: "sources", title: "Sources filter", description: "Journal, Daybook, gratitude or mood notes." },
+    { id: "gratitudeWords", title: "Gratitude words", description: "What your thanks is most often about." },
+    { id: "privacy", title: "On-device", description: "Nothing is sent anywhere." },
+    { id: "weekFace", title: "This week", description: "A face for how this week reads." },
+    { id: "scores", title: "Per-entry scores", description: "Every entry scored for tone." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

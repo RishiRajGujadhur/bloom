@@ -174,6 +174,9 @@ const MalaPage = lazy(() =>
 const InkPage = lazy(() =>
   import('./features/ink/InkPage').then((m) => ({ default: m.InkPage })),
 )
+const MirrorPage = lazy(() =>
+  import('./features/mirror/MirrorPage').then((m) => ({ default: m.MirrorPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -630,6 +633,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'mirror' && !settings.features.moodMirror) ||
             (active === 'ink' && !settings.features.inkJournal) ||
             (active === 'mala' && !settings.features.mala) ||
             (active === 'breathwork' && !settings.features.breathwork) ||
@@ -779,6 +783,10 @@ function App() {
             ) : active === 'ink' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <InkPage />
+              </Suspense>
+            ) : active === 'mirror' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <MirrorPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

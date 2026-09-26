@@ -389,6 +389,10 @@ const common = {
         title: "Ink journal",
         description: "Handwrite and sketch with a pressure-sensitive pen on paper you choose.",
       },
+      moodMirror: {
+        title: "Mood mirror",
+        description: "See the emotional tone of your writing over time, analysed on your device.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1400,6 +1404,10 @@ export const resources = {
           inkJournal: {
             title: "Journal à l’encre",
             description: "Écrivez et dessinez à la main avec un stylo sensible à la pression.",
+          },
+          moodMirror: {
+            title: "Miroir d’humeur",
+            description: "Le ton émotionnel de vos écrits au fil du temps, analysé sur l’appareil.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

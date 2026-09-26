@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { agreement, daily as mrDaily, label as mrLabel, reframesFor, score as mrScore, topWords } from '../src/features/mirror/mirrorModel'
 import { hit, pathFor, promptFor, push as inkPush, redo as inkRedo, undo as inkUndo } from '../src/features/ink/inkModel'
 import { beadOf, isQuarter, roundsOf } from '../src/features/mala/malaModel'
 import { best as bwBest, defaultSettings as bwDefaults, initial as bwInitial, lung, step as bwStep } from '../src/features/breathwork/breathworkModel'
@@ -29,7 +30,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -248,4 +249,18 @@ test('ink: freehand path, eraser hit, undo/redo, prompts', () => {
   expect(inkRedo(h, [])!.strokes).toEqual([stroke])
   expect(inkUndo({ past: [], future: [] }, [])).toBeNull()
   expect(promptFor('2026-09-26')).toBe(promptFor('2026-09-26'))
+})
+
+test('mood mirror: sentiment, daily tone, words, agreement, reframes', () => {
+  const day = 86400000
+  const items = ['I am so happy and grateful today', 'Stressed and tired, a hard day', 'Wonderful calm evening', 'Sad and lonely', 'Great news, excited'].map((text, i) => mrScore({ id: String(i), at: i * day, text, source: 'journal' }))
+  expect(items[0].comparative).toBeGreaterThan(0)
+  expect(items[1].comparative).toBeLessThan(0)
+  expect(mrLabel(items[0].comparative)).toMatch(/Bright|Warm/)
+  expect(topWords(items, 'negative').map((w) => w[0])).toContain('stressed')
+  const days = mrDaily(items)
+  expect(days).toHaveLength(5)
+  const moods = [5, 2, 4, 1, 5].map((mood, i) => ({ at: i * day, mood }))
+  expect(agreement(days, moods)!).toBeGreaterThan(0.8)
+  expect(reframesFor(items).map((r) => r[0])).toEqual(expect.arrayContaining(['stressed', 'tired', 'sad']))
 })
