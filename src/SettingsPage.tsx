@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { CalendarRange as CalendarRangeF_goalRoadmap } from 'lucide-react'
 import { Gamepad2 as Gamepad2F_brainGames } from 'lucide-react'
 import { Layers as LayersF_flashcards } from 'lucide-react'
 import { Network as NetworkF_mindMaps } from 'lucide-react'
@@ -126,6 +127,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  goalRoadmap: CalendarRangeF_goalRoadmap,
   brainGames: Gamepad2F_brainGames,
   flashcards: LayersF_flashcards,
   mindMaps: NetworkF_mindMaps,
@@ -203,6 +205,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  goalRoadmap: boolean
   brainGames: boolean
   flashcards: boolean
   mindMaps: boolean
@@ -289,6 +292,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    goalRoadmap: true,
     brainGames: true,
     flashcards: true,
     mindMaps: true,
@@ -367,6 +371,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'goalRoadmap',
   'brainGames',
   'flashcards',
   'mindMaps',

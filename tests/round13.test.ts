@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { ganttTasks, goalProgress, onTrack, reviewDue, sampleGoal } from '../src/features/roadmap/roadmapModel'
 import { dailyWorkout, isTarget, mathsProblem, memoryPattern, memorySetup, nbackSequence, nextLevel, reactionScore, rng, scoreNback, skillScores, stroopTrial } from '../src/features/games/gamesModel'
 import { clozeBack, clozeFront, dueCards, newCard, parseImport, render as mdRender, review as cardReview, stats as cardStats } from '../src/features/cards/cardsModel'
 import { branches, fromText, templates as mapTemplates, titleOf } from '../src/features/mindmap/mindmapModel'
@@ -33,7 +34,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -316,4 +317,17 @@ test('brain games: n-back, memory, stroop, maths, adaptivity, skills', () => {
   expect(reactionScore(500)).toBe(0)
   expect(skillScores([{ at: 0, game: 'stroop', level: 2, score: 50, accuracy: 1 }]).attention).toBe(68)
   expect(dailyWorkout('2026-09-26')).toHaveLength(3)
+})
+
+test('roadmap: progress, on-track, reviews and gantt tasks', () => {
+  const g = sampleGoal('2026-09-01')
+  expect(goalProgress(g)).toBeCloseTo((1 / 3 + 4 / 10) / 2)
+  expect(goalProgress({ ...g, krs: [] })).toBeCloseTo(0.1)
+  expect(onTrack(g, '2026-09-01')?.status).toBe('on track')
+  expect(onTrack({ ...g, krs: [] }, '2026-10-25')?.status).toBe('behind')
+  expect(reviewDue(g, '2026-09-01')).toBe(true)
+  expect(reviewDue({ ...g, reviewedAt: '2026-09-01' }, '2026-09-05')).toBe(false)
+  const t = ganttTasks([g])
+  expect(t).toHaveLength(3)
+  expect(t[1].dependencies).toBe(g.milestones[0].id)
 })

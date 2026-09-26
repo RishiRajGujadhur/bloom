@@ -186,6 +186,9 @@ const CardsPage = lazy(() =>
 const GamesPage = lazy(() =>
   import('./features/games/GamesPage').then((m) => ({ default: m.GamesPage })),
 )
+const RoadmapPage = lazy(() =>
+  import('./features/roadmap/RoadmapPage').then((m) => ({ default: m.RoadmapPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -642,6 +645,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'roadmap' && !settings.features.goalRoadmap) ||
             (active === 'games' && !settings.features.brainGames) ||
             (active === 'cards' && !settings.features.flashcards) ||
             (active === 'mindmaps' && !settings.features.mindMaps) ||
@@ -811,6 +815,10 @@ function App() {
             ) : active === 'games' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <GamesPage />
+              </Suspense>
+            ) : active === 'roadmap' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <RoadmapPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

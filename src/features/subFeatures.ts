@@ -613,6 +613,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "skillRadar", title: "Skill radar", description: "Memory, attention, speed and maths." },
     { id: "sounds", title: "Sounds", description: "Blips for right and wrong." },
   ],
+  goalRoadmap: [
+    { id: "timeline", title: "Gantt timeline", description: "Every milestone on one timeline." },
+    { id: "dragDates", title: "Drag dates", description: "Move and stretch bars to reschedule." },
+    { id: "progress", title: "Drag progress", description: "Slide a bar’s progress handle." },
+    { id: "keyResults", title: "Key results", description: "Measurable sliders for each goal." },
+    { id: "confidence", title: "Confidence", description: "How sure you feel, out of ten." },
+    { id: "views", title: "Week, month, year", description: "Zoom the timeline." },
+    { id: "dependencies", title: "Dependencies", description: "Arrows link each milestone to the last." },
+    { id: "review", title: "Weekly review", description: "Four questions to steer the goal." },
+    { id: "linkTasks", title: "Link to tasks", description: "Send a milestone to your to-dos." },
+    { id: "onTrack", title: "On-track check", description: "Compares progress with the time passed." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

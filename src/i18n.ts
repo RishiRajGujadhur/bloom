@@ -405,6 +405,10 @@ const common = {
         title: "Brain games",
         description: "N-back, memory, colour clash, reaction and maths that adapt to you.",
       },
+      goalRoadmap: {
+        title: "Goal roadmap",
+        description: "Long-term goals on a Gantt timeline with key results and weekly reviews.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1432,6 +1436,10 @@ export const resources = {
           brainGames: {
             title: "Jeux cérébraux",
             description: "N-back, mémoire, couleurs, réflexes et calcul qui s’adaptent à vous.",
+          },
+          goalRoadmap: {
+            title: "Feuille de route",
+            description: "Objectifs à long terme sur une frise, résultats clés et revues hebdomadaires.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
