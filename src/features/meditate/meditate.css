@@ -1,0 +1,180 @@
+.md-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 420px;
+  border-radius: 24px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.md-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.md-particles {
+  position: absolute;
+  inset: 0;
+}
+.md-particles canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+.md-halo {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff40, transparent 65%);
+  opacity: 0.5;
+  z-index: -1;
+}
+.md-center {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: 560px;
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+}
+.md-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.md-caption {
+  min-height: 3.2em;
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(19px, 2.2vw, 26px);
+  line-height: 1.5;
+  text-shadow: 0 2px 14px #0008;
+  animation: md-caption 1.4s ease both;
+}
+.md-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 140px;
+}
+.md-ring svg {
+  width: 140px;
+}
+.md-ring span {
+  position: absolute;
+  font-size: 24px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.md-track {
+  fill: none;
+  stroke: #ffffff26;
+  stroke-width: 5;
+}
+.md-arc {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+.md-btn {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid #ffffff66;
+  background: #ffffff22;
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+.md-pre {
+  display: grid;
+  gap: 10px;
+  width: min(360px, 90vw);
+  padding: 14px;
+  border-radius: 18px;
+  background: #00000033;
+  backdrop-filter: blur(8px);
+}
+.md-pre .bloom-slider-head,
+.md-pre .bloom-slider-head strong {
+  color: #fff;
+}
+.md-done {
+  display: grid;
+  gap: 12px;
+  width: min(360px, 90vw);
+}
+.md-done h3 {
+  margin: 0;
+  font-size: 30px;
+}
+.md-done .bloom-slider-head,
+.md-done .bloom-slider-head strong {
+  color: #fff;
+}
+.md-sos {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: start;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 99px;
+  background: linear-gradient(120deg, #9fdcc8, #c9b8ff);
+  color: #1c2336;
+  font: inherit;
+  font-weight: 800;
+  box-shadow: 0 12px 26px -14px #6b5bd6;
+}
+.md-card {
+  min-height: 160px !important;
+  align-content: end;
+  background: linear-gradient(160deg, var(--scene), color-mix(in oklab, var(--scene) 60%, #6b5bd6)) !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+.md-card small {
+  color: #ffffffb0 !important;
+}
+.md-course {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+.md-course > span {
+  font-size: 30px;
+}
+.md-course small {
+  color: var(--text-muted);
+}
+.md-steps {
+  display: grid;
+  gap: 6px;
+}
+.md-steps .studio-chip {
+  justify-self: start;
+}
+@keyframes md-caption {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-caption {
+    animation: none;
+  }
+}

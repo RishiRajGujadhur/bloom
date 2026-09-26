@@ -1,0 +1,224 @@
+/* Classes shared by several studio pages (lazy pages only load their own CSS). */
+.iv-buttons {
+  display: flex;
+  gap: 8px;
+}
+.iv-programs {
+  display: grid;
+  gap: 14px;
+}
+.iv-programs h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.iv-card {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 140px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--bg-surface) 85%, transparent);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  transition: transform 220ms cubic-bezier(0.3, 1.5, 0.5, 1), border-color 200ms ease;
+}
+.iv-card:hover,
+.iv-card[data-on='true'] {
+  transform: translateY(-4px);
+  border-color: var(--studio);
+}
+.iv-card span {
+  font-size: 30px;
+}
+.iv-card small {
+  color: var(--text-muted);
+}
+.st-scale {
+  width: min(460px, 100%);
+}
+.wo-sets {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 170px;
+  overflow: auto;
+}
+.wo-sets li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--studio-soft);
+  font-size: 14px;
+  animation: wo-in 380ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+.wo-sets strong {
+  margin-left: auto;
+}
+.wo-sets small {
+  color: var(--text-muted);
+}
+/* Pose-to-pose morph: every joint eases into the next pose. */
+.yg-morph g {
+  transition: transform 1.4s cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+.yg-figure .ef {
+  max-height: 100%;
+}
+.yg-pose-name {
+  margin: 0 !important;
+  font-size: 30px !important;
+}
+.yg-sanskrit {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: var(--studio);
+  font-size: 18px;
+}
+.yg-cue,
+.yg-benefit {
+  margin: 0;
+  color: var(--text-secondary);
+}
+.yg-step .ef,
+.yg-lib .ef {
+  height: 90px;
+}
+.yg-add,
+.yg-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+.yg-add:hover {
+  background: var(--studio);
+  color: #fff;
+}
+.yg-saved {
+  position: relative;
+}
+.yg-pose-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ef {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  transition: transform 400ms cubic-bezier(0.3, 1.2, 0.5, 1);
+}
+.ef line,
+.ef circle {
+  stroke: var(--text-primary);
+  stroke-width: 9;
+  stroke-linecap: round;
+  fill: none;
+}
+.ef .ef-R line,
+.ef .ef-R circle {
+  stroke: color-mix(in oklab, var(--text-primary) 40%, transparent);
+}
+.ef .ef-limb circle {
+  fill: var(--text-primary);
+  stroke-width: 2;
+}
+.ef .ef-head {
+  fill: var(--studio, var(--accent-color));
+  stroke: var(--text-primary);
+  stroke-width: 4;
+}
+.ef .ef-floor {
+  stroke: var(--border-color);
+  stroke-width: 3;
+}
+.ef[data-small='true'] line {
+  stroke-width: 11;
+}
+.ex-card-main .ef {
+  height: 150px;
+}
+.ex-aside {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.mm-silhouette > * {
+  fill: color-mix(in oklab, var(--text-muted) 14%, transparent);
+}
+@keyframes mm-glow {
+  50% {
+    opacity: 0.7;
+  }
+}
+.run-goal {
+  width: 190px;
+}
+.run-goal-track {
+  fill: none;
+  stroke: var(--studio-soft);
+  stroke-width: 12;
+}
+.run-goal-arc {
+  fill: none;
+  stroke: var(--studio);
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 900ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.run-goal text {
+  fill: var(--text-primary);
+  font-size: 30px;
+  font-weight: 800;
+}
+.run-goal .run-goal-sub {
+  font-size: 12px;
+  font-weight: 500;
+  fill: var(--text-muted);
+}
+.fm-play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mode);
+  color: #fff;
+  box-shadow: 0 20px 44px -16px var(--mode);
+  transition: transform 220ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.fm-play:hover {
+  transform: scale(1.06);
+}
+.sc-manual {
+  display: flex;
+  gap: 8px;
+}
+.sc-manual .studio-input {
+  flex: 1;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+}

@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'meditate': { title: "Meditate", description: "Sit. Breathe. Arrive." },
   'mixer': { title: "Soundscapes", description: "Build your own weather." },
   'sounds': { title: "Focus sounds", description: "Music made for your mind." },
   'fasting': { title: "Fasting", description: "Rest for your digestion, too." },
@@ -152,6 +153,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'mixer': [
     step(".mx-layers", "Mix", "Slide any layer in or out."),
     step(".mx-play", "Play", "Your scene comes alive behind the sliders."),
+  ],
+  'meditate': [
+    step(".md-sos", "Need calm now?", "Three minutes to steady yourself."),
+    step(".studio-rail", "Pick a session", "Each has its own scene."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

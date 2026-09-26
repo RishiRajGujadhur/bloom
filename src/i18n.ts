@@ -373,6 +373,10 @@ const common = {
         title: "Soundscape mixer",
         description: "Mix rain, ocean, fire, birds and noise into your own living soundscape.",
       },
+      meditation: {
+        title: "Guided meditation",
+        description: "Spoken sessions with captions, courses, SOS calm and particle scenes.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1368,6 +1372,10 @@ export const resources = {
           soundMixer: {
             title: "Mixeur d’ambiances",
             description: "Mélangez pluie, océan, feu, oiseaux et bruit en une ambiance vivante.",
+          },
+          meditation: {
+            title: "Méditation guidée",
+            description: "Séances guidées avec sous-titres, parcours, SOS et scènes de particules.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

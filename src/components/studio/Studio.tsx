@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import gsap from 'gsap'
 import './studio.css'
+import './shared.css'
 
 /**
  * The shared page shell for Bloom's studios (exercise, sounds, meditation…):

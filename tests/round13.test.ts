@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { bells, courses, currentLine, sessionById, streakDays, timed } from '../src/features/meditate/meditateModel'
 import { modes as soundModes } from '../src/features/sounds/focusEngine'
 import { endMessage, fmtH, perDay, stageAt, stats as fastStats } from '../src/features/fasting/fastingModel'
 import { allergenHits, forPortion, light, parseProduct, sugarCubes, validCode } from '../src/features/scan/scanModel'
@@ -25,7 +26,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -190,4 +191,18 @@ test('soundscape presets only use known layers', async () => {
   const ids = new Set(layers.map((l) => l.id))
   for (const p of presets) for (const k of Object.keys(p.mix)) expect(ids.has(k as never)).toBe(true)
   expect(layers.filter((l) => l.noise)).toHaveLength(3)
+})
+
+test('meditation: scripts scale to length, bells and streaks', () => {
+  const body = sessionById('body')
+  const lines = timed(body, 20)
+  expect(lines[0].at).toBe(0)
+  expect(lines[lines.length - 1].at).toBeLessThan(1200)
+  expect(currentLine(lines, 300)?.text).toBe(lines.filter((l) => l.at <= 300).at(-1)?.text)
+  expect(bells(10, 5)).toEqual([300])
+  expect(bells(10, 0)).toEqual([])
+  for (const c of courses) for (const id of c.sessions) expect(sessionById(id)).toBeDefined()
+  const now = new Date('2026-09-26T12:00:00').getTime()
+  const logs = [0, 1, 2, 4].map((d) => ({ at: now - d * 86400000, id: 'breath1', minutes: 5 }))
+  expect(streakDays(logs, now)).toBe(3)
 })
