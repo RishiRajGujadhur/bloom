@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Sparkles as SparklesF_affirmations } from 'lucide-react'
 import { Sunrise as SunriseF_daylight } from 'lucide-react'
 import { Eye as EyeF_eyeCare } from 'lucide-react'
 import { MonitorSmartphone as MonitorSmartphoneF_digitalWellbeing } from 'lucide-react'
@@ -131,6 +132,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  affirmations: SparklesF_affirmations,
   daylight: SunriseF_daylight,
   eyeCare: EyeF_eyeCare,
   digitalWellbeing: MonitorSmartphoneF_digitalWellbeing,
@@ -213,6 +215,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  affirmations: boolean
   daylight: boolean
   eyeCare: boolean
   digitalWellbeing: boolean
@@ -304,6 +307,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    affirmations: true,
     daylight: true,
     eyeCare: true,
     digitalWellbeing: true,
@@ -387,6 +391,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'affirmations',
   'daylight',
   'eyeCare',
   'digitalWellbeing',

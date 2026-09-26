@@ -673,6 +673,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "gps", title: "Use my location", description: "Precise sunrise for where you are." },
     { id: "cities", title: "Cities", description: "Or pick a city." },
   ],
+  affirmations: [
+    { id: "decks", title: "Themed decks", description: "Calm, confidence, self-kindness, growth and gratitude." },
+    { id: "swipe", title: "Swipe cards", description: "A stack you flick through." },
+    { id: "favourites", title: "Favourites", description: "Save the ones that land." },
+    { id: "custom", title: "Write your own", description: "Your own words in your own deck." },
+    { id: "speak", title: "Read aloud", description: "Hear each card spoken." },
+    { id: "autoplay", title: "Slideshow", description: "Cards move on by themselves." },
+    { id: "repeat", title: "Repeat counter", description: "Say it three times for a sparkle." },
+    { id: "themes", title: "Card styles", description: "Gradient, paper or night." },
+    { id: "daily", title: "Today’s card", description: "A new card each day." },
+    { id: "mix", title: "Mix", description: "Shuffle every deck together." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

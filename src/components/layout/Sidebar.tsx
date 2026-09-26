@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Sparkles as SparklesF_affirmations } from 'lucide-react'
 import { Sunrise as SunriseF_daylight } from 'lucide-react'
 import { Eye as EyeF_eyeCare } from 'lucide-react'
 import { MonitorSmartphone as MonitorSmartphoneF_digitalWellbeing } from 'lucide-react'
@@ -105,6 +106,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'affirm'
   | 'daylight'
   | 'eyes'
   | 'screen'
@@ -143,7 +145,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps'] },
 ]
@@ -375,6 +377,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'affirm', title: "Affirmations", Icon: SparklesF_affirmations, requires: 'affirmations' },
     { key: 'daylight', title: "Daylight", Icon: SunriseF_daylight, requires: 'daylight' },
     { key: 'eyes', title: "Eye care", Icon: EyeF_eyeCare, requires: 'eyeCare' },
     { key: 'screen', title: "Screen time", Icon: MonitorSmartphoneF_digitalWellbeing, requires: 'digitalWellbeing' },

@@ -425,6 +425,10 @@ const common = {
         title: "Daylight & circadian",
         description: "Your sun, your body clock: morning light, caffeine curfew, wind-down and moon.",
       },
+      affirmations: {
+        title: "Affirmation deck",
+        description: "Swipeable affirmation cards with decks, favourites, your own words and a slideshow.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1472,6 +1476,10 @@ export const resources = {
           daylight: {
             title: "Lumière & rythme",
             description: "Votre soleil et votre horloge : lumière du matin, café, coucher et lune.",
+          },
+          affirmations: {
+            title: "Cartes d’affirmation",
+            description: "Cartes à faire glisser : paquets, favoris, vos propres mots et diaporama.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

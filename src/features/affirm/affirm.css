@@ -1,0 +1,98 @@
+.af-layout {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  justify-items: center;
+  gap: 14px;
+  height: 100%;
+}
+.af-layout > .studio-chip-row {
+  justify-self: stretch;
+}
+.af-stage {
+  width: min(380px, 80vw);
+  height: 100%;
+  min-height: 280px;
+  max-height: 440px;
+}
+.af-swiper {
+  width: 100%;
+  height: 100%;
+}
+.af-card {
+  position: relative;
+  display: grid !important;
+  place-items: center;
+  align-content: center;
+  gap: 16px;
+  padding: 36px 30px;
+  border-radius: 28px;
+  background: linear-gradient(150deg, var(--g1), var(--g2));
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 30px 60px -30px #0007;
+}
+.af-stage[data-theme='paper'] .af-card {
+  background: #fffaf2;
+  color: #3a2f28;
+  border: 1px solid #eadfd4;
+}
+.af-stage[data-theme='night'] .af-card {
+  background: radial-gradient(circle at 30% 20%, #3a3f7a, #141a3a);
+  color: #fff3c4;
+}
+.af-card p {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(24px, 2.8vw, 34px);
+  line-height: 1.3;
+  text-shadow: 0 2px 16px #0003;
+}
+.af-deck {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.af-count {
+  position: absolute;
+  bottom: 18px;
+  right: 22px;
+  font-weight: 800;
+  opacity: 0.75;
+}
+.af-actions {
+  display: flex;
+  gap: 10px;
+}
+.af-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 14px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-weight: 700;
+  transition: transform 180ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.af-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+.af-btn[aria-pressed='true'] {
+  color: #e2553f;
+}
+.af-btn[aria-pressed='true'] svg {
+  fill: currentColor;
+}
+.af-say {
+  background: var(--studio);
+  border-color: var(--studio);
+  color: #fff;
+  padding: 0 22px;
+}

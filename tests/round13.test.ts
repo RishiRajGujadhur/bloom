@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { cardsFor, dailyCard, deckOf, decks as afDecks, shuffle } from '../src/features/affirm/affirmModel'
 import { cities as dlCities, dayFraction, hm as dlHm, moonName, plan as dlPlan, sunTimes, yearDayLengths } from '../src/features/daylight/daylightModel'
 import { blinkClosed, exerciseById, nearFar, routine as eyeRoutine } from '../src/features/eyes/eyesModel'
 import { addActive, challengeMinutes, inWindDown, minutesOn, week as screenWeek } from '../src/features/screen/screenModel'
@@ -38,7 +39,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing', 'eyeCare', 'daylight'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing', 'eyeCare', 'daylight', 'affirmations'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -386,4 +387,15 @@ test('daylight: sun times, plan, moon and seasons', () => {
   expect(moonName(0.01)).toBe('New moon')
   // Polar night still yields usable times.
   expect(sunTimes(new Date('2026-12-21T12:00:00Z'), { name: 'Pole', lat: 89, lng: 0 }).dayLength).toBe(12)
+})
+
+test('affirmations: decks, mix, favourites, daily card', () => {
+  const store = { favourites: ['I trust myself.'], custom: ['I am here.'] }
+  expect(cardsFor('calm', store)).toHaveLength(6)
+  expect(cardsFor('favourites', store)).toEqual(['I trust myself.'])
+  expect(cardsFor('mine', store)).toEqual(['I am here.'])
+  expect(cardsFor('mix', store)).toHaveLength(afDecks.length * 6)
+  expect(shuffle([1, 2, 3, 4], 7)).toEqual(shuffle([1, 2, 3, 4], 7))
+  expect(dailyCard(new Date('2026-09-26'))).toBe(dailyCard(new Date('2026-09-26T20:00:00')))
+  expect(deckOf('I trust myself.')?.id).toBe('confidence')
 })
