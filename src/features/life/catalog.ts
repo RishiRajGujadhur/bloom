@@ -5,6 +5,7 @@ import { connections } from './tools/connections'
 import { practice } from './tools/practice'
 import { reading } from './tools/reading'
 import { writing } from './tools/writing'
+import { shutdown } from './tools/shutdown'
 export const lifeTools: Tool[] = [
   decision,
   boundaries,
@@ -12,4 +13,5 @@ export const lifeTools: Tool[] = [
   practice,
   reading,
   writing,
+  shutdown,
 ]
