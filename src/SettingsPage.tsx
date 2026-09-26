@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { AudioLines as AudioLinesF_focusSounds } from 'lucide-react'
 import { Hourglass as HourglassF_fasting } from 'lucide-react'
 import { ScanBarcode as ScanBarcodeF_foodScanner } from 'lucide-react'
 import { Ruler as RulerF_bodyProgress } from 'lucide-react'
@@ -116,6 +117,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  focusSounds: AudioLinesF_focusSounds,
   fasting: HourglassF_fasting,
   foodScanner: ScanBarcodeF_foodScanner,
   bodyProgress: RulerF_bodyProgress,
@@ -183,6 +185,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  focusSounds: boolean
   fasting: boolean
   foodScanner: boolean
   bodyProgress: boolean
@@ -259,6 +262,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    focusSounds: true,
     fasting: true,
     foodScanner: true,
     bodyProgress: true,
@@ -327,6 +331,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'focusSounds',
   'fasting',
   'foodScanner',
   'bodyProgress',

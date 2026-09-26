@@ -156,6 +156,9 @@ const ScanPage = lazy(() =>
 const FastingPage = lazy(() =>
   import('./features/fasting/FastingPage').then((m) => ({ default: m.FastingPage })),
 )
+const SoundsPage = lazy(() =>
+  import('./features/sounds/SoundsPage').then((m) => ({ default: m.SoundsPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -612,6 +615,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'sounds' && !settings.features.focusSounds) ||
             (active === 'fasting' && !settings.features.fasting) ||
             (active === 'scan' && !settings.features.foodScanner) ||
             (active === 'body' && !settings.features.bodyProgress) ||
@@ -731,6 +735,10 @@ function App() {
             ) : active === 'fasting' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <FastingPage />
+              </Suspense>
+            ) : active === 'sounds' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <SoundsPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

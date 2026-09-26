@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { modes as soundModes } from '../src/features/sounds/focusEngine'
 import { endMessage, fmtH, perDay, stageAt, stats as fastStats } from '../src/features/fasting/fastingModel'
 import { allergenHits, forPortion, light, parseProduct, sugarCubes, validCode } from '../src/features/scan/scanModel'
 import { bmi, bmiBand, display, projection, trend, whtr, whtrBand } from '../src/features/body/bodyModel'
@@ -24,7 +25,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -172,4 +173,13 @@ test('fasting: stages, per-day hours, stats and kind endings', () => {
   expect(st.rate).toBe(0.5)
   expect(endMessage(16, 16)).toMatch(/Goal reached/)
   expect(endMessage(6, 16)).toMatch(/still a real fast/)
+})
+
+test('focus sounds: modes map to brainwave bands', () => {
+  expect(soundModes.focus.am).toBeGreaterThanOrEqual(13)
+  expect(soundModes.relax.am).toBeGreaterThanOrEqual(8)
+  expect(soundModes.relax.am).toBeLessThan(13)
+  expect(soundModes.meditate.am).toBeGreaterThanOrEqual(4)
+  expect(soundModes.meditate.am).toBeLessThan(8)
+  expect(soundModes.sleep.am).toBeLessThan(4)
 })

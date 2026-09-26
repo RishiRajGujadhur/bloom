@@ -365,6 +365,10 @@ const common = {
         title: "Fasting",
         description: "Intermittent fasting with a live ring, body stages and a history heatmap.",
       },
+      focusSounds: {
+        title: "Focus sounds",
+        description: "Generative music tuned for focus, relaxation, meditation and sleep.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1352,6 +1356,10 @@ export const resources = {
           fasting: {
             title: "Jeûne",
             description: "Jeûne intermittent : anneau en direct, étapes du corps et carte de chaleur.",
+          },
+          focusSounds: {
+            title: "Sons de concentration",
+            description: "Musique générative pour se concentrer, se détendre, méditer et dormir.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

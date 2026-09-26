@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { AudioLines as AudioLinesF_focusSounds } from 'lucide-react'
 import { Hourglass as HourglassF_fasting } from 'lucide-react'
 import { ScanBarcode as ScanBarcodeF_foodScanner } from 'lucide-react'
 import { Ruler as RulerF_bodyProgress } from 'lucide-react'
@@ -90,6 +91,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'sounds'
   | 'fasting'
   | 'scan'
   | 'body'
@@ -113,7 +115,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
 ]
@@ -345,6 +347,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'sounds', title: "Focus sounds", Icon: AudioLinesF_focusSounds, requires: 'focusSounds' },
     { key: 'fasting', title: "Fasting", Icon: HourglassF_fasting, requires: 'fasting' },
     { key: 'scan', title: "Food scanner", Icon: ScanBarcodeF_foodScanner, requires: 'foodScanner' },
     { key: 'body', title: "Body progress", Icon: RulerF_bodyProgress, requires: 'bodyProgress' },

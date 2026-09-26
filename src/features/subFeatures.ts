@@ -491,6 +491,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "notes", title: "Feelings & notes", description: "How the fast felt." },
     { id: "windowReminder", title: "Window reminder", description: "When your eating window closes." },
   ],
+  focusSounds: [
+    { id: "modes", title: "Four modes", description: "Focus, relax, meditate and sleep." },
+    { id: "generative", title: "Generative music", description: "Composed live, never the same twice." },
+    { id: "neuralPhase", title: "Neural-phase pulsing", description: "Amplitude modulation tuned to each mode’s brainwave band." },
+    { id: "intensity", title: "Effect intensity", description: "How strong the pulsing feels." },
+    { id: "genres", title: "Genres", description: "Ambient, piano, lo-fi and nature." },
+    { id: "binaural", title: "Binaural beats", description: "Optional beats for headphones." },
+    { id: "timer", title: "Session timer", description: "Music ends softly when time is up." },
+    { id: "visualiser", title: "Visualiser", description: "A living shape that breathes with the music." },
+    { id: "fade", title: "Fade in & out", description: "No abrupt starts or stops." },
+    { id: "pairFocus", title: "Counts as focus", description: "Finished focus sessions add to your focus minutes." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

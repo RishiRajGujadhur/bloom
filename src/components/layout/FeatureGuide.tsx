@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'sounds': { title: "Focus sounds", description: "Music made for your mind." },
   'fasting': { title: "Fasting", description: "Rest for your digestion, too." },
   'scan': { title: "Food scanner", description: "Know what’s inside." },
   'body': { title: "Body progress", description: "Trends, not single days." },
@@ -142,6 +143,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'fasting': [
     step(".fs-ring", "Your fast", "Stage markers light up as you pass them."),
     step(".fs-side", "Start or end", "Pick a protocol and begin."),
+  ],
+  'sounds': [
+    step(".fm-stage", "Press play", "Music keeps playing while you use other pages."),
+    step(".fm-modes", "Pick a mode", "Each targets a different state of mind."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
