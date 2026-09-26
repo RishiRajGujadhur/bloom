@@ -9,6 +9,9 @@ import {
   focusQuestState,
   startFocusQuest,
 } from '../rpg/engine'
+import { readStore } from '../components/studio/Studio'
+import { FocusQuick, SCENE_KEY, focusOn } from './quick/FocusQuick'
+import { GrowScene, type SceneId } from './quick/GrowScene'
 
 export function PixelPlant({ stage = 2 }: { stage?: number }) {
   return (
@@ -96,6 +99,7 @@ export function FocusPage({
 }) {
   const [now, setNow] = useState(Date.now)
   const [confirmStop, setConfirmStop] = useState(false)
+  const [scene, setScene] = useState<SceneId | 'pixel'>(() => readStore(SCENE_KEY, 'tree'))
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(timer)
@@ -118,10 +122,19 @@ export function FocusPage({
         focusQuest: { ...current.rpg.focusQuest, ...patch, startedAt: null, completedAt: null, failedAt: null },
       },
     }))
+  const since = new Date().setHours(0, 0, 0, 0)
+  const doneToday = history.filter((h) => h.completedAt >= since).length
   return (
     <div id="focus-page" className="focus-layout grid grid-cols-1 gap-5 xl:grid-cols-2">
+      {!active && (
+        <div className="xl:col-span-2">
+          <FocusQuick data={data} scene={scene} setScene={setScene} onPlan={update} />
+        </div>
+      )}
       <section className="card focus-room rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
-        {showCollectibles ? (
+        {focusOn('growScenes') && scene !== 'pixel' ? (
+          <GrowScene scene={scene} progress={progress} extra={focusOn('sceneScale') ? doneToday : 0} />
+        ) : showCollectibles ? (
           <FocusCompanion active={active} fallback={<PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />} />
         ) : (
           <PixelPlant stage={progress >= 1 ? 3 : progress > 0.3 ? 1 : 0} />

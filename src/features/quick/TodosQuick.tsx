@@ -54,7 +54,7 @@ export function TodosQuick({ data, setData }: { data: AppData; setData: Dispatch
   const open = data.todos.filter((t) => !t.done)
   const preview = useMemo(() => (text.trim() ? parseQuickTask(text) : null), [text])
   const fit = mood && on('moodMatch') ? open.filter((t) => moodPriorities[mood]?.includes(t.priority)).slice(0, 3) : []
-  const triage = open.filter((t) => t.due < today || (t.due === today && on('triageToday')))
+  const triage = open.filter((t) => t.due < today)
   const move = (taskId: string, due: string) => setData((d) => ({ ...d, todos: d.todos.map((t) => (t.id === taskId ? { ...t, due } : t)) }))
   const tagged = (taskId: string) => setData((d) => ({ ...d, todos: d.todos.map((t) => (t.id === taskId ? { ...t, tags: [...new Set([...t.tags, 'someday'])], due: format(new Date(Date.now() + 30 * 864e5), 'yyyy-MM-dd') } : t)) }))
 
@@ -77,7 +77,7 @@ export function TodosQuick({ data, setData }: { data: AppData; setData: Dispatch
           }}
         >
           <input aria-label="Quick add" placeholder='Try "call mum tomorrow !1 #family"' value={text} onChange={(e) => setText(e.target.value)} />
-          <button type="submit" className="primary" disabled={!preview?.title}>Add</button>
+          <button type="submit" className="primary" disabled={!preview?.title}>Quick add</button>
           {preview?.title && (
             <small className="quick-note">
               “{preview.title}” · {preview.due === today ? 'today' : preview.due} · {preview.priority}
@@ -99,7 +99,7 @@ export function TodosQuick({ data, setData }: { data: AppData; setData: Dispatch
           label="Triage: keep for today or push to tomorrow"
           yes="Today"
           no="Later"
-          cards={triage.map((t) => ({ id: t.id, emoji: t.priority === 'P1' ? '🔥' : '📝', title: t.title, detail: t.due < today ? `Overdue since ${t.due}` : `${t.priority} · due today` }))}
+          cards={triage.map((t) => ({ id: t.id, emoji: t.priority === 'P1' ? '🔥' : '📝', title: t.title, detail: `Overdue since ${t.due}` }))}
           empty="Nothing to triage. Your day is clear."
           onSwipe={(card, yes) => {
             if (yes) move(card.id, today)

@@ -159,6 +159,10 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'nightSky', title: 'Day and night', description: 'The window follows the time of day.' },
     { id: 'notes', title: 'Music notes', description: 'Floating notes while working.' },
     { id: 'progress', title: 'Progress bar', description: 'Session progress along the floor.' },
+    { id: 'moodLength', title: 'Focus: mood-sized sessions', description: 'Pick your energy; the session length follows.' },
+    { id: 'taskSwipe', title: 'Focus: swipe a task', description: 'Swipe right on the task to focus on.' },
+    { id: 'growScenes', title: 'Focus: grow scenes', description: 'Tree, flower bed, city, treasure, reef or space station.' },
+    { id: 'sceneScale', title: 'Focus: scenes that scale', description: 'Each session today makes the next scene bigger.' },
   ],
   timeCapsule: [
     { id: 'onThisDay', title: 'On this day', description: 'Entries from a week, month or year ago.' },
@@ -333,7 +337,6 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'naturalAdd', title: 'To-dos: natural quick-add', description: 'Type dates, !priority and #tags in plain words.' },
     { id: 'moodMatch', title: 'To-dos: energy match', description: 'Pick a mood, get tasks that fit it.' },
     { id: 'triage', title: 'To-dos: swipe triage', description: 'Swipe overdue tasks to today or later.' },
-    { id: 'triageToday', title: 'To-dos: include today', description: 'Also triage tasks due today.' },
     { id: 'somedayOnNo', title: 'To-dos: someday list', description: 'Old tasks swiped left go to #someday.' },
   ],
   dietTracker: [
