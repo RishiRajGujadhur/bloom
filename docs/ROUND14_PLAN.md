@@ -220,8 +220,8 @@ Use: `planned → implementing → validated → committed → pushed`. A commit
 | 04 | Skill practice planner | Validated | 14 tests, TypeScript, lint; memory route enhancement | See feature commit | Pending |
 | 05 | Reading companion | Pushed | TypeScript, lint, domain tests | 5b3b1ca | Confirmed |
 | 06 | Clear writing lab | Pushed | TypeScript, lint, domain tests | 76c4bfc | Confirmed |
-| 07 | Programmer shutdown desk | Validated | TypeScript, lint, domain tests | Feature commit below | Pending |
-| 08 | Meeting preparation | Planned | — | — | — |
+| 07 | Programmer shutdown desk | Pushed | TypeScript, lint, domain tests | fa66033 | Confirmed |
+| 08 | Meeting preparation | Validated | TypeScript, lint, domain tests | Feature commit below | Pending |
 | 09 | Timezone bridge | Planned | — | — | — |
 | 10 | Household care | Planned | — | — | — |
 | 11 | Pantry use-first | Planned | — | — | — |
