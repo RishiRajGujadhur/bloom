@@ -1,0 +1,71 @@
+.ey-stage {
+  display: grid;
+  place-items: center;
+  background: #fbfaf3;
+  transition: background 800ms ease;
+}
+.ey-stage[data-dark='true'] {
+  background: #1f2b28;
+}
+.ey-guide {
+  width: 100%;
+  max-height: 100%;
+}
+.ey-dot {
+  fill: #3f8a76;
+  filter: drop-shadow(0 0 12px #6bbf9a);
+}
+.ey-nearfar {
+  fill: #6bbf9a;
+  opacity: 0.85;
+}
+.ey-lid {
+  fill: #f3e6d6;
+  stroke: #5a4a3a;
+  stroke-width: 4;
+  transition: d 150ms ease;
+}
+.ey-iris {
+  fill: #3f7fd0;
+  stroke: #1e3b66;
+  stroke-width: 6;
+}
+.ey-hint {
+  fill: #5a6a64;
+  font-size: 18px;
+  font-family: 'Comic Sans MS', 'Segoe Print', cursive;
+}
+.ey-dark {
+  fill: #cfe8dd;
+}
+.ey-progress {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--studio-soft);
+  overflow: hidden;
+}
+.ey-progress span {
+  display: block;
+  height: 100%;
+  background: var(--studio);
+}
+.rt-steps {
+  display: flex;
+  gap: 8px;
+}
+.rt-steps span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  background: var(--bg-surface);
+}
+.rt-steps span[data-state='done'] {
+  opacity: 0.45;
+}
+.rt-steps span[data-state='now'] {
+  border-color: var(--studio);
+  transform: scale(1.12);
+}

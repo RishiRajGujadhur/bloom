@@ -417,6 +417,10 @@ const common = {
         title: "Digital wellbeing",
         description: "Active time, break reminders, detox and wind-down modes, phone-free challenges.",
       },
+      eyeCare: {
+        title: "Eye care",
+        description: "20-20-20 reminders and hand-drawn eye exercises to follow.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1456,6 +1460,10 @@ export const resources = {
           digitalWellbeing: {
             title: "Bien-être numérique",
             description: "Temps actif, pauses, modes détox et soirée, défis sans téléphone.",
+          },
+          eyeCare: {
+            title: "Soin des yeux",
+            description: "Rappels 20-20-20 et exercices des yeux dessinés à la main.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

@@ -649,6 +649,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "focusOnly", title: "Focus-only mode", description: "Hide everything but today’s essentials." },
     { id: "trend", title: "Weekly trend", description: "Seven days against your limit." },
   ],
+  eyeCare: [
+    { id: "reminders", title: "20-20-20 reminders", description: "A nudge to look far away." },
+    { id: "rule20", title: "20-20-20 break", description: "Twenty seconds of distance." },
+    { id: "followDot", title: "Follow the dot", description: "Figure eight, circles and zig-zags." },
+    { id: "nearFar", title: "Near & far focus", description: "Train your focusing muscles." },
+    { id: "blink", title: "Blink training", description: "Relearn relaxed blinking." },
+    { id: "palming", title: "Palming", description: "Warm darkness to rest the eyes." },
+    { id: "handDrawn", title: "Hand-drawn paths", description: "Sketchy, calming guides." },
+    { id: "interval", title: "Reminder interval", description: "A slider for how often." },
+    { id: "sounds", title: "Chimes", description: "A soft tone between exercises." },
+    { id: "history", title: "History", description: "Breaks taken and your streak." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

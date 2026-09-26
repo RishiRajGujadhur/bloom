@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { blinkClosed, exerciseById, nearFar, routine as eyeRoutine } from '../src/features/eyes/eyesModel'
 import { addActive, challengeMinutes, inWindDown, minutesOn, week as screenWeek } from '../src/features/screen/screenModel'
 import { describe as ruleText, occursOn, streak as rtStreak, templates as rtTemplates, totalMinutes, upcoming } from '../src/features/routines/routineModel'
 import { ganttTasks, goalProgress, onTrack, reviewDue, sampleGoal } from '../src/features/roadmap/roadmapModel'
@@ -36,7 +37,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards', 'brainGames', 'goalRoadmap', 'routineScheduler', 'digitalWellbeing', 'eyeCare'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -357,4 +358,12 @@ test('screen time: hourly usage, week, wind-down, challenges', () => {
   expect(inWindDown(22, 3)).toBe(true)
   expect(inWindDown(22, 12)).toBe(false)
   expect(challengeMinutes({ start: 0, end: 90 * 60000 })).toBe(90)
+})
+
+test('eye care: routine, near/far and blink timing', () => {
+  expect(eyeRoutine.every((id) => exerciseById(id))).toBe(true)
+  expect(nearFar(0)).toBeCloseTo(0)
+  expect(nearFar(5)).toBeCloseTo(1)
+  expect(blinkClosed(2.8)).toBe(true)
+  expect(blinkClosed(1)).toBe(false)
 })

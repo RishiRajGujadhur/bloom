@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Eye as EyeF_eyeCare } from 'lucide-react'
 import { MonitorSmartphone as MonitorSmartphoneF_digitalWellbeing } from 'lucide-react'
 import { Repeat as RepeatF_routineScheduler } from 'lucide-react'
 import { CalendarRange as CalendarRangeF_goalRoadmap } from 'lucide-react'
@@ -129,6 +130,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  eyeCare: EyeF_eyeCare,
   digitalWellbeing: MonitorSmartphoneF_digitalWellbeing,
   routineScheduler: RepeatF_routineScheduler,
   goalRoadmap: CalendarRangeF_goalRoadmap,
@@ -209,6 +211,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  eyeCare: boolean
   digitalWellbeing: boolean
   routineScheduler: boolean
   goalRoadmap: boolean
@@ -298,6 +301,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    eyeCare: true,
     digitalWellbeing: true,
     routineScheduler: true,
     goalRoadmap: true,
@@ -379,6 +383,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'eyeCare',
   'digitalWellbeing',
   'routineScheduler',
   'goalRoadmap',
