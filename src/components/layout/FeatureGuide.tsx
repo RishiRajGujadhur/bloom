@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'mala': { title: "Mala", description: "One bead, one breath." },
   'breathwork': { title: "Breathwork", description: "Breathe big. Then be still." },
   'meditate': { title: "Meditate", description: "Sit. Breathe. Arrive." },
   'mixer': { title: "Soundscapes", description: "Build your own weather." },
@@ -162,6 +163,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'breathwork': [
     step(".bw-stage", "Follow the lungs", "Tap anywhere during the hold when you need to breathe."),
     step(".bw-side", "Set your rounds", "Start gently."),
+  ],
+  'mala': [
+    step(".ml-stage", "Tap to count", "Or press space. The ring turns bead by bead."),
+    step(".ml-side", "Choose a mantra", "Or let it count for you."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

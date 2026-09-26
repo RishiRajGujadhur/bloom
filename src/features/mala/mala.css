@@ -1,0 +1,49 @@
+.ml-split {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+}
+.ml-stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 120ms ease;
+}
+.ml-stage:active {
+  transform: scale(0.995);
+}
+.ml-canvas {
+  width: min(100%, 440px);
+  height: auto;
+  max-height: 100%;
+  aspect-ratio: 1;
+}
+.ml-big {
+  font-size: 110px;
+  font-weight: 800;
+}
+.ml-mantra {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  color: #5a3a24;
+  animation: ml-word 900ms ease both;
+}
+.ml-side {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+@keyframes ml-word {
+  from {
+    opacity: 0.2;
+    letter-spacing: 0.2em;
+    filter: blur(3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ml-mantra {
+    animation: none;
+  }
+}

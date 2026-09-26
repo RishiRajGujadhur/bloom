@@ -381,6 +381,10 @@ const common = {
         title: "Breathwork",
         description: "Power-breathing rounds, breath holds and recovery with animated lungs.",
       },
+      mala: {
+        title: "Mala & mantra",
+        description: "A 3D 108-bead mala you tap through, with mantras, bells and rounds.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1384,6 +1388,10 @@ export const resources = {
           breathwork: {
             title: "Respiration intense",
             description: "Séries de respiration, apnées et récupération avec poumons animés.",
+          },
+          mala: {
+            title: "Mala & mantra",
+            description: "Un mala 3D de 108 perles à égrener, avec mantras, cloches et tours.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

@@ -541,6 +541,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "history", title: "Records", description: "Best hold and past sessions." },
     { id: "chart", title: "Retention chart", description: "Bars for each round over time." },
   ],
+  mala: [
+    { id: "mala3d", title: "3D mala", description: "A ring of 108 beads that turns as you count; drag to tilt." },
+    { id: "library", title: "Mantra library", description: "Traditional and plain-English mantras." },
+    { id: "custom", title: "Your mantras", description: "Write your own." },
+    { id: "bells", title: "Quarter bells", description: "A chime every 27 beads, a gong at 108." },
+    { id: "haptics", title: "Haptics", description: "A tiny tap on each bead." },
+    { id: "rounds", title: "Rounds", description: "Count full malas." },
+    { id: "themes", title: "Bead themes", description: "Sandalwood, rose, jade and lapis." },
+    { id: "autoChant", title: "Auto-count", description: "Counts at a steady pace for you." },
+    { id: "chant", title: "Spoken chant", description: "Hear the mantra with each bead." },
+    { id: "log", title: "Practice log", description: "Rounds and days practised." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

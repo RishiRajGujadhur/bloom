@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { beadOf, isQuarter, roundsOf } from '../src/features/mala/malaModel'
 import { best as bwBest, defaultSettings as bwDefaults, initial as bwInitial, lung, step as bwStep } from '../src/features/breathwork/breathworkModel'
 import { bells, courses, currentLine, sessionById, streakDays, timed } from '../src/features/meditate/meditateModel'
 import { modes as soundModes } from '../src/features/sounds/focusEngine'
@@ -27,7 +28,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -225,4 +226,11 @@ test('breathwork: breathe → retention → recovery → next round → done', (
   expect(s.phase).toBe('done')
   expect(bwBest([{ at: 0, retentions: s.retentions }])).toBe(40)
   expect(lung(bwInitial(0), cfg, 1000)).toBeCloseTo(1)
+})
+
+test('mala: quarters, rounds and bead position', () => {
+  expect([27, 54, 81, 108].every((n) => isQuarter(n))).toBe(true)
+  expect(isQuarter(28)).toBe(false)
+  expect(roundsOf(250)).toBe(2)
+  expect(beadOf(250)).toBe(34)
 })
