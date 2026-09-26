@@ -220,7 +220,7 @@ export function CalendarPage({ data, setData }: Props) {
             <option value="timeGridDay">Day</option>
             <option value="timeGridWeek">Week</option>
             <option value="dayGridMonth">Month</option>
-            <option value="listWeek">Agenda</option>
+            {subOn('fullCalendar', 'agenda') && <option value="listWeek">Agenda</option>}
           </select>
           <button
             className="primary"
@@ -402,7 +402,8 @@ export function CalendarPage({ data, setData }: Props) {
             initialDate={selectedDay}
             headerToolbar={false}
             height={fullscreen ? 'calc(100dvh - 190px)' : 680}
-            nowIndicator
+            nowIndicator={subOn('fullCalendar', 'nowLine')}
+            weekends={subOn('fullCalendar', 'weekends')}
             firstDay={1}
             allDaySlot={false}
             editable

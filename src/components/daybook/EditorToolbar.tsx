@@ -1,3 +1,4 @@
+import { subOn } from '../../features/subFeatures'
 import type { Editor } from '@tiptap/react'
 import { useEditorState } from '@tiptap/react'
 import {
@@ -90,9 +91,13 @@ export function EditorToolbar({ editor }: Props) {
       { label: 'Divider', icon: Minus, run: () => chain().setHorizontalRule().run() },
     ],
   ]
+  const extras = new Set(['Highlight', 'Quote', 'Code block', 'Divider', 'Strikethrough'])
+  const shown = subOn('daybookModes', 'extraTools')
+    ? groups
+    : groups.map((group) => group.filter((action) => !extras.has(action.label)))
   return (
     <div className={styles.toolbar} role="toolbar" aria-label="Formatting tools">
-      {groups.map((group, i) => (
+      {shown.map((group, i) => (
         <div className={styles.group} key={i}>
           {group.map(({ label, icon: Icon, keys, active, disabled, run }) => (
             <button

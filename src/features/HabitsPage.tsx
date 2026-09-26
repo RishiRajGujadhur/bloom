@@ -91,7 +91,7 @@ export function HabitsPage({
     const skipped = run.skipped + Number(skip)
     const next = run.index + 1
     if (next === run.routine.steps.length) {
-      if (!skipped) burst(null, 'stars')
+      if (!skipped) burst(null, 'stars', 'routines')
       if (!skipped)
         setData((current) => ({
           ...current,
@@ -354,7 +354,7 @@ export function HabitsPage({
                       <p>{h.detail || 'Daily practice'}</p>
                     </div>
                     <div className="habit-actions">
-                      {reminders && <ReminderButton id={h.id} title={h.title} />}
+                      {reminders && subOn('reminders', 'habits') && <ReminderButton id={h.id} title={h.title} />}
                       <button
                         className="icon-button"
                         title="Edit habit"
@@ -467,7 +467,7 @@ export function HabitsPage({
                       <h2>{r.title}</h2>
                     </div>
                     <div className="habit-actions">
-                      {reminders && <ReminderButton id={r.id} title={r.title} />}
+                      {reminders && subOn('reminders', 'routines') && <ReminderButton id={r.id} title={r.title} />}
                       <button
                         className="icon-button"
                         title="Edit routine"

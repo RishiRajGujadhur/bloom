@@ -255,7 +255,7 @@ export function BreathePage() {
         <motion.div
           className="wb-orb"
           animate={
-            running && scale !== undefined && !reduced
+            running && scale !== undefined && !reduced && subOn('breathe', 'orbPulse')
               ? { scale }
               : undefined
           }
@@ -313,7 +313,7 @@ export function MoodPage() {
       },
       ...list,
     ])
-    if (loadSettings().features.placesMap) capturePlace('mood', picked)
+    if (loadSettings().features.placesMap && subOn('placesMap', 'moodCapture')) capturePlace('mood', picked)
     setPicked(null)
     setNote('')
     setEmotions([])
@@ -375,12 +375,12 @@ export function MoodPage() {
               value={calm}
               onChange={(value) => {
                 setCalm(value)
-                setPicked(orbToMood(value))
+                if (subOn('moodOrb', 'autoMood')) setPicked(orbToMood(value))
               }}
             />
           </Suspense>
         )}
-        <div className="wb-moods" role="radiogroup" aria-label="Mood" hidden={orb && orbEnabled}>
+        <div className="wb-moods" role="radiogroup" aria-label="Mood" hidden={orb && orbEnabled && subOn('moodOrb', 'autoMood')}>
           {moods.map((m) => (
             <button
               key={m.value}

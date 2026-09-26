@@ -62,7 +62,7 @@ export function ReleasePage() {
         api.set({ x: 0, y: 0, scale: 1, rotate: 0, opacity: 1 })
       },
     })
-    burst(fire.current, 'stars')
+    burst(fire.current, 'stars', 'release')
   }
 
   const bind = useDrag(

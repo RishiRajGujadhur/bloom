@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Visual sub-feature gates. The app lists switched-off options on <html>
+   as data-off="feature.option …"; these rules hide or calm the matching UI.
+   Behavioural options are gated in code with subOn().
+   ========================================================================== */
+
+/* Daily spin */
+html[data-off~='dailySpin.odds'] .daily-spin .spin-copy small,
+html[data-off~='dailySpin.collectionLink'] .daily-spin .spin-copy .text-button {
+  display: none !important;
+}
+html[data-off~='dailySpin.machineGlow'] .spin-machine * {
+  animation: none !important;
+}
+
+/* Collectibles */
+html[data-off~='collectibles.numbering'] .collectible-number,
+html[data-off~='collectibles.filterTabs'] .collection-toolbar .segmented {
+  display: none !important;
+}
+
+/* Vision board */
+html[data-off~='visionBoard.grid'] .react-flow__background,
+html[data-off~='visionBoard.controls'] .react-flow__controls {
+  display: none !important;
+}
+
+/* Bloom World */
+html[data-off~='bloomWorld.districtCards'] .world-districts,
+html[data-off~='bloomWorld.growthNote'] .world-toast:not(.world-toast-peek) {
+  display: none !important;
+}
+
+/* Breathe */
+html[data-off~='breathe.rounds'] .wb-chips[aria-label='Rounds'],
+html[data-off~='breathe.cycleCount'] .wb-breathe > .wb-muted {
+  display: none !important;
+}
+
+/* Mood */
+html[data-off~='moodCheckin.notes'] .wb-inline-form input[aria-label^='Add a note'],
+html[data-off~='moodCheckin.weekChart'] .wb-card:has(.wb-week) {
+  display: none !important;
+}
+
+/* Gratitude */
+html[data-off~='gratitude.notes'] .ui-carousel[aria-label^='Notes in'],
+html[data-off~='gratitude.counts'] .wb-mini-jar small {
+  display: none !important;
+}
+
+/* Compact layout extras (only matter while Compact layout is on) */
+html[data-density='compact']:not([data-off~='compactMode.hero']) .app-shell .bloom-heading.feature-heading {
+  padding: 10px 16px !important;
+}
+html[data-density='compact']:not([data-off~='compactMode.hero']) .app-shell .bloom-heading.is-hero {
+  min-height: 130px !important;
+}
+html[data-density='compact']:not([data-off~='compactMode.type']) .app-shell :is(h1, .bloom-heading h1) {
+  font-size: 22px !important;
+}
+html[data-density='compact']:not([data-off~='compactMode.type']) .app-shell :is(.ov-card-head h2, .wb-card h2) {
+  font-size: 16px !important;
+}
+html[data-density='compact']:not([data-off~='compactMode.descriptions']) .app-shell :is(.bloom-heading p, .ov-muted, .adopt-card p, .featureCopy > span) {
+  display: none;
+}
+
+/* Sleep */
+html[data-off~='sleepTracker.consistency'] .sleep-stat:nth-child(3),
+html[data-off~='sleepTracker.debt'] .sleep-stat:nth-child(4),
+html[data-off~='sleepTracker.history'] .sleep-history {
+  display: none !important;
+}
+
+/* Petal shop */
+html[data-off~='petalShop.avatarPreview'] .shop-hero .avatar-preview,
+html[data-off~='petalShop.toast'] .shop-flash {
+  display: none !important;
+}
+
+/* Burn & release */
+html[data-off~='burnRelease.smoke'] .release-smoke,
+html[data-off~='burnRelease.count'] .release-count {
+  display: none !important;
+}
+html[data-off~='burnRelease.handwriting'] .release-card {
+  font-family: var(--font-app) !important;
+}
+html[data-off~='burnRelease.handwriting'] .release-card p {
+  font-size: 18px;
+}
+
+/* Urge clock */
+html[data-off~='urgeClock.progress'] .urge-best-track {
+  display: none !important;
+}
+html[data-off~='urgeClock.glow'] .urge-clock[data-record='true'] {
+  border-color: var(--border-color) !important;
+  box-shadow: none !important;
+}
+
+/* Focus room */
+html[data-off~='focusRoom.notes'] .room-notes,
+html[data-off~='focusRoom.progress'] .room-progress {
+  display: none !important;
+}
+
+/* Thought diffing */
+html[data-off~='thoughtDiff.removed'] .thought-diff del,
+html[data-off~='thoughtDiff.date'] .thought-diff header strong {
+  display: none !important;
+}
+html[data-off~='thoughtDiff.added'] .thought-diff ins {
+  background: none !important;
+  color: inherit !important;
+}
+
+/* Mood orb */
+html[data-off~='moodOrb.label'] .mood-orb-slider strong {
+  visibility: hidden;
+}
+
+/* Places */
+html[data-off~='placesMap.insight'] .places-insight {
+  display: none !important;
+}
+
+/* Urge tracker */
+html[data-off~='urgeTracker.manage'] .urge-manage,
+html[data-off~='urgeTracker.contextCard'] .urge-privacy {
+  display: none !important;
+}
+
+/* Habits */
+html[data-off~='habitTracker.streak'] .habit-grid-card footer > span,
+html[data-off~='habitTracker.edit'] .habit-actions .icon-button:not(.reminder-bell) {
+  display: none !important;
+}
+
+/* Chat journal */
+html[data-off~='chatJournal.ratings'] .ratings,
+html[data-off~='chatJournal.modeSwitch'] .journal-mode-switch,
+html[data-off~='chatJournal.stepCounter'] #chat-journal .card-heading .badge {
+  display: none !important;
+}
+
+/* Growth panel */
+html[data-off~='rpgSkillTree.levelBar'] .growth-level,
+html[data-off~='rpgSkillTree.sound'] .growth-sound,
+html[data-off~='rpgSkillTree.skillsLink'] .growth-skill-link {
+  display: none !important;
+}
+
+/* Weekly raid */
+html[data-off~='weeklyRaidBoss.bossMark'] .raid-boss-mark,
+html[data-off~='weeklyRaidBoss.levelTag'] .raid-level,
+html[data-off~='weeklyRaidBoss.attackNote'] .attack-feedback {
+  display: none !important;
+}
+
+/* Daybook */
+html[data-off~='daybookModes.wordCount'] .daybook-meta span:nth-child(2),
+html[data-off~='daybookModes.search'] .daybook-home-actions button:nth-child(2),
+html[data-off~='daybookModes.ambient'] .daybook-ambient {
+  display: none !important;
+}
+
+/* Guides */
+html[data-off~='walkthroughTour.progress'] .bloom-guide .driver-popover-progress-text,
+html[data-off~='walkthroughTour.back'] .bloom-guide .driver-popover-prev-btn {
+  display: none !important;
+}
+
+/* Time since */
+html[data-off~='timeSince.units'] .ts-units {
+  display: none !important;
+}
+
+/* Drawn achievements */
+html[data-off~='drawnAchievements.fill'] .drawn-art .d-fill {
+  opacity: 0 !important;
+}

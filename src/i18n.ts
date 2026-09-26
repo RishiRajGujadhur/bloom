@@ -277,6 +277,14 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      flowTopography: {
+        title: 'Flow topography',
+        description: 'Your typing rhythm drawn as a mountain range under each page.',
+      },
+      postureGuard: {
+        title: 'Posture guard',
+        description: 'On-device webcam posture check: stamina for sitting tall, poison for slouching.',
+      },
       timeSince: {
         title: 'Time since',
         description: 'Split-flap counters for streaks and countdowns.',
@@ -1153,6 +1161,14 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          flowTopography: {
+            title: 'Topographie du flow',
+            description: 'Votre rythme de frappe dessiné en chaîne de montagnes sous chaque page.',
+          },
+          postureGuard: {
+            title: 'Gardien de posture',
+            description: 'Posture vérifiée par webcam, sur l’appareil : endurance si droit, poison si avachi.',
+          },
           timeSince: {
             title: 'Compteurs',
             description: 'Compteurs à palettes pour séries et comptes à rebours.',

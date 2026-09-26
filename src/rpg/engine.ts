@@ -94,6 +94,7 @@ export function totals(rpg: Rpg) {
   const healthEvents = [
     ...Object.values(rpg.bosses).filter(b=>b.penalty>0).map(b=>({ at:new Date(`${b.day}T23:59:59.999`).getTime(), amount:-b.penalty })),
     ...Object.values(rpg.ledger).filter(e=>e.kind==='boss'&&e.active).map(e=>({at:e.at,amount:5})),
+    ...(rpg.posture ?? []).map(p=>({ at:p.at, amount: p.kind==='poison' ? -p.amount : p.amount })),
   ].sort((a,b)=>a.at-b.at)
   // Full-health victories cannot bank healing against a future missed day.
   const hp = healthEvents.reduce((hp,event)=>Math.max(1,Math.min(100,hp+event.amount)),100)

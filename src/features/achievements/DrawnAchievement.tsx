@@ -104,7 +104,7 @@ export function AchievementHost() {
   const close = () => setQueue((q) => q.slice(1))
   useEffect(() => {
     if (!current) return
-    const timer = setTimeout(close, 6500)
+    const timer = subOn('drawnAchievements', 'autoClose') ? setTimeout(close, 6500) : undefined
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close()
     window.addEventListener('keydown', onKey)
     return () => {

@@ -163,6 +163,7 @@ export function PlacesPage() {
           {clusters.slice(0, 12).map((c) => (
             <li key={c.key}>
               <span className="places-dot" style={{ background: moodColor(c.mood) }} aria-hidden="true" />
+              {subOn('placesMap', 'naming') ? (
               <input
                 aria-label="Name this place"
                 placeholder="Name this place"
@@ -170,6 +171,9 @@ export function PlacesPage() {
                 maxLength={40}
                 onChange={(e) => update({ ...state, names: { ...state.names, [c.key]: e.target.value } })}
               />
+              ) : (
+                <span>{state.names[c.key] ?? `${c.lat.toFixed(3)}, ${c.lng.toFixed(3)}`}</span>
+              )}
               <small>
                 {c.visits}× {c.mood !== null && `· ${c.mood.toFixed(1)}`}
               </small>

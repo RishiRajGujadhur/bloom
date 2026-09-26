@@ -4,10 +4,10 @@ import { counterParts, flapString } from '../src/features/timeSince/timeSinceMod
 
 beforeEach(() => localStorage.clear())
 
-test('every feature offers at least two sub-features with unique ids', () => {
+test('every feature offers at least five sub-features (language: four) with unique ids', () => {
   for (const key of Object.keys(defaultSettings.features)) {
     const options = subFeatures[key as keyof typeof subFeatures]
-    expect(options.length).toBeGreaterThanOrEqual(2)
+    expect(options.length).toBeGreaterThanOrEqual(key === 'languageSelector' ? 4 : 5)
     expect(new Set(options.map((o) => o.id)).size).toBe(options.length)
   }
 })

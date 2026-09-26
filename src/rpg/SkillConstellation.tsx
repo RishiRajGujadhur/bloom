@@ -16,7 +16,7 @@ function Star({ node, active, onPick }: { node: StarNode; active: boolean; onPic
   const ref = useRef<Mesh>(null)
   useFrame(({ clock }) => {
     if (!ref.current) return
-    const pulse = node.lit ? 1 + Math.sin(clock.getElapsedTime() * 2 + node.position[0]) * 0.08 : 1
+    const pulse = node.lit && subOn('skillConstellation', 'pulse') ? 1 + Math.sin(clock.getElapsedTime() * 2 + node.position[0]) * 0.08 : 1
     ref.current.scale.setScalar((active ? 1.5 : 1) * pulse)
   })
   return (
@@ -109,7 +109,7 @@ export function SkillConstellation({ rpg }: { rpg: Rpg }) {
           {subOn('skillConstellation', 'starfield') && (
             <Stars radius={60} depth={30} count={1500} factor={3} fade />
           )}
-          {nodes.flatMap((node) =>
+          {subOn('skillConstellation', 'links') && nodes.flatMap((node) =>
             node.links.map((link) => {
               const other = byId.get(link)
               if (!other) return null
@@ -129,7 +129,7 @@ export function SkillConstellation({ rpg }: { rpg: Rpg }) {
             <Star key={node.id} node={node} active={selected?.id === node.id} onPick={() => setSelected(node)} />
           ))}
           <OrbitControls ref={controls} makeDefault enablePan={false} minDistance={3} maxDistance={30} />
-          <Flight target={selected} controls={controls} />
+          {subOn('skillConstellation', 'flyTo') && <Flight target={selected} controls={controls} />}
         </Canvas>
         </Scene3D>
         {selected && (

@@ -13,6 +13,8 @@ import {
   CarFront,
   Castle,
   PenTool,
+  Mountain,
+  PersonStanding,
   Timer,
   Armchair,
   BookMarked,
@@ -80,6 +82,8 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   placesMap: MapPinned,
   timeSince: Timer,
   drawnAchievements: PenTool,
+  flowTopography: Mountain,
+  postureGuard: PersonStanding,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -120,6 +124,8 @@ export interface FeatureFlags {
   placesMap: boolean
   timeSince: boolean
   drawnAchievements: boolean
+  flowTopography: boolean
+  postureGuard: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -169,6 +175,8 @@ export const defaultSettings: AppSettings = {
     placesMap: true,
     timeSince: true,
     drawnAchievements: true,
+    flowTopography: true,
+    postureGuard: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -210,6 +218,8 @@ const featureKeys = [
   'placesMap',
   'timeSince',
   'drawnAchievements',
+  'flowTopography',
+  'postureGuard',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

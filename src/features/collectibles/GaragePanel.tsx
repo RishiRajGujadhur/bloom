@@ -20,7 +20,11 @@ export function GaragePanel({ owned, onShop }: { owned: string[]; onShop?: () =>
   const has = (id: string) =>
     shop.owned.includes(id) &&
     subOn('garage', 'upgrades') &&
-    (id !== 'garage-turntable' || subOn('garage', 'turntable'))
+    (id !== 'garage-turntable' || subOn('garage', 'turntable')) &&
+    (id !== 'garage-neon' || subOn('garage', 'neon')) &&
+    (id !== 'garage-spotlights' || subOn('garage', 'spotlights')) &&
+    (id !== 'garage-plants' || subOn('garage', 'plants')) &&
+    (id !== 'garage-charger' || subOn('garage', 'chargers'))
   const ownedCars = cars.filter((car) => owned.includes(car.id))
   const parked = new Set(layout.pads.filter(Boolean))
 

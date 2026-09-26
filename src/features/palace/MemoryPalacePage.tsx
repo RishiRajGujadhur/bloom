@@ -58,7 +58,7 @@ function Ring({
       color.set(
         i === selected
           ? '#ffffff'
-          : day.mood !== null
+          : day.mood !== null && subOn('memoryPalace', 'moodColors')
             ? moodColors[Math.round(day.mood) - 1]
             : day.intensity > 0
               ? '#d0643f'
@@ -177,6 +177,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
         tabIndex={0}
         aria-label="Year ring. Use left and right arrows to move between days, Enter to zoom."
         onKeyDown={(e) => {
+          if (!subOn('memoryPalace', 'keyboard')) return
           if (e.key === 'ArrowRight') goTo(selected + 1)
           if (e.key === 'ArrowLeft') goTo(selected - 1)
           if (e.key === 'Enter') setZoomed((z) => !z)
@@ -185,7 +186,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
         <Scene3D>
         <Canvas camera={{ position: [0, 7, RADIUS + 16], fov: 45 }} dpr={[1, 2]}>
           <color attach="background" args={['#15121f']} />
-          <fog attach="fog" args={['#15121f', 20, 55]} />
+          {subOn('memoryPalace', 'fog') && <fog attach="fog" args={['#15121f', 20, 55]} />}
           <ambientLight intensity={0.5} />
           <pointLight position={[0, 8, RADIUS + 6]} intensity={60} color="#ffd9b0" />
           <Ring
@@ -194,7 +195,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
             selected={selected}
             onPick={(i) => {
               goTo(i)
-              setZoomed(true)
+              if (subOn('memoryPalace', 'zoom')) setZoomed(true)
             }}
           />
           <CameraZoom zoomed={zoomed} />

@@ -20,6 +20,7 @@ import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
 import { SemanticSearch } from './SemanticSearch'
 import './daybook.css'
+import { FlowMountain } from '../../features/flow/FlowMountain'
 import { capturePlace } from '../../features/places/placesStore'
 import { loadSettings } from '../../SettingsPage'
 
@@ -71,6 +72,8 @@ export function JournalContainer() {
   // Each page is its own entry: choosing a mode starts a fresh page, while
   // "Your pages" (and search) reopen a specific saved one.
   const [entryId, setEntryId] = useState<string | null>(null)
+  // Changes only when a page is opened, so autosaves never remount the editor.
+  const [session, setSession] = useState(0)
   const entry = entryId
     ? entries.find((item) => item.id === entryId)
     : undefined
@@ -88,12 +91,13 @@ export function JournalContainer() {
       return updated
     })
     if (close) {
-      if (loadSettings().features.placesMap) capturePlace('daybook')
+      if (loadSettings().features.placesMap && subOn('placesMap', 'daybookCapture')) capturePlace('daybook')
       setSelected(null)
       setEntryId(null)
     } else setEntryId(next.id)
   }
   const openPage = (page: JournalEntry) => {
+    setSession((s) => s + 1)
     setEntryId(page.id)
     setSelected(
       modes.find((m) => m.id === page.modeId) ?? {
@@ -104,6 +108,7 @@ export function JournalContainer() {
     )
   }
   const startPage = (mode: JournalMode | null) => {
+    setSession((s) => s + 1)
     setEntryId(null)
     setSelected(mode)
   }
@@ -120,6 +125,7 @@ export function JournalContainer() {
       } catch {
         /* nothing to clear */
       }
+      setSession((s) => s + 1)
       setEntryId(page?.id ?? null)
       setSelected(mode)
     }
@@ -170,7 +176,7 @@ export function JournalContainer() {
         )}
         {selected ? (
           <AdaptiveEditor
-            key={`${selected.id}:${entry?.id ?? 'new'}`}
+            key={`${selected.id}:${session}`}
             mode={selected}
             entry={entry}
             onBack={() => startPage(null)}
@@ -222,6 +228,9 @@ export function JournalContainer() {
                       <span className="daybook-page-preview">
                         {text.slice(0, 160) || 'Empty page'}
                       </span>
+                      {page.flow && subOn('flowTopography', 'thumbnails') && (
+                        <FlowMountain fp={page.flow} compact label="Writing flow" />
+                      )}
                       <small>
                         {words} {words === 1 ? 'word' : 'words'}
                       </small>

@@ -80,7 +80,7 @@ function Orb({ value }: { value: number }) {
     const target = subOn('moodOrb', 'colorShift') ? orbColor(value) : orbColor(0.5)
     const tl = gsap.timeline()
     tl.to(uniforms.uChaos, { value: 1 - value, duration: 1.2, ease: 'power2.out' }, 0)
-      .to(uniforms.uGloss, { value, duration: 1.2, ease: 'power2.out' }, 0)
+      .to(uniforms.uGloss, { value: subOn('moodOrb', 'gloss') ? value : 0, duration: 1.2, ease: 'power2.out' }, 0)
       .to(uniforms.uColor.value, { r: target.r, g: target.g, b: target.b, duration: 1.2, ease: 'power2.out' }, 0)
     return () => {
       tl.kill()

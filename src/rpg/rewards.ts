@@ -113,12 +113,13 @@ export function weeklyGoals(
   adaptive = false,
   /** Target multiplier over recent pace (1.1 = gentle stretch). */
   stretch = 1.1,
+  options: { weeks?: number; floor?: boolean } = {},
 ) {
   const goals = goalsForWeek(data, today)
   if (!adaptive) return goals.map((g) => ({ ...g, baseTarget: g.target, adapted: false }))
   const monday = new Date(`${today}T12:00:00`)
   monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
-  const history = [1, 2, 3].map((weeksAgo) => {
+  const history = Array.from({ length: options.weeks ?? 3 }, (_, i) => i + 1).map((weeksAgo) => {
     const sunday = new Date(monday)
     sunday.setDate(sunday.getDate() - 7 * weeksAgo + 6)
     return goalsForWeek(data, dayKey(sunday))
@@ -128,7 +129,7 @@ export function weeklyGoals(
     if (average <= 0) return { ...goal, baseTarget: goal.target, adapted: false }
     const target = Math.min(
       goal.target * 3,
-      Math.max(Math.ceil(goal.target / 2), Math.ceil(average * stretch)),
+      Math.max(options.floor === false ? 1 : Math.ceil(goal.target / 2), Math.ceil(average * stretch)),
     )
     return { ...goal, baseTarget: goal.target, target, adapted: target !== goal.target }
   })

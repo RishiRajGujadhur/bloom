@@ -57,6 +57,7 @@ export const pageDetails: Record<
   },
   breathe: { title: 'Breathe', description: 'Slow down, one breath at a time.' },
   sleep: { title: 'Sleep', description: 'Rest is part of the work.' },
+  posture: { title: 'Posture guard', description: 'Sit tall, level up.' },
   'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
   'focus-room': { title: 'Focus room', description: 'One task. Soft strings. Deep work.' },
   'explore': { title: 'Explore data', description: 'Ask your own questions.' },
@@ -88,6 +89,10 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  posture: [
+    step('.posture-stage', 'Your posture', 'Green when upright, red when slouching.'),
+    step('.posture-side', 'Calibrate and play', 'Sit tall, calibrate, then earn stamina.'),
+  ],
   'release': [
     step('.release-input', 'Name it', 'Write what is weighing on you.'),
     step('.release-fire', 'Let it burn', 'Drag the card into the fire.'),
@@ -395,7 +400,7 @@ export function FeatureGuide({ page }: { page: NavKey }) {
       popoverClass: 'bloom-guide',
       stagePadding: 8,
       stageRadius: 14,
-      overlayOpacity: 0.55,
+      overlayOpacity: subOn('walkthroughTour', 'dim', { ignoreParent: true }) ? 0.55 : 0,
       showProgress: true,
       progressText: '{{current}} / {{total}}',
       // Each step: the pixel wizard "speaks" the tip while its words reveal.

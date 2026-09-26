@@ -91,14 +91,14 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
   const [kind, setKind] = useState<(typeof kinds)[number]['id']>('all')
   const [flash, setFlash] = useState<ShopItem | null>(null)
   const allowed = (item: ShopItem) =>
-    item.kind === 'garage' ||
+    (item.kind === 'garage' && subOn('petalShop', 'garageItems')) ||
     (item.kind === 'decor' ? subOn('petalShop', 'decor') : subOn('petalShop', 'wearables'))
   const shown = shopItems.filter((i) => allowed(i) && (kind === 'all' || i.kind === kind))
   const purchase = (item: ShopItem) => {
     const next = buy(shop, shop.spent + balance, item.id)
     if (!next) return
     update(next)
-    burst(null, 'stars')
+    burst(null, 'stars', 'shop')
     setFlash(item)
     setTimeout(() => setFlash(null), 2200)
   }

@@ -66,9 +66,11 @@ export const rpgSchema = z.object({
   focusHistory: z.array(z.object({ id: z.string(), completedAt: stamp, minutes: z.number(), taskTitle: z.string() })).default([]),
   focusQuest: focusQuestSchema.default({ durationMinutes: 25, taskId: null, strict: false, startedAt: null, completedAt: null, failedAt: null, damage: 0, soundscape: 'rain' }),
   contracts: z.array(contractSchema).default([]),
+  /** Posture guard effects: poison (−HP) for ignored slouching, stamina (+HP) for good posture. */
+  posture: z.array(z.object({ at: stamp, kind: z.enum(['poison','stamina']), amount: z.number().int().nonnegative() })).default([]),
 })
 export type Rpg = z.infer<typeof rpgSchema>
-export const initialRpg = (now = Date.now()): Rpg => ({ createdAt: now, lastSeenAt: now, ledger: {}, bosses: {}, loot: [], palette: 'bloom', companion: 'none', sound: false, gold: 0, buffs: [], skills: {}, graceDays: [], weeklyRaid: null, badges: [], momentum: { startedAt: null, resetAt: null, shatteredAt: null }, focusHistory: [], focusQuest: { durationMinutes: 25, taskId: null, strict: false, startedAt: null, completedAt: null, failedAt: null, damage: 0, soundscape: 'rain' }, contracts: [] })
+export const initialRpg = (now = Date.now()): Rpg => ({ createdAt: now, lastSeenAt: now, ledger: {}, bosses: {}, loot: [], palette: 'bloom', companion: 'none', sound: false, gold: 0, buffs: [], skills: {}, graceDays: [], weeklyRaid: null, badges: [], momentum: { startedAt: null, resetAt: null, shatteredAt: null }, focusHistory: [], focusQuest: { durationMinutes: 25, taskId: null, strict: false, startedAt: null, completedAt: null, failedAt: null, damage: 0, soundscape: 'rain' }, contracts: [], posture: [] })
 export const statNames: Record<Stat,string> = { strength: 'Strength', intelligence: 'Intelligence', spirit: 'Spirit' }
 export function inferStat(title: string): Stat {
   return /cod|study|learn|read|focus|deep work/i.test(title) ? 'intelligence' : /workout|exercis|walk|run|move|gym|strength|stretch/i.test(title) ? 'strength' : 'spirit'

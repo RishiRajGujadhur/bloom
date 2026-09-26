@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Map,
   Castle,
+  PersonStanding,
   Armchair,
   BookMarked,
   Boxes,
@@ -69,6 +70,7 @@ export type NavKey =
   | 'palace'
   | 'journey'
   | 'places'
+  | 'posture'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -83,7 +85,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook'] },
 ]
 
@@ -306,6 +308,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'palace', title: 'Memory palace', Icon: Boxes, requires: 'memoryPalace' },
     { key: 'journey', title: 'Streak journey', Icon: Route, requires: 'streakJourney' },
     { key: 'places', title: 'Places', Icon: MapPinned, requires: 'placesMap' },
+    { key: 'posture', title: 'Posture guard', Icon: PersonStanding, requires: 'postureGuard' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]

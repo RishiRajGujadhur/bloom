@@ -238,7 +238,9 @@ export function CollectiblesPage() {
       <CardRail label="Your collection">
         {cars
           .filter(
-            (car) => filter === 'all' || collection.owned.includes(car.id),
+            (car) =>
+              (filter === 'all' && subOn('collectibles', 'lockedCars')) ||
+              collection.owned.includes(car.id),
           )
           .map((car, index) => {
             const owned = collection.owned.includes(car.id)

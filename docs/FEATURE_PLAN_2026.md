@@ -102,3 +102,34 @@ Findings:
 - `react-flip-numbers` is CommonJS; its default export is unwrapped for Vite.
 - Tests: `tests/subFeatures.test.ts` checks every feature has ≥2 unique
   options, default-on/parent semantics, and counter maths.
+
+---
+
+# Round 8 — Flow topography, posture guard, 5+ options per feature
+
+| ✅ | Feature | Flag | Where | Library |
+|---|---|---|---|---|
+| ✅ | **Flow topography** — keystroke timing (never the keys) becomes a layered mountain range under the Daybook page: steady fast typing raises smooth peaks, pauses make valleys, backspacing carves jagged ravines. Saved with the page as a fingerprint (shown at the top next time, and as a thumbnail on “Your pages”), with WPM and % time in flow | `flowTopography` | Daybook editor | `d3-shape` |
+| ✅ | **Posture guard** — webcam pose detection runs on-device; calibrate “sitting tall”, then a 0–100 score updates each second. 5 min of slouching → warning; ignored for 2 more → poison (−HP, repeating); 20 min upright → stamina (+HP). Works in the background across pages | `postureGuard` | New **Posture guard** page + global warning | `@mediapipe/tasks-vision` (PoseLandmarker lite) |
+
+## Sub-features: 209 across 39 features
+
+Every feature now has **≥ 5** options (Language has 4 — there isn't a
+meaningful fifth). Visual options are CSS-gated through
+`html[data-off~="feature.option"]` (`src/styles/subFeatureGates.css`);
+behavioural ones use `subOn()`.
+
+Findings:
+- 🔁 `@mediapipe/pose` is deprecated; its successor `@mediapipe/tasks-vision`
+  (PoseLandmarker) is used. The ~12 MB WASM runtime loads from jsDelivr and the
+  ~6 MB model from Google's MediaPipe bucket **only after opt-in**; inference
+  and all data stay on-device. The runtime is lazy-loaded only after the
+  Posture page is first opened.
+- 🔁 Posture effects are stored as `rpg.posture` events and folded into the
+  existing HP calculation, so HP stays derived (never stored directly).
+- 🐛 Fixed: the Daybook editor remounted after its first autosave (its key
+  used the entry id), which reset keystroke history and could drop focus
+  mid-sentence. It now keys on the opening session.
+- 🔁 “Extra goals” (adaptive goals) ignores its parent switch so turning off
+  adaptive targets doesn’t hide goals.
+- Jest now transforms the ESM-only `d3-shape`/`d3-path`.

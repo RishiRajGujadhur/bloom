@@ -21,12 +21,14 @@ export function LanguageSelector() {
       className="language-selector"
       label={t('actions.language')}
       value={selectedLanguage}
-      options={languages.filter(
+      options={languages.map((l) =>
+        l.value === 'fr' && !subOn('languageSelector', 'nativeNames') ? { ...l, label: 'French' } : l,
+      ).filter(
         (l) =>
           l.value === 'en' ||
           (l.value === 'fr' ? subOn('languageSelector', 'french') : subOn('languageSelector', 'dialects')),
       )}
-      icon={<Languages size={16} aria-hidden="true" />}
+      icon={subOn('languageSelector', 'icon') ? <Languages size={16} aria-hidden="true" /> : undefined}
       onValueChange={(value) => {
         void i18n.changeLanguage(value)
       }}

@@ -19,6 +19,7 @@ import {
 import { journalText } from '../../search/db'
 import { loadSettings } from '../../SettingsPage'
 import { ThoughtDiffPanel } from './ThoughtDiff'
+import { FlowMountain, useKeystrokeFlow } from '../../features/flow/FlowMountain'
 
 /** Pages about fears and shadows offer the Burn & release ritual. */
 const releaseModes = new Set(['fear-setting', 'shadow-work'])
@@ -237,6 +238,11 @@ export function AdaptiveEditor({
     }
   }, [immersive])
   const [comparing, setComparing] = useState(() => subOn('thoughtDiff', 'autoOpen'))
+  // Flow topography: keystroke rhythm → a mountain range under the page.
+  const flowOn = loadSettings().features.flowTopography
+  const flow = useKeystrokeFlow()
+  // The fingerprint from before this session (autosaves don't replace it on screen).
+  const [savedFlow] = useState(entry?.flow)
   const canCompare = Boolean(previous) && loadSettings().features.thoughtDiff
   const words = useMemo(() => {
     const text = journalText(content).trim()
@@ -272,6 +278,9 @@ export function AdaptiveEditor({
     createdAt: createdAt.current,
     updatedAt: new Date().toISOString(),
     content,
+    flow:
+      (flowOn && subOn('flowTopography', 'save') ? flow.snapshot() : null) ??
+      entry?.flow,
   })
   // Autosave shortly after typing stops; empty pages are never stored.
   useEffect(() => {
@@ -299,6 +308,10 @@ export function AdaptiveEditor({
     <div
       ref={editorRoot}
       className={`daybook-editor editor-${mode.editorType}`}
+      onKeyDownCapture={(event) => {
+        if (flowOn && (event.target as HTMLElement).isContentEditable)
+          flow.onKeyDown(event.nativeEvent)
+      }}
     >
       <nav className="daybook-crumbs" aria-label="Breadcrumb">
         <button className="daybook-back" onClick={leave}>
@@ -376,6 +389,12 @@ export function AdaptiveEditor({
         </div>
       </header>
       {comparing && previous && <ThoughtDiffPanel previous={previous} content={content} />}
+      {flowOn && savedFlow && subOn('flowTopography', 'fingerprint') && (
+        <div className="flow-saved">
+          <span className="flow-saved-label">Last session’s flow</span>
+          <FlowMountain fp={savedFlow} label="Flow fingerprint of your last writing session" />
+        </div>
+      )}
       {ambient && (
         <aside
           className="daybook-ambient"
@@ -458,6 +477,12 @@ export function AdaptiveEditor({
             ariaLabel={t('daybook.freeformAria', { title: mode.title })}
           />
         </label>
+      )}
+      {flowOn && subOn('flowTopography', 'live') && flow.current && (
+        <div className="flow-live" aria-live="off">
+          <span className="flow-live-label">Your flow right now</span>
+          <FlowMountain fp={flow.current} />
+        </div>
       )}
       {steps > 1 && (
         <div className="prompt-navigation">

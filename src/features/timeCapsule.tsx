@@ -96,7 +96,7 @@ export function TimeCapsuleCard({ data, today }: { data: AppData; today: string 
     onThisDay: subOn('timeCapsule', 'onThisDay'),
     gratitude: subOn('timeCapsule', 'gratitude'),
   })
-  const morning = new Date().getHours() < 12
+  const morning = new Date().getHours() < 12 && subOn('timeCapsule', 'greeting')
   return (
     <OverviewCard
       icon={Hourglass}
@@ -120,7 +120,9 @@ export function TimeCapsuleCard({ data, today }: { data: AppData; today: string 
               {capsule.title} · {new Date(`${capsule.date}T12:00:00`).toLocaleDateString(undefined, { dateStyle: 'medium' })}
             </small>
           </figcaption>
-          <blockquote>“{capsule.text.length > 220 ? `${capsule.text.slice(0, 220)}…` : capsule.text}”</blockquote>
+          <blockquote>
+            “{capsule.text.length > 220 && !subOn('timeCapsule', 'fullText') ? `${capsule.text.slice(0, 220)}…` : capsule.text}”
+          </blockquote>
         </figure>
       ) : (
         <p className="ov-muted">

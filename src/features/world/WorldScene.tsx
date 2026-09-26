@@ -1,3 +1,4 @@
+import { subOn } from '../subFeatures'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import type { ReactNode, RefObject } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -858,14 +859,16 @@ export function WorldScene({
       <group {...target('trophies')}>
         <TrophyHall trophies={scene.trophies} reduced={reduced} />
       </group>
-      <Decorations world={world} reduced={reduced} night={time === 'night' || time === 'dusk'} />
+      {subOn('bloomWorld', 'decorations') && (
+        <Decorations world={world} reduced={reduced} night={time === 'night' || time === 'dusk'} />
+      )}
       {shop && (
         <>
           <ShopDecor owned={shop.owned} reduced={reduced} night={time === 'night' || time === 'dusk'} />
           <Avatar shop={shop} reduced={reduced} />
         </>
       )}
-      <Clouds reduced={reduced} />
+      {subOn('bloomWorld', 'clouds') && <Clouds reduced={reduced} />}
       <SelectionRing id={focus} reduced={reduced} />
       <OrbitControls
         ref={controls}

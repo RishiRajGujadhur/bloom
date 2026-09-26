@@ -60,14 +60,19 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
     setError('')
     try {
       const { renderYearbook } = await import('./YearbookDocument')
-      const blob = await renderYearbook(book, chapters)
+      const blob = await renderYearbook(book, {
+        ...chapters,
+        daybook: chapters.daybook && subOn('yearbook', 'daybookChapter'),
+        journal: chapters.journal && subOn('yearbook', 'journalChapter'),
+        gratitude: chapters.gratitude && subOn('yearbook', 'gratitudeChapter'),
+      })
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
       link.download = `bloom-year-${year}.pdf`
       link.click()
       setTimeout(() => URL.revokeObjectURL(url), 4000)
-      burst(button, 'stars')
+      burst(button, 'stars', 'yearbook')
     } catch {
       setError('The book could not be generated. Please try again.')
     } finally {
@@ -104,7 +109,14 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
         </label>
         <fieldset>
           <legend>Chapters</legend>
-          {(Object.keys(chapterLabels) as (keyof YearbookChapters)[]).map((key) => (
+          {(Object.keys(chapterLabels) as (keyof YearbookChapters)[])
+            .filter(
+              (key) =>
+                (key !== 'daybook' || subOn('yearbook', 'daybookChapter')) &&
+                (key !== 'journal' || subOn('yearbook', 'journalChapter')) &&
+                (key !== 'gratitude' || subOn('yearbook', 'gratitudeChapter')),
+            )
+            .map((key) => (
             <label key={key} className="yearbook-check">
               <input
                 type="checkbox"

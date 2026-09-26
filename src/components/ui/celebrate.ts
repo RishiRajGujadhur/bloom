@@ -51,8 +51,9 @@ const gold = ['#ffcf40', '#f2a900', '#fff1a8', '#e8743b']
 const stars = ['#ffffff', '#fff6a8', '#9fd6ff', '#ffb3d1']
 
 /** A small localized burst, e.g. for a habit check-in. */
-export function burst(from?: Origin, kind: 'coins' | 'stars' = 'coins') {
-  if (!enabled() || !subOn('celebrations', 'checkins')) return
+export type BurstSource = 'checkins' | 'routines' | 'shop' | 'release' | 'yearbook'
+export function burst(from?: Origin, kind: 'coins' | 'stars' = 'coins', source: BurstSource = 'checkins') {
+  if (!enabled() || !subOn('celebrations', source)) return
   void load().then((confetti) => {
     const [coin, star] = pixelShapes(confetti)
     confetti({

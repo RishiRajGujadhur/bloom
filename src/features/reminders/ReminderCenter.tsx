@@ -135,7 +135,12 @@ export function ReminderCenter({
           scheduled: r.days.includes(weekday),
         })),
       ]
-      const due = dueReminders(state, items, today, new Date())
+      const due = dueReminders(
+        state,
+        items.filter((i) => subOn('reminders', i.kind === 'habit' ? 'habits' : 'routines')),
+        today,
+        new Date(),
+      )
       if (!due.length) return
       update(markFired(state, due.map((d) => d.id), today))
       setToasts((list) => [...list, ...due.map((d) => ({ ...d, at: Date.now() }))])
@@ -173,7 +178,7 @@ export function ReminderCenter({
               <small>{toast.kind === 'habit' ? 'Habit reminder' : 'Routine reminder'}</small>
               <strong>{toast.title}</strong>
             </span>
-            {toast.kind === 'habit' ? (
+            {toast.kind === 'habit' && subOn('reminders', 'quickDone') ? (
               <button
                 className="ov-primary"
                 onClick={() => {

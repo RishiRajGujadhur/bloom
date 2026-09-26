@@ -51,7 +51,13 @@ export function GrowthRewards({
   const [soundError, setSoundError] = useState('')
   const stats = totals(data.rpg)
   const stretch = subOn('adaptiveGoals', 'stretch') ? 1.1 : 1
-  const goals = weeklyGoals(data, today, flags.adaptiveGoals, stretch).filter((goal) =>
+  const adaptOptions = {
+    weeks: subOn('adaptiveGoals', 'longHistory') ? 6 : 3,
+    floor: subOn('adaptiveGoals', 'floor'),
+  }
+  const goals = weeklyGoals(data, today, flags.adaptiveGoals, stretch, adaptOptions)
+    .slice(0, subOn('adaptiveGoals', 'extraGoals', { ignoreParent: true }) ? undefined : 3)
+    .filter((goal) =>
     goal.id === 'journal'
       ? flags.chatJournal
       : goal.id === 'habits'

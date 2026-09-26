@@ -38,7 +38,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const left = running ? Math.max(0, total - (now - quest.startedAt!)) : total
   const progress = running ? 1 - left / total : 0
   const hour = new Date().getHours()
-  const night = hour < 7 || hour >= 19
+  const night = subOn('focusRoom', 'nightSky') && (hour < 7 || hour >= 19)
 
   const start = () => {
     setData((d) => startFocusQuest(d, d.rpg.focusQuest.soundscape))

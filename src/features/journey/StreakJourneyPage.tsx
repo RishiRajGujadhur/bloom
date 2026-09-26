@@ -53,7 +53,7 @@ function Path({ steps, curve }: { steps: JourneyStep[]; curve: CatmullRomCurve3 
               </mesh>
             </group>
           )}
-          {i % 3 === 1 && (
+          {i % 3 === 1 && subOn('streakJourney', 'trees') && (
             <mesh position={[-2.2, 0.6, 0]}>
               <coneGeometry args={[0.6, 1.4, 6]} />
               <meshStandardMaterial color="#3f8a3a" />
@@ -131,7 +131,7 @@ export function StreakJourneyPage({ data, today }: FeaturePageProps) {
             <Scene3D>
               <Canvas camera={{ position: [0, 2.4, 5], fov: 55 }} dpr={[1, 2]}>
                 <color attach="background" args={['#bfe3ff']} />
-                <fog attach="fog" args={['#bfe3ff', 10, 40]} />
+                {subOn('streakJourney', 'fog') && <fog attach="fog" args={['#bfe3ff', 10, 40]} />}
                 <ambientLight intensity={0.8} />
                 <directionalLight position={[5, 10, 5]} intensity={1.6} />
                 <Path steps={steps} curve={curve} />
@@ -145,7 +145,11 @@ export function StreakJourneyPage({ data, today }: FeaturePageProps) {
       </div>
       <ol className="journey-steps" ref={list}>
         {steps.map((step) => (
-          <li key={step.date} data-milestone={step.milestone} data-active={step.index === current}>
+          <li
+            key={step.date}
+            data-milestone={step.milestone}
+            data-active={subOn('streakJourney', 'highlight') && step.index === current}
+          >
             <span className="journey-day">Day {step.index + 1}</span>
             <strong>
               {new Date(`${step.date}T12:00:00`).toLocaleDateString(undefined, {

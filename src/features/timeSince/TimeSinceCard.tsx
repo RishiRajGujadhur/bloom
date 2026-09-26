@@ -82,9 +82,9 @@ export function TimeSinceCard({ data }: { data: AppData }) {
     return () => clearInterval(timer)
   }, [])
   const derived = useMemo<Counter[]>(() => {
-    const list: Counter[] = [
-      { id: 'bloom', label: 'With Bloom', emoji: '🌸', at: data.rpg.createdAt, kind: 'since' },
-    ]
+    const list: Counter[] = subOn('timeSince', 'withBloom')
+      ? [{ id: 'bloom', label: 'With Bloom', emoji: '🌸', at: data.rpg.createdAt, kind: 'since' }]
+      : []
     if (subOn('timeSince', 'urgeLink'))
       for (const habit of data.urgeHabits.filter((h) => !h.archived)) {
         const stats = urgeClockStats(data.urgeEvents, habit.id, Date.now())
@@ -92,7 +92,9 @@ export function TimeSinceCard({ data }: { data: AppData }) {
       }
     return list
   }, [data.rpg.createdAt, data.urgeHabits, data.urgeEvents])
-  const mine = counters.filter((c) => c.kind === 'since' || subOn('timeSince', 'countdowns'))
+  const mine = subOn('timeSince', 'custom')
+    ? counters.filter((c) => c.kind === 'since' || subOn('timeSince', 'countdowns'))
+    : []
   const all = [...mine, ...derived]
   return (
     <OverviewCard
@@ -102,7 +104,7 @@ export function TimeSinceCard({ data }: { data: AppData }) {
       labelledBy="ov-time-since"
       className="ov-time-since"
       action={
-        <button className="icon-button" aria-label={adding ? 'Cancel' : 'Add a counter'} onClick={() => setAdding((a) => !a)}>
+        subOn('timeSince', 'custom') && <button className="icon-button" aria-label={adding ? 'Cancel' : 'Add a counter'} onClick={() => setAdding((a) => !a)}>
           {adding ? <X size={16} /> : <Plus size={16} />}
         </button>
       }

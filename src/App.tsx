@@ -86,6 +86,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 
 import './features/features.css'
 import './styles/shared-ui.css'
+import './styles/subFeatureGates.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
 const WorldPage = lazy(() =>
@@ -124,6 +125,12 @@ const PlacesPage = lazy(() =>
 )
 const SkillConstellation = lazy(() =>
   import('./rpg/SkillConstellation').then((m) => ({ default: m.SkillConstellation })),
+)
+const PosturePage = lazy(() =>
+  import('./features/posture/PosturePage').then((m) => ({ default: m.PosturePage })),
+)
+const PostureGuardian = lazy(() =>
+  import('./features/posture/PosturePage').then((m) => ({ default: m.PostureGuardian })),
 )
 const SleepPage = lazy(() =>
   import('./features/sleep/SleepPage').then((m) => ({ default: m.SleepPage })),
@@ -217,6 +224,11 @@ function App() {
   const [active, setActive] = useState<NavKey>(readPage)
   const [companionOpen, setCompanionOpen] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
+  // The posture runtime only loads once the Posture page has been opened.
+  const [postureTouched, setPostureTouched] = useState(active === 'posture')
+  useEffect(() => {
+    if (active === 'posture') setPostureTouched(true)
+  }, [active])
   const [showDoneHabits, setShowDoneHabits] = useState(false)
   // Habits ticked during this visit stay in place; earlier ones fold away.
   const [justChecked, setJustChecked] = useState<Set<string>>(() => new Set())
@@ -257,6 +269,11 @@ function App() {
     document.documentElement.dataset.density = settings.features.compactMode
       ? 'compact'
       : 'comfortable'
+    // Switched-off sub-features, for CSS-level gates (see subFeatureGates.css).
+    document.documentElement.dataset.off = Object.entries(settings.sub ?? {})
+      .filter(([, on]) => on === false)
+      .map(([key]) => key)
+      .join(' ')
     document.documentElement.dataset.compactSidebar = String(
       settings.features.compactMode && subOn('compactMode', 'sidebar'),
     )
@@ -466,6 +483,7 @@ function App() {
             (active === 'mood' && !settings.features.moodCheckin) ||
             (active === 'gratitude' && !settings.features.gratitude) ||
             (active === 'sleep' && !settings.features.sleepTracker) ||
+            (active === 'posture' && !settings.features.postureGuard) ||
             (active === 'shop' && !settings.features.petalShop) ||
             (active === 'release' && !settings.features.burnRelease) ||
             (active === 'focus-room' && !settings.features.focusRoom) ||
@@ -520,6 +538,10 @@ function App() {
             ) : active === 'places' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <PlacesPage />
+              </Suspense>
+            ) : active === 'posture' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <PosturePage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'sleep' ? (
               <Suspense fallback={null}>
@@ -979,6 +1001,11 @@ function App() {
           </div>
         </main>
         {settings.features.drawnAchievements && <AchievementHost />}
+        {settings.features.postureGuard && postureTouched && (
+          <Suspense fallback={null}>
+            <PostureGuardian setData={setData} />
+          </Suspense>
+        )}
         {settings.features.reminders && (
           <ReminderCenter
             data={data}

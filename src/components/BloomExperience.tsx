@@ -154,6 +154,7 @@ const captions: Record<NavKey, string> = {
   world: 'Every small step builds your little world.',
   breathe: 'Slow down, one breath at a time.',
   sleep: 'Rest is part of the work.',
+  posture: 'Sit tall, level up.',
   'release': 'Write it, then let it burn.',
   'focus-room': 'One task. Soft strings. Deep work.',
   'explore': 'Ask your own questions.',

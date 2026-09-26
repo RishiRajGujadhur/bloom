@@ -1,3 +1,4 @@
+import type { FlowFingerprint } from '../../features/flow/flowModel'
 export type JournalCategory = 'planning' | 'reflection' | 'vision' | 'gamified'
 
 export type JournalEditorType =
@@ -26,4 +27,6 @@ export interface JournalEntry {
   updatedAt: string
   /** TipTap document JSON, keyed by field for guided and split-pane pages. */
   content: Record<string, unknown>
+  /** Keystroke-rhythm fingerprint of the last writing session (Flow topography). */
+  flow?: FlowFingerprint
 }

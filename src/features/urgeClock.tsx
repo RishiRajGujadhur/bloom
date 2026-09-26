@@ -89,7 +89,8 @@ export function UrgeClocks({ habits, events }: { habits: UrgeHabit[]; events: Ur
               <i style={{ width: `${progress * 100}%` }} />
             </div>
             <p hidden={!subOn('urgeClock', 'highScore')}>
-              Best {best.days}d {best.hours}h {best.minutes}m · {stats!.resisted} urges resisted this run
+              Best {best.days}d {best.hours}h {best.minutes}m
+              {subOn('urgeClock', 'resisted') && ` · ${stats!.resisted} urges resisted this run`}
             </p>
           </article>
         )

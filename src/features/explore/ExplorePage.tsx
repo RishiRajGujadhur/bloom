@@ -144,10 +144,16 @@ export function ExplorePage({ data }: FeaturePageProps) {
       </div>
       <div className="explore-builder">
         <QueryBuilder
-          fields={fields}
+          fields={fields.filter(
+            (f) =>
+              (f.name !== 'habit' || subOn('queryBuilder', 'habitField')) &&
+              (f.name !== 'tags' || subOn('queryBuilder', 'tagsField')) &&
+              (f.name !== 'date' || subOn('queryBuilder', 'dateField')),
+          )}
           query={query}
           onQueryChange={setQuery}
           controlClassnames={{ queryBuilder: 'queryBuilder-branches' }}
+          controlElements={subOn('queryBuilder', 'groups') ? undefined : { addGroupAction: () => null }}
           translations={{
             addRule: { label: '+ Rule', title: 'Add rule' },
             addGroup: { label: '+ Group', title: 'Add group' },

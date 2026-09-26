@@ -52,7 +52,7 @@ export function UrgePage({ data, setData }: Props) {
   const [view, setView] = useState<'log' | 'patterns'>('log')
   const [habitId, setHabitId] = useState<string | null>(null)
   const [kind, setKind] = useState<UrgeEvent['kind'] | null>(null)
-  const [intensity, setIntensity] = useState<number | null>(null)
+  const [intensity, setIntensity] = useState<number | null>(() => (subOn('urgeTracker', 'intensity') ? null : 3))
   const [lastEvent, setLastEvent] = useState<UrgeEvent | null>(null)
   const [newHabit, setNewHabit] = useState('')
   const snapshotContext = usePassiveContext()
@@ -63,7 +63,7 @@ export function UrgePage({ data, setData }: Props) {
   const reset = () => {
     setHabitId(null)
     setKind(null)
-    setIntensity(null)
+    setIntensity(subOn('urgeTracker', 'intensity') ? null : 3)
     setLastEvent(null)
   }
 

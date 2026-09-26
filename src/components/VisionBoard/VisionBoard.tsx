@@ -244,6 +244,8 @@ function Canvas({ badges }: { badges: string[] }) {
         )}
         <div className={styles.workspace} ref={area}>
           <ReactFlow<CanvasNode>
+            snapToGrid={subOn('visionBoard', 'snap')}
+            snapGrid={[20, 20]}
             nodes={nodes}
             edges={[]}
             nodeTypes={nodeTypes}
