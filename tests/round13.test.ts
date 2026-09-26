@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { branches, fromText, templates as mapTemplates, titleOf } from '../src/features/mindmap/mindmapModel'
 import { agreement, daily as mrDaily, label as mrLabel, reframesFor, score as mrScore, topWords } from '../src/features/mirror/mirrorModel'
 import { hit, pathFor, promptFor, push as inkPush, redo as inkRedo, undo as inkUndo } from '../src/features/ink/inkModel'
 import { beadOf, isQuarter, roundsOf } from '../src/features/mala/malaModel'
@@ -30,7 +31,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -263,4 +264,19 @@ test('mood mirror: sentiment, daily tone, words, agreement, reframes', () => {
   const moods = [5, 2, 4, 1, 5].map((mood, i) => ({ at: i * day, mood }))
   expect(agreement(days, moods)!).toBeGreaterThan(0.8)
   expect(reframesFor(items).map((r) => r[0])).toEqual(expect.arrayContaining(['stressed', 'tired', 'sad']))
+})
+
+test('mind maps: outlines, titles and journal conversion', () => {
+  expect(titleOf(mapTemplates[0].md)).toBe('My goal')
+  expect(branches('# A
+## B
+- c
+- d')).toBe(3)
+  const md = fromText('Nightly', 'Work was busy. I felt tired. I need rest.
+
+Dinner with Sam was lovely.')
+  expect(md.split('
+')[0]).toBe('# Nightly')
+  expect(md).toContain('## Work was busy.')
+  expect(md).toContain('- I felt tired.')
 })

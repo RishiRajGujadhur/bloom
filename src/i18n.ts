@@ -393,6 +393,10 @@ const common = {
         title: "Mood mirror",
         description: "See the emotional tone of your writing over time, analysed on your device.",
       },
+      mindMaps: {
+        title: "Mind maps",
+        description: "Type an outline and watch it become a living mind map.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1408,6 +1412,10 @@ export const resources = {
           moodMirror: {
             title: "Miroir d’humeur",
             description: "Le ton émotionnel de vos écrits au fil du temps, analysé sur l’appareil.",
+          },
+          mindMaps: {
+            title: "Cartes mentales",
+            description: "Écrivez un plan et regardez-le devenir une carte mentale.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

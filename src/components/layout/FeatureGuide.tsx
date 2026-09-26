@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'mindmaps': { title: "Mind maps", description: "Untangle your thoughts." },
   'mirror': { title: "Mood mirror", description: "What your words say about you." },
   'ink': { title: "Ink journal", description: "Some thoughts need a pen." },
   'mala': { title: "Mala", description: "One bead, one breath." },
@@ -177,6 +178,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'mirror': [
     step(".mr-face", "This week", "How your recent writing reads."),
     step(".mr-trend", "Over time", "Above the line is brighter, below is heavier."),
+  ],
+  'mindmaps': [
+    step(".mm-editor", "Write an outline", "# centre, ## branches, - leaves."),
+    step(".mm-canvas", "Explore", "Click a node to fold it; scroll to zoom."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

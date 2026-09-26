@@ -81,6 +81,8 @@
     "leaflet": "^1.9.4",
     "lottie-web": "^5.13.0",
     "lucide-react": "^1.45.0",
+    "markmap-lib": "^0.18.12",
+    "markmap-view": "^0.18.12",
     "mathjs": "^15.2.0",
     "matter-js": "^0.20.0",
     "meyda": "^5.6.3",

@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Network as NetworkF_mindMaps } from 'lucide-react'
 import { ScanFace as ScanFaceF_moodMirror } from 'lucide-react'
 import { PenLine as PenLineF_inkJournal } from 'lucide-react'
 import { CircleDot as CircleDotF_mala } from 'lucide-react'
@@ -97,6 +98,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'mindmaps'
   | 'mirror'
   | 'ink'
   | 'mala'
@@ -129,7 +131,7 @@ const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body'] },
-  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
+  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps'] },
 ]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
@@ -359,6 +361,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'mindmaps', title: "Mind maps", Icon: NetworkF_mindMaps, requires: 'mindMaps' },
     { key: 'mirror', title: "Mood mirror", Icon: ScanFaceF_moodMirror, requires: 'moodMirror' },
     { key: 'ink', title: "Ink journal", Icon: PenLineF_inkJournal, requires: 'inkJournal' },
     { key: 'mala', title: "Mala", Icon: CircleDotF_mala, requires: 'mala' },

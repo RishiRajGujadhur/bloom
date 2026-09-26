@@ -577,6 +577,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "weekFace", title: "This week", description: "A face for how this week reads." },
     { id: "scores", title: "Per-entry scores", description: "Every entry scored for tone." },
   ],
+  mindMaps: [
+    { id: "liveMap", title: "Live map", description: "The map redraws as you type." },
+    { id: "templates", title: "Templates", description: "Goals, week plan, decisions, life areas, brain dump." },
+    { id: "fromJournal", title: "From a journal page", description: "Turn a Daybook page into a map." },
+    { id: "collapse", title: "Collapse & expand", description: "Fold branches to focus." },
+    { id: "zoom", title: "Zoom & pan", description: "Scroll to zoom, drag to move, fit in one tap." },
+    { id: "colours", title: "Colourful branches", description: "Each level gets its own colour." },
+    { id: "saved", title: "Saved maps", description: "Keep as many maps as you like." },
+    { id: "export", title: "Export SVG", description: "Save a crisp image of the map." },
+    { id: "fullscreen", title: "Full view", description: "Hide the editor for more room." },
+    { id: "goalHelper", title: "Goal breakdown", description: "A template for why, milestones and obstacles." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
