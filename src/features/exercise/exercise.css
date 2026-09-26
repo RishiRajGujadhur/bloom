@@ -43,7 +43,11 @@
   position: absolute;
   inset: 20% 25%;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in oklab, var(--studio) 25%, transparent), transparent 70%);
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--studio) 25%, transparent),
+    transparent 70%
+  );
   transition: transform 600ms ease;
   z-index: -1;
 }
@@ -165,7 +169,9 @@
   border: 1px solid var(--border-color);
   background: color-mix(in oklab, var(--bg-surface) 85%, transparent);
   backdrop-filter: blur(10px);
-  transition: transform 200ms cubic-bezier(0.3, 1.5, 0.5, 1), border-color 200ms ease;
+  transition:
+    transform 200ms cubic-bezier(0.3, 1.5, 0.5, 1),
+    border-color 200ms ease;
 }
 .ex-card:hover {
   transform: translateY(-4px);
@@ -245,7 +251,9 @@
 .mm-muscle {
   fill: color-mix(in oklab, var(--text-muted) 22%, transparent);
   cursor: pointer;
-  transition: fill 300ms ease, transform 300ms ease;
+  transition:
+    fill 300ms ease,
+    transform 300ms ease;
   transform-box: fill-box;
   transform-origin: center;
 }

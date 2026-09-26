@@ -1,16 +1,61 @@
+import Fuse from 'fuse.js'
+import { seatedExercises } from './seated'
 import { useEffect, useRef, useState } from 'react'
-import { Dumbbell, FlipHorizontal2, Library, Pause, Play, RotateCcw, Star, Target, Volume2, VolumeX } from 'lucide-react'
-import { Rail, Segmented, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
+import {
+  Dumbbell,
+  FlipHorizontal2,
+  Library,
+  Pause,
+  Play,
+  RotateCcw,
+  Star,
+  Target,
+  Volume2,
+  VolumeX,
+} from 'lucide-react'
+import {
+  Rail,
+  Segmented,
+  Slider,
+  Stat,
+  Studio,
+  StudioScene,
+  logActivity,
+  readStore,
+  writeStore,
+} from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { ExerciseFigure } from './ExerciseFigure'
 import { MuscleMap } from './MuscleMap'
-import { exercises, filterExercises, muscleNames, repSeconds, type Exercise, type Muscle } from './exercises'
+import {
+  exercises,
+  filterExercises,
+  muscleNames,
+  repSeconds,
+  type Exercise,
+  type Muscle,
+} from './exercises'
 import './exercise.css'
 
 const KEY = 'bloom-exercise-v1'
-type Prefs = { favourites: string[]; target: number; speed: number; voice: boolean; metronome: boolean; mirror: boolean }
-const defaults: Prefs = { favourites: [], target: 10, speed: 1, voice: false, metronome: true, mirror: false }
+type Prefs = {
+  wheelchair?: boolean
+  favourites: string[]
+  target: number
+  speed: number
+  voice: boolean
+  metronome: boolean
+  mirror: boolean
+}
+const defaults: Prefs = {
+  favourites: [],
+  target: 10,
+  speed: 1,
+  voice: false,
+  metronome: true,
+  mirror: false,
+}
 
 const on = (id: string) => subOn('exerciseGuides', id)
 
@@ -33,18 +78,40 @@ function click(high: boolean) {
 const say = (text: string) => {
   try {
     speechSynthesis.cancel()
-    speechSynthesis.speak(Object.assign(new SpeechSynthesisUtterance(text), { rate: 1.05 }))
+    speechSynthesis.speak(
+      Object.assign(new SpeechSynthesisUtterance(text), { rate: 1.05 }),
+    )
   } catch {
     /* optional */
   }
 }
 
-function RepRing({ value, of, hold }: { value: number; of: number; hold?: boolean }) {
+function RepRing({
+  value,
+  of,
+  hold,
+}: {
+  value: number
+  of: number
+  hold?: boolean
+}) {
   const C = 2 * Math.PI * 54
   return (
-    <svg className="ex-ring" viewBox="0 0 130 130" aria-label={`${value} of ${of} ${hold ? 'seconds' : 'reps'}`}>
+    <svg
+      className="ex-ring"
+      viewBox="0 0 130 130"
+      aria-label={`${value} of ${of} ${hold ? 'seconds' : 'reps'}`}
+    >
       <circle cx="65" cy="65" r="54" className="ex-ring-track" />
-      <circle cx="65" cy="65" r="54" className="ex-ring-arc" strokeDasharray={C} strokeDashoffset={C * (1 - Math.min(1, value / Math.max(1, of)))} transform="rotate(-90 65 65)" />
+      <circle
+        cx="65"
+        cy="65"
+        r="54"
+        className="ex-ring-arc"
+        strokeDasharray={C}
+        strokeDashoffset={C * (1 - Math.min(1, value / Math.max(1, of)))}
+        transform="rotate(-90 65 65)"
+      />
       <text x="65" y="66" textAnchor="middle">
         {value}
       </text>
@@ -63,17 +130,38 @@ export function ExercisePage() {
       writeStore(KEY, next)
       return next
     })
+  const [search, setSearch] = useState('')
+  const available = prefs.wheelchair
+    ? seatedExercises
+    : [...exercises, ...seatedExercises]
   const [tab, setTab] = useState('library')
-  const [pick, setPick] = useState<Exercise>(exercises[0])
+  const [pick, setPick] = useState<Exercise>(
+    prefs.wheelchair ? seatedExercises[0] : exercises[0],
+  )
   const [muscle, setMuscle] = useState<Muscle | 'all'>('all')
-  const [equipment, setEquipment] = useState<Exercise['equipment'] | 'all'>('all')
+  const [equipment, setEquipment] = useState<Exercise['equipment'] | 'all'>(
+    'all',
+  )
   const [level, setLevel] = useState<Exercise['level'] | 'all'>('all')
   const [favOnly, setFavOnly] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [count, setCount] = useState(0)
   const [phase, setPhase] = useState<'down' | 'up'>('down')
   const goBtn = useRef<HTMLButtonElement>(null)
-  const list = on('filters') || on('favourites') ? filterExercises(exercises, { muscle, equipment, level, favourites: favOnly ? prefs.favourites : null }) : exercises
+  const filtered =
+    on('filters') || on('favourites')
+      ? filterExercises(available, {
+          muscle,
+          equipment,
+          level,
+          favourites: favOnly ? prefs.favourites : null,
+        })
+      : available
+  const list = search.trim()
+    ? new Fuse(filtered, { keys: ['name', 'cues', 'primary'], threshold: 0.35 })
+        .search(search)
+        .map((r) => r.item)
+    : filtered
   const speed = on('slowMo') ? prefs.speed : 1
 
   // Holds count seconds; reps come from the animation loop.
@@ -87,7 +175,8 @@ export function ExercisePage() {
       setPlaying(false)
       burst(goBtn.current, 'stars')
       logActivity('exercise', { id: pick.id, amount: count })
-      if (prefs.voice && on('voice')) say(pick.hold ? 'Time. Well held.' : 'Set complete. Nice work.')
+      if (prefs.voice && on('voice'))
+        say(pick.hold ? 'Time. Well held.' : 'Set complete. Nice work.')
     }
   }, [count, prefs.target, playing, pick, prefs.voice])
 
@@ -95,7 +184,12 @@ export function ExercisePage() {
     if (pick.hold) return
     setCount((c) => {
       const n = c + 1
-      if (prefs.voice && on('voice')) say(n % 5 === 0 && pick.cues[n / 5 - 1] ? `${n}. ${pick.cues[(n / 5 - 1) % pick.cues.length]}` : String(n))
+      if (prefs.voice && on('voice'))
+        say(
+          n % 5 === 0 && pick.cues[n / 5 - 1]
+            ? `${n}. ${pick.cues[(n / 5 - 1) % pick.cues.length]}`
+            : String(n),
+        )
       return n
     })
   }
@@ -109,25 +203,100 @@ export function ExercisePage() {
     setPlaying(false)
     setTab('coach')
   }
-  const fav = (id: string) => setPrefs({ favourites: prefs.favourites.includes(id) ? prefs.favourites.filter((x) => x !== id) : [...prefs.favourites, id] })
+  const fav = (id: string) =>
+    setPrefs({
+      favourites: prefs.favourites.includes(id)
+        ? prefs.favourites.filter((x) => x !== id)
+        : [...prefs.favourites, id],
+    })
   const muscles = Object.keys(muscleNames) as Muscle[]
 
   const library = () => (
     <div className="ex-library">
+      <div className="studio-card">
+        <label>
+          Find a movement
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Try seated, elbow, or shoulder"
+          />
+        </label>
+        {on('wheelchair') && (
+          <label>
+            <input
+              type="checkbox"
+              checked={!!prefs.wheelchair}
+              onChange={(e) => {
+                setPrefs({ wheelchair: e.target.checked })
+                setPlaying(false)
+                setCount(0)
+                setMuscle('all')
+                setEquipment('all')
+                setLevel('all')
+                setPick(e.target.checked ? seatedExercises[0] : exercises[0])
+              }}
+            />{' '}
+            Wheelchair / seated-only mode
+          </label>
+        )}
+        {prefs.wheelchair && (
+          <p>
+            Supported, seated movements with no standing or floor transfers.
+            Choose movements appropriate to your own mobility and any advice
+            from your clinician. The figure is an illustration, not a form
+            assessment.
+          </p>
+        )}
+        {!list.length && (
+          <p>No movements match. Clear your search or filters.</p>
+        )}
+      </div>
       {on('filters') && (
         <div className="ex-filters">
           <div className="studio-chip-row" role="group" aria-label="Muscle">
             {(['all', ...muscles] as const).map((m) => (
-              <button key={m} type="button" className="studio-chip" aria-pressed={muscle === m} onClick={() => setMuscle(m)}>
+              <button
+                key={m}
+                type="button"
+                className="studio-chip"
+                aria-pressed={muscle === m}
+                onClick={() => setMuscle(m)}
+              >
                 {m === 'all' ? 'All muscles' : muscleNames[m]}
               </button>
             ))}
           </div>
           <div className="ex-filter-line">
-            <Segmented label="Equipment" value={equipment} onChange={setEquipment} options={[{ id: 'all', label: 'Any kit' }, { id: 'none', label: 'Bodyweight' }, { id: 'dumbbells', label: 'Dumbbells' }, { id: 'wall', label: 'Wall' }]} />
-            <Segmented label="Level" value={level} onChange={setLevel} options={[{ id: 'all', label: 'All levels' }, { id: 'beginner', label: 'Beginner' }, { id: 'intermediate', label: 'Intermediate' }]} />
+            <Segmented
+              label="Equipment"
+              value={equipment}
+              onChange={setEquipment}
+              options={[
+                { id: 'all', label: 'Any kit' },
+                { id: 'none', label: 'Bodyweight' },
+                { id: 'dumbbells', label: 'Dumbbells' },
+                { id: 'wall', label: 'Wall' },
+              ]}
+            />
+            <Segmented
+              label="Level"
+              value={level}
+              onChange={setLevel}
+              options={[
+                { id: 'all', label: 'All levels' },
+                { id: 'beginner', label: 'Beginner' },
+                { id: 'intermediate', label: 'Intermediate' },
+              ]}
+            />
             {on('favourites') && (
-              <button type="button" className="studio-chip" aria-pressed={favOnly} onClick={() => setFavOnly(!favOnly)}>
+              <button
+                type="button"
+                className="studio-chip"
+                aria-pressed={favOnly}
+                onClick={() => setFavOnly(!favOnly)}
+              >
                 <Star size={13} /> Favourites
               </button>
             )}
@@ -137,16 +306,37 @@ export function ExercisePage() {
       {list.length ? (
         <Rail label="Exercises">
           {list.map((e) => (
-            <article key={e.id} className="ex-card" role="listitem" data-on={pick.id === e.id}>
-              <button type="button" className="ex-card-main" onClick={() => choose(e)} aria-label={`Open ${e.name}`}>
-                <ExerciseFigure exercise={e} playing={false} animate={false} small />
+            <article
+              key={e.id}
+              className="ex-card"
+              role="listitem"
+              data-on={pick.id === e.id}
+            >
+              <button
+                type="button"
+                className="ex-card-main"
+                onClick={() => choose(e)}
+                aria-label={`Open ${e.name}`}
+              >
+                <ExerciseFigure
+                  exercise={e}
+                  playing={false}
+                  animate={false}
+                  small
+                />
                 <strong>{e.name}</strong>
                 <small>
                   {e.level} · {e.primary.map((m) => muscleNames[m]).join(', ')}
                 </small>
               </button>
               {on('favourites') && (
-                <button type="button" className="ex-fav" aria-pressed={prefs.favourites.includes(e.id)} aria-label={`Favourite ${e.name}`} onClick={() => fav(e.id)}>
+                <button
+                  type="button"
+                  className="ex-fav"
+                  aria-pressed={prefs.favourites.includes(e.id)}
+                  aria-label={`Favourite ${e.name}`}
+                  onClick={() => fav(e.id)}
+                >
                   <Star size={15} />
                 </button>
               )}
@@ -161,29 +351,58 @@ export function ExercisePage() {
 
   const coach = () => (
     <div className="studio-split">
-      <div className="studio-card ex-stage" data-phase={phase} data-playing={playing}>
+      <div
+        className="studio-card ex-stage"
+        data-phase={phase}
+        data-playing={playing}
+      >
         {on('animation') ? (
-          <ExerciseFigure exercise={pick} playing={playing} speed={speed} mirror={on('mirror') && prefs.mirror} onRep={onRep} onPhase={onPhase} />
+          <ExerciseFigure
+            exercise={pick}
+            playing={playing}
+            speed={speed}
+            mirror={on('mirror') && prefs.mirror}
+            onRep={onRep}
+            onPhase={onPhase}
+          />
         ) : (
           <ExerciseFigure exercise={pick} playing={false} animate={false} />
         )}
         <div className="ex-stage-bar">
           {on('mirror') && (
-            <button type="button" className="studio-chip" aria-pressed={prefs.mirror} onClick={() => setPrefs({ mirror: !prefs.mirror })}>
+            <button
+              type="button"
+              className="studio-chip"
+              aria-pressed={prefs.mirror}
+              onClick={() => setPrefs({ mirror: !prefs.mirror })}
+            >
               <FlipHorizontal2 size={14} /> Mirror
             </button>
           )}
           {on('voice') && (
-            <button type="button" className="studio-chip" aria-pressed={prefs.voice} onClick={() => setPrefs({ voice: !prefs.voice })}>
-              {prefs.voice ? <Volume2 size={14} /> : <VolumeX size={14} />} Coach voice
+            <button
+              type="button"
+              className="studio-chip"
+              aria-pressed={prefs.voice}
+              onClick={() => setPrefs({ voice: !prefs.voice })}
+            >
+              {prefs.voice ? <Volume2 size={14} /> : <VolumeX size={14} />}{' '}
+              Coach voice
             </button>
           )}
           {on('tempo') && (
-            <button type="button" className="studio-chip" aria-pressed={prefs.metronome} onClick={() => setPrefs({ metronome: !prefs.metronome })}>
+            <button
+              type="button"
+              className="studio-chip"
+              aria-pressed={prefs.metronome}
+              onClick={() => setPrefs({ metronome: !prefs.metronome })}
+            >
               Metronome
             </button>
           )}
-          <span className="ex-phase">{pick.hold ? 'Hold' : phase === 'down' ? 'Lower' : 'Drive up'}</span>
+          <span className="ex-phase">
+            {pick.hold ? 'Hold' : phase === 'down' ? 'Lower' : 'Drive up'}
+          </span>
         </div>
       </div>
       <div className="studio-card ex-panel">
@@ -193,19 +412,60 @@ export function ExercisePage() {
         <div className="ex-count">
           <RepRing value={count} of={prefs.target} hold={pick.hold} />
           <div className="ex-controls">
-            <button ref={goBtn} type="button" className="studio-go" onClick={() => setPlaying(!playing)}>
-              {playing ? <Pause size={18} /> : <Play size={18} />} {playing ? 'Pause' : count ? 'Resume' : 'Start'}
+            <button
+              ref={goBtn}
+              type="button"
+              className="studio-go"
+              onClick={() => setPlaying(!playing)}
+            >
+              {playing ? <Pause size={18} /> : <Play size={18} />}{' '}
+              {playing ? 'Pause' : count ? 'Resume' : 'Start'}
             </button>
-            <button type="button" className="studio-go" data-variant="quiet" onClick={() => (setCount(0), setPlaying(false))}>
+            <button
+              type="button"
+              className="studio-go"
+              data-variant="quiet"
+              onClick={() => (setCount(0), setPlaying(false))}
+            >
               <RotateCcw size={16} /> Reset
             </button>
           </div>
         </div>
-        <Slider label={pick.hold ? 'Hold for' : 'Target reps'} value={prefs.target} min={pick.hold ? 10 : 3} max={pick.hold ? 120 : 30} step={pick.hold ? 5 : 1} unit={pick.hold ? 's' : ''} onChange={(v) => setPrefs({ target: v })} />
-        {on('slowMo') && <Slider label="Speed" value={prefs.speed} min={0.25} max={1.5} step={0.05} unit="×" format={(v) => v.toFixed(2)} onChange={(v) => setPrefs({ speed: v })} />}
+        <button
+          type="button"
+          className="studio-chip"
+          onClick={() => {
+            setPlaying(false)
+            setCount((c) => c + 1)
+          }}
+        >
+          Count one rep manually
+        </button>
+        <Slider
+          label={pick.hold ? 'Hold for' : 'Target reps'}
+          value={prefs.target}
+          min={pick.hold ? 10 : 3}
+          max={pick.hold ? 120 : 30}
+          step={pick.hold ? 5 : 1}
+          unit={pick.hold ? 's' : ''}
+          onChange={(v) => setPrefs({ target: v })}
+        />
+        {on('slowMo') && (
+          <Slider
+            label="Speed"
+            value={prefs.speed}
+            min={0.25}
+            max={1.5}
+            step={0.05}
+            unit="×"
+            format={(v) => v.toFixed(2)}
+            onChange={(v) => setPrefs({ speed: v })}
+          />
+        )}
         {on('tempo') && !pick.hold && (
           <p className="ex-tempo">
-            Tempo {pick.tempo.join('-')} · {repSeconds(pick, speed).toFixed(1)} s per rep
+            Tempo {pick.tempo.join('-')} · {repSeconds(pick, speed).toFixed(1)}{' '}
+            s per rep
           </p>
         )}
         {on('cues') && (
@@ -241,19 +501,41 @@ export function ExercisePage() {
       <div className="studio-card">
         <h3>{pick.name}</h3>
         <div className="studio-stats">
-          <Stat value={pick.primary.map((m) => muscleNames[m]).join(' · ')} label="Primary" />
-          <Stat value={pick.secondary.map((m) => muscleNames[m]).join(' · ') || '—'} label="Supporting" />
-          <Stat value={pick.equipment === 'none' ? 'Bodyweight' : pick.equipment} label="Equipment" />
+          <Stat
+            value={pick.primary.map((m) => muscleNames[m]).join(' · ')}
+            label="Primary"
+          />
+          <Stat
+            value={pick.secondary.map((m) => muscleNames[m]).join(' · ') || '—'}
+            label="Supporting"
+          />
+          <Stat
+            value={pick.equipment === 'none' ? 'Bodyweight' : pick.equipment}
+            label="Equipment"
+          />
         </div>
         <p className="studio-empty">Tap a muscle to find exercises for it.</p>
         <h3>Also trains {muscleNames[pick.primary[0]]}</h3>
         <Rail label="Similar exercises">
-          {exercises
-            .filter((e) => e.id !== pick.id && e.primary.some((m) => pick.primary.includes(m)))
+          {available
+            .filter(
+              (e) =>
+                e.id !== pick.id &&
+                e.primary.some((m) => pick.primary.includes(m)),
+            )
             .map((e) => (
               <div key={e.id} role="listitem">
-                <button type="button" className="ex-card ex-card-main" onClick={() => choose(e)}>
-                  <ExerciseFigure exercise={e} playing={false} animate={false} small />
+                <button
+                  type="button"
+                  className="ex-card ex-card-main"
+                  onClick={() => choose(e)}
+                >
+                  <ExerciseFigure
+                    exercise={e}
+                    playing={false}
+                    animate={false}
+                    small
+                  />
                   <strong>{e.name}</strong>
                 </button>
               </div>
@@ -269,16 +551,37 @@ export function ExercisePage() {
       accent="#e0703f"
       tab={tab}
       onTab={setTab}
-      scene={<StudioScene colors={['#f7b27a', '#f4a7b9', '#ffd89b']} line="pulse" />}
+      scene={
+        <StudioScene colors={['#f7b27a', '#f4a7b9', '#ffd89b']} line="pulse" />
+      }
       aside={
         <span className="ex-aside">
           <Dumbbell size={16} aria-hidden="true" /> {pick.name}
         </span>
       }
       tabs={[
-        { id: 'library', label: 'Library', icon: <Library size={15} />, render: library },
-        { id: 'coach', label: 'Coach', icon: <Target size={15} />, render: coach },
-        ...(on('muscleMap') ? [{ id: 'muscles', label: 'Muscles', icon: <Dumbbell size={15} />, render: musclesTab }] : []),
+        {
+          id: 'library',
+          label: 'Library',
+          icon: <Library size={15} />,
+          render: library,
+        },
+        {
+          id: 'coach',
+          label: 'Coach',
+          icon: <Target size={15} />,
+          render: coach,
+        },
+        ...(on('muscleMap')
+          ? [
+              {
+                id: 'muscles',
+                label: 'Muscles',
+                icon: <Dumbbell size={15} />,
+                render: musclesTab,
+              },
+            ]
+          : []),
       ]}
     />
   )

@@ -385,6 +385,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'breathDensity', title: 'Breath density', description: 'Chimes thicken as you inhale.' },
   ],
   exerciseGuides: [
+    { id: 'wheelchair', title: 'Wheelchair mode control', description: 'Show the switch for supported seated movements.' },
     { id: "animation", title: "Animated form guide", description: "The figure moves through each rep." },
     { id: "muscleMap", title: "Muscle map", description: "Front and back maps of what works." },
     { id: "cues", title: "Form cues", description: "Short checklist for good form." },

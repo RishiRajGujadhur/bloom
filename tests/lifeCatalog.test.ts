@@ -29,3 +29,32 @@ test('boundary messages include the request but keep private preparation out', a
   expect(result.download?.text).toContain('space & choice')
   expect(result.download?.text).not.toContain('PRIVATE PREPARATION')
 })
+
+import { connections } from '../src/features/life/tools/connections'
+test('connection cadence handles month boundaries without inventing urgency', async () => {
+  const r = await connections.analyze(
+    {
+      name: 'A friend',
+      cadence: '14',
+      last: '2026-09-26',
+      today: '2026-10-01',
+      limit: '5',
+    },
+    [],
+  )
+  expect(r.lines[0]).toContain('2026-10-10')
+  expect(r.title).toContain('9 days')
+})
+
+import { seatedExercises } from '../src/features/exercise/seated'
+test('seated library keeps both legs supported through all movement poses', () => {
+  expect(seatedExercises).toHaveLength(8)
+  for (const e of seatedExercises) {
+    expect(e.wheelchair).toBe(true)
+    expect(e.equipment).toBe('none')
+    expect(e.a.hipL).toBe(-90)
+    expect(e.b.hipL).toBe(-90)
+    expect(e.a.knR).toBe(90)
+    expect(e.b.knR).toBe(90)
+  }
+})

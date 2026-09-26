@@ -35,7 +35,19 @@ const back: [Muscle, number, number, number, number][] = [
   ['calves', 70, 204, 7, 16],
 ]
 
-function Body({ parts, primary, secondary, label, onPick }: { parts: typeof front; primary: Muscle[]; secondary: Muscle[]; label: string; onPick?: (m: Muscle) => void }) {
+function Body({
+  parts,
+  primary,
+  secondary,
+  label,
+  onPick,
+}: {
+  parts: typeof front
+  primary: Muscle[]
+  secondary: Muscle[]
+  label: string
+  onPick?: (m: Muscle) => void
+}) {
   return (
     <figure className="mm-body">
       <svg viewBox="0 0 120 230" role="img" aria-label={`${label} view`}>
@@ -55,7 +67,13 @@ function Body({ parts, primary, secondary, label, onPick }: { parts: typeof fron
             rx={rx}
             ry={ry}
             className="mm-muscle"
-            data-level={primary.includes(m) ? 'primary' : secondary.includes(m) ? 'secondary' : 'none'}
+            data-level={
+              primary.includes(m)
+                ? 'primary'
+                : secondary.includes(m)
+                  ? 'secondary'
+                  : 'none'
+            }
             onClick={() => onPick?.(m)}
           >
             <title>{muscleNames[m]}</title>
@@ -67,11 +85,31 @@ function Body({ parts, primary, secondary, label, onPick }: { parts: typeof fron
   )
 }
 
-export function MuscleMap({ primary, secondary, onPick }: { primary: Muscle[]; secondary: Muscle[]; onPick?: (m: Muscle) => void }) {
+export function MuscleMap({
+  primary,
+  secondary,
+  onPick,
+}: {
+  primary: Muscle[]
+  secondary: Muscle[]
+  onPick?: (m: Muscle) => void
+}) {
   return (
     <div className="mm">
-      <Body parts={front} primary={primary} secondary={secondary} label="Front" onPick={onPick} />
-      <Body parts={back} primary={primary} secondary={secondary} label="Back" onPick={onPick} />
+      <Body
+        parts={front}
+        primary={primary}
+        secondary={secondary}
+        label="Front"
+        onPick={onPick}
+      />
+      <Body
+        parts={back}
+        primary={primary}
+        secondary={secondary}
+        label="Back"
+        onPick={onPick}
+      />
     </div>
   )
 }
