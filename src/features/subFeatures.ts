@@ -90,6 +90,10 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'debt', title: 'Sleep debt', description: 'Hours short of your goal.' },
     { id: 'consistency', title: 'Consistency score', description: 'How regular your bedtime is.' },
     { id: 'history', title: 'Recent nights list', description: 'Edit or delete recent nights.' },
+    { id: 'morningCheckin', title: 'Morning check-in', description: 'Log last night with one tap on how you woke up.' },
+    { id: 'factorSwipe', title: 'Swipe sleep factors', description: 'Yes/no on caffeine, screens, stress…' },
+    { id: 'sunrise', title: 'Sunrise scene', description: 'Animated dawn and today’s sunrise time.' },
+    { id: 'smartDefaults', title: 'Smart times', description: 'Uses your bedtime and the time you tap.' },
   ],
   petalShop: [
     { id: 'wearables', title: 'Avatar items', description: 'Hats, outfits and pets.' },

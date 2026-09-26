@@ -22,6 +22,7 @@ import {
   type SleepSettings,
 } from './sleepModel'
 import './sleep.css'
+import { SleepQuick } from '../quick/SleepQuick'
 import { NightSky } from './NightSky'
 
 export const WIND_DOWN_KEY = 'bloom-winddown-v1'
@@ -47,6 +48,7 @@ export function SleepPage() {
   const stats = sleepStats(entries, settings)
   return (
     <section className="sleep-page" aria-label="Sleep">
+      {subOn('sleepTracker', 'morningCheckin') && <SleepQuick settings={settings} setEntries={setEntries} />}
       <NightSky quality={stats.count ? stats.quality : 3}>
       <div className="sleep-stats">
         <Stat label="Avg sleep" value={stats.count ? `${stats.average}h` : '—'} hint={`Goal ${settings.targetHours}h`} />
