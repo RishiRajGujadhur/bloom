@@ -397,6 +397,10 @@ const common = {
         title: "Mind maps",
         description: "Type an outline and watch it become a living mind map.",
       },
+      flashcards: {
+        title: "Flashcards",
+        description: "Spaced-repetition cards in Markdown with 3D flips, cloze and decks.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1416,6 +1420,10 @@ export const resources = {
           mindMaps: {
             title: "Cartes mentales",
             description: "Écrivez un plan et regardez-le devenir une carte mentale.",
+          },
+          flashcards: {
+            title: "Cartes mémoire",
+            description: "Cartes à répétition espacée en Markdown, retournement 3D, texte à trous et paquets.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

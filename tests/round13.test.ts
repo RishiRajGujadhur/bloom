@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { clozeBack, clozeFront, dueCards, newCard, parseImport, render as mdRender, review as cardReview, stats as cardStats } from '../src/features/cards/cardsModel'
 import { branches, fromText, templates as mapTemplates, titleOf } from '../src/features/mindmap/mindmapModel'
 import { agreement, daily as mrDaily, label as mrLabel, reframesFor, score as mrScore, topWords } from '../src/features/mirror/mirrorModel'
 import { hit, pathFor, promptFor, push as inkPush, redo as inkRedo, undo as inkUndo } from '../src/features/ink/inkModel'
@@ -31,7 +32,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork', 'mala', 'inkJournal', 'moodMirror', 'mindMaps', 'flashcards'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -273,4 +274,20 @@ test('mind maps: outlines, titles and journal conversion', () => {
   expect(md.split('\n')[0]).toBe('# Nightly')
   expect(md).toContain('## Work was busy.')
   expect(md).toContain('- I felt tired.')
+})
+
+test('flashcards: SM-2, cloze, safe markdown, import, stats', () => {
+  const c = newCard('d', 'Q', 'A', '2026-09-26')
+  expect(dueCards([c], '2026-09-26')).toHaveLength(1)
+  const good = cardReview(c, 4, '2026-09-26')
+  expect(good.due).toBe('2026-09-27')
+  expect(dueCards([good], '2026-09-26')).toHaveLength(0)
+  expect(cardReview(good, 1, '2026-09-27').lapses).toBe(1)
+  expect(clozeFront('The {{c1::heart}} pumps')).toBe('The […] pumps')
+  expect(clozeBack('The {{c1::heart}} pumps')).toBe('The **heart** pumps')
+  const html = mdRender('**bold** <script>alert(1)</script> <a href="javascript:x" onclick="y">l</a>')
+  expect(html).toContain('<strong>bold</strong>')
+  expect(html).not.toMatch(/script|onclick|javascript:/)
+  expect(parseImport('a;b\nc\td\nbad')).toEqual([{ front: 'a', back: 'b' }, { front: 'c', back: 'd' }])
+  expect(cardStats([c, good], '2026-09-26')).toMatchObject({ fresh: 1, young: 1, total: 2 })
 })

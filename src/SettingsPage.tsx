@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Layers as LayersF_flashcards } from 'lucide-react'
 import { Network as NetworkF_mindMaps } from 'lucide-react'
 import { ScanFace as ScanFaceF_moodMirror } from 'lucide-react'
 import { PenLine as PenLineF_inkJournal } from 'lucide-react'
@@ -124,6 +125,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  flashcards: LayersF_flashcards,
   mindMaps: NetworkF_mindMaps,
   moodMirror: ScanFaceF_moodMirror,
   inkJournal: PenLineF_inkJournal,
@@ -199,6 +201,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  flashcards: boolean
   mindMaps: boolean
   moodMirror: boolean
   inkJournal: boolean
@@ -283,6 +286,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    flashcards: true,
     mindMaps: true,
     moodMirror: true,
     inkJournal: true,
@@ -359,6 +363,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'flashcards',
   'mindMaps',
   'moodMirror',
   'inkJournal',

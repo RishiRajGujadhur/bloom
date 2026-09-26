@@ -589,6 +589,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "fullscreen", title: "Full view", description: "Hide the editor for more room." },
     { id: "goalHelper", title: "Goal breakdown", description: "A template for why, milestones and obstacles." },
   ],
+  flashcards: [
+    { id: "decks", title: "Decks", description: "Organise cards by topic." },
+    { id: "markdown", title: "Markdown", description: "Bold, lists, code and links on cards." },
+    { id: "sm2", title: "Spaced repetition", description: "SM-2 shows each card just before you’d forget." },
+    { id: "flip", title: "3D flip", description: "Cards turn over to reveal the answer." },
+    { id: "cloze", title: "Cloze deletions", description: "Hide words with {{c1::…}}." },
+    { id: "reverse", title: "Reverse cards", description: "Sometimes ask the answer side first." },
+    { id: "import", title: "Import", description: "Paste question;answer lines." },
+    { id: "dailyLimit", title: "Daily limit", description: "A slider for reviews per day." },
+    { id: "tags", title: "Tags", description: "Label cards." },
+    { id: "stats", title: "Stats", description: "New, learning, mature and what’s due." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
