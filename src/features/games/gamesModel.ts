@@ -1,11 +1,16 @@
-export type GameId = 'nback' | 'memory' | 'stroop' | 'reaction' | 'maths'
-export type Skill = 'memory' | 'attention' | 'speed' | 'maths'
+export type GameId = 'nback' | 'memory' | 'stroop' | 'reaction' | 'maths' | 'simon' | 'rotate' | 'scramble' | 'track' | 'stream'
+export type Skill = 'memory' | 'attention' | 'speed' | 'maths' | 'spatial' | 'language'
 export const games: { id: GameId; name: string; emoji: string; skill: Skill; blurb: string }[] = [
   { id: 'nback', name: 'N-back', emoji: '🔲', skill: 'memory', blurb: 'Tap when the square repeats from N steps back.' },
   { id: 'memory', name: 'Memory grid', emoji: '🧩', skill: 'memory', blurb: 'Remember the lit tiles, then tap them.' },
   { id: 'stroop', name: 'Colour clash', emoji: '🎨', skill: 'attention', blurb: 'Pick the ink colour, not the word.' },
   { id: 'reaction', name: 'Reaction', emoji: '⚡', skill: 'speed', blurb: 'Tap the moment it turns green.' },
   { id: 'maths', name: 'Speed maths', emoji: '➗', skill: 'maths', blurb: 'Solve as many as you can in 45 s.' },
+  { id: 'simon', name: 'Pattern echo', emoji: '🎵', skill: 'memory', blurb: 'Watch the pads light up, then play the pattern back.' },
+  { id: 'rotate', name: '3D rotation', emoji: '🧊', skill: 'spatial', blurb: 'Same shape turned, or its mirror image?' },
+  { id: 'scramble', name: 'Word scramble', emoji: '🔤', skill: 'language', blurb: 'Unscramble the letters into a word.' },
+  { id: 'track', name: 'Focus tracker', emoji: '🎯', skill: 'attention', blurb: 'Follow the marked dots as they move, then find them.' },
+  { id: 'stream', name: 'Number stream', emoji: '🔢', skill: 'maths', blurb: 'Keep a running total of the numbers as they flash.' },
 ]
 export type Result = { at: number; game: GameId; level: number; score: number; accuracy: number }
 export type GamesStore = { levels: Record<GameId, number>; results: Result[]; sound: boolean }
@@ -100,7 +105,7 @@ export const reactionScore = (ms: number) => Math.round(Math.max(0, Math.min(100
 
 /** Recent performance per skill, 0–100. */
 export function skillScores(results: Result[]) {
-  const out: Record<Skill, number> = { memory: 0, attention: 0, speed: 0, maths: 0 }
+  const out: Record<Skill, number> = { memory: 0, attention: 0, speed: 0, maths: 0, spatial: 0, language: 0 }
   for (const s of Object.keys(out) as Skill[]) {
     const r = results.filter((x) => games.find((g) => g.id === x.game)?.skill === s).slice(-6)
     out[s] = r.length ? Math.round(r.reduce((t, x) => t + Math.min(100, x.accuracy * 60 + x.level * 4), 0) / r.length) : 0
@@ -112,4 +117,91 @@ export function skillScores(results: Result[]) {
 export function dailyWorkout(date: string) {
   const n = Number(date.replace(/-/g, '')) % games.length
   return [0, 1, 2].map((i) => games[(n + i * 2) % games.length].id)
+}
+
+/** Pattern echo: the sequence to repeat grows with level. */
+export const simonLength = (level: number) => Math.min(12, 2 + level)
+export const simonSequence = (length: number, rand = Math.random) => Array.from({ length }, () => Math.floor(rand() * 4))
+
+/** 3D rotation: a polycube as a random walk of unit cubes. */
+export type Vec = [number, number, number]
+export function polycube(size: number, rand = Math.random): Vec[] {
+  const cubes: Vec[] = [[0, 0, 0]]
+  const dirs: Vec[] = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]
+  let guard = 0
+  while (cubes.length < size && guard++ < 500) {
+    const from = cubes[Math.floor(rand() * cubes.length)]
+    const d = dirs[Math.floor(rand() * 6)]
+    const next: Vec = [from[0] + d[0], from[1] + d[1], from[2] + d[2]]
+    if (!cubes.some((c) => c[0] === next[0] && c[1] === next[1] && c[2] === next[2])) cubes.push(next)
+  }
+  return cubes
+}
+export const mirror = (shape: Vec[]): Vec[] => shape.map(([x, y, z]) => [-x, y, z])
+const key = (shape: Vec[]) => {
+  const min = [0, 1, 2].map((a) => Math.min(...shape.map((c) => c[a])))
+  return shape.map((c) => c.map((v, a) => v - min[a]).join(',')).sort().join(';')
+}
+/** The 24 proper rotations of a cube, as functions on integer vectors. */
+const rotations: ((v: Vec) => Vec)[] = (() => {
+  const turnX = ([x, y, z]: Vec): Vec => [x, -z, y]
+  const turnY = ([x, y, z]: Vec): Vec => [z, y, -x]
+  const out: ((v: Vec) => Vec)[] = []
+  const seen = new Set<string>()
+  const probe: Vec[] = [[1, 2, 3]]
+  const queue: ((v: Vec) => Vec)[] = [(v) => v]
+  while (queue.length) {
+    const f = queue.shift()!
+    const k = f(probe[0]).join(',')
+    if (seen.has(k)) continue
+    seen.add(k)
+    out.push(f)
+    queue.push((v) => turnX(f(v)), (v) => turnY(f(v)))
+  }
+  return out
+})()
+/** True when no rotation turns the shape into its mirror image. */
+export function isChiral(shape: Vec[]) {
+  const target = key(mirror(shape))
+  return !rotations.some((r) => key(shape.map(r)) === target)
+}
+export function rotationTrial(level: number, rand = Math.random) {
+  const size = Math.min(8, 4 + Math.floor(level / 2))
+  let shape = polycube(size, rand)
+  for (let i = 0; i < 60 && !isChiral(shape); i++) shape = polycube(size, rand)
+  const same = rand() < 0.5
+  const angle = (0.6 + rand() * 1.6) * (level > 4 ? 1.4 : 1)
+  return { shape, other: same ? shape : mirror(shape), same, angle }
+}
+
+export const wordBank = [
+  'calm', 'mind', 'rest', 'grow', 'kind', 'hope', 'glow', 'seed', 'tree', 'rain', 'moon', 'star',
+  'bloom', 'focus', 'quiet', 'peace', 'light', 'smile', 'river', 'ocean', 'petal', 'dream', 'heart', 'brave',
+  'garden', 'breath', 'gentle', 'streak', 'wonder', 'thrive', 'spring', 'meadow', 'forest', 'sunset', 'mellow', 'steady',
+  'balance', 'harmony', 'journey', 'kindness', 'patience', 'gratitude', 'mindful', 'blossom', 'serenity', 'resilient',
+]
+export function scrambleTrial(level: number, rand = Math.random) {
+  const min = Math.min(8, 4 + Math.floor(level / 2))
+  const pool = wordBank.filter((w) => w.length >= min - 1 && w.length <= min + 1)
+  const word = (pool.length ? pool : wordBank)[Math.floor(rand() * (pool.length || wordBank.length))]
+  let letters = word.split('')
+  for (let k = 0; k < 10 && letters.join('') === word; k++) {
+    letters = [...letters]
+    for (let i = letters.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1))
+      ;[letters[i], letters[j]] = [letters[j], letters[i]]
+    }
+  }
+  return { word, letters: letters.join('') }
+}
+
+/** Focus tracker: how many dots, how many marked, how long they move. */
+export const trackSetup = (level: number) => ({ dots: Math.min(12, 5 + level), targets: Math.min(5, 1 + Math.floor(level / 2)), seconds: Math.min(10, 4 + level * 0.5) })
+
+/** Number stream: digits shown one by one; answer is the total. */
+export function streamTrial(level: number, rand = Math.random) {
+  const n = Math.min(12, 3 + level)
+  const max = level < 4 ? 9 : 19
+  const nums = Array.from({ length: n }, () => 1 + Math.floor(rand() * max))
+  return { nums, total: nums.reduce((a, b) => a + b, 0), ms: Math.max(550, 1300 - level * 60) }
 }

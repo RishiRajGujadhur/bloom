@@ -7,9 +7,19 @@ import { dayKey } from '../../dates'
 import { PixiBoard, type CellState } from './PixiBoard'
 import { GAMES_KEY, dailyWorkout, games, mathsProblem, memoryPattern, memorySetup, nbackSequence, nextLevel, reactionScore, scoreNback, skillScores, stroopColors, stroopTrial, type GameId, type GamesStore, type Result } from './gamesModel'
 import './games.css'
+import { FocusTracker, MentalRotation, NumberStream, PatternEcho, WordScramble } from './NewGames'
+import { Fireworks } from 'fireworks-js'
 
 const on = (id: string) => subOn('brainGames', id)
-const initialStore: GamesStore = { levels: { nback: 1, memory: 1, stroop: 1, reaction: 1, maths: 1 }, results: [], sound: true }
+const initialStore: GamesStore = { levels: { nback: 1, memory: 1, stroop: 1, reaction: 1, maths: 1, simon: 1, rotate: 1, scramble: 1, track: 1, stream: 1 }, results: [], sound: true }
+
+/** Fireworks over the stage for a new personal best. */
+function celebrateBest(el: HTMLElement | null) {
+  if (!el || !on('personalBest') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  const fw = new Fireworks(el, { particles: 60, traceSpeed: 4, explosion: 6, intensity: 25 })
+  fw.start()
+  setTimeout(() => fw.waitStop(true), 2600)
+}
 
 function blip(ok: boolean, sound: boolean) {
   if (!sound || !on('sounds')) return
@@ -257,7 +267,10 @@ function SkillRadar({ scores }: { scores: Record<string, number> }) {
 }
 
 export function GamesPage() {
-  const [store, setStoreState] = useState<GamesStore>(() => readStore(GAMES_KEY, initialStore))
+  const [store, setStoreState] = useState<GamesStore>(() => {
+    const saved = readStore(GAMES_KEY, initialStore)
+    return { ...saved, levels: { ...initialStore.levels, ...saved.levels } }
+  })
   const setStore = (fn: (s: GamesStore) => GamesStore) =>
     setStoreState((c) => {
       const n = fn(c)
@@ -280,7 +293,9 @@ export function GamesPage() {
     setLast(r)
     setGame(null)
     logActivity('brainGame', { game: g })
-    if (accuracy >= 0.8) burst(stage.current, 'stars')
+    const best = Math.max(0, ...store.results.filter((x) => x.game === g).map((x) => x.score))
+    if (store.results.some((x) => x.game === g) && r.score > best) celebrateBest(stage.current)
+    else if (accuracy >= 0.8) burst(stage.current, 'stars')
   }
   const start = (g: GameId) => {
     setLast(null)
@@ -288,7 +303,9 @@ export function GamesPage() {
     setRound((x) => x + 1)
     setTab('play')
   }
-  const visible = games.filter((g) => on(g.id === 'nback' ? 'nback' : g.id === 'memory' ? 'memoryGrid' : g.id === 'stroop' ? 'stroop' : g.id === 'reaction' ? 'reaction' : 'speedMaths'))
+  const subId: Record<GameId, string> = { nback: 'nback', memory: 'memoryGrid', stroop: 'stroop', reaction: 'reaction', maths: 'speedMaths', simon: 'patternEcho', rotate: 'rotation3d', scramble: 'wordScramble', track: 'focusTracker', stream: 'numberStream' }
+  const visible = games.filter((g) => on(subId[g.id]))
+  const newProps = (g: GameId) => ({ level: store.levels[g], finish: finish(g), blip: (ok: boolean) => blip(ok, store.sound) })
   const props = (g: GameId) => ({ level: store.levels[g], finish: finish(g), sound: store.sound })
 
   const play = () => (
@@ -303,6 +320,11 @@ export function GamesPage() {
           {game === 'stroop' && <Stroop {...props('stroop')} />}
           {game === 'reaction' && <Reaction {...props('reaction')} />}
           {game === 'maths' && <Maths {...props('maths')} />}
+          {game === 'simon' && <PatternEcho {...newProps('simon')} />}
+          {game === 'rotate' && <MentalRotation {...newProps('rotate')} />}
+          {game === 'scramble' && <WordScramble {...newProps('scramble')} />}
+          {game === 'track' && <FocusTracker {...newProps('track')} />}
+          {game === 'stream' && <NumberStream {...newProps('stream')} />}
         </div>
       ) : (
         <div className="iv-programs">

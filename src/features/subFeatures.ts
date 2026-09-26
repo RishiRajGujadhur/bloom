@@ -671,6 +671,12 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "history", title: "History", description: "Your recent scores." },
     { id: "skillRadar", title: "Skill radar", description: "Memory, attention, speed and maths." },
     { id: "sounds", title: "Sounds", description: "Blips for right and wrong." },
+    { id: 'patternEcho', title: 'Pattern echo', description: 'Simon-style sound and colour sequences.' },
+    { id: 'rotation3d', title: '3D rotation', description: 'Mental rotation of three.js block shapes.' },
+    { id: 'wordScramble', title: 'Word scramble', description: 'Unscramble calm words against the clock.' },
+    { id: 'focusTracker', title: 'Focus tracker', description: 'Follow moving dots (multiple-object tracking).' },
+    { id: 'numberStream', title: 'Number stream', description: 'Running totals of flashing numbers.' },
+    { id: 'personalBest', title: 'Personal-best fireworks', description: 'Fireworks when you beat your best score.' },
   ],
   goalRoadmap: [
     { id: "timeline", title: "Gantt timeline", description: "Every milestone on one timeline." },

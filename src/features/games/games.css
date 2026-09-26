@@ -102,3 +102,115 @@
     grid-template-columns: 1fr;
   }
 }
+
+.bg-prompt {
+  margin: 0 0 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.bg-simon {
+  width: min(100%, 260px);
+  display: block;
+  margin: 0 auto;
+}
+
+.bg-simon path {
+  cursor: pointer;
+  stroke: var(--bg-surface, #fff);
+  stroke-width: 4;
+}
+
+.bg-simon-count {
+  font-size: 26px;
+  font-weight: 800;
+  fill: var(--text, #333);
+}
+
+.bg-rotate {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.bg-rotate-view {
+  height: 220px;
+  border-radius: 16px;
+  background: radial-gradient(circle, #f3efff, #e6e0ff);
+}
+
+.bg-tiles {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.bg-tiles span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 44px;
+  border-radius: 10px;
+  background: #8f7ae5;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.bg-track {
+  position: relative;
+  height: 280px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f3efff, #e8f7f1);
+  overflow: hidden;
+}
+
+.bg-dot {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 0;
+  background: #8f7ae5;
+  cursor: pointer;
+}
+
+.bg-dot.target {
+  background: #ffb300;
+  box-shadow: 0 0 0 6px #ffb30055;
+}
+
+.bg-dot.hit {
+  background: #3f8a5a;
+}
+
+.bg-dot.miss {
+  background: #e2553f;
+}
+
+.bg-stage {
+  position: relative;
+}
+
+.bg-stage > canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg-play.bg-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  width: 100%;
+  justify-items: stretch;
+}
+
+.bg-col .bg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
