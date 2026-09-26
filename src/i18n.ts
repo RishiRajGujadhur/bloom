@@ -337,6 +337,10 @@ const common = {
         title: "Workout log",
         description: "Log sets with sliders, rest timer, PRs, charts and a plate calculator.",
       },
+      intervalCoach: {
+        title: "Interval coach",
+        description: "HIIT, Tabata, EMOM and Couch-to-5K with voice and beeps.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1296,6 +1300,10 @@ export const resources = {
           workoutLog: {
             title: "Journal d’entraînement",
             description: "Séries aux curseurs, repos, records, graphiques et calculateur de disques.",
+          },
+          intervalCoach: {
+            title: "Coach d’intervalles",
+            description: "HIIT, Tabata, EMOM et Couch-to-5K avec voix et bips.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

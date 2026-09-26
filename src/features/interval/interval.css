@@ -1,0 +1,172 @@
+.iv-stage {
+  --seg: var(--studio);
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  gap: 12px;
+  background: radial-gradient(circle at 50% 42%, color-mix(in oklab, var(--seg) 22%, transparent), transparent 62%), color-mix(in oklab, var(--bg-surface) 82%, transparent);
+  transition: background 600ms ease;
+}
+.iv-ring {
+  grid-area: 1 / 1;
+  width: min(100%, 340px);
+  height: auto;
+  max-height: 100%;
+}
+.iv-track {
+  fill: none;
+  stroke: color-mix(in oklab, var(--seg) 18%, transparent);
+  stroke-width: 16;
+}
+.iv-arc {
+  fill: none;
+  stroke: var(--seg);
+  stroke-width: 16;
+  stroke-linecap: round;
+  transition: stroke 400ms ease;
+  filter: drop-shadow(0 0 12px color-mix(in oklab, var(--seg) 55%, transparent));
+}
+.iv-readout {
+  grid-area: 1 / 1;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+.iv-label {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--seg);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.iv-readout strong {
+  font-size: clamp(56px, 8vw, 88px);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.iv-round {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.iv-timeline {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+  height: 12px;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.iv-timeline i {
+  opacity: 0.35;
+  transition: opacity 300ms ease;
+}
+.iv-timeline i[data-past='true'] {
+  opacity: 1;
+}
+.iv-timeline i[data-now='true'] {
+  opacity: 1;
+  animation: iv-now 1s ease-in-out infinite alternate;
+}
+.iv-preview i {
+  opacity: 1;
+}
+.iv-side,
+.iv-builder {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+.iv-side h3 {
+  margin: 0;
+  font-size: 22px;
+}
+.iv-buttons {
+  display: flex;
+  gap: 8px;
+}
+.iv-programs {
+  display: grid;
+  gap: 14px;
+}
+.iv-programs h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.iv-card {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 140px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--bg-surface) 85%, transparent);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  transition: transform 220ms cubic-bezier(0.3, 1.5, 0.5, 1), border-color 200ms ease;
+}
+.iv-card:hover,
+.iv-card[data-on='true'] {
+  transform: translateY(-4px);
+  border-color: var(--studio);
+}
+.iv-card span {
+  font-size: 30px;
+}
+.iv-card small {
+  color: var(--text-muted);
+}
+.iv-c25k {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--bg-surface) 85%, transparent);
+  justify-items: start;
+}
+.iv-weeks {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+.iv-weeks span {
+  display: grid;
+  place-items: center;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--studio-soft);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.iv-weeks span[data-state='done'] {
+  background: #6bbf7a;
+  color: #fff;
+}
+.iv-weeks span[data-state='now'] {
+  background: var(--studio);
+  color: #fff;
+  animation: iv-now 1.2s ease-in-out infinite alternate;
+}
+.iv-total {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+}
+@keyframes iv-now {
+  to {
+    opacity: 0.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iv-timeline i[data-now='true'],
+  .iv-weeks span[data-state='now'] {
+    animation: none;
+  }
+}

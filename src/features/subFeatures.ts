@@ -407,6 +407,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "muscleVolume", title: "Weekly muscle sets", description: "Hard sets per muscle this week." },
     { id: "history", title: "History", description: "Every workout you have logged." },
   ],
+  intervalCoach: [
+    { id: "presets", title: "Programs", description: "Tabata, HIIT, EMOM, sprints and gentle." },
+    { id: "builder", title: "Custom builder", description: "Sliders for work, rest and rounds." },
+    { id: "voice", title: "Voice cues", description: "Work, rest and halfway, spoken." },
+    { id: "beeps", title: "Beeps", description: "Tones at changes and a 3-2-1 countdown." },
+    { id: "ring", title: "Progress ring", description: "A glowing ring drains each interval." },
+    { id: "warmCool", title: "Warm-up & cool-down", description: "Easy minutes before and after." },
+    { id: "rounds", title: "Round counter", description: "Round 3 of 8." },
+    { id: "c25k", title: "Couch to 5K", description: "A nine-week run/walk plan that remembers where you are." },
+    { id: "calories", title: "Calorie estimate", description: "From effort and your weight." },
+    { id: "logWorkouts", title: "Log to workouts", description: "Finished sessions appear in your workout history." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

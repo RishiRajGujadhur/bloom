@@ -61,6 +61,7 @@
     "dexie": "^4.4.6",
     "diff": "^9.0.0",
     "driver.js": "^1.8.0",
+    "easytimer.js": "^4.6.0",
     "embla-carousel-react": "^8.6.0",
     "formik": "^2.4.9",
     "framer-motion": "^13.2.0",

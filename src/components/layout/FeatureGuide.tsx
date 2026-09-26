@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'intervals': { title: "Intervals", description: "Work hard, rest well." },
   'workouts': { title: "Workouts", description: "Stronger than last week." },
   'exercises': { title: "Exercises", description: "Move well, not just more." },
   'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
@@ -107,6 +108,10 @@ const guides: Record<NavKey, DriveStep[]> = {
     step(".wo-start", "Start a session", "Pick a template to begin."),
     step(".wo-lift", "Log with sliders", "Set weight, reps and effort, then log."),
     step(".wo-rest-box", "Rest", "The timer starts after each set."),
+  ],
+  'intervals': [
+    step(".iv-stage", "Follow the ring", "Colours show work, rest and warm-up."),
+    step(".iv-side", "Start, skip, reset", "The coach cues each change."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

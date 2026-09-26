@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { c25kProgram, calories, position, presets as ivPresets, segments, total } from '../src/features/interval/intervalModel'
 import { e1rm, plates, progress, prsFor, volume, weeklyMuscleSets, type Workout } from '../src/features/workout/workoutModel'
 
 test('settings: every feature has a category; presets round-trip', () => {
@@ -16,7 +17,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -51,4 +52,19 @@ test('workout maths: e1RM, PRs, volume, plates and weekly muscle sets', () => {
   expect(progress(w, 'bench').map((p) => p.best)).toEqual([76, 82.3])
   expect(weeklyMuscleSets(w, now).get('chest')).toBe(2)
   expect(weeklyMuscleSets(w, now).get('triceps')).toBe(1)
+})
+
+test('intervals: segments, position, C25K progression and calories', () => {
+  const tabata = ivPresets.find((p) => p.id === 'tabata')!
+  const s = segments(tabata)
+  expect(s.filter((x) => x.kind === 'work')).toHaveLength(8)
+  expect(s.filter((x) => x.kind === 'rest')).toHaveLength(7)
+  expect(total(s)).toBe(120 + 8 * 20 + 7 * 10 + 120)
+  expect(total(segments(tabata, false))).toBe(230)
+  expect(position(s, 125)).toMatchObject({ segment: { kind: 'work', round: 1 }, into: 5, left: 15 })
+  expect(position(s, total(s))).toBeNull()
+  expect(c25kProgram(0).name).toBe('C25K W1 D1')
+  expect(c25kProgram(4).name).toBe('C25K W2 D2')
+  expect(c25kProgram(99).work).toBe(1800)
+  expect(calories(s, total(s), 70)).toBeGreaterThan(40)
 })
