@@ -419,6 +419,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "calories", title: "Calorie estimate", description: "From effort and your weight." },
     { id: "logWorkouts", title: "Log to workouts", description: "Finished sessions appear in your workout history." },
   ],
+  yogaFlow: [
+    { id: "library", title: "Pose library", description: "Twelve poses to study." },
+    { id: "builder", title: "Flow builder", description: "Drag and drop poses into your own flow." },
+    { id: "player", title: "Guided player", description: "The figure morphs from pose to pose." },
+    { id: "breathCue", title: "Breath cue", description: "A glowing orb paces each breath." },
+    { id: "sanskrit", title: "Sanskrit names", description: "Traditional names beside each pose." },
+    { id: "presets", title: "Preset flows", description: "Sun salutation, energiser, balance, wind-down." },
+    { id: "savedFlows", title: "Saved flows", description: "Keep the flows you build." },
+    { id: "voice", title: "Voice guidance", description: "Hear each pose and its cue." },
+    { id: "timeline", title: "Flow timeline", description: "See where you are in the sequence." },
+    { id: "benefits", title: "Benefits", description: "Why each pose helps." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

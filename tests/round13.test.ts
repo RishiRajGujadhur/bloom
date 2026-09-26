@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { flowSeconds, newStep, poses, presetFlows, stepAt } from '../src/features/yoga/yogaModel'
 import { c25kProgram, calories, position, presets as ivPresets, segments, total } from '../src/features/interval/intervalModel'
 import { e1rm, plates, progress, prsFor, volume, weeklyMuscleSets, type Workout } from '../src/features/workout/workoutModel'
 
@@ -17,7 +18,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -67,4 +68,16 @@ test('intervals: segments, position, C25K progression and calories', () => {
   expect(c25kProgram(4).name).toBe('C25K W2 D2')
   expect(c25kProgram(99).work).toBe(1800)
   expect(calories(s, total(s), 70)).toBeGreaterThan(40)
+})
+
+test('yoga: poses, flow length and the live step', () => {
+  expect(poses.length).toBeGreaterThanOrEqual(12)
+  const sun = presetFlows.find((f) => f.id === 'sunA')!
+  const breaths = sun.steps.reduce((t, s) => t + s.breaths, 0)
+  expect(flowSeconds(sun, 5)).toBe(breaths * 5)
+  expect(stepAt(sun, 5, 0)?.index).toBe(0)
+  expect(stepAt(sun, 5, 10)?.index).toBe(1)
+  expect(stepAt(sun, 5, flowSeconds(sun, 5))).toBeNull()
+  expect(newStep('tree').key).not.toBe(newStep('tree').key)
+  for (const f of presetFlows) for (const s of f.steps) expect(poses.some((p) => p.id === s.poseId)).toBe(true)
 })

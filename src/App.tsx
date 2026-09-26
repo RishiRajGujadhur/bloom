@@ -137,6 +137,9 @@ const WorkoutPage = lazy(() =>
 const IntervalPage = lazy(() =>
   import('./features/interval/IntervalPage').then((m) => ({ default: m.IntervalPage })),
 )
+const YogaPage = lazy(() =>
+  import('./features/yoga/YogaPage').then((m) => ({ default: m.YogaPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -593,6 +596,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'yoga' && !settings.features.yogaFlow) ||
             (active === 'intervals' && !settings.features.intervalCoach) ||
             (active === 'workouts' && !settings.features.workoutLog) ||
             (active === 'exercises' && !settings.features.exerciseGuides) ||
@@ -682,6 +686,10 @@ function App() {
             ) : active === 'intervals' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <IntervalPage />
+              </Suspense>
+            ) : active === 'yoga' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <YogaPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

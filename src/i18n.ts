@@ -341,6 +341,10 @@ const common = {
         title: "Interval coach",
         description: "HIIT, Tabata, EMOM and Couch-to-5K with voice and beeps.",
       },
+      yogaFlow: {
+        title: "Yoga flow",
+        description: "Build flows by drag and drop and practise with a morphing guide and breath cue.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1304,6 +1308,10 @@ export const resources = {
           intervalCoach: {
             title: "Coach d’intervalles",
             description: "HIIT, Tabata, EMOM et Couch-to-5K avec voix et bips.",
+          },
+          yogaFlow: {
+            title: "Flow de yoga",
+            description: "Composez des enchaînements en glisser-déposer et pratiquez avec guide et souffle.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

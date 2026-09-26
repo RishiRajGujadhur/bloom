@@ -1,0 +1,173 @@
+/* Pose-to-pose morph: every joint eases into the next pose. */
+.yg-morph g {
+  transition: transform 1.4s cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+.yg-stage {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+  background: radial-gradient(circle at 50% 60%, color-mix(in oklab, var(--studio) 16%, transparent), transparent 65%), color-mix(in oklab, var(--bg-surface) 82%, transparent);
+}
+.yg-figure {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+.yg-figure .ef {
+  max-height: 100%;
+}
+.yg-timeline {
+  display: flex;
+  gap: 3px;
+  height: 10px;
+}
+.yg-timeline i {
+  border-radius: 99px;
+  background: var(--studio-soft);
+  transition: background 400ms ease;
+}
+.yg-timeline i[data-past='true'] {
+  background: color-mix(in oklab, var(--studio) 55%, transparent);
+}
+.yg-timeline i[data-now='true'] {
+  background: var(--studio);
+}
+.yg-side {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+.yg-pose-name {
+  margin: 0 !important;
+  font-size: 30px !important;
+}
+.yg-sanskrit {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: var(--studio);
+  font-size: 18px;
+}
+.yg-cue,
+.yg-benefit {
+  margin: 0;
+  color: var(--text-secondary);
+}
+.yg-breath {
+  display: grid;
+  place-items: center;
+  height: 150px;
+}
+.yg-breath-orb {
+  grid-area: 1 / 1;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, color-mix(in oklab, var(--studio) 55%, #fff));
+  box-shadow: 0 0 40px color-mix(in oklab, var(--studio) 45%, transparent);
+  transform: scale(0.8);
+}
+.yg-breath span {
+  grid-area: 1 / 1;
+  font-weight: 700;
+  color: #4b3a8a;
+}
+.yg-build {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 12px;
+}
+.yg-build-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.yg-build-head .studio-input {
+  flex: 1;
+  min-width: 180px;
+  font-weight: 700;
+}
+.yg-flow {
+  display: flex;
+  gap: 10px;
+  min-height: 210px;
+  padding: 12px;
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 2px dashed var(--border-color);
+  background: color-mix(in oklab, var(--bg-surface) 70%, transparent);
+  transition: border-color 200ms ease, background 200ms ease;
+}
+.yg-flow[data-over='true'] {
+  border-color: var(--studio);
+  background: var(--studio-soft);
+}
+.yg-step,
+.yg-lib {
+  position: relative;
+  flex: none;
+  display: grid;
+  gap: 4px;
+  width: 150px;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  touch-action: none;
+}
+.yg-step[data-dragging='true'],
+.yg-lib[data-dragging='true'] {
+  z-index: 5;
+  box-shadow: 0 18px 30px -12px #0005;
+  rotate: -2deg;
+}
+.yg-step-grip,
+.yg-lib {
+  cursor: grab;
+}
+.yg-step .ef,
+.yg-lib .ef {
+  height: 90px;
+}
+.yg-step strong,
+.yg-lib strong {
+  font-size: 13px;
+}
+.yg-lib small {
+  color: var(--studio);
+  font-style: italic;
+  font-size: 11px;
+}
+.yg-add,
+.yg-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+.yg-add:hover {
+  background: var(--studio);
+  color: #fff;
+}
+.yg-saved {
+  position: relative;
+}
+.yg-pose-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .yg-morph g {
+    transition: none;
+  }
+}

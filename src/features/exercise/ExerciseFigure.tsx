@@ -110,10 +110,37 @@ export function ExerciseFigure({
   }, [playing, exercise, speed, animate])
 
   const pose = animate ? exercise.a : exercise.b
+  return <FigureSvg pose={pose} refs={refs} mirror={mirror} small={small} label={`${exercise.name} form guide`} floor={floor} />
+}
+
+/**
+ * The figure itself. Transforms come from `pose`; pass refs to animate joints
+ * directly (exercise guides), or rely on the CSS transition for smooth
+ * pose-to-pose morphs (yoga flows).
+ */
+export function FigureSvg({
+  pose,
+  refs: given,
+  mirror,
+  small,
+  label,
+  floor,
+  className,
+}: {
+  pose: Pose
+  refs?: React.MutableRefObject<Partial<Record<Joint, SVGGElement | null>>>
+  mirror?: boolean
+  small?: boolean
+  label: string
+  floor?: boolean
+  className?: string
+}) {
+  const own = useRef<Partial<Record<Joint, SVGGElement | null>>>({})
+  const refs = given ?? own
   return (
-    <svg className="ef" data-small={small} viewBox="0 0 220 230" role="img" aria-label={`${exercise.name} form guide`} style={{ transform: mirror ? 'scaleX(-1)' : undefined }}>
+    <svg className={`ef ${className ?? ''}`} data-small={small} viewBox="0 0 220 230" role="img" aria-label={label} style={{ transform: mirror ? 'scaleX(-1)' : undefined }}>
       <line className="ef-floor" x1="10" y1="208" x2="210" y2="208" />
-      <g transform={floor ? 'translate(-55 0)' : undefined}>
+      <g className="ef-floorshift" style={{ transform: floor ? 'translateX(-55px)' : 'none' }}>
         <g ref={(el) => void (refs.current.root = el)} style={{ ...origin(110, 205), transform: transformOf('root', at(pose, 'root')) }}>
           <g ref={(el) => void (refs.current.shift = el)} style={{ transform: transformOf('shift', at(pose, 'shift')) }}>
             <g ref={(el) => void (refs.current.drop = el)} style={{ transform: transformOf('drop', at(pose, 'drop')) }}>
