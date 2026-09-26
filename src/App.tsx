@@ -165,6 +165,9 @@ const MixerPage = lazy(() =>
 const MeditatePage = lazy(() =>
   import('./features/meditate/MeditatePage').then((m) => ({ default: m.MeditatePage })),
 )
+const BreathworkPage = lazy(() =>
+  import('./features/breathwork/BreathworkPage').then((m) => ({ default: m.BreathworkPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -621,6 +624,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'breathwork' && !settings.features.breathwork) ||
             (active === 'meditate' && !settings.features.meditation) ||
             (active === 'mixer' && !settings.features.soundMixer) ||
             (active === 'sounds' && !settings.features.focusSounds) ||
@@ -755,6 +759,10 @@ function App() {
             ) : active === 'meditate' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <MeditatePage />
+              </Suspense>
+            ) : active === 'breathwork' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <BreathworkPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

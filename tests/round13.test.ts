@@ -2,6 +2,7 @@ import { exercises, filterExercises, repSeconds } from '../src/features/exercise
 import { applyPreset, featureCategory, matchPreset, presets } from '../src/settings/featureCatalog'
 import { defaultSettings, featureKeys } from '../src/SettingsPage'
 import { subFeatures } from '../src/features/subFeatures'
+import { best as bwBest, defaultSettings as bwDefaults, initial as bwInitial, lung, step as bwStep } from '../src/features/breathwork/breathworkModel'
 import { bells, courses, currentLine, sessionById, streakDays, timed } from '../src/features/meditate/meditateModel'
 import { modes as soundModes } from '../src/features/sounds/focusEngine'
 import { endMessage, fmtH, perDay, stageAt, stats as fastStats } from '../src/features/fasting/fastingModel'
@@ -26,7 +27,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer', 'meditation', 'breathwork'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -205,4 +206,23 @@ test('meditation: scripts scale to length, bells and streaks', () => {
   const now = new Date('2026-09-26T12:00:00').getTime()
   const logs = [0, 1, 2, 4].map((d) => ({ at: now - d * 86400000, id: 'breath1', minutes: 5 }))
   expect(streakDays(logs, now)).toBe(3)
+})
+
+test('breathwork: breathe → retention → recovery → next round → done', () => {
+  const cfg = { ...bwDefaults, rounds: 2, breaths: 3, pace: 1, recovery: 5 }
+  let s = bwInitial(0)
+  s = bwStep(s, cfg, 2500)
+  expect(s.breath).toBe(1)
+  s = bwStep(s, cfg, 6000)
+  expect(s.phase).toBe('retention')
+  s = bwStep(s, cfg, 36000, true)
+  expect(s).toMatchObject({ phase: 'recovery', retentions: [30] })
+  s = bwStep(s, cfg, 41000)
+  expect(s.phase).toBe('rest')
+  s = bwStep(s, cfg, 44000)
+  expect(s).toMatchObject({ phase: 'breathe', round: 2 })
+  s = bwStep(bwStep(bwStep(s, cfg, 50000), cfg, 90000, true), cfg, 96000)
+  expect(s.phase).toBe('done')
+  expect(bwBest([{ at: 0, retentions: s.retentions }])).toBe(40)
+  expect(lung(bwInitial(0), cfg, 1000)).toBeCloseTo(1)
 })

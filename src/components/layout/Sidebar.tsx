@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Wind as WindF_breathwork } from 'lucide-react'
 import { Sparkles as SparklesF_meditation } from 'lucide-react'
 import { CloudRain as CloudRainF_soundMixer } from 'lucide-react'
 import { AudioLines as AudioLinesF_focusSounds } from 'lucide-react'
@@ -93,6 +94,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'breathwork'
   | 'meditate'
   | 'mixer'
   | 'sounds'
@@ -119,7 +121,7 @@ interface SidebarProps {
 const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting'] },
-  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab'] },
 ]
@@ -351,6 +353,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'breathwork', title: "Breathwork", Icon: WindF_breathwork, requires: 'breathwork' },
     { key: 'meditate', title: "Meditate", Icon: SparklesF_meditation, requires: 'meditation' },
     { key: 'mixer', title: "Soundscapes", Icon: CloudRainF_soundMixer, requires: 'soundMixer' },
     { key: 'sounds', title: "Focus sounds", Icon: AudioLinesF_focusSounds, requires: 'focusSounds' },

@@ -377,6 +377,10 @@ const common = {
         title: "Guided meditation",
         description: "Spoken sessions with captions, courses, SOS calm and particle scenes.",
       },
+      breathwork: {
+        title: "Breathwork",
+        description: "Power-breathing rounds, breath holds and recovery with animated lungs.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1376,6 +1380,10 @@ export const resources = {
           meditation: {
             title: "Méditation guidée",
             description: "Séances guidées avec sous-titres, parcours, SOS et scènes de particules.",
+          },
+          breathwork: {
+            title: "Respiration intense",
+            description: "Séries de respiration, apnées et récupération avec poumons animés.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

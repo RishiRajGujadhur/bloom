@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Wind as WindF_breathwork } from 'lucide-react'
 import { Sparkles as SparklesF_meditation } from 'lucide-react'
 import { CloudRain as CloudRainF_soundMixer } from 'lucide-react'
 import { AudioLines as AudioLinesF_focusSounds } from 'lucide-react'
@@ -119,6 +120,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  breathwork: WindF_breathwork,
   meditation: SparklesF_meditation,
   soundMixer: CloudRainF_soundMixer,
   focusSounds: AudioLinesF_focusSounds,
@@ -189,6 +191,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  breathwork: boolean
   meditation: boolean
   soundMixer: boolean
   focusSounds: boolean
@@ -268,6 +271,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    breathwork: true,
     meditation: true,
     soundMixer: true,
     focusSounds: true,
@@ -339,6 +343,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'breathwork',
   'meditation',
   'soundMixer',
   'focusSounds',
