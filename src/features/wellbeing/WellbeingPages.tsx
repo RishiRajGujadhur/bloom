@@ -23,6 +23,7 @@ import {
   type MoodEntry,
 } from './store'
 import './wellbeing.css'
+import { MoodQuick } from '../quick/MoodQuick'
 import { GratitudeJarSvg, MiniJarSvg } from './GratitudeJarSvg'
 import { orbToMood } from './moodOrbModel'
 
@@ -339,6 +340,7 @@ export function MoodPage() {
     .slice(0, 5)
   return (
     <section className="wb-page" aria-labelledby="mood-title">
+      <MoodQuick setEntries={setEntries} />
       <div className="wb-card">
         <div className="wb-card-head">
           <h2 id="mood-title">How are you right now?</h2>

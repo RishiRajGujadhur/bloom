@@ -64,6 +64,10 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'recent', title: 'Recent check-ins slider', description: 'Your latest entries.' },
     { id: 'notes', title: 'Notes', description: 'A word about why.' },
     { id: 'weekChart', title: 'Week chart', description: 'Your last seven days.' },
+    { id: 'oneTapLog', title: 'One-tap logging', description: 'A single tap saves your mood.' },
+    { id: 'factorSwipe', title: 'Why this mood?', description: 'Swipe through sleep, food, movement and more.' },
+    { id: 'nextStep', title: 'Suggested next step', description: 'Links to a feature that suits your mood.' },
+    { id: 'crossFeature', title: 'Moods across Bloom', description: 'Timeline of moods tagged on other pages.' },
   ],
   gratitude: [
     { id: 'customJars', title: 'Custom jars', description: 'Create your own jars.' },

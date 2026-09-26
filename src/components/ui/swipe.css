@@ -308,3 +308,30 @@
   margin: 0 0 4px;
   font-style: italic;
 }
+
+.quick-next {
+  justify-self: start;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--accent, #e0703f);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mood-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mood-timeline li {
+  display: grid;
+  justify-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--mood, #ccc) 22%, transparent);
+}
