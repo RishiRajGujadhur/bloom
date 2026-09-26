@@ -28,7 +28,7 @@ function ProgramArt({ p }: { p: Program }) {
     )
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     const tw = gsap.from(el.querySelectorAll('path'), { opacity: 0, scale: 0.6, transformOrigin: '40px 40px', duration: 0.6, stagger: 0.04, ease: 'back.out(2)' })
-    return () => void tw.kill()
+    return () => void tw.revert()
   }, [p.id, p.ids.length])
   return (
     <span className="ex-prog-art">

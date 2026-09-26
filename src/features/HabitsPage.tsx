@@ -29,6 +29,7 @@ import { burst, streakMilestone } from '../components/ui/celebrate'
 import { ReminderButton } from './reminders/ReminderCenter'
 import { gridDays, habitStats } from './habits'
 import './habits.css'
+import { HabitsQuick } from './quick/HabitsQuick'
 
 type Habit = AppData['habits'][number]
 type Routine = NonNullable<AppData['routines']>[number]
@@ -134,6 +135,7 @@ export function HabitsPage({
           </div>
         </div>
       )}
+      {tab === 'habits' && <HabitsQuick data={data} setData={setData} today={today} />}
       <div className="habits-toolbar">
         <div className="segmented" role="tablist" aria-label="Habit views">
           <button

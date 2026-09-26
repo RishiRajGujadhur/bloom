@@ -224,6 +224,12 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'grid', title: 'Contribution grid', description: 'History heatmap on each habit.' },
     { id: 'streak', title: 'Streak footer', description: 'Current and best streak.' },
     { id: 'edit', title: 'Edit and delete', description: 'Actions on each card.' },
+    { id: 'swipeCheckin', title: 'Swipe check-in', description: 'Swipe right on habits you did today.' },
+    { id: 'moodTag', title: 'Guided mood', description: 'One-tap mood before checking in.' },
+    { id: 'gentleMode', title: 'Gentle mode', description: 'Tired or low? Habits shrink to 2 minutes.' },
+    { id: 'skipDay', title: 'Skip for today', description: 'Swipe left hides a habit until tomorrow.' },
+    { id: 'allDoneBurst', title: 'All-done celebration', description: 'Stars when the last habit is checked.' },
+    { id: 'doneList', title: 'Done today list', description: 'Animated list with undo.' },
   ],
   chatJournal: [
     { id: 'quickEntry', title: 'Quick entry', description: 'Short journal entries with tags.' },

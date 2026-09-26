@@ -1,0 +1,267 @@
+.swipe-deck {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  outline: none;
+  padding: 8px 0;
+}
+
+.swipe-deck:focus-visible .swipe-card:not(.swipe-under) {
+  box-shadow: 0 0 0 3px var(--accent, #e0703f);
+}
+
+.swipe-stack {
+  position: relative;
+  width: min(100%, 340px);
+  height: 190px;
+}
+
+.swipe-card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  padding: 18px;
+  text-align: center;
+  border-radius: 20px;
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border, #0001);
+  box-shadow: 0 10px 30px #0000001a;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.swipe-card:active {
+  cursor: grabbing;
+}
+
+.swipe-under {
+  transform: translateY(10px) scale(0.95);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.swipe-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.swipe-emoji {
+  font-size: 2.2rem;
+}
+
+.swipe-stamp {
+  position: absolute;
+  top: 12px;
+  width: 90px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.swipe-stamp.yes {
+  left: 14px;
+  transform: rotate(-14deg);
+  color: #2e9d6a;
+}
+
+.swipe-stamp.no {
+  right: 14px;
+  transform: rotate(14deg);
+  color: #d64545;
+}
+
+.swipe-stamp rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+}
+
+.swipe-stamp text {
+  fill: currentColor;
+  font: 800 16px var(--font-sans, sans-serif);
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.swipe-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.swipe-btn {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: var(--bg-surface, #fff);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.swipe-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.swipe-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.swipe-btn.yes {
+  color: #2e9d6a;
+}
+
+.swipe-btn.no {
+  color: #d64545;
+}
+
+.swipe-btn.undo {
+  width: 36px;
+  height: 36px;
+  color: var(--text-muted);
+}
+
+.swipe-count,
+.swipe-empty {
+  color: var(--text-muted);
+}
+
+.swipe-empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border: 2px dashed var(--border, #0002);
+  border-radius: 20px;
+}
+
+.mood-guide {
+  display: grid;
+  gap: 8px;
+}
+
+.mood-guide-label {
+  font-weight: 600;
+}
+
+.mood-guide-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mood-guide-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border, #0002);
+  background: var(--bg-surface, #fff);
+  cursor: pointer;
+  font: inherit;
+}
+
+.mood-guide-chip svg {
+  position: absolute;
+  left: 2px;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+}
+
+.mood-guide-chip circle {
+  fill: none;
+  stroke: var(--mood);
+  stroke-width: 3;
+  stroke-dashoffset: 120;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.mood-guide-chip[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--mood) 18%, var(--bg-surface, #fff));
+  border-color: var(--mood);
+}
+
+.mood-guide-chip[aria-pressed='true'] circle {
+  stroke-dashoffset: 0;
+}
+
+.mood-guide-emoji {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 1.2rem;
+}
+
+.mood-guide-hint {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.quick-panel {
+  margin: 0 0 14px;
+  border-radius: 18px;
+  border: 1px solid var(--border, #0001);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent, #e0703f) 8%, var(--bg-surface, #fff)), var(--bg-surface, #fff));
+}
+
+.quick-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: inherit;
+}
+
+.quick-panel-chev {
+  margin-left: auto;
+  transition: transform 0.25s ease;
+}
+
+.quick-panel-head[aria-expanded='false'] .quick-panel-chev {
+  transform: rotate(-90deg);
+}
+
+.quick-panel-body {
+  display: grid;
+  gap: 14px;
+  padding: 0 16px 16px;
+  overflow: hidden;
+}
+
+.quick-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.quick-done {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quick-done li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
