@@ -1,0 +1,225 @@
+.release-page {
+  display: grid;
+  gap: 14px;
+}
+.release-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: center;
+  gap: 24px;
+  min-height: 460px;
+  padding: 28px;
+  border-radius: 26px;
+  border: 1px solid var(--border-color);
+  background:
+    radial-gradient(circle at 80% 70%, #ff9a3c33, transparent 45%),
+    linear-gradient(180deg, #1c1830, #2a1f2e 70%, #3a2a26);
+  color: #f6ede4;
+  overflow: hidden;
+}
+.release-input {
+  display: grid;
+  gap: 12px;
+  max-width: 460px;
+}
+.release-input label {
+  font-size: 20px;
+  font-weight: 700;
+}
+.release-input textarea {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid #ffffff2a;
+  background: #ffffff12;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  resize: vertical;
+}
+.release-input button {
+  justify-self: start;
+}
+.release-card-slot {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+}
+.release-card {
+  position: relative;
+  z-index: 3;
+  width: min(300px, 100%);
+  min-height: 170px;
+  padding: 20px;
+  border-radius: 6px;
+  background: linear-gradient(170deg, #fff8e8, #f2e3c4);
+  color: #3b2a1e;
+  box-shadow: 0 20px 40px -18px #000c, 0 0 0 1px #0001;
+  cursor: grab;
+  user-select: none;
+  font-family: 'Caveat', var(--font-app), cursive;
+}
+.release-card:active {
+  cursor: grabbing;
+}
+.release-card p {
+  margin: 0 0 18px;
+  font-size: 24px;
+  line-height: 1.25;
+}
+.release-card small {
+  position: absolute;
+  bottom: 12px;
+  left: 20px;
+  color: #8a6a4a;
+  font-family: var(--font-app);
+  font-size: 12px;
+}
+.release-actions {
+  display: flex;
+  gap: 10px;
+}
+.release-actions .ov-secondary {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff30;
+}
+.release-fire {
+  position: relative;
+  justify-self: center;
+  width: 220px;
+  height: 260px;
+  transition: transform 300ms ease, filter 300ms ease;
+}
+.release-fire.is-hungry {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 30px #ffb347);
+}
+.release-flames {
+  position: absolute;
+  left: 50%;
+  bottom: 50px;
+  width: 140px;
+  height: 170px;
+  translate: -50% 0;
+}
+.release-flames i {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  transform-origin: 50% 100%;
+  animation: flame 900ms ease-in-out infinite alternate;
+  filter: blur(1px);
+}
+.release-flames i:nth-child(1) {
+  width: 130px;
+  height: 160px;
+  margin-left: -65px;
+  background: radial-gradient(circle at 50% 80%, #ffd35a, #ff7a1a 55%, #d8391a 80%, transparent 82%);
+  opacity: 0.9;
+}
+.release-flames i:nth-child(2) {
+  width: 90px;
+  height: 120px;
+  margin-left: -45px;
+  background: radial-gradient(circle at 50% 80%, #fff3b0, #ffc23a 60%, transparent 70%);
+  animation-duration: 700ms;
+  animation-delay: -200ms;
+}
+.release-flames i:nth-child(3) {
+  width: 46px;
+  height: 70px;
+  margin-left: -23px;
+  background: radial-gradient(circle at 50% 80%, #fff, #fff6c8 50%, transparent 70%);
+  animation-duration: 520ms;
+}
+@keyframes flame {
+  from {
+    transform: scale(1, 1) skewX(-3deg);
+  }
+  to {
+    transform: scale(0.94, 1.08) skewX(4deg);
+  }
+}
+.release-fire.is-burning .release-flames i {
+  animation-duration: 260ms;
+}
+.release-logs {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  width: 170px;
+  height: 36px;
+  translate: -50% 0;
+}
+.release-logs i {
+  position: absolute;
+  top: 8px;
+  width: 170px;
+  height: 22px;
+  border-radius: 12px;
+  background: linear-gradient(#7a4b2a, #4e2e18);
+}
+.release-logs i:first-child {
+  transform: rotate(12deg);
+}
+.release-logs i:last-child {
+  transform: rotate(-12deg);
+}
+.release-smoke {
+  position: absolute;
+  left: 50%;
+  bottom: 190px;
+  translate: -50% 0;
+}
+.release-smoke i {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #c8c2d655;
+  opacity: 0;
+  filter: blur(6px);
+}
+.release-fire.is-burning .release-smoke i {
+  animation: smoke 1.6s ease-out forwards;
+}
+.release-fire.is-burning .release-smoke i:nth-child(2) {
+  animation-delay: 250ms;
+  left: -24px;
+}
+.release-fire.is-burning .release-smoke i:nth-child(3) {
+  animation-delay: 500ms;
+  left: 18px;
+}
+@keyframes smoke {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-140px) scale(2.4);
+  }
+}
+.release-count {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+@media (max-width: 800px) {
+  .release-stage {
+    grid-template-columns: 1fr;
+  }
+  .release-fire {
+    width: 180px;
+    height: 220px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .release-flames i,
+  .release-fire.is-burning .release-smoke i {
+    animation: none;
+  }
+}

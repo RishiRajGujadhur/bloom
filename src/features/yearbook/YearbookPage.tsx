@@ -1,0 +1,137 @@
+import { useMemo, useState } from 'react'
+import { BookMarked, Download, Loader2 } from 'lucide-react'
+import type { FeaturePageProps } from '../shared/pageProps'
+import { DAYBOOK_STORAGE_KEY } from '../../components/daybook/storage'
+import type { JournalEntry } from '../../components/daybook/types'
+import { GRATITUDE_KEY, MOOD_KEY, type GratitudeEntry, type MoodEntry } from '../wellbeing/store'
+import { buildYearbook, type YearbookChapters } from './yearbookModel'
+import { burst } from '../../components/ui/celebrate'
+import './yearbook.css'
+
+function readJson<T>(key: string): T[] {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem(key) ?? '[]')
+    return Array.isArray(value) ? (value as T[]) : []
+  } catch {
+    return []
+  }
+}
+
+const chapterLabels: Record<keyof YearbookChapters, string> = {
+  stats: 'The year in numbers',
+  moods: 'Mood by month',
+  daybook: 'Daybook pages',
+  journal: 'Guided reflections',
+  gratitude: 'Good things',
+}
+
+/** Typesets the year into a paperback-sized PDF, entirely in the browser. */
+export function YearbookPage({ data, today }: FeaturePageProps) {
+  const thisYear = Number(today.slice(0, 4))
+  const [year, setYear] = useState(thisYear)
+  const [title, setTitle] = useState('My year in Bloom')
+  const [author, setAuthor] = useState('')
+  const [chapters, setChapters] = useState<YearbookChapters>({
+    stats: true,
+    moods: true,
+    daybook: true,
+    journal: true,
+    gratitude: true,
+  })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const book = useMemo(
+    () =>
+      buildYearbook(
+        data,
+        readJson<JournalEntry>(DAYBOOK_STORAGE_KEY),
+        readJson<GratitudeEntry>(GRATITUDE_KEY),
+        readJson<MoodEntry>(MOOD_KEY),
+        year,
+        title,
+        author,
+      ),
+    [data, year, title, author],
+  )
+  const publish = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const button = event.currentTarget
+    setBusy(true)
+    setError('')
+    try {
+      const { renderYearbook } = await import('./YearbookDocument')
+      const blob = await renderYearbook(book, chapters)
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `bloom-year-${year}.pdf`
+      link.click()
+      setTimeout(() => URL.revokeObjectURL(url), 4000)
+      burst(button, 'stars')
+    } catch {
+      setError('The book could not be generated. Please try again.')
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <section className="yearbook-page" aria-label="Year book">
+      <div className="yearbook-preview" aria-hidden="true">
+        <div className="yearbook-cover">
+          <span>{year}</span>
+          <strong>{title || 'My year'}</strong>
+          <small>{author || 'A year with Bloom'}</small>
+        </div>
+      </div>
+      <div className="yearbook-options">
+        <label>
+          Year
+          <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+            {[thisYear, thisYear - 1, thisYear - 2].map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Title
+          <input value={title} maxLength={60} onChange={(e) => setTitle(e.target.value)} />
+        </label>
+        <label>
+          Author
+          <input value={author} maxLength={60} placeholder="Your name" onChange={(e) => setAuthor(e.target.value)} />
+        </label>
+        <fieldset>
+          <legend>Chapters</legend>
+          {(Object.keys(chapterLabels) as (keyof YearbookChapters)[]).map((key) => (
+            <label key={key} className="yearbook-check">
+              <input
+                type="checkbox"
+                checked={chapters[key]}
+                onChange={() => setChapters((c) => ({ ...c, [key]: !c[key] }))}
+              />
+              {chapterLabels[key]}
+            </label>
+          ))}
+        </fieldset>
+        <ul className="yearbook-stats">
+          {book.stats.map((stat) => (
+            <li key={stat.label}>
+              <strong>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </li>
+          ))}
+        </ul>
+        <button className="ov-primary yearbook-generate" onClick={publish} disabled={busy}>
+          {busy ? <Loader2 size={17} className="spin" /> : <Download size={17} />}
+          {busy ? 'Typesetting…' : 'Download PDF book'}
+        </button>
+        {error && <p role="alert">{error}</p>}
+        <p className="wb-muted">
+          <BookMarked size={14} aria-hidden="true" /> A5 paperback layout with page numbers, ready for a print shop.
+          Everything is generated on your device.
+        </p>
+      </div>
+    </section>
+  )
+}

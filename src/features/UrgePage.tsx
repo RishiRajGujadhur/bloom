@@ -1,3 +1,5 @@
+import { UrgeClocks } from './urgeClock'
+import { loadSettings } from '../SettingsPage'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import {
@@ -91,6 +93,9 @@ export function UrgePage({ data, setData }: Props) {
 
   return (
     <section id="urge-page" className="urge-page flex flex-col gap-5">
+      {loadSettings().features.urgeClock && (
+        <UrgeClocks habits={habits} events={data.urgeEvents} />
+      )}
       <div className="segmented urge-tabs" aria-label="Urge tracker view">
         <button aria-pressed={view === 'log'} onClick={() => setView('log')}>
           <ShieldCheck size={16} /> Interrupt & log

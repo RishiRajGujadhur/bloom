@@ -97,4 +97,14 @@ export const mixerPresets: MixerPreset[] = [
     volumes: { piano: 0.5, fire: 0.3 },
   },
   { id: 'quest', name: 'Epic Quest', volumes: { tavern: 0.4, cello: 0.6 } },
+  {
+    id: 'classical',
+    name: 'Classical Study',
+    volumes: { piano: 0.6, strings: 0.35, cello: 0.25 },
+  },
+  {
+    id: 'cinematic',
+    name: 'Cinematic Score',
+    volumes: { strings: 0.7, cello: 0.45, space: 0.2 },
+  },
 ]

@@ -49,6 +49,13 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   gratitude: 'gratitude',
   sleep: 'sleepTracker',
   shop: 'petalShop',
+  'release': 'burnRelease',
+  'focus-room': 'focusRoom',
+  'explore': 'queryBuilder',
+  'yearbook': 'yearbook',
+  'palace': 'memoryPalace',
+  'journey': 'streakJourney',
+  'places': 'placesMap',
 }
 
 export function readRecentPages(): NavKey[] {

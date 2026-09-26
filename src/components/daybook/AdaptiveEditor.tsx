@@ -9,11 +9,18 @@ import {
   ArrowLeft,
   Check,
   ChevronRight,
+  Flame,
+  GitCompare,
   Maximize2,
   Minimize2,
   Sparkles,
 } from 'lucide-react'
 import { journalText } from '../../search/db'
+import { loadSettings } from '../../SettingsPage'
+import { ThoughtDiffPanel } from './ThoughtDiff'
+
+/** Pages about fears and shadows offer the Burn & release ritual. */
+const releaseModes = new Set(['fear-setting', 'shadow-work'])
 import { LottieIcon } from '../ui/LottieIcon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -189,9 +196,12 @@ export function AdaptiveEditor({
   onBack,
   onSave,
   onAutosave,
+  previous,
 }: {
   mode: JournalMode
   entry?: JournalEntry
+  /** The last page of the same mode, for Thought diffing. */
+  previous?: JournalEntry
   onBack: () => void
   /** "Complete journal": save and close. */
   onSave: (entry: JournalEntry) => void
@@ -225,6 +235,8 @@ export function AdaptiveEditor({
       window.removeEventListener('keydown', onKey)
     }
   }, [immersive])
+  const [comparing, setComparing] = useState(false)
+  const canCompare = Boolean(previous) && loadSettings().features.thoughtDiff
   const words = useMemo(() => {
     const text = journalText(content).trim()
     return text ? text.split(/\s+/).length : 0
@@ -321,6 +333,21 @@ export function AdaptiveEditor({
           </div>
         </div>
         <div className="daybook-actions">
+          {canCompare && (
+            <button
+              type="button"
+              className="quiet-button"
+              aria-pressed={comparing}
+              onClick={() => setComparing((v) => !v)}
+            >
+              <GitCompare size={16} aria-hidden="true" /> Compare with last time
+            </button>
+          )}
+          {releaseModes.has(mode.id) && loadSettings().features.burnRelease && (
+            <a className="quiet-button" href="#release">
+              <Flame size={16} aria-hidden="true" /> Burn & release
+            </a>
+          )}
           <button
             type="button"
             className="quiet-button"
@@ -345,6 +372,7 @@ export function AdaptiveEditor({
           </button>
         </div>
       </header>
+      {comparing && previous && <ThoughtDiffPanel previous={previous} content={content} />}
       {ambient && (
         <aside
           className="daybook-ambient"

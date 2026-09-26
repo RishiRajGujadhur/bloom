@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import {
   BookOpen,
   CarFront,
@@ -11,6 +11,13 @@ import {
   LayoutDashboard,
   Map,
   Castle,
+  Armchair,
+  BookMarked,
+  Boxes,
+  Filter,
+  Flame,
+  MapPinned,
+  Route,
   BedDouble,
   ShoppingBag,
   Heart,
@@ -55,6 +62,13 @@ export type NavKey =
   | 'gratitude'
   | 'sleep'
   | 'shop'
+  | 'release'
+  | 'focus-room'
+  | 'explore'
+  | 'yearbook'
+  | 'palace'
+  | 'journey'
+  | 'places'
 
 interface SidebarProps {
   /** Currently highlighted destination. */
@@ -64,6 +78,14 @@ interface SidebarProps {
   /** Feature flags: a disabled feature drops out of the navigation entirely. */
   flags: FeatureFlags
 }
+
+/** Sidebar sections, in display order. Unlisted keys (settings) come last. */
+const navSections: { label: string; keys: NavKey[] }[] = [
+  { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room'] },
+  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles'] },
+  { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release'] },
+  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook'] },
+]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
 const DRAWER_MEDIA_QUERY = '(max-width: 900px)'
@@ -277,13 +299,27 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     },
     { key: 'sleep', title: 'Sleep', Icon: BedDouble, requires: 'sleepTracker' },
     { key: 'shop', title: 'Petal shop', Icon: ShoppingBag, requires: 'petalShop' },
+    { key: 'release', title: 'Let it go', Icon: Flame, requires: 'burnRelease' },
+    { key: 'focus-room', title: 'Focus room', Icon: Armchair, requires: 'focusRoom' },
+    { key: 'explore', title: 'Explore data', Icon: Filter, requires: 'queryBuilder' },
+    { key: 'yearbook', title: 'Year book', Icon: BookMarked, requires: 'yearbook' },
+    { key: 'palace', title: 'Memory palace', Icon: Boxes, requires: 'memoryPalace' },
+    { key: 'journey', title: 'Streak journey', Icon: Route, requires: 'streakJourney' },
+    { key: 'places', title: 'Places', Icon: MapPinned, requires: 'placesMap' },
     // Settings is always reachable: it is where features get switched back on.
     { key: 'settings', title: t('dashboard.settings'), Icon: Settings },
   ]
 
-  const visibleItems = items.filter(
-    (item) => !item.requires || flags[item.requires],
-  )
+  // Group the (long) list into sections so it stays scannable.
+  const sectionOf = (key: NavKey) => {
+    const index = navSections.findIndex((section) => section.keys.includes(key))
+    // Unsectioned destinations (Settings) stay at the end.
+    return index < 0 ? navSections.length : index
+  }
+  const visibleItems = items
+    .filter((item) => !item.requires || flags[item.requires])
+    .map((item, order) => ({ ...item, order, section: sectionOf(item.key) }))
+    .sort((a, b) => a.section - b.section || a.order - b.order)
 
   const toggleLabel = isOpen ? t('sidebar.collapse') : t('sidebar.expand')
 
@@ -363,10 +399,15 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
             <PanelLeftOpen size={19} aria-hidden="true" />
           )}
         </button>
-        <div className="nav-caption">{t('navigation.space')}</div>
-
         <nav aria-label={t('navigation.main')}>
-          {visibleItems.map(({ key, title, Icon }) => (
+          {visibleItems.map(({ key, title, Icon, section }, index) => (
+            <Fragment key={key}>
+            {(index === 0 || visibleItems[index - 1].section !== section) &&
+              section < navSections.length && (
+                <div className="nav-caption nav-section" aria-hidden="true">
+                  {index === 0 ? t('navigation.space') : navSections[section].label}
+                </div>
+              )}
             <button
               key={key}
               type="button"
@@ -380,6 +421,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
               <span className={styles.navLabel}>{title}</span>
               {active === key && <span className="nav-indicator" />}
             </button>
+            </Fragment>
           ))}
         </nav>
         <div className="sidebar-encourage" aria-hidden={!isOpen}>

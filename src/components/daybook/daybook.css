@@ -269,3 +269,60 @@ html[data-writing='focus'] .daybook.is-writing {
   gap: 10px;
   margin-top: 16px;
 }
+.thought-diff {
+  max-width: 820px;
+  margin: 8px auto 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--text-primary) 3%, var(--bg-surface));
+}
+.thought-diff header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.thought-diff-stat {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.thought-diff-stat.is-added {
+  background: #dcf5e3;
+  color: #1f6b3a;
+}
+.thought-diff-stat.is-removed {
+  background: #fde2e2;
+  color: #9b1c1c;
+}
+.thought-diff-body {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.8;
+  font-size: 15px;
+}
+.thought-diff ins {
+  text-decoration: none;
+  background: #dcf5e3;
+  color: #1f6b3a;
+  border-radius: 4px;
+  padding: 0 2px;
+}
+.thought-diff del {
+  background: #fde2e2;
+  color: #9b1c1c;
+  border-radius: 4px;
+  padding: 0 2px;
+}
+html[data-mode='dark'] .thought-diff ins {
+  background: #1f4d2e;
+  color: #b7f0c8;
+}
+html[data-mode='dark'] .thought-diff del {
+  background: #5a2020;
+  color: #ffc9c9;
+}

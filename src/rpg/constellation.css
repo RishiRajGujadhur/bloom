@@ -1,0 +1,64 @@
+.constellation {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.constellation-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.constellation-head strong {
+  font-size: 18px;
+}
+.constellation-head span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.constellation-stage {
+  position: relative;
+  height: 440px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.constellation-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  gap: 6px;
+  width: min(280px, calc(100% - 32px));
+  padding: 16px;
+  border-radius: 18px;
+  background: #140f24cc;
+  backdrop-filter: blur(10px);
+  color: #f3eefc;
+  border: 1px solid #ffffff22;
+}
+.constellation-panel strong {
+  font-size: 20px;
+}
+.constellation-panel p {
+  margin: 0;
+  color: #d8d0ea;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.constellation-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.constellation-state {
+  font-weight: 700;
+}
+.constellation-panel .ov-secondary {
+  justify-self: start;
+  margin-top: 4px;
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff30;
+}

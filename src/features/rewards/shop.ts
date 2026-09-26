@@ -8,7 +8,7 @@ import { readLogin } from './loginRewards'
  */
 export type ShopItem = {
   id: string
-  kind: 'decor' | 'hat' | 'outfit' | 'pet'
+  kind: 'decor' | 'hat' | 'outfit' | 'pet' | 'garage'
   name: string
   emoji: string
   price: number
@@ -35,6 +35,11 @@ export const shopItems: ShopItem[] = [
   { id: 'outfit-night', kind: 'outfit', name: 'Midnight robe', emoji: '🌌', price: 120, color: '#3b3f8f' },
   { id: 'pet-cat', kind: 'pet', name: 'Garden cat', emoji: '🐈', price: 250 },
   { id: 'pet-fox', kind: 'pet', name: 'Friendly fox', emoji: '🦊', price: 350 },
+  { id: 'garage-charger', kind: 'garage', name: 'Eco charging station', emoji: '🔌', price: 90 },
+  { id: 'garage-turntable', kind: 'garage', name: 'Display turntable', emoji: '💿', price: 160 },
+  { id: 'garage-neon', kind: 'garage', name: 'Neon sign', emoji: '💡', price: 120 },
+  { id: 'garage-plants', kind: 'garage', name: 'Garage plants', emoji: '🌵', price: 50 },
+  { id: 'garage-spotlights', kind: 'garage', name: 'Spotlights', emoji: '🔦', price: 140 },
 ]
 
 export type ShopState = {
@@ -81,14 +86,15 @@ export function buy(shop: ShopState, earned: number, itemId: string): ShopState 
     owned: [...shop.owned, itemId],
     spent: shop.spent + item.price,
   }
-  if (item.kind !== 'decor') next.equipped = { ...shop.equipped, [item.kind]: itemId }
+  if (item.kind !== 'decor' && item.kind !== 'garage') next.equipped = { ...shop.equipped, [item.kind]: itemId }
   return next
 }
 
 /** Wears an owned item, or takes it off when already worn. */
 export function toggleEquip(shop: ShopState, itemId: string): ShopState {
   const item = shopItems.find((i) => i.id === itemId)
-  if (!item || item.kind === 'decor' || !shop.owned.includes(itemId)) return shop
+  if (!item || item.kind === 'decor' || item.kind === 'garage' || !shop.owned.includes(itemId))
+    return shop
   const current = shop.equipped[item.kind]
   return {
     ...shop,

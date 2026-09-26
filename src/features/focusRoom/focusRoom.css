@@ -1,0 +1,288 @@
+.room-page {
+  display: grid;
+  gap: 16px;
+}
+.room-scene {
+  position: relative;
+  height: 420px;
+  border-radius: 26px;
+  overflow: hidden;
+  image-rendering: pixelated;
+  background:
+    linear-gradient(180deg, transparent 72%, #8a5a3a 72% 74%, #a86f48 74%),
+    linear-gradient(180deg, #f3dcc2, #e9cba8);
+  border: 1px solid var(--border-color);
+}
+.room-scene.is-night {
+  background:
+    linear-gradient(180deg, transparent 72%, #4a3326 72% 74%, #5e4030 74%),
+    linear-gradient(180deg, #3b3150, #2c2540);
+}
+.room-window {
+  position: absolute;
+  top: 36px;
+  left: 8%;
+  width: 190px;
+  height: 150px;
+  border: 10px solid #fff7ea;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 4px #fff7ea;
+}
+.room-window::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 3px), #fff7ea calc(50% - 3px) calc(50% + 3px), transparent 0),
+    linear-gradient(180deg, transparent calc(50% - 3px), #fff7ea calc(50% - 3px) calc(50% + 3px), transparent 0);
+}
+.room-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#8fd3ff, #d9f1ff);
+}
+.is-night .room-sky {
+  background:
+    radial-gradient(circle at 20% 30%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 60%, #fff 0 1px, transparent 2px),
+    linear-gradient(#141a3d, #2b2f6b);
+}
+.room-moon {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffe58a;
+  box-shadow: 0 0 20px #ffe58a;
+}
+.room-scene:not(.is-night) .room-moon {
+  background: #ffd24a;
+}
+.room-shelf {
+  position: absolute;
+  top: 70px;
+  right: 10%;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 0 10px;
+  height: 54px;
+  border-bottom: 8px solid #7a4b2a;
+}
+.room-shelf i {
+  width: 14px;
+  height: 44px;
+}
+.room-shelf i:nth-child(2n) {
+  height: 36px;
+}
+.room-clock {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  translate: -50% 0;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #1d1a26;
+  color: #7cffb2;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 26px;
+  letter-spacing: 2px;
+  box-shadow: 0 8px 0 #0003;
+}
+.room-desk {
+  position: absolute;
+  left: 50%;
+  bottom: 22%;
+  width: 360px;
+  height: 20px;
+  translate: -20% 0;
+  background: #6b4226;
+  box-shadow: 0 60px 0 -8px #4e2e18;
+}
+.room-desk::before,
+.room-desk::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  width: 16px;
+  height: 90px;
+  background: #4e2e18;
+}
+.room-desk::before {
+  left: 16px;
+}
+.room-desk::after {
+  right: 16px;
+}
+.room-laptop {
+  position: absolute;
+  bottom: 20px;
+  left: 140px;
+  width: 90px;
+  height: 58px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(#9fd6ff, #6ab0e6);
+  border: 6px solid #2f2f36;
+}
+.is-working .room-laptop {
+  animation: screen-glow 1.6s ease-in-out infinite;
+}
+@keyframes screen-glow {
+  50% {
+    filter: brightness(1.25);
+  }
+}
+.room-lamp {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  width: 12px;
+  height: 70px;
+  background: #2f2f36;
+}
+.room-lamp::after {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: -22px;
+  width: 50px;
+  height: 26px;
+  border-radius: 26px 26px 4px 4px;
+  background: #e3a857;
+  box-shadow: 0 30px 60px 10px #ffe19a55;
+}
+.room-mug {
+  position: absolute;
+  bottom: 20px;
+  left: 40px;
+  width: 22px;
+  height: 24px;
+  border-radius: 0 0 6px 6px;
+  background: #fff7ea;
+}
+.room-mug::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 6px;
+  width: 6px;
+  height: 16px;
+  border-radius: 6px;
+  background: #fff8;
+  animation: steam 2s ease-in-out infinite;
+}
+@keyframes steam {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+.room-avatar {
+  position: absolute;
+  left: 50%;
+  bottom: calc(22% + 2px);
+  z-index: 0;
+  translate: 12% 0;
+}
+.room-desk {
+  z-index: 1;
+}
+.is-working .room-avatar svg {
+  animation: typing 0.5s steps(2) infinite;
+}
+@keyframes typing {
+  50% {
+    transform: translateY(2px);
+  }
+}
+.room-notes {
+  position: absolute;
+  top: 120px;
+  left: 60%;
+  display: flex;
+  gap: 18px;
+  color: var(--accent-color);
+  font-size: 24px;
+}
+.room-notes i {
+  font-style: normal;
+  animation: note 2.4s ease-in-out infinite;
+}
+.room-notes i:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.room-notes i:nth-child(3) {
+  animation-delay: 1.6s;
+}
+@keyframes note {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) rotate(15deg);
+  }
+}
+.room-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  background: #0002;
+}
+.room-progress i {
+  display: block;
+  height: 100%;
+  background: var(--accent-color);
+  transition: width 1s linear;
+}
+.room-controls {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+.room-controls .wb-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.room-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 800px) {
+  .room-desk {
+    width: 260px;
+  }
+  .room-window {
+    width: 130px;
+    height: 110px;
+  }
+  .room-shelf {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .room-scene *,
+  .room-scene *::before,
+  .room-avatar svg {
+    animation: none !important;
+  }
+}

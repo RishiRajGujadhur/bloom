@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Heart, Pause, RotateCcw, Trash2 } from 'lucide-react'
 import { Carousel } from '../../components/ui/Carousel'
@@ -20,6 +20,12 @@ import {
   type MoodEntry,
 } from './store'
 import './wellbeing.css'
+import { orbToMood } from './moodOrbModel'
+
+// The orb pulls in Three.js, so it loads only when Orb mode is opened.
+const MoodOrb = lazy(() => import('./MoodOrb').then((m) => ({ default: m.MoodOrb })))
+import { capturePlace } from '../places/placesStore'
+import { loadSettings } from '../../SettingsPage'
 import { LottieIcon } from '../../components/ui/LottieIcon'
 
 /* ------------------------------------------------------------------ */
@@ -280,6 +286,10 @@ export function MoodPage() {
   const [picked, setPicked] = useState<number | null>(null)
   // Advanced mode: name the feeling precisely and rate energy.
   const [detailed, setDetailed] = useState(false)
+  // Orb mode: log mood by shaping a liquid orb from anxious to calm.
+  const orbEnabled = loadSettings().features.moodOrb
+  const [orb, setOrb] = useState(false)
+  const [calm, setCalm] = useState(0.5)
   const [core, setCore] = useState<string | null>(null)
   const [emotions, setEmotions] = useState<string[]>([])
   const [energy, setEnergy] = useState(3)
@@ -296,6 +306,7 @@ export function MoodPage() {
       },
       ...list,
     ])
+    if (loadSettings().features.placesMap) capturePlace('mood', picked)
     setPicked(null)
     setNote('')
     setEmotions([])
@@ -314,15 +325,53 @@ export function MoodPage() {
         <div className="wb-card-head">
           <h2 id="mood-title">How are you right now?</h2>
           <div className="wb-chips" role="group" aria-label="Check-in mode">
-            <button type="button" aria-pressed={!detailed} onClick={() => setDetailed(false)}>
+            <button
+              type="button"
+              aria-pressed={!detailed && !orb}
+              onClick={() => {
+                setDetailed(false)
+                setOrb(false)
+              }}
+            >
               Quick
             </button>
-            <button type="button" aria-pressed={detailed} onClick={() => setDetailed(true)}>
+            <button
+              type="button"
+              aria-pressed={detailed && !orb}
+              onClick={() => {
+                setDetailed(true)
+                setOrb(false)
+              }}
+            >
               Detailed
             </button>
+            {orbEnabled && (
+              <button
+                type="button"
+                aria-pressed={orb}
+                onClick={() => {
+                  setOrb(true)
+                  setDetailed(false)
+                  setPicked(orbToMood(calm))
+                }}
+              >
+                Orb
+              </button>
+            )}
           </div>
         </div>
-        <div className="wb-moods" role="radiogroup" aria-label="Mood">
+        {orb && orbEnabled && (
+          <Suspense fallback={<p role="status">Loading orb…</p>}>
+            <MoodOrb
+              value={calm}
+              onChange={(value) => {
+                setCalm(value)
+                setPicked(orbToMood(value))
+              }}
+            />
+          </Suspense>
+        )}
+        <div className="wb-moods" role="radiogroup" aria-label="Mood" hidden={orb && orbEnabled}>
           {moods.map((m) => (
             <button
               key={m.value}

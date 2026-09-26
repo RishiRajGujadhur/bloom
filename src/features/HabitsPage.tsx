@@ -21,6 +21,7 @@ import type { AppData } from '../model'
 import { inferStat } from '../rpg/schema'
 import { Modal } from '../components/Modal'
 import { HabitLibrary, RoutineLibrary } from './AdoptLibrary'
+import { burst, fountain, isMilestoneStreak } from '../components/ui/celebrate'
 import { ReminderButton } from './reminders/ReminderCenter'
 import { gridDays, habitStats } from './habits'
 import './habits.css'
@@ -89,6 +90,7 @@ export function HabitsPage({
     const skipped = run.skipped + Number(skip)
     const next = run.index + 1
     if (next === run.routine.steps.length) {
+      if (!skipped) burst(null, 'stars')
       if (!skipped)
         setData((current) => ({
           ...current,
@@ -408,9 +410,13 @@ export function HabitsPage({
                       className={done ? 'quiet-button' : 'primary'}
                       aria-label={`Check in: ${h.title}`}
                       aria-pressed={done}
-                      onClick={() =>
+                      onClick={(event) => {
+                        if (!done) {
+                          burst(event.currentTarget)
+                          if (isMilestoneStreak(stats.current + 1)) fountain()
+                        }
                         setData((d) => toggleHabit(d, h.id, today))
-                      }
+                      }}
                     >
                       <Check size={16} />
                       {done ? 'Done today' : 'Check in'}

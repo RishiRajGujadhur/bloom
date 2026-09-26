@@ -60,6 +60,14 @@ import {
 } from './features/collectibles/Collectibles'
 import { Sidebar } from './components/layout/Sidebar'
 import { Carousel } from './components/ui/Carousel'
+import {
+  burst,
+  fountain,
+  isMilestoneStreak,
+} from './components/ui/celebrate'
+import { habitStats } from './features/habits'
+import { TimeCapsuleCard } from './features/timeCapsule'
+import { hasWebGL } from './components/ui/Scene3D'
 import { LottieIcon } from './components/ui/LottieIcon'
 import { QuickAdd, SearchTrigger } from './components/layout/TopbarExtras'
 import { StreakRewards } from './features/rewards/StreakRewards'
@@ -93,6 +101,30 @@ const BreathePage = lazy(() =>
 const MoodPage = lazy(() => wellbeing().then((m) => ({ default: m.MoodPage })))
 const GratitudePage = lazy(() =>
   wellbeing().then((m) => ({ default: m.GratitudePage })),
+)
+const ReleasePage = lazy(() =>
+  import('./features/release/ReleasePage').then((m) => ({ default: m.ReleasePage })),
+)
+const FocusRoomPage = lazy(() =>
+  import('./features/focusRoom/FocusRoomPage').then((m) => ({ default: m.FocusRoomPage })),
+)
+const ExplorePage = lazy(() =>
+  import('./features/explore/ExplorePage').then((m) => ({ default: m.ExplorePage })),
+)
+const YearbookPage = lazy(() =>
+  import('./features/yearbook/YearbookPage').then((m) => ({ default: m.YearbookPage })),
+)
+const MemoryPalacePage = lazy(() =>
+  import('./features/palace/MemoryPalacePage').then((m) => ({ default: m.MemoryPalacePage })),
+)
+const StreakJourneyPage = lazy(() =>
+  import('./features/journey/StreakJourneyPage').then((m) => ({ default: m.StreakJourneyPage })),
+)
+const PlacesPage = lazy(() =>
+  import('./features/places/PlacesPage').then((m) => ({ default: m.PlacesPage })),
+)
+const SkillConstellation = lazy(() =>
+  import('./rpg/SkillConstellation').then((m) => ({ default: m.SkillConstellation })),
 )
 const SleepPage = lazy(() =>
   import('./features/sleep/SleepPage').then((m) => ({ default: m.SleepPage })),
@@ -429,7 +461,14 @@ function App() {
             (active === 'mood' && !settings.features.moodCheckin) ||
             (active === 'gratitude' && !settings.features.gratitude) ||
             (active === 'sleep' && !settings.features.sleepTracker) ||
-            (active === 'shop' && !settings.features.petalShop) ? (
+            (active === 'shop' && !settings.features.petalShop) ||
+            (active === 'release' && !settings.features.burnRelease) ||
+            (active === 'focus-room' && !settings.features.focusRoom) ||
+            (active === 'explore' && !settings.features.queryBuilder) ||
+            (active === 'yearbook' && !settings.features.yearbook) ||
+            (active === 'palace' && !settings.features.memoryPalace) ||
+            (active === 'journey' && !settings.features.streakJourney) ||
+            (active === 'places' && !settings.features.placesMap) ? (
               <section className="card rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
                 <h2>This feature is turned off</h2>
                 <p>You can enable it in Settings.</p>
@@ -448,6 +487,34 @@ function App() {
             ) : active === 'gratitude' ? (
               <Suspense fallback={null}>
                 <GratitudePage />
+              </Suspense>
+            ) : active === 'release' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <ReleasePage />
+              </Suspense>
+            ) : active === 'focus-room' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <FocusRoomPage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'explore' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <ExplorePage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'yearbook' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <YearbookPage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'palace' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <MemoryPalacePage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'journey' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <StreakJourneyPage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'places' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <PlacesPage />
               </Suspense>
             ) : active === 'sleep' ? (
               <Suspense fallback={null}>
@@ -492,6 +559,12 @@ function App() {
                 showCollectibles={settings.features.collectibles}
               />
             ) : active === 'growth' ? (
+              <>
+              {settings.features.skillConstellation && hasWebGL() && (
+                <Suspense fallback={null}>
+                  <SkillConstellation rpg={data.rpg} />
+                </Suspense>
+              )}
               <RpgDashboard
                 compact
                 externalFeedback
@@ -501,6 +574,7 @@ function App() {
                 showWeeklyRaid={settings.features.weeklyRaidBoss}
                 showWalkthroughTour={false}
               />
+              </>
             ) : active === 'settings' ? (
               <SettingsPage
                 settings={settings}
@@ -598,7 +672,16 @@ function App() {
                                   <button
                                     className={`habit ${h.dates.includes(today) ? 'done' : ''}`}
                                     aria-pressed={h.dates.includes(today)}
-                                    onClick={() => {
+                                    onClick={(event) => {
+                                      if (!h.dates.includes(today)) {
+                                        burst(event.currentTarget)
+                                        if (
+                                          isMilestoneStreak(
+                                            habitStats(h.dates, today).current + 1,
+                                          )
+                                        )
+                                          fountain()
+                                      }
                                       setJustChecked((set) =>
                                         new Set(set).add(h.id),
                                       )
@@ -820,6 +903,9 @@ function App() {
                       label="More for you"
                       title="More for you"
                     >
+                      {settings.features.timeCapsule && (
+                        <TimeCapsuleCard data={data} today={today} />
+                      )}
                       {modules.reflection && (
                         <ReflectionCard
                           onNavigate={jump}

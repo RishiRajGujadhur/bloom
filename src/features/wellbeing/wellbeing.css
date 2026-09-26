@@ -552,3 +552,43 @@
     animation: none;
   }
 }
+.mood-orb {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+.mood-orb-stage {
+  width: min(320px, 80vw);
+  aspect-ratio: 1;
+}
+.mood-orb-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #fff9,
+    color-mix(in oklab, #5fb8e6 calc(var(--calm) * 100%), #e8574a)
+  );
+}
+.mood-orb-slider {
+  display: grid;
+  gap: 6px;
+  width: min(420px, 100%);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.mood-orb-slider span {
+  display: flex;
+  justify-content: space-between;
+}
+.mood-orb-slider strong {
+  color: var(--text-primary);
+  font-size: 15px;
+}
+.mood-orb-slider input {
+  accent-color: var(--accent-color);
+}
+.wb-moods[hidden] {
+  display: none;
+}

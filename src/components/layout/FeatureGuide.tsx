@@ -56,6 +56,13 @@ export const pageDetails: Record<
   },
   breathe: { title: 'Breathe', description: 'Slow down, one breath at a time.' },
   sleep: { title: 'Sleep', description: 'Rest is part of the work.' },
+  'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
+  'focus-room': { title: 'Focus room', description: 'One task. Soft strings. Deep work.' },
+  'explore': { title: 'Explore data', description: 'Ask your own questions.' },
+  'yearbook': { title: 'Year book', description: 'Your year, bound.' },
+  'palace': { title: 'Memory palace', description: 'Walk through your year.' },
+  'journey': { title: 'Streak journey', description: 'Every day is a step on the path.' },
+  'places': { title: 'Places', description: 'Where you feel your best.' },
   shop: { title: 'Petal shop', description: 'Treat your world.' },
   mood: { title: 'Mood check-in', description: 'Two taps. No judgement.' },
   gratitude: { title: 'Gratitude jar', description: 'Collect the good things.' },
@@ -80,6 +87,34 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  'release': [
+    step('.release-input', 'Name it', 'Write what is weighing on you.'),
+    step('.release-fire', 'Let it burn', 'Drag the card into the fire.'),
+  ],
+  'focus-room': [
+    step('.room-scene', 'Your study', 'Your avatar works alongside you.'),
+    step('.room-controls', 'Start a session', 'Pick a length and a soundtrack.'),
+  ],
+  'explore': [
+    step('.explore-builder', 'Build a question', 'Add rules and groups with AND / OR.'),
+    step('.explore-results', 'See matches', 'Entries that fit every rule.'),
+  ],
+  'yearbook': [
+    step('.yearbook-options', 'Choose chapters', 'Pick what goes in your book.'),
+    step('.yearbook-generate', 'Publish', 'Download a print-ready PDF.'),
+  ],
+  'palace': [
+    step('.palace-stage', 'Your year', 'Drag or scroll to spin; click a day.'),
+    step('.palace-detail', 'Read the day', 'Everything you recorded that day.'),
+  ],
+  'journey': [
+    step('.journey-stage', 'Your path', 'Scroll to walk your streak.'),
+    step('.journey-steps', 'Milestones', 'A monument every 7 days.'),
+  ],
+  'places': [
+    step('.places-consent', 'Private by default', 'Location is only saved if you turn it on.'),
+    step('.places-map', 'Your map', 'Markers are coloured by mood.'),
+  ],
   sleep: [
     step('.sleep-stats', 'Your week of sleep', 'Average, quality, consistency and debt.'),
     step('.sleep-page .filter-chips', 'Three modes', 'Log a night, wind down, or read your insights.'),

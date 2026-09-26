@@ -1,0 +1,198 @@
+.garage {
+  display: grid;
+  gap: 16px;
+}
+.garage-scene {
+  position: relative;
+  height: 430px;
+  border-radius: 26px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #2b2f3d 0 38%, transparent 38%),
+    linear-gradient(180deg, #3a3f52, #232634);
+  perspective: 900px;
+}
+.garage-scene.has-spotlights::before,
+.garage-scene.has-spotlights::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  width: 260px;
+  height: 480px;
+  background: radial-gradient(ellipse at 50% 0, #fff6c855, transparent 65%);
+  pointer-events: none;
+  z-index: 2;
+}
+.garage-scene.has-spotlights::before {
+  left: 18%;
+  transform: rotate(-12deg);
+}
+.garage-scene.has-spotlights::after {
+  right: 18%;
+  transform: rotate(12deg);
+}
+.garage-neon {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 3;
+  color: #ff7ad9;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 6px #ff7ad9, 0 0 18px #ff3fbf, 0 0 36px #ff3fbf;
+  animation: neon 3s ease-in-out infinite;
+}
+@keyframes neon {
+  0%,
+  92%,
+  100% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0.4;
+  }
+  96% {
+    opacity: 0.9;
+  }
+}
+.garage-floor {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  display: grid;
+  grid-template-columns: repeat(3, 170px);
+  gap: 18px;
+  translate: -50% -50%;
+  transform: rotateX(56deg) rotateZ(-38deg);
+  transform-style: preserve-3d;
+}
+.garage-pad {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 170px;
+  height: 120px;
+  border-radius: 14px;
+  border: 2px dashed #ffffff33;
+  background: repeating-linear-gradient(45deg, #ffffff08 0 12px, transparent 12px 24px), #2f3344;
+  color: #ffffff66;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.garage-pad.is-target {
+  border-color: #ffd166;
+  background-color: #3a3a38;
+}
+.garage-pad:hover {
+  border-color: #ffffff88;
+}
+.garage-pad.is-turntable::after {
+  content: '';
+  position: absolute;
+  inset: 12px 30px;
+  border-radius: 50%;
+  border: 3px solid #9fd6ff66;
+  animation: turn 6s linear infinite;
+}
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.garage-pad-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+}
+.garage-car {
+  display: block;
+  width: 150px;
+  transform: rotateZ(38deg) rotateX(-56deg) translateY(-26px);
+  transform-origin: 50% 100%;
+}
+.garage-pad.is-turntable .garage-car {
+  animation: turntable-car 6s linear infinite;
+}
+@keyframes turntable-car {
+  50% {
+    transform: rotateZ(38deg) rotateX(-56deg) translateY(-26px) scaleX(-1);
+  }
+}
+.garage-car .car-stage {
+  margin: 0;
+}
+.garage-charger {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  font-size: 22px;
+  transform: rotateZ(38deg) rotateX(-56deg);
+}
+.garage-plants {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  display: flex;
+  gap: 6px;
+  font-size: 34px;
+}
+.garage-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.garage-cars {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.garage-car-chip {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 110px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.garage-car-chip[aria-selected='true'] {
+  border-color: var(--accent-color);
+  background: color-mix(in oklab, var(--accent-color) 12%, var(--bg-surface));
+}
+.garage-car-chip[data-parked='true'] {
+  opacity: 0.6;
+}
+.garage-chip-sprite {
+  width: 90px;
+}
+.garage-chip-sprite .car-stage {
+  margin: 0;
+}
+@media (max-width: 800px) {
+  .garage-floor {
+    grid-template-columns: repeat(2, 130px);
+  }
+  .garage-pad {
+    width: 130px;
+    height: 96px;
+  }
+  .garage-car {
+    width: 110px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .garage-neon,
+  .garage-pad.is-turntable::after,
+  .garage-pad.is-turntable .garage-car {
+    animation: none;
+  }
+}

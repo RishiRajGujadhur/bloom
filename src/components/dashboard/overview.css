@@ -734,3 +734,30 @@ html[data-mode='dark'] .ov-focus-body img {
     font-size: 13px;
   }
 }
+.capsule-body {
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(150deg, color-mix(in oklab, #e39a3b 12%, var(--bg-surface)), var(--bg-surface));
+}
+.capsule-body figcaption {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+.capsule-body figcaption span {
+  color: var(--accent-color);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.capsule-body figcaption small {
+  color: var(--text-muted);
+}
+.capsule-body blockquote {
+  margin: 0;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.55;
+}

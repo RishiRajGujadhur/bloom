@@ -1,4 +1,6 @@
 import { CardRail } from '../../components/BloomExperience'
+import { GaragePanel } from './GaragePanel'
+import { loadSettings } from '../../SettingsPage'
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useReducedMotion } from 'framer-motion'
@@ -159,7 +161,8 @@ export function DailySpin({ onCollection }: { onCollection?: () => void }) {
 
 export function CollectiblesPage() {
   const { collection, error } = useCollection()
-  const [filter, setFilter] = useState<'all' | 'owned'>('all')
+  const [filter, setFilter] = useState<'all' | 'owned' | 'garage'>('all')
+  const garageOn = loadSettings().features.garage
   const [failure, setFailure] = useState('')
   const [pending, setPending] = useState(false)
   const choose = async (id: string | null) => {
@@ -198,6 +201,14 @@ export function CollectiblesPage() {
           >
             Unlocked
           </button>
+          {garageOn && (
+            <button
+              aria-pressed={filter === 'garage'}
+              onClick={() => setFilter('garage')}
+            >
+              Garage
+            </button>
+          )}
         </div>
       </div>
       {(error || failure) && (
@@ -211,6 +222,14 @@ export function CollectiblesPage() {
           unlocks a car.
         </p>
       )}
+      {filter === 'garage' && garageOn ? (
+        <GaragePanel
+          owned={collection.owned}
+          onShop={() => {
+            window.location.hash = 'shop'
+          }}
+        />
+      ) : (
       <CardRail label="Your collection">
         {cars
           .filter(
@@ -267,6 +286,7 @@ export function CollectiblesPage() {
             )
           })}
       </CardRail>
+      )}
     </div>
   )
 }

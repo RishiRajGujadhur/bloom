@@ -19,6 +19,8 @@ import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
 import { SemanticSearch } from './SemanticSearch'
 import './daybook.css'
+import { capturePlace } from '../../features/places/placesStore'
+import { loadSettings } from '../../SettingsPage'
 
 export { DAYBOOK_STORAGE_KEY }
 export function JournalContainer() {
@@ -85,6 +87,7 @@ export function JournalContainer() {
       return updated
     })
     if (close) {
+      if (loadSettings().features.placesMap) capturePlace('daybook')
       setSelected(null)
       setEntryId(null)
     } else setEntryId(next.id)
@@ -172,6 +175,12 @@ export function JournalContainer() {
             onBack={() => startPage(null)}
             onSave={(next) => persist(next, true)}
             onAutosave={(next) => persist(next, false)}
+            previous={recentPages.find(
+              (page) =>
+                page.modeId === selected.id &&
+                page.id !== entry?.id &&
+                (!entry || page.updatedAt < entry.createdAt),
+            )}
           />
         ) : category || browse ? (
           <>

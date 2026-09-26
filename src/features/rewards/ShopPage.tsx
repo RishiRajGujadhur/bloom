@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Lock, ShoppingBag } from 'lucide-react'
 import { buy, shopItems, toggleEquip, useShop, type ShopItem, type ShopState } from './shop'
 import './shop.css'
+import { burst } from '../../components/ui/celebrate'
 
 const kinds = [
   { id: 'all', label: 'All' },
@@ -10,6 +11,7 @@ const kinds = [
   { id: 'hat', label: 'Hats' },
   { id: 'outfit', label: 'Outfits' },
   { id: 'pet', label: 'Pets' },
+  { id: 'garage', label: 'Garage' },
 ] as const
 
 /** A small pixel avatar that wears whatever is equipped. */
@@ -92,6 +94,7 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
     const next = buy(shop, shop.spent + balance, item.id)
     if (!next) return
     update(next)
+    burst(null, 'stars')
     setFlash(item)
     setTimeout(() => setFlash(null), 2200)
   }
@@ -122,7 +125,8 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
       <ul className="shop-grid">
         {shown.map((item) => {
           const owned = shop.owned.includes(item.id)
-          const worn = item.kind !== 'decor' && shop.equipped[item.kind] === item.id
+          const wearable = item.kind === 'hat' || item.kind === 'outfit' || item.kind === 'pet'
+          const worn = wearable && shop.equipped[item.kind as 'hat' | 'outfit' | 'pet'] === item.id
           const affordable = balance >= item.price
           return (
             <li key={item.id} className="shop-card" data-owned={owned}>
@@ -143,13 +147,14 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
                   {affordable ? <ShoppingBag size={16} /> : <Lock size={16} />}
                   {affordable ? 'Buy' : `${item.price - balance} more`}
                 </button>
-              ) : item.kind !== 'decor' ? (
+              ) : wearable ? (
                 <button className="ov-secondary" aria-pressed={worn} onClick={() => update(toggleEquip(shop, item.id))}>
                   {worn ? 'Take off' : 'Wear'}
                 </button>
               ) : (
                 <span className="shop-owned">
-                  <Check size={15} aria-hidden="true" /> In your world
+                  <Check size={15} aria-hidden="true" />{' '}
+                  {item.kind === 'garage' ? 'In your garage' : 'In your world'}
                 </span>
               )}
             </li>

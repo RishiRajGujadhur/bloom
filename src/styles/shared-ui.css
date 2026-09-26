@@ -642,3 +642,50 @@ html[data-density='compact'] .app-shell .sidebar nav button {
   border-color: transparent;
   color: var(--text-on-accent, #fff);
 }
+
+/* Sidebar sections */
+.app-shell .sidebar .nav-section {
+  margin: 14px 14px 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.app-shell .sidebar nav .nav-section:first-child {
+  margin-top: 18px;
+}
+html[data-sidebar='collapsed'] .app-shell .sidebar .nav-section {
+  height: 1px;
+  margin: 8px 12px;
+  overflow: hidden;
+  color: transparent;
+  background: var(--border-color);
+}
+
+/* Pill chips (shared by wellbeing, sleep, focus room). */
+.wb-chips {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.wb-chips button {
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+.wb-chips button[aria-checked='true'] {
+  background: var(--accent-color);
+  border-color: transparent;
+  color: var(--text-on-accent, #fff);
+}
+.wb-chips button[aria-pressed='true'] {
+  background: var(--accent-color);
+  border-color: transparent;
+  color: var(--text-on-accent, #fff);
+}

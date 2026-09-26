@@ -277,6 +277,62 @@ const common = {
     importShape:
       'Settings JSON must include a features object with boolean values for every feature.',
     feature: {
+      celebrations: {
+        title: 'Celebrations',
+        description: 'Pixel coin and star bursts when you complete things.',
+      },
+      burnRelease: {
+        title: 'Burn & release',
+        description: 'Drag a worry into the campfire and let it go.',
+      },
+      garage: {
+        title: 'Garage',
+        description: 'Park your collectible cars and upgrade the garage.',
+      },
+      urgeClock: {
+        title: 'Urge clock',
+        description: 'Live time since your last slip, with a best-streak high score.',
+      },
+      focusRoom: {
+        title: 'Focus room',
+        description: 'A pixel study with a timer and classical soundtrack.',
+      },
+      timeCapsule: {
+        title: 'Time capsule',
+        description: 'On-this-day memories and gratitude notes each morning.',
+      },
+      thoughtDiff: {
+        title: 'Thought diffing',
+        description: 'Compare a Daybook page with your last one of the same kind.',
+      },
+      queryBuilder: {
+        title: 'Explore data',
+        description: 'Build AND/OR filters across moods, journals and habits.',
+      },
+      yearbook: {
+        title: 'Year book',
+        description: 'Export your year as a beautifully typeset PDF book.',
+      },
+      memoryPalace: {
+        title: 'Memory palace',
+        description: 'Your year as a 3D ring of glowing days.',
+      },
+      skillConstellation: {
+        title: 'Skill constellation',
+        description: 'See skills and milestones as a 3D star map.',
+      },
+      streakJourney: {
+        title: 'Streak journey',
+        description: 'Scroll along a 3D path of your longest streak.',
+      },
+      moodOrb: {
+        title: 'Mood orb',
+        description: 'Log mood with a liquid 3D orb.',
+      },
+      placesMap: {
+        title: 'Places',
+        description: 'Opt-in map of where you feel and write best.',
+      },
       sleepTracker: {
         title: 'Sleep & wind-down',
         description: 'Log nights, see patterns and follow a bedtime routine.',
@@ -1089,6 +1145,62 @@ export const resources = {
         importShape:
           'Le JSON des paramètres doit inclure un objet features avec une valeur booléenne pour chaque fonctionnalité.',
         feature: {
+          celebrations: {
+            title: 'Célébrations',
+            description: 'Des pluies de pièces et d’étoiles quand vous accomplissez quelque chose.',
+          },
+          burnRelease: {
+            title: 'Brûler et lâcher prise',
+            description: 'Faites glisser un souci dans le feu de camp et laissez-le partir.',
+          },
+          garage: {
+            title: 'Garage',
+            description: 'Garez vos voitures de collection et améliorez le garage.',
+          },
+          urgeClock: {
+            title: 'Chrono des envies',
+            description: 'Le temps écoulé depuis le dernier écart, avec votre record.',
+          },
+          focusRoom: {
+            title: 'Salle de concentration',
+            description: 'Un bureau pixel avec minuteur et musique classique.',
+          },
+          timeCapsule: {
+            title: 'Capsule temporelle',
+            description: 'Des souvenirs « ce jour-là » et des notes de gratitude chaque matin.',
+          },
+          thoughtDiff: {
+            title: 'Comparaison de pensées',
+            description: 'Comparez une page avec la précédente du même type.',
+          },
+          queryBuilder: {
+            title: 'Explorer les données',
+            description: 'Filtres ET/OU sur humeurs, journaux et habitudes.',
+          },
+          yearbook: {
+            title: 'Livre de l’année',
+            description: 'Exportez votre année en livre PDF soigné.',
+          },
+          memoryPalace: {
+            title: 'Palais de mémoire',
+            description: 'Votre année en anneau 3D de jours lumineux.',
+          },
+          skillConstellation: {
+            title: 'Constellation de compétences',
+            description: 'Compétences et étapes en carte d’étoiles 3D.',
+          },
+          streakJourney: {
+            title: 'Voyage de série',
+            description: 'Parcourez en 3D le chemin de votre plus longue série.',
+          },
+          moodOrb: {
+            title: 'Orbe d’humeur',
+            description: 'Notez votre humeur avec un orbe 3D liquide.',
+          },
+          placesMap: {
+            title: 'Lieux',
+            description: 'Carte (facultative) des lieux où vous vous sentez le mieux.',
+          },
           sleepTracker: {
             title: 'Sommeil et détente',
             description: 'Notez vos nuits, voyez les tendances, suivez un rituel du soir.',

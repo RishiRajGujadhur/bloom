@@ -1,0 +1,101 @@
+.journey-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.journey-sticky {
+  position: sticky;
+  top: 90px;
+  display: grid;
+  gap: 10px;
+}
+.journey-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.journey-toolbar select {
+  min-height: 40px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+}
+.journey-stage {
+  height: min(64vh, 540px);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.journey-steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 30vh 0 40vh;
+  list-style: none;
+}
+.journey-steps li {
+  display: grid;
+  gap: 4px;
+  min-height: 110px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  opacity: 0.55;
+  transition:
+    opacity 250ms ease,
+    transform 250ms ease,
+    border-color 250ms ease;
+}
+.journey-steps li[data-active='true'] {
+  opacity: 1;
+  transform: translateX(-6px);
+  border-color: var(--accent-color);
+}
+.journey-steps li[data-milestone='true'] {
+  background: linear-gradient(150deg, color-mix(in oklab, #ffd166 18%, var(--bg-surface)), var(--bg-surface));
+}
+.journey-day {
+  color: var(--accent-color);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.journey-badge {
+  justify-self: start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #ffe8a3;
+  color: #7a5200;
+  font-size: 12px;
+  font-weight: 700;
+}
+.journey-steps p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+@media (max-width: 900px) {
+  .journey-page {
+    grid-template-columns: 1fr;
+  }
+  .journey-sticky {
+    top: 70px;
+    z-index: 2;
+  }
+  .journey-stage {
+    height: 42vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey-steps li {
+    transition: none;
+  }
+}

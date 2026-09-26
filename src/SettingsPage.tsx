@@ -10,6 +10,19 @@ import {
   CalendarDays,
   CarFront,
   Castle,
+  Armchair,
+  BookMarked,
+  Boxes,
+  CircleDot,
+  Filter,
+  Flame,
+  GitCompare,
+  Hourglass,
+  MapPinned,
+  PartyPopper,
+  Route,
+  Sparkles,
+  Warehouse,
   BellRing,
   Moon,
   ShoppingBag,
@@ -47,6 +60,20 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   petalShop: ShoppingBag,
   reminders: BellRing,
   adaptiveGoals: TrendingUp,
+  celebrations: PartyPopper,
+  burnRelease: Flame,
+  garage: Warehouse,
+  urgeClock: Hourglass,
+  focusRoom: Armchair,
+  timeCapsule: Hourglass,
+  thoughtDiff: GitCompare,
+  queryBuilder: Filter,
+  yearbook: BookMarked,
+  memoryPalace: Boxes,
+  skillConstellation: Sparkles,
+  streakJourney: Route,
+  moodOrb: CircleDot,
+  placesMap: MapPinned,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -71,6 +98,20 @@ export interface FeatureFlags {
   petalShop: boolean
   reminders: boolean
   adaptiveGoals: boolean
+  celebrations: boolean
+  burnRelease: boolean
+  garage: boolean
+  urgeClock: boolean
+  focusRoom: boolean
+  timeCapsule: boolean
+  thoughtDiff: boolean
+  queryBuilder: boolean
+  yearbook: boolean
+  memoryPalace: boolean
+  skillConstellation: boolean
+  streakJourney: boolean
+  moodOrb: boolean
+  placesMap: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -102,6 +143,20 @@ export const defaultSettings: AppSettings = {
     petalShop: true,
     reminders: true,
     adaptiveGoals: true,
+    celebrations: true,
+    burnRelease: true,
+    garage: true,
+    urgeClock: true,
+    focusRoom: true,
+    timeCapsule: true,
+    thoughtDiff: true,
+    queryBuilder: true,
+    yearbook: true,
+    memoryPalace: true,
+    skillConstellation: true,
+    streakJourney: true,
+    moodOrb: true,
+    placesMap: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -127,6 +182,20 @@ const featureKeys = [
   'petalShop',
   'reminders',
   'adaptiveGoals',
+  'celebrations',
+  'burnRelease',
+  'garage',
+  'urgeClock',
+  'focusRoom',
+  'timeCapsule',
+  'thoughtDiff',
+  'queryBuilder',
+  'yearbook',
+  'memoryPalace',
+  'skillConstellation',
+  'streakJourney',
+  'moodOrb',
+  'placesMap',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

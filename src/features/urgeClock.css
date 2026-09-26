@@ -1,0 +1,73 @@
+.urge-clocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.urge-clock {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: linear-gradient(160deg, color-mix(in oklab, #5f8f5a 10%, var(--bg-surface)), var(--bg-surface));
+}
+.urge-clock[data-record='true'] {
+  border-color: #e3b341;
+  box-shadow: 0 16px 30px -22px #e3b341;
+}
+.urge-clock header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.urge-record {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #ffe8a3;
+  color: #7a5200;
+  font-size: 12px;
+  font-weight: 700;
+}
+.urge-digits {
+  display: flex;
+  gap: 6px;
+}
+.urge-digits span {
+  display: grid;
+  justify-items: center;
+  min-width: 52px;
+  padding: 8px 6px;
+  border-radius: 12px;
+  background: var(--bg-primary);
+}
+.urge-digits b {
+  font-family: 'Fira Code', var(--font-mono, monospace);
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+}
+.urge-digits small {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.urge-best-track {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--text-primary) 8%, var(--bg-surface));
+  overflow: hidden;
+}
+.urge-best-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5f8f5a, #e3b341);
+  transition: width 1s linear;
+}
+.urge-clock p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}

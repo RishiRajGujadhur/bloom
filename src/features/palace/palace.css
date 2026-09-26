@@ -1,0 +1,73 @@
+.palace-page {
+  display: grid;
+  gap: 14px;
+}
+.palace-stage {
+  position: relative;
+  height: min(64vh, 560px);
+  min-height: 360px;
+  border-radius: 26px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  border: 1px solid var(--border-color);
+}
+.palace-stage:active {
+  cursor: grabbing;
+}
+.palace-stage:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+}
+.palace-hud {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  translate: -50% 0;
+  background: #0008;
+  backdrop-filter: blur(8px);
+  color: #fff;
+  white-space: nowrap;
+}
+.palace-hud strong {
+  min-width: 170px;
+  text-align: center;
+}
+.palace-hud .icon-button {
+  color: #fff;
+}
+.palace-hud .ov-secondary {
+  min-height: 36px !important;
+  padding: 6px 12px;
+  font-size: 13px;
+  background: #ffffff18;
+  color: #fff;
+  border-color: #ffffff30;
+}
+.palace-detail {
+  padding: 16px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+.palace-detail ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+@media (max-width: 700px) {
+  .palace-hud {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: calc(100% - 24px);
+  }
+}

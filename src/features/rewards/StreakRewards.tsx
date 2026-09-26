@@ -17,6 +17,7 @@ import {
 } from './loginRewards'
 import './rewards.css'
 import { SHOP_EVENT, useShop } from './shop'
+import { fountain } from '../../components/ui/celebrate'
 
 /**
  * Topbar streak counter. Opening Bloom each day earns petals; hovering (or
@@ -36,6 +37,7 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
     setLogin(result.state)
     window.dispatchEvent(new Event(SHOP_EVENT))
     setReward(result.reward)
+    if (result.reward.milestone) fountain()
   }, [today])
   // Dismiss the reward toast on its own timer (independent of re-renders).
   useEffect(() => {
