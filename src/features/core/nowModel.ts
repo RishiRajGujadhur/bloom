@@ -74,7 +74,7 @@ export function whatNow(data: AppData, today: string, mode: Mode, opts: { reflec
       title: 'Choose one thing that matters today',
       reason: 'A single intention makes the rest of the day easier.',
       primary: { type: 'plan', label: 'Set my intention' },
-      secondary: task ? { type: 'focus', taskId: task.id, label: `Or start ${minutes} min on “${task.title}”` } : undefined,
+      secondary: task ? { type: 'focus', taskId: task.id, label: `Or start a ${minutes}-minute focus` } : undefined,
       chips,
     }
   if (mode === 'evening' && !opts.reflectedToday)
@@ -82,7 +82,7 @@ export function whatNow(data: AppData, today: string, mode: Mode, opts: { reflec
       title: 'Close the day gently',
       reason: task ? `${task.title} can wait for tomorrow.` : 'A few honest lines before rest.',
       primary: { type: 'navigate', page: opts.journalPage, label: 'Reflect for 3 minutes' },
-      secondary: habit ? { type: 'habit', habitId: habit.id, label: `Tick “${habit.title}”` } : undefined,
+      secondary: habit ? { type: 'habit', habitId: habit.id, label: 'Tick off a habit' } : undefined,
       chips,
     }
   if (task)

@@ -369,6 +369,10 @@ const common = {
         title: "Focus sounds",
         description: "Generative music tuned for focus, relaxation, meditation and sleep.",
       },
+      soundMixer: {
+        title: "Soundscape mixer",
+        description: "Mix rain, ocean, fire, birds and noise into your own living soundscape.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1360,6 +1364,10 @@ export const resources = {
           focusSounds: {
             title: "Sons de concentration",
             description: "Musique générative pour se concentrer, se détendre, méditer et dormir.",
+          },
+          soundMixer: {
+            title: "Mixeur d’ambiances",
+            description: "Mélangez pluie, océan, feu, oiseaux et bruit en une ambiance vivante.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

@@ -25,7 +25,7 @@ test('settings: every feature has a category; presets round-trip', () => {
 })
 
 test('round 13 features each have at least 10 sub-features', () => {
-  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
+  for (const k of ['exerciseGuides', 'workoutLog', 'intervalCoach', 'yogaFlow', 'mobility', 'runTracker', 'bodyProgress', 'foodScanner', 'fasting', 'focusSounds', 'soundMixer'] as const) expect(subFeatures[k].length).toBeGreaterThanOrEqual(10)
 })
 
 test('exercise library: poses, tempo and filters', () => {
@@ -182,4 +182,12 @@ test('focus sounds: modes map to brainwave bands', () => {
   expect(soundModes.meditate.am).toBeGreaterThanOrEqual(4)
   expect(soundModes.meditate.am).toBeLessThan(8)
   expect(soundModes.sleep.am).toBeLessThan(4)
+})
+
+test('soundscape presets only use known layers', async () => {
+  jest.resetModules()
+  const { layers, presets } = await import('../src/features/mixer/mixerEngine')
+  const ids = new Set(layers.map((l) => l.id))
+  for (const p of presets) for (const k of Object.keys(p.mix)) expect(ids.has(k as never)).toBe(true)
+  expect(layers.filter((l) => l.noise)).toHaveLength(3)
 })

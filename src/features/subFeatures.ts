@@ -503,6 +503,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "fade", title: "Fade in & out", description: "No abrupt starts or stops." },
     { id: "pairFocus", title: "Counts as focus", description: "Finished focus sessions add to your focus minutes." },
   ],
+  soundMixer: [
+    { id: "natureLayers", title: "Nature layers", description: "Rain, wind, ocean, fire, birds and stream." },
+    { id: "noiseColours", title: "Coloured noise", description: "White, pink and brown noise." },
+    { id: "organic", title: "Organic motion", description: "Simplex noise drifts every layer so it never loops." },
+    { id: "spatial", title: "Spatial drift", description: "Sounds wander gently left and right." },
+    { id: "presets", title: "Scenes", description: "Rainy night, beach, campfire, forest, deep focus." },
+    { id: "savedMixes", title: "Saved mixes", description: "Keep your favourite blends." },
+    { id: "sleepTimer", title: "Sleep timer", description: "Fades out when you drift off." },
+    { id: "scene", title: "Living scene", description: "The picture answers your mix." },
+    { id: "fade", title: "Soft fades", description: "Gentle starts and stops." },
+    { id: "keepPlaying", title: "Plays everywhere", description: "Keeps playing while you use other pages." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
