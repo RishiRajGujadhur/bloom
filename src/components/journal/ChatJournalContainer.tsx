@@ -12,6 +12,7 @@ import { PromptChips } from './PromptChips'
 import { ChatInputArea } from './ChatInputArea'
 import { SessionSummaryModal } from './SessionSummaryModal'
 import { MicroJournalComposer } from './MicroJournalComposer'
+import { JournalQuick } from '../../features/quick/JournalQuick'
 
 export function ChatJournalContainer({
   data,
@@ -117,6 +118,16 @@ export function ChatJournalContainer({
               : t('ui.fiveMin')}
         </span>
       </div>
+      {mode === 'guided' && (
+        <JournalQuick
+          lastReply={[...(session?.messages ?? [])].reverse().find((m) => m.sender === 'user')?.text ?? ''}
+          onMood={(score) => {
+            if (!session) setData((d) => (d.draft ? d : { ...d, draft: newSession(language) }))
+            rate('mood', score)
+          }}
+          onTopics={(topics) => setTags(topics.join(', '))}
+        />
+      )}
       <div className="journal-mode-switch" aria-label="Journal style">
         {subOn('chatJournal', 'quickEntry') && (
           <button

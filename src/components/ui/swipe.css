@@ -419,3 +419,8 @@
   margin: 0 auto;
   display: block;
 }
+
+.tone-meter {
+  width: 100%;
+  max-width: 320px;
+}

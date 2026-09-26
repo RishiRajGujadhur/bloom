@@ -40,3 +40,19 @@ Each item is its own commit and push. Status is tracked below.
 |---|---|
 | 1 Daybook + Life migration | ✅ pushed |
 | 2 Exercises (moves, filters, programs, visible wheelchair) | ✅ pushed |
+| 3 Habits: swipe check-in, gentle mode, skip, done list (@formkit/auto-animate, @use-gesture) | ✅ pushed |
+| 4 To-dos: natural quick-add (chrono-node), energy match, swipe triage | ✅ pushed |
+| 5 Urges: urge-surfing wave (simplex-noise), swipe alternatives | ✅ pushed |
+| 6 Epiphanies: swipe SM-2 review, glowing bulb, mood lift (sentiment) | ✅ pushed |
+| 7 Mood: one-tap check-in, factor swipe, next step, cross-feature timeline | ✅ pushed |
+| 8 Sleep: morning check-in, factor swipe, sunrise (suncalc) | ✅ pushed |
+| 9 Petal shop: swipe wishlist, savings rings, flip balance (react-flip-numbers) | ✅ pushed |
+| 10 Gratitude: swipe prompts, mood-aware, note drop | ✅ pushed |
+| 11 Focus: six grow scenes that scale, mood-sized sessions, task swipe | ✅ pushed |
+| 12 Guided journal: mood start, topic swipe, tone meter (sentiment) | ✅ pushed |
+
+Shared: `SwipeDeck` (drag or buttons, arrow keys, undo, SVG stamps), `MoodGuide` (8 guided moods with GSAP ring), `QuickPanel` and one cross-feature mood log.
+
+## Next: Dojo
+
+Martial-arts training reusing the exercise figure: karate, kung fu, taekwondo, boxing, tai chi links — stances, strikes, blocks, kicks and kata/forms as combo programs, belt progression, and a combo caller.
