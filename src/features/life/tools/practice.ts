@@ -13,9 +13,9 @@ export async function practiceSchedule(history: string, retention = 0.9) {
   const { fsrs, createEmptyCard, Rating } = await import('ts-fsrs')
   const entries = lines(history).map((line) => {
     const [date, rating] = line.split('|').map((s) => s.trim())
-    const time = new Date(date + 'T12:00:00Z')
+    const time = new Date(date.includes('T') ? date : date + 'T12:00:00Z')
     if (
-      !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      !/^\d{4}-\d{2}-\d{2}(T.*Z)?$/.test(date) ||
       !Number.isFinite(time.getTime()) ||
       !['Again', 'Hard', 'Good', 'Easy'].includes(rating)
     )

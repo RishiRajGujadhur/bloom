@@ -3,7 +3,6 @@ import gsap from 'gsap'
 import { z } from 'zod'
 import { useLife, updateLife } from '../life/store'
 import { practiceSchedule } from '../life/tools/practice'
-import { dayKey } from '../../dates'
 import { download } from '../lab/exportSuite'
 import '../life/life.css'
 
@@ -39,9 +38,8 @@ export function LociPractice() {
   const [status, setStatus] = useState('')
   const [busy, setBusy] = useState(false)
   const svg = useRef<SVGSVGElement>(null)
-  const today = dayKey()
   const ordered = (reverse ? [...loci].reverse() : loci).filter(
-    (l) => !dueOnly || !l.due || l.due.slice(0, 10) <= today,
+    (l) => !dueOnly || !l.due || new Date(l.due).getTime() <= Date.now(),
   )
   const current = ordered[index % Math.max(1, ordered.length)]
   useEffect(() => {
@@ -93,8 +91,8 @@ export function LociPractice() {
       const history = [
         ...current.history
           .split('\n')
-          .filter((l) => l.trim() && !l.startsWith(today + ' |')),
-        `${today} | ${rating}`,
+          .filter((l) => l.trim()),
+        `${new Date().toISOString()} | ${rating}`,
       ].join('\n')
       const card = await practiceSchedule(history)
       const next = loci.map((l) =>
