@@ -75,6 +75,9 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'compare', title: 'Compare jars', description: 'See which jar is fullest.' },
     { id: 'notes', title: 'Notes slider', description: 'Browse notes in the jar.' },
     { id: 'counts', title: 'Jar counts', description: 'Numbers under each jar.' },
+    { id: 'promptSwipe', title: 'Swipe prompts', description: 'Swipe right on a prompt to answer it in one line.' },
+    { id: 'moodPrompts', title: 'Mood-aware prompts', description: 'Gentle prompts first on hard days.' },
+    { id: 'noteDrop', title: 'Note drop', description: 'A note tumbles into the jar when saved.' },
   ],
   compactMode: [
     { id: 'sidebar', title: 'Compact sidebar', description: 'Tighter navigation rows.' },
