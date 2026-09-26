@@ -188,3 +188,25 @@ Findings:
 - 🔁 USDA FoodData Central is large; a curated 46-ingredient subset (per 100 g, 13 micronutrients plus cook yield, density and piece weight) is bundled and seeded into Dexie.
 - 🔁 Breath detection: breath is broadband noise (high spectral flatness); each burst after a pause flips inhale/exhale.
 - 🐛 Emoji 🫘/🫛 don't render on Windows 10; replaced.
+
+---
+
+# Round 12 — Bloom Core: one loop instead of many mini-apps
+
+Principles and validation plan: [`BLOOM_UX_PRINCIPLES.md`](BLOOM_UX_PRINCIPLES.md).
+
+| ✅ | Piece | Option (`bloomCore.*`) |
+|---|---|---|
+| ✅ | **Now card**: one dominant next action, Morning / Afternoon / Evening / Sunday modes, one-tap focus, done and habit actions | `nowCard`, `progress` |
+| ✅ | **Bloom Growth**: Seed → Blooming from real activity (lifetime half banked, 28-day rhythm half), a garden that only grows, weekly balance | `growth`, `pillars` |
+| ✅ | **Human recognition** replaces generic "+XP" toasts | `recognition` |
+| ✅ | **Discoveries**: controlled unpredictability with a pity timer | `discoveries` |
+| ✅ | **Moments**: anticipation → reveal → celebration for discoveries, stage-ups, day complete, Sunday story | `celebration`, `dayComplete`, `weekly` |
+| ✅ | **Welcome back**, softened streak copy ("Ready to pick up again", days kept) | `welcomeBack` |
+| ✅ | **Daily seed** and tomorrow's bud | `tomorrowSeed` |
+| ✅ | **Quick start**: goal → routine → first task | `onboarding` |
+| ✅ | **Simple home**: compact hero, fewer choices, "More for today" collapsed | `simpleHome` |
+
+Findings:
+- 🐛 A stage-up could fire from background data loading; it now waits for your next real action so the moment is tied to what earned it.
+- 🐛 GSAP `from()` tweens re-run under React strict mode inherit the half-animated state; moments use `fromTo` with explicit end values.

@@ -424,9 +424,15 @@ export function HabitsPage({
                   <footer>
                     <span>
                       <Flame size={15} />
-                      {stats.current} day streak
+                      {stats.current
+                        ? `${stats.current} day streak`
+                        : h.dates.length
+                          ? 'Ready to pick up again'
+                          : 'Your first day awaits'}
                     </span>
-                    <span>Best {stats.best}</span>
+                    <span>
+                      {h.dates.length} {h.dates.length === 1 ? 'day' : 'days'} kept · best {stats.best}
+                    </span>
                     <button
                       className={done ? 'quiet-button' : 'primary'}
                       aria-label={`Check in: ${h.title}`}

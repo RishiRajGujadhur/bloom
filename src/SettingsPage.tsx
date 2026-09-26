@@ -8,6 +8,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
+import { Sprout as SproutCore } from 'lucide-react'
 import { Swords as SwordsRound11, Leaf as LeafRound11, ChefHat as ChefHatRound11, Waves as WavesRound11, Mountain as MountainRound11 } from 'lucide-react'
 import { Apple as AppleIcon, Feather as FeatherIcon, Zap as ZapIcon, Mic as MicIcon, FlaskConical as FlaskConicalIcon, ScanSearch as ScanSearchIcon, SquareTerminal as SquareTerminalIcon } from 'lucide-react'
 import {
@@ -104,6 +105,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   recipeBuilder: ChefHatRound11,
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
+  bloomCore: SproutCore,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -161,6 +163,7 @@ export interface FeatureFlags {
   recipeBuilder: boolean
   breathSilk: boolean
   wuXing: boolean
+  bloomCore: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -227,6 +230,7 @@ export const defaultSettings: AppSettings = {
     recipeBuilder: true,
     breathSilk: true,
     wuXing: true,
+    bloomCore: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -285,6 +289,7 @@ const featureKeys = [
   'recipeBuilder',
   'breathSilk',
   'wuXing',
+  'bloomCore',
   'urgeTracker',
   'habitTracker',
   'chatJournal',

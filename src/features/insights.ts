@@ -1,5 +1,6 @@
 import type { AppData } from '../model'
 import { dayKey } from '../dates'
+import { readMoments } from './core/discoveries'
 
 export type ActivityDay = {
   date: string
@@ -14,7 +15,7 @@ export type Memory = {
   date: string
   title: string
   detail: string
-  kind: 'journal' | 'focus' | 'task' | 'milestone'
+  kind: 'journal' | 'focus' | 'task' | 'milestone' | 'discovery'
 }
 export const localDate = (value: number | string) => dayKey(new Date(value))
 
@@ -113,6 +114,14 @@ export function memories(data: AppData): Memory[] {
           kind: 'milestone',
         })
   }
+  for (const m of readMoments())
+    result.push({
+      id: m.id,
+      date: m.date,
+      title: m.title,
+      detail: m.detail,
+      kind: m.kind === 'discovery' ? 'discovery' : 'milestone',
+    })
   return result.sort(
     (a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id),
   )

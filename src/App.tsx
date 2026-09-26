@@ -66,6 +66,9 @@ import { burst, streakMilestone } from './components/ui/celebrate'
 import { AchievementHost } from './features/achievements/DrawnAchievement'
 import { ImpactLayer } from './features/impact/ImpactLayer'
 import { JuiceLayer, juice, pointer } from './features/juice/PixelJuice'
+import { CoreEngine } from './features/core/CoreEngine'
+import { MomentHost } from './features/core/MomentReveal'
+import { GrowthGarden, NowCard, Onboarding, WelcomeBack } from './features/core/CoreHome'
 import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
@@ -327,6 +330,8 @@ function App() {
     )
   }, [settings])
   const completed = data.habits.filter((h) => h.dates.includes(today)).length
+  // Hick's law: the simple home shows fewer, stronger choices; the rest is one tap away.
+  const simpleHome = settings.features.bloomCore && subOn('bloomCore', 'simpleHome')
   // Pixel juice: any new habit tick today (from any page) pops loot.
   const prevCompleted = useRef(completed)
   useEffect(() => {
@@ -460,7 +465,7 @@ function App() {
             </div>
           </header>
           <div
-            className={`page-content feature-page page-${active} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
+            className={`page-content feature-page page-${active}${simpleHome ? ' is-simple-home' : ''} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
           >
             {active === 'overview' && (
               <div className="overview-bar">
@@ -759,7 +764,17 @@ function App() {
                 <div
                   hidden={active === 'overview' && overviewPanel !== 'today'}
                 >
-                  {active === 'overview' && settings.features.dailySpin && subOn('dailySpin', 'dashboard') && (
+                  {active === 'overview' && settings.features.bloomCore && (
+                    <>
+                      {subOn('bloomCore', 'onboarding') && <Onboarding data={data} setData={setData} today={today} />}
+                      {subOn('bloomCore', 'welcomeBack') && <WelcomeBack data={data} today={today} onNavigate={jump} />}
+                      {subOn('bloomCore', 'nowCard') && (
+                        <NowCard data={data} setData={setData} today={today} flags={settings.features} onNavigate={jump} onPlan={() => setModal('plan')} />
+                      )}
+                      {subOn('bloomCore', 'growth') && <GrowthGarden data={data} today={today} />}
+                    </>
+                  )}
+                  {active === 'overview' && !simpleHome && settings.features.dailySpin && subOn('dailySpin', 'dashboard') && (
                     <Disclosure title="Your daily discovery · Free spin">
                       <DailySpin
                         onCollection={
@@ -778,7 +793,7 @@ function App() {
                       onNavigate={jump}
                     />
                   )}
-                  {active === 'overview' && modules.stats && (
+                  {active === 'overview' && modules.stats && !simpleHome && (
                     <StatsRow data={data} today={today} onNavigate={jump} />
                   )}
                   <div
@@ -1061,6 +1076,7 @@ function App() {
                     )}
                   </div>
                   {active === 'overview' && (
+                    <MaybeCollapsed collapsed={simpleHome} title="More for today">
                     <Carousel
                       label="More for you"
                       title="More for you"
@@ -1087,6 +1103,7 @@ function App() {
                         <WorldTeaser onOpen={() => jump('world')} />
                       )}
                     </Carousel>
+                    </MaybeCollapsed>
                   )}
                   {active === 'overview' &&
                     modules.growth &&
@@ -1135,6 +1152,8 @@ function App() {
         {settings.features.drawnAchievements && <AchievementHost />}
         {settings.features.impactTasks && <ImpactLayer setData={setData} />}
         {settings.features.pixelJuice && <JuiceLayer />}
+        {settings.features.bloomCore && <CoreEngine data={data} today={today} />}
+        {settings.features.bloomCore && <MomentHost />}
         {settings.features.postureGuard && postureTouched && (
           <Suspense fallback={null}>
             <PostureGuardian setData={setData} />
@@ -1294,3 +1313,8 @@ function App() {
   )
 }
 export default App
+
+/** Progressive disclosure: wraps secondary content in a collapsed section. */
+function MaybeCollapsed({ collapsed, title, children }: { collapsed: boolean; title: string; children: React.ReactNode }) {
+  return collapsed ? <Disclosure title={title}>{children}</Disclosure> : <>{children}</>
+}

@@ -1,3 +1,4 @@
+import { loadSettings } from '../SettingsPage'
 import { subOn } from '../features/subFeatures'
 import { Disclosure } from '../components/BloomExperience'
 import { useEffect, useRef, useState } from 'react'
@@ -103,6 +104,8 @@ export function GrowthRewards({
     previous.current = data.rpg
     previousData.current = data
     if (!result.xp && !result.badges.length && !completedGoals.length) return
+    // Bloom Core says something human about ordinary progress; keep this toast for real milestones.
+    if (!result.leveledUp && !result.badges.length && !completedGoals.length && loadSettings().features.bloomCore && subOn('bloomCore', 'recognition')) return
     if (!subOn('rpgSkillTree', 'notices')) return
     setNotice({
       title: result.leveledUp
