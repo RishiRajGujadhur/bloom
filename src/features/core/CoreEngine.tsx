@@ -38,7 +38,7 @@ const writeValue = (key: string, value: string) => {
 export function readExtras(): DayExtras {
   const at = (key: string) => readArray<{ at: number }>(key).map((e) => dayKey(new Date(e.at)))
   return {
-    wellbeing: [...new Set([...at(MOOD_KEY), ...at(GRATITUDE_KEY), ...at(BREATH_KEY)])],
+    wellbeing: [...new Set([...at(MOOD_KEY), ...at(GRATITUDE_KEY), ...at(BREATH_KEY), ...at('bloom-activity-v1')])],
     daybook: [...new Set(readArray<{ updatedAt: string }>(DAYBOOK_STORAGE_KEY).map((p) => p.updatedAt.slice(0, 10)))],
   }
 }

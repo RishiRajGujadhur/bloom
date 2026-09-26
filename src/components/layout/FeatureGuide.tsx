@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'exercises': { title: "Exercises", description: "Move well, not just more." },
   'release': { title: 'Let it go', description: 'Write it, then let it burn.' },
   'focus-room': { title: 'Focus room', description: 'One task. Soft strings. Deep work.' },
   'explore': { title: 'Explore data', description: 'Ask your own questions.' },
@@ -96,6 +97,11 @@ const step = (
   description: string,
 ): DriveStep => ({ element, popover: { title, description } })
 const guides: Record<NavKey, DriveStep[]> = {
+  'exercises': [
+    step(".ex-library", "Pick a move", "Filter by muscle or kit, then open it."),
+    step(".ex-stage", "Watch the form", "Mirror it, slow it down, follow the tempo."),
+    step(".ex-ring", "Count your reps", "Set a target and let the coach count."),
+  ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
     step('.tc-ground', 'Grounding', 'Sink into your stance and the bass deepens.'),

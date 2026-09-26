@@ -329,6 +329,10 @@ const common = {
         title: 'Tai Chi soundscape',
         description: 'Five-element generative sound that deepens as your stance grounds.',
       },
+      exerciseGuides: {
+        title: "Exercise guides",
+        description: "Animated form guides, muscle maps, tempo and a rep coach.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1280,6 +1284,10 @@ export const resources = {
           wuXing: {
             title: 'Paysage sonore Tai Chi',
             description: 'Son génératif des cinq éléments qui s’approfondit avec votre posture.',
+          },
+          exerciseGuides: {
+            title: "Guides d’exercices",
+            description: "Guides animés, carte musculaire, tempo et coach de répétitions.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

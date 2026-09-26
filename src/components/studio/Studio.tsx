@@ -19,6 +19,8 @@ export function Studio({
   tabs,
   aside,
   initial,
+  tab: controlled,
+  onTab,
 }: {
   name: string
   accent: string
@@ -27,9 +29,17 @@ export function Studio({
   /** Small summary shown at the right of the tab bar (a stat, a toggle). */
   aside?: ReactNode
   initial?: string
+  /** Controlled mode: the parent chooses the tab. */
+  tab?: string
+  onTab?: (id: string) => void
 }) {
   const visible = tabs.filter(Boolean)
-  const [active, setActive] = useState(initial && visible.some((t) => t.id === initial) ? initial : visible[0]?.id)
+  const [inner, setInner] = useState(initial && visible.some((t) => t.id === initial) ? initial : visible[0]?.id)
+  const active = controlled && visible.some((t) => t.id === controlled) ? controlled : inner
+  const setActive = (id: string) => {
+    setInner(id)
+    onTab?.(id)
+  }
   const panel = useRef<HTMLDivElement>(null)
   const dir = useRef(1)
   const index = Math.max(0, visible.findIndex((t) => t.id === active))
@@ -180,5 +190,20 @@ export function writeStore<T>(key: string, value: T) {
     localStorage.setItem(key, JSON.stringify(value))
   } catch {
     /* This visit keeps working. */
+  }
+}
+
+/** Soft floating orbs + a flowing line: the default living backdrop. */
+export { StudioScene } from './StudioScene'
+
+export const ACTIVITY_KEY = 'bloom-activity-v1'
+/** Any studio session (a workout, a meditation…) counts as a day you showed up. */
+export function logActivity(kind: string, detail: Record<string, unknown> = {}) {
+  try {
+    const list = JSON.parse(localStorage.getItem(ACTIVITY_KEY) ?? '[]') as unknown[]
+    list.push({ at: Date.now(), kind, ...detail })
+    localStorage.setItem(ACTIVITY_KEY, JSON.stringify(list.slice(-3000)))
+  } catch {
+    /* best effort */
   }
 }

@@ -18,6 +18,7 @@ type Key = keyof FeatureFlags
 
 export const featureCategory: Record<Key, CategoryId> = {
   bloomCore: 'today',
+  exerciseGuides: 'body',
   dailyFlow: 'today',
   fullCalendar: 'today',
   reminders: 'today',
@@ -79,11 +80,12 @@ export const featureCategory: Record<Key, CategoryId> = {
  * features to enable (everything else is turned off); categories expand to
  * every feature they contain.
  */
-export type Preset = { id: string; label: string; description: string; on: 'all' | (Key | CategoryId)[] }
+export type Preset = { id: string; label: string; description: string; on: 'all' | 'defaults' | (Key | CategoryId)[] }
 
 const essentials: (Key | CategoryId)[] = ['bloomCore', 'dailyFlow', 'habitTracker', 'languageSelector', 'walkthroughTour', 'omnibox', 'smartSearch']
 
 export const presets: Preset[] = [
+  { id: 'recommended', label: 'Recommended', description: 'Bloom’s default set of features.', on: 'defaults' },
   { id: 'everything', label: 'Everything', description: 'Every feature on.', on: 'all' },
   {
     id: 'balanced',
@@ -100,17 +102,18 @@ export const presets: Preset[] = [
   { id: 'gamified', label: 'Gamified', description: 'Loot, worlds and quests.', on: [...essentials, 'play', 'today', 'productivity'] },
 ]
 
-export function applyPreset(preset: Preset, keys: readonly Key[]): Record<Key, boolean> {
+export function applyPreset(preset: Preset, keys: readonly Key[], defaults?: FeatureFlags): Record<Key, boolean> {
   const out = {} as Record<Key, boolean>
   const on = preset.on
-  for (const k of keys) out[k] = on === 'all' || on.includes(k) || on.includes(featureCategory[k])
+  for (const k of keys)
+    out[k] = on === 'all' ? true : on === 'defaults' ? (defaults?.[k] ?? true) : on.includes(k) || on.includes(featureCategory[k])
   return out
 }
 
 /** The preset that exactly matches the current switches, if any. */
-export function matchPreset(features: FeatureFlags, keys: readonly Key[]) {
+export function matchPreset(features: FeatureFlags, keys: readonly Key[], defaults?: FeatureFlags) {
   return presets.find((p) => {
-    const want = applyPreset(p, keys)
+    const want = applyPreset(p, keys, defaults)
     return keys.every((k) => want[k] === features[k])
   })
 }

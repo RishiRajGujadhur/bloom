@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Dumbbell as DumbbellF_exerciseGuides } from 'lucide-react'
 import { Swords as SwordsRound11, Leaf as LeafRound11, ChefHat as ChefHatRound11, Waves as WavesRound11, Mountain as MountainRound11 } from 'lucide-react'
 import { Apple as AppleIcon, Feather as FeatherIcon, Zap as ZapIcon, Mic as MicIcon, FlaskConical as FlaskConicalIcon, ScanSearch as ScanSearchIcon, SquareTerminal as SquareTerminalIcon } from 'lucide-react'
 import {
@@ -107,6 +108,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  exerciseGuides: DumbbellF_exerciseGuides,
   urgeTracker: ShieldCheck,
   habitTracker: ListChecks,
   chatJournal: MessageCircle,
@@ -165,6 +167,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  exerciseGuides: boolean
   urgeTracker: boolean
   habitTracker: boolean
   chatJournal: boolean
@@ -232,6 +235,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    exerciseGuides: true,
     urgeTracker: true,
     habitTracker: true,
     chatJournal: true,
@@ -291,6 +295,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'exerciseGuides',
   'urgeTracker',
   'habitTracker',
   'chatJournal',
@@ -426,7 +431,7 @@ export function SettingsPage({
 
   const formattedSettings = JSON.stringify(settings, null, 2)
   const [query, setQuery] = useState('')
-  const current = matchPreset(settings.features, featureKeys)
+  const current = matchPreset(settings.features, featureKeys, defaultSettings.features)
   const titleOf = (key: (typeof featureKeys)[number]) =>
     key === 'dailySpin'
       ? 'Daily 7-7-7 Spin'
@@ -460,7 +465,7 @@ export function SettingsPage({
               value={current?.id ?? 'custom'}
               onChange={(event) => {
                 const preset = presets.find((p) => p.id === event.target.value)
-                if (preset) setSettings((c) => ({ ...c, features: { ...c.features, ...applyPreset(preset, featureKeys) } }))
+                if (preset) setSettings((c) => ({ ...c, features: { ...c.features, ...applyPreset(preset, featureKeys, defaultSettings.features) } }))
               }}
               aria-label="Feature configuration"
             >

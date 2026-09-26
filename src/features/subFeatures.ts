@@ -383,6 +383,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'skeleton', title: 'Skeleton overlay', description: 'See the tracked pose over the preview.' },
     { id: 'breathDensity', title: 'Breath density', description: 'Chimes thicken as you inhale.' },
   ],
+  exerciseGuides: [
+    { id: "animation", title: "Animated form guide", description: "The figure moves through each rep." },
+    { id: "muscleMap", title: "Muscle map", description: "Front and back maps of what works." },
+    { id: "cues", title: "Form cues", description: "Short checklist for good form." },
+    { id: "mistakes", title: "Common mistakes", description: "What to avoid." },
+    { id: "tempo", title: "Tempo & metronome", description: "Clicks for lowering and lifting." },
+    { id: "slowMo", title: "Slow motion", description: "Speed slider to study the movement." },
+    { id: "mirror", title: "Mirror view", description: "Flip the figure to match you." },
+    { id: "filters", title: "Filters", description: "By muscle, equipment and level." },
+    { id: "favourites", title: "Favourites", description: "Star the moves you like." },
+    { id: "voice", title: "Voice coach", description: "Counts reps and calls cues aloud." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
