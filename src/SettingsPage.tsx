@@ -8,6 +8,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { subFeatures } from './features/subFeatures'
+import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
 import { Swords as SwordsRound11, Leaf as LeafRound11, ChefHat as ChefHatRound11, Waves as WavesRound11, Mountain as MountainRound11 } from 'lucide-react'
 import { Apple as AppleIcon, Feather as FeatherIcon, Zap as ZapIcon, Mic as MicIcon, FlaskConical as FlaskConicalIcon, ScanSearch as ScanSearchIcon, SquareTerminal as SquareTerminalIcon } from 'lucide-react'
@@ -242,7 +243,7 @@ export const defaultSettings: AppSettings = {
   },
 }
 
-const featureKeys = [
+export const featureKeys = [
   'dailySpin',
   'collectibles',
   'fullCalendar',
@@ -424,21 +425,23 @@ export function SettingsPage({
   }
 
   const formattedSettings = JSON.stringify(settings, null, 2)
+  const [query, setQuery] = useState('')
+  const current = matchPreset(settings.features, featureKeys)
+  const titleOf = (key: (typeof featureKeys)[number]) =>
+    key === 'dailySpin'
+      ? 'Daily 7-7-7 Spin'
+      : key === 'collectibles'
+        ? 'My Collectibles'
+        : key === 'fullCalendar'
+          ? 'Full calendar'
+          : t(`settings.feature.${key}.title`)
+  const setMany = (keys: readonly (typeof featureKeys)[number][], on: boolean) =>
+    setSettings((c) => ({ ...c, features: { ...c.features, ...Object.fromEntries(keys.map((k) => [k, on])) } }))
 
   return (
     <div
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
-      <section
-        className={styles.card}
-        aria-labelledby="appearance-heading"
-      >
-        <h2 id="appearance-heading" className={styles.sectionTitle}>
-          <Palette size={18} aria-hidden="true" />
-          {t('settings.appearanceHeading')}
-        </h2>
-        <ThemePicker settings={theme} onChange={setTheme} />
-      </section>
 
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>
@@ -450,16 +453,62 @@ export function SettingsPage({
             {t('settings.savedLocally')}
           </span>
         </div>
-        <div className={styles.featureGrid}>
-          {featureKeys.map((key) => {
-            const title =
-              key === 'dailySpin'
-                ? 'Daily 7-7-7 Spin'
-                : key === 'collectibles'
-                  ? 'My Collectibles'
-                  : key === 'fullCalendar'
-                    ? 'Full calendar'
-                    : t(`settings.feature.${key}.title`)
+        <div className={styles.presetBar}>
+          <label className={styles.presetPick}>
+            <span>Configuration</span>
+            <select
+              value={current?.id ?? 'custom'}
+              onChange={(event) => {
+                const preset = presets.find((p) => p.id === event.target.value)
+                if (preset) setSettings((c) => ({ ...c, features: { ...c.features, ...applyPreset(preset, featureKeys) } }))
+              }}
+              aria-label="Feature configuration"
+            >
+              {!current && <option value="custom">Custom</option>}
+              {presets.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+            <small>{current ? current.description : 'Your own mix of features.'}</small>
+          </label>
+          <input
+            className={styles.featureSearch}
+            type="search"
+            placeholder="Find a feature…"
+            aria-label="Find a feature"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </div>
+        {categories.map((category) => {
+          const keys = featureKeys.filter(
+            (key) => featureCategory[key] === category.id && (!query.trim() || titleOf(key).toLowerCase().includes(query.trim().toLowerCase())),
+          )
+          if (!keys.length) return null
+          const onCount = keys.filter((k) => settings.features[k]).length
+          return (
+            <section key={category.id} className={styles.category} aria-label={category.label}>
+              <header className={styles.categoryHead}>
+                <h3>
+                  <span aria-hidden="true">{category.emoji}</span> {category.label}
+                  <small>
+                    {onCount}/{keys.length} on
+                  </small>
+                </h3>
+                <span className={styles.categoryActions}>
+                  <button type="button" onClick={() => setMany(keys, true)} disabled={onCount === keys.length}>
+                    All on
+                  </button>
+                  <button type="button" onClick={() => setMany(keys, false)} disabled={onCount === 0}>
+                    All off
+                  </button>
+                </span>
+              </header>
+              <div className={styles.featureRail}>
+          {keys.map((key) => {
+            const title = titleOf(key)
             const Icon = featureIcons[key]
             const options = subFeatures[key]
             return (
@@ -534,7 +583,21 @@ export function SettingsPage({
               </div>
             )
           })}
-        </div>
+              </div>
+            </section>
+          )
+        })}
+      </section>
+
+      <section
+        className={styles.card}
+        aria-labelledby="appearance-heading"
+      >
+        <h2 id="appearance-heading" className={styles.sectionTitle}>
+          <Palette size={18} aria-hidden="true" />
+          {t('settings.appearanceHeading')}
+        </h2>
+        <ThemePicker settings={theme} onChange={setTheme} />
       </section>
 
       <Disclosure title={t('settings.configurationHeading')}>
