@@ -368,3 +368,24 @@
     flex: 1 1 auto;
   }
 }
+
+.life-steps {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 22px;
+}
+.life-steps button[aria-pressed='true'] {
+  background: var(--life-accent);
+  color: white;
+  border-color: transparent;
+}
+.life-palace {
+  margin-bottom: 32px;
+}
+.life-palace fieldset {
+  min-width: 0;
+}
+.life-palace > label {
+  margin: 20px 0;
+}

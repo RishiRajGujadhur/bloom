@@ -58,3 +58,15 @@ test('seated library keeps both legs supported through all movement poses', () =
     expect(e.b.knR).toBe(90)
   }
 })
+
+import { practiceSchedule } from '../src/features/life/tools/practice'
+test('practice scheduler produces a future review and rejects out-of-order history', async () => {
+  const card = await practiceSchedule('2026-09-20 | Good\n2026-09-26 | Easy')
+  expect(card.reps).toBe(2)
+  expect(card.due.getTime()).toBeGreaterThan(
+    new Date('2026-09-26T12:00:00Z').getTime(),
+  )
+  await expect(
+    practiceSchedule('2026-09-26 | Good\n2026-09-20 | Easy'),
+  ).rejects.toThrow('increasing order')
+})

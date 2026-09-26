@@ -128,6 +128,9 @@ function Results({ result, animate }: { result: Analysis; animate: boolean }) {
 function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
   const { data: store, error, blocked } = useLife()
   const prefs = preference(store, tool.id)
+  const [fieldStep, setFieldStep] = useState(0)
+  const visibleFields = tool.fields.filter((f) => !prefs.hidden.includes(f.key))
+  const stepCount = Math.max(1, Math.ceil(visibleFields.length / 5))
   const records = store.records.filter((r) => r.tool === tool.id)
   const initial = () =>
     Object.fromEntries(tool.fields.map((f) => [f.key, f.initial ?? '']))
@@ -365,7 +368,9 @@ function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
             </span>
             <small>
               {dirty
-                ? 'Unsaved changes'
+                ? error
+                  ? 'Draft could not be saved'
+                  : 'Draft saved on this device'
                 : selected
                   ? 'Saved locally'
                   : 'Private to this browser'}
@@ -385,9 +390,22 @@ function Workspace({ tool, ...props }: FeaturePageProps & { tool: Tool }) {
               }}
             />
           </label>
+          <div className="life-steps" role="group" aria-label="Record sections">
+            {Array.from({ length: stepCount }, (_, i) => (
+              <button
+                type="button"
+                key={i}
+                aria-pressed={fieldStep === i}
+                onClick={() => setFieldStep(i)}
+              >
+                {i + 1}.{' '}
+                {['Start', 'Details', 'Context', 'Review'][i] ?? 'More'}
+              </button>
+            ))}
+          </div>
           <div className="life-fields">
-            {tool.fields
-              .filter((f) => !prefs.hidden.includes(f.key))
+            {visibleFields
+              .slice(fieldStep * 5, (fieldStep + 1) * 5)
               .map((f) => (
                 <label
                   key={f.key}

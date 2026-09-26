@@ -176,6 +176,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'gratitudeChapter', title: 'Good things chapter', description: 'Offer the gratitude chapter.' },
   ],
   memoryPalace: [
+    { id: 'lociPractice', title: 'Memory routes and recall', description: 'Create familiar locations, practice recall, and schedule reviews with FSRS.' },
     { id: 'inertia', title: 'Drag and scroll', description: 'Spin the ring with momentum.' },
     { id: 'monthMarkers', title: 'Month markers', description: 'Glowing dots at each month.' },
     { id: 'moodColors', title: 'Mood colours', description: 'Colour days by mood.' },

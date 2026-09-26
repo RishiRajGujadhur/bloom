@@ -216,8 +216,8 @@ Use: `planned → implementing → validated → committed → pushed`. A commit
 |---|---|---|---|---|---|
 | 01 | Decision studio | Pushed | 9 Jest tests; build/lint; browser save/reload/task handoff | e1fe55c | Confirmed |
 | 02 | Personal boundaries | Pushed | TypeScript, lint, 11 tests; browser template preview | 3bd94f9 | Confirmed |
-| 03 | Connection garden | Validating | Contact cadence + fuzzy search; wheelchair exercise enhancement uses Fuse | See feature commit | Pending |
-| 04 | Skill practice planner | Planned | — | — | — |
+| 03 | Connection garden | Pushed | TypeScript, lint, 13 tests; seated-only library verified in browser | 28eb7b7 | Confirmed |
+| 04 | Skill practice planner | Validated | 14 tests, TypeScript, lint; memory route enhancement | See feature commit | Pending |
 | 05 | Reading companion | Planned | — | — | — |
 | 06 | Clear writing lab | Planned | — | — | — |
 | 07 | Programmer shutdown desk | Planned | — | — | — |

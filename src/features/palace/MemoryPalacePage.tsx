@@ -1,3 +1,4 @@
+import { LociPractice } from './LociPractice'
 import { subOn } from '../subFeatures'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
@@ -171,6 +172,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
   const day = days[selected]
   return (
     <section className="palace-page" aria-label="Memory palace">
+      {subOn('memoryPalace', 'lociPractice') && <LociPractice />}
       <div
         className="palace-stage"
         ref={stage}
