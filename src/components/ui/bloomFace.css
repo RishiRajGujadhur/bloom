@@ -5,8 +5,8 @@
   filter: drop-shadow(0 6px 10px #d9503a33);
 }
 
+/* Lids start closed-away; GSAP owns their origin (it bakes it into the matrix),
+   so no CSS transform-origin here — a second origin shifted the lid above the head. */
 .bloom-face .bf-lid {
   transform: scaleY(0);
-  transform-box: fill-box;
-  transform-origin: center;
 }

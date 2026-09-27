@@ -69,12 +69,16 @@ export const BloomFace = forwardRef<
     const body = q('.bf-body')
     const eye = q('.bf-eye')
     const happy = q('.bf-happy')
-    current.current?.kill()
+    // Talking layers on top; it must not cut a wave short (that left the hand up).
+    if (m !== 'talk') {
+      current.current?.kill()
+      gsap.set(q('.bf-arm'), { opacity: 0 })
+    }
     gsap.killTweensOf([body, eye, happy])
     gsap.set(eye, { opacity: 1 })
     gsap.set(happy, { opacity: 0 })
     const tl = gsap.timeline()
-    current.current = tl
+    if (m !== 'talk') current.current = tl
     if (m === 'talk' && (robot || orange)) tl.fromTo(svg.current.querySelectorAll('.rb-bar'), { scaleY: 0.3 }, { scaleY: () => gsap.utils.random(0.6, 1.4), transformOrigin: '50% 50%', duration: 0.12, yoyo: true, repeat: 5, stagger: 0.03, ease: 'steps(3)' })
     if (orb) {
       const mood = m === 'happy' || m === 'excited' || m === 'wave' || m === 'wink' ? 4 : m === 'think' ? 1 : m === 'talk' ? 7 : -1
