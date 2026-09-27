@@ -756,6 +756,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "themes", title: "Card styles", description: "Gradient, paper or night." },
     { id: "daily", title: "Today’s card", description: "A new card each day." },
     { id: "mix", title: "Mix", description: "Shuffle every deck together." },
+    { id: 'moodDeck', title: 'Mood deck', description: 'Tap how you feel; the matching deck opens.' },
   ],
   dojo: [
     { id: "styleFilter", title: "Style filter", description: "Karate, kung fu, taekwondo, boxing, Muay Thai." },

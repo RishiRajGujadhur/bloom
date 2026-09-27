@@ -8,6 +8,7 @@ import { Segmented, Slider, Studio, StudioScene, logActivity, readStore, writeSt
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { AFFIRM_KEY, cardsFor, dailyCard, deckOf, decks, type AffirmStore } from './affirmModel'
+import { AffirmQuick } from '../quick/AffirmQuick'
 import './affirm.css'
 
 const on = (id: string) => subOn('affirmations', id)
@@ -53,6 +54,7 @@ export function AffirmPage() {
 
   const swipe = () => (
     <div className="af-layout">
+      <AffirmQuick onDeck={(d) => { setDeck(d); setIndex(0) }} />
       <div className="studio-chip-row">
         {deckOptions.map((o) => (
           <button key={o.id} type="button" className="studio-chip" aria-pressed={deck === o.id} onClick={() => (setDeck(o.id), setIndex(0))}>
