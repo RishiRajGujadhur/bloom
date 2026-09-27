@@ -962,3 +962,22 @@
   background: #fdecea;
   color: #c62828;
 }
+
+/* ---------- Mix orbit ---------- */
+.mo-orbit {
+  width: min(100%, 220px);
+  margin: 0 auto;
+  display: block;
+}
+
+.mo-path {
+  fill: none;
+  stroke: var(--border-color, #0002);
+  stroke-dasharray: 3 5;
+}
+
+.mo-bg {
+  fill: color-mix(in srgb, #4db6ac 25%, var(--bg-surface, #fff));
+  stroke: #4db6ac;
+  stroke-width: 1.5;
+}

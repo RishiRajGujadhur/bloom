@@ -5,6 +5,8 @@ import { Rail, Slider, Studio, logActivity, readStore, writeStore } from '../../
 import { subOn } from '../subFeatures'
 import { layers, mixer, presets, type Mix } from './mixerEngine'
 import '../sounds/sounds.css'
+import { MixOrbit } from '../showcase/MixOrbit'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './mixer.css'
 
 const on = (id: string) => subOn('soundMixer', id)
@@ -103,11 +105,12 @@ export function MixerPage() {
   }
   const visible = layers.filter((l) => (l.noise ? on('noiseColours') : on('natureLayers')))
 
+  usePageActions([{ id: 'mx-toggle', label: playing ? 'Pause the mix' : 'Play the mix', icon: '🎚️', run: toggle }, { id: 'mx-mute', label: 'Mute every layer', icon: '🔇', run: () => visible.forEach((l) => setLayer(l.id, 0)) }])
   const mixTab = () => (
     <div className="studio-split mx-split">
       <div className="studio-card mx-layers">
         {visible.map((l) => (
-          <div key={l.id} className="mx-layer" data-on={(store.mix[l.id] ?? 0) > 0}>
+          <div key={l.id} className="mx-layer" data-on={(store.mix[l.id] ?? 0) > 0} data-hint={`${l.label}: ${(store.mix[l.id] ?? 0) ? `${Math.round((store.mix[l.id] ?? 0) * 100)}%` : 'off'}`}>
             <span className="mx-emoji" aria-hidden="true">
               {l.emoji}
             </span>
@@ -116,6 +119,7 @@ export function MixerPage() {
         ))}
       </div>
       <div className="studio-card mx-side">
+        {on('orbit') && <MixOrbit playing={playing} layers={visible.map((l) => ({ id: l.id, emoji: l.emoji, label: l.label, volume: store.mix[l.id] ?? 0 }))} />}
         <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={36} /> : <Play size={36} />}
         </button>

@@ -593,6 +593,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "scene", title: "Living scene", description: "The picture answers your mix." },
     { id: "fade", title: "Soft fades", description: "Gentle starts and stops." },
     { id: "keepPlaying", title: "Plays everywhere", description: "Keeps playing while you use other pages." },
+    { id: 'orbit', title: 'Mix orbit', description: 'Active sounds circle the play button, sized by volume.' },
   ],
   meditation: [
     { id: "courses", title: "Courses", description: "Short series for basics, kindness, sleep and focus." },
