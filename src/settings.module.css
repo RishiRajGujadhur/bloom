@@ -535,3 +535,15 @@ html[data-mode='dark'] .importInput {
   border-radius: 10px;
   background: color-mix(in srgb, var(--accent-color) 12%, transparent);
 }
+.presetBar {
+  align-items: start;
+}
+.presetPick input[type='search'] {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 16px;
+}

@@ -87,6 +87,7 @@ import {
 } from 'lucide-react'
 import { Menu } from 'lucide-react'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
+import { compactTitles, setCompactTitles } from './components/ui/Flow'
 import type { LucideIcon } from 'lucide-react'
 
 const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
@@ -520,6 +521,7 @@ const matches = (text: string, query: string) => text.toLowerCase().includes(que
 /** Navigation style and a way back into onboarding. */
 function NavigationCard() {
   const [hamburger, setHamburger] = useState(hamburgerNav)
+  const [compact, setCompact] = useState(compactTitles)
   return (
     <section className={styles.card} aria-labelledby="navigation-heading">
       <h2 id="navigation-heading" className={styles.sectionTitle}>
@@ -540,6 +542,24 @@ function NavigationCard() {
               setHamburgerNav(e.target.checked)
             }}
             aria-label="Hamburger menu"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Compact page titles</strong>
+          <small>Slim, one-line page titles so more of each page fits on screen.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={compact}
+            onChange={(e) => {
+              setCompact(e.target.checked)
+              setCompactTitles(e.target.checked)
+            }}
+            aria-label="Compact page titles"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>
@@ -728,14 +748,18 @@ export function SettingsPage({
             </select>
             <small>{current ? current.description : 'Your own mix of features.'}</small>
           </label>
-          <input
-            className={styles.featureSearch}
-            type="search"
-            placeholder="Find a feature…"
-            aria-label="Find a feature"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
+          <label className={styles.presetPick}>
+            <span>Search</span>
+            <input
+              className={styles.featureSearch}
+              type="search"
+              placeholder="Find a feature…"
+              aria-label="Find a feature"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <small>Features and their options.</small>
+          </label>
         </div>
         {categories.map((category) => {
           const keys = featureKeys.filter(

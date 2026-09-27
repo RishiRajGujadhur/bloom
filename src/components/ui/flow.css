@@ -188,3 +188,28 @@
 .link-chip.ask-bloom .bloom-face {
   filter: none;
 }
+
+/* Compact page titles (Settings → Navigation & setup). */
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) {
+  min-height: 0;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) h1 {
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  margin: 0;
+}
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .bloom-heading-copy p,
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .bloom-kicker {
+  display: none;
+}
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .page-emblem {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+}
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .page-emblem svg {
+  width: 28px;
+  height: 28px;
+}

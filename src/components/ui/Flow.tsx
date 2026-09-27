@@ -162,3 +162,24 @@ export function HoverHints() {
     </div>
   )
 }
+
+/** Settings → "Compact page titles" (on by default). */
+const TITLES_KEY = 'bloom-compact-titles'
+export const compactTitles = () => {
+  try {
+    return localStorage.getItem(TITLES_KEY) !== '0'
+  } catch {
+    return true
+  }
+}
+export function applyCompactTitles() {
+  document.documentElement.toggleAttribute('data-compact-titles', compactTitles())
+}
+export function setCompactTitles(on: boolean) {
+  try {
+    localStorage.setItem(TITLES_KEY, on ? '1' : '0')
+  } catch {
+    /* optional */
+  }
+  applyCompactTitles()
+}

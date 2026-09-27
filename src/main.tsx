@@ -7,6 +7,7 @@ import { AudioMixerProvider } from './contexts/AudioMixerContext'
 import { AudioMixer } from './components/AudioMixer'
 import { installInteractions } from './components/ui/interactions'
 import './components/ui/interactions.css'
+import { applyCompactTitles } from './components/ui/Flow'
 import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
@@ -24,3 +25,5 @@ createRoot(document.getElementById('root')!).render(
     </AudioMixerProvider>
   </StrictMode>,
 )
+
+applyCompactTitles()
