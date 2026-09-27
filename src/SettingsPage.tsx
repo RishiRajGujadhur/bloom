@@ -85,6 +85,8 @@ import {
   Swords,
   Wind,
 } from 'lucide-react'
+import { Menu } from 'lucide-react'
+import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
 import type { LucideIcon } from 'lucide-react'
 
 const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
@@ -515,6 +517,43 @@ const matches = (text: string, query: string) => text.toLowerCase().includes(que
  * the same bulk actions, and options that keep working when the feature is off
  * are labelled instead of greyed out.
  */
+/** Navigation style and a way back into onboarding. */
+function NavigationCard() {
+  const [hamburger, setHamburger] = useState(hamburgerNav)
+  return (
+    <section className={styles.card} aria-labelledby="navigation-heading">
+      <h2 id="navigation-heading" className={styles.sectionTitle}>
+        <Menu size={18} aria-hidden="true" />
+        Navigation & setup
+      </h2>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Hamburger menu</strong>
+          <small>Keep the sidebar tucked behind a menu button on every screen size, like on phones. Off shows the side column.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={hamburger}
+            onChange={(e) => {
+              setHamburger(e.target.checked)
+              setHamburgerNav(e.target.checked)
+            }}
+            aria-label="Hamburger menu"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <div className={styles.optionActions}>
+        <button type="button" onClick={() => window.dispatchEvent(new Event('bloom:welcome'))}>
+          🌸 Set up Bloom again
+        </button>
+      </div>
+      <small className={styles.optionNote}>Answer Bloom’s welcome questions again to re-pick your features and theme.</small>
+    </section>
+  )
+}
+
 function OptionList({
   prefix,
   options,
@@ -812,6 +851,8 @@ export function SettingsPage({
           </section>
         )}
       </section>
+
+      <NavigationCard />
 
       <section
         className={styles.card}

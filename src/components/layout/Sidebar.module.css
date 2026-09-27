@@ -163,3 +163,16 @@
 @media (prefers-reduced-motion: reduce) { .switchTrack > span { transition:none; } }
 /* The rail switch stays within reach, immediately below the brand. */
 .collapseToggle { margin-top:18px; margin-bottom:4px; flex-shrink:0; border-top:0; padding:10px 12px; text-transform:none; }
+
+/* Hamburger menu on wide screens (Settings → Navigation): same as phones. */
+:global(html[data-nav='hamburger']) .hamburger {
+  display: flex;
+}
+
+:global(html[data-nav='hamburger']) .backdrop {
+  display: block;
+}
+
+:global(html[data-nav='hamburger']) .collapseToggle {
+  display: none;
+}

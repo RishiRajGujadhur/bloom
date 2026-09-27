@@ -130,3 +130,11 @@ jest.mock('@chatscope/chat-ui-kit-react', () => {
     TypingIndicator: ({ content }: { content: string }) => React.createElement('span', null, content),
   }
 })
+
+// Tests were written for the side-column navigation; the hamburger default
+// is off here unless a test sets it.
+const realGetItem = Storage.prototype.getItem
+Storage.prototype.getItem = function (key: string) {
+  const v = realGetItem.call(this, key)
+  return v === null && key === 'bloom-nav-hamburger' ? '0' : v
+}

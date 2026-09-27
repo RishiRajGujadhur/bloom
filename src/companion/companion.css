@@ -368,3 +368,9 @@
     z-index: 60;
   }
 }
+
+@media (min-width: 900px) {
+  html[data-bloom-docked][data-nav='hamburger'] main#overview {
+    width: calc(100% - 380px);
+  }
+}

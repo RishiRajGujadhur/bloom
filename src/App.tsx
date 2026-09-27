@@ -388,6 +388,11 @@ function App() {
     useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
   const [welcome, setWelcome] = useState(() => !welcomeDone())
+  useEffect(() => {
+    const open = () => setWelcome(true)
+    window.addEventListener('bloom:welcome', open)
+    return () => window.removeEventListener('bloom:welcome', open)
+  }, [])
   const finishWelcome = (answers: Answers | null) => {
     try {
       localStorage.setItem(WELCOME_KEY, JSON.stringify({ at: Date.now(), answers }))

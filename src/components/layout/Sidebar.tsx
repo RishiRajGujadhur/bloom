@@ -162,8 +162,26 @@ export const navSections: { label: string; keys: NavKey[] }[] = [
 /** Below this width the sidebar becomes an off-canvas drawer. */
 const DRAWER_MEDIA_QUERY = '(max-width: 900px)'
 
+/** Settings → "Hamburger menu" (on by default): the drawer on every screen size. */
+export const NAV_KEY = 'bloom-nav-hamburger'
+export const NAV_EVENT = 'bloom:nav-mode'
+export const hamburgerNav = () => {
+  try {
+    return localStorage.getItem(NAV_KEY) !== '0'
+  } catch {
+    return true
+  }
+}
+export function setHamburgerNav(on: boolean) {
+  try {
+    localStorage.setItem(NAV_KEY, on ? '1' : '0')
+  } catch {
+    /* optional */
+  }
+  window.dispatchEvent(new Event(NAV_EVENT))
+}
 const isDrawerWidth = () =>
-  typeof window !== 'undefined' && window.matchMedia(DRAWER_MEDIA_QUERY).matches
+  typeof window !== 'undefined' && (hamburgerNav() || window.matchMedia(DRAWER_MEDIA_QUERY).matches)
 
 /**
  * Collapsible navigation.
@@ -233,19 +251,29 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
   // drawer widths closes the drawer, leaving them re-expands the column.
   useEffect(() => {
     const query = window.matchMedia(DRAWER_MEDIA_QUERY)
-    const onChange = (event: MediaQueryListEvent) => {
-      setIsNarrow(event.matches)
+    const onChange = () => {
+      const drawer = isDrawerWidth()
+      setIsNarrow(drawer)
       try {
-        setIsOpen(
-          !event.matches &&
-            localStorage.getItem('bloom-sidebar') !== 'collapsed',
-        )
+        setIsOpen(!drawer && localStorage.getItem('bloom-sidebar') !== 'collapsed')
       } catch {
-        setIsOpen(!event.matches)
+        setIsOpen(!drawer)
       }
     }
     query.addEventListener('change', onChange)
-    return () => query.removeEventListener('change', onChange)
+    // The hamburger setting switches presentation straight away.
+    const onMode = () => {
+      const drawer = isDrawerWidth()
+      document.documentElement.dataset.nav = hamburgerNav() ? 'hamburger' : 'rail'
+      setIsNarrow(drawer)
+      setIsOpen(!drawer)
+    }
+    document.documentElement.dataset.nav = hamburgerNav() ? 'hamburger' : 'rail'
+    window.addEventListener(NAV_EVENT, onMode)
+    return () => {
+      query.removeEventListener('change', onChange)
+      window.removeEventListener(NAV_EVENT, onMode)
+    }
   }, [])
 
   // Escape closes the drawer while it is open.
@@ -525,7 +553,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
               data-section={section}
               aria-current={active === key ? 'page' : undefined}
               // Without the visible label the icon needs its own name.
-              {...(isOpen ? {} : { 'aria-label': title, title })}
+              {...(isOpen ? {} : { 'aria-label': title, title, 'data-hint': title, 'data-cursor-text': title })}
               onClick={() => handleNavigate(key)}
             >
               <Icon size={19} aria-hidden="true" />

@@ -2580,3 +2580,19 @@ html[data-mode='dark'] .focus-editor input {
     transition: none;
   }
 }
+
+/* Hamburger navigation at any width (mirrors the <=900px drawer). */
+html[data-nav='hamburger'] .sidebar {
+  width: var(--sidebar-width);
+  padding-top: 68px;
+  transform: translateX(-100%);
+  box-shadow: 0 18px 50px var(--shadow-color);
+}
+html[data-nav='hamburger'][data-sidebar='open'] .sidebar {
+  transform: translateX(0);
+}
+html[data-nav='hamburger'][data-sidebar] main,
+html[data-nav='hamburger'] main {
+  margin-left: 0;
+  width: 100%;
+}
