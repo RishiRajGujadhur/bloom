@@ -8,7 +8,8 @@ import {
 import { Leaf, MessageCircle, Send, Sparkles } from 'lucide-react'
 import type { AppData } from '../model'
 import type { NavKey } from '../components/layout/Sidebar'
-import { Modal } from '../components/Modal'
+import gsap from 'gsap'
+import { PanelRightClose, PanelRightOpen, X } from 'lucide-react'
 import { Sprite } from '../rpg/Sprite'
 import type { LocalCompanion } from './localAI'
 import {
@@ -95,6 +96,34 @@ export function BloomCompanion({
   initialMode?: 'guide' | 'plan'
 }) {
   const [mode, setMode] = useState<'guide' | 'plan'>(initialMode)
+  const [docked, setDockedState] = useState(() => {
+    try {
+      return localStorage.getItem('bloom-guide-docked') === '1'
+    } catch {
+      return false
+    }
+  })
+  const setDocked = (d: boolean) => {
+    setDockedState(d)
+    try {
+      localStorage.setItem('bloom-guide-docked', d ? '1' : '0')
+    } catch {
+      /* optional */
+    }
+  }
+  const panel = useRef<HTMLElement>(null)
+  // Docked: the page makes room beside the panel.
+  useEffect(() => {
+    const on = open && docked
+    document.documentElement.toggleAttribute('data-bloom-docked', on)
+    return () => document.documentElement.removeAttribute('data-bloom-docked')
+  }, [open, docked])
+  // Open like the soundscape box: grow from the button corner (GSAP).
+  useEffect(() => {
+    if (!open || !panel.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const tw = gsap.fromTo(panel.current, docked ? { x: 40, opacity: 0 } : { scale: 0.85, opacity: 0, y: 16, transformOrigin: '100% 100%' }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.6)', clearProps: 'transform' })
+    return () => void tw.progress(1)
+  }, [open, docked])
   const [text, setText] = useState('')
   const [turns, setTurns] = useState<Turn[]>([])
   const [proposal, setProposal] = useState<Proposal | null>(null)
@@ -237,7 +266,8 @@ export function BloomCompanion({
     <>
       <button
         className="bloom-companion-launch has-face"
-        onClick={onOpen}
+        aria-expanded={open}
+        onClick={open ? onClose : onOpen}
         onPointerEnter={() => launchFace.current?.react('excited')}
         aria-label="Talk to Bloom"
         data-hint="Ask Bloom anything about this page"
@@ -246,7 +276,31 @@ export function BloomCompanion({
         <span>Talk to Bloom</span>
       </button>
       {open && (
-        <Modal title="A little space with Bloom" onClose={onClose}>
+        <section
+          ref={panel}
+          className={`bc-panel${docked ? ' is-docked' : ''}`}
+          aria-label="Talk to Bloom"
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              e.stopPropagation()
+              onClose()
+            }
+          }}
+        >
+          <header className="bc-head">
+            <div>
+              <span className="bc-eyebrow">Your guide</span>
+              <h2>Talk to Bloom</h2>
+            </div>
+            <div className="bc-head-actions">
+              <button type="button" aria-label={docked ? 'Float the chat' : 'Dock beside the page'} aria-pressed={docked} onClick={() => setDocked(!docked)} data-hint={docked ? 'Float as a small box' : 'Keep Bloom open beside this page'}>
+                {docked ? <PanelRightClose size={17} /> : <PanelRightOpen size={17} />}
+              </button>
+              <button type="button" aria-label="Close Bloom" onClick={onClose}>
+                <X size={18} />
+              </button>
+            </div>
+          </header>
           <div className="segmented companion-mode" role="tablist" aria-label="Bloom mode">
             <button role="tab" aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} className={mode === 'guide' ? 'active' : ''} onClick={() => setMode('guide')}>
               Guide me
@@ -565,7 +619,7 @@ export function BloomCompanion({
             )}
           </div>
           )}
-        </Modal>
+        </section>
       )}
     </>
   )

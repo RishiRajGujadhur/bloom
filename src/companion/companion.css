@@ -279,3 +279,92 @@
 .bloom-companion-launch.has-face .bloom-face {
   filter: none;
 }
+
+/* Talk to Bloom: a docked box like the soundscape, or a side panel. */
+.bc-panel {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: calc(max(20px, env(safe-area-inset-bottom)) + 128px);
+  z-index: 60;
+  display: grid;
+  gap: 10px;
+  width: min(400px, calc(100vw - 32px));
+  max-height: calc(100dvh - 170px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--bg-surface) 94%, transparent);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 16px 60px color-mix(in srgb, var(--text-primary) 18%, transparent);
+  color: var(--text-primary);
+}
+
+.bc-panel.is-docked {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  max-height: none;
+  border-radius: 0;
+  border-width: 0 0 0 1px;
+  z-index: 45;
+}
+
+.bc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bc-head h2 {
+  margin: 2px 0 0;
+  font-size: 1.25rem;
+}
+
+.bc-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.bc-head-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.bc-head-actions button {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.bc-head-actions button[aria-pressed='true'] {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+@media (min-width: 900px) {
+  html[data-bloom-docked] main#overview {
+    margin-right: 380px;
+  }
+}
+
+@media (max-width: 899px) {
+  .bc-panel.is-docked {
+    top: auto;
+    width: 100%;
+    height: 62dvh;
+    border-radius: 24px 24px 0 0;
+    border-width: 1px 0 0;
+    z-index: 60;
+  }
+}
