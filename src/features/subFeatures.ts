@@ -857,6 +857,14 @@ export const pageOptions: Record<string, { title: string; emoji: string; options
       { id: 'somedayOnNo', title: 'Someday list', description: 'Old tasks swiped left go to #someday.' },
     ],
   },
+  intentions: {
+    title: 'Intentions',
+    emoji: '🌅',
+    options: [
+      { id: 'templateSwipe', title: 'Swipe intentions', description: 'Swipe right on ready-made intentions until you have three.' },
+      { id: 'moodTemplates', title: 'Mood ideas', description: 'Templates that suit how you feel come first.' },
+    ],
+  },
   focus: {
     title: 'Focus timer',
     emoji: '⏱️',

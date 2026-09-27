@@ -99,6 +99,7 @@ import type { ThemeSettings } from './utils/themeEngine'
 
 import './features/features.css'
 import './styles/shared-ui.css'
+import { IntentionsQuick } from './features/quick/IntentionsQuick'
 import './styles/subFeatureGates.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
@@ -1203,6 +1204,7 @@ function App() {
                               </button>
                             </div>
                           )}
+                          <IntentionsQuick data={data} setData={setData} today={today} />
                           {plans.length === 0 ? (
                             active === 'overview' ? null : <div className="empty-plans">
                               <Sun size={26} />

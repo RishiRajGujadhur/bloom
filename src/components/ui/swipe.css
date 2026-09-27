@@ -431,3 +431,9 @@
   font-family: var(--font-hand, "Caveat", cursive);
   font-size: 1.35rem;
 }
+
+.intention-quick {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 12px;
+}

@@ -56,3 +56,12 @@ Shared: `SwipeDeck` (drag or buttons, arrow keys, undo, SVG stamps), `MoodGuide`
 ## Next: Dojo
 
 Martial-arts training reusing the exercise figure: karate, kung fu, taekwondo, boxing, tai chi links — stances, strikes, blocks, kicks and kata/forms as combo programs, belt progression, and a combo caller.
+| 13 Dojo (new): karate, kung fu, taekwondo, boxing, Muay Thai; forms, combo caller, belts (rough-notation) | ✅ pushed |
+| 14 Growth: living seedling fed by real activity (chroma-js seasons), tree/constellation toggle | ✅ pushed |
+| 15 Brain games: pattern echo, 3D rotation (three.js), word scramble, focus tracker, number stream (fireworks-js) | ✅ pushed |
+| 16 Settings: one OptionList, bulk actions, option search, independent options, Everyday pages | ✅ pushed |
+| 17 Daybook: typed.js sparks, mood and time-of-day journal picks | ✅ pushed |
+| 18 Meditation + Breathwork: mood-matched sessions and presets | ✅ pushed |
+| 19 Diet: swipe meals by time of day, one-tap water, after-meal feeling | ✅ pushed |
+| 20 Affirmations: mood opens the matching deck | ✅ pushed |
+| 21 Intentions: swipe mood-matched intention templates | ✅ pushed |
