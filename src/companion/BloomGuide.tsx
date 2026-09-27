@@ -9,7 +9,6 @@ import { navSections } from '../components/layout/Sidebar'
 import { guideFor, pageGuides, type Choice } from './guideScripts'
 import type { Dispatch, SetStateAction } from 'react'
 import type { AppData } from '../model'
-import { runCommand } from './chatCommands'
 import { explain, nextHint, reveal, useQuiz } from './quizContext'
 import './guide.css'
 
@@ -142,9 +141,11 @@ export function BloomGuide({
   const quiz = useQuiz()
   const root2: Choice[] = [{ label: 'What can I do here?', next: '__page' }, { label: 'Take me somewhere', next: '__sections' }]
   /** Typed messages: try a command first (expenses, todos, hints…), then page search. */
-  const submit = () => {
+  const submit = async () => {
     const text = query.trim()
     if (!text) return
+    // Loaded on first use so money / course code stays out of the main bundle.
+    const { runCommand } = await import('./chatCommands')
     const res = runCommand(text, { data, setData, navigate, clear: () => setLines([]) })
     if (res) {
       setQuery('')
@@ -206,7 +207,7 @@ export function BloomGuide({
       </div>
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>
-        <input type="search" placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && submit()} />
+        <input type="search" placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && void submit()} />
       </label>
     </div>
   )

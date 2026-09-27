@@ -1,7 +1,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import type { AppData } from '../../model'
-import { analyseWriting } from './englishNlp'
+import { analyseWriting } from './englishWriting'
 import { subOn } from '../subFeatures'
 
 const on = (id: string) => subOn('englishLearning', id)

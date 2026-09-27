@@ -12,7 +12,7 @@ test('the guide offers page-specific choices and can navigate', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Which game should I play?' }))
   act(() => void jest.advanceTimersByTime(700))
   expect(screen.getByRole('button', { name: 'Empathy (EQ)' })).toBeInTheDocument()
-  fireEvent.change(screen.getByPlaceholderText(/type where you want to go/), { target: { value: 'focus' } })
+  fireEvent.change(screen.getByPlaceholderText(/Ask Bloom/), { target: { value: 'focus' } })
   fireEvent.click(screen.getByRole('button', { name: 'Focus Today' }))
   act(() => void jest.advanceTimersByTime(700))
   expect(navigate).toHaveBeenCalledWith('focus')
