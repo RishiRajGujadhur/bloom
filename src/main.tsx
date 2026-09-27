@@ -11,6 +11,7 @@ import { applyCompactTitles } from './components/ui/Flow'
 import { pixelIconsOn } from './icons/pixelated'
 import { registerChartTheme } from './components/ui/chartTheme'
 import { installCardEntrance, installCardGlow, installTitleReveal } from './components/ui/cardGlow'
+import { installFunLayer } from './components/ui/funLayer'
 import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
@@ -35,3 +36,4 @@ registerChartTheme()
 installCardGlow()
 installTitleReveal()
 installCardEntrance()
+installFunLayer()

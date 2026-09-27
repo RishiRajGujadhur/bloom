@@ -79,7 +79,11 @@ export function Studio({
                 aria-selected={t.id === tab?.id}
                 aria-controls={`studio-${name}-panel`}
                 tabIndex={t.id === tab?.id ? 0 : -1}
-                onClick={() => go(i)}
+                onClick={(e) => {
+                  go(i)
+                  const icon = e.currentTarget.querySelector('svg')
+                  if (icon && !reduced()) gsap.fromTo(icon, { rotate: -25, scale: 0.6 }, { rotate: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1.2, 0.4)' })
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowRight') go(i + 1)
                   if (e.key === 'ArrowLeft') go(i - 1)
@@ -150,9 +154,27 @@ export function Slider({
 
 /** Big number tile. */
 export function Stat({ value, label, hint }: { value: ReactNode; label: string; hint?: string }) {
+  const el = useRef<HTMLElement>(null)
+  const last = useRef<number | null>(null)
+  const n = typeof value === 'number' ? value : typeof value === 'string' && /^-?\d+(\.\d+)?$/.test(value) ? Number(value) : null
+  // Numbers count up (or down) to their new value with a little bump; GSAP owns that text.
+  useLayoutEffect(() => {
+    if (n === null || !el.current) return
+    const from = last.current ?? 0
+    last.current = n
+    const dec = String(n).includes('.') ? 1 : 0
+    if (reduced() || from === n) {
+      el.current.textContent = n.toFixed(dec)
+      return
+    }
+    const o = { v: from }
+    const tw = gsap.to(o, { v: n, duration: 0.9, ease: 'power3.out', onUpdate: () => { if (el.current) el.current.textContent = o.v.toFixed(dec) } })
+    gsap.fromTo(el.current, { scale: 1.18 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' })
+    return () => void tw.progress(1).kill()
+  }, [n])
   return (
     <div className="studio-stat" title={hint}>
-      <strong>{value}</strong>
+      {n === null ? <strong>{value}</strong> : <strong ref={el} aria-label={String(n)} />}
       <small>{label}</small>
     </div>
   )
