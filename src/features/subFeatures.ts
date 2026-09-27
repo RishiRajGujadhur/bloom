@@ -503,6 +503,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "voice", title: "Voice guidance", description: "Hear each pose and its cue." },
     { id: "timeline", title: "Flow timeline", description: "See where you are in the sequence." },
     { id: "benefits", title: "Benefits", description: "Why each pose helps." },
+    { id: 'lotus', title: 'Lotus breath', description: 'A lotus opens and closes with your breath behind the pose.' },
   ],
   mobility: [
     { id: "bodyMap", title: "Body map", description: "Tap where it feels tight." },

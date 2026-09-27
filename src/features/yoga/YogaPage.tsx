@@ -10,6 +10,8 @@ import { burst } from '../../components/ui/celebrate'
 import { FigureSvg } from '../exercise/ExerciseFigure'
 import { flowSeconds, newStep, poseById, poses, presetFlows, stepAt, type Flow, type Step } from './yogaModel'
 import '../exercise/exercise.css'
+import { Lotus } from '../showcase/Lotus'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './yoga.css'
 
 const on = (id: string) => subOn('yogaFlow', id)
@@ -159,16 +161,18 @@ export function YogaPage() {
     }
   }
 
+  usePageActions([{ id: 'yg-go', label: running ? 'Pause flow' : 'Begin flow', icon: '🧘', run: () => (elapsed >= length ? play(current) : setRunning(!running)) }])
   const practice = () => (
     <div className="studio-split">
       <div className="studio-card yg-stage">
+        {on('lotus') && <Lotus seconds={breath} running={running} />}
         <div className="yg-figure">
           <FigureSvg pose={pose.pose} floor={pose.floor} label={pose.name} className="yg-morph" />
         </div>
         {on('timeline') && (
           <div className="yg-timeline" aria-hidden="true">
             {current.steps.map((s, i) => (
-              <i key={s.key} style={{ flex: s.breaths }} data-past={at ? i < at.index : elapsed >= length} data-now={at?.index === i} />
+              <i key={s.key} style={{ flex: s.breaths }} data-past={at ? i < at.index : elapsed >= length} data-now={at?.index === i} data-hint={`${poseById(s.poseId)?.name ?? s.poseId} · ${s.breaths} breaths`} />
             ))}
           </div>
         )}

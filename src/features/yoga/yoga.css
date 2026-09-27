@@ -171,3 +171,16 @@
     transition: none;
   }
 }
+
+.yg-stage {
+  position: relative;
+}
+
+.yg-stage .yg-figure {
+  position: relative;
+  z-index: 1;
+}
+
+.yg-timeline i {
+  pointer-events: auto;
+}
