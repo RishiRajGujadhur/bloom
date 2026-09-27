@@ -15,6 +15,8 @@ import { speak } from './englishNlp'
 import { makeLesson, makeMistakes, makePlacement, makeReview, type Exercise } from './lessonGen'
 import { LessonPlayer, type LessonResult } from './LessonPlayer'
 import { sfx } from './sfx'
+import { BloomFace } from '../../components/ui/BloomFace'
+import { UnitScene, unitThemes } from './UnitScene'
 import './english.css'
 
 const EnglishPractice = lazy(() => import('./EnglishPractice').then((m) => ({ default: m.EnglishPractice })))
@@ -63,11 +65,16 @@ function PathMap({ store, onStart }: { store: EnglishStore; onStart: (unitIndex:
         return (
           <section key={u.id} className="en-unit" style={{ ['--u' as string]: u.color }}>
             <header className="en-unit-head">
+              {unitThemes[u.id] && <UnitScene theme={unitThemes[u.id]} className="en-unit-fx" />}
               <span className="en-unit-emoji">{u.emoji}</span>
-              <div>
-                <small>Unit {ui + 1} · {u.level}</small>
+              <div className="en-unit-text">
+                <small>Unit {ui + 1} · {u.level}{unitThemes[u.id] ? ` · ${unitThemes[u.id].place}` : ''}</small>
                 <strong>{u.title}</strong>
+                {unitThemes[u.id] && <p className="en-unit-story">{unitThemes[u.id].story}</p>}
               </div>
+              <span className="en-unit-cast">
+                {unitThemes[u.id]?.cast.map((c) => <BloomFace key={c.name} variant={c.face} size={52} follow={false} waveOnMount={false} label={c.name} />)}
+              </span>
               <span className="en-unit-count">{done}/{LESSONS_PER_UNIT}</span>
             </header>
             <div className="en-nodes">
@@ -182,6 +189,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
         onHeartLost={() => on('hearts') && session.kind === 'lesson' && save((s) => loseHeart(s))}
         onDone={finish}
         onQuit={() => setSession(null)}
+        theme={session.unit ? unitThemes[session.unit] : undefined}
       />
     )
   }

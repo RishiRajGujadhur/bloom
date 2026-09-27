@@ -8,6 +8,7 @@ import { units } from './englishCourse'
 import { makeLesson } from './lessonGen'
 import { LessonPlayer, type LessonResult } from './LessonPlayer'
 import { sfx } from './sfx'
+import { unitThemes } from './UnitScene'
 import './story.css'
 
 /**
@@ -306,7 +307,7 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
   if (step.kind === 'play') {
     const lv = levels[step.level]
     const exercises = makeLesson(units[lv.unit], 2, { speak: false }).slice(0, 8)
-    return <LessonPlayer title={lv.title} exercises={exercises} hearts={5} onHeartLost={() => {}} onDone={(r) => done(step.level, r)} onQuit={() => setStep({ kind: 'map' })} />
+    return <LessonPlayer title={lv.title} exercises={exercises} hearts={5} onHeartLost={() => {}} onDone={(r) => done(step.level, r)} onQuit={() => setStep({ kind: 'map' })} theme={unitThemes[units[lv.unit].id]} />
   }
   if (step.kind === 'wheel')
     return (

@@ -7,6 +7,8 @@ import { Heart, Mic, Snail, Volume2, X } from 'lucide-react'
 import { canListen, checkTyped, listen, norm, soundScore, speak } from './englishNlp'
 import { answerOf, promptOf, type Exercise } from './lessonGen'
 import { sfx } from './sfx'
+import { BloomFace, type BloomFaceHandle } from '../../components/ui/BloomFace'
+import { UnitScene, type UnitTheme } from './UnitScene'
 import { setQuiz } from '../../companion/quizContext'
 
 export type LessonResult = { correct: number; total: number; mistakes: { prompt: string; answer: string; given: string }[]; words: { en: string; good: boolean }[] }
@@ -24,14 +26,17 @@ function Chip({ id, label, onClick }: { id: string; label: string; onClick: () =
  * Plays one lesson: a progress bar, hearts, one exercise at a time, a check
  * button and a Duolingo-style feedback banner that slides up.
  */
-export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, title }: {
+export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, title, theme }: {
   exercises: Exercise[]
   hearts: number
   onHeartLost: () => void
   onDone: (r: LessonResult) => void
   onQuit: () => void
   title: string
+  theme?: UnitTheme
 }) {
+  const buddy = useRef<BloomFaceHandle>(null)
+  const checkBtn = useRef<HTMLButtonElement>(null)
   const [i, setI] = useState(0)
   const [queue, setQueue] = useState(exercises)
   const [status, setStatus] = useState<'idle' | 'right' | 'typo' | 'wrong'>('idle')
@@ -51,7 +56,10 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
 
   useLayoutEffect(() => {
     if (!card.current) return
-    const tl = gsap.fromTo(card.current, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' })
+    const tl = gsap.timeline()
+    tl.fromTo(card.current, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' })
+      .from(card.current.querySelectorAll('.en-prompt .w'), { y: 14, opacity: 0, rotateX: -50, duration: 0.35, stagger: 0.04, ease: 'back.out(2)' }, 0.1)
+      .from(card.current.querySelectorAll('.en-option, .en-pic, .en-bank .en-chip, .en-speaker, .en-mic, .en-type'), { y: 18, opacity: 0, scale: 0.92, duration: 0.35, stagger: 0.05, ease: 'back.out(1.8)', clearProps: 'transform,opacity' }, 0.2)
     if (ex?.kind === 'listen') speak(ex.answer)
     return () => void tl.kill()
   }, [i, ex])
@@ -103,6 +111,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
       if (word) r.words.push({ en: word, good: false })
       onHeartLost()
       sfx('wrong')
+      buddy.current?.react('think')
       if (card.current) gsap.fromTo(card.current, { x: -10 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.25)' })
       // Duolingo repeats a missed exercise at the end of the lesson.
       setQueue((q) => [...q, ex])
@@ -110,6 +119,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
       r.correct++
       if (word) r.words.push({ en: word, good: true })
       sfx('right')
+      buddy.current?.react('cheer')
       if (card.current) gsap.fromTo(card.current, { scale: 1 }, { scale: 1.03, duration: 0.15, yoyo: true, repeat: 1 })
     }
     setStatus(verdict)
@@ -150,14 +160,16 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
 
   return (
     <div className="en-lesson" role="dialog" aria-label={`Lesson: ${title}`}>
+      {theme && <UnitScene theme={theme} dense className="en-lesson-fx" />}
       <div className="en-lesson-top">
         <button type="button" className="en-icon-btn" aria-label="Quit lesson" onClick={onQuit}><X size={20} /></button>
         <div className="en-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${progress * 100}%` }} /></div>
+        {theme?.cast[0] && <BloomFace ref={buddy} variant={theme.cast[0].face} size={44} follow={false} waveOnMount={false} label={theme.cast[0].name} />}
         <span className="en-hearts" aria-label={`${hearts} hearts`}><Heart size={18} fill="currentColor" /> {hearts}</span>
       </div>
 
       <div ref={card} className="en-ex" key={i}>
-        <h3 className="en-prompt">{ex.kind === 'type' ? <>Type the word: <span className="en-big-emoji">{ex.emoji}</span> {ex.prompt}</> : promptOf(ex)}</h3>
+        <h3 className="en-prompt">{ex.kind === 'type' ? <><Words text="Type the word:" /> <span className="en-big-emoji w">{ex.emoji}</span> <Words text={ex.prompt} /></> : <Words text={promptOf(ex)} />}</h3>
 
         {ex.kind === 'picture' && (
           <div className="en-pics">
@@ -231,7 +243,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
       {status === 'idle' ? (
         <div className="en-footer">
           {(ex.kind === 'speak' || ex.kind === 'listen') && <button type="button" className="studio-btn" onClick={() => { results.current.total++; next() }}>Can’t {ex.kind === 'speak' ? 'speak' : 'listen'} now</button>}
-          <button type="button" className="en-check" disabled={!ready} onClick={check}>Check</button>
+          <button ref={checkBtn} type="button" className={`en-check ${ready ? 'is-ready' : ''}`} disabled={!ready} onClick={check}>Check</button>
         </div>
       ) : (
         <div ref={banner} className={`en-banner is-${status}`} role="status">
@@ -247,6 +259,15 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
         </div>
       )}
     </div>
+  )
+}
+
+/** Prompt text split into words (rendered by React) so GSAP can ripple them in. */
+function Words({ text }: { text: string }) {
+  return (
+    <span aria-label={text}>
+      {text.split(' ').map((w, i) => <span key={i} className="w" aria-hidden="true">{w}{' '}</span>)}
+    </span>
   )
 }
 

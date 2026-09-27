@@ -296,3 +296,74 @@
 /* Matrix: keep text dark on the bright banners and nodes */
 html[data-theme='matrix'] .en-banner { color: #021006; }
 html[data-theme='matrix'] .en-check, html[data-theme='matrix'] .en-node, html[data-theme='matrix'] .en-unit-head, html[data-theme='matrix'] .en-speaker { color: #021006; text-shadow: none; }
+
+/* ---- themed unit banners ---- */
+.en-unit-head {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 110px;
+  flex-wrap: wrap;
+}
+.en-unit-fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.9;
+}
+.en-unit-head::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, #0008, #0002 70%);
+}
+.en-unit-text { flex: 1 1 220px; min-width: 0; }
+.en-unit-story {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px #0008;
+}
+.en-unit-cast {
+  display: inline-flex;
+  gap: 2px;
+}
+.en-unit-head small, .en-unit-head strong { text-shadow: 0 1px 4px #0008; }
+
+/* lesson backdrop */
+.en-lesson { position: relative; isolation: isolate; }
+.en-lesson-fx {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.en-prompt .w { display: inline-block; white-space: pre; }
+.en-check.is-ready {
+  animation: en-ready 420ms cubic-bezier(0.3, 1.6, 0.5, 1), en-glow 2s ease-in-out 420ms infinite;
+}
+@keyframes en-ready {
+  from { transform: scale(0.85); }
+}
+@keyframes en-glow {
+  50% { box-shadow: 0 4px 0 #46a302, 0 0 0 6px color-mix(in srgb, #58cc02 25%, transparent); }
+}
+.en-option, .en-pic, .en-chip {
+  transition: transform 160ms cubic-bezier(0.3, 1.6, 0.5, 1), border-color 160ms, background-color 160ms;
+}
+.en-option:hover:not(:disabled), .en-pic:hover:not(:disabled), .en-chip:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.en-option[aria-pressed='true'], .en-pic[aria-pressed='true'] {
+  animation: en-pick 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+@keyframes en-pick {
+  40% { transform: scale(1.05); }
+}
