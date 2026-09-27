@@ -11,3 +11,33 @@
   z-index: 10000;
   pointer-events: none;
 }
+
+/* slider value pops each time it changes */
+.bloom-slider-value {
+  display: inline-block;
+  animation: fun-pop 280ms cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+@keyframes fun-pop {
+  from { transform: scale(1.25); }
+}
+/* a light sweep across buttons on hover */
+:where(.studio-btn, .en-check, .bg-chip) {
+  position: relative;
+  overflow: hidden;
+}
+:where(.studio-btn, .en-check, .bg-chip)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, #ffffff55 50%, transparent 70%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+:where(.studio-btn, .en-check, .bg-chip):hover:not(:disabled)::after {
+  transition: transform 600ms ease;
+  transform: translateX(120%);
+}
+main h1 { cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+  .bloom-slider-value { animation: none; }
+}

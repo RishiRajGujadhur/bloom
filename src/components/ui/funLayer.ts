@@ -85,4 +85,18 @@ export function installFunLayer() {
     gsap.fromTo(icon, { rotate: 0 }, { keyframes: [{ rotate: -14 }, { rotate: 10 }, { rotate: -6 }, { rotate: 0 }], duration: 0.5, ease: 'sine.inOut', transformOrigin: '50% 50%', onComplete: () => void wiggling.delete(icon) })
   }, { passive: true })
   window.addEventListener('hashchange', pageSquiggle)
+  // Easter egg: clicking a page title throws sparkles.
+  document.addEventListener('click', (e) => {
+    const h = (e.target as Element | null)?.closest?.('main h1')
+    if (!h) return
+    const r = h.getBoundingClientRect()
+    for (let i = 0; i < 12; i++) {
+      const star = svgEl('svg', { width: 18, height: 18, viewBox: '-9 -9 18 18', class: 'fun-burst' })
+      star.appendChild(svgEl('path', { d: 'M0 -8 L2 -2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2 -2 Z', fill: colors[i % colors.length] }))
+      star.style.left = `${r.left + Math.random() * r.width}px`
+      star.style.top = `${r.top + r.height / 2}px`
+      document.body.appendChild(star)
+      gsap.to(star, { y: gsap.utils.random(-70, -20), x: gsap.utils.random(-30, 30), rotate: gsap.utils.random(-180, 180), opacity: 0, scale: gsap.utils.random(0.6, 1.4), duration: gsap.utils.random(0.7, 1.2), ease: 'power2.out', onComplete: () => star.remove() })
+    }
+  })
 }

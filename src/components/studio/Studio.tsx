@@ -133,7 +133,7 @@ export function Slider({
     <label className="bloom-slider" data-compact={compact}>
       <span className="bloom-slider-head">
         <span>{label}</span>
-        <strong>
+        <strong key={value} className="bloom-slider-value">
           {format ? format(value) : value}
           {unit && <small>{unit}</small>}
         </strong>
