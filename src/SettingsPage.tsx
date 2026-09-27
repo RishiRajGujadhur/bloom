@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { MousePointer2 as MousePointer2F_pointerFx } from 'lucide-react'
 import { Swords as SwordsF_dojo } from 'lucide-react'
 import { Sparkles as SparklesF_affirmations } from 'lucide-react'
 import { Sunrise as SunriseF_daylight } from 'lucide-react'
@@ -133,6 +134,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  pointerFx: MousePointer2F_pointerFx,
   dojo: SwordsF_dojo,
   affirmations: SparklesF_affirmations,
   daylight: SunriseF_daylight,
@@ -217,6 +219,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  pointerFx: boolean
   dojo: boolean
   affirmations: boolean
   daylight: boolean
@@ -310,6 +313,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    pointerFx: true,
     dojo: true,
     affirmations: true,
     daylight: true,
@@ -395,6 +399,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'pointerFx',
   'dojo',
   'affirmations',
   'daylight',

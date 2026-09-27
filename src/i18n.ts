@@ -433,6 +433,10 @@ const common = {
         title: "Dojo",
         description: "Martial arts training: karate, kung fu, taekwondo, boxing and Muay Thai techniques, forms, a combo caller and belts.",
       },
+      pointerFx: {
+        title: "Pointer & right-click menu",
+        description: "Custom pointer shapes, colours and trails, and a right-click menu that changes with each page.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1518,6 +1522,10 @@ export const resources = {
           dojo: {
             title: "Dojo",
             description: "Arts martiaux : techniques de karaté, kung-fu, taekwondo, boxe et boxe thaï, formes, appel de combinaisons et ceintures.",
+          },
+          pointerFx: {
+            title: "Pointeur et menu contextuel",
+            description: "Formes, couleurs et traînées de pointeur, et un clic droit qui change selon la page.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

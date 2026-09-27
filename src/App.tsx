@@ -100,6 +100,10 @@ import type { ThemeSettings } from './utils/themeEngine'
 import './features/features.css'
 import './styles/shared-ui.css'
 import { IntentionsQuick } from './features/quick/IntentionsQuick'
+import { addEpiphany } from './features/epiphany/epiphanyStore'
+import { createEpiphany } from './features/epiphany/epiphanyModel'
+import { PageMenu, type PageAction } from './components/ui/PageMenu'
+import { PointerFx } from './components/ui/PointerFx'
 import './styles/subFeatureGates.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
@@ -208,6 +212,9 @@ const AffirmPage = lazy(() =>
 )
 const DojoPage = lazy(() =>
   import('./features/dojo/DojoPage').then((m) => ({ default: m.DojoPage })),
+)
+const PointerPage = lazy(() =>
+  import('./features/pointer/PointerPage').then((m) => ({ default: m.PointerPage })),
 )
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
@@ -466,6 +473,39 @@ function App() {
     window.location.hash = target
     window.scrollTo?.({ top: 0, behavior: 'instant' })
   }
+  // Right-click selection actions.
+  useEffect(() => {
+    const epiphany = (e: Event) => {
+      const text = String((e as CustomEvent).detail ?? '').trim()
+      if (text) addEpiphany(createEpiphany(text, { kind: 'manual', title: 'Saved from the right-click menu', date: today }, today))
+    }
+    const todo = (e: Event) => {
+      const title = String((e as CustomEvent).detail ?? '').trim().slice(0, 150)
+      if (title)
+        setData((d) => ({
+          ...d,
+          todos: [...d.todos, { id: id(), title, due: today, done: false, challengeId: null, rewarded: false, priority: 'P3', tags: [], recurrence: 'none', seriesId: null, subtasks: [] }],
+        }))
+    }
+    const search = () => setPaletteOpen(true)
+    window.addEventListener('bloom:save-epiphany', epiphany)
+    window.addEventListener('bloom:quick-todo', todo)
+    window.addEventListener('bloom:search', search)
+    return () => {
+      window.removeEventListener('bloom:save-epiphany', epiphany)
+      window.removeEventListener('bloom:quick-todo', todo)
+      window.removeEventListener('bloom:search', search)
+    }
+  }, [today, setData])
+  const menuCommon: PageAction[] = [
+    { id: 'c-todo', label: 'Add a to-do', icon: '➕', run: () => jump('todos') },
+    { id: 'c-intention', label: 'Set an intention', icon: '🌅', run: () => setModal('plan') },
+    { id: 'c-search', label: 'Search everything', icon: '🔎', hint: 'Ctrl K', run: () => setPaletteOpen(true) },
+    { id: 'c-theme', label: isDark ? 'Light mode' : 'Dark mode', icon: isDark ? '☀️' : '🌙', run: () => setThemeSettings(toggleThemeMode) },
+    { id: 'c-link', label: 'Copy link to this page', icon: '🔗', run: () => void navigator.clipboard?.writeText(window.location.href) },
+    ...(settings.features.pointerFx ? [{ id: 'c-pointer', label: 'Change my pointer', icon: '🖱️', run: () => jump('pointer' as NavKey) }] : []),
+    { id: 'c-settings', label: 'Settings', icon: '⚙️', run: () => jump('settings') },
+  ]
   /** Omnibox ("> …" in Ctrl K) commands. */
   const runCommand = (action: OmniAction) => {
     if (action.type === 'logHabit') {
@@ -514,6 +554,8 @@ function App() {
           {t('ui.skipToDashboard')}
         </a>
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
+        {settings.features.pointerFx && <PointerFx page={active} />}
+        <PageMenu page={active} common={menuCommon}>
         <main id="overview" className="min-w-0 flex-1">
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
             <SearchTrigger onOpen={() => setPaletteOpen(true)} />
@@ -665,6 +707,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'pointer' && !settings.features.pointerFx) ||
             (active === 'dojo' && !settings.features.dojo) ||
             (active === 'affirm' && !settings.features.affirmations) ||
             (active === 'daylight' && !settings.features.daylight) ||
@@ -869,6 +912,10 @@ function App() {
             ) : active === 'dojo' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <DojoPage />
+              </Suspense>
+            ) : active === 'pointer' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <PointerPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
@@ -1361,6 +1408,7 @@ function App() {
             )}
           </div>
         </main>
+        </PageMenu>
         {settings.features.drawnAchievements && <AchievementHost />}
         {settings.features.impactTasks && <ImpactLayer setData={setData} />}
         {settings.features.pixelJuice && <JuiceLayer />}

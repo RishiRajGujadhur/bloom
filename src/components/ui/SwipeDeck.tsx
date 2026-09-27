@@ -105,7 +105,7 @@ export function SwipeDeck<T extends SwipeCard>({
         {card ? (
           <>
             {visible[1] && <div className="swipe-card swipe-under" aria-hidden="true" />}
-            <div key={card.id} ref={top} className="swipe-card" {...bind()}>
+            <div key={card.id} ref={top} className="swipe-card" data-cursor-text="Drag" {...bind()}>
               <svg ref={stampYes} className="swipe-stamp yes" viewBox="0 0 90 40" aria-hidden="true">
                 <rect x="3" y="3" width="84" height="34" rx="8" />
                 <text x="45" y="27">{yes}</text>
@@ -130,13 +130,13 @@ export function SwipeDeck<T extends SwipeCard>({
         )}
       </div>
       <div className="swipe-actions">
-        <button type="button" className="swipe-btn no" onClick={() => decide(false)} disabled={!card} aria-label={no}>
+        <button type="button" data-cursor-stick className="swipe-btn no" onClick={() => decide(false)} disabled={!card} aria-label={no}>
           <X size={20} />
         </button>
         <button type="button" className="swipe-btn undo" onClick={undo} disabled={!history.length} aria-label="Undo">
           <Undo2 size={16} />
         </button>
-        <button type="button" className="swipe-btn yes" onClick={() => decide(true)} disabled={!card} aria-label={yes}>
+        <button type="button" data-cursor-stick className="swipe-btn yes" onClick={() => decide(true)} disabled={!card} aria-label={yes}>
           <Check size={20} />
         </button>
       </div>

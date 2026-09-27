@@ -1,0 +1,106 @@
+html[data-pointer],
+html[data-pointer] body,
+html[data-pointer] button,
+html[data-pointer] a,
+html[data-pointer] [role='button'],
+html[data-pointer] label,
+html[data-pointer] summary {
+  cursor: var(--bloom-cursor);
+}
+
+html[data-pointer] input,
+html[data-pointer] textarea,
+html[data-pointer] [contenteditable='true'] {
+  cursor: text;
+}
+
+/* mouse-follower, tinted with the chosen colour */
+.bloom-follower.mf-cursor {
+  z-index: 2000;
+  color: var(--bloom-follower, #e0703f);
+}
+
+.bloom-follower.mf-cursor::before {
+  background: currentColor;
+  opacity: 0.85;
+}
+
+.bloom-follower.mf-cursor .mf-cursor-text {
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* cursor-effects canvases never block clicks */
+body > canvas[style*='pointer-events: none'] {
+  z-index: 1999 !important;
+}
+
+.pt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.pt-grid h3 {
+  margin: 0 0 10px;
+}
+
+.pt-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pt-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #0002);
+  background: var(--bg-surface, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.pt-option[aria-pressed='true'] {
+  border-color: var(--accent-color, #e0703f);
+  background: color-mix(in srgb, var(--accent-color, #e0703f) 14%, var(--bg-surface, #fff));
+}
+
+.pt-swatch {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+}
+
+.pt-swatch img {
+  width: 30px;
+  height: 30px;
+}
+
+.pt-colour {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid var(--bg-surface, #fff);
+  box-shadow: 0 0 0 1px var(--border-color, #0003);
+}
+
+.pt-colour[aria-pressed='true'] {
+  box-shadow: 0 0 0 3px var(--text, #333);
+}
+
+.pt-auto {
+  columns: 2;
+  margin: 0 0 8px;
+  padding-left: 18px;
+  font-size: 0.85rem;
+}
+
+.pt-try {
+  min-height: 180px;
+}

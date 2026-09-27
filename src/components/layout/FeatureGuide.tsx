@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'pointer': { title: "Pointer", description: "Make the pointer yours." },
   'dojo': { title: "Dojo", description: "Discipline, one technique at a time." },
   'affirm': { title: "Affirmations", description: "Words to grow into." },
   'daylight': { title: "Daylight", description: "Live with the light." },
@@ -227,6 +228,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'dojo': [
     step(".dojo-belt", "Your belt", "Every technique you practise brings the next belt closer."),
     step(".dojo-filters", "Choose a style", "Filter by martial art, type of technique, or train seated."),
+  ],
+  'pointer': [
+    step(".pt-grid", "Your pointer", "Pick a shape, colour, size and effect."),
+    step(".pt-try", "Try it", "Right-click here to see this page's menu."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

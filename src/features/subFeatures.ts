@@ -770,6 +770,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "bell", title: "Round bell", description: "Bell at the start and end of rounds." },
     { id: "safety", title: "Safety notes", description: "Warm-up and stop-if-it-hurts reminders." },
   ],
+  pointerFx: [
+    { id: "contextMenu", title: "Right-click menu", description: "A menu that changes with each page." },
+    { id: "pageShortcuts", title: "Goes well with", description: "Right-click shortcuts to linked features." },
+    { id: "selectionActions", title: "Selected text actions", description: "Copy, save as epiphany, make a to-do or search." },
+    { id: "shapes", title: "Pointer shapes", description: "Arrow, dot, ink pen, leaf or hand in your colour." },
+    { id: "effects", title: "Pointer effects", description: "Follower dot, emoji trail, fairy dust, rainbow, bubbles or snow." },
+    { id: "magnetic", title: "Magnetic buttons", description: "The follower sticks to buttons as you pass." },
+    { id: "labels", title: "Hover labels", description: "The follower shows hints like Drag or Click." },
+    { id: "pageMatch", title: "Match the page", description: "Each page picks its own effect." },
+    { id: "bigPointer", title: "Big pointer", description: "Up to 60 px for easier tracking." },
+    { id: "menuMotion", title: "Menu animation", description: "Menu items slide in with GSAP." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { MousePointer2 as MousePointer2F_pointerFx } from 'lucide-react'
 import { Swords as SwordsF_dojo } from 'lucide-react'
 import { Sparkles as SparklesF_affirmations } from 'lucide-react'
 import { Sunrise as SunriseF_daylight } from 'lucide-react'
@@ -107,6 +108,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'pointer'
   | 'dojo'
   | 'affirm'
   | 'daylight'
@@ -149,7 +151,7 @@ const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
-  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps'] },
+  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps', 'pointer'] },
 ]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
@@ -379,6 +381,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'pointer', title: "Pointer & menu", Icon: MousePointer2F_pointerFx, requires: 'pointerFx' },
     { key: 'dojo', title: "Dojo", Icon: SwordsF_dojo, requires: 'dojo' },
     { key: 'affirm', title: "Affirmations", Icon: SparklesF_affirmations, requires: 'affirmations' },
     { key: 'daylight', title: "Daylight", Icon: SunriseF_daylight, requires: 'daylight' },
