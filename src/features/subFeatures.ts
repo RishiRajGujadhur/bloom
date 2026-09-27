@@ -672,6 +672,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "export", title: "Export SVG", description: "Save a crisp image of the map." },
     { id: "fullscreen", title: "Full view", description: "Hide the editor for more room." },
     { id: "goalHelper", title: "Goal breakdown", description: "A template for why, milestones and obstacles." },
+    { id: 'grow', title: 'Growing branches', description: 'Branches grow in one after another when a map opens.' },
   ],
   flashcards: [
     { id: "decks", title: "Decks", description: "Organise cards by topic." },

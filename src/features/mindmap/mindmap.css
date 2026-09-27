@@ -68,3 +68,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+.mm-edit-toggle {
+  width: 100%;
+  margin-bottom: 8px;
+}

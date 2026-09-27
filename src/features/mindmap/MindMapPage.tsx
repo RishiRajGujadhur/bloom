@@ -7,6 +7,8 @@ import { subOn } from '../subFeatures'
 import { journalText } from '../../search/db'
 import { DAYBOOK_STORAGE_KEY } from '../../components/daybook/storage'
 import { MAP_KEY, branches, fromText, templates, titleOf, type MapStore, type MindMap } from './mindmapModel'
+import gsap from 'gsap'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './mindmap.css'
 
 const on = (id: string) => subOn('mindMaps', id)
@@ -49,6 +51,17 @@ export function MindMapPage() {
     })
   const [tab, setTab] = useState('map')
   const [full, setFull] = useState(false)
+  const narrow = typeof window !== 'undefined' && window.innerWidth < 720
+  const [editing, setEditing] = useState(!narrow)
+  // Branches grow in one after another when a map opens (GSAP stagger).
+  const revealed = useRef('')
+  const reveal = () => {
+    if (revealed.current === map.id) return
+    revealed.current = map.id
+    const nodes = wrap.current?.querySelectorAll('g.markmap-node')
+    if (!nodes?.length || !subOn('mindMaps', 'grow') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    gsap.from(nodes, { opacity: 0, scale: 0.4, transformOrigin: '0% 50%', stagger: 0.04, duration: 0.45, ease: 'back.out(2)' })
+  }
   const view = useRef<Markmap | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const map = store.maps.find((m) => m.id === store.current) ?? store.maps[0]
@@ -88,16 +101,30 @@ export function MindMapPage() {
     void m.renderData().then(() => m.fit())
   }
 
+  usePageActions([
+    { id: 'mm-expand', label: 'Expand every branch', icon: '🌳', run: () => toggleAll(true) },
+    { id: 'mm-collapse', label: 'Collapse to main branches', icon: '🌱', run: () => toggleAll(false) },
+    { id: 'mm-full', label: full ? 'Exit full view' : 'Full view', icon: '⛶', run: () => setFull(!full) },
+    { id: 'mm-export', label: 'Download as SVG', icon: '⬇️', run: exportSvg },
+  ])
   const mapTab = () => (
     <div className={`mm-layout${full ? ' is-full' : ''}`}>
-      {!full && (
+      {!full && narrow && (
+        <button type="button" className="quiet-button mm-edit-toggle" aria-expanded={editing} onClick={() => setEditing(!editing)}>
+          {editing ? 'Hide outline' : 'Edit outline'}
+        </button>
+      )}
+      {!full && editing && (
         <div className="studio-card mm-editor">
           <textarea className="mm-text" aria-label="Outline" value={map.md} spellCheck={false} onChange={(e) => edit(e.target.value)} />
           <p className="studio-empty">Use # for the centre, ## for branches, - for leaves. {branches(map.md)} branches.</p>
         </div>
       )}
       <div className="studio-card mm-canvas" ref={wrap}>
-        <MapView md={map.md} colorful={on('colours') && store.colorful} maxWidth={store.maxWidth} onReady={(m) => (view.current = m)} />
+        <MapView md={map.md} colorful={on('colours') && store.colorful} maxWidth={store.maxWidth} onReady={(m) => {
+            view.current = m
+            requestAnimationFrame(reveal)
+          }} />
         <div className="mm-tools">
           {on('collapse') && (
             <>
