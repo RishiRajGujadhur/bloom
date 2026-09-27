@@ -87,28 +87,9 @@ export const emblems: Record<string, Emblem> = {
 }
 const fallback: Emblem = { Icon: Sparkles, motion: 'flicker', color: '#e0703f' }
 
-function idle(el: SVGSVGElement, motion: Motion) {
-  const o = { transformOrigin: '50% 50%', ease: 'sine.inOut', yoyo: true, repeat: -1 }
-  switch (motion) {
-    case 'spin':
-      return gsap.to(el, { rotate: 360, duration: 24, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
-    case 'tick':
-      return gsap.to(el, { rotate: '+=30', duration: 0.12, repeat: -1, repeatDelay: 0.88, ease: 'back.out(3)', transformOrigin: '50% 50%' })
-    case 'sway':
-      return gsap.fromTo(el, { rotate: -8 }, { ...o, rotate: 8, duration: 2.2, transformOrigin: '50% 100%' })
-    case 'swing':
-      return gsap.fromTo(el, { rotate: -10 }, { ...o, rotate: 10, duration: 1.6, transformOrigin: '50% 0%' })
-    case 'pulse':
-      return gsap.to(el, { ...o, scale: 1.12, duration: 0.9 })
-    case 'flicker':
-      return gsap.to(el, { ...o, opacity: 0.55, scale: 1.05, duration: 0.5, repeatDelay: 0.3 })
-    case 'wave':
-      return gsap.to(el, { ...o, skewX: 8, x: 3, duration: 1.4 })
-    case 'hover':
-      return gsap.to(el, { ...o, y: -6, rotate: 6, duration: 1.3 })
-    default:
-      return gsap.to(el, { ...o, y: -5, duration: 1.5 })
-  }
+// Every emblem idles with the same slow levitation (no ticks, flickers or pops).
+function idle(el: SVGSVGElement) {
+  return gsap.to(el, { y: -4, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 })
 }
 
 export function PageEmblem({ page }: { page: string }) {
@@ -123,8 +104,8 @@ export function PageEmblem({ page }: { page: string }) {
       const len = p.getTotalLength?.() || 60
       gsap.set(p, { strokeDasharray: len, strokeDashoffset: len })
     })
-    tl.to(parts, { strokeDashoffset: 0, duration: 1.1, stagger: 0.08, ease: 'power2.inOut' }).fromTo(svg, { scale: 0.6 }, { scale: 1, duration: 0.6, ease: 'back.out(2.5)' }, 0)
-    const loop = idle(svg, e.motion)
+    tl.to(parts, { strokeDashoffset: 0, duration: 1.1, stagger: 0.08, ease: 'power2.inOut' }).fromTo(svg, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'sine.out' }, 0)
+    const loop = idle(svg)
     loop.pause()
     tl.eventCallback('onComplete', () => void loop.play())
     return () => {

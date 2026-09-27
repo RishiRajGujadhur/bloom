@@ -369,8 +369,37 @@ html[data-theme='matrix'] .app-shell {
    is tinted phosphor green. Charts opt out with [data-matrix-native] so they
    can use the green / amber / violet palette. */
 html[data-theme='matrix'] main :is(svg, canvas, img):not(.bloom-face):not(.bloom-face *):not(.pixel-icon):not(.lucide):not(.matrix-rain):not([data-matrix-native] *):not([data-matrix-native]) {
-  filter: grayscale(1) sepia(1) hue-rotate(68deg) saturate(3.2) brightness(0.95) drop-shadow(0 0 6px #39ff6a55);
+  filter: grayscale(1) sepia(1) hue-rotate(68deg) saturate(2.6) brightness(0.55) contrast(1.15) drop-shadow(0 0 6px #39ff6a55);
 }
 html[data-theme='matrix'] .studio-scene {
-  filter: grayscale(1) sepia(1) hue-rotate(68deg) saturate(3) brightness(0.8);
+  filter: grayscale(1) sepia(1) hue-rotate(68deg) saturate(3) brightness(0.5);
+}
+
+/* Matrix contrast: bright-green fills get dark ink; big tinted surfaces stay dim. */
+html[data-theme='matrix'] :is(.primary, .ov-primary, .feature-primary, .now-primary, .moment-cta, [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], .is-active, .active) {
+  color: #021006 !important;
+  text-shadow: none !important;
+}
+html[data-theme='matrix'] :is(.primary, .ov-primary, .feature-primary, .now-primary, .moment-cta) :is(svg, .lucide) {
+  color: #021006 !important;
+  filter: none !important;
+}
+html[data-theme='matrix'] .page-emblem {
+  background: radial-gradient(circle at 30% 25%, #0f3a1c, #051009);
+  color: #39ff6a;
+  box-shadow: inset 0 0 0 1.5px #1d5a2e, 0 0 14px #39ff6a22;
+}
+html[data-theme='matrix'] main [class*='hero'],
+html[data-theme='matrix'] main [class*='stage'] {
+  color: #d9ffe3;
+}
+html[data-theme='matrix'] .tc-page {
+  background: radial-gradient(circle at 50% 30%, #0f3a1c, #030a05);
+}
+html[data-theme='matrix'] .tc-silk {
+  opacity: 0.55;
+}
+html[data-theme='matrix'] .tc-overlay {
+  color: #d9ffe3;
+  text-shadow: 0 1px 10px #000c;
 }

@@ -95,6 +95,8 @@ export const BloomFace = forwardRef<
     const breathe = gsap.timeline({ repeat: -1, yoyo: true, defaults: { duration: 2.8, ease: 'sine.inOut' } })
       .to(el.querySelector('.bf-body'), { y: -4 }, 0)
       .to(el.querySelector('.bf-shadow'), { scaleX: 0.8, opacity: 0.18, transformOrigin: '50% 50%' }, 0)
+    // A slow, barely-there tilt so Bloom feels alive between blinks.
+    const tilt = gsap.fromTo(el.querySelector('.bf-breath'), { rotate: -2 }, { rotate: 2, svgOrigin: '50 90', duration: 5.5, ease: 'sine.inOut', yoyo: true, repeat: -1 })
     // Say hello: pop in and wave when Bloom first appears.
     let hello: gsap.core.Timeline | undefined
     if (waveOnMount) {
@@ -107,6 +109,7 @@ export const BloomFace = forwardRef<
       next?.kill()
       blinkTl?.kill()
       breathe.kill()
+      tilt.kill()
       hello?.kill()
       gsap.set(el.querySelector('.bf-arm'), { opacity: 0 })
     }
@@ -114,24 +117,21 @@ export const BloomFace = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [robot])
 
-  // Robot idle: antenna light pulses, a scanline sweeps the visor, rare glitch.
+  // Robot idle: antenna light pulses, a scanline sweeps the visor, the visor glances around.
   useEffect(() => {
     const el = svg.current
     if (!el || !robot || reduced()) return
-    const bulb = gsap.to(el.querySelector('.rb-bulb'), { opacity: 0.25, duration: 0.6, yoyo: true, repeat: -1, ease: 'steps(2)' })
+    const bulb = gsap.to(el.querySelector('.rb-bulb'), { opacity: 0.45, duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut' })
     const scan = gsap.fromTo(el.querySelector('.rb-scan'), { attr: { y: 34 } }, { attr: { y: 62 }, duration: 2.4, repeat: -1, ease: 'none' })
-    let glitch: gsap.core.Tween | null = null
-    const doGlitch = () => {
-      glitch = gsap.to(el.querySelector('.bf-breath'), {
-        keyframes: [{ x: 2, skewX: 6, duration: 0.05 }, { x: -2, skewX: -4, duration: 0.05 }, { x: 0, skewX: 0, duration: 0.05 }],
-        onComplete: () => void (glitch = gsap.delayedCall(gsap.utils.random(6, 10), doGlitch) as unknown as gsap.core.Tween),
-      })
-    }
-    glitch = gsap.delayedCall(4, doGlitch) as unknown as gsap.core.Tween
+    // Idle life without jumps: the visor slowly glances left and right.
+    const glance = gsap.timeline({ repeat: -1, repeatDelay: 3, defaults: { duration: 1.2, ease: 'sine.inOut' } })
+      .to(el.querySelector('.bf-pupil'), { x: -3 })
+      .to(el.querySelector('.bf-pupil'), { x: 3 }, '+=1.4')
+      .to(el.querySelector('.bf-pupil'), { x: 0 }, '+=1.4')
     return () => {
       bulb.kill()
       scan.kill()
-      glitch?.kill()
+      glance.kill()
     }
   }, [robot])
 
