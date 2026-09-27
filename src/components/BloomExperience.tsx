@@ -209,12 +209,15 @@ export function BloomHeading({
   page,
   children,
   actions,
+  lead,
 }: {
   title: string
   page: NavKey
   children: ReactNode
   /** Call-to-action buttons; the overview uses them to make the heading a hero. */
   actions?: ReactNode
+  /** Shown on the left of the same bar (e.g. the Works-with links). */
+  lead?: ReactNode
 }) {
   const hero = page === 'overview'
   const [paused, setPaused] = useState(() => {
@@ -236,7 +239,8 @@ export function BloomHeading({
     }
   }, [paused])
   return (
-    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}`}>
+    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}${lead ? ' has-lead' : ''}`}>
+      {lead && <div className="bloom-heading-lead">{lead}</div>}
       {hero && (
         <img className="bloom-hero-art" src={heroLandscape} alt="" aria-hidden="true" />
       )}

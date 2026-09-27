@@ -660,6 +660,7 @@ function App() {
             <BloomHeading
               title={pageDetails[active].title}
               page={active}
+              lead={active !== 'overview' ? <LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} /> : undefined}
               actions={
                 active === 'overview' ? (
                   <>
@@ -683,7 +684,6 @@ function App() {
             >
               <FeatureGuide page={active} />
             </BloomHeading>
-            {active !== 'overview' && <LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} />}
             {settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}

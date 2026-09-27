@@ -65,7 +65,6 @@ export function LinkRail({ page, names, enabled = () => true }: { page: string; 
   if (!links || !subOn('pointerFx', 'linkRail', { ignoreParent: true })) return null
   return (
     <nav ref={row} className="link-rail" aria-label="Works well with">
-      <span className="link-rail-label">Works with</span>
       {links.map((l) => {
         const e = emblems[l.page]
         return (

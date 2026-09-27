@@ -239,3 +239,49 @@ html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .page-emb
   border-color: var(--border-color, #0002);
   font-weight: 600;
 }
+
+/* One bar per page: links on the left, title + icon on the right. */
+.bloom-heading.feature-heading.has-lead {
+  flex-wrap: wrap;
+}
+.bloom-heading-lead {
+  order: 10;
+  flex: 1 1 100%;
+  min-width: 0;
+  z-index: 1;
+}
+.bloom-heading-lead .link-rail {
+  margin: 0;
+}
+html[data-compact-titles] .bloom-heading.feature-heading.has-lead {
+  flex-wrap: nowrap;
+}
+html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-lead {
+  order: 0;
+  flex: 1 1 auto;
+}
+html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-copy {
+  order: 1;
+  flex: 0 0 auto;
+  text-align: right;
+}
+html[data-compact-titles] .bloom-heading.has-lead .page-emblem {
+  order: 2;
+}
+html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-actions {
+  order: 3;
+  align-self: center;
+}
+@media (max-width: 720px) {
+  html[data-compact-titles] .bloom-heading.feature-heading.has-lead {
+    flex-wrap: wrap;
+  }
+  html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-lead {
+    order: 10;
+    flex-basis: 100%;
+  }
+  html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-copy {
+    flex: 1;
+    text-align: left;
+  }
+}
