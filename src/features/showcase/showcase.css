@@ -148,3 +148,49 @@
   right: 8px;
   color: #fff;
 }
+
+/* ---------- Mood marble jar ---------- */
+.mj-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #eef8ff, #fff7e6);
+}
+
+.mj-canvas {
+  max-width: 100%;
+  touch-action: pan-y;
+}
+
+.mj-side {
+  display: grid;
+  flex: 1 1 200px;
+  gap: 8px;
+  align-content: start;
+}
+
+.mj-side h3,
+.mj-side p {
+  margin: 0;
+}
+
+.mj-hover {
+  min-height: 1.4em;
+  font-weight: 600;
+}
+
+.mj-legend {
+  display: flex;
+  gap: 6px;
+}
+
+.mj-legend span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset -3px -3px 4px #0002;
+}

@@ -26,6 +26,7 @@ import './wellbeing.css'
 import { MoodQuick } from '../quick/MoodQuick'
 import { GratitudeQuick } from '../quick/GratitudeQuick'
 import { LetterWall } from '../showcase/LetterWall'
+import { MarbleJar } from '../showcase/MarbleJar'
 import { GratitudeJarSvg, MiniJarSvg } from './GratitudeJarSvg'
 import { orbToMood } from './moodOrbModel'
 
@@ -343,6 +344,7 @@ export function MoodPage() {
   return (
     <section className="wb-page" aria-labelledby="mood-title">
       <MoodQuick setEntries={setEntries} />
+      <MarbleJar entries={entries} />
       <div className="wb-card">
         <div className="wb-card-head">
           <h2 id="mood-title">How are you right now?</h2>

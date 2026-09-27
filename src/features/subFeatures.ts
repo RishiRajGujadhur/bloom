@@ -74,6 +74,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'factorSwipe', title: 'Why this mood?', description: 'Swipe through sleep, food, movement and more.' },
     { id: 'nextStep', title: 'Suggested next step', description: 'Links to a feature that suits your mood.' },
     { id: 'crossFeature', title: 'Moods across Bloom', description: 'Timeline of moods tagged on other pages.' },
+    { id: 'marbleJar', title: 'Mood marble jar', description: 'Every check-in drops into a jar as a marble (physics).' },
   ],
   gratitude: [
     { id: 'customJars', title: 'Custom jars', description: 'Create your own jars.' },
