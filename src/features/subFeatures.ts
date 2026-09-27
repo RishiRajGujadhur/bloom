@@ -827,6 +827,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'moodLift', title: 'Mood lift', description: 'Low days show uplifting insights first.' },
     { id: 'dailyPick', title: 'Insight of the day', description: 'One epiphany pinned each day.' },
     { id: 'reviewStreak', title: 'Review streak', description: 'Days in a row you reviewed.' },
+    { id: 'garland', title: 'Lightbulb garland', description: 'Insights hang as bulbs that glow as brightly as you remember them.' },
   ],
   dailyFlow: [
     { id: 'morning', title: 'Morning setup', description: 'Insight, check-in, intention, habit, focus.' },

@@ -6,6 +6,7 @@ import { burst } from '../../components/ui/celebrate'
 import { createEpiphany, dueToday, grades, retention, review, type Epiphany } from './epiphanyModel'
 import { addEpiphany, useEpiphanies } from './epiphanyStore'
 import { EpiphaniesQuick } from '../quick/EpiphaniesQuick'
+import { BulbGarland } from '../showcase/BulbGarland'
 import './epiphany.css'
 
 /** The forgetting curve for an insight, drawn on with GSAP. */
@@ -159,6 +160,7 @@ export function EpiphaniesPage({ today }: { today: string }) {
   return (
     <section className="epiphanies-page" aria-label="Epiphanies">
       <EpiphaniesQuick today={today} />
+      <BulbGarland list={list} />
       <form
         className="epiphany-add"
         onSubmit={(e) => {

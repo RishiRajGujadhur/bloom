@@ -14,3 +14,15 @@ test('letter wall pins notes, filters by jar and opens a letter', () => {
   fireEvent.click(document.querySelector('.lw-note')!)
   expect(screen.getByRole('dialog', { name: 'Gratitude letter' }).textContent).toContain('Coffee with Sam')
 })
+
+import { BulbGarland, recallNow } from '../src/features/showcase/BulbGarland'
+import { createEpiphany } from '../src/features/epiphany/epiphanyModel'
+
+test('epiphany garland glows by recall and flips to show details', () => {
+  const e = createEpiphany('Small steps compound', { kind: 'manual', title: 'Added by hand', date: '2026-09-27' }, '2026-09-27')
+  expect(recallNow(e, e.createdAt)).toBeCloseTo(1)
+  expect(recallNow(e, e.createdAt + 10 * 864e5)).toBeLessThan(0.1)
+  render(<BulbGarland list={[e]} />)
+  fireEvent.click(document.querySelector('.bg-bulb')!)
+  expect(document.querySelector('.bg-card')!.textContent).toContain('From Added by hand')
+})
