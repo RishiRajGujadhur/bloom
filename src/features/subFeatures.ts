@@ -478,6 +478,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "plates", title: "Plate calculator", description: "Which plates go on the bar." },
     { id: "muscleVolume", title: "Weekly muscle sets", description: "Hard sets per muscle this week." },
     { id: "history", title: "History", description: "Every workout you have logged." },
+    { id: 'weekBars', title: 'Week plates', description: 'This week’s volume as stacked plates that drop in.' },
   ],
   intervalCoach: [
     { id: "presets", title: "Programs", description: "Tabata, HIIT, EMOM, sprints and gentle." },

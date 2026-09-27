@@ -809,3 +809,20 @@
   stroke: #e0703f;
   stroke-width: 3;
 }
+
+/* ---------- Week bars ---------- */
+.wb-bars {
+  width: 100%;
+  max-width: 360px;
+}
+
+.wb-day {
+  font-size: 10px;
+  fill: currentColor;
+  opacity: 0.6;
+}
+
+.wb-day.today {
+  font-weight: 800;
+  opacity: 1;
+}

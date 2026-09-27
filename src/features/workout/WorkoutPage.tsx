@@ -8,6 +8,8 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { muscleNames, type Muscle } from '../exercise/exercises'
 import { WORKOUT_KEY, e1rm, liftById, lifts, load, plates, progress, prsFor, templates, volume, weeklyMuscleSets, type WSet, type WorkoutStore } from './workoutModel'
+import { WeekBars } from '../showcase/WeekBars'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './workout.css'
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, BarElement, Tooltip, Filler)
@@ -133,6 +135,11 @@ export function WorkoutPage() {
   const grid = css('--border-color', '#eadfd4')
   const chartOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: grid }, ticks: { color: muted } }, y: { grid: { color: grid }, ticks: { color: muted } } } } as const
 
+  usePageActions(
+    active
+      ? [{ id: 'wo-form', label: 'Open the form guide', icon: '💪', run: () => (window.location.hash = 'exercises') }]
+      : templates.slice(0, 3).map((t) => ({ id: `wo-${t.id}`, label: `Start ${t.name}`, icon: t.emoji, run: () => start(t.id) })),
+  )
   const train = () =>
     !active ? (
       <div className="wo-start">
@@ -155,6 +162,19 @@ export function WorkoutPage() {
           </button>
         )}
         {on('history') && store.workouts.length > 0 && <p className="studio-empty">{store.workouts.length} workouts logged so far.</p>}
+        {on('weekBars') && store.workouts.length > 0 && (
+          <WeekBars
+            unit="kg lifted"
+            days={Array.from({ length: 7 }, (_, i) => {
+              const d = new Date()
+              d.setDate(d.getDate() - (6 - i))
+              const key = d.toDateString()
+              const sets = store.workouts.filter((w) => new Date(w.startedAt).toDateString() === key).flatMap((w) => w.sets)
+              const vol = Math.round(sets.reduce((t, x) => t + x.weight * x.reps, 0))
+              return { label: d.toLocaleDateString([], { weekday: 'narrow' }), value: vol, today: i === 6, hint: `${d.toLocaleDateString([], { weekday: 'long' })}: ${sets.length} sets · ${vol} kg` }
+            })}
+          />
+        )}
       </div>
     ) : (
       <div className="studio-split">
@@ -164,6 +184,7 @@ export function WorkoutPage() {
               <ChevronLeft size={16} />
             </button>
             <h3>{lift?.name}</h3>
+            <a className="studio-chip" href="#exercises" data-hint="See how to do this move in the Exercises guide">Form guide</a>
             <button type="button" className="studio-chip" aria-label="Next lift" onClick={() => setLiftIdx((i) => Math.min(liftIds.length - 1, i + 1))} disabled={liftIdx >= liftIds.length - 1}>
               <ChevronRight size={16} />
             </button>
