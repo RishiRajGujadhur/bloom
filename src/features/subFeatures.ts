@@ -679,6 +679,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "dailyLimit", title: "Daily limit", description: "A slider for reviews per day." },
     { id: "tags", title: "Tags", description: "Label cards." },
     { id: "stats", title: "Stats", description: "New, learning, mature and what’s due." },
+    { id: 'piles', title: 'Card piles', description: 'Due, learning and known piles; graded cards fly to their pile.' },
   ],
   brainGames: [
     { id: "nback", title: "N-back", description: "A classic working-memory trainer." },

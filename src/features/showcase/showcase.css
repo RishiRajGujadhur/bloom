@@ -867,3 +867,23 @@
   color: #fff;
   text-shadow: 0 1px 3px #0006;
 }
+
+/* ---------- Card piles ---------- */
+.cp-piles {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  display: block;
+}
+
+.cp-num {
+  font-size: 13px;
+  font-weight: 800;
+  fill: currentColor;
+}
+
+.cp-lbl {
+  font-size: 9px;
+  fill: currentColor;
+  opacity: 0.6;
+}

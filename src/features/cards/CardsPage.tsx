@@ -6,6 +6,8 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { dayKey } from '../../dates'
 import { CARDS_KEY, clozeBack, clozeFront, dueCards, grades, hasCloze, newCard, parseImport, render, review, starterDeck, stats, type Card, type CardStore } from './cardsModel'
+import { CardPiles, type PilesHandle } from '../showcase/CardPiles'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './cards.css'
 
 const on = (id: string) => subOn('flashcards', id)
@@ -73,8 +75,11 @@ export function CardsPage() {
   const card = queue[0]
   const stage = useRef<HTMLDivElement>(null)
 
+  const piles = useRef<PilesHandle>(null)
+  const gradeHints: Record<string, string> = { Again: 'Forgot: see it again today', Hard: 'Remembered with effort: back soon', Good: 'Remembered: spaced further apart', Easy: 'Instant: a long gap before next time' }
   const grade = (g: (typeof grades)[number]) => {
     if (!card) return
+    piles.current?.fly(g.grade < 3 ? 'again' : g.grade === 5 || card.interval >= 21 ? 'known' : 'learning')
     setStore((s) => {
       const log = s.log.find((l) => l.date === today) ?? { date: today, count: 0, correct: 0 }
       return {
@@ -104,8 +109,11 @@ export function CardsPage() {
     return () => window.removeEventListener('keydown', k)
   })
 
+  const inDeck = store.cards.filter((c) => !deck || c.deck === deck)
+  usePageActions(card ? [{ id: 'fc-flip', label: flipped ? 'Hide answer' : 'Show answer', icon: '🔄', run: () => setFlipped(!flipped) }, ...(flipped ? [{ id: 'fc-good', label: 'Grade: Good', icon: '✅', run: () => grade(grades[2]) }] : [])] : [])
   const reviewTab = () => (
     <div className="fc-review" ref={stage}>
+      {on('piles') && <CardPiles ref={piles} due={queue.length} learning={inDeck.filter((c) => c.reviews > 0 && c.interval < 21).length} known={inDeck.filter((c) => c.interval >= 21).length} />}
       {on('decks') && (
         <div className="studio-chip-row">
           <button type="button" className="studio-chip" aria-pressed={!deck} onClick={() => setDeck('')}>
@@ -124,7 +132,7 @@ export function CardsPage() {
           <div className="fc-grades">
             {flipped ? (
               grades.map((g) => (
-                <button key={g.label} type="button" className="fc-grade" data-grade={g.label} onClick={() => grade(g)}>
+                <button key={g.label} type="button" className="fc-grade" data-grade={g.label} onClick={() => grade(g)} data-hint={`${gradeHints[g.label]} (key ${g.key})`}>
                   {g.label}
                   <small>{g.key}</small>
                 </button>
