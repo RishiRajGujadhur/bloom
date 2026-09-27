@@ -111,23 +111,10 @@ export const BloomFace = forwardRef<
   }, [act])
   useImperativeHandle(ref, () => ({ react, actFor }))
 
-  // Calm idle: soft blinks at uneven intervals and slow breathing.
+  // Calm idle: slow levitation and tilt (no blinking).
   useEffect(() => {
     const el = svg.current
     if (!el || reduced()) return
-    const lid = el.querySelector('.bf-lid')
-    // Lids scale from their own centre (GSAP otherwise scales SVG from the
-    // top-left, which made the lid shoot in from above the head on each blink).
-    gsap.set(el.querySelectorAll('.bf-lid'), { scaleY: 0, transformOrigin: '50% 50%' })
-    let next: gsap.core.Tween | null = null
-    let blinkTl: gsap.core.Timeline | null = null
-    const blink = () => {
-      blinkTl = gsap
-        .timeline({ onComplete: () => void (next = gsap.delayedCall(gsap.utils.random(3.5, 6), blink)) })
-        .to(lid, { scaleY: 1, duration: 0.12, ease: 'sine.in' })
-        .to(lid, { scaleY: 0, duration: 0.18, ease: 'sine.out' })
-    }
-    next = gsap.delayedCall(2.5, blink)
     // Slow levitation: Bloom floats up and down while its shadow breathes.
     const breathe = gsap.timeline({ repeat: -1, yoyo: true, defaults: { duration: 2.8, ease: 'sine.inOut' } })
       .to(el.querySelector('.bf-body'), { y: -4 }, 0)
@@ -143,8 +130,6 @@ export const BloomFace = forwardRef<
       if (w) hello.add(w, '-=0.1')
     }
     return () => {
-      next?.kill()
-      blinkTl?.kill()
       breathe.kill()
       tilt.kill()
       hello?.kill()
