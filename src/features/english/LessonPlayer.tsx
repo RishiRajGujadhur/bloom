@@ -7,6 +7,7 @@ import { Heart, Mic, Snail, Volume2, X } from 'lucide-react'
 import { canListen, checkTyped, listen, norm, soundScore, speak } from './englishNlp'
 import { answerOf, promptOf, type Exercise } from './lessonGen'
 import { sfx } from './sfx'
+import { setQuiz } from '../../companion/quizContext'
 
 export type LessonResult = { correct: number; total: number; mistakes: { prompt: string; answer: string; given: string }[]; words: { en: string; good: boolean }[] }
 
@@ -54,6 +55,18 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
     if (ex?.kind === 'listen') speak(ex.answer)
     return () => void tl.kill()
   }, [i, ex])
+  // Let Bloom's chat give hints for the question on screen.
+  useEffect(() => {
+    if (!ex) return
+    setQuiz({
+      source: 'English lesson',
+      question: promptOf(ex),
+      answer: answerOf(ex),
+      options: ex.kind === 'choice' || ex.kind === 'cloze' ? ex.options : ex.kind === 'picture' ? ex.options.map((o) => o.en) : undefined,
+      explain: ex.kind === 'cloze' ? ex.tip : ex.kind === 'picture' ? `${ex.word.emoji} “${ex.word.en}” means ${ex.word.meaning}.` : undefined,
+    })
+  }, [ex])
+  useEffect(() => () => setQuiz(null), [])
   useEffect(() => {
     if (status !== 'idle' && banner.current) gsap.fromTo(banner.current, { yPercent: 100 }, { yPercent: 0, duration: 0.3, ease: 'back.out(1.6)' })
   }, [status])

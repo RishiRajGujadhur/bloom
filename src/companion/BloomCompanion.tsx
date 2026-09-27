@@ -324,6 +324,8 @@ export function BloomCompanion({
               names={names}
               enabled={enabled}
               extra={extra}
+              data={data}
+              setData={setData}
               navigate={(p) => navigate(p as never)}
               onPlan={() => setMode('plan')}
             />

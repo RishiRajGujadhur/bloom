@@ -1,4 +1,4 @@
-import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ArrowDownRight, ArrowUpRight, BarChart3, PiggyBank, Plus, Receipt, Sparkles, Trash2, Upload, Wallet } from 'lucide-react'
 import { Rail, Slider, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
@@ -84,6 +84,12 @@ function Ring({ share }: { share: number }) {
 
 export function MoneyPage() {
   const [store, setStoreState] = useState<MoneyStore>(() => ({ ...emptyMoney, ...readStore(MONEY_KEY, emptyMoney) }))
+  // Expenses added from Bloom's chat show up straight away.
+  useEffect(() => {
+    const reload = () => setStoreState({ ...emptyMoney, ...readStore(MONEY_KEY, emptyMoney) })
+    window.addEventListener('bloom:money', reload)
+    return () => window.removeEventListener('bloom:money', reload)
+  }, [])
   const save = (fn: (s: MoneyStore) => MoneyStore) =>
     setStoreState((c) => {
       const n = fn(c)

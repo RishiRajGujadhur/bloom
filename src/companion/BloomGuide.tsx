@@ -7,9 +7,17 @@ import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import { currentPageActions } from '../components/ui/PageMenu'
 import { navSections } from '../components/layout/Sidebar'
 import { guideFor, pageGuides, type Choice } from './guideScripts'
+import type { Dispatch, SetStateAction } from 'react'
+import type { AppData } from '../model'
+import { runCommand } from './chatCommands'
+import { explain, nextHint, reveal, useQuiz } from './quizContext'
 import './guide.css'
 
-type Line = { from: 'bloom' | 'you'; text: string }
+type Line = { id: number; from: 'bloom' | 'you'; text: string }
+/** Only the latest messages are kept, so long chats never slow the app down. */
+const MAX_LINES = 6
+let lineId = 0
+const trim = (l: Line[]) => l.slice(-MAX_LINES)
 
 /**
  * Guided "Talk to Bloom": a chat (chatscope UI kit) where Bloom offers
@@ -23,6 +31,8 @@ export function BloomGuide({
   navigate,
   onPlan,
   extra = [],
+  data,
+  setData,
 }: {
   page: string
   names: (p: string) => string
@@ -31,6 +41,8 @@ export function BloomGuide({
   onPlan: () => void
   /** App-wide actions (the right-click menu's common items). */
   extra?: { id: string; label: string; icon?: string; run: () => void }[]
+  data?: AppData
+  setData?: Dispatch<SetStateAction<AppData>>
 }) {
   // Never offer (or open) a page that is switched off, and always keep a way
   // to move around Bloom.
@@ -44,7 +56,7 @@ export function BloomGuide({
     return [...list, ...extra]
   }
   const start = guideFor(page, names)
-  const [lines, setLines] = useState<Line[]>([{ from: 'bloom', text: start.say }])
+  const [lines, setLines] = useState<Line[]>(() => [{ id: ++lineId, from: 'bloom', text: start.say }])
   const [choices, setChoices] = useState<Choice[]>(() => withNav(start.choices))
   const [typing, setTyping] = useState(false)
   const [query, setQuery] = useState('')
@@ -60,7 +72,7 @@ export function BloomGuide({
     window.clearTimeout(timer.current)
     timer.current = window.setTimeout(() => {
       setTyping(false)
-      setLines((l) => [...l, { from: 'bloom', text }])
+      setLines((l) => trim([...l, { id: ++lineId, from: 'bloom', text }]))
       setChoices(withNav(then))
       face.current?.react('talk')
       after?.()
@@ -94,7 +106,7 @@ export function BloomGuide({
   const pageChoices = (p: string) => [...guideFor(p, names).choices, ...root.filter((r) => r.next !== '__page')]
 
   const pick = (c: Choice) => {
-    setLines((l) => [...l, { from: 'you', text: c.label }])
+    setLines((l) => trim([...l, { id: ++lineId, from: 'you', text: c.label }]))
     face.current?.react('cheer')
     if (c.next === '__tour') return say('Let me show you around — follow the highlights.', root, () => window.dispatchEvent(new Event('bloom:tour')))
     if (c.next === '__page') return say(guideFor(page, names).say, pageChoices(page))
@@ -127,6 +139,33 @@ export function BloomGuide({
     say(c.reply ?? 'Okay!', [...(guideFor(page, names).choices.filter((x) => x.label !== c.label)), { label: 'Something else', next: '__root' }])
   }
 
+  const quiz = useQuiz()
+  const root2: Choice[] = [{ label: 'What can I do here?', next: '__page' }, { label: 'Take me somewhere', next: '__sections' }]
+  /** Typed messages: try a command first (expenses, todos, hints…), then page search. */
+  const submit = () => {
+    const text = query.trim()
+    if (!text) return
+    const res = runCommand(text, { data, setData, navigate, clear: () => setLines([]) })
+    if (res) {
+      setQuery('')
+      setLines((l) => trim([...l, { id: ++lineId, from: 'you', text }]))
+      face.current?.react(res.mood ?? 'cheer')
+      return say(res.reply, root2)
+    }
+    if (results[0]) {
+      setQuery('')
+      pick({ label: results[0].title, go: results[0].key })
+      return
+    }
+    setQuery('')
+    setLines((l) => trim([...l, { id: ++lineId, from: 'you', text }]))
+    say('I didn’t catch that. Try “spent 5 on coffee”, “add todo …”, “hint”, or a page name — or type “help”.', root2)
+  }
+  const quizHelp = (label: string, fn: () => string) => {
+    setLines((l) => trim([...l, { id: ++lineId, from: 'you', text: label }]))
+    face.current?.react('think')
+    say(fn(), root2)
+  }
   const results = query.trim() ? fuse.search(query).slice(0, 6).map((r) => r.item) : []
   return (
     <div className="bg-guide">
@@ -137,13 +176,21 @@ export function BloomGuide({
         <MainContainer>
           <ChatContainer>
             <MessageList typingIndicator={typing ? <TypingIndicator content="Bloom is typing" /> : undefined}>
-              {lines.map((l, i) => (
-                <Message key={i} model={{ message: l.text, sender: l.from, direction: l.from === 'you' ? 'outgoing' : 'incoming', position: 'single' }} />
+              {lines.map((l) => (
+                <Message key={l.id} model={{ message: l.text, sender: l.from, direction: l.from === 'you' ? 'outgoing' : 'incoming', position: 'single' }} />
               ))}
             </MessageList>
           </ChatContainer>
         </MainContainer>
       </div>
+      {quiz && (
+        <div className="bg-quiz" role="group" aria-label="Quiz help">
+          <span>🧩 Stuck?</span>
+          <button type="button" className="bg-chip" onClick={() => quizHelp('Give me a hint', nextHint)}>💡 Hint</button>
+          <button type="button" className="bg-chip" onClick={() => quizHelp('Explain it', explain)}>📘 Explain</button>
+          <button type="button" className="bg-chip ghost" onClick={() => quizHelp('Show the answer', reveal)}>Answer</button>
+        </div>
+      )}
       <div ref={chips} className="bg-guide-chips" role="group" aria-label={results.length ? 'Matching pages' : 'Choices'}>
         {results.length
           ? results.map((r) => (
@@ -158,8 +205,8 @@ export function BloomGuide({
             ))}
       </div>
       <label className="bg-guide-search">
-        <span className="sr-only">Find a page</span>
-        <input type="search" placeholder="Or type where you want to go…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && results[0] && (setQuery(''), pick({ label: results[0].title, go: results[0].key }))} />
+        <span className="sr-only">Ask Bloom or find a page</span>
+        <input type="search" placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && submit()} />
       </label>
     </div>
   )
