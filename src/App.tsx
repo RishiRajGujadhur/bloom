@@ -216,6 +216,9 @@ const DojoPage = lazy(() =>
 const PointerPage = lazy(() =>
   import('./features/pointer/PointerPage').then((m) => ({ default: m.PointerPage })),
 )
+const StreetPage = lazy(() =>
+  import('./features/street/StreetPage').then((m) => ({ default: m.StreetPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -707,6 +710,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'street' && !settings.features.bloomStreet) ||
             (active === 'pointer' && !settings.features.pointerFx) ||
             (active === 'dojo' && !settings.features.dojo) ||
             (active === 'affirm' && !settings.features.affirmations) ||
@@ -916,6 +920,10 @@ function App() {
             ) : active === 'pointer' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <PointerPage />
+              </Suspense>
+            ) : active === 'street' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <StreetPage flags={settings.features} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

@@ -437,6 +437,10 @@ const common = {
         title: "Pointer & right-click menu",
         description: "Custom pointer shapes, colours and trails, and a right-click menu that changes with each page.",
       },
+      bloomStreet: {
+        title: "Bloom Street",
+        description: "An illustrated street where every feature is a building; a little sprout walks you there.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1526,6 +1530,10 @@ export const resources = {
           pointerFx: {
             title: "Pointeur et menu contextuel",
             description: "Formes, couleurs et traînées de pointeur, et un clic droit qui change selon la page.",
+          },
+          bloomStreet: {
+            title: "Rue Bloom",
+            description: "Une rue illustrée où chaque fonction est un bâtiment ; une petite pousse vous y conduit.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

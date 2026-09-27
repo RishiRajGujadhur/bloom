@@ -785,6 +785,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "bigPointer", title: "Big pointer", description: "Up to 60 px for easier tracking." },
     { id: "menuMotion", title: "Menu animation", description: "Menu items slide in with GSAP." },
   ],
+  bloomStreet: [
+    { id: "walker", title: "Walking sprout", description: "A sprout buddy walks to each building." },
+    { id: "drag", title: "Drag the street", description: "Drag or swipe the street sideways." },
+    { id: "sky", title: "Drifting clouds", description: "Clouds float across the sky." },
+    { id: "lights", title: "Lit windows", description: "Windows glow for places you visited recently." },
+    { id: "lamps", title: "Street lamps", description: "Lamps between buildings." },
+    { id: "bubble", title: "Name bubble", description: "A speech bubble names the building." },
+    { id: "dots", title: "Dot navigation", description: "Dots under the street to jump anywhere." },
+    { id: "keys", title: "Arrow keys", description: "Left and right walk, Enter goes in." },
+    { id: "menu", title: "Right-click walks", description: "Right-click to go in or walk on." },
+    { id: "onlyOn", title: "Only features you use", description: "Buildings for switched-off features are hidden." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'street': { title: "Bloom Street", description: "Take a walk through your town." },
   'pointer': { title: "Pointer", description: "Make the pointer yours." },
   'dojo': { title: "Dojo", description: "Discipline, one technique at a time." },
   'affirm': { title: "Affirmations", description: "Words to grow into." },
@@ -232,6 +233,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'pointer': [
     step(".pt-grid", "Your pointer", "Pick a shape, colour, size and effect."),
     step(".pt-try", "Try it", "Right-click here to see this page's menu."),
+  ],
+  'street': [
+    step(".st-viewport", "Your street", "Drag the street or click a building; the sprout walks there."),
+    step(".st-panel", "Go in", "Open the building's feature."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
