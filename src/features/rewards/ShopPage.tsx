@@ -23,7 +23,7 @@ export function AvatarPreview({ equipped, size = 120 }: { equipped: ShopState['e
   const hat = equipped.hat
   const pet = equipped.pet
   return (
-    <svg className="avatar-preview" width={size} height={size} viewBox="0 0 24 24" shape-rendering="crispEdges" aria-hidden="true">
+    <svg className="avatar-preview" width={size} height={size} viewBox="0 0 24 24" shapeRendering="crispEdges" aria-hidden="true">
       <rect x="6" y="21" width="12" height="1" fill="#0002" />
       {/* legs + body */}
       <rect x="9" y="17" width="2" height="4" fill="#4a3a2e" />
