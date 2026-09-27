@@ -441,6 +441,10 @@ const common = {
         title: "Bloom Street",
         description: "An illustrated street where every feature is a building; a little sprout walks you there.",
       },
+      moneyTracker: {
+        title: "Money & spending",
+        description: "Track spending in any currency: budgets, charts, subscriptions, net worth, savings goals and CSV import.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1534,6 +1538,10 @@ export const resources = {
           bloomStreet: {
             title: "Rue Bloom",
             description: "Une rue illustrée où chaque fonction est un bâtiment ; une petite pousse vous y conduit.",
+          },
+          moneyTracker: {
+            title: "Argent et dépenses",
+            description: "Suivez vos dépenses dans n’importe quelle devise : budgets, graphiques, abonnements, patrimoine, objectifs et import CSV.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
