@@ -270,6 +270,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'moodStart', title: 'Start from a mood', description: 'One tap sets the session mood.' },
     { id: 'topicSwipe', title: 'Swipe topics', description: 'Swipe right on what is on your mind; they become tags.' },
     { id: 'toneMeter', title: 'Tone meter', description: 'Animated gauge of how your last reply reads.' },
+    { id: 'storyCarousel', title: 'Story carousel', description: 'Past reflections as storybook cards in a 3D coverflow.' },
   ],
   rpgSkillTree: [
     { id: 'weeklyGoals', title: 'Weekly goals', description: 'Goal cards on the Growth panel.' },

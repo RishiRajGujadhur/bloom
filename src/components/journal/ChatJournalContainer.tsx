@@ -13,6 +13,7 @@ import { ChatInputArea } from './ChatInputArea'
 import { SessionSummaryModal } from './SessionSummaryModal'
 import { MicroJournalComposer } from './MicroJournalComposer'
 import { JournalQuick } from '../../features/quick/JournalQuick'
+import { StoryCarousel } from '../../features/showcase/StoryCarousel'
 
 export function ChatJournalContainer({
   data,
@@ -118,6 +119,7 @@ export function ChatJournalContainer({
               : t('ui.fiveMin')}
         </span>
       </div>
+      <StoryCarousel sessions={data.sessions} onOpen={setSummary} />
       {mode === 'guided' && (
         <JournalQuick
           lastReply={[...(session?.messages ?? [])].reverse().find((m) => m.sender === 'user')?.text ?? ''}
