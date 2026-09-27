@@ -4,10 +4,16 @@ import { hierarchy, pack } from 'd3-hierarchy'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import { CandlestickSeries, ColorType, HistogramSeries, createChart } from 'lightweight-charts'
 import { subOn } from '../subFeatures'
-import { balanceCandles, categoryOf, formatMoney, perDay, spend, toMajor, type MoneyStore } from './moneyModel'
+import { isMatrix, matrixPalette } from '../../components/ui/chartTheme'
+import { useThemeId } from '../../components/ui/MatrixRain'
+import { balanceCandles, byCategory, categories, categoryOf, formatMoney, perDay, spend, toMajor, type MoneyStore } from './moneyModel'
 
 const on = (id: string) => subOn('moneyTracker', id)
-const ramp = ['#3b2f9e', '#4b3fd0', '#5b8def', '#35d0a0', '#9ef04a', '#f5c542', '#f58a42']
+const bloomRamp = ['#3b2f9e', '#4b3fd0', '#5b8def', '#35d0a0', '#9ef04a', '#f5c542', '#f58a42']
+const matrixRamp = ['#0b2a14', '#0f5a26', '#1f8f3f', '#2fd35a', '#39ff6a', '#9ef04a', '#f5c542']
+const rampNow = () => (isMatrix() ? matrixRamp : bloomRamp)
+/** Category colour, or the Matrix palette in that theme. */
+const catColor = (id: string) => (isMatrix() ? matrixPalette[Math.max(0, categories.findIndex((c) => c.id === id)) % matrixPalette.length] : categoryOf(id).color)
 
 /** The last 64 days as number tiles, coloured by spend (like a sales report grid). */
 function DayTiles({ store }: { store: MoneyStore }) {
@@ -28,7 +34,7 @@ function DayTiles({ store }: { store: MoneyStore }) {
   return (
     <div ref={root} className="mn-tiles" role="img" aria-label="Spending per day, last 64 days">
       {list.map((x) => (
-        <span key={x.key} style={{ background: x.v ? ramp[Math.min(ramp.length - 1, Math.floor((x.v / max) * (ramp.length - 1)))] : '#2a2a35' }} data-hint={`${x.key}: ${formatMoney(x.v, store.currency)}`}>
+        <span key={x.key} style={{ background: x.v ? rampNow()[Math.min(6, Math.floor((x.v / max) * 6))] : '#2a2a35' }} data-hint={`${x.key}: ${formatMoney(x.v, store.currency)}`}>
           {x.v ? Math.round(toMajor(x.v)) : ''}
         </span>
       ))}
@@ -59,7 +65,8 @@ function CirclePack({ store }: { store: MoneyStore }) {
   return (
     <svg ref={svg} className="mn-pack" viewBox="0 0 320 320" role="img" aria-label="Spending by category and place">
       {nodes.map((n, i) => {
-        const cat = n.depth === 1 ? categoryOf(n.data.name) : categoryOf(n.parent!.data.name)
+        const catId = n.depth === 1 ? n.data.name : n.parent!.data.name
+        const cat = { ...categoryOf(catId), color: catColor(catId) }
         return (
           <g key={i} data-hint={`${n.depth === 1 ? cat.name : n.data.name}: ${formatMoney(n.value ?? 0, store.currency)}`}>
             <circle cx={n.x} cy={n.y} r={n.r} fill={n.depth === 1 ? `${cat.color}33` : cat.color} stroke={cat.color} strokeWidth={n.depth === 1 ? 1.5 : 0} />
@@ -76,8 +83,61 @@ function CirclePack({ store }: { store: MoneyStore }) {
   )
 }
 
+/** Spending shape: this month vs last month per category, glowing radar (SVG + GSAP). */
+function SpendRadar({ store }: { store: MoneyStore }) {
+  const root = useRef<SVGSVGElement>(null)
+  const now = new Date()
+  const m = now.toISOString().slice(0, 7)
+  const prev = new Date(now.getFullYear(), now.getMonth() - 1, 15).toISOString().slice(0, 7)
+  const cats = categories.filter((c) => c.id !== 'other').slice(0, 8)
+  const a = new Map(byCategory(store.txns, m).map((c) => [c.category, c.amount]))
+  const b = new Map(byCategory(store.txns, prev).map((c) => [c.category, c.amount]))
+  const max = Math.max(1, ...cats.map((c) => Math.max(a.get(c.id) ?? 0, b.get(c.id) ?? 0)))
+  const pt = (i: number, v: number) => {
+    const ang = (i / cats.length) * Math.PI * 2 - Math.PI / 2
+    const r = 18 + (v / max) * 92
+    return [130 + Math.cos(ang) * r, 130 + Math.sin(ang) * r]
+  }
+  const path = (vals: Map<string, number>) => cats.map((c, i) => pt(i, vals.get(c.id) ?? 0).join(',')).join(' ')
+  const green = isMatrix() ? '#39ff6a' : '#35d0a0'
+  const amber = '#f5c542'
+  useLayoutEffect(() => {
+    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const tw = gsap.from(root.current.querySelectorAll('.mr-shape'), { scale: 0, transformOrigin: '130px 130px', duration: 1.1, stagger: 0.2, ease: 'elastic.out(1, 0.55)' })
+    return () => void tw.progress(1)
+  }, [store.txns.length])
+  return (
+    <svg ref={root} className="mn-radar" viewBox="0 0 260 260" role="img" aria-label="Spending shape, this month against last month">
+      <defs>
+        <filter id="mr-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="4" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      {[0.33, 0.66, 1].map((f) => (
+        <polygon key={f} points={cats.map((_, i) => pt(i, max * f).join(',')).join(' ')} fill="none" stroke="#ffffff1a" />
+      ))}
+      {cats.map((c, i) => {
+        const [x, y] = pt(i, max * 1.12)
+        return (
+          <text key={c.id} x={x} y={y} textAnchor="middle" className="mn-radar-label" data-hint={`${c.name}: ${formatMoney(a.get(c.id) ?? 0, store.currency)} (last month ${formatMoney(b.get(c.id) ?? 0, store.currency)})`}>
+            {c.emoji}
+          </text>
+        )
+      })}
+      <polygon className="mr-shape" points={path(b)} fill={`${amber}22`} stroke={amber} strokeWidth="2.5" strokeLinejoin="round" filter="url(#mr-glow)" />
+      <polygon className="mr-shape" points={path(a)} fill={`${green}2a`} stroke={green} strokeWidth="3" strokeLinejoin="round" filter="url(#mr-glow)" />
+      <circle cx="130" cy="130" r="10" fill="none" stroke="#ffffff55" />
+    </svg>
+  )
+}
+
 /** Running balance as daily candles with a spending histogram (TradingView lightweight-charts). */
 function BalanceCandles({ store }: { store: MoneyStore }) {
+  const theme = useThemeId()
   const host = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const el = host.current
@@ -90,7 +150,9 @@ function BalanceCandles({ store }: { store: MoneyStore }) {
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false },
     })
-    const candles = chart.addSeries(CandlestickSeries, { upColor: '#35e07a', downColor: '#ff4d6d', borderVisible: false, wickUpColor: '#35e07a', wickDownColor: '#ff4d6d' })
+    const up = isMatrix() ? '#39ff6a' : '#35e07a'
+    const down = isMatrix() ? '#f5c542' : '#ff4d6d'
+    const candles = chart.addSeries(CandlestickSeries, { upColor: up, downColor: down, borderVisible: false, wickUpColor: up, wickDownColor: down })
     candles.setData(balanceCandles(store.txns))
     const vol = chart.addSeries(HistogramSeries, { color: '#8888aa55', priceScaleId: '' })
     vol.priceScale().applyOptions({ scaleMargins: { top: 0.75, bottom: 0 } })
@@ -103,20 +165,27 @@ function BalanceCandles({ store }: { store: MoneyStore }) {
       ro.disconnect()
       chart.remove()
     }
-  }, [store.txns])
+  }, [store.txns, theme])
   return <div ref={host} className="mn-candles" aria-label="Balance candles" />
 }
 
 export function MoneyCharts({ store }: { store: MoneyStore }) {
+  useThemeId() // re-render the charts when the theme changes
   const year = new Date().getFullYear()
   const days = perDay(store.txns)
   const calendar = [...days.entries()].map(([day, v]) => ({ day, value: Math.round(toMajor(v)) }))
   return (
-    <div className="mn-grid">
+    <div className="mn-grid" data-matrix-native>
       {on('tiles') && (
         <section className="studio-card mn-dark">
           <h3>Last 64 days</h3>
           <DayTiles store={store} />
+        </section>
+      )}
+      {on('radar') && (
+        <section className="studio-card mn-dark">
+          <h3>Spending shape <small className="mn-legend"><i style={{ background: isMatrix() ? '#39ff6a' : '#35d0a0' }} /> this month <i style={{ background: '#f5c542' }} /> last month</small></h3>
+          <SpendRadar store={store} />
         </section>
       )}
       {on('circles') && (
@@ -140,7 +209,7 @@ export function MoneyCharts({ store }: { store: MoneyStore }) {
               from={`${year}-01-01`}
               to={`${year}-12-31`}
               emptyColor="#eeeeee22"
-              colors={['#3b2f9e', '#5b8def', '#35d0a0', '#9ef04a', '#f5c542']}
+              colors={isMatrix() ? ['#0f5a26', '#1f8f3f', '#39ff6a', '#9ef04a', '#f5c542'] : ['#3b2f9e', '#5b8def', '#35d0a0', '#9ef04a', '#f5c542']}
               margin={{ top: 20, right: 10, bottom: 10, left: 24 }}
               monthBorderColor="transparent"
               dayBorderWidth={2}

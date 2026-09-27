@@ -265,3 +265,37 @@
   color: inherit;
   font: inherit;
 }
+.mn-radar {
+  width: 100%;
+  max-width: 320px;
+  display: block;
+  margin: 0 auto;
+}
+.mn-radar-label {
+  font-size: 14px;
+}
+.mn-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.mn-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mn-tips {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+.mn-forecast small {
+  color: var(--text-muted);
+}

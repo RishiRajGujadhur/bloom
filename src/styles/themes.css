@@ -364,3 +364,13 @@ html[data-theme='matrix'] body {
 html[data-theme='matrix'] .app-shell {
   background: transparent;
 }
+
+/* Matrix: every other animation and illustration (tai chi, scenes, emblems…)
+   is tinted phosphor green. Charts opt out with [data-matrix-native] so they
+   can use the green / amber / violet palette. */
+html[data-theme='matrix'] main :is(svg, canvas, img):not(.bloom-face):not(.bloom-face *):not(.pixel-icon):not(.lucide):not(.matrix-rain):not([data-matrix-native] *):not([data-matrix-native]) {
+  filter: grayscale(1) sepia(1) hue-rotate(68deg) saturate(3.2) brightness(0.95) drop-shadow(0 0 6px #39ff6a55);
+}
+html[data-theme='matrix'] .studio-scene {
+  filter: grayscale(1) sepia(1) hue-rotate(68deg) saturate(3) brightness(0.8);
+}

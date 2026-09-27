@@ -164,3 +164,71 @@ const hints: [RegExp, string][] = [
   [/amazon|store|shop|zara|h&m|ikea/i, 'shopping'],
 ]
 export const guessCategory = (place: string) => hints.find(([r]) => r.test(place))?.[1] ?? 'other'
+
+/** Plain-language insights about recent spending. */
+export function insights(txns: Txn[], today: string, code: string) {
+  const out: string[] = []
+  const m = today.slice(0, 7)
+  const d = new Date(`${today}T12:00:00`)
+  d.setMonth(d.getMonth() - 1)
+  const pm = d.toISOString().slice(0, 7)
+  const now = new Map(byCategory(txns, m).map((c) => [c.category, c.amount]))
+  const before = new Map(byCategory(txns, pm).map((c) => [c.category, c.amount]))
+  let best: { id: string; diff: number } | null = null
+  for (const [id, v] of now) {
+    const diff = v - (before.get(id) ?? 0)
+    if (!best || Math.abs(diff) > Math.abs(best.diff)) best = { id, diff }
+  }
+  if (best && best.diff !== 0) out.push(`${categoryOf(best.id).emoji} ${categoryOf(best.id).name} is ${best.diff > 0 ? 'up' : 'down'} ${formatMoney(Math.abs(best.diff), code)} on last month.`)
+  const days = [...perDay(txns.filter((t) => t.date.startsWith(m))).entries()].sort((a, b) => b[1] - a[1])
+  if (days[0]) out.push(`Your costliest day this month was ${new Date(`${days[0][0]}T12:00:00`).toLocaleDateString([], { weekday: 'long', day: 'numeric' })} (${formatMoney(days[0][1], code)}).`)
+  const wk = spend(txns.filter((t) => t.date.startsWith(m)))
+  const weekend = wk.filter((t) => [0, 6].includes(new Date(`${t.date}T12:00:00`).getDay())).reduce((a, t) => a + t.amount, 0)
+  const total = wk.reduce((a, t) => a + t.amount, 0)
+  if (total) out.push(`${Math.round((weekend / total) * 100)}% of this month\u2019s spending happened at weekends.`)
+  return out
+}
+
+/** Month-end forecast from the average daily spend so far. */
+export function forecast(txns: Txn[], today: string) {
+  const day = Number(today.slice(8, 10))
+  const d = new Date(`${today}T12:00:00`)
+  const daysInMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
+  const soFar = sumMinor(spend(txns).filter((t) => t.date.startsWith(today.slice(0, 7))).map((t) => t.amount))
+  const perDayAvg = day ? soFar / day : 0
+  return { soFar, projected: Math.round(perDayAvg * daysInMonth), perDay: Math.round(perDayAvg), daysLeft: daysInMonth - day }
+}
+
+/** Days this month with no spending (up to today), and the current streak. */
+export function noSpendDays(txns: Txn[], today: string) {
+  const days = perDay(txns)
+  let count = 0
+  let streak = 0
+  for (let n = 1; n <= Number(today.slice(8, 10)); n++) {
+    const k = `${today.slice(0, 7)}-${String(n).padStart(2, '0')}`
+    if (!days.get(k)) {
+      count++
+      streak++
+    } else streak = 0
+  }
+  return { count, streak }
+}
+
+/** Upcoming bills: detected subscriptions due in the next 30 days. */
+export function upcomingBills(txns: Txn[], today: string) {
+  const t0 = new Date(`${today}T12:00:00`).getTime()
+  return detectSubscriptions(txns)
+    .map((s) => {
+      const due = new Date(`${s.last}T12:00:00`)
+      while (due.getTime() <= t0) due.setMonth(due.getMonth() + 1)
+      return { ...s, due: due.toISOString().slice(0, 10) }
+    })
+    .filter((b) => (new Date(`${b.due}T12:00:00`).getTime() - t0) / 864e5 <= 30)
+    .sort((a, b) => a.due.localeCompare(b.due))
+}
+
+/** Months to clear all debts with a fixed monthly payment (simple, no interest). */
+export const monthsToDebtFree = (holdings: Holding[], monthly: number) => {
+  const debt = sumMinor(holdings.filter((h) => h.kind === 'debt').map((h) => h.value))
+  return monthly > 0 ? Math.ceil(debt / monthly) : Infinity
+}

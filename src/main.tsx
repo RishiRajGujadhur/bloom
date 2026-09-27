@@ -9,6 +9,7 @@ import { installInteractions } from './components/ui/interactions'
 import './components/ui/interactions.css'
 import { applyCompactTitles } from './components/ui/Flow'
 import { pixelIconsOn } from './icons/pixelated'
+import { registerChartTheme } from './components/ui/chartTheme'
 import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
@@ -29,3 +30,4 @@ createRoot(document.getElementById('root')!).render(
 
 applyCompactTitles()
 document.documentElement.toggleAttribute('data-pixel-icons', pixelIconsOn())
+registerChartTheme()

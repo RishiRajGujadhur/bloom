@@ -27,3 +27,16 @@ test('subscriptions, budgets, candles, net worth and CSV import', () => {
   expect(csv[0]).toMatchObject({ place: 'Spotify', category: 'subscriptions', amount: 999 })
   expect(csv[1].income).toBe(true)
 })
+
+import { forecast, insights, monthsToDebtFree, noSpendDays, upcomingBills } from '../src/features/money/moneyModel'
+
+test('plan tools: forecast, no-spend days, bills, debt and insights', () => {
+  const txns = [t('2026-09-01', 30, 'Tesco', 'groceries'), t('2026-09-10', 30, 'Tesco', 'groceries'), t('2026-08-20', 10, 'Tesco', 'groceries'), t('2026-08-05', 9.99, 'Netflix'), t('2026-09-05', 9.99, 'Netflix')]
+  const f = forecast(txns, '2026-09-10')
+  expect(f.soFar).toBe(6999)
+  expect(f.projected).toBeGreaterThan(f.soFar)
+  expect(noSpendDays(txns, '2026-09-10').count).toBe(7)
+  expect(upcomingBills(txns, '2026-09-27')[0]).toMatchObject({ place: 'Netflix', due: '2026-10-05' })
+  expect(monthsToDebtFree([{ id: 'd', name: 'Card', kind: 'debt', value: 100000 }], 25000)).toBe(4)
+  expect(insights(txns, '2026-09-10', 'USD').join(' ')).toMatch(/Groceries is up/)
+})

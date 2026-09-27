@@ -6,6 +6,7 @@ import type { FeaturePageProps } from '../shared/pageProps'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { PLANT_GOAL, dayNutrients, plantDiversity, type DietState } from './dietModel'
+import { useChartColors } from '../../components/ui/chartTheme'
 import { electrolytesMet, foods, nutrientIds, nutrientInfo, pct, radarData } from './nutrients'
 
 const endOfDay = (today: string) => new Date(`${today}T23:59:59`).getTime()
@@ -35,6 +36,7 @@ function DiversityRing({ count }: { count: number }) {
 }
 
 export function NutrientsPanel({ state, today, data, setData }: { state: DietState; today: string } & Pick<FeaturePageProps, 'data' | 'setData'>) {
+  const radarColors = useChartColors(['#d8c7bb', '#6bbf7a'])
   const totals = dayNutrients(state.meals, today)
   const radar = radarData(totals)
   const diversity = plantDiversity(state.meals, today)
@@ -69,7 +71,7 @@ export function NutrientsPanel({ state, today, data, setData }: { state: DietSta
         <section className="diet-card nut-radar-card">
           <h3>Micronutrients today</h3>
           {!logged && <p className="diet-empty">Quick-add a meal or build a recipe; meals made from ingredients fill this in.</p>}
-          <div className="nut-radar" role="img" aria-label={radar.map((r) => `${r.axis} ${r.consumed}%`).join(', ')}>
+          <div className="nut-radar" data-matrix-native role="img" aria-label={radar.map((r) => `${r.axis} ${r.consumed}%`).join(', ')}>
             <ResponsiveRadar
               data={radar}
               keys={['target', 'consumed']}
@@ -79,7 +81,7 @@ export function NutrientsPanel({ state, today, data, setData }: { state: DietSta
               curve="linearClosed"
               gridShape="circular"
               gridLevels={3}
-              colors={['#d8c7bb', '#6bbf7a']}
+              colors={radarColors}
               fillOpacity={0.35}
               borderWidth={2}
               dotSize={7}

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ArrowDownRight, ArrowUpRight, BarChart3, Crown, PiggyBank, Plus, Receipt, Trash2, Upload, Wallet } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, BarChart3, PiggyBank, Plus, Receipt, Sparkles, Trash2, Upload, Wallet } from 'lucide-react'
 import { Rail, Slider, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { ShowMore } from '../../components/ui/Flow'
 import { usePageActions } from '../../components/ui/PageMenu'
@@ -15,6 +15,11 @@ import {
   categoryOf,
   currencies,
   detectSubscriptions,
+  forecast,
+  insights,
+  monthsToDebtFree,
+  noSpendDays,
+  upcomingBills,
   emptyMoney,
   formatMoney,
   guessCategory,
@@ -252,14 +257,61 @@ export function MoneyPage() {
     )
   }
 
+  const [debtPay, setDebtPay] = useState(200)
   const premiumTab = () => {
+    const fc = forecast(store.txns, today)
+    const ns = noSpendDays(store.txns, today)
+    const bills = upcomingBills(store.txns, today)
+    const tips = insights(store.txns, today, code)
+    const debtMonths = monthsToDebtFree(store.holdings, toMinor(debtPay))
+    const hasDebt = store.holdings.some((h) => h.kind === 'debt')
     const subs = detectSubscriptions(store.txns).filter((s) => !store.subscriptionsOff.includes(s.place))
     const worth = netWorth(store.holdings)
     return (
       <div className="mn-grid mn-premium">
+        {on('insights') && tips.length > 0 && (
+          <section className="studio-card">
+            <h3>💡 Insights</h3>
+            <ul className="mn-tips">{tips.map((x) => <li key={x}>{x}</li>)}</ul>
+          </section>
+        )}
+        {on('forecast') && (
+          <section className="studio-card mn-forecast">
+            <h3>📈 Month-end forecast</h3>
+            <Count minor={fc.projected} code={code} />
+            <small>{fmt(fc.soFar)} so far · about {fmt(fc.perDay)} a day · {fc.daysLeft} days to go</small>
+            {on('noSpend') && <p className="quick-note">🌿 {ns.count} no-spend day{ns.count === 1 ? '' : 's'} this month{ns.streak > 1 ? ` · ${ns.streak}-day streak` : ''}</p>}
+          </section>
+        )}
+        {on('bills') && (
+          <section className="studio-card">
+            <h3>🗓️ Upcoming bills</h3>
+            {bills.length ? (
+              <ul className="mn-txns">
+                {bills.map((b) => (
+                  <li key={b.place}>
+                    <span className="mn-emoji">📅</span>
+                    <span className="mn-txn-main"><strong>{b.place}</strong><small>due {new Date(`${b.due}T12:00:00`).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}</small></span>
+                    <strong>{fmt(b.amount)}</strong>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="studio-empty">No bills due in the next 30 days.</p>
+            )}
+          </section>
+        )}
+        {on('debtPlanner') && hasDebt && (
+          <section className="studio-card">
+            <h3>🧗 Debt payoff planner</h3>
+            <Slider label="Monthly payment" value={debtPay} min={10} max={3000} step={10} format={(v) => formatMoney(v * 100, code)} onChange={setDebtPay} />
+            <p><strong>{Number.isFinite(debtMonths) ? `${debtMonths} month${debtMonths === 1 ? '' : 's'}` : '—'}</strong> to be debt-free.</p>
+            <p className="quick-note">Pay the smallest balance first for quick wins (snowball) or the highest interest first to save the most (avalanche).</p>
+          </section>
+        )}
         {on('subscriptions') && (
           <section className="studio-card">
-            <h3><Crown size={15} /> Subscriptions found</h3>
+            <h3>🔁 Subscriptions found</h3>
             <p className="quick-note">Payments to the same place in several months at a similar price.</p>
             {subs.length ? (
               <ul className="mn-txns">
@@ -282,7 +334,7 @@ export function MoneyPage() {
         )}
         {on('netWorth') && (
           <section className="studio-card">
-            <h3><Crown size={15} /> Net worth</h3>
+            <h3>🏦 Net worth</h3>
             <Count minor={worth} code={code} />
             <ul className="mn-txns">
               {store.holdings.map((h) => (
@@ -314,7 +366,7 @@ export function MoneyPage() {
         )}
         {on('goals') && (
           <section className="studio-card">
-            <h3><Crown size={15} /> Savings goals</h3>
+            <h3>🎯 Savings goals</h3>
             {store.goals.map((g) => (
               <div key={g.id} className="mn-goal">
                 <span>{g.emoji} {g.name}</span>
@@ -375,7 +427,7 @@ export function MoneyPage() {
         { id: 'spend', label: 'Spend', icon: <Receipt size={15} />, render: spendTab },
         ...(on('budgets') ? [{ id: 'budgets', label: 'Budgets', icon: <PiggyBank size={15} />, render: budgetsTab }] : []),
         ...(on('charts') ? [{ id: 'charts', label: 'Charts', icon: <BarChart3 size={15} />, render: () => <Suspense fallback={<p role="status">Loading charts…</p>}><MoneyCharts store={store} /></Suspense> }] : []),
-        ...(on('premium') ? [{ id: 'premium', label: 'Premium', icon: <Crown size={15} />, render: premiumTab }] : []),
+        ...(on('premium') ? [{ id: 'plan', label: 'Plan', icon: <Sparkles size={15} />, render: premiumTab }] : []),
       ]}
     />
   )

@@ -254,7 +254,7 @@ export function WorkoutPage() {
           {on('progressChart') && (
             <div className="studio-card wo-chart">
               <h3>Estimated max</h3>
-              <div className="wo-canvas">
+              <div className="wo-canvas" data-matrix-native>
                 <Line
                   options={chartOpts}
                   data={{
@@ -268,7 +268,7 @@ export function WorkoutPage() {
           {on('volumeChart') && (
             <div className="studio-card wo-chart">
               <h3>Volume</h3>
-              <div className="wo-canvas">
+              <div className="wo-canvas" data-matrix-native>
                 <Bar options={chartOpts} data={{ labels: series.map((p) => day(p.at)), datasets: [{ data: series.map((p) => p.volume), backgroundColor: '#f2a65a', borderRadius: 8 }] }} />
               </div>
             </div>
@@ -284,7 +284,7 @@ export function WorkoutPage() {
     <div className="studio-card wo-chart wo-muscles">
       <h3>Sets per muscle · last 7 days</h3>
       <p className="studio-empty">10–20 hard sets a week is a common growth range.</p>
-      <div className="wo-canvas">
+      <div className="wo-canvas" data-matrix-native>
         <Bar
           options={{ ...chartOpts, indexAxis: 'y' as const, scales: { ...chartOpts.scales, x: { ...chartOpts.scales.x, suggestedMax: 20 } } }}
           data={{
