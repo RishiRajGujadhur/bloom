@@ -103,6 +103,7 @@ import { IntentionsQuick } from './features/quick/IntentionsQuick'
 import { addEpiphany } from './features/epiphany/epiphanyStore'
 import { createEpiphany } from './features/epiphany/epiphanyModel'
 import { PageMenu, type PageAction } from './components/ui/PageMenu'
+import { Menu as MenuIcon } from 'lucide-react'
 import { pageRequires } from './components/layout/Sidebar'
 import { PointerFx } from './components/ui/PointerFx'
 import { HoverHints, LinkRail } from './components/ui/Flow'
@@ -620,6 +621,9 @@ function App() {
               <button className="quiet-button" onClick={() => exportData()}>
                 <ArrowDownToLine size={16} aria-hidden="true" />{' '}
                 <span className="topbar-label">{t('actions.exportData')}</span>
+              </button>
+              <button type="button" className="topbar-menu" aria-label="Open menu" data-hint="Menu" onClick={() => window.dispatchEvent(new Event('bloom:toggle-nav'))}>
+                <MenuIcon size={20} aria-hidden="true" />
               </button>
             </div>
           </header>

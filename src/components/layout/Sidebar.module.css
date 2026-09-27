@@ -189,3 +189,9 @@
   left: auto;
   right: max(16px, env(safe-area-inset-right));
 }
+
+/* The floating button is replaced by the top bar's menu button. */
+.hamburger,
+:global(html[data-nav='hamburger']) .hamburger {
+  display: none !important;
+}

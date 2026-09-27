@@ -2622,3 +2622,42 @@ html[data-sidebar='open'] .sidebar {
 html[data-nav='hamburger'] .topbar {
   padding-right: 60px;
 }
+
+/* Quick add: a plus button; the label shows on hover. */
+.quick-add.icon-only {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 14px;
+}
+.quick-add.icon-only > *:not(:first-child) {
+  display: none;
+}
+
+/* Drawer navigation: the menu button sits in the top bar, after Export. */
+.topbar-menu {
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+html[data-nav='hamburger'] .topbar-menu {
+  display: inline-grid;
+}
+@media (max-width: 900px) {
+  .topbar-menu {
+    display: inline-grid;
+  }
+  .topbar {
+    padding-right: 0;
+  }
+}
+html[data-nav='hamburger'] .topbar {
+  padding-right: 0;
+}

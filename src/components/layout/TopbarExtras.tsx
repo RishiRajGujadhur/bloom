@@ -1,7 +1,6 @@
 import {
   BookOpen,
   CheckSquare,
-  ChevronDown,
   ListChecks,
   Search,
   Sun,
@@ -50,9 +49,8 @@ export function QuickAdd({
       label="Quick add"
       items={items}
       trigger={
-        <button type="button" className="quick-add">
-          <LottieIcon name="plus" size={18} /> Quick add
-          <ChevronDown className="quick-add-chevron" size={16} aria-hidden="true" />
+        <button type="button" className="quick-add icon-only" aria-label="Quick add" title="Quick add" data-hint="Quick add">
+          <LottieIcon name="plus" size={20} />
         </button>
       }
     />

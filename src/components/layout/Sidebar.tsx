@@ -236,7 +236,13 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
       setIsOpen((open) => !open)
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    // The top bar's menu button toggles the drawer.
+    const toggle = () => setIsOpen((open) => !open)
+    window.addEventListener('bloom:toggle-nav', toggle)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('bloom:toggle-nav', toggle)
+    }
   }, [])
 
   // Publish the state for the global layout rules in App.css.
