@@ -34,3 +34,9 @@ test('gives progressive quiz hints', () => {
 test('unknown text falls through', () => {
   expect(runCommand('journal', ctx())).toBeNull()
 })
+
+test('logs mood and gratitude', () => {
+  expect(runCommand('mood 4', ctx())?.reply).toMatch(/Good/)
+  expect(runCommand('I feel awful', ctx())?.reply).toMatch(/breathing/)
+  expect(runCommand('grateful for sunshine', ctx())?.reply).toMatch(/sunshine/)
+})

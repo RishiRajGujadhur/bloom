@@ -7,6 +7,8 @@ import type { AppData } from '../model'
 import { MONEY_KEY, categoryOf, emptyMoney, formatMoney, guessCategory, toMinor, totals, byCategory, type MoneyStore } from '../features/money/moneyModel'
 import { allWords } from '../features/english/englishCourse'
 import { explain, nextHint, reveal } from './quizContext'
+import { GRATITUDE_KEY, MOOD_KEY, moods } from '../features/wellbeing/store'
+import Sentiment from 'sentiment'
 
 /**
  * Things you can type to Bloom instead of clicking around:
@@ -26,7 +28,7 @@ export function runCommand(raw: string, ctx: CommandCtx): CommandResult {
   if (!text) return null
 
   if (/^(help|what can you do\??|commands)$/.test(low))
-    return { reply: 'You can type things like: “spent 12 on lunch”, “how much did I spend?”, “add todo call mum”, “done meditation”, “hint” or “answer” during a quiz, “define grateful”, or a page name to go there.' }
+    return { reply: 'You can type things like: “spent 12 on lunch”, “how much did I spend?”, “add todo call mum”, “done meditation”, “mood 4” or “I feel tired”, “grateful for …”, “hint” or “answer” during a quiz, “define grateful”, or a page name to go there.' }
 
   if (/^(clear|clear chat|reset chat)$/.test(low)) {
     ctx.clear()
@@ -41,7 +43,7 @@ export function runCommand(raw: string, ctx: CommandCtx): CommandResult {
   // Expenses: “spent 12.50 on lunch”, “paid $30 for gas at shell”, “coffee 4.20”
   const lead = low.match(/^(?:i\s+)?(?:spent|spend|paid|pay|bought|expense|add expense)\s*(?:[$€£₹]|rs\.?)?\s*(\d+(?:[.,]\d{1,2})?)\s*(?:on|for|at)?\s*(.*)$/)
   const tail = low.match(/^(?:spent\s+)?([a-z][a-z '&-]{1,40}?)\s+(?:[$€£₹])?(\d+(?:[.,]\d{1,2})?)$/)
-  const spent = lead ? { amountRaw: lead[1], placeRaw: lead[2] } : tail && !/^(add|done|did|define|hint)/.test(tail[1]) ? { amountRaw: tail[2], placeRaw: tail[1] } : null
+  const spent = lead ? { amountRaw: lead[1], placeRaw: lead[2] } : tail && !/^(add|done|did|define|hint|mood|log mood|timer|level|unit|lesson)\b/.test(tail[1]) ? { amountRaw: tail[2], placeRaw: tail[1] } : null
   if (spent) {
     const { amountRaw, placeRaw } = spent
     const amount = toMinor(amountRaw.replace(',', '.'))
@@ -62,6 +64,25 @@ export function runCommand(raw: string, ctx: CommandCtx): CommandResult {
     const t = totals(store.txns, dayKey())
     const top = byCategory(store.txns, dayKey().slice(0, 7))[0]
     return { reply: `This month you’ve spent ${formatMoney(t.month, store.currency)}${t.monthChange !== null ? ` (${t.monthChange > 0 ? '+' : ''}${Math.round(t.monthChange)}% vs last month)` : ''}.${top ? ` Most went on ${categoryOf(top.category).emoji} ${categoryOf(top.category).name}.` : ''}` }
+  }
+
+  // Mood: “mood 4”, “I feel great”, “feeling anxious”
+  const moodNum = low.match(/^(?:log\s+)?mood\s*:?\s*([1-5])$/)
+  const feel = low.match(/^(?:i\s*(?:'m|am)\s+feeling|i feel|feeling)\s+(.+)$/)
+  if (moodNum || feel) {
+    const score = moodNum ? Number(moodNum[1]) : Math.max(1, Math.min(5, 3 + Math.round(new Sentiment().analyze(feel![1]).score / 2)))
+    const list = readStore<unknown[]>(MOOD_KEY, [])
+    writeStore(MOOD_KEY, [...(Array.isArray(list) ? list : []), { id: crypto.randomUUID(), at: Date.now(), mood: score, note: feel ? feel[1] : '' }])
+    const m = moods.find((x) => x.value === score)
+    return { reply: `Logged your mood: ${m?.emoji ?? ''} ${m?.label ?? score}.${score <= 2 ? ' Want to try a short breathing exercise? Type “breathe”.' : ''}`, mood: score >= 4 ? 'cheer' : 'think' }
+  }
+
+  // Gratitude: “grateful for my sister”, “thankful for sunshine”
+  const thanks = text.match(/^(?:i(?:'m| am)\s+)?(?:grateful|thankful)\s+(?:for|that)\s+(.+)$/i) ?? text.match(/^gratitude\s*:\s*(.+)$/i)
+  if (thanks) {
+    const list = readStore<unknown[]>(GRATITUDE_KEY, [])
+    writeStore(GRATITUDE_KEY, [...(Array.isArray(list) ? list : []), { id: crypto.randomUUID(), at: Date.now(), text: thanks[1].trim() }])
+    return { reply: `Saved to your gratitude jar: “${thanks[1].trim()}” 🙏`, mood: 'cheer' }
   }
 
   // Todos

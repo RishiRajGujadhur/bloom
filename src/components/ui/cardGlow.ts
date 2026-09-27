@@ -61,13 +61,21 @@ export function installTitleReveal() {
   run()
 }
 
-/** Cards on a newly opened page rise in with a short stagger, so every page enters the same way. */
+/** Cards on a newly opened page rise in with a short stagger and their heading icons draw in, so every page enters the same way. */
 export function installCardEntrance() {
   if (typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
   const run = () =>
     window.setTimeout(() => {
       const cards = [...document.querySelectorAll<HTMLElement>('main :is(.studio-card, .card)')].filter((c) => c.getBoundingClientRect().top < window.innerHeight).slice(0, 14)
       if (cards.length) gsap.from(cards, { y: 16, opacity: 0, duration: 0.5, stagger: 0.045, ease: 'power3.out', clearProps: 'transform,opacity' })
+      // Heading icons draw themselves in (the same stroke-draw as page emblems).
+      cards.forEach((card, i) => {
+        const parts = card.querySelectorAll<SVGGeometryElement>(':scope > :is(h2, h3) svg :is(path, circle, rect, line, polyline, polygon)')
+        parts.forEach((p) => {
+          const len = p.getTotalLength?.() || 40
+          gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.9, delay: 0.15 + i * 0.045, ease: 'power2.inOut', clearProps: 'strokeDasharray,strokeDashoffset' })
+        })
+      })
     }, 180)
   window.addEventListener('hashchange', run)
 }
