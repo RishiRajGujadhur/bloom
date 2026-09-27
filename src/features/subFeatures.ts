@@ -259,6 +259,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'skipDay', title: 'Skip for today', description: 'Swipe left hides a habit until tomorrow.' },
     { id: 'allDoneBurst', title: 'All-done celebration', description: 'Stars when the last habit is checked.' },
     { id: 'doneList', title: 'Done today list', description: 'Animated list with undo.' },
+    { id: 'stickerBook', title: 'Sticker book', description: 'A month page where every check-in is a sticker.' },
   ],
   chatJournal: [
     { id: 'quickEntry', title: 'Quick entry', description: 'Short journal entries with tags.' },

@@ -310,3 +310,93 @@
   background: #c8e6c9;
   border-color: #2e7d32;
 }
+
+/* ---------- Habit sticker book ---------- */
+.sb-book {
+  margin: 0 0 16px;
+  padding: 16px;
+  border-radius: 8px 20px 20px 8px;
+  background: #fffdf7;
+  border-left: 14px solid #8fb996;
+  box-shadow: 0 10px 24px #0000001f;
+  color: #3a3a3a;
+}
+
+.sb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sb-head h3 {
+  margin: 0;
+  font-family: var(--font-hand, 'Caveat', cursive);
+  font-size: 1.6rem;
+}
+
+.sb-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 6px 0 10px;
+  font-size: 0.85rem;
+}
+
+.sb-page {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.sb-dow {
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.sb-day {
+  position: relative;
+  min-height: 62px;
+  padding: 4px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(180deg, #fffdf7 0 11px, #eef3e8 11px 12px);
+  border: 1px dashed #d6dccd;
+}
+
+.sb-day::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 30%;
+  width: 36%;
+  height: 10px;
+  background: var(--tape);
+  opacity: 0.8;
+  transform: rotate(-4deg);
+}
+
+.sb-day.today {
+  border: 2px solid #8fb996;
+}
+
+.sb-day.future {
+  opacity: 0.45;
+}
+
+.sb-day small {
+  font-weight: 700;
+}
+
+.sb-stickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+}
+
+.sb-sticker {
+  display: inline-block;
+  font-size: 1.15rem;
+  transform: rotate(var(--r));
+  filter: drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 2px #0003);
+}
