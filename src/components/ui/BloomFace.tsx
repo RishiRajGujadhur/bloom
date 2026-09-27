@@ -50,14 +50,13 @@ export const BloomFace = forwardRef<
     const tl = gsap.timeline()
     current.current = tl
     if (m === 'talk' && robot) tl.fromTo(svg.current.querySelectorAll('.rb-bar'), { scaleY: 0.3 }, { scaleY: () => gsap.utils.random(0.6, 1.4), transformOrigin: '50% 50%', duration: 0.12, yoyo: true, repeat: 5, stagger: 0.03, ease: 'steps(3)' })
-    if (m === 'talk' && !robot) tl.fromTo(body, { scaleY: 0.97, scaleX: 1.015 }, { scaleY: 1, scaleX: 1, transformOrigin: '50% 90%', duration: 0.6, ease: 'sine.out' })
+    if (m === 'talk' && !robot) tl.to(svg.current.querySelector('.bf-lid'), { scaleY: 1, duration: 0.1, yoyo: true, repeat: 1, ease: 'sine.inOut' })
     if (m === 'happy' || m === 'wink')
       tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.9).to(happy, { opacity: 0, duration: 0.1 }, 0.9)
     if (m === 'think') tl.to(q('.bf-pupil'), { x: 4, y: -4, duration: 0.35, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
     if (m === 'excited' || m === 'wave') {
       const w = wave()
       if (w) tl.add(w, 0)
-      if (m === 'excited') tl.fromTo(body, { y: 0 }, { y: -3, duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 0)
     }
   }
   useImperativeHandle(ref, () => ({ react }))
@@ -76,12 +75,15 @@ export const BloomFace = forwardRef<
         .to(lid, { scaleY: 0, duration: 0.18, ease: 'sine.out' })
     }
     next = gsap.delayedCall(2.5, blink)
-    const breathe = gsap.to(el.querySelector('.bf-breath'), { scale: 1.025, transformOrigin: '50% 60%', duration: 3.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    // Slow levitation: Bloom floats up and down while its shadow breathes.
+    const breathe = gsap.timeline({ repeat: -1, yoyo: true, defaults: { duration: 2.8, ease: 'sine.inOut' } })
+      .to(el.querySelector('.bf-body'), { y: -4 }, 0)
+      .to(el.querySelector('.bf-shadow'), { scaleX: 0.8, opacity: 0.18, transformOrigin: '50% 50%' }, 0)
     // Say hello: pop in and wave when Bloom first appears.
     let hello: gsap.core.Timeline | undefined
     if (waveOnMount) {
       hello = gsap.timeline({ delay: 0.3 })
-      hello.fromTo(el.querySelector('.bf-breath'), { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 60%', duration: 0.7, ease: 'sine.out' })
+      hello.fromTo(el.querySelector('.bf-breath'), { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'sine.out' })
       const w = wave()
       if (w) hello.add(w, '-=0.1')
     }
@@ -143,7 +145,7 @@ export const BloomFace = forwardRef<
   }, [mood])
 
   return (
-    <svg ref={svg} className={`bloom-face ${className ?? ''}`} width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={label}>
+    <svg ref={svg} className={`bloom-face ${className ?? ''}`} width={size} height={size} viewBox="0 -2 100 108" role="img" aria-label={label}>
       <defs>
         <linearGradient id={`bf-body-${uid}`} x1="0.2" y1="0" x2="0.8" y2="1">
           <stop offset="0" stopColor="#ff7a59" />
@@ -159,6 +161,7 @@ export const BloomFace = forwardRef<
           <stop offset="1" stopColor="#fff4ea" />
         </linearGradient>
       </defs>
+      <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : '#d9503a'} opacity="0.28" />
       {robot ? (
         <g className="bf-body">
           <g className="bf-arm" opacity="0">

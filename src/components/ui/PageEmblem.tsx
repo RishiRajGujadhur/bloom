@@ -134,7 +134,7 @@ export function PageEmblem({ page }: { page: string }) {
     }
   }, [page, e.motion])
   return (
-    <span ref={host} className="page-emblem" style={{ ['--emblem' as string]: e.color }} aria-hidden="true" key={page}>
+    <span ref={host} className="page-emblem" style={{ ['--emblem' as string]: 'var(--accent-color)' }} aria-hidden="true" key={page}>
       <e.Icon size={46} strokeWidth={1.6} data-animated />
     </span>
   )

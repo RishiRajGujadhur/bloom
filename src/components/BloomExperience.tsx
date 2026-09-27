@@ -7,7 +7,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from 'react'
-import { ChevronLeft, ChevronRight, Leaf, Pause, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Leaf } from 'lucide-react'
 import heroLandscape from '../assets/bloom/hero-landscape.webp'
 import type { NavKey } from './layout/Sidebar'
 import { PageEmblem } from './ui/PageEmblem'
@@ -223,13 +223,8 @@ export function BloomHeading({
   lead?: ReactNode
 }) {
   const hero = page === 'overview'
-  const [paused, setPaused] = useState(() => {
-    try {
-      return localStorage.getItem('bloom-motion') === 'paused'
-    } catch {
-      return false
-    }
-  })
+  // Decorative motion always loops (the pause button was removed).
+  const paused = false
   useEffect(() => {
     document.documentElement.dataset.bloomMotion = paused ? 'paused' : 'running'
     try {
@@ -295,19 +290,6 @@ export function BloomHeading({
       </div>
       <div className="bloom-heading-actions">
         {children}
-        <button
-          className="bloom-motion-toggle"
-          onClick={() => setPaused(!paused)}
-          aria-pressed={paused}
-          aria-label={
-            paused ? 'Resume decorative motion' : 'Pause decorative motion'
-          }
-          title={
-            paused ? 'Resume decorative motion' : 'Pause decorative motion'
-          }
-        >
-          {paused ? <Play size={14} /> : <Pause size={14} />}
-        </button>
       </div>
     </div>
   )

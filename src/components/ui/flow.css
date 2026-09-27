@@ -313,3 +313,11 @@ html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-actions {
   image-rendering: pixelated;
   flex-shrink: 0;
 }
+
+/* Smaller, cleaner page titles. */
+html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) h1 {
+  font-family: 'Manrope', var(--font-sans, system-ui), sans-serif;
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}

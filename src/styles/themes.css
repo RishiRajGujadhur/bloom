@@ -321,11 +321,14 @@ html[data-theme='matrix'] body {
 html[data-theme='matrix'] h1,
 html[data-theme='matrix'] h2,
 html[data-theme='matrix'] h3 {
-  font-family: 'Press Start 2P', 'VT323', monospace;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  text-shadow: 0 0 10px #39ff6a66;
+  font-family: 'Fira Code', 'VT323', ui-monospace, monospace;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: 0 0 8px #39ff6a55;
+}
+html[data-theme='matrix'] h1 {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
 }
 /* scanlines + vignette */
 html[data-theme='matrix'] body::after {
