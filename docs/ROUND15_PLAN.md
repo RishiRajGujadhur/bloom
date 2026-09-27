@@ -82,3 +82,9 @@ Inspired by Bercerita's floating storybooks and Dinotaeng's illustrated town.
 | 8 | Epiphany lightbulb garland | GSAP | ✅ pushed |
 | 9 | Guided journal story carousel | Swiper coverflow | ✅ pushed |
 | 10 | Focus week diorama + right-click timer actions | GSAP | ✅ pushed |
+
+## Round 17 — animation on every page, less scrolling, links, IQ/EQ
+
+- Every page: animated SVG emblem (GSAP draw-on + page idle), "Works with" link row, hover hints, Fold sections that start closed on phones, compact phone headings.
+- Brain games: IQ-style reasoning and EQ assessments, four training games (matrix, analogies, face reader, kind reply), personal leaderboard.
+- Pages (each its own commit): Calendar capacity ring · Routines day dial · Challenges summit trail · Eye care watching eye · Daylight rising sun · Focus sounds halo · Fasting stage track · Workouts week plates · Intervals segment flash · Yoga lotus breath · Mala tap ripples · Flashcards piles · Run strider · Release ash · Stretch band · Body sparkline · Mixer orbit · Mind maps growing branches · Memory palace year ribbon · Vision board pop-in. All with right-click actions.
