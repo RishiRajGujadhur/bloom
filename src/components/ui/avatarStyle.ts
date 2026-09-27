@@ -8,13 +8,16 @@ import { useMatrix } from './MatrixRain'
  *   robot – the green terminal robot
  *   orb   – a soft, blurry colour orb with a tiny face that drifts through moods
  */
-export type AvatarStyle = 'auto' | 'bloom' | 'robot' | 'orb'
+export type AvatarStyle = 'auto' | 'bloom' | 'robot' | 'orb' | 'spark' | 'beacon' | 'tinker'
 export const AVATAR_KEY = 'bloom-avatar-style'
 export const avatarStyles: { id: AvatarStyle; label: string; hint: string }[] = [
   { id: 'auto', label: 'Automatic', hint: 'Bloom, or the robot in the Matrix theme' },
   { id: 'bloom', label: 'Bloom', hint: 'The coral diamond with a window eye' },
   { id: 'robot', label: 'Robot', hint: 'A green terminal robot' },
   { id: 'orb', label: 'Mood orb', hint: 'A soft glowing orb whose colour follows its mood' },
+  { id: 'spark', label: 'Sparky', hint: 'Orange robot: crackling antenna, pulsing ring eyes' },
+  { id: 'beacon', label: 'Beacon', hint: 'Orange robot: spinning radar and a scanner eye' },
+  { id: 'tinker', label: 'Tinker', hint: 'Orange robot: turning gear and puffs of steam' },
 ]
 
 const listeners = new Set<() => void>()
@@ -45,7 +48,8 @@ const subscribe = (l: () => void) => {
 export const useAvatarStyle = () => useSyncExternalStore(subscribe, read, () => 'auto' as AvatarStyle)
 
 /** The drawing actually used right now. */
-export function useAvatarDrawing(): 'bloom' | 'robot' | 'orb' {
+export type AvatarDrawing = Exclude<AvatarStyle, 'auto'>
+export function useAvatarDrawing(): AvatarDrawing {
   const style = useAvatarStyle()
   const matrix = useMatrix()
   return style === 'auto' ? (matrix ? 'robot' : 'bloom') : style

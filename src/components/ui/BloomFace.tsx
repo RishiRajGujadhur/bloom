@@ -2,7 +2,8 @@ import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } f
 import { type Act, ActProp, pageActs, playAct } from './avatarActs'
 import gsap from 'gsap'
 import './bloomFace.css'
-import { useAvatarDrawing } from './avatarStyle'
+import { type AvatarDrawing, useAvatarDrawing } from './avatarStyle'
+import { OrangeBot, isOrange, orangeIdle } from './orangeBots'
 
 export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave'
 export type BloomFaceHandle = { react: (mood: FaceMood) => void; actFor: (page: string) => void }
@@ -36,7 +37,7 @@ const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(p
  */
 export const BloomFace = forwardRef<
   BloomFaceHandle,
-  { size?: number; mood?: FaceMood; follow?: boolean; label?: string; className?: string; waveOnMount?: boolean; variant?: 'bloom' | 'robot' | 'orb' }
+  { size?: number; mood?: FaceMood; follow?: boolean; label?: string; className?: string; waveOnMount?: boolean; variant?: AvatarDrawing }
 >(function BloomFace({ size = 72, mood = 'idle', follow = true, label = 'Bloom', className, waveOnMount = true, variant }, ref) {
   const svg = useRef<SVGSVGElement>(null)
   const current = useRef<gsap.core.Timeline | null>(null)
@@ -45,6 +46,7 @@ export const BloomFace = forwardRef<
   const drawing = variant ?? chosen
   const robot = drawing === 'robot'
   const orb = drawing === 'orb'
+  const orange = isOrange(drawing)
   const q = (s: string) => svg.current?.querySelector(s) as SVGElement | null
 
   const wave = () => {
@@ -72,13 +74,13 @@ export const BloomFace = forwardRef<
     gsap.set(happy, { opacity: 0 })
     const tl = gsap.timeline()
     current.current = tl
-    if (m === 'talk' && robot) tl.fromTo(svg.current.querySelectorAll('.rb-bar'), { scaleY: 0.3 }, { scaleY: () => gsap.utils.random(0.6, 1.4), transformOrigin: '50% 50%', duration: 0.12, yoyo: true, repeat: 5, stagger: 0.03, ease: 'steps(3)' })
+    if (m === 'talk' && (robot || orange)) tl.fromTo(svg.current.querySelectorAll('.rb-bar'), { scaleY: 0.3 }, { scaleY: () => gsap.utils.random(0.6, 1.4), transformOrigin: '50% 50%', duration: 0.12, yoyo: true, repeat: 5, stagger: 0.03, ease: 'steps(3)' })
     if (orb) {
       const mood = m === 'happy' || m === 'excited' || m === 'wave' || m === 'wink' ? 4 : m === 'think' ? 1 : m === 'talk' ? 7 : -1
       if (mood >= 0) tl.add(orbTo(svg.current, mood, 0.6), 0)
       if (m === 'talk') tl.fromTo(q('.orb-mouth'), { scaleY: 1 }, { scaleY: 1.8, svgOrigin: '50 52', duration: 0.12, yoyo: true, repeat: 5, ease: 'sine.inOut' }, 0)
     }
-    if (m === 'talk' && !robot && !orb) tl.to(svg.current.querySelector('.bf-lid'), { scaleY: 1, duration: 0.1, yoyo: true, repeat: 1, ease: 'sine.inOut' })
+    if (m === 'talk' && !robot && !orb && !orange) tl.to(svg.current.querySelector('.bf-lid'), { scaleY: 1, duration: 0.1, yoyo: true, repeat: 1, ease: 'sine.inOut' })
     if (m === 'happy' || m === 'wink')
       tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.9).to(happy, { opacity: 0, duration: 0.1 }, 0.9)
     if (m === 'think') tl.to(q('.bf-pupil'), { x: 4, y: -4, duration: 0.35, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
@@ -163,6 +165,13 @@ export const BloomFace = forwardRef<
     }
   }, [orb])
 
+  // Orange robots: each has its own idle life.
+  useEffect(() => {
+    const el = svg.current
+    if (!el || !isOrange(drawing) || reduced()) return
+    return orangeIdle(el, drawing)
+  }, [drawing])
+
   // Robot idle: antenna light pulses, a scanline sweeps the visor, the visor glances around.
   useEffect(() => {
     const el = svg.current
@@ -223,8 +232,10 @@ export const BloomFace = forwardRef<
           <stop offset="1" stopColor="#fff4ea" />
         </linearGradient>
       </defs>
-      <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : orb ? '#6a72c8' : '#d9503a'} opacity="0.28" />
-      {orb ? (
+      <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : orb ? '#6a72c8' : orange ? '#ff8a2a' : '#d9503a'} opacity="0.28" />
+      {isOrange(drawing) ? (
+        <OrangeBot variant={drawing} uid={uid} />
+      ) : orb ? (
         <g className="bf-body">
           <defs>
             <radialGradient id={`orb-g-${uid}`} cx="0.38" cy="0.3" r="0.75">
