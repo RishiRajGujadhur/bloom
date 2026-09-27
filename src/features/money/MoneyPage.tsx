@@ -84,6 +84,7 @@ function Ring({ share }: { share: number }) {
 
 export function MoneyPage() {
   const [store, setStoreState] = useState<MoneyStore>(() => ({ ...emptyMoney, ...readStore(MONEY_KEY, emptyMoney) }))
+  const [sentenceMsg, setSentenceMsg] = useState('')
   // Expenses added from Bloom's chat show up straight away.
   useEffect(() => {
     const reload = () => setStoreState({ ...emptyMoney, ...readStore(MONEY_KEY, emptyMoney) })
@@ -151,6 +152,17 @@ export function MoneyPage() {
       </section>
       <section className="studio-card mn-add">
         <h3>Add</h3>
+        <form className="mn-sentence" onSubmit={async (e) => {
+          e.preventDefault()
+          const input = e.currentTarget.elements.namedItem('sentence') as HTMLInputElement
+          const { runCommand } = await import('../../companion/chatCommands')
+          const res = runCommand(input.value.startsWith('spent') ? input.value : `spent ${input.value}`, { navigate: () => {}, clear: () => {} })
+          setSentenceMsg(res?.reply ?? 'Try “12.50 on lunch”.')
+          if (res?.mood === 'cheer') { burst(input, 'coins'); input.value = '' }
+        }}>
+          <input name="sentence" className="studio-input" placeholder="Quick: “12.50 on lunch at Nando’s”" aria-label="Describe a purchase" />
+          {sentenceMsg && <small className="quick-note">{sentenceMsg}</small>}
+        </form>
         <div className="studio-chip-row" role="group" aria-label="Type">
           <button type="button" className="studio-chip" aria-pressed={!income} onClick={() => setIncome(false)}>Spent</button>
           <button type="button" className="studio-chip" aria-pressed={income} onClick={() => setIncome(true)}>Received</button>

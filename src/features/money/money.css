@@ -299,3 +299,8 @@
 .mn-forecast small {
   color: var(--text-muted);
 }
+.mn-sentence {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 6px;
+}

@@ -10,6 +10,7 @@ import { guideFor, pageGuides, type Choice } from './guideScripts'
 import type { Dispatch, SetStateAction } from 'react'
 import type { AppData } from '../model'
 import { explain, nextHint, reveal, useQuiz } from './quizContext'
+import { burst } from '../components/ui/celebrate'
 import './guide.css'
 
 type Line = { id: number; from: 'bloom' | 'you'; text: string }
@@ -151,6 +152,7 @@ export function BloomGuide({
       setQuery('')
       setLines((l) => trim([...l, { id: ++lineId, from: 'you', text }]))
       face.current?.react(res.mood ?? 'cheer')
+      if (res.mood === 'cheer') burst(document.querySelector('.bg-guide-search input') ?? undefined, 'stars')
       return say(res.reply, root2)
     }
     if (results[0]) {
