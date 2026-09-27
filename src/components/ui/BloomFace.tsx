@@ -1,10 +1,11 @@
-import { forwardRef, useEffect, useId, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from 'react'
+import { type Act, ActProp, pageActs, playAct } from './avatarActs'
 import gsap from 'gsap'
 import './bloomFace.css'
 import { useMatrix } from './MatrixRain'
 
 export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave'
-export type BloomFaceHandle = { react: (mood: FaceMood) => void }
+export type BloomFaceHandle = { react: (mood: FaceMood) => void; actFor: (page: string) => void }
 
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -59,7 +60,22 @@ export const BloomFace = forwardRef<
       if (w) tl.add(w, 0)
     }
   }
-  useImperativeHandle(ref, () => ({ react }))
+  // Page acts: show a prop for the page's intent, then play its timeline once drawn.
+  const [act, setAct] = useState<{ act: Act; n: number } | null>(null)
+  const actFor = (page: string) => {
+    const a = pageActs[page] ?? 'wave'
+    if (a === 'wave' || reduced()) return react('wave')
+    setAct((p) => ({ act: a, n: (p?.n ?? 0) + 1 }))
+  }
+  useEffect(() => {
+    if (!act || !svg.current) return
+    const tl = playAct(svg.current, act.act)
+    tl.eventCallback('onComplete', () => setAct(null))
+    return () => {
+      tl.kill()
+    }
+  }, [act])
+  useImperativeHandle(ref, () => ({ react, actFor }))
 
   // Calm idle: soft blinks at uneven intervals and slow breathing.
   useEffect(() => {
@@ -225,6 +241,7 @@ export const BloomFace = forwardRef<
           </g>
         </g>
       )}
+      {act && <ActProp key={act.n} act={act.act} robot={robot} />}
     </svg>
   )
 })

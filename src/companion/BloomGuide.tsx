@@ -73,7 +73,7 @@ export function BloomGuide({
     if (lastPage.current === page) return
     lastPage.current = page
     const g = guideFor(page, names)
-    face.current?.react('wave')
+    face.current?.actFor(page)
     say(g.say, g.choices)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
