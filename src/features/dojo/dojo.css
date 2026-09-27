@@ -162,3 +162,9 @@
   width: 100%;
   max-width: 150px;
 }
+
+.studio-rail > .dojo-card,
+.studio-rail > .dojo-form,
+.studio-rail > .ex-prog {
+  scroll-snap-align: start;
+}

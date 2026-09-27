@@ -320,3 +320,38 @@
     transform: rotate(360deg);
   }
 }
+
+/* Rail slider arrows */
+.studio-rail-wrap {
+  display: grid;
+  gap: 4px;
+}
+.studio-rail-arrows {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.studio-rail-arrows button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.studio-rail-arrows button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.studio-rail.is-all {
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  overflow: visible;
+}

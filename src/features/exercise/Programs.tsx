@@ -1,11 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import rough from 'roughjs'
-import { Slider, logActivity, readStore, writeStore } from '../../components/studio/Studio'
+import { Rail, Slider, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { ExerciseFigure } from './ExerciseFigure'
-import { ShowMore } from '../../components/ui/Flow'
 import { programExercises, programMinutes, programs, type Program } from './moves'
 
 const on = (id: string) => subOn('exerciseGuides', id)
@@ -123,7 +122,7 @@ export function Programs({ seatedOnly }: { seatedOnly: boolean }) {
           </div>
         )}
       </div>
-      <ShowMore className="ex-prog-grid" initial={4} label="programs">
+      <Rail label="Programs">
         {programs
           .filter((p) => programExercises(p, seatedOnly).length >= 3)
           .map((p) => (
@@ -141,7 +140,7 @@ export function Programs({ seatedOnly }: { seatedOnly: boolean }) {
               </div>
             </article>
           ))}
-      </ShowMore>
+      </Rail>
     </div>
   )
 }

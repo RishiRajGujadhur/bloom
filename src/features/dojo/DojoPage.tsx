@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { annotate } from 'rough-notation'
 import { Swords, Library, Target, Timer, Award } from 'lucide-react'
-import { Studio, StudioScene, Slider, logActivity, readStore, writeStore } from '../../components/studio/Studio'
+import { Rail, Studio, StudioScene, Slider, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { burst } from '../../components/ui/celebrate'
 import { ExerciseFigure } from '../exercise/ExerciseFigure'
 import { subOn } from '../subFeatures'
@@ -20,7 +20,6 @@ import {
   type Style,
   type Technique,
 } from './dojoMoves'
-import { ShowMore } from '../../components/ui/Flow'
 import './dojo.css'
 
 const on = (id: string) => subOn('dojo', id)
@@ -179,7 +178,7 @@ export function DojoPage() {
         </div>
       </div>
       {!visible.length && <p className="studio-empty">No techniques match. Pick another style or type.</p>}
-      <ShowMore className="dojo-grid" initial={8} label="techniques">
+      <Rail label="Techniques">
         {visible.map((t) => (
           <button key={t.id} type="button" className="studio-card dojo-card" onClick={() => choose(t)}>
             <ExerciseFigure exercise={t} playing={false} animate={false} small mirror={s.southpaw} />
@@ -187,7 +186,7 @@ export function DojoPage() {
             <small>{t.style.map((x) => styleNames[x]).join(' · ')}</small>
           </button>
         ))}
-      </ShowMore>
+      </Rail>
     </div>
   )
 
@@ -275,7 +274,7 @@ function Forms({ s, onDone }: { s: Store; onDone: (f: Form, reps: number) => voi
       </div>
     )
   return (
-    <div className="dojo-grid">
+    <Rail label="Forms">
       {forms
         .filter((f) => (s.seated ? f.id === 'seated-dojo' : f.id !== 'seated-dojo') && s.styles.includes(f.style))
         .map((f) => (
@@ -287,7 +286,7 @@ function Forms({ s, onDone }: { s: Store; onDone: (f: Form, reps: number) => voi
             <button type="button" className="studio-btn primary" onClick={() => { setActive(f); setStep(0); setPlaying(false) }}>Start form</button>
           </article>
         ))}
-    </div>
+    </Rail>
   )
 }
 

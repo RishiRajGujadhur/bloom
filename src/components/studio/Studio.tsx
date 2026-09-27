@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { Children, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import gsap from 'gsap'
 import './studio.css'
 import { setHeadSlot } from '../ui/headSlot'
@@ -158,10 +159,60 @@ export function Stat({ value, label, hint }: { value: ReactNode; label: string; 
 }
 
 /** Horizontal, snap-scrolling card rail: the "slider" layout for lists. */
+/** A sideways list with slider arrows (and Show all), like the card rails. */
 export function Rail({ children, label }: { children: ReactNode; label: string }) {
+  const track = useRef<HTMLDivElement>(null)
+  const [edges, setEdges] = useState({ start: true, end: true })
+  const [all, setAll] = useState(false)
+  const count = Children.count(children)
+  useEffect(() => {
+    const node = track.current
+    if (!node) return
+    const update = () => setEdges({ start: node.scrollLeft < 2, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 2 })
+    update()
+    node.addEventListener('scroll', update, { passive: true })
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null
+    ro?.observe(node)
+    return () => {
+      node.removeEventListener('scroll', update)
+      ro?.disconnect()
+    }
+  }, [count, all])
+  const move = (dir: number) => track.current?.scrollBy({ left: dir * track.current.clientWidth * 0.85, behavior: reduced() ? 'auto' : 'smooth' })
+  const scrollable = !(edges.start && edges.end)
   return (
-    <div className="studio-rail" role="list" aria-label={label}>
-      {children}
+    <div className="studio-rail-wrap">
+      {(scrollable || all) && (
+        <div className="studio-rail-arrows">
+          <button type="button" onClick={() => setAll(!all)} aria-expanded={all}>
+            {all ? 'Show slider' : `Show all ${count}`}
+          </button>
+          {!all && (
+            <>
+              <button type="button" aria-label={`Previous ${label}`} disabled={edges.start} onClick={() => move(-1)}>
+                <ChevronLeft size={16} />
+              </button>
+              <button type="button" aria-label={`Next ${label}`} disabled={edges.end} onClick={() => move(1)}>
+                <ChevronRight size={16} />
+              </button>
+            </>
+          )}
+        </div>
+      )}
+      <div
+        ref={track}
+        className={`studio-rail${all ? ' is-all' : ''}`}
+        role="list"
+        aria-label={label}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.target !== e.currentTarget) return
+          if (e.key === 'ArrowRight') move(1)
+          if (e.key === 'ArrowLeft') move(-1)
+        }}
+      >
+        {children}
+      </div>
     </div>
   )
 }
