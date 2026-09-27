@@ -11,6 +11,8 @@ import { ChevronLeft, ChevronRight, Leaf, Pause, Play } from 'lucide-react'
 import heroLandscape from '../assets/bloom/hero-landscape.webp'
 import type { NavKey } from './layout/Sidebar'
 import { PageEmblem } from './ui/PageEmblem'
+import { createPortal } from 'react-dom'
+import { compactTitles, useHeadSlot } from './ui/Flow'
 import './bloom-experience.css'
 
 export function CardRail({
@@ -238,8 +240,10 @@ export function BloomHeading({
       delete document.documentElement.dataset.bloomMotion
     }
   }, [paused])
-  return (
-    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}${lead ? ' has-lead' : ''}`}>
+  const slot = useHeadSlot()
+  const inSlot = !hero && !!slot && compactTitles()
+  const bar = (
+    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}${lead ? ' has-lead' : ''}${inSlot ? ' in-slot' : ''}`}>
       {lead && <div className="bloom-heading-lead">{lead}</div>}
       {hero && (
         <img className="bloom-hero-art" src={heroLandscape} alt="" aria-hidden="true" />
@@ -306,5 +310,6 @@ export function BloomHeading({
       </div>
     </div>
   )
+  return inSlot && slot ? createPortal(bar, slot) : bar
 }
 

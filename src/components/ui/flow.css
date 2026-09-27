@@ -285,3 +285,26 @@ html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-actions {
     text-align: left;
   }
 }
+
+/* The page bar inside a Studio tab row: slim, no card chrome. */
+.studio-head-slot {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 0;
+}
+.studio-head-slot:empty {
+  display: none;
+}
+.studio-head-slot .bloom-heading.feature-heading.in-slot {
+  flex: 1;
+  margin: 0;
+  padding: 0 0 0 10px;
+  min-height: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.studio-head-slot .bloom-heading.in-slot .bloom-contours {
+  display: none;
+}

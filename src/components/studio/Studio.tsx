@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import gsap from 'gsap'
 import './studio.css'
+import { setHeadSlot } from '../ui/headSlot'
 import './shared.css'
 
 /**
@@ -90,6 +91,7 @@ export function Studio({
             <span className="studio-tab-ink" style={{ ['--i' as string]: index, ['--n' as string]: visible.length } as CSSProperties} aria-hidden="true" />
           </div>
         )}
+        <div className="studio-head-slot" ref={(el) => setHeadSlot(el)} />
         {aside && <div className="studio-aside">{aside}</div>}
       </div>
       <div ref={panel} className="studio-panel" role="tabpanel" id={`studio-${name}-panel`} aria-labelledby={tab ? `studio-${name}-${tab.id}` : undefined}>

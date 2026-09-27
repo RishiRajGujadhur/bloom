@@ -230,3 +230,5 @@ export function ShowMore({ children, initial = 6, step, className, label = 'more
     </>
   )
 }
+
+export { setHeadSlot, useHeadSlot } from './headSlot'
