@@ -1,6 +1,5 @@
 import { subOn } from '../../features/subFeatures'
 import { useEffect, useRef } from 'react'
-import { Compass } from 'lucide-react'
 import { driver } from 'driver.js'
 import type { DriveStep, Driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
@@ -613,9 +612,13 @@ export function FeatureGuide({ page }: { page: NavKey }) {
     })
     tour.current.drive()
   }
-  return (
-    <button ref={trigger} className="guide-button" onClick={start}>
-      <Compass size={18} /> Guide me
-    </button>
-  )
+  // The page tour now starts from Bloom's chat ("Show me around this page").
+  const startRef = useRef(start)
+  startRef.current = start
+  useEffect(() => {
+    const go = () => startRef.current()
+    window.addEventListener('bloom:tour', go)
+    return () => window.removeEventListener('bloom:tour', go)
+  }, [])
+  return <button ref={trigger} className="guide-button sr-only" onClick={start} tabIndex={-1} aria-hidden="true" />
 }

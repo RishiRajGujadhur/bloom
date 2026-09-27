@@ -530,6 +530,7 @@ function App() {
       window.removeEventListener('bloom:search', search)
     }
   }, [today, setData])
+  const pageEnabled = (p: string) => p in pageDetails && (!pageRequires[p as NavKey] || settings.features[pageRequires[p as NavKey]!])
   const menuCommon: PageAction[] = [
     { id: 'c-todo', label: 'Add a to-do', icon: '➕', run: () => jump('todos') },
     { id: 'c-intention', label: 'Set an intention', icon: '🌅', run: () => setModal('plan') },
@@ -682,7 +683,7 @@ function App() {
             >
               <FeatureGuide page={active} />
             </BloomHeading>
-            {active !== 'overview' && <LinkRail page={active} names={Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title]))} />}
+            {active !== 'overview' && <LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} />}
             {settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}
@@ -1500,8 +1501,8 @@ function App() {
           navigate={jump}
           open={companionOpen}
           page={active}
-          names={(p) => pageDetails[p as NavKey]?.title ?? p}
-          enabled={(p) => !pageRequires[p as NavKey] || settings.features[pageRequires[p as NavKey]!]}
+          names={(p) => (p === 'overview' ? 'Home' : (pageDetails[p as NavKey]?.title ?? p))}
+          enabled={pageEnabled}
           extra={menuCommon}
           onOpen={() => setCompanionOpen(true)}
           onClose={() => setCompanionOpen(false)}

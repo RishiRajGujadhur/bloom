@@ -55,8 +55,8 @@ export const featureLinks: Record<string, { page: string; why: string }[]> = {
 const title = (page: string) => page.replace(/-/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
 
 /** One row of linked features with animated SVG connectors. */
-export function LinkRail({ page, names }: { page: string; names?: Record<string, string> }) {
-  const links = featureLinks[page]
+export function LinkRail({ page, names, enabled = () => true }: { page: string; names?: Record<string, string>; enabled?: (p: string) => boolean }) {
+  const links = featureLinks[page]?.filter((l) => enabled(l.page))
   const row = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     if (!row.current || reduced()) return

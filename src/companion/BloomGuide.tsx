@@ -32,9 +32,20 @@ export function BloomGuide({
   /** App-wide actions (the right-click menu's common items). */
   extra?: { id: string; label: string; icon?: string; run: () => void }[]
 }) {
+  // Never offer (or open) a page that is switched off, and always keep a way
+  // to move around Bloom.
+  const allowed = (cs: Choice[]) => cs.filter((c) => !c.go || enabled(c.go))
+  const withNav = (cs: Choice[]) => {
+    const list = allowed(cs)
+    const extra = [
+      { label: 'Show me around this page', next: '__tour' },
+      { label: 'Take me somewhere', next: '__sections' },
+    ].filter((x) => !list.some((c) => c.next === x.next))
+    return [...list, ...extra]
+  }
   const start = guideFor(page, names)
   const [lines, setLines] = useState<Line[]>([{ from: 'bloom', text: start.say }])
-  const [choices, setChoices] = useState<Choice[]>(start.choices)
+  const [choices, setChoices] = useState<Choice[]>(() => withNav(start.choices))
   const [typing, setTyping] = useState(false)
   const [query, setQuery] = useState('')
   const face = useRef<BloomFaceHandle>(null)
@@ -50,7 +61,7 @@ export function BloomGuide({
     timer.current = window.setTimeout(() => {
       setTyping(false)
       setLines((l) => [...l, { from: 'bloom', text }])
-      setChoices(then)
+      setChoices(withNav(then))
       face.current?.react('talk')
       after?.()
     }, 550)
@@ -85,6 +96,7 @@ export function BloomGuide({
   const pick = (c: Choice) => {
     setLines((l) => [...l, { from: 'you', text: c.label }])
     face.current?.react('happy')
+    if (c.next === '__tour') return say('Let me show you around — follow the highlights.', root, () => window.dispatchEvent(new Event('bloom:tour')))
     if (c.next === '__page') return say(guideFor(page, names).say, pageChoices(page))
     if (c.next === '__sections')
       return say('Where to? Pick a part of Bloom.', navSections.map((s) => ({ label: s.label, next: `__section:${s.label}` })))
@@ -107,6 +119,7 @@ export function BloomGuide({
       }
       return say(a ? (c.reply ?? 'Done!') : 'That isn’t available right now — it may be switched off in Settings.', root)
     }
+    if (c.go && !enabled(c.go)) return say(`${names(c.go)} is switched off. You can turn it on in Settings.`, root)
     if (c.go) {
       const to = c.go
       return say(c.reply ?? `Opening ${names(to)}.`, root, () => navigate(to))
