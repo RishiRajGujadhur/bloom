@@ -353,6 +353,9 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'library', title: 'Quick-add foods', description: 'One tap for common meals.' },
     { id: 'mindful', title: 'Mindful eating', description: 'Hunger before, fullness and energy after.' },
     { id: 'insights', title: 'Gentle insights', description: 'Patterns like late meals or sluggish foods.' },
+    { id: 'swipeFoods', title: 'Swipe meals', description: 'Swipe right on foods that fit this meal time.' },
+    { id: 'quickWater', title: 'One-tap water', description: 'A big +1 glass button.' },
+    { id: 'afterFeeling', title: 'How it left you', description: 'Tap how you feel after eating; insights learn from it.' },
   ],
   monkMode: [
     { id: 'sand', title: 'Sand (not smoke)', description: 'Words crumble and fall as sand. Off: they drift up as smoke.' },

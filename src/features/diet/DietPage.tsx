@@ -22,6 +22,7 @@ import { NutrientsPanel } from './NutrientsPanel'
 import { RecipeBuilder } from './RecipeBuilder'
 import { loadSettings } from '../../SettingsPage'
 import type { FeaturePageProps } from '../shared/pageProps'
+import { DietQuick } from '../quick/DietQuick'
 import './diet.css'
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -228,6 +229,18 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
       {tab === 'nutrients' && <NutrientsPanel state={state} today={today} data={data} setData={setData} />}
       {tab === 'recipes' && <RecipeBuilder state={state} today={today} onLog={logMeal} />}
       {tab === 'today' && (<>
+        <DietQuick
+          kind={kind}
+          water={water}
+          target={state.targets.water}
+          hasMeal={todayMeals.length > 0}
+          onAdd={(f) => addMeal({ name: f.name, kcal: f.kcal, protein: f.protein, carbs: f.carbs, fat: f.fat, ...(f.ingredients ? { ingredients: f.ingredients } : {}) })}
+          onWater={setWater}
+          onFeeling={(feeling) => {
+            const last = todayMeals.at(-1)
+            if (last) update((s) => ({ ...s, meals: s.meals.map((m) => (m.id === last.id ? { ...m, feeling } : m)) }))
+          }}
+        />
       <section className="diet-hero">
         <PlateRing value={totals.kcal} target={state.targets.kcal} />
         <div className="diet-hero-side">
