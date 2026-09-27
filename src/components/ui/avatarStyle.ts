@@ -8,7 +8,7 @@ import { useMatrix } from './MatrixRain'
  *   robot – the green terminal robot
  *   orb   – a soft, blurry colour orb with a tiny face that drifts through moods
  */
-export type AvatarStyle = 'auto' | 'bloom' | 'robot' | 'orb' | 'spark' | 'beacon' | 'tinker'
+export type AvatarStyle = 'auto' | 'bloom' | 'robot' | 'orb' | 'spark' | 'beacon' | 'tinker' | 'pixel' | 'globe'
 export const AVATAR_KEY = 'bloom-avatar-style'
 export const avatarStyles: { id: AvatarStyle; label: string; hint: string }[] = [
   { id: 'auto', label: 'Automatic', hint: 'Bloom, or the robot in the Matrix theme' },
@@ -18,6 +18,8 @@ export const avatarStyles: { id: AvatarStyle; label: string; hint: string }[] = 
   { id: 'spark', label: 'Sparky', hint: 'Orange robot: crackling antenna, pulsing ring eyes' },
   { id: 'beacon', label: 'Beacon', hint: 'Orange robot: spinning radar and a scanner eye' },
   { id: 'tinker', label: 'Tinker', hint: 'Orange robot: turning gear and puffs of steam' },
+  { id: 'pixel', label: 'Pixel Bloom', hint: '8-bit Bloom with stepped frames and twinkling pixels' },
+  { id: 'globe', label: 'Globe', hint: 'A glossy 3D sphere that turns its head, with an orbiting moon' },
 ]
 
 const listeners = new Set<() => void>()

@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import './bloomFace.css'
 import { type AvatarDrawing, useAvatarDrawing } from './avatarStyle'
 import { OrangeBot, isOrange, orangeIdle } from './orangeBots'
+import { GlobeBot, PixelBot, extraIdle, isExtra } from './extraBots'
 
 export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave'
 export type BloomFaceHandle = { react: (mood: FaceMood) => void; actFor: (page: string) => void }
@@ -46,7 +47,7 @@ export const BloomFace = forwardRef<
   const drawing = variant ?? chosen
   const robot = drawing === 'robot'
   const orb = drawing === 'orb'
-  const orange = isOrange(drawing)
+  const orange = isOrange(drawing) || isExtra(drawing)
   const q = (s: string) => svg.current?.querySelector(s) as SVGElement | null
 
   const wave = () => {
@@ -111,6 +112,9 @@ export const BloomFace = forwardRef<
     const el = svg.current
     if (!el || reduced()) return
     const lid = el.querySelector('.bf-lid')
+    // Lids scale from their own centre (GSAP otherwise scales SVG from the
+    // top-left, which made the lid shoot in from above the head on each blink).
+    gsap.set(el.querySelectorAll('.bf-lid'), { scaleY: 0, transformOrigin: '50% 50%' })
     let next: gsap.core.Tween | null = null
     let blinkTl: gsap.core.Timeline | null = null
     const blink = () => {
@@ -170,6 +174,13 @@ export const BloomFace = forwardRef<
     const el = svg.current
     if (!el || !isOrange(drawing) || reduced()) return
     return orangeIdle(el, drawing)
+  }, [drawing])
+
+  // Pixel and globe: their own idle life.
+  useEffect(() => {
+    const el = svg.current
+    if (!el || !isExtra(drawing) || reduced()) return
+    return extraIdle(el, drawing)
   }, [drawing])
 
   // Robot idle: antenna light pulses, a scanline sweeps the visor, the visor glances around.
@@ -233,7 +244,11 @@ export const BloomFace = forwardRef<
         </linearGradient>
       </defs>
       <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : orb ? '#6a72c8' : orange ? '#ff8a2a' : '#d9503a'} opacity="0.28" />
-      {isOrange(drawing) ? (
+      {drawing === 'pixel' ? (
+        <PixelBot />
+      ) : drawing === 'globe' ? (
+        <GlobeBot uid={uid} />
+      ) : isOrange(drawing) ? (
         <OrangeBot variant={drawing} uid={uid} />
       ) : orb ? (
         <g className="bf-body">
