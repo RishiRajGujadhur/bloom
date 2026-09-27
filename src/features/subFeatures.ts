@@ -630,6 +630,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "autoChant", title: "Auto-count", description: "Counts at a steady pace for you." },
     { id: "chant", title: "Spoken chant", description: "Hear the mantra with each bead." },
     { id: "log", title: "Practice log", description: "Rounds and days practised." },
+    { id: 'ripples', title: 'Tap ripples', description: 'Each bead sends a ripple from your fingertip; rounds glow gold.' },
   ],
   inkJournal: [
     { id: "pressure", title: "Pressure-sensitive pen", description: "Lines swell and taper naturally." },

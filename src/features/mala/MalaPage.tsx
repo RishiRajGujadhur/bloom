@@ -5,6 +5,9 @@ import { Rail, Segmented, Slider, Stat, Studio, logActivity, readStore, writeSto
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { BEADS, MALA_KEY, beadOf, isQuarter, mantras, roundsOf, themes, type MalaStore, type ThemeId } from './malaModel'
+import { ripple } from '../showcase/ripple'
+import '../showcase/showcase.css'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './mala.css'
 
 const on = (id: string) => subOn('mala', id)
@@ -93,7 +96,11 @@ export function MalaPage() {
   const mantra = all.find((m) => m.id === store.mantra) ?? mantras[0]
   const theme = on('themes') ? store.theme : 'sandalwood'
 
-  const tap = () =>
+  const lastTap = useRef<{ clientX: number; clientY: number } | null>(null)
+  const tap = () => {
+    const next = count + 1
+    if (on('ripples')) ripple(stage.current, lastTap.current, isQuarter(next) ? `${next % BEADS || BEADS}` : '+1', next % BEADS === 0 ? '#ffd54f' : '#ffffffcc', next % BEADS === 0)
+    lastTap.current = null
     setCount((c) => {
       const n = c + 1
       if (on('haptics')) navigator.vibrate?.(isQuarter(n) ? [30, 50, 30] : 12)
@@ -106,6 +113,7 @@ export function MalaPage() {
       if (n >= store.target && n % store.target === 0) setAuto(false)
       return n
     })
+  }
 
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
@@ -134,9 +142,13 @@ export function MalaPage() {
     return () => clearInterval(i)
   })  
 
+  usePageActions([
+    { id: 'ml-bead', label: 'Count a bead', icon: '📿', run: tap },
+    { id: 'ml-reset', label: 'Start a new round', icon: '↺', run: () => setCount(0) },
+  ])
   const count_ = () => (
     <div className="studio-split ml-split">
-      <div ref={stage} className="studio-card ml-stage" style={{ background: `radial-gradient(circle at 50% 45%, ${themes[theme].bg[0]}, ${themes[theme].bg[1]})` }} onClick={tap} role="button" aria-label="Count a bead">
+      <div ref={stage} className="studio-card ml-stage" style={{ background: `radial-gradient(circle at 50% 45%, ${themes[theme].bg[0]}, ${themes[theme].bg[1]})` }} onClick={(e) => { lastTap.current = e; tap() }} role="button" aria-label="Count a bead" data-cursor-text="Tap" data-hint="Tap (or press space) for each bead">
         {on('mala3d') ? <MalaRing count={count} theme={theme} /> : <span className="ml-big">{beadOf(count)}</span>}
         <p className="ml-mantra" key={count}>
           {mantra.text}

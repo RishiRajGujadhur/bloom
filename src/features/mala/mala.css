@@ -47,3 +47,8 @@
     animation: none;
   }
 }
+
+.ml-stage {
+  position: relative;
+  overflow: hidden;
+}

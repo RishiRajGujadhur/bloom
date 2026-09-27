@@ -851,3 +851,19 @@
 .lo-pad {
   fill: #a5d6a7;
 }
+
+/* ---------- Tap ripple ---------- */
+.fx-ripple {
+  position: absolute;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.fx-float {
+  position: absolute;
+  transform: translateX(-50%);
+  pointer-events: none;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 3px #0006;
+}
