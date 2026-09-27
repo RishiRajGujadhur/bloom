@@ -7,6 +7,7 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { WORKOUT_KEY, type WorkoutStore } from '../workout/workoutModel'
 import { c25k, c25kProgram, calories, fmt, position, presets, segments, total, type Program } from './intervalModel'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './interval.css'
 
 const on = (id: string) => subOn('intervalCoach', id)
@@ -147,6 +148,14 @@ export function IntervalPage() {
   }
   const kind = done ? 'cooldown' : (pos?.segment.kind ?? 'warmup')
 
+  // Flash the stage when a new segment starts, so the change is felt, not just read.
+  const segIndex = pos?.index ?? -1
+  useEffect(() => {
+    if (segIndex < 1 || !stage.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const tw = gsap.fromTo(stage.current, { scale: 0.97, boxShadow: '0 0 0 10px var(--seg)' }, { scale: 1, boxShadow: '0 0 0 0px var(--seg)', duration: 0.6, ease: 'elastic.out(1, 0.5)' })
+    return () => void tw.progress(1)
+  }, [segIndex])
+  usePageActions([{ id: 'iv-toggle', label: running ? 'Pause timer' : done ? 'Start again' : 'Start timer', icon: running ? '⏸️' : '▶️', run: toggle }])
   const run = () => (
     <div className="studio-split">
       <div ref={stage} className="studio-card iv-stage" data-kind={kind} style={{ ['--seg' as string]: colors[kind] }}>
@@ -165,9 +174,14 @@ export function IntervalPage() {
             </span>
           )}
         </div>
+        {done && (
+          <a className="studio-chip iv-log" href="#workouts" data-hint="Add this session to your workout log">
+            Log it in Workouts →
+          </a>
+        )}
         <div className="iv-timeline" aria-hidden="true">
           {segs.map((s, i) => (
-            <i key={i} style={{ flex: s.seconds, background: colors[s.kind] }} data-past={pos ? i < pos.index : done} data-now={pos?.index === i} />
+            <i key={i} style={{ flex: s.seconds, background: colors[s.kind] }} data-past={pos ? i < pos.index : done} data-now={pos?.index === i} data-hint={`${s.label} · ${fmt(s.seconds)}`} />
           ))}
         </div>
       </div>

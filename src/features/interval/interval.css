@@ -170,3 +170,12 @@
     animation: none;
   }
 }
+
+.iv-timeline i {
+  pointer-events: auto;
+}
+
+.iv-log {
+  align-self: center;
+  text-decoration: none;
+}
