@@ -705,3 +705,32 @@
 .dd-item.next circle {
   stroke: #e2553f;
 }
+
+/* ---------- Summit trail ---------- */
+.stl {
+  display: block;
+  width: 100%;
+  max-height: 190px;
+  margin: 0 0 10px;
+  border-radius: 18px;
+  background: linear-gradient(#cdeffd, #fdf6e3);
+}
+
+.stl-mountain {
+  fill: #a5c9a0;
+}
+
+.stl-snow {
+  fill: #fff;
+}
+
+.stl-trail {
+  fill: none;
+  stroke: #8d6e63;
+  stroke-width: 3;
+  stroke-dasharray: 6 5;
+}
+
+.stl-climber {
+  cursor: pointer;
+}

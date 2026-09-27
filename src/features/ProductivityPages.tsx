@@ -4,6 +4,8 @@ import { burst } from '../components/ui/celebrate'
 import { loadSettings } from '../SettingsPage'
 import { subOn } from './subFeatures'
 import { TodosQuick } from './quick/TodosQuick'
+import { SummitTrail } from './showcase/SummitTrail'
+import { usePageActions } from '../components/ui/PageMenu'
 
 /** Only heavy tasks drop by default; switching "Heavy tasks only" off lets any task fall. */
 const impactThreshold = () => (subOn('impactTasks', 'heavyOnly') ? 1 : 0)
@@ -58,8 +60,20 @@ export function ChallengesPage({
   const shown = challenges.filter(
     (c) => category === 'all' || c.category === category,
   )
+  const palette = ['#e0703f', '#3f7fd0', '#3f8a5a', '#8f7ae5', '#f0a500']
+  const climbers = data.challenges.map((c, i) => {
+    const def = challenges.find((x) => x.id === c.id)
+    const tasks = data.todos.filter((t) => t.challengeId === c.id)
+    return { id: c.id, label: def?.title ?? c.id, progress: tasks.length ? tasks.filter((t) => t.done).length / tasks.length : 0, color: palette[i % palette.length], emoji: '🧗' }
+  })
+  const nextOpen = data.todos.find((t) => !t.done && t.challengeId)
+  usePageActions([
+    ...(nextOpen ? [{ id: 'ch-next', label: `Next step: ${nextOpen.title}`, icon: '🧗', run: onTasks }] : []),
+    { id: 'ch-all', label: 'Show every challenge', icon: '🏔️', run: () => setCategory('all') },
+  ])
   return (
     <div id="challenges-page">
+      {subOn('adaptiveGoals', 'summitTrail', { ignoreParent: true }) && <SummitTrail climbers={climbers} onPick={(cid) => setSelected(cid)} />}
       <div className="filter-chips" role="tablist" aria-label="Challenge type">
         {challengeCategories.map((c) => (
           <button

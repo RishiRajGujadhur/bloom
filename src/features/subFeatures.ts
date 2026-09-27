@@ -131,6 +131,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'longHistory', title: 'Six-week memory', description: 'Use 6 weeks of history instead of 3.' },
     { id: 'extraGoals', title: 'Extra goals', description: 'Tasks, intentions, routines, sessions, active days.', independent: true },
     { id: 'floor', title: 'Keep a floor', description: 'Never go below half the default target.' },
+    { id: 'summitTrail', title: 'Summit trail', description: 'Active challenges climb a mountain trail as you finish their steps.', independent: true },
   ],
   celebrations: [
     { id: 'checkins', title: 'Check-in bursts', description: 'Coins when you complete a habit.' },
