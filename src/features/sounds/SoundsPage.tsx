@@ -4,6 +4,15 @@ import type { FeaturePageProps } from '../shared/pageProps'
 import { Segmented, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { engine, modes, type Genre, type Mode } from './focusEngine'
+import gsap from 'gsap'
+import { usePageActions } from '../../components/ui/PageMenu'
+
+const modeHints: Record<Mode, string> = {
+  focus: 'Beta rhythm (~16 Hz) for alert, steady work',
+  relax: 'Alpha rhythm (~10 Hz) for calm, open attention',
+  meditate: 'Theta rhythm (~6 Hz) for deep, inward rest',
+  sleep: 'Delta rhythm (~2 Hz) to help you drift off',
+}
 import './sounds.css'
 
 const on = (id: string) => subOn('focusSounds', id)
@@ -108,10 +117,26 @@ export function SoundsPage({ setData }: FeaturePageProps) {
   const toggle = () => (playing ? engine.stop() : void engine.play(on('timer') ? prefs.minutes : null))
   const left = engine.endsAt ? Math.max(0, Math.round((engine.endsAt - now) / 1000)) : null
 
+  const halo = useRef<SVGSVGElement>(null)
+  useEffect(() => {
+    const el = halo.current
+    if (!el || !playing || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const beat = 60 / mode.bpm
+    const tl = gsap.timeline({ repeat: -1 })
+    tl.fromTo(el.querySelectorAll('circle'), { attr: { r: 46 }, opacity: 0.6 }, { attr: { r: 96 }, opacity: 0, duration: beat * 4, stagger: beat * 4 / 3, ease: 'sine.out' })
+    return () => void tl.kill()
+  }, [playing, mode.bpm])
+  usePageActions([
+    { id: 'fm-toggle', label: playing ? 'Pause' : 'Play', icon: playing ? '⏸️' : '▶️', run: toggle },
+    ...(Object.keys(modes) as Mode[]).filter((m) => m !== prefs.mode).map((m) => ({ id: `fm-${m}`, label: `Switch to ${modes[m].label}`, icon: '🎧', run: () => setPrefs({ mode: m }) })),
+  ])
   const player = () => (
     <div className="studio-split">
       <div className="studio-card fm-stage" style={{ ['--mode' as string]: mode.color }}>
         {on('visualiser') ? <Visualiser color={mode.color} /> : null}
+        <svg ref={halo} className="fm-halo" viewBox="0 0 200 200" aria-hidden="true">
+          {[0, 1, 2].map((k) => <circle key={k} cx="100" cy="100" r="46" />)}
+        </svg>
         <button type="button" className="fm-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={40} /> : <Play size={40} />}
         </button>
@@ -121,7 +146,7 @@ export function SoundsPage({ setData }: FeaturePageProps) {
         {on('modes') && (
           <div className="fm-modes" role="radiogroup" aria-label="Mode">
             {(Object.keys(modes) as Mode[]).map((m) => (
-              <button key={m} type="button" role="radio" aria-checked={prefs.mode === m} style={{ ['--c' as string]: modes[m].color }} onClick={() => setPrefs({ mode: m })}>
+              <button key={m} type="button" role="radio" aria-checked={prefs.mode === m} style={{ ['--c' as string]: modes[m].color }} onClick={() => setPrefs({ mode: m })} data-hint={modeHints[m]}>
                 <strong>{modes[m].label}</strong>
                 <small>
                   {modes[m].band} · {modes[m].am} Hz
