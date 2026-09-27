@@ -104,6 +104,7 @@ import { addEpiphany } from './features/epiphany/epiphanyStore'
 import { createEpiphany } from './features/epiphany/epiphanyModel'
 import { PageMenu, type PageAction } from './components/ui/PageMenu'
 import { PointerFx } from './components/ui/PointerFx'
+import { HoverHints, LinkRail } from './components/ui/Flow'
 import './styles/subFeatureGates.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
@@ -558,6 +559,7 @@ function App() {
         </a>
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
         {settings.features.pointerFx && <PointerFx page={active} />}
+        <HoverHints />
         <PageMenu page={active} common={menuCommon}>
         <main id="overview" className="min-w-0 flex-1">
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
@@ -645,6 +647,7 @@ function App() {
             >
               <FeatureGuide page={active} />
             </BloomHeading>
+            {active !== 'overview' && <LinkRail page={active} names={Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title]))} />}
             {settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}

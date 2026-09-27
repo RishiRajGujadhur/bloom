@@ -10,6 +10,7 @@ import {
 import { ChevronLeft, ChevronRight, Leaf, Pause, Play } from 'lucide-react'
 import heroLandscape from '../assets/bloom/hero-landscape.webp'
 import type { NavKey } from './layout/Sidebar'
+import { PageEmblem } from './ui/PageEmblem'
 import './bloom-experience.css'
 
 export function CardRail({
@@ -271,7 +272,8 @@ export function BloomHeading({
         <p>{captions[page]}</p>
         {actions && <div className="bloom-hero-actions">{actions}</div>}
       </div>
-      <div className="bloom-sculpture" aria-hidden="true">
+      {!hero && <PageEmblem page={page} />}
+      <div className="bloom-sculpture" aria-hidden="true" hidden={!hero}>
         <div className="bloom-orbit" />
         <div className="bloom-flower">
           {Array.from({ length: 8 }, (_, i) => (
