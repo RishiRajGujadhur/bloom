@@ -54,7 +54,7 @@ import { GrowthRewards } from './rpg/GrowthRewards'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
-import { SettingsPage, useAppSettings } from './SettingsPage'
+import { SettingsPage, defaultSettings, featureKeys, useAppSettings, type FeatureFlags } from './SettingsPage'
 import { HabitsPage } from './features/HabitsPage'
 import {
   CollectiblesPage,
@@ -105,6 +105,8 @@ import { createEpiphany } from './features/epiphany/epiphanyModel'
 import { PageMenu, type PageAction } from './components/ui/PageMenu'
 import { PointerFx } from './components/ui/PointerFx'
 import { HoverHints, LinkRail } from './components/ui/Flow'
+import { WelcomeFlow } from './features/welcome/WelcomeFlow'
+import { WELCOME_KEY, configure, configureSubs, themeFor, welcomeDone, type Answers } from './features/welcome/welcomeModel'
 import './styles/subFeatureGates.css'
 
 const VisionBoard = lazy(() => import('./components/VisionBoard/VisionBoard'))
@@ -384,6 +386,25 @@ function App() {
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
+  const [welcome, setWelcome] = useState(() => !welcomeDone())
+  const finishWelcome = (answers: Answers | null) => {
+    try {
+      localStorage.setItem(WELCOME_KEY, JSON.stringify({ at: Date.now(), answers }))
+    } catch {
+      /* optional */
+    }
+    setWelcome(false)
+    if (!answers) return
+    const features = configure(answers, featureKeys, defaultSettings.features) as FeatureFlags
+    setSettings((c) => ({ ...c, features: { ...c.features, ...features }, sub: { ...c.sub, ...configureSubs(answers) } }))
+    setThemeSettings((t) => ({ ...t, themeId: themeFor(answers) }))
+    jump('overview')
+  }
+  const welcomePreview = (answers: Answers) => {
+    const features = configure(answers, featureKeys, defaultSettings.features)
+    const names = featureKeys.filter((k) => features[k]).map((k) => t(`settings.feature.${k}.title`))
+    return { names, features: features as FeatureFlags }
+  }
   useEffect(() => {
     document.documentElement.lang = i18n.resolvedLanguage ?? 'en'
     document.title = t('ui.documentTitle')
@@ -509,6 +530,7 @@ function App() {
     { id: 'c-link', label: 'Copy link to this page', icon: '🔗', run: () => void navigator.clipboard?.writeText(window.location.href) },
     ...(settings.features.pointerFx ? [{ id: 'c-pointer', label: 'Change my pointer', icon: '🖱️', run: () => jump('pointer' as NavKey) }] : []),
     { id: 'c-settings', label: 'Settings', icon: '⚙️', run: () => jump('settings') },
+    { id: 'c-welcome', label: 'Set up Bloom again', icon: '🌸', run: () => setWelcome(true) },
   ]
   /** Omnibox ("> …" in Ctrl K) commands. */
   const runCommand = (action: OmniAction) => {
@@ -560,6 +582,7 @@ function App() {
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
         {settings.features.pointerFx && <PointerFx page={active} />}
         <HoverHints />
+        {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
         <PageMenu page={active} common={menuCommon}>
         <main id="overview" className="min-w-0 flex-1">
           <header className="topbar flex flex-wrap items-center justify-between gap-3">

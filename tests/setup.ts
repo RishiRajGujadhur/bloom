@@ -111,3 +111,14 @@ for (const name of ['IntersectionObserver', 'ResizeObserver'] as const)
       writable: true,
       value: ObserverStub,
     })
+
+// Existing tests start past the welcome onboarding (it has its own tests).
+const markWelcomed = () => {
+  try {
+    if (!localStorage.getItem('bloom-welcome-v1')) localStorage.setItem('bloom-welcome-v1', '{}')
+  } catch {
+    /* no storage */
+  }
+}
+markWelcomed()
+beforeEach(markWelcomed)

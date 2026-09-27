@@ -1,0 +1,12 @@
+.bloom-face {
+  display: block;
+  overflow: visible;
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 10px #d9503a33);
+}
+
+.bloom-face .bf-lid {
+  transform: scaleY(0);
+  transform-box: fill-box;
+  transform-origin: center;
+}
