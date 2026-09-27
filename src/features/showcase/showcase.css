@@ -571,3 +571,82 @@
 .fd-day small {
   opacity: 0.7;
 }
+
+/* ---------- Calendar capacity ring ---------- */
+.cap-ring {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cap-ring svg {
+  width: 84px;
+  height: 84px;
+  transform: rotate(-90deg);
+}
+
+.cap-ring text {
+  transform: rotate(90deg);
+  transform-origin: 50px 50px;
+}
+
+.cap-track {
+  fill: none;
+  stroke: var(--border-color, #0001);
+  stroke-width: 9;
+}
+
+.cap-track.thin {
+  stroke-width: 6;
+}
+
+.cap-used {
+  fill: none;
+  stroke: #3f7fd0;
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.cap-used.over {
+  stroke: #e2553f;
+}
+
+.cap-deep {
+  fill: none;
+  stroke: #8f7ae5;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.cap-num {
+  font-size: 18px;
+  font-weight: 800;
+  fill: currentColor;
+}
+
+.cap-sub {
+  font-size: 9px;
+  fill: currentColor;
+  opacity: 0.6;
+}
+
+.cap-ring dl {
+  display: flex;
+  gap: 14px;
+  margin: 0;
+}
+
+.cap-ring dt {
+  font-size: 0.72rem;
+  opacity: 0.65;
+}
+
+.cap-ring dd {
+  margin: 0;
+  font-weight: 800;
+}
+
+.calendar-tray-toggle {
+  width: 100%;
+  margin-bottom: 8px;
+}

@@ -33,6 +33,8 @@ import {
 } from './planning'
 import { toggleTodo } from './productivity'
 import './planning.css'
+import { CapacityRing } from './showcase/CapacityRing'
+import { usePageActions } from '../components/ui/PageMenu'
 
 type Props = { data: AppData; setData: Dispatch<SetStateAction<AppData>> }
 const localInput = (value: string) => {
@@ -82,6 +84,8 @@ export function CalendarPage({ data, setData }: Props) {
   }
   const tray = useRef<HTMLDivElement>(null)
   const [selectedDay, setSelectedDay] = useState(dayKey)
+  const narrow = typeof window !== 'undefined' && window.innerWidth < 700
+  const [trayOpen, setTrayOpen] = useState(false)
   const [view, setView] = useState(() =>
     window.innerWidth < 700 ? 'timeGridDay' : 'timeGridWeek',
   )
@@ -173,6 +177,11 @@ export function CalendarPage({ data, setData }: Props) {
     newBlock(start, task)
   }
 
+  usePageActions([
+    { id: 'cal-new', label: 'New block now', icon: '➕', run: () => newBlock(new Date(Math.ceil(Date.now() / 1800000) * 1800000)) },
+    { id: 'cal-today', label: 'Jump to today', icon: '📍', run: () => { calendar.current?.getApi().today(); setSelectedDay(dayKey()) } },
+    { id: 'cal-week', label: view === 'timeGridWeek' ? 'Show one day' : 'Show the week', icon: '🗓️', run: () => { const v = view === 'timeGridWeek' ? 'timeGridDay' : 'timeGridWeek'; setView(v); calendar.current?.getApi().changeView(v, selectedDay) } },
+  ])
   return (
     <section
       ref={workspace}
@@ -260,30 +269,15 @@ export function CalendarPage({ data, setData }: Props) {
             }}
           />
         </label>
-        <div>
-          <strong>{hours(capacity.capacity)}</strong>
-          <span>Daily capacity</span>
-        </div>
-        <div>
-          <strong>{hours(capacity.booked)}</strong>
-          <span>Time blocked</span>
-        </div>
-        <div>
-          <strong>{hours(capacity.free)}</strong>
-          <span>Still available</span>
-        </div>
-        <div>
-          <strong>{hours(capacity.deep)}</strong>
-          <span>Deep work</span>
-        </div>
-        <progress
-          aria-label="Daily time booked"
-          value={capacity.booked}
-          max={capacity.capacity || 1}
-        />
+        <CapacityRing capacity={capacity.capacity} booked={capacity.booked} deep={capacity.deep} label={hours} />
       </div>
       <div className="calendar-layout">
-        <aside className="calendar-tray" hidden={!subOn('fullCalendar', 'taskTray')}>
+        {narrow && subOn('fullCalendar', 'taskTray') && (
+          <button type="button" className="quiet-button calendar-tray-toggle" aria-expanded={trayOpen} onClick={() => setTrayOpen(!trayOpen)} data-hint="Drag tasks onto the calendar">
+            {trayOpen ? 'Hide task list' : `Show task list (${tasks.length})`}
+          </button>
+        )}
+        <aside className="calendar-tray" hidden={!subOn('fullCalendar', 'taskTray') || (narrow && !trayOpen)}>
           <h3>
             Task list <small>{tasks.length}</small>
           </h3>
@@ -466,6 +460,9 @@ export function CalendarPage({ data, setData }: Props) {
             )}
             eventDidMount={(info) => {
               info.el.tabIndex = 0
+              const s = info.event.start
+              const e = info.event.end
+              if (s && e) info.el.dataset.hint = `${info.event.title} · ${Math.round((e.getTime() - s.getTime()) / 60000)} min · click to edit`
               info.el.setAttribute('role', 'button')
               info.el.setAttribute(
                 'aria-label',
