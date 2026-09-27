@@ -163,3 +163,31 @@
   max-height: 30dvh;
   overflow-y: auto;
 }
+
+/* Matrix theme: the chat speaks in phosphor green. */
+html[data-theme='matrix'] .bg-guide-chat .cs-message--incoming .cs-message__content {
+  background: #0b2a14;
+  color: #b6ffc8;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+}
+html[data-theme='matrix'] .bg-guide-chat .cs-message--outgoing .cs-message__content {
+  background: #39ff6a;
+  color: #021006;
+}
+html[data-theme='matrix'] .bg-guide-chat .cs-chat-container,
+html[data-theme='matrix'] .bg-guide-chat .cs-message-list {
+  background: #030a05;
+}
+html[data-theme='matrix'] .bg-chip {
+  border-color: #1f7a3a;
+  color: #b6ffc8;
+}
+html[data-theme='matrix'] .bc-panel .bc-head-actions button[aria-selected='true'] {
+  background: #39ff6a;
+  border-color: #39ff6a;
+  color: #021006;
+}
+html[data-theme='matrix'] .bg-guide-chat .cs-typing-indicator__dot {
+  background-color: #39ff6a;
+}

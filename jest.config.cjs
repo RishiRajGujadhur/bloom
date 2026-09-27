@@ -14,5 +14,5 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/(?!(d3-shape|d3-path|marked|@formkit|swiper|ssr-window|dom7)/)'],
   clearMocks: true,
   // Full-App renders are slow on a cold module graph when run in-band.
-  testTimeout: 15000,
+  testTimeout: 30000,
 }

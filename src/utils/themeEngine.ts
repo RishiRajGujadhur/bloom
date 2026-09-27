@@ -137,6 +137,14 @@ export const THEMES: ThemeDefinition[] = [
     accent: '#ff7edb',
   },
   {
+    id: 'matrix',
+    name: 'Matrix',
+    mode: 'dark',
+    bg: '#030a05',
+    surface: '#07140b',
+    accent: '#39ff6a',
+  },
+  {
     id: 'emerald-forest',
     name: 'Emerald Forest',
     mode: 'dark',

@@ -108,6 +108,7 @@ import { pageRequires } from './components/layout/Sidebar'
 import { PointerFx } from './components/ui/PointerFx'
 import { HoverHints, LinkRail } from './components/ui/Flow'
 import { GsapControls } from './components/ui/GsapControls'
+import { MatrixRain } from './components/ui/MatrixRain'
 import { WelcomeFlow } from './features/welcome/WelcomeFlow'
 import { WELCOME_KEY, configure, configureSubs, themeFor, welcomeDone, type Answers } from './features/welcome/welcomeModel'
 import './styles/subFeatureGates.css'
@@ -614,6 +615,8 @@ function App() {
         </a>
         <Sidebar active={active} onNavigate={jump} flags={settings.features} tools={topTools} />
         {settings.features.pointerFx && <PointerFx page={active} />}
+
+        <MatrixRain />
         <HoverHints />
         <GsapControls />
         {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}

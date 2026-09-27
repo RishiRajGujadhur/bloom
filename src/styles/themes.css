@@ -297,3 +297,67 @@ html[data-mode='light'] {
   --bg-sidebar: #161b22;
   --accent-color: #58a6ff;
 }
+
+/* ---- Matrix: phosphor green on black, CRT scanlines, terminal type ---- */
+[data-theme='matrix'] {
+  --mode: dark;
+  --bg-primary: #030a05;
+  --bg-surface: #07140b;
+  --bg-sidebar: #051009;
+  --accent-color: #39ff6a;
+}
+html[data-theme='matrix'] {
+  --text-primary: #b6ffc8;
+  --text-secondary: #6fdc8c;
+  --text-muted: #3f9a58;
+  --border-color: #1d5a2e;
+  --text-on-accent: #021006;
+}
+html[data-theme='matrix'] body {
+  font-family: 'VT323', ui-monospace, monospace;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 6px #39ff6a33;
+}
+html[data-theme='matrix'] h1,
+html[data-theme='matrix'] h2,
+html[data-theme='matrix'] h3 {
+  font-family: 'Press Start 2P', 'VT323', monospace;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #39ff6a66;
+}
+/* scanlines + vignette */
+html[data-theme='matrix'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, #00000026 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 60%, #000a 100%);
+}
+html[data-theme='matrix'] .card,
+html[data-theme='matrix'] .studio-card,
+html[data-theme='matrix'] .bloom-heading.feature-heading {
+  border-color: #1d5a2e;
+  box-shadow: 0 0 0 1px #0d2a15, 0 0 18px #39ff6a14 inset;
+}
+html[data-theme='matrix'] button:focus-visible {
+  outline-color: #39ff6a;
+}
+.matrix-rain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.18;
+}
+html[data-theme='matrix'],
+html[data-theme='matrix'] body {
+  background: #030a05;
+}
+html[data-theme='matrix'] .app-shell {
+  background: transparent;
+}

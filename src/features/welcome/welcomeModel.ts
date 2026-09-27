@@ -89,6 +89,7 @@ export const questions: Question[] = [
       { id: 'rose-pine', label: 'Rosé', emoji: '🍷' },
       { id: 'nord', label: 'Nordic', emoji: '❄️' },
       { id: 'tokyo-night', label: 'Tokyo night', emoji: '🌃' },
+      { id: 'matrix', label: 'Matrix', emoji: '🤖' },
       { id: 'device', label: 'Match my device', emoji: '🖥️' },
     ],
   },
@@ -102,6 +103,7 @@ export const themeSwatches: Record<string, [string, string, string, string]> = {
   'rose-pine': ['#191724', '#1f1d2e', '#ebbcba', '#e0def4'],
   nord: ['#2e3440', '#3b4252', '#88c0d0', '#eceff4'],
   'tokyo-night': ['#1a1b26', '#24283b', '#7aa2f7', '#c0caf5'],
+  matrix: ['#030a05', '#07140b', '#39ff6a', '#b6ffc8'],
   device: ['#fbf6f1', '#1c1a1f', '#e0703f', '#888888'],
 }
 
