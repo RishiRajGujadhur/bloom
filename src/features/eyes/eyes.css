@@ -69,3 +69,8 @@
   border-color: var(--studio);
   transform: scale(1.12);
 }
+
+.ey-watch {
+  display: grid;
+  place-items: center;
+}

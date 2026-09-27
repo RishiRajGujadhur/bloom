@@ -734,3 +734,43 @@
 .stl-climber {
   cursor: pointer;
 }
+
+/* ---------- Watching eye ---------- */
+.we-eye {
+  width: 150px;
+  height: 150px;
+}
+
+.we-track {
+  fill: none;
+  stroke: var(--border-color, #0001);
+  stroke-width: 6;
+}
+
+.we-ring {
+  fill: none;
+  stroke: #3f7fd0;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 70px 70px;
+  transition: stroke-dashoffset 1s ease;
+}
+
+.we-white {
+  fill: #fff;
+  stroke: #1b1b2f;
+  stroke-width: 3;
+}
+
+.we-lid {
+  fill: #f2c9a0;
+  stroke: #1b1b2f;
+  stroke-width: 3;
+}
+
+.we-time {
+  font-size: 11px;
+  font-weight: 700;
+  fill: currentColor;
+}

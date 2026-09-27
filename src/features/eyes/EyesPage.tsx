@@ -6,6 +6,8 @@ import { setNudge } from '../../components/studio/Nudges'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { EYES_KEY, blinkClosed, exerciseById, exercises, nearFar, routine, streakDays, type EyesStore, type Exercise } from './eyesModel'
+import { WatchEye } from '../showcase/WatchEye'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './eyes.css'
 
 const on = (id: string) => subOn('eyeCare', id)
@@ -125,6 +127,10 @@ export function EyesPage() {
   }
   const visible = exercises.filter((e) => (e.id === 'rule20' ? on('rule20') : e.id === 'nearfar' ? on('nearFar') : e.id === 'blink' ? on('blink') : e.id === 'palming' ? on('palming') : on('followDot')))
 
+  usePageActions([
+    { id: 'ey-routine', label: running ? 'Pause' : 'Start the 2-minute routine', icon: '👁️', run: () => (queue.length ? setRunning(!running) : start(routine)) },
+    { id: 'ey-2020', label: '20-20-20 break now', icon: '🌳', run: () => start(['rule20']) },
+  ])
   const practice = () => (
     <div className="studio-split">
       <div ref={stage} className="studio-card ey-stage" data-dark={current.id === 'palming'}>
@@ -138,6 +144,11 @@ export function EyesPage() {
                 {exerciseById(id).emoji}
               </span>
             ))}
+          </div>
+        )}
+        {!running && on('watchEye') && (
+          <div className="ey-watch">
+            <WatchEye every={store.every} minutesLeft={Math.max(0, store.every - (Date.now() - (store.log.at(-1)?.at ?? Date.now() - store.every * 60000)) / 60000)} />
           </div>
         )}
         <h3 className="yg-pose-name">

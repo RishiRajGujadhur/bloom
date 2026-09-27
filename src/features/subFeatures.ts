@@ -746,6 +746,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "interval", title: "Reminder interval", description: "A slider for how often." },
     { id: "sounds", title: "Chimes", description: "A soft tone between exercises." },
     { id: "history", title: "History", description: "Breaks taken and your streak." },
+    { id: 'watchEye', title: 'Watching eye', description: 'An eye that follows your pointer, blinks and counts down to your next break.' },
   ],
   daylight: [
     { id: "sunArc", title: "Sun arc", description: "A live sky with the sun where it really is." },
