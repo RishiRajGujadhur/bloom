@@ -37,6 +37,7 @@ function mount() {
       navigate={jest.fn()}
       blocked={false}
       open
+      initialMode="plan"
       onOpen={jest.fn()}
       onClose={jest.fn()}
     />,

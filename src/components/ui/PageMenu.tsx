@@ -19,6 +19,9 @@ const subscribe = (l: () => void) => {
   return () => void listeners.delete(l)
 }
 
+/** Actions the current page has registered (used by the Bloom guide too). */
+export const currentPageActions = () => registered
+
 /** Register actions for the current page while it is mounted. */
 export function usePageActions(actions: PageAction[]) {
   const ref = useRef(actions)

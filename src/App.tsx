@@ -103,6 +103,7 @@ import { IntentionsQuick } from './features/quick/IntentionsQuick'
 import { addEpiphany } from './features/epiphany/epiphanyStore'
 import { createEpiphany } from './features/epiphany/epiphanyModel'
 import { PageMenu, type PageAction } from './components/ui/PageMenu'
+import { pageRequires } from './components/layout/Sidebar'
 import { PointerFx } from './components/ui/PointerFx'
 import { HoverHints, LinkRail } from './components/ui/Flow'
 import { WelcomeFlow } from './features/welcome/WelcomeFlow'
@@ -1487,6 +1488,10 @@ function App() {
           blocked={blocked}
           navigate={jump}
           open={companionOpen}
+          page={active}
+          names={(p) => pageDetails[p as NavKey]?.title ?? p}
+          enabled={(p) => !pageRequires[p as NavKey] || settings.features[pageRequires[p as NavKey]!]}
+          extra={menuCommon}
           onOpen={() => setCompanionOpen(true)}
           onClose={() => setCompanionOpen(false)}
         />

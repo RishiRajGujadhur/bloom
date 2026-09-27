@@ -148,7 +148,10 @@ interface SidebarProps {
 }
 
 /** Sidebar sections, in display order. Unlisted keys (settings) come last. */
-const navSections: { label: string; keys: NavKey[] }[] = [
+/** Feature each page needs, filled in by the sidebar. */
+export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
+
+export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
@@ -421,6 +424,8 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
     // Unsectioned destinations (Settings) stay at the end.
     return index < 0 ? navSections.length : index
   }
+  // Share which feature each page needs (Bloom's guide only offers pages that are on).
+  for (const item of items) if (item.requires) pageRequires[item.key] = item.requires
   const visibleItems = items
     .filter((item) => !item.requires || flags[item.requires])
     .map((item, order) => ({ ...item, order, section: sectionOf(item.key) }))

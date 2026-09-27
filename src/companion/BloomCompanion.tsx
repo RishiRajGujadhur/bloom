@@ -21,6 +21,7 @@ import {
   type Proposal,
 } from './planner'
 import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
+import { BloomGuide } from './BloomGuide'
 import './companion.css'
 
 type Props = {
@@ -78,7 +79,22 @@ export function BloomCompanion({
   open,
   onOpen,
   onClose,
-}: Props & { open: boolean; onOpen: () => void; onClose: () => void }) {
+  page = 'overview',
+  names = (p: string) => p,
+  enabled = () => true,
+  extra = [],
+  initialMode = 'guide',
+}: Props & {
+  open: boolean
+  onOpen: () => void
+  onClose: () => void
+  page?: string
+  names?: (p: string) => string
+  enabled?: (p: string) => boolean
+  extra?: { id: string; label: string; icon?: string; run: () => void }[]
+  initialMode?: 'guide' | 'plan'
+}) {
+  const [mode, setMode] = useState<'guide' | 'plan'>(initialMode)
   const [text, setText] = useState('')
   const [turns, setTurns] = useState<Turn[]>([])
   const [proposal, setProposal] = useState<Proposal | null>(null)
@@ -231,6 +247,28 @@ export function BloomCompanion({
       </button>
       {open && (
         <Modal title="A little space with Bloom" onClose={onClose}>
+          <div className="segmented companion-mode" role="tablist" aria-label="Bloom mode">
+            <button role="tab" aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} className={mode === 'guide' ? 'active' : ''} onClick={() => setMode('guide')}>
+              Guide me
+            </button>
+            <button role="tab" aria-selected={mode === 'plan'} aria-pressed={mode === 'plan'} className={mode === 'plan' ? 'active' : ''} onClick={() => setMode('plan')}>
+              Plan with Bloom
+            </button>
+          </div>
+          {mode === 'guide' ? (
+            <BloomGuide
+              key={page}
+              page={page}
+              names={names}
+              enabled={enabled}
+              extra={extra}
+              navigate={(p) => {
+                navigate(p as never)
+                onClose()
+              }}
+              onPlan={() => setMode('plan')}
+            />
+          ) : (
           <div className="bloom-companion">
             <div className="companion-identity">
               {data.rpg.companion !== 'none' ? (
@@ -526,6 +564,7 @@ export function BloomCompanion({
               </div>
             )}
           </div>
+          )}
         </Modal>
       )}
     </>

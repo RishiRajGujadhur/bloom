@@ -117,3 +117,16 @@ jest.mock('../src/features/welcome/welcomeModel', () => ({
   ...jest.requireActual('../src/features/welcome/welcomeModel'),
   welcomeDone: () => true,
 }))
+
+// chatscope uses selectors jsdom's engine cannot parse; render plain markup in tests.
+jest.mock('@chatscope/chat-ui-kit-react', () => {
+  const React = require('react')
+  const Box = ({ children }: { children?: unknown }) => React.createElement('div', null, children)
+  return {
+    MainContainer: Box,
+    ChatContainer: Box,
+    MessageList: ({ children, typingIndicator }: { children?: unknown; typingIndicator?: unknown }) => React.createElement('div', { role: 'log' }, children, typingIndicator),
+    Message: ({ model }: { model: { message: string } }) => React.createElement('p', null, model.message),
+    TypingIndicator: ({ content }: { content: string }) => React.createElement('span', null, content),
+  }
+})
