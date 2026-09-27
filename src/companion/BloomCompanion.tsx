@@ -112,6 +112,17 @@ export function BloomCompanion({
     }
   }
   const panel = useRef<HTMLElement>(null)
+  // "Ask Bloom" on a page opens the guide docked beside it.
+  useEffect(() => {
+    const ask = (e: Event) => {
+      if ((e as CustomEvent<{ dock?: boolean }>).detail?.dock) setDocked(true)
+      setMode('guide')
+      onOpen()
+    }
+    window.addEventListener('bloom:guide', ask)
+    return () => window.removeEventListener('bloom:guide', ask)
+     
+  }, [onOpen])
   // Docked: the page makes room beside the panel.
   useEffect(() => {
     const on = open && docked

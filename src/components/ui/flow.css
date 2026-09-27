@@ -180,3 +180,11 @@
     font-size: 0.8rem;
   }
 }
+
+.link-chip.ask-bloom {
+  border-style: dashed;
+}
+
+.link-chip.ask-bloom .bloom-face {
+  filter: none;
+}
