@@ -587,6 +587,8 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "bells", title: "Interval bells", description: "Soft bells for silent sits." },
     { id: "unguided", title: "Unguided timer", description: "Just you, the scene and a bell." },
     { id: "moodCheck", title: "Calm before & after", description: "See how much each sit helps." },
+    { id: 'moodMatch', title: 'Mood match', description: 'Tap how you feel; get the session that fits.' },
+    { id: 'swipePick', title: 'Swipe to begin', description: 'Swipe through suggested sessions.' },
   ],
   breathwork: [
     { id: "lungs", title: "Animated lungs", description: "Lungs fill and empty with each breath." },
@@ -600,6 +602,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "safety", title: "Safety check", description: "A short note before your first session." },
     { id: "history", title: "Records", description: "Best hold and past sessions." },
     { id: "chart", title: "Retention chart", description: "Bars for each round over time." },
+    { id: 'moodPreset', title: 'Mood presets', description: 'A tap on your mood sets rounds, breaths and pace.' },
   ],
   mala: [
     { id: "mala3d", title: "3D mala", description: "A ring of 108 beads that turns as you count; drag to tilt." },

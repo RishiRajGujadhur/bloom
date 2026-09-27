@@ -8,6 +8,7 @@ import { Rail, Slider, Stat, Studio, logActivity, readStore, writeStore } from '
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { MED_KEY, bells, courses, currentLine, sessionById, sessions, streakDays, timed, type MedLog, type SceneId, type Session } from './meditateModel'
+import { MeditateQuick } from '../quick/MeditateQuick'
 import './meditate.css'
 
 const on = (id: string) => subOn('meditation', id)
@@ -182,6 +183,7 @@ export function MeditatePage() {
 
   const today = () => (
     <div className="iv-programs">
+      <MeditateQuick onStart={start} />
       {on('sos') && (
         <button type="button" className="md-sos" onClick={() => start(sessionById('sos'))}>
           <LifeBuoy size={20} /> Feeling anxious? 3-minute SOS

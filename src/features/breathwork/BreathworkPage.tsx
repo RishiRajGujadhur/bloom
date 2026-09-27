@@ -5,6 +5,7 @@ import { Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore }
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { BREATHWORK_KEY, best, defaultSettings, initial, lung, step, type Session, type Settings, type State } from './breathworkModel'
+import { BreathQuick } from '../quick/BreathQuick'
 import './breathwork.css'
 
 const on = (id: string) => subOn('breathwork', id)
@@ -147,6 +148,8 @@ export function BreathworkPage() {
         </button>
       </div>
     ) : (
+      <>
+      {!s && <BreathQuick onPreset={(p) => setStore((x) => ({ ...x, cfg: { ...x.cfg, ...p } }))} />}
       <div className="studio-split">
         <div ref={stage} className="studio-card bw-stage" data-phase={s?.phase ?? 'idle'} onClick={() => s?.phase === 'retention' && setS(step(s, cfg, Date.now(), true))}>
           {on('lungs') && <Lungs fill={fill} phase={s?.phase ?? 'breathe'} />}
@@ -201,6 +204,7 @@ export function BreathworkPage() {
           )}
         </div>
       </div>
+      </>
     )
 
   const hist = store.history

@@ -44,7 +44,10 @@ export function QuickPanel({ id, title, children }: { id: string; title: string;
 /** One shared log of guided moods from every feature (feeds Mood insights). */
 export type MoodLogEntry = { feature: string; mood: string; at: number; note?: string }
 export const MOOD_LOG_KEY = 'bloom-guided-mood-log-v1'
-export const readMoodLog = () => readStore<MoodLogEntry[]>(MOOD_LOG_KEY, [])
+export const readMoodLog = (): MoodLogEntry[] => {
+  const v = readStore<unknown>(MOOD_LOG_KEY, [])
+  return Array.isArray(v) ? (v as MoodLogEntry[]) : []
+}
 export function logMood(feature: string, mood: string, note?: string) {
   const next = [...readMoodLog(), { feature, mood, at: Date.now(), note }].slice(-500)
   writeStore(MOOD_LOG_KEY, next)
