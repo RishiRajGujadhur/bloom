@@ -283,7 +283,7 @@ export function BloomCompanion({
         aria-label="Talk to Bloom"
         data-hint="Ask Bloom anything about this page"
       >
-        <BloomFace ref={launchFace} size={34} label="" />
+        <BloomFace ref={launchFace} size={46} label="" waveOnMount={false} />
         <span>Talk to Bloom</span>
       </button>
       {open && (

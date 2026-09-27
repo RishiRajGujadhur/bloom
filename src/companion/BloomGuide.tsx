@@ -131,7 +131,7 @@ export function BloomGuide({
   return (
     <div className="bg-guide">
       <div className="bg-guide-head">
-        <BloomFace ref={face} size={56} />
+        <BloomFace ref={face} size={72} />
         <div>
           <strong>Bloom</strong>
           <small>Your guide · {names(page)}</small>

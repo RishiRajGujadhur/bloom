@@ -67,7 +67,7 @@ export function LinkRail({ page, names, enabled = () => true }: { page: string; 
   return (
     <nav ref={row} className="link-rail" aria-label="Works well with">
       <button type="button" className="link-chip ask-bloom" style={{ ['--c' as string]: '#e0703f' }} onClick={() => window.dispatchEvent(new CustomEvent('bloom:guide', { detail: { dock: true } }))} data-hint="Open Bloom’s guide beside this page">
-        <BloomFace size={20} follow={false} label="" waveOnMount={false} />
+        <BloomFace size={26} follow={false} label="" waveOnMount={false} />
         <span>Ask Bloom</span>
       </button>
       <span className="link-rail-label">Works with</span>

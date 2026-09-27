@@ -201,7 +201,7 @@ export function WelcomeFlow({
       </header>
       <main ref={stage} className={`wf-stage ${step === 'intro' || step === 'done' || step === 'build' ? 'center' : ''}`}>
         <div className={`wf-ask ${q ? 'row' : 'col'}`}>
-          <BloomFace ref={face} size={q ? 76 : 132} />
+          <BloomFace ref={face} size={112} />
           <p className="wf-say" key={String(step)}>
             {say}
           </p>

@@ -29,10 +29,10 @@ export const BloomFace = forwardRef<
     return gsap
       .timeline()
       .set(arm, { opacity: 1 })
-      .fromTo(arm, { scale: 0, svgOrigin: '78 64' }, { scale: 1, svgOrigin: '78 64', duration: 0.25, ease: 'back.out(3)' })
-      .fromTo(hand, { rotate: -12 }, { rotate: 26, svgOrigin: '80 62', duration: 0.18, yoyo: true, repeat: 5, ease: 'sine.inOut' })
-      .to(hand, { rotate: 0, svgOrigin: '80 62', duration: 0.15 })
-      .to(arm, { scale: 0, svgOrigin: '78 64', duration: 0.2, ease: 'back.in(2)', delay: 0.15 })
+      .fromTo(arm, { scale: 0, svgOrigin: '74 62' }, { scale: 1, svgOrigin: '74 62', duration: 0.45, ease: 'power2.out' })
+      .fromTo(hand, { rotate: -8 }, { rotate: 18, svgOrigin: '74 62', duration: 0.42, yoyo: true, repeat: 3, ease: 'sine.inOut' })
+      .to(hand, { rotate: 0, svgOrigin: '74 62', duration: 0.3, ease: 'sine.out' })
+      .to(arm, { scale: 0, svgOrigin: '74 62', duration: 0.4, ease: 'power2.in', delay: 0.2 })
       .set(arm, { opacity: 0 })
   }
 
@@ -47,14 +47,14 @@ export const BloomFace = forwardRef<
     gsap.set(happy, { opacity: 0 })
     const tl = gsap.timeline()
     current.current = tl
-    if (m === 'talk') tl.fromTo(body, { scaleY: 0.93, scaleX: 1.04 }, { scaleY: 1, scaleX: 1, transformOrigin: '50% 90%', duration: 0.45, ease: 'elastic.out(1.1, 0.45)' })
+    if (m === 'talk') tl.fromTo(body, { scaleY: 0.97, scaleX: 1.015 }, { scaleY: 1, scaleX: 1, transformOrigin: '50% 90%', duration: 0.6, ease: 'sine.out' })
     if (m === 'happy' || m === 'wink')
       tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.9).to(happy, { opacity: 0, duration: 0.1 }, 0.9)
     if (m === 'think') tl.to(q('.bf-pupil'), { x: 4, y: -4, duration: 0.35, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
     if (m === 'excited' || m === 'wave') {
       const w = wave()
       if (w) tl.add(w, 0)
-      if (m === 'excited') tl.fromTo(body, { y: 0 }, { y: -5, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 0)
+      if (m === 'excited') tl.fromTo(body, { y: 0 }, { y: -3, duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 0)
     }
   }
   useImperativeHandle(ref, () => ({ react }))
@@ -78,7 +78,7 @@ export const BloomFace = forwardRef<
     let hello: gsap.core.Timeline | undefined
     if (waveOnMount) {
       hello = gsap.timeline({ delay: 0.3 })
-      hello.fromTo(el.querySelector('.bf-breath'), { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 60%', duration: 0.5, ease: 'back.out(2.2)' })
+      hello.fromTo(el.querySelector('.bf-breath'), { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 60%', duration: 0.7, ease: 'sine.out' })
       const w = wave()
       if (w) hello.add(w, '-=0.1')
     }
@@ -86,7 +86,8 @@ export const BloomFace = forwardRef<
       next?.kill()
       blinkTl?.kill()
       breathe.kill()
-      hello?.progress(1).kill()
+      hello?.kill()
+      gsap.set(el.querySelector('.bf-arm'), { opacity: 0 })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -133,8 +134,8 @@ export const BloomFace = forwardRef<
         {/* waving arm (hidden until it waves) */}
         <g className="bf-arm" opacity="0">
           <g className="bf-arm-swing">
-            <path d="M78 64 C 86 60, 90 50, 88 42" stroke="#ff8a5a" strokeWidth="7" strokeLinecap="round" fill="none" />
-            <circle cx="88" cy="40" r="6" fill="#ffb36b" stroke="#ff8a5a" strokeWidth="2" />
+            <path d="M72 62 C 80 60, 86 54, 87 45" stroke="#ff9458" strokeWidth="8" strokeLinecap="round" fill="none" />
+            <circle cx="87" cy="42" r="6.5" fill="#ffc06b" stroke="#ff9458" strokeWidth="2.5" />
           </g>
         </g>
         <g className="bf-breath">
