@@ -303,6 +303,9 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'moodPicks', title: 'Mood picks', description: 'Tap a mood; swipe through journals that suit it.' },
     { id: 'timePicks', title: 'Time-of-day picks', description: 'Morning, afternoon or evening journals.' },
     { id: 'typedSpark', title: 'Typed spark', description: 'A question types itself out to beat the blank page.' },
+    { id: 'bookshelf', title: 'Bookshelf', description: 'Each journal type becomes a floating 3D storybook.' },
+    { id: 'bookFaces', title: 'Book faces', description: 'Covers with blinking faces.' },
+    { id: 'bookFloat', title: 'Floating books', description: 'Books bob gently and tilt toward your pointer.' },
   ],
   languageSelector: [
     { id: 'dialects', title: 'Fun dialects', description: 'Pirate and slang English.' },

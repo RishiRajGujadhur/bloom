@@ -19,6 +19,8 @@ import { localizedJournalModes } from './mockData'
 import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
 import { DaybookQuick } from '../../features/quick/DaybookQuick'
+import { Bookshelf } from './Bookshelf'
+import { usePageActions } from '../ui/PageMenu'
 import { SemanticSearch } from './SemanticSearch'
 import './daybook.css'
 import { FlowMountain } from '../../features/flow/FlowMountain'
@@ -149,6 +151,10 @@ export function JournalContainer() {
     { key: 'vision', label: 'Imagine', Icon: Compass },
     { key: 'gamified', label: 'Explore', Icon: Sparkles },
   ] as const
+  usePageActions([
+    { id: 'daybook-browse', label: 'Browse every page type', icon: '📚', run: () => setBrowse(true) },
+    ...(recentPages[0] ? [{ id: 'daybook-continue', label: `Continue “${recentPages[0].modeTitle}”`, icon: '✍️', run: () => openPage(recentPages[0]) }] : []),
+  ])
   return (
     <section
       className={`card daybook daybook-wizard mx-auto w-full rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6 ${selected ? 'is-writing max-w-[1180px]' : 'max-w-5xl'}`}
@@ -207,6 +213,7 @@ export function JournalContainer() {
         ) : (
           <div className="journal-direction">
             <DaybookQuick modes={modes} onSelect={startPage} />
+            {subOn('daybookModes', 'bookshelf') && <Bookshelf pages={recentPages} modes={modes} onEdit={openPage} language={language} />}
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
               <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
                 {recentPages.map((page) => {
