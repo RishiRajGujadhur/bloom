@@ -10,7 +10,7 @@ import './components/ui/interactions.css'
 import { applyCompactTitles } from './components/ui/Flow'
 import { pixelIconsOn } from './icons/pixelated'
 import { registerChartTheme } from './components/ui/chartTheme'
-import { installCardGlow, installTitleReveal } from './components/ui/cardGlow'
+import { installCardEntrance, installCardGlow, installTitleReveal } from './components/ui/cardGlow'
 import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
@@ -34,3 +34,4 @@ document.documentElement.toggleAttribute('data-pixel-icons', pixelIconsOn())
 registerChartTheme()
 installCardGlow()
 installTitleReveal()
+installCardEntrance()

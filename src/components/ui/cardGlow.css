@@ -59,3 +59,22 @@
     display: none;
   }
 }
+
+/* ---- Consistent controls across pages ---- */
+:where(.studio-btn, .studio-input, .en-option, .en-chip) {
+  border-radius: 12px;
+}
+:where(.studio-btn) {
+  transition: transform 180ms cubic-bezier(0.3, 1.5, 0.5, 1), box-shadow 200ms ease, background-color 200ms ease;
+}
+:where(.studio-btn):hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--accent-color) 60%, transparent);
+}
+:where(button, a, input, select, textarea, [role='button']):focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+:where(.studio-card) > h3:first-child {
+  letter-spacing: -0.01em;
+}

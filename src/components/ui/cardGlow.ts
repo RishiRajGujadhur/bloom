@@ -60,3 +60,14 @@ export function installTitleReveal() {
   window.addEventListener('hashchange', run)
   run()
 }
+
+/** Cards on a newly opened page rise in with a short stagger, so every page enters the same way. */
+export function installCardEntrance() {
+  if (typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  const run = () =>
+    window.setTimeout(() => {
+      const cards = [...document.querySelectorAll<HTMLElement>('main :is(.studio-card, .card)')].filter((c) => c.getBoundingClientRect().top < window.innerHeight).slice(0, 14)
+      if (cards.length) gsap.from(cards, { y: 16, opacity: 0, duration: 0.5, stagger: 0.045, ease: 'power3.out', clearProps: 'transform,opacity' })
+    }, 180)
+  window.addEventListener('hashchange', run)
+}
