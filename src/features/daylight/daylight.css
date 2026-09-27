@@ -103,3 +103,9 @@
     animation: none;
   }
 }
+
+@media (max-width: 720px) {
+  .dl-sky {
+    max-height: 200px;
+  }
+}

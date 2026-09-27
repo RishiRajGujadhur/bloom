@@ -6,6 +6,7 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { dayKey } from '../../dates'
 import { DAYLIGHT_KEY, altitude, cities, dayFraction, homeCity, hm as hmIn, moonName, plan, sunTimes, yearDayLengths, type DaylightStore } from './daylightModel'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './daylight.css'
 
 const on = (id: string) => subOn('daylight', id)
@@ -16,9 +17,26 @@ function SunArc({ frac, alt, sunrise, sunset }: { frac: number | null; alt: numb
   const f = frac ?? 0
   const x = 60 + f * 480
   const y = 260 - Math.sin(Math.PI * f) * 200
+  const trail = useRef<SVGPathElement>(null)
+  const rays = useRef<SVGGElement>(null)
+  const clouds = useRef<SVGGElement>(null)
   useLayoutEffect(() => {
-    if (sun.current) gsap.to(sun.current, { x, y, duration: 1.4, ease: 'power2.out' })
-  }, [x, y])
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const tl = gsap.timeline()
+    // The sun rises from the horizon to where it is now, drawing the path it took.
+    if (sun.current) tl.fromTo(sun.current, { x: 60, y: 260 }, { x, y, duration: reduced ? 0 : 1.6, ease: 'power2.out' })
+    if (trail.current) {
+      const len = trail.current.getTotalLength?.() || 700
+      tl.fromTo(trail.current, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: len * (1 - f), duration: reduced ? 0 : 1.6, ease: 'power2.out' }, 0)
+    }
+    const spin = reduced || !rays.current ? null : gsap.to(rays.current, { rotate: 360, duration: 30, repeat: -1, ease: 'none', transformOrigin: '0 0' })
+    const drift = reduced || !clouds.current ? null : gsap.to(clouds.current.children, { x: '+=60', yoyo: true, repeat: -1, duration: 12, ease: 'sine.inOut', stagger: 3 })
+    return () => {
+      tl.progress(1)
+      spin?.kill()
+      drift?.kill()
+    }
+  }, [x, y, f])
   const sky = alt > 20 ? ['#8fd0ff', '#dff3ff'] : alt > 0 ? ['#ffb37a', '#ffe3c2'] : alt > -6 ? ['#6a5aa8', '#f2a3a0'] : ['#141a3a', '#2c3566']
   return (
     <svg className="dl-sky" viewBox="0 0 600 320" aria-label={`Sun ${frac === null ? 'below the horizon' : `${Math.round(f * 100)}% across the sky`}`}>
@@ -37,9 +55,20 @@ function SunArc({ frac, alt, sunrise, sunset }: { frac: number | null; alt: numb
       {frac === null &&
         Array.from({ length: 40 }, (_, i) => <circle key={i} cx={(i * 137) % 600} cy={(i * 71) % 220} r={1 + (i % 3) * 0.5} fill="#fff" opacity={0.3 + (i % 4) * 0.15} className="dl-star" />)}
       <path d="M60 260 Q300 -140 540 260" fill="none" stroke="#ffffff88" strokeWidth="2" strokeDasharray="6 8" />
+      <path ref={trail} d="M60 260 Q300 -140 540 260" fill="none" stroke="#ffd35a" strokeWidth="4" strokeLinecap="round" />
+      <g ref={clouds} fill="#ffffffcc">
+        <ellipse cx="140" cy="70" rx="38" ry="14" />
+        <ellipse cx="420" cy="50" rx="46" ry="16" />
+      </g>
       <path d="M0 260 Q150 240 300 258 T600 252 L600 320 L0 320 Z" fill="#3f6a4f" opacity="0.85" />
       <g ref={sun} style={{ opacity: frac === null ? 0 : 1 }}>
         <circle r="46" fill="url(#dl-sun)" />
+        <g ref={rays} stroke="#ffd35a" strokeWidth="3" strokeLinecap="round">
+          {Array.from({ length: 10 }, (_, i) => {
+            const a = (i / 10) * Math.PI * 2
+            return <line key={i} x1={Math.cos(a) * 24} y1={Math.sin(a) * 24} x2={Math.cos(a) * 32} y2={Math.sin(a) * 32} />
+          })}
+        </g>
         <circle r="18" fill="#ffd35a" />
       </g>
       <text x="60" y="296" textAnchor="middle" className="dl-lbl">
@@ -115,12 +144,16 @@ export function DaylightPage() {
     }
   }
 
+  usePageActions([
+    { id: 'dl-10', label: 'Log 10 min outside', icon: '☀️', run: () => logLight(10) },
+    ...(on('gps') ? [{ id: 'dl-gps', label: 'Use my location', icon: '📍', run: locate }] : []),
+  ])
   const todayTab = () => (
     <div className="studio-split">
       <div className="studio-card dl-stage">
         {on('sunArc') && <SunArc frac={frac} alt={altitude(now, p)} sunrise={hm(t.sunrise)} sunset={hm(t.sunset)} />}
         <div className="studio-stats">
-          <Stat value={hm(t.sunrise)} label="sunrise" />
+          <span data-hint="Get outside within an hour of sunrise"><Stat value={hm(t.sunrise)} label="sunrise" /></span>
           <Stat value={hm(t.sunset)} label="sunset" />
           {on('golden') && <Stat value={hm(t.goldenEvening)} label="golden hour" />}
           <Stat value={`${t.dayLength.toFixed(1)} h`} label="daylight" />
