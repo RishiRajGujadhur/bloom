@@ -24,6 +24,8 @@ import { StickyNode } from './nodes/StickyNode'
 import { JournalNode } from './nodes/JournalNode'
 import { BadgeNode } from './nodes/BadgeNode'
 import { GoalNode, HabitNode, ImageNode } from './nodes/WhiteboardNodes'
+import gsap from 'gsap'
+import { usePageActions } from '../ui/PageMenu'
 import styles from './VisionBoard.module.css'
 
 const nodeTypes = { sticky: StickyNode, journal: JournalNode, badge: BadgeNode, image: ImageNode, goal: GoalNode, habit: HabitNode }
@@ -224,6 +226,26 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
         save(() => db.vision_board_nodes.delete(change.id))
     }
   }
+  // Pin the board together when it opens: notes pop in one by one (GSAP).
+  const popped = useRef(false)
+  useEffect(() => {
+    if (!ready || popped.current || !area.current || !subOn('visionBoard', 'popIn') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    popped.current = true
+    const t = window.setTimeout(() => {
+      const els = area.current?.querySelectorAll('.react-flow__node > *')
+      if (els?.length) gsap.from(els, { scale: 0.3, opacity: 0, rotate: () => gsap.utils.random(-12, 12), stagger: 0.05, duration: 0.5, ease: 'back.out(2)' })
+    }, 120)
+    return () => window.clearTimeout(t)
+  }, [ready])
+  usePageActions(
+    ready
+      ? [
+          { id: 'vb-sticky', label: 'Add a sticky note', icon: '🗒️', run: () => add('sticky') },
+          { id: 'vb-goal', label: 'Add a goal', icon: '🎯', run: () => add('goal') },
+          { id: 'vb-fit', label: 'Fit everything on screen', icon: '🔭', run: () => void fitView({ padding: 0.25, duration: 300, maxZoom: 1.2 }) },
+        ]
+      : [],
+  )
   const add = (
     type: BoardNode['type'],
     referenceId?: string,

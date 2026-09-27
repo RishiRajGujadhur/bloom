@@ -46,6 +46,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'connect', title: 'Arrows', description: 'Connect cards with labelled arrows.' },
     { id: 'flowingArrows', title: 'Flowing arrows', description: 'Arrows animate in the direction they point.' },
     { id: 'whiteboardCards', title: 'Goals, habits & images', description: 'Pin long-term goals, live habits and pictures.' },
+    { id: 'popIn', title: 'Pop-in notes', description: 'Notes and goals pop onto the board one by one when it opens.' },
   ],
   bloomWorld: [
     { id: 'avatar', title: 'Avatar and shop decor', description: 'Your avatar and items bought with petals.' },
