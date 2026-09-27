@@ -8,6 +8,8 @@ import { setNudge } from '../../components/studio/Nudges'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { FAST_KEY, endMessage, fmtH, hours, perDay, protocols, stageAt, stages, stats, type Fast, type FastStore } from './fastingModel'
+import { StageTrack } from '../showcase/StageTrack'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './fasting.css'
 
 const on = (id: string) => subOn('fasting', id)
@@ -103,10 +105,12 @@ export function FastingPage() {
   }
   const st = stats(store.history)
 
+  usePageActions([cur ? { id: 'fs-end', label: 'End this fast', icon: '🍽️', run: end } : { id: 'fs-start', label: `Start a ${protocol.label} fast`, icon: '⏳', run: start }])
   const fast = () => (
     <div className="studio-split">
       <div className="studio-card studio-center fs-stage-card">
         {on('ring') ? <FastRing h={h} goal={cur?.goal ?? protocol.fast} /> : <strong className="fs-time-big">{fmtH(h)}</strong>}
+        {on('stageTrack') && <StageTrack stages={stages} hours={cur ? h : 0} goal={cur?.goal ?? protocol.fast} max={Math.max(24, (cur?.goal ?? protocol.fast) + 6)} />}
       </div>
       <div className="studio-card fs-side">
         {!cur ? (

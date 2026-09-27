@@ -774,3 +774,38 @@
   font-weight: 700;
   fill: currentColor;
 }
+
+/* ---------- Stage track ---------- */
+.sg-track {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 8px;
+}
+
+.sg-bg {
+  fill: var(--border-color, #0001);
+}
+
+.sg-fill {
+  fill: #f0a500;
+}
+
+.sg-stage line {
+  stroke: var(--text-muted, #999);
+  stroke-dasharray: 2 2;
+}
+
+.sg-stage text {
+  font-size: 16px;
+  opacity: 0.45;
+}
+
+.sg-stage.on text {
+  opacity: 1;
+}
+
+.sg-marker {
+  fill: #fff;
+  stroke: #e0703f;
+  stroke-width: 3;
+}

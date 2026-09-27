@@ -562,6 +562,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "endEarly", title: "Kind endings", description: "Ending early still counts." },
     { id: "notes", title: "Feelings & notes", description: "How the fast felt." },
     { id: "windowReminder", title: "Window reminder", description: "When your eating window closes." },
+    { id: 'stageTrack', title: 'Stage timeline', description: 'Body stages along a track; a marker glides to where you are.' },
   ],
   focusSounds: [
     { id: "modes", title: "Four modes", description: "Focus, relax, meditate and sleep." },
