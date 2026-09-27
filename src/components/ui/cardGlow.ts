@@ -2,8 +2,8 @@ import gsap from 'gsap'
 import './cardGlow.css'
 
 /**
- * Cards glow where the pointer is: a soft accent gradient (and a lit border)
- * follows the mouse inside any card, eased with GSAP so it trails smoothly.
+ * Cards glow where the pointer is (Composio-style): blurred multicolour blobs
+ * orbit the pointer and a conic rainbow edge rotates while hovered, eased with GSAP.
  * Buttons get a small springy press.
  */
 const CARD = '.studio-card, .card, .en-unit-head, .avatar-option'
@@ -12,6 +12,7 @@ export function installCardGlow() {
   let current: HTMLElement | null = null
   let setX: ((v: number) => void) | null = null
   let setY: ((v: number) => void) | null = null
+  let spin: gsap.core.Tween | null = null
   const track = (el: HTMLElement) => {
     current = el
     const px = { x: 50, y: 50 }
@@ -26,10 +27,14 @@ export function installCardGlow() {
     const el = (e.target as Element | null)?.closest?.(CARD) as HTMLElement | null
     if (el !== current) {
       current?.classList.remove('is-glowing')
+      spin?.kill()
       current = null
       if (el) {
         track(el)
         el.classList.add('is-glowing')
+        // Rotate the colours round the card while it is hovered.
+        const st = { a: 0 }
+        spin = gsap.to(st, { a: 360, duration: 6, repeat: -1, ease: 'none', onUpdate: () => el.style.setProperty('--ang', `${st.a}deg`) })
       }
     }
     if (!el || !setX || !setY) return

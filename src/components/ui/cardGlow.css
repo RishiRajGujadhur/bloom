@@ -1,6 +1,18 @@
+/* Composio-style card light: blurred multicolour blobs follow the pointer and
+   a conic rainbow edge rotates around the card while it is hovered. */
+@property --ang {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
 :where(.studio-card, .card, .avatar-option) {
   --mx: 50%;
   --my: 50%;
+  --ang: 0deg;
+  --glow-a: var(--accent-color);
+  --glow-b: #ff5ea8;
+  --glow-c: #38c8ff;
+  --glow-d: #ffc53d;
   position: relative;
   isolation: isolate;
 }
@@ -12,27 +24,38 @@
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 400ms ease;
+  transition: opacity 500ms ease;
   background:
-    radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent-color) 16%, transparent), transparent 55%),
-    radial-gradient(260px circle at calc(100% - var(--mx)) calc(100% - var(--my)), color-mix(in srgb, var(--accent-color) 7%, transparent), transparent 60%);
+    radial-gradient(260px circle at var(--mx) var(--my), color-mix(in srgb, var(--glow-a) 22%, transparent), transparent 60%),
+    radial-gradient(220px circle at calc(var(--mx) + 70px * cos(var(--ang))) calc(var(--my) + 50px * sin(var(--ang))), color-mix(in srgb, var(--glow-b) 16%, transparent), transparent 60%),
+    radial-gradient(200px circle at calc(var(--mx) - 80px * sin(var(--ang))) calc(var(--my) + 60px * cos(var(--ang))), color-mix(in srgb, var(--glow-c) 16%, transparent), transparent 60%),
+    radial-gradient(180px circle at calc(var(--mx) - 60px * cos(var(--ang))) calc(var(--my) - 50px * sin(var(--ang))), color-mix(in srgb, var(--glow-d) 12%, transparent), transparent 60%);
+  filter: blur(6px) saturate(1.2);
 }
-/* lit border that follows the pointer */
+/* rotating conic rainbow edge, brightest near the pointer */
 :is(.studio-card, .card, .avatar-option)::after {
   content: '';
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 400ms ease;
-  background: radial-gradient(240px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent-color) 70%, transparent), transparent 60%);
+  transition: opacity 500ms ease;
+  background:
+    conic-gradient(from var(--ang) at var(--mx) var(--my), var(--glow-a), var(--glow-b), var(--glow-d), var(--glow-c), var(--glow-a));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+  filter: blur(0.4px) brightness(1.15);
 }
 .is-glowing::before,
 .is-glowing::after {
   opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.studio-card, .card, .avatar-option)::before,
+  :is(.studio-card, .card, .avatar-option)::after {
+    display: none;
+  }
 }
