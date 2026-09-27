@@ -113,12 +113,7 @@ for (const name of ['IntersectionObserver', 'ResizeObserver'] as const)
     })
 
 // Existing tests start past the welcome onboarding (it has its own tests).
-const markWelcomed = () => {
-  try {
-    if (!localStorage.getItem('bloom-welcome-v1')) localStorage.setItem('bloom-welcome-v1', '{}')
-  } catch {
-    /* no storage */
-  }
-}
-markWelcomed()
-beforeEach(markWelcomed)
+jest.mock('../src/features/welcome/welcomeModel', () => ({
+  ...jest.requireActual('../src/features/welcome/welcomeModel'),
+  welcomeDone: () => true,
+}))

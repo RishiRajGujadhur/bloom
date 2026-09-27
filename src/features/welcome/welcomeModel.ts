@@ -162,9 +162,10 @@ export function themeFor(answers: Answers) {
 }
 
 export const WELCOME_KEY = 'bloom-welcome-v1'
+/** Show the welcome only on a true first run: never welcomed and no saved Bloom data yet. */
 export const welcomeDone = () => {
   try {
-    return localStorage.getItem(WELCOME_KEY) !== null
+    return localStorage.getItem(WELCOME_KEY) !== null || localStorage.getItem('mindfulness-dashboard-v1') !== null
   } catch {
     return true
   }
