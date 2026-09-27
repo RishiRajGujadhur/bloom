@@ -6,7 +6,7 @@ import { type AvatarDrawing, useAvatarDrawing } from './avatarStyle'
 import { OrangeBot, isOrange, orangeIdle } from './orangeBots'
 import { GlobeBot, PixelBot, extraIdle, isExtra } from './extraBots'
 
-export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave'
+export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave' | 'cheer'
 export type BloomFaceHandle = { react: (mood: FaceMood) => void; actFor: (page: string) => void }
 
 /** Mood orb palettes (light, deep) and mouths — joy, ennui, anger, anxiety… */
@@ -42,6 +42,7 @@ export const BloomFace = forwardRef<
 >(function BloomFace({ size = 72, mood = 'idle', follow = true, label = 'Bloom', className, waveOnMount = true, variant }, ref) {
   const svg = useRef<SVGSVGElement>(null)
   const current = useRef<gsap.core.Timeline | null>(null)
+  const lastCheer = useRef(-1)
   const uid = useId().replace(/:/g, '')
   const chosen = useAvatarDrawing()
   const drawing = variant ?? chosen
@@ -86,6 +87,18 @@ export const BloomFace = forwardRef<
       if (m === 'talk') tl.fromTo(q('.orb-mouth'), { scaleY: 1 }, { scaleY: 1.8, svgOrigin: '50 52', duration: 0.12, yoyo: true, repeat: 5, ease: 'sine.inOut' }, 0)
     }
     if (m === 'talk' && !robot && !orb && !orange) tl.to(svg.current.querySelector('.bf-lid'), { scaleY: 1, duration: 0.1, yoyo: true, repeat: 1, ease: 'sine.inOut' })
+    if (m === 'cheer') {
+      // One of five reactions, never the same twice in a row; all move whole groups so every avatar supports them.
+      const breath = q('.bf-breath')
+      let k = Math.floor(Math.random() * 5)
+      if (k === lastCheer.current) k = (k + 1) % 5
+      lastCheer.current = k
+      if (k === 0) tl.to(breath, { rotate: '+=360', svgOrigin: '50 54', duration: 0.8, ease: 'back.inOut(1.4)' })
+      else if (k === 1) tl.to(breath, { scaleX: 1.12, scaleY: 0.86, svgOrigin: '50 88', duration: 0.14, ease: 'power2.out' }).to(breath, { scaleX: 0.94, scaleY: 1.08, duration: 0.16 }).to(breath, { scaleX: 1, scaleY: 1, duration: 0.5, ease: 'elastic.out(1, 0.35)' })
+      else if (k === 2) tl.to(breath, { keyframes: [{ rotate: -12 }, { rotate: 10 }, { rotate: -7 }, { rotate: 4 }, { rotate: 0 }], svgOrigin: '50 88', duration: 0.7, ease: 'sine.inOut' })
+      else if (k === 3) tl.to(breath, { keyframes: [{ y: 5, rotate: 4 }, { y: 0, rotate: 0 }, { y: 5, rotate: -4 }, { y: 0, rotate: 0 }], svgOrigin: '50 88', duration: 0.8, ease: 'sine.inOut' })
+      else tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).fromTo(breath, { scale: 1 }, { scale: 1.1, svgOrigin: '50 54', duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.8).to(happy, { opacity: 0, duration: 0.1 }, 0.8)
+    }
     if (m === 'happy' || m === 'wink')
       tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.9).to(happy, { opacity: 0, duration: 0.1 }, 0.9)
     if (m === 'think') tl.to(q('.bf-pupil'), { x: 4, y: -4, duration: 0.35, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
