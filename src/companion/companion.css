@@ -264,3 +264,18 @@
     padding: 13px;
   }
 }
+
+.bloom-companion-launch.has-face {
+  padding: 5px 16px 5px 5px;
+  gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bloom-companion-launch.has-face:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px #d9503a33;
+}
+
+.bloom-companion-launch.has-face .bloom-face {
+  filter: none;
+}

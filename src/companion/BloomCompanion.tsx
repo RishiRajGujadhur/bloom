@@ -20,6 +20,7 @@ import {
   type Intent,
   type Proposal,
 } from './planner'
+import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import './companion.css'
 
 type Props = {
@@ -95,6 +96,7 @@ export function BloomCompanion({
   const revision = useRef(0)
   const pending = useRef(false)
   const feed = useRef<HTMLDivElement>(null)
+  const launchFace = useRef<BloomFaceHandle>(null)
   useEffect(
     () => () => {
       revision.current++
@@ -218,11 +220,13 @@ export function BloomCompanion({
   return (
     <>
       <button
-        className="bloom-companion-launch"
+        className="bloom-companion-launch has-face"
         onClick={onOpen}
+        onPointerEnter={() => launchFace.current?.react('excited')}
         aria-label="Talk to Bloom"
+        data-hint="Ask Bloom anything about this page"
       >
-        <MessageCircle size={19} />
+        <BloomFace ref={launchFace} size={34} label="" />
         <span>Talk to Bloom</span>
       </button>
       {open && (
