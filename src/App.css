@@ -2661,3 +2661,34 @@ html[data-nav='hamburger'] .topbar-menu {
 html[data-nav='hamburger'] .topbar {
   padding-right: 0;
 }
+
+/* Language, theme and export live in the drawer's header when the menu is a
+   drawer (hamburger mode or phones); otherwise in the top bar. */
+.topbar-tools {
+  display: contents;
+}
+.drawer-tools {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  right: 64px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.drawer-tools > * {
+  flex-shrink: 0;
+}
+.drawer-tools .theme-toggle span,
+.drawer-tools .topbar-label {
+  display: none;
+}
+html[data-nav='hamburger'] .topbar-tools {
+  display: none;
+}
+@media (max-width: 900px) {
+  .topbar-tools {
+    display: none;
+  }
+}

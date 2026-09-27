@@ -530,6 +530,30 @@ function App() {
       window.removeEventListener('bloom:search', search)
     }
   }, [today, setData])
+  // Language, theme and export: in the top bar, or in the drawer's header.
+  const topTools = (
+    <>
+              {settings.features.languageSelector && <LanguageSelector />}
+              <button
+                className="theme-toggle"
+                type="button"
+                aria-label={
+                  isDark ? t('ui.switchToLight') : t('ui.switchToDark')
+                }
+                aria-pressed={isDark}
+                onClick={() => setThemeSettings(toggleThemeMode)}
+              >
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                <span>
+                  {isDark ? t('actions.lightMode') : t('actions.darkMode')}
+                </span>
+              </button>
+              <button className="quiet-button" onClick={() => exportData()}>
+                <ArrowDownToLine size={16} aria-hidden="true" />{' '}
+                <span className="topbar-label">{t('actions.exportData')}</span>
+              </button>
+    </>
+  )
   const pageEnabled = (p: string) => p in pageDetails && (!pageRequires[p as NavKey] || settings.features[pageRequires[p as NavKey]!])
   const menuCommon: PageAction[] = [
     { id: 'c-todo', label: 'Add a to-do', icon: '➕', run: () => jump('todos') },
@@ -588,7 +612,7 @@ function App() {
         >
           {t('ui.skipToDashboard')}
         </a>
-        <Sidebar active={active} onNavigate={jump} flags={settings.features} />
+        <Sidebar active={active} onNavigate={jump} flags={settings.features} tools={topTools} />
         {settings.features.pointerFx && <PointerFx page={active} />}
         <HoverHints />
         <GsapControls />
@@ -604,25 +628,7 @@ function App() {
                 onNavigate={jump}
               />
               <StreakRewards data={data} today={today} />
-              {settings.features.languageSelector && <LanguageSelector />}
-              <button
-                className="theme-toggle"
-                type="button"
-                aria-label={
-                  isDark ? t('ui.switchToLight') : t('ui.switchToDark')
-                }
-                aria-pressed={isDark}
-                onClick={() => setThemeSettings(toggleThemeMode)}
-              >
-                {isDark ? <Sun size={16} /> : <Moon size={16} />}
-                <span>
-                  {isDark ? t('actions.lightMode') : t('actions.darkMode')}
-                </span>
-              </button>
-              <button className="quiet-button" onClick={() => exportData()}>
-                <ArrowDownToLine size={16} aria-hidden="true" />{' '}
-                <span className="topbar-label">{t('actions.exportData')}</span>
-              </button>
+              <div className="topbar-tools">{topTools}</div>
               <button type="button" className="topbar-menu" aria-label="Open menu" data-hint="Menu" onClick={() => window.dispatchEvent(new Event('bloom:toggle-nav'))}>
                 <MenuIcon size={20} aria-hidden="true" />
               </button>

@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import {
   BookOpen,
   CarFront,
@@ -193,7 +194,7 @@ const isDrawerWidth = () =>
  * CSS keys off `html[data-sidebar]`, which this component publishes in an
  * effect, so the layout shift costs no re-render of the page content.
  */
-export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
+export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { tools?: ReactNode }) {
   const { t } = useTranslation(undefined, { i18n })
   const [isNarrow, setIsNarrow] = useState(isDrawerWidth)
   const [isOpen, setIsOpen] = useState(() => {
@@ -518,6 +519,7 @@ export function Sidebar({ active, onNavigate, flags }: SidebarProps) {
           </span>
         </a>
 
+        {drawerOpen && tools && <div className="drawer-tools">{tools}</div>}
         {drawerOpen && (
           <button
             className={styles.drawerClose}
