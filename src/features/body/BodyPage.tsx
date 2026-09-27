@@ -10,6 +10,8 @@ import { db, type ProgressPhoto } from '../../search/db'
 import { dayKey } from '../../dates'
 import { BODY_KEY, bmi, bmiBand, display, latest, measures, projection, trend, whtr, whtrBand, type BodyStore, type Entry, type Measure } from './bodyModel'
 import '../run/run.css'
+import { Sparkline } from '../showcase/Sparkline'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './body.css'
 
 const on = (id: string) => subOn('bodyProgress', id)
@@ -111,6 +113,7 @@ export function BodyPage() {
     return `${d.value.toFixed(1)} ${d.unit}`
   }
 
+  usePageActions([{ id: 'bd-save', label: 'Save today’s check-in', icon: '📏', run: save }])
   const checkin = () => (
     <div className="studio-split">
       <div className="studio-card bd-sliders">
@@ -134,6 +137,10 @@ export function BodyPage() {
         </button>
       </div>
       <div className="studio-card bd-side">
+        {on('sparkline') && (() => {
+          const w = store.entries.filter((e) => typeof e.weight === 'number')
+          return <Sparkline values={w.map((e) => e.weight!)} labels={w.map((e) => e.date)} unit="kg" goodWhenDown={store.goalWeight < (w.at(-1)?.weight ?? 0)} />
+        })()}
         <div className="studio-stats">
           <Stat value={fmt(weight, 'kg')} label="weight" />
           {on('ratios') && <Stat value={weight ? bmi(weight, store.heightCm).toFixed(1) : '—'} label={weight ? `BMI · ${bmiBand(bmi(weight, store.heightCm))}` : 'BMI'} />}

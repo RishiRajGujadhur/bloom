@@ -543,6 +543,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "checkIn", title: "Weekly reminder", description: "A gentle weekly nudge to check in." },
     { id: "units", title: "Units", description: "Metric or imperial." },
     { id: "smoothing", title: "Trend smoothing", description: "Smooth out daily water-weight noise." },
+    { id: 'sparkline', title: 'Weight sparkline', description: 'A trend line that draws itself, with the change toward your goal.' },
   ],
   foodScanner: [
     { id: "camera", title: "Camera scanning", description: "Point your camera at a barcode." },
