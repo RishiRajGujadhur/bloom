@@ -480,7 +480,8 @@ aside[aria-label='Ambient audio'] > button {
     box-shadow 180ms ease !important;
 }
 .bloom-companion-launch {
-  right: max(20px, env(safe-area-inset-right)) !important;
+  right: auto !important;
+  left: max(20px, env(safe-area-inset-left)) !important;
   bottom: calc(max(20px, env(safe-area-inset-bottom)) + 64px) !important;
   font-size: 14px !important;
 }

@@ -4,7 +4,6 @@ import { ChevronDown } from 'lucide-react'
 import { readStore, writeStore } from '../studio/Studio'
 import { subOn } from '../../features/subFeatures'
 import { emblems } from './PageEmblem'
-import { BloomFace } from './BloomFace'
 import './flow.css'
 
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -66,10 +65,6 @@ export function LinkRail({ page, names, enabled = () => true }: { page: string; 
   if (!links || !subOn('pointerFx', 'linkRail', { ignoreParent: true })) return null
   return (
     <nav ref={row} className="link-rail" aria-label="Works well with">
-      <button type="button" className="link-chip ask-bloom" style={{ ['--c' as string]: '#e0703f' }} onClick={() => window.dispatchEvent(new CustomEvent('bloom:guide', { detail: { dock: true } }))} data-hint="Open Bloom’s guide beside this page">
-        <BloomFace size={26} follow={false} label="" waveOnMount={false} />
-        <span>Ask Bloom</span>
-      </button>
       <span className="link-rail-label">Works with</span>
       {links.map((l) => {
         const e = emblems[l.page]

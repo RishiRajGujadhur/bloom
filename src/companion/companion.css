@@ -283,14 +283,15 @@
 /* Talk to Bloom: a docked box like the soundscape, or a side panel. */
 .bc-panel {
   position: fixed;
-  right: max(20px, env(safe-area-inset-right));
+  left: max(20px, env(safe-area-inset-left));
   bottom: calc(max(20px, env(safe-area-inset-bottom)) + 128px);
   z-index: 60;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   width: min(400px, calc(100vw - 32px));
   max-height: calc(100dvh - 170px);
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
   padding: 18px;
   border: 1px solid var(--border-color);

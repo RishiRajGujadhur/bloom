@@ -103,3 +103,38 @@
   background: #e0703f;
   color: #fff;
 }
+
+/* The panel fills the screen height exactly: the chat takes whatever is left,
+   so there is never a page scrollbar just for the header. */
+.bc-panel > .bg-guide,
+.bc-panel > .bloom-companion {
+  flex: 1;
+  min-height: 0;
+}
+
+.bc-panel > .bloom-companion {
+  overflow-y: auto;
+}
+
+.bg-guide {
+  grid-template-rows: auto minmax(120px, 1fr) auto auto;
+}
+
+.bg-guide-chat {
+  height: auto;
+  min-height: 0;
+}
+
+.bc-panel:not(.is-docked) .bg-guide-chat {
+  height: min(32vh, 260px);
+}
+
+.bg-guide-head {
+  justify-content: center;
+}
+
+.bc-panel .bc-head-actions button[aria-selected='true'] {
+  background: #e0703f;
+  border-color: #e0703f;
+  color: #fff;
+}

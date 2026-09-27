@@ -9,7 +9,7 @@ import { Leaf, MessageCircle, Send, Sparkles } from 'lucide-react'
 import type { AppData } from '../model'
 import type { NavKey } from '../components/layout/Sidebar'
 import gsap from 'gsap'
-import { PanelRightClose, PanelRightOpen, X } from 'lucide-react'
+import { CalendarClock, Compass, PanelRightClose, PanelRightOpen, X } from 'lucide-react'
 import { Sprite } from '../rpg/Sprite'
 import type { LocalCompanion } from './localAI'
 import {
@@ -132,7 +132,7 @@ export function BloomCompanion({
   // Open like the soundscape box: grow from the button corner (GSAP).
   useEffect(() => {
     if (!open || !panel.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const tw = gsap.fromTo(panel.current, docked ? { x: -40, opacity: 0 } : { scale: 0.85, opacity: 0, y: 16, transformOrigin: '100% 100%' }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.6)', clearProps: 'transform' })
+    const tw = gsap.fromTo(panel.current, docked ? { x: -40, opacity: 0 } : { scale: 0.85, opacity: 0, y: 16, transformOrigin: '0% 100%' }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.6)', clearProps: 'transform' })
     return () => void tw.progress(1)
   }, [open, docked])
   const [text, setText] = useState('')
@@ -299,27 +299,23 @@ export function BloomCompanion({
           }}
         >
           <header className="bc-head">
-            <div>
-              <span className="bc-eyebrow">Your guide</span>
-              <h2>Talk to Bloom</h2>
+            <div className="bc-head-actions" role="tablist" aria-label="Bloom mode">
+              <button type="button" role="tab" aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>
+                <Compass size={17} />
+              </button>
+              <button type="button" role="tab" aria-selected={mode === 'plan'} aria-pressed={mode === 'plan'} aria-label="Plan with Bloom" data-hint="Plan with Bloom" onClick={() => setMode('plan')}>
+                <CalendarClock size={17} />
+              </button>
             </div>
             <div className="bc-head-actions">
               <button type="button" aria-label={docked ? 'Float the chat' : 'Dock beside the page'} aria-pressed={docked} onClick={() => setDocked(!docked)} data-hint={docked ? 'Float as a small box' : 'Keep Bloom open beside this page'}>
                 {docked ? <PanelRightClose size={17} /> : <PanelRightOpen size={17} />}
               </button>
-              <button type="button" aria-label="Close Bloom" onClick={onClose}>
+              <button type="button" aria-label="Close Bloom" data-hint="Close" onClick={onClose}>
                 <X size={18} />
               </button>
             </div>
           </header>
-          <div className="segmented companion-mode" role="tablist" aria-label="Bloom mode">
-            <button role="tab" aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} className={mode === 'guide' ? 'active' : ''} onClick={() => setMode('guide')}>
-              Guide me
-            </button>
-            <button role="tab" aria-selected={mode === 'plan'} aria-pressed={mode === 'plan'} className={mode === 'plan' ? 'active' : ''} onClick={() => setMode('plan')}>
-              Plan with Bloom
-            </button>
-          </div>
           {mode === 'guide' ? (
             <BloomGuide
               page={page}

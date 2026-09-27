@@ -131,11 +131,7 @@ export function BloomGuide({
   return (
     <div className="bg-guide">
       <div className="bg-guide-head">
-        <BloomFace ref={face} size={72} />
-        <div>
-          <strong>Bloom</strong>
-          <small>Your guide · {names(page)}</small>
-        </div>
+        <BloomFace ref={face} size={72} label={`Bloom, your guide on ${names(page)}`} />
       </div>
       <div className="bg-guide-chat">
         <MainContainer>
@@ -148,26 +144,23 @@ export function BloomGuide({
           </ChatContainer>
         </MainContainer>
       </div>
-      <div ref={chips} className="bg-guide-chips" role="group" aria-label="Choices">
-        {choices.map((c) => (
-          <button key={c.label} type="button" className="bg-chip" onClick={() => pick(c)} disabled={typing}>
-            {c.label}
-          </button>
-        ))}
+      <div ref={chips} className="bg-guide-chips" role="group" aria-label={results.length ? 'Matching pages' : 'Choices'}>
+        {results.length
+          ? results.map((r) => (
+              <button key={r.key} type="button" className="bg-chip ghost" onClick={() => { setQuery(''); pick({ label: r.title, go: r.key }) }}>
+                {r.title} <small>{r.section}</small>
+              </button>
+            ))
+          : choices.map((c) => (
+              <button key={c.label} type="button" className="bg-chip" onClick={() => pick(c)} disabled={typing}>
+                {c.label}
+              </button>
+            ))}
       </div>
       <label className="bg-guide-search">
         <span className="sr-only">Find a page</span>
         <input type="search" placeholder="Or type where you want to go…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && results[0] && (setQuery(''), pick({ label: results[0].title, go: results[0].key }))} />
       </label>
-      {results.length > 0 && (
-        <div className="bg-guide-results">
-          {results.map((r) => (
-            <button key={r.key} type="button" className="bg-chip ghost" onClick={() => { setQuery(''); pick({ label: r.title, go: r.key }) }}>
-              {r.title} <small>{r.section}</small>
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
