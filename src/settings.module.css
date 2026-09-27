@@ -528,7 +528,7 @@ html[data-mode='dark'] .importInput {
 }
 .optionNote {
   margin: 0 0 8px;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 12px;
 }
 .subOptions li[data-hit] .subOption {
