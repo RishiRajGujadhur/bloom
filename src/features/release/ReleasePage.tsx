@@ -7,6 +7,8 @@ import { Flame, Heart, RotateCcw } from 'lucide-react'
 import { useStoredValue } from '../sleep/useStoredValue'
 import { burst } from '../../components/ui/celebrate'
 import './release.css'
+import gsap from 'gsap'
+import { usePageActions } from '../../components/ui/PageMenu'
 
 const RELEASE_KEY = 'bloom-release-v1'
 
@@ -43,7 +45,48 @@ export function ReleasePage() {
     return cx > b.left - 30 && cx < b.right + 30 && cy > b.top - 40 && cy < b.bottom + 20
   }
 
+  // The words crumble into ash letters that drift up and away (GSAP).
+  const ash = (words: string | null) => {
+    const a = cardRef.current?.getBoundingClientRect()
+    if (!a || !words || reduced || !subOn('burnRelease', 'ash')) return
+    const layer = document.createElement('div')
+    layer.className = 'release-ash'
+    document.body.append(layer)
+    const letters = [...words.slice(0, 90)].map((ch, i) => {
+      const el = document.createElement('span')
+      el.textContent = ch
+      el.style.left = `${a.left + 16 + ((i * 11) % Math.max(40, a.width - 32))}px`
+      el.style.top = `${a.top + 20 + Math.floor((i * 11) / Math.max(40, a.width - 32)) * 20}px`
+      layer.append(el)
+      return el
+    })
+    gsap.to(letters, {
+      y: () => gsap.utils.random(-260, -120),
+      x: () => gsap.utils.random(-60, 60),
+      rotate: () => gsap.utils.random(-180, 180),
+      opacity: 0,
+      color: '#9e9e9e',
+      duration: () => gsap.utils.random(1.2, 2.2),
+      stagger: 0.015,
+      ease: 'power1.out',
+      onComplete: () => layer.remove(),
+    })
+  }
+  const embers = () => {
+    const f = fire.current
+    if (!f || reduced) return
+    const sparks = Array.from({ length: 14 }, () => {
+      const el = document.createElement('i')
+      el.className = 'release-ember'
+      f.append(el)
+      return el
+    })
+    gsap.fromTo(sparks, { x: () => gsap.utils.random(-30, 30), y: 0, opacity: 1, scale: () => gsap.utils.random(0.5, 1.2) }, { y: () => gsap.utils.random(-200, -90), opacity: 0, duration: () => gsap.utils.random(0.9, 1.8), stagger: 0.05, ease: 'power1.out', onComplete: () => sparks.forEach((e) => e.remove()) })
+  }
+
   const release = () => {
+    ash(card)
+    embers()
     const a = cardRef.current?.getBoundingClientRect()
     const b = fire.current?.getBoundingClientRect()
     setBurning(true)
@@ -83,6 +126,7 @@ export function ReleasePage() {
     { filterTaps: true },
   )
 
+  usePageActions(card ? [{ id: 'rl-go', label: 'Release it', icon: '🔥', run: release }, { id: 'rl-not', label: 'Not yet', icon: '↩️', run: () => setCard(null) }] : [])
   return (
     <section className="release-page" aria-label="Burn and release">
       <div className="release-stage">
@@ -133,7 +177,7 @@ export function ReleasePage() {
             </div>
           )}
         </div>
-        <div className={`release-fire${burning ? ' is-burning' : ''}`} ref={fire} aria-hidden="true">
+        <div className={`release-fire${burning ? ' is-burning' : ''}`} ref={fire} aria-hidden="true" data-hint="Drop your card here to let it go">
           <div className="release-smoke">
             <i />
             <i />

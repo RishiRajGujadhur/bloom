@@ -147,6 +147,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'smoke', title: 'Smoke', description: 'The card turns to smoke.' },
     { id: 'count', title: 'Release counter', description: 'How many thoughts you let go.' },
     { id: 'handwriting', title: 'Handwritten card', description: 'A handwriting font on the card.' },
+    { id: 'ash', title: 'Words to ash', description: 'Your words crumble into ash letters that drift away.' },
   ],
   garage: [
     { id: 'upgrades', title: 'Garage upgrades', description: 'Neon, turntable, chargers and more.' },

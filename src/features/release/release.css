@@ -223,3 +223,33 @@
     animation: none;
   }
 }
+
+.release-ash {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  pointer-events: none;
+}
+
+.release-ash span {
+  position: absolute;
+  font-family: var(--font-hand, 'Caveat', cursive);
+  font-size: 1.2rem;
+  color: #5d4037;
+}
+
+.release-fire {
+  position: relative;
+}
+
+.release-ember {
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffb300;
+  box-shadow: 0 0 8px #ff6f00;
+  pointer-events: none;
+}
