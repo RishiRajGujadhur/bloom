@@ -812,6 +812,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'emblems', title: 'Animated page emblems', description: 'Each page title has an icon that draws itself and moves.', independent: true },
     { id: 'linkRail', title: 'Works-with links', description: 'One row of related features under each title.', independent: true },
     { id: 'hoverHints', title: 'Hover hints', description: 'A label follows the pointer to explain buttons and items.', independent: true },
+    { id: 'gsapControls', title: 'Springy controls', description: 'Buttons, chips and switches squash and spring back when pressed (GSAP).', independent: true },
   ],
   bloomStreet: [
     { id: "walker", title: "Walking sprout", description: "A sprout buddy walks to each building." },

@@ -106,6 +106,7 @@ import { PageMenu, type PageAction } from './components/ui/PageMenu'
 import { pageRequires } from './components/layout/Sidebar'
 import { PointerFx } from './components/ui/PointerFx'
 import { HoverHints, LinkRail } from './components/ui/Flow'
+import { GsapControls } from './components/ui/GsapControls'
 import { WelcomeFlow } from './features/welcome/WelcomeFlow'
 import { WELCOME_KEY, configure, configureSubs, themeFor, welcomeDone, type Answers } from './features/welcome/welcomeModel'
 import './styles/subFeatureGates.css'
@@ -588,6 +589,7 @@ function App() {
         <Sidebar active={active} onNavigate={jump} flags={settings.features} />
         {settings.features.pointerFx && <PointerFx page={active} />}
         <HoverHints />
+        <GsapControls />
         {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
         <PageMenu page={active} common={menuCommon}>
         <main id="overview" className="min-w-0 flex-1">
