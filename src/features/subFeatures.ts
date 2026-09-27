@@ -116,6 +116,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'wishRings', title: 'Savings rings', description: 'Animated progress rings toward each wish.' },
     { id: 'affordEta', title: 'Days to afford', description: 'Estimate from your average petals a day.' },
     { id: 'flipBalance', title: 'Flip-counter balance', description: 'Animated petal counter.' },
+    { id: 'shopWindow', title: 'Shop window', description: 'A storybook shop front with shelves, swinging price tags and a waving shopkeeper.' },
   ],
   reminders: [
     { id: 'system', title: 'System notifications', description: 'Notify when Bloom is in the background.' },

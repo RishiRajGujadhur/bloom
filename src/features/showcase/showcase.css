@@ -194,3 +194,119 @@
   border-radius: 50%;
   box-shadow: inset -3px -3px 4px #0002;
 }
+
+/* ---------- Petal shop window ---------- */
+.sw-front {
+  position: relative;
+  margin: 0 0 16px;
+  padding: 44px 16px 16px;
+  border-radius: 20px 20px 12px 12px;
+  background: linear-gradient(#fbe7ef, #f7d4e2);
+  border: 8px solid #6d4c41;
+  overflow: hidden;
+}
+
+.sw-awning {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 34px;
+  background: repeating-linear-gradient(90deg, #e57373 0 34px, #fff 34px 68px);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 97% 100%, 94% 70%, 91% 100%, 88% 70%, 85% 100%, 82% 70%, 79% 100%, 76% 70%, 73% 100%, 70% 70%, 67% 100%, 64% 70%, 61% 100%, 58% 70%, 55% 100%, 52% 70%, 49% 100%, 46% 70%, 43% 100%, 40% 70%, 37% 100%, 34% 70%, 31% 100%, 28% 70%, 25% 100%, 22% 70%, 19% 100%, 16% 70%, 13% 100%, 10% 70%, 7% 100%, 4% 70%, 1% 100%, 0 70%);
+}
+
+.sw-sign {
+  justify-self: center;
+  width: fit-content;
+  margin: 0 auto 10px;
+  padding: 4px 16px;
+  border-radius: 10px;
+  background: #fff8e1;
+  border: 3px solid #6d4c41;
+  color: #6d4c41;
+  font-weight: 800;
+}
+
+.sw-inside {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.sw-keeper {
+  flex: 0 0 80px;
+  width: 80px;
+}
+
+.sw-shelves {
+  display: grid;
+  flex: 1;
+  gap: 12px;
+}
+
+.sw-shelf {
+  position: relative;
+}
+
+.sw-shelf-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6d4c41;
+  text-transform: uppercase;
+}
+
+.sw-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 4px 6px 0;
+}
+
+.sw-plank {
+  display: block;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(#a1887f, #795548);
+  box-shadow: 0 4px 0 #5d4037;
+}
+
+.sw-item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 58px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.sw-item:disabled {
+  cursor: default;
+  filter: grayscale(0.6) opacity(0.7);
+}
+
+.sw-item.sw-owned {
+  filter: none;
+}
+
+.sw-emoji {
+  font-size: 2rem;
+}
+
+.sw-tag {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: #fff8e1;
+  border: 1.5px solid #c79a00;
+  color: #6d4c41;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.sw-owned .sw-tag {
+  background: #c8e6c9;
+  border-color: #2e7d32;
+}
