@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { BookOpen, Dumbbell, Flame, Gem, Heart, Languages, Mic, PenLine, Trophy, Zap } from 'lucide-react'
+import { BookOpen, Dumbbell, Flame, Gem, Heart, Languages, Mic, PenLine, Swords, Trophy, Zap } from 'lucide-react'
 import { Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { burst } from '../../components/ui/celebrate'
 import type { AppData } from '../../model'
@@ -20,6 +20,7 @@ import './english.css'
 const EnglishPractice = lazy(() => import('./EnglishPractice').then((m) => ({ default: m.EnglishPractice })))
 const EnglishLab = lazy(() => import('./EnglishLab').then((m) => ({ default: m.EnglishLab })))
 const EnglishWrite = lazy(() => import('./EnglishWrite').then((m) => ({ default: m.EnglishWrite })))
+const StoryMode = lazy(() => import('./StoryMode').then((m) => ({ default: m.StoryMode })))
 const XpChart = lazy(() => import('./XpChart').then((m) => ({ default: m.XpChart })))
 
 export const on = (id: string) => subOn('englishLearning', id)
@@ -346,6 +347,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
       aside={header}
       tabs={[
         { id: 'learn', label: 'Learn', icon: <Languages size={15} />, render: learnTab },
+        ...(on('storyMode') ? [{ id: 'story', label: 'Story', icon: <Swords size={15} />, render: () => lazyTab(<StoryMode onXp={(n) => save((st) => earn(st, today, n))} onGems={(n) => save((st) => ({ ...st, gems: st.gems + n }))} onFreeze={() => save((st) => ({ ...st, freezes: Math.min(2, st.freezes + 1) }))} />) }] : []),
         ...(on('review') ? [{ id: 'practice', label: 'Practice', icon: <Dumbbell size={15} />, render: () => lazyTab(<EnglishPractice store={store} save={save} today={today} onStart={(exs: Exercise[], title: string, kind: Session['kind']) => start({ title, exercises: exs, kind })} makeReview={makeReview} makeMistakes={makeMistakes} />) }] : []),
         ...(on('pronunciation') ? [{ id: 'speak', label: 'Speak', icon: <Mic size={15} />, render: () => lazyTab(<EnglishLab onXp={(n: number) => save((s) => earn(s, today, n))} />) }] : []),
         ...(on('writing') ? [{ id: 'write', label: 'Write', icon: <PenLine size={15} />, render: () => lazyTab(<EnglishWrite data={data} onFeedback={() => save((s) => ({ ...earn(s, today, 10), writings: s.writings + 1 }))} />) }] : []),

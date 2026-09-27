@@ -850,6 +850,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'debtPlanner', title: 'Debt payoff planner', description: 'Months to debt-free at a chosen payment.' },
   ],
   englishLearning: [
+    { id: "storyMode", title: "Story mode", description: "The Word Well: a tournament side quest with Bloom's friends." },
     { id: "hearts", title: "Hearts", description: "Lose a heart for each mistake; they refill over time." },
     { id: "listening", title: "Listening exercises", description: "Hear a sentence and type it." },
     { id: "speaking", title: "Speaking exercises", description: "Say sentences out loud (speech recognition)." },
