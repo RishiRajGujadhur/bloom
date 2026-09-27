@@ -403,3 +403,54 @@ html[data-theme='matrix'] .tc-overlay {
   color: #d9ffe3;
   text-shadow: 0 1px 10px #000c;
 }
+
+/* ---- Glow themes: black glass over a soft gradient light rising from below ---- */
+[data-theme^='glow-'] {
+  --mode: dark;
+  --bg-primary: #050508;
+  --bg-sidebar: #07070c;
+}
+[data-theme='glow-purple'] { --g1: #7b61ff; --g2: #3a1fd1; --g3: #fff; --bg-surface: #0d0b1f; --accent-color: #8f7bff; }
+[data-theme='glow-orange'] { --g1: #ff7a2f; --g2: #a33a10; --g3: #ffe2b8; --bg-surface: #140b07; --accent-color: #ff8a3d; }
+[data-theme='glow-pink'] { --g1: #f25cff; --g2: #9b1fbf; --g3: #ffe1ff; --bg-surface: #170a17; --accent-color: #f25cff; }
+[data-theme='glow-green'] { --g1: #3dff6e; --g2: #0f8a2c; --g3: #e8ffe9; --bg-surface: #08140a; --accent-color: #3dff6e; }
+[data-theme='glow-blue'] { --g1: #3d7bff; --g2: #1a2fbf; --g3: #9ff0ff; --bg-surface: #070d1c; --accent-color: #4d8bff; }
+html[data-theme^='glow-'] {
+  --text-primary: #f3f1ff;
+  --text-secondary: #c9c6dc;
+  --text-muted: #8c89a3;
+  --border-color: #ffffff1f;
+  --text-on-accent: #07070c;
+}
+html[data-theme^='glow-'],
+html[data-theme^='glow-'] body {
+  background:
+    radial-gradient(120% 60% at 50% 110%, color-mix(in srgb, var(--g3) 70%, transparent) 0%, var(--g1) 18%, color-mix(in srgb, var(--g2) 60%, transparent) 38%, transparent 70%),
+    radial-gradient(80% 50% at 85% -10%, color-mix(in srgb, var(--g2) 45%, transparent), transparent 60%),
+    #050508;
+  background-attachment: fixed;
+}
+html[data-theme^='glow-'] .app-shell {
+  background: transparent;
+}
+/* fine dot grain like frosted glass */
+html[data-theme^='glow-'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: radial-gradient(#ffffff14 0.6px, transparent 0.7px);
+  background-size: 5px 5px;
+  mix-blend-mode: overlay;
+}
+html[data-theme^='glow-'] :is(.card, .studio-card, .bloom-heading.feature-heading) {
+  background: color-mix(in srgb, var(--bg-surface) 72%, transparent);
+  border: 1px solid #ffffff1c;
+  backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow: inset 0 1px 0 #ffffff14, 0 20px 50px -30px var(--g1);
+}
+html[data-theme^='glow-'] :is(.primary, .ov-primary, .feature-primary, .now-primary, .moment-cta, [aria-selected='true'].tab, .en-check) {
+  background: linear-gradient(135deg, var(--g3), var(--g1) 45%, var(--g2));
+  color: #07070c;
+}

@@ -1,0 +1,38 @@
+:where(.studio-card, .card, .avatar-option) {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  isolation: isolate;
+}
+:is(.studio-card, .card, .avatar-option)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  background:
+    radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent-color) 16%, transparent), transparent 55%),
+    radial-gradient(260px circle at calc(100% - var(--mx)) calc(100% - var(--my)), color-mix(in srgb, var(--accent-color) 7%, transparent), transparent 60%);
+}
+/* lit border that follows the pointer */
+:is(.studio-card, .card, .avatar-option)::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  background: radial-gradient(240px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent-color) 70%, transparent), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.is-glowing::before,
+.is-glowing::after {
+  opacity: 1;
+}
