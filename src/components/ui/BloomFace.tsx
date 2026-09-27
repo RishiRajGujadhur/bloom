@@ -2,10 +2,29 @@ import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } f
 import { type Act, ActProp, pageActs, playAct } from './avatarActs'
 import gsap from 'gsap'
 import './bloomFace.css'
-import { useMatrix } from './MatrixRain'
+import { useAvatarDrawing } from './avatarStyle'
 
 export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave'
 export type BloomFaceHandle = { react: (mood: FaceMood) => void; actFor: (page: string) => void }
+
+/** Mood orb palettes (light, deep) and mouths — joy, ennui, anger, anxiety… */
+const orbMoods: [string, string][] = [
+  ['#8fe6ae', '#34b86a'], ['#b5bdf3', '#6a72c8'], ['#f39a9a', '#c84848'], ['#ffbb8a', '#e9804a'], ['#ffe391', '#f2c23a'],
+  ['#a8dcff', '#4fb0f0'], ['#eadcf7', '#b999d8'], ['#9ad8ee', '#3a9cc8'], ['#f7a6cf', '#d8559a'],
+]
+const orbMouths = [
+  'M42 53 Q50 50 58 53', 'M42 53 Q50 51 58 53', 'M42 55 Q50 49 58 55', 'M36 52 Q50 50 64 52', 'M40 50 Q50 58 60 50',
+  'M42 55 Q50 49 58 55', 'M42 53 Q50 51 58 53', 'M44 51 Q50 55 56 51', 'M44 52 Q50 52 56 52',
+]
+function orbTo(el: SVGSVGElement, k: number, duration: number) {
+  const [a, b] = orbMoods[k]
+  const tl = gsap.timeline({ defaults: { duration, ease: 'sine.inOut' } })
+  tl.to(el.querySelectorAll('.orb-s0'), { attr: { 'stop-color': a } }, 0)
+    .to(el.querySelectorAll('.orb-s1'), { attr: { 'stop-color': b } }, 0)
+    .to(el.querySelector('.orb-lid'), { attr: { fill: a } }, 0)
+    .to(el.querySelector('.orb-mouth'), { attr: { d: orbMouths[k] } }, 0)
+  return tl
+}
 
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -17,12 +36,15 @@ const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(p
  */
 export const BloomFace = forwardRef<
   BloomFaceHandle,
-  { size?: number; mood?: FaceMood; follow?: boolean; label?: string; className?: string; waveOnMount?: boolean }
->(function BloomFace({ size = 72, mood = 'idle', follow = true, label = 'Bloom', className, waveOnMount = true }, ref) {
+  { size?: number; mood?: FaceMood; follow?: boolean; label?: string; className?: string; waveOnMount?: boolean; variant?: 'bloom' | 'robot' | 'orb' }
+>(function BloomFace({ size = 72, mood = 'idle', follow = true, label = 'Bloom', className, waveOnMount = true, variant }, ref) {
   const svg = useRef<SVGSVGElement>(null)
   const current = useRef<gsap.core.Timeline | null>(null)
   const uid = useId().replace(/:/g, '')
-  const robot = useMatrix()
+  const chosen = useAvatarDrawing()
+  const drawing = variant ?? chosen
+  const robot = drawing === 'robot'
+  const orb = drawing === 'orb'
   const q = (s: string) => svg.current?.querySelector(s) as SVGElement | null
 
   const wave = () => {
@@ -51,7 +73,12 @@ export const BloomFace = forwardRef<
     const tl = gsap.timeline()
     current.current = tl
     if (m === 'talk' && robot) tl.fromTo(svg.current.querySelectorAll('.rb-bar'), { scaleY: 0.3 }, { scaleY: () => gsap.utils.random(0.6, 1.4), transformOrigin: '50% 50%', duration: 0.12, yoyo: true, repeat: 5, stagger: 0.03, ease: 'steps(3)' })
-    if (m === 'talk' && !robot) tl.to(svg.current.querySelector('.bf-lid'), { scaleY: 1, duration: 0.1, yoyo: true, repeat: 1, ease: 'sine.inOut' })
+    if (orb) {
+      const mood = m === 'happy' || m === 'excited' || m === 'wave' || m === 'wink' ? 4 : m === 'think' ? 1 : m === 'talk' ? 7 : -1
+      if (mood >= 0) tl.add(orbTo(svg.current, mood, 0.6), 0)
+      if (m === 'talk') tl.fromTo(q('.orb-mouth'), { scaleY: 1 }, { scaleY: 1.8, svgOrigin: '50 52', duration: 0.12, yoyo: true, repeat: 5, ease: 'sine.inOut' }, 0)
+    }
+    if (m === 'talk' && !robot && !orb) tl.to(svg.current.querySelector('.bf-lid'), { scaleY: 1, duration: 0.1, yoyo: true, repeat: 1, ease: 'sine.inOut' })
     if (m === 'happy' || m === 'wink')
       tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.9).to(happy, { opacity: 0, duration: 0.1 }, 0.9)
     if (m === 'think') tl.to(q('.bf-pupil'), { x: 4, y: -4, duration: 0.35, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
@@ -115,7 +142,26 @@ export const BloomFace = forwardRef<
     }
     // Re-run when the drawing swaps (Matrix theme robot).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [robot])
+  }, [drawing])
+
+  // Mood orb idle: drift slowly through the mood colours and faces.
+  useEffect(() => {
+    const el = svg.current
+    if (!el || !orb || reduced()) return
+    let k = 4
+    let next: gsap.core.Tween | null = null
+    const drift = () => {
+      k = (k + 1 + Math.floor(Math.random() * 3)) % orbMoods.length
+      orbTo(el, k, 2.4)
+      next = gsap.delayedCall(gsap.utils.random(7, 11), drift)
+    }
+    next = gsap.delayedCall(6, drift)
+    const halo = gsap.to(el.querySelector('.orb-halo'), { attr: { r: 44 }, opacity: 0.75, duration: 3.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    return () => {
+      next?.kill()
+      halo.kill()
+    }
+  }, [orb])
 
   // Robot idle: antenna light pulses, a scanline sweeps the visor, the visor glances around.
   useEffect(() => {
@@ -153,7 +199,7 @@ export const BloomFace = forwardRef<
     }
     window.addEventListener('pointermove', move, { passive: true })
     return () => window.removeEventListener('pointermove', move)
-  }, [follow, robot])
+  }, [follow, drawing])
 
   useEffect(() => {
     if (mood !== 'idle') react(mood)
@@ -177,8 +223,45 @@ export const BloomFace = forwardRef<
           <stop offset="1" stopColor="#fff4ea" />
         </linearGradient>
       </defs>
-      <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : '#d9503a'} opacity="0.28" />
-      {robot ? (
+      <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : orb ? '#6a72c8' : '#d9503a'} opacity="0.28" />
+      {orb ? (
+        <g className="bf-body">
+          <defs>
+            <radialGradient id={`orb-g-${uid}`} cx="0.38" cy="0.3" r="0.75">
+              <stop offset="0" stopColor="#fffbe8" />
+              <stop className="orb-s0" offset="0.35" stopColor={orbMoods[4][0]} />
+              <stop className="orb-s1" offset="1" stopColor={orbMoods[4][1]} />
+            </radialGradient>
+            <radialGradient id={`orb-h-${uid}`}>
+              <stop className="orb-s1" offset="0.55" stopColor={orbMoods[4][1]} stopOpacity="0.7" />
+              <stop className="orb-s1" offset="1" stopColor={orbMoods[4][1]} stopOpacity="0" />
+            </radialGradient>
+            <filter id={`orb-b-${uid}`} x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" /></filter>
+            <filter id={`orb-s-${uid}`} x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" /></filter>
+          </defs>
+          <g className="bf-arm" opacity="0">
+            <g className="bf-arm-swing">
+              <circle cx="86" cy="44" r="8" fill={`url(#orb-g-${uid})`} filter={`url(#orb-s-${uid})`} />
+            </g>
+          </g>
+          <g className="bf-breath">
+            <circle className="orb-halo" cx="50" cy="54" r="40" fill={`url(#orb-h-${uid})`} opacity="0.55" filter={`url(#orb-b-${uid})`} />
+            <circle cx="50" cy="54" r="33" fill={`url(#orb-g-${uid})`} filter={`url(#orb-s-${uid})`} />
+            <ellipse cx="40" cy="36" rx="11" ry="6" fill="#fff" opacity="0.4" filter={`url(#orb-s-${uid})`} />
+            <g className="bf-eye">
+              <g className="bf-pupil">
+                <path d="M35 44 a7 7.5 0 0 1 13 0 z" fill="#111" />
+                <path d="M52 44 a7 7.5 0 0 1 13 0 z" fill="#111" />
+                <circle cx="45" cy="40" r="1.2" fill="#fff" />
+                <circle cx="62" cy="40" r="1.2" fill="#fff" />
+              </g>
+              <rect className="bf-lid orb-lid" x="33" y="35" width="34" height="10" rx="5" fill={orbMoods[4][0]} />
+            </g>
+            <path className="bf-happy" d="M35 44 Q41.5 36 48 44 M52 44 Q58.5 36 65 44" stroke="#111" strokeWidth="3.2" strokeLinecap="round" fill="none" opacity="0" />
+            <path className="orb-mouth" d={orbMouths[4]} stroke="#111" strokeWidth="3" strokeLinecap="round" fill="none" />
+          </g>
+        </g>
+      ) : robot ? (
         <g className="bf-body">
           <g className="bf-arm" opacity="0">
             <g className="bf-arm-swing">
