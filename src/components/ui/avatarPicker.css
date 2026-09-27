@@ -43,3 +43,41 @@
   height: 64px;
   align-items: center;
 }
+
+.data-reset {
+  display: grid;
+  gap: 10px;
+}
+.data-reset h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.05rem;
+  color: #d9534f;
+}
+.data-reset p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+.data-reset-btn {
+  border: 1px solid #d9534f;
+  color: #d9534f;
+  background: transparent;
+}
+.data-reset-btn:not(:disabled):hover {
+  background: #d9534f;
+  color: #fff;
+}
+.data-reset-confirm {
+  display: grid;
+  gap: 8px;
+}
+.data-reset-confirm label {
+  display: grid;
+  gap: 4px;
+}
+.data-reset-confirm > div {
+  display: flex;
+  gap: 8px;
+}

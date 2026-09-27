@@ -92,6 +92,7 @@ import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
 import { ShowMore, compactTitles, setCompactTitles } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
+import { DataReset } from './settings/DataReset'
 import type { LucideIcon } from 'lucide-react'
 
 const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
@@ -919,6 +920,10 @@ export function SettingsPage({
         </h2>
         <ThemePicker settings={theme} onChange={setTheme} />
         <AvatarPicker />
+      </section>
+
+      <section className={styles.card}>
+        <DataReset />
       </section>
 
       <Disclosure title={t('settings.configurationHeading')}>
