@@ -32,39 +32,17 @@ test('rails offer keyboard navigation without intercepting keys inside cards', (
   expect(track).not.toHaveClass('is-expanded')
 })
 
-test('decorative motion preference survives a new header and cleans up on unmount', () => {
-  localStorage.removeItem('bloom-motion')
+test('decorative motion always runs and cleans up on unmount', () => {
+  localStorage.setItem('bloom-motion', 'paused')
   const view = render(
     <BloomHeading title="Your daily space" page="overview">
       Guide
     </BloomHeading>,
   )
-  fireEvent.click(
-    screen.getByRole('button', { name: 'Pause decorative motion' }),
-  )
-  expect(document.documentElement).toHaveAttribute(
-    'data-bloom-motion',
-    'paused',
-  )
-  expect(localStorage.getItem('bloom-motion')).toBe('paused')
+  expect(screen.queryByRole('button', { name: /decorative motion/ })).not.toBeInTheDocument()
+  expect(document.documentElement).toHaveAttribute('data-bloom-motion', 'running')
   view.unmount()
   expect(document.documentElement).not.toHaveAttribute('data-bloom-motion')
-  render(
-    <BloomHeading title="Focus" page="focus">
-      Guide
-    </BloomHeading>,
-  )
-  expect(
-    screen.getByRole('button', { name: 'Resume decorative motion' }),
-  ).toHaveAttribute('aria-pressed', 'true')
-  fireEvent.click(
-    screen.getByRole('button', { name: 'Resume decorative motion' }),
-  )
-  expect(document.documentElement).toHaveAttribute(
-    'data-bloom-motion',
-    'running',
-  )
-  localStorage.removeItem('bloom-motion')
 })
 
 test('secondary content is collapsed by default and remains mounted', () => {
