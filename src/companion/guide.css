@@ -138,3 +138,28 @@
   border-color: #e0703f;
   color: #fff;
 }
+
+/* Floating box: a real height (not just a max) so the chat is never squeezed
+   and the choices never get clipped. */
+.bc-panel:not(.is-docked) {
+  height: min(620px, calc(100dvh - 170px));
+}
+
+.bc-panel:not(.is-docked) .bg-guide-chat {
+  height: auto;
+  min-height: 80px;
+}
+
+.bc-panel:not(.is-docked) .bg-guide {
+  grid-template-rows: auto minmax(80px, 1fr) auto auto;
+}
+
+.bc-panel:not(.is-docked) .bloom-face {
+  width: 52px;
+  height: 52px;
+}
+
+.bc-panel .bg-guide-chips {
+  max-height: 30dvh;
+  overflow-y: auto;
+}

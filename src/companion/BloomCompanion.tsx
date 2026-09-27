@@ -277,6 +277,7 @@ export function BloomCompanion({
     <>
       <button
         className="bloom-companion-launch has-face"
+        hidden={open && docked}
         aria-expanded={open}
         onClick={open ? onClose : onOpen}
         onPointerEnter={() => launchFace.current?.react('excited')}
