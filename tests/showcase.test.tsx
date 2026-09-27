@@ -26,3 +26,17 @@ test('epiphany garland glows by recall and flips to show details', () => {
   fireEvent.click(document.querySelector('.bg-bulb')!)
   expect(document.querySelector('.bg-card')!.textContent).toContain('From Added by hand')
 })
+
+import { FocusDiorama } from '../src/features/showcase/FocusDiorama'
+import { defaults } from '../src/model'
+
+test('focus diorama puts each session on its day shelf', () => {
+  const data = defaults()
+  data.rpg.focusHistory = [
+    { id: 'f1', completedAt: Date.now(), minutes: 25, taskTitle: 'Write' },
+    { id: 'f2', completedAt: Date.now() - 864e5, minutes: 50, taskTitle: '' },
+  ]
+  render(<FocusDiorama data={data} />)
+  expect(document.querySelectorAll('.fd-tile')).toHaveLength(2)
+  expect(screen.getByRole('region', { name: "This week's focus diorama" }).textContent).toContain('2 sessions')
+})

@@ -12,6 +12,8 @@ import {
 import { readStore } from '../components/studio/Studio'
 import { FocusQuick, SCENE_KEY, focusOn } from './quick/FocusQuick'
 import { GrowScene, type SceneId } from './quick/GrowScene'
+import { FocusDiorama } from './showcase/FocusDiorama'
+import { usePageActions } from '../components/ui/PageMenu'
 
 export function PixelPlant({ stage = 2 }: { stage?: number }) {
   return (
@@ -123,9 +125,23 @@ export function FocusPage({
       },
     }))
   const since = new Date().setHours(0, 0, 0, 0)
+  usePageActions(
+    active
+      ? []
+      : [
+          { id: 'focus-25', label: 'Set 25 minutes', icon: '🍅', run: () => update({ durationMinutes: 25 }) },
+          { id: 'focus-50', label: 'Set 50 minutes', icon: '🔥', run: () => update({ durationMinutes: 50 }) },
+          { id: 'focus-strict', label: quest.strict ? 'Turn strict mode off' : 'Turn strict mode on', icon: '🔒', run: () => update({ strict: !quest.strict }) },
+        ],
+  )
   const doneToday = history.filter((h) => h.completedAt >= since).length
   return (
     <div id="focus-page" className="focus-layout grid grid-cols-1 gap-5 xl:grid-cols-2">
+      {!active && (
+        <div className="xl:col-span-2">
+          <FocusDiorama data={data} />
+        </div>
+      )}
       {!active && (
         <div className="xl:col-span-2">
           <FocusQuick data={data} scene={scene} setScene={setScene} onPlan={update} />

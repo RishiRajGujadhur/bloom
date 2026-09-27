@@ -65,3 +65,20 @@ Martial-arts training reusing the exercise figure: karate, kung fu, taekwondo, b
 | 19 Diet: swipe meals by time of day, one-tap water, after-meal feeling | ✅ pushed |
 | 20 Affirmations: mood opens the matching deck | ✅ pushed |
 | 21 Intentions: swipe mood-matched intention templates | ✅ pushed |
+
+## Round 16 — showcases, right-click and pointer
+
+Inspired by Bercerita's floating storybooks and Dinotaeng's illustrated town.
+
+| # | Feature | Libraries | Status |
+|---|---|---|---|
+| 1 | Page-aware right-click menu + Pointer page (shapes, colours, effects) | @radix-ui/react-context-menu, mouse-follower, cursor-effects, GSAP | ✅ pushed |
+| 2 | Daybook bookshelf + page-turning reader | page-flip, GSAP | ✅ pushed |
+| 3 | Bloom Street town | GSAP Draggable | ✅ pushed |
+| 4 | Gratitude letter wall | GSAP Flip | ✅ pushed |
+| 5 | Mood marble jar | matter-js | ✅ pushed |
+| 6 | Petal shop window | GSAP | ✅ pushed |
+| 7 | Habit sticker book | GSAP | ✅ pushed |
+| 8 | Epiphany lightbulb garland | GSAP | ✅ pushed |
+| 9 | Guided journal story carousel | Swiper coverflow | ✅ pushed |
+| 10 | Focus week diorama + right-click timer actions | GSAP | ✅ pushed |

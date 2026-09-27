@@ -906,6 +906,7 @@ export const pageOptions: Record<string, { title: string; emoji: string; options
       { id: 'taskSwipe', title: 'Swipe a task', description: 'Swipe right on the task to focus on.' },
       { id: 'growScenes', title: 'Grow scenes', description: 'Tree, flower bed, city, treasure, reef or space station.' },
       { id: 'sceneScale', title: 'Scenes that scale', description: 'Each session today makes the next scene bigger.' },
+      { id: 'diorama', title: 'Week diorama', description: 'Every session this week as a little grown scene on a shelf.' },
     ],
   },
 }
