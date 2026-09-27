@@ -84,6 +84,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'promptSwipe', title: 'Swipe prompts', description: 'Swipe right on a prompt to answer it in one line.' },
     { id: 'moodPrompts', title: 'Mood-aware prompts', description: 'Gentle prompts first on hard days.' },
     { id: 'noteDrop', title: 'Note drop', description: 'A note tumbles into the jar when saved.' },
+    { id: 'letterWall', title: 'Letter wall', description: 'Notes pinned as envelopes on a cork board; open one to read it.' },
   ],
   compactMode: [
     { id: 'sidebar', title: 'Compact sidebar', description: 'Tighter navigation rows.' },

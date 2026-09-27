@@ -25,6 +25,7 @@ import {
 import './wellbeing.css'
 import { MoodQuick } from '../quick/MoodQuick'
 import { GratitudeQuick } from '../quick/GratitudeQuick'
+import { LetterWall } from '../showcase/LetterWall'
 import { GratitudeJarSvg, MiniJarSvg } from './GratitudeJarSvg'
 import { orbToMood } from './moodOrbModel'
 
@@ -594,6 +595,7 @@ export function GratitudePage() {
   return (
     <section className="wb-page" aria-labelledby="gratitude-title">
       <GratitudeQuick setEntries={setEntries} jarIds={jars.map((j) => j.id)} />
+      <LetterWall entries={entries} jars={jars} />
       <h2 id="gratitude-title" className="sr-only">
         Gratitude jars
       </h2>

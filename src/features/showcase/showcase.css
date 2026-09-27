@@ -1,0 +1,150 @@
+/* ---------- Gratitude letter wall ---------- */
+.lw-wrap {
+  position: relative;
+  margin: 0 0 16px;
+  padding: 26px 16px 18px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% 30%, #0000000d 0 2px, transparent 3px) 0 0 / 22px 22px,
+    radial-gradient(circle at 60% 70%, #ffffff22 0 2px, transparent 3px) 0 0 / 30px 30px,
+    linear-gradient(135deg, #d7a86e, #c28b50);
+  border: 10px solid #8d6e63;
+}
+
+.lw-lights {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+}
+
+.lw-filters {
+  margin: 6px 0 12px;
+}
+
+.lw-board {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  min-height: 140px;
+}
+
+.lw-note {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 128px;
+  padding: 18px 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #fffdf5, #f5ecd7);
+  box-shadow: 0 8px 14px #0000002e;
+  transform: rotate(var(--tilt));
+  color: #4e3b22;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.lw-note::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 6px;
+  border-radius: 0 0 6px 6px;
+  background: var(--jar);
+}
+
+.lw-note:hover,
+.lw-note:focus-visible {
+  transform: rotate(0deg) translateY(-6px) scale(1.06);
+  box-shadow: 0 16px 22px #00000038;
+}
+
+.lw-pin {
+  position: absolute;
+  top: -6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff8a80, #c62828);
+  box-shadow: 0 2px 2px #0005;
+}
+
+.lw-env {
+  font-size: 1.7rem;
+}
+
+.lw-note small {
+  opacity: 0.7;
+}
+
+.lw-peek {
+  font-family: var(--font-hand, 'Caveat', cursive);
+  font-size: 1.05rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.lw-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #0007;
+  perspective: 900px;
+}
+
+.lw-letter {
+  position: relative;
+  width: min(92vw, 460px);
+  padding: 70px 22px 22px;
+  border-radius: 12px;
+  background: var(--jar);
+  box-shadow: 0 30px 60px #0006;
+}
+
+.lw-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: color-mix(in srgb, var(--jar) 80%, #000);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transform: rotateX(180deg);
+}
+
+.lw-paper {
+  display: grid;
+  gap: 8px;
+  padding: 22px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(180deg, #fffdf5 0 29px, #eadfc6 29px 30px);
+  color: #3a2c17;
+}
+
+.lw-paper p {
+  margin: 0;
+  font-family: var(--font-hand, 'Caveat', cursive);
+  font-size: 1.6rem;
+  line-height: 30px;
+}
+
+.lw-sign {
+  justify-self: end;
+  font-style: italic;
+}
+
+.lw-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #fff;
+}
