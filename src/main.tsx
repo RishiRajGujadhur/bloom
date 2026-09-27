@@ -8,6 +8,7 @@ import { AudioMixer } from './components/AudioMixer'
 import { installInteractions } from './components/ui/interactions'
 import './components/ui/interactions.css'
 import { applyCompactTitles } from './components/ui/Flow'
+import { pixelIconsOn } from './icons/pixelated'
 import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
@@ -27,3 +28,4 @@ createRoot(document.getElementById('root')!).render(
 )
 
 applyCompactTitles()
+document.documentElement.toggleAttribute('data-pixel-icons', pixelIconsOn())

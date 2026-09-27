@@ -308,3 +308,8 @@ html[data-compact-titles] .bloom-heading.has-lead .bloom-heading-actions {
 .studio-head-slot .bloom-heading.in-slot .bloom-contours {
   display: none;
 }
+
+.pixel-icon {
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}

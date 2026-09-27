@@ -86,6 +86,7 @@ import {
   Wind,
 } from 'lucide-react'
 import { Menu } from 'lucide-react'
+import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
 import { ShowMore, compactTitles, setCompactTitles } from './components/ui/Flow'
 import type { LucideIcon } from 'lucide-react'
@@ -522,6 +523,7 @@ const matches = (text: string, query: string) => text.toLowerCase().includes(que
 function NavigationCard() {
   const [hamburger, setHamburger] = useState(hamburgerNav)
   const [compact, setCompact] = useState(compactTitles)
+  const [pixel, setPixel] = useState(pixelIconsOn)
   return (
     <section className={styles.card} aria-labelledby="navigation-heading">
       <h2 id="navigation-heading" className={styles.sectionTitle}>
@@ -560,6 +562,24 @@ function NavigationCard() {
               setCompactTitles(e.target.checked)
             }}
             aria-label="Compact page titles"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Pixel icon mode</strong>
+          <small>Swap Bloom’s line icons for pixel-art icons. Animated icons keep their motion.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={pixel}
+            onChange={(e) => {
+              setPixel(e.target.checked)
+              setPixelIcons(e.target.checked)
+            }}
+            aria-label="Pixel icon mode"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>

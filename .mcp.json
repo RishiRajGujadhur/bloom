@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "streamline": {
+      "type": "http",
+      "url": "https://public-api.streamlinehq.com/mcp"
+    }
+  }
+}
