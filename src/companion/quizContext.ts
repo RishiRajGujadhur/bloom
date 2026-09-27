@@ -12,6 +12,7 @@ const listeners = new Set<() => void>()
 const emit = () => listeners.forEach((l) => l())
 
 export function setQuiz(q: QuizContext | null) {
+  if (q && !q.answer.trim()) q = null
   if (q?.question === current?.question && q?.answer === current?.answer) return
   current = q
   hints = 0

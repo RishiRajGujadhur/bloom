@@ -1,3 +1,4 @@
+import { setQuiz } from '../../companion/quizContext'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { readStore, writeStore } from '../../components/studio/Studio'
@@ -135,6 +136,15 @@ export function IqAssessment({ onDone }: { onDone: (score: number) => void }) {
   useLayoutEffect(() => {
     if (stage.current && !reduced()) gsap.fromTo(stage.current, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3 })
   }, [i])
+  // Bloom's chat can hint at the question on screen.
+  useEffect(() => {
+    const it = items[i]
+    if (!it) return
+    if (it.kind === 'series') setQuiz({ source: 'Reasoning test', question: `What comes next: ${it.terms.join(', ')}, ?`, answer: String(it.answer), options: it.options.map(String), explain: `Look for the pattern: ${it.rule}.` })
+    else if (it.kind === 'analogy') setQuiz({ source: 'Reasoning test', question: it.stem, answer: it.options[it.answer], options: it.options, explain: 'Find how the first pair is related, then apply the same link.' })
+    else setQuiz({ source: 'Reasoning test', question: 'Which tile completes the grid?', answer: `option ${it.answer + 1}`, explain: `The rule: ${it.rule}.` })
+  }, [i, items])
+  useEffect(() => () => setQuiz(null), [])
   const answer = (k: number) => {
     const c = correct + Number(k === answerOf(items[i]))
     if (i + 1 >= items.length) {

@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { setQuiz } from '../../companion/quizContext'
 import { BarChart3, Brain, Layers, Plus, Repeat, Trash2, Upload } from 'lucide-react'
 import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
@@ -74,6 +75,11 @@ export function CardsPage() {
   const queue = dueCards(store.cards, today, on('dailyLimit') ? Math.max(0, store.dailyLimit - reviewedToday) : Infinity, deck || undefined)
   const card = queue[0]
   const stage = useRef<HTMLDivElement>(null)
+  // Bloom's chat can hint at the card being studied.
+  useEffect(() => {
+    setQuiz(card ? { source: 'Flashcards', question: card.front.replace(/\{\{c\d+::(.*?)\}\}/g, '___'), answer: (card.back || card.front.match(/\{\{c\d+::(.*?)\}\}/)?.[1] || '').slice(0, 200) } : null)
+  }, [card])
+  useEffect(() => () => setQuiz(null), [])
 
   const piles = useRef<PilesHandle>(null)
   const gradeHints: Record<string, string> = { Again: 'Forgot: see it again today', Hard: 'Remembered with effort: back soon', Good: 'Remembered: spaced further apart', Easy: 'Instant: a long gap before next time' }
