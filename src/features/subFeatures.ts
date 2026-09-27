@@ -528,6 +528,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "voiceSplits", title: "Voice splits", description: "Hear each split as you pass it." },
     { id: "replay", title: "Route replay", description: "Watch a past route redraw on the map." },
     { id: "weeklyGoal", title: "Weekly goal", description: "A ring for this week’s distance." },
+    { id: 'strider', title: 'Moving runner', description: 'A little runner that strides while you move.' },
   ],
   bodyProgress: [
     { id: "measurements", title: "Measurements", description: "Waist, chest, hips, arm, thigh, body fat." },

@@ -6,6 +6,8 @@ import { Rail, Segmented, Slider, Stat, Studio, StudioScene, logActivity, readSt
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { RUN_KEY, bests, demoRoute, distanceKm, fmtPace, fmtTime, pace, pointAt, splits, toUnits, weekKm, type Pt, type Run, type RunStore } from './runModel'
+import { Strider } from '../showcase/Strider'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './run.css'
 
 const on = (id: string) => subOn('runTracker', id)
@@ -204,18 +206,20 @@ export function RunPage() {
   const goal = store.weeklyGoal
   const active = status === 'tracking' || status === 'paused' || status === 'demo'
 
+  usePageActions(!active ? [{ id: 'run-go', label: `Start a ${kind}`, icon: kind === 'walk' ? '🚶' : '🏃', run: start }, { id: 'run-demo', label: 'Play a demo route', icon: '🗺️', run: demo }] : status !== 'demo' ? [{ id: 'run-pause', label: status === 'paused' ? 'Resume' : 'Pause', icon: '⏯️', run: pause }] : [])
   const track = () => (
     <div className="studio-split run-split">
       <div className="studio-card run-map-card">{on('map') ? <RouteMap points={points} replay={replay} /> : <div className="studio-center">Map is off</div>}</div>
       <div className="studio-card run-side">
         <Segmented label="Activity" value={kind} onChange={setKind} options={[{ id: 'run', label: '🏃 Run' }, { id: 'walk', label: '🚶 Walk' }]} />
         <div className="run-big">
+          {on('strider') && <Strider active={active && status !== 'paused'} walk={kind === 'walk'} />}
           <strong>{toUnits(km, units).toFixed(2)}</strong>
           <small>{units}</small>
         </div>
         <div className="studio-stats">
           <Stat value={fmtTime(seconds)} label="time" />
-          <Stat value={fmtPace(pace(km, seconds, units))} label={`pace /${units}`} />
+          <span data-hint={`Minutes per ${units}; lower is faster`}><Stat value={fmtPace(pace(km, seconds, units))} label={`pace /${units}`} /></span>
           {on('splits') && <Stat value={split.length} label="splits" />}
         </div>
         {on('paceChart') && <PaceChart values={split} />}

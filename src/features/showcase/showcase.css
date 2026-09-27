@@ -887,3 +887,24 @@
   fill: currentColor;
   opacity: 0.6;
 }
+
+/* ---------- Strider ---------- */
+.sr-runner {
+  width: 54px;
+  height: 64px;
+}
+
+.sr-runner circle {
+  fill: var(--sr);
+}
+
+.sr-runner line {
+  stroke: var(--sr);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.sr-runner .sr-ground {
+  stroke: var(--border-color, #0002);
+  stroke-width: 2;
+}
