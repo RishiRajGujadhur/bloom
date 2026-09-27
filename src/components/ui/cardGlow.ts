@@ -42,3 +42,16 @@ export function installCardGlow() {
     if (b) gsap.fromTo(b, { scale: 0.96 }, { scale: 1, duration: 0.5, ease: 'elastic.out(1.1, 0.45)', clearProps: 'scale' })
   }, { passive: true })
 }
+
+/** Page titles sweep in (clip + letter-spacing) on every page change; no DOM rewriting, so React stays in charge. */
+export function installTitleReveal() {
+  if (typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  const run = () =>
+    window.setTimeout(() => {
+      const h = document.querySelector<HTMLElement>('main h1')
+      if (!h) return
+      gsap.fromTo(h, { clipPath: 'inset(0 100% 0 0)', letterSpacing: '0.12em', opacity: 0.2 }, { clipPath: 'inset(0 0% 0 0)', letterSpacing: 'normal', opacity: 1, duration: 0.8, ease: 'power3.out', clearProps: 'clipPath,letterSpacing,opacity' })
+    }, 120)
+  window.addEventListener('hashchange', run)
+  run()
+}
