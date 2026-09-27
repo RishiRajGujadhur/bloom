@@ -9,6 +9,8 @@ import { FigureSvg } from '../exercise/ExerciseFigure'
 import { areaNames, forAreas, routines, steps, totalSeconds, type Area } from './stretchModel'
 import '../exercise/exercise.css'
 import '../yoga/yoga.css'
+import { StretchBand } from '../showcase/StretchBand'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './stretch.css'
 
 const on = (id: string) => subOn('mobility', id)
@@ -154,6 +156,7 @@ export function StretchPage() {
     setStore((s) => ({ ...s, sessions: [...s.sessions, { at: Date.now(), routine: routine.name, before, after: a }].slice(-100) }))
   }
 
+  usePageActions(finished ? [{ id: 'st-again', label: 'Stretch again', icon: '🤸', run: () => start(routine) }] : [{ id: 'st-play', label: playing ? 'Pause' : 'Play', icon: '⏯️', run: () => setPlaying(!playing) }, { id: 'st-next', label: 'Next stretch', icon: '⏭️', run: next }])
   const session = () => (
     <div className="studio-split">
       <div ref={card} className="studio-card st-stage">
@@ -165,9 +168,10 @@ export function StretchPage() {
             </div>
           )}
         </div>
+        {on('band') && <StretchBand playing={playing && !finished && !waitingSwitch} />}
         <div className="st-timeline" aria-hidden="true">
-          {list.map((_, k) => (
-            <i key={k} data-past={k < i || finished} data-now={k === i && !finished} />
+          {list.map((x, k) => (
+            <i key={k} data-past={k < i || finished} data-now={k === i && !finished} data-hint={x.stretch.name} />
           ))}
         </div>
       </div>

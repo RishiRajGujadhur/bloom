@@ -517,6 +517,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "chime", title: "Chime", description: "A soft bell between stretches." },
     { id: "stiffness", title: "Stiffness check-in", description: "Before and after, zero to ten." },
     { id: "history", title: "History", description: "Sessions and how much you loosened." },
+    { id: 'band', title: 'Stretch band', description: 'An elastic band lengthens slowly while you hold, a cue to breathe, not bounce.' },
   ],
   runTracker: [
     { id: "gps", title: "GPS tracking", description: "Record your route live." },

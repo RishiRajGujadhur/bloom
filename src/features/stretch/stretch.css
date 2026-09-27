@@ -100,3 +100,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+.st-timeline i {
+  pointer-events: auto;
+}

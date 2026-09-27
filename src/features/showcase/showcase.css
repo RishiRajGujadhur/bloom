@@ -908,3 +908,16 @@
   stroke: var(--border-color, #0002);
   stroke-width: 2;
 }
+
+/* ---------- Stretch band ---------- */
+.sb-band {
+  width: 100%;
+  height: 28px;
+}
+
+.sb-band path {
+  fill: none;
+  stroke: var(--band);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
