@@ -5,6 +5,7 @@ import { loadSettings } from '../SettingsPage'
 import { subOn } from './subFeatures'
 import { TodosQuick } from './quick/TodosQuick'
 import { SummitTrail } from './showcase/SummitTrail'
+import { ShowMore } from '../components/ui/Flow'
 import { usePageActions } from '../components/ui/PageMenu'
 
 /** Only heavy tasks drop by default; switching "Heavy tasks only" off lets any task fall. */
@@ -405,7 +406,7 @@ export function TodoPage({ data, setData }: Props) {
           })}
         </details>
       )}
-      <ul className="task-list">
+      <ShowMore as="ul" key={`${filter}-${tagFilter}`} className="task-list" initial={10} label="tasks">
         {tasks.map((task) => {
           const completedSteps = task.subtasks.filter(
             (step) => step.done,
@@ -710,7 +711,7 @@ export function TodoPage({ data, setData }: Props) {
             </li>
           )
         })}
-      </ul>
+      </ShowMore>
       {!tasks.length && (
         <div className="calm-empty">
           <Sprite name="fox" label="Resting fox" size={64} />

@@ -10,7 +10,7 @@ import './swipe.css'
  */
 export function QuickPanel({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   const key = 'bloom-quick-open-v1'
-  const [open, setOpen] = useState(() => readStore<Record<string, boolean>>(key, {})[id] ?? !window.matchMedia?.('(max-width: 720px)').matches)
+  const [open, setOpen] = useState(() => readStore<Record<string, boolean>>(key, {})[id] ?? false)
   const body = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     if (!open || !body.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
