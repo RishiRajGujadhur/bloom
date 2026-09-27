@@ -45,16 +45,25 @@ export const BloomFace = forwardRef<BloomFaceHandle, { size?: number; mood?: Fac
   }
   useImperativeHandle(ref, () => ({ react }))
 
-  // Life: float, blink, sway the leaf.
+  // Life: soft blinking and breathing (no bouncing).
   useEffect(() => {
     const el = svg.current
     if (!el || reduced()) return
-    const ctx = gsap.context(() => {
-      gsap.to('.bf-body', { y: -4, duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut' })
-      gsap.to('.bf-leaf', { rotate: 10, transformOrigin: '50% 100%', duration: 1.4, yoyo: true, repeat: -1, ease: 'sine.inOut' })
-      gsap.timeline({ repeat: -1, repeatDelay: 3.4 }).to('.bf-lid', { scaleY: 1, duration: 0.08 }).to('.bf-lid', { scaleY: 0, duration: 0.12 })
-    }, el)
-    return () => ctx.revert()
+    const lid = el.querySelector('.bf-lid')
+    let next: gsap.core.Tween | null = null
+    let blinkTl: gsap.core.Timeline | null = null
+    const blink = () => {
+      blinkTl = gsap.timeline({ onComplete: () => void (next = gsap.delayedCall(gsap.utils.random(3.5, 6), blink)) })
+        .to(lid, { scaleY: 1, duration: 0.12, ease: 'sine.in' })
+        .to(lid, { scaleY: 0, duration: 0.18, ease: 'sine.out' })
+    }
+    next = gsap.delayedCall(2.5, blink)
+    const breathe = gsap.to(el.querySelector('.bf-body'), { scale: 1.02, transformOrigin: '50% 60%', duration: 3.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    return () => {
+      next?.kill()
+      blinkTl?.kill()
+      breathe.kill()
+    }
   }, [])
 
   // The eye follows the pointer.
