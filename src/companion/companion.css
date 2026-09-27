@@ -303,13 +303,21 @@
 
 .bc-panel.is-docked {
   top: 0;
-  right: 0;
+  right: auto;
   bottom: 0;
+  left: var(--bc-left, 0px);
   width: 380px;
   max-height: none;
   border-radius: 0;
-  border-width: 0 0 0 1px;
+  border-width: 0 1px 0 0;
   z-index: 45;
+}
+/* Beside the side column when it is showing. */
+html:not([data-nav='hamburger'])[data-sidebar='open'] {
+  --bc-left: var(--sidebar-width);
+}
+html:not([data-nav='hamburger'])[data-sidebar='collapsed'] {
+  --bc-left: var(--sidebar-collapsed-width);
 }
 
 .bc-head {
@@ -352,9 +360,10 @@
   color: var(--accent-color);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 901px) {
   html[data-bloom-docked] main#overview {
-    margin-right: 380px;
+    margin-left: calc(var(--bc-left, 0px) + 380px);
+    width: auto;
   }
 }
 
@@ -369,8 +378,9 @@
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 901px) {
   html[data-bloom-docked][data-nav='hamburger'] main#overview {
+    margin-left: 380px;
     width: calc(100% - 380px);
   }
 }

@@ -122,7 +122,7 @@ export function GrowScene({ scene, progress, extra = 0 }: { scene: SceneId; prog
     const tw = gsap.from(fresh, { scale: 0, opacity: 0, transformOrigin: '50% 100%', duration: 0.6, stagger: 0.08, ease: 'back.out(2.2)' })
     return () => void tw.progress(1)
   }, [shown])
-  const [top, bottom] = skies[scene]
+  const [top, bottom] = skies[scene] ?? skies.tree
   return (
     <svg className="grow-scene" viewBox="0 0 200 150" role="img" aria-label={`${scenes.find((s) => s.id === scene)?.name}: ${shown} of ${count} grown`}>
       <defs>

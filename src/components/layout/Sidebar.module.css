@@ -176,3 +176,16 @@
 :global(html[data-nav='hamburger']) .collapseToggle {
   display: none;
 }
+
+/* The menu button lives at the top right, beside Export, and never covers search. */
+@media (max-width: 900px) {
+  .hamburger {
+    left: auto;
+    right: max(14px, env(safe-area-inset-right));
+  }
+}
+
+:global(html[data-nav='hamburger']) .hamburger {
+  left: auto;
+  right: max(16px, env(safe-area-inset-right));
+}

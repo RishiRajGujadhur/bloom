@@ -56,6 +56,16 @@ export function BloomGuide({
     }, 550)
   }
   useEffect(() => () => window.clearTimeout(timer.current), [])
+  // Staying open across pages: Bloom greets each new page in the same chat.
+  const lastPage = useRef(page)
+  useEffect(() => {
+    if (lastPage.current === page) return
+    lastPage.current = page
+    const g = guideFor(page, names)
+    face.current?.react('wave')
+    say(g.say, g.choices)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
 
   // Chips pop in whenever Bloom offers new choices.
   useLayoutEffect(() => {

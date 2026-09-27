@@ -11,7 +11,7 @@ import {
 } from '../rpg/engine'
 import { readStore } from '../components/studio/Studio'
 import { FocusQuick, SCENE_KEY, focusOn } from './quick/FocusQuick'
-import { GrowScene, type SceneId } from './quick/GrowScene'
+import { GrowScene, scenes, type SceneId } from './quick/GrowScene'
 import { FocusDiorama } from './showcase/FocusDiorama'
 import { usePageActions } from '../components/ui/PageMenu'
 
@@ -101,7 +101,10 @@ export function FocusPage({
 }) {
   const [now, setNow] = useState(Date.now)
   const [confirmStop, setConfirmStop] = useState(false)
-  const [scene, setScene] = useState<SceneId | 'pixel'>(() => readStore(SCENE_KEY, 'tree'))
+  const [scene, setScene] = useState<SceneId | 'pixel'>(() => {
+    const saved = readStore<string>(SCENE_KEY, 'tree')
+    return saved === 'pixel' || scenes.some((x) => x.id === saved) ? (saved as SceneId | 'pixel') : 'tree'
+  })
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(timer)

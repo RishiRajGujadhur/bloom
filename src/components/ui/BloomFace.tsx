@@ -2,50 +2,64 @@ import { forwardRef, useEffect, useId, useImperativeHandle, useRef } from 'react
 import gsap from 'gsap'
 import './bloomFace.css'
 
-export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink'
+export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave'
 export type BloomFaceHandle = { react: (mood: FaceMood) => void }
 
 const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 /**
- * Bloom's face: a four-petal flower in Bloom coral with one big friendly eye
- * (after Brilliant's Koji). GSAP gives it life — it floats, blinks, looks at
- * the pointer, bobs when it talks, squints when happy and spins when excited.
+ * Bloom, drawn after Brilliant's Koji: a rounded diamond in Bloom's coral-to-
+ * sunshine gradient, one window-like eye with a square pupil, a little leaf
+ * sprout, and an arm that pops out to wave hello when Bloom appears.
+ * Idle is calm: soft blinks and breathing only.
  */
-export const BloomFace = forwardRef<BloomFaceHandle, { size?: number; mood?: FaceMood; follow?: boolean; label?: string; className?: string }>(function BloomFace(
-  { size = 72, mood = 'idle', follow = true, label = 'Bloom', className },
-  ref,
-) {
+export const BloomFace = forwardRef<
+  BloomFaceHandle,
+  { size?: number; mood?: FaceMood; follow?: boolean; label?: string; className?: string; waveOnMount?: boolean }
+>(function BloomFace({ size = 72, mood = 'idle', follow = true, label = 'Bloom', className, waveOnMount = true }, ref) {
   const svg = useRef<SVGSVGElement>(null)
   const current = useRef<gsap.core.Timeline | null>(null)
   const uid = useId().replace(/:/g, '')
   const q = (s: string) => svg.current?.querySelector(s) as SVGElement | null
 
+  const wave = () => {
+    const arm = q('.bf-arm')
+    const hand = q('.bf-arm-swing')
+    if (!arm || !hand) return
+    return gsap
+      .timeline()
+      .set(arm, { opacity: 1 })
+      .fromTo(arm, { scale: 0, svgOrigin: '78 64' }, { scale: 1, svgOrigin: '78 64', duration: 0.25, ease: 'back.out(3)' })
+      .fromTo(hand, { rotate: -12 }, { rotate: 26, svgOrigin: '80 62', duration: 0.18, yoyo: true, repeat: 5, ease: 'sine.inOut' })
+      .to(hand, { rotate: 0, svgOrigin: '80 62', duration: 0.15 })
+      .to(arm, { scale: 0, svgOrigin: '78 64', duration: 0.2, ease: 'back.in(2)', delay: 0.15 })
+      .set(arm, { opacity: 0 })
+  }
+
   const react = (m: FaceMood) => {
-    const el = svg.current
-    if (!el || reduced()) return
+    if (!svg.current || reduced()) return
     const body = q('.bf-body')
     const eye = q('.bf-eye')
-    const lid = q('.bf-happy')
-    // Finish whatever the last reaction was doing, then start clean.
+    const happy = q('.bf-happy')
     current.current?.kill()
-    gsap.killTweensOf([body, lid, eye])
+    gsap.killTweensOf([body, eye, happy])
     gsap.set(eye, { opacity: 1 })
-    gsap.set(lid, { opacity: 0 })
-    if (m === 'talk') gsap.fromTo(body, { scaleY: 0.9, scaleX: 1.06 }, { scaleY: 1, scaleX: 1, duration: 0.5, ease: 'elastic.out(1.2, 0.4)', transformOrigin: '50% 90%' })
-    if (m === 'happy' || m === 'wink') {
-      current.current = gsap.timeline().to(eye, { opacity: 0, duration: 0.1 }).to(lid, { opacity: 1, duration: 0.1 }, 0).to(body, { y: -6, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 0).to(eye, { opacity: 1, duration: 0.1, delay: 0.9 }).to(lid, { opacity: 0, duration: 0.1 }, '<')
+    gsap.set(happy, { opacity: 0 })
+    const tl = gsap.timeline()
+    current.current = tl
+    if (m === 'talk') tl.fromTo(body, { scaleY: 0.93, scaleX: 1.04 }, { scaleY: 1, scaleX: 1, transformOrigin: '50% 90%', duration: 0.45, ease: 'elastic.out(1.1, 0.45)' })
+    if (m === 'happy' || m === 'wink')
+      tl.to(eye, { opacity: 0, duration: 0.08 }).to(happy, { opacity: 1, duration: 0.08 }, 0).to(eye, { opacity: 1, duration: 0.1 }, 0.9).to(happy, { opacity: 0, duration: 0.1 }, 0.9)
+    if (m === 'think') tl.to(q('.bf-pupil'), { x: 4, y: -4, duration: 0.35, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
+    if (m === 'excited' || m === 'wave') {
+      const w = wave()
+      if (w) tl.add(w, 0)
+      if (m === 'excited') tl.fromTo(body, { y: 0 }, { y: -5, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 0)
     }
-    if (m === 'think') gsap.to(q('.bf-pupil'), { x: 6, y: -8, duration: 0.4, yoyo: true, repeat: 1, repeatDelay: 0.6, ease: 'power2.inOut' })
-    if (m === 'excited')
-      gsap.timeline()
-        .to(body, { y: -14, duration: 0.2, ease: 'power2.out', transformOrigin: '50% 50%' })
-        .to(q('.bf-petals'), { rotate: '+=90', transformOrigin: '50px 50px', duration: 0.6, ease: 'back.out(2)' }, 0)
-        .to(body, { y: 0, duration: 0.45, ease: 'bounce.out' })
   }
   useImperativeHandle(ref, () => ({ react }))
 
-  // Life: soft blinking and breathing (no bouncing).
+  // Calm idle: soft blinks at uneven intervals and slow breathing.
   useEffect(() => {
     const el = svg.current
     if (!el || reduced()) return
@@ -53,24 +67,35 @@ export const BloomFace = forwardRef<BloomFaceHandle, { size?: number; mood?: Fac
     let next: gsap.core.Tween | null = null
     let blinkTl: gsap.core.Timeline | null = null
     const blink = () => {
-      blinkTl = gsap.timeline({ onComplete: () => void (next = gsap.delayedCall(gsap.utils.random(3.5, 6), blink)) })
+      blinkTl = gsap
+        .timeline({ onComplete: () => void (next = gsap.delayedCall(gsap.utils.random(3.5, 6), blink)) })
         .to(lid, { scaleY: 1, duration: 0.12, ease: 'sine.in' })
         .to(lid, { scaleY: 0, duration: 0.18, ease: 'sine.out' })
     }
     next = gsap.delayedCall(2.5, blink)
-    const breathe = gsap.to(el.querySelector('.bf-body'), { scale: 1.02, transformOrigin: '50% 60%', duration: 3.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    const breathe = gsap.to(el.querySelector('.bf-breath'), { scale: 1.025, transformOrigin: '50% 60%', duration: 3.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    // Say hello: pop in and wave when Bloom first appears.
+    let hello: gsap.core.Timeline | undefined
+    if (waveOnMount) {
+      hello = gsap.timeline({ delay: 0.3 })
+      hello.fromTo(el.querySelector('.bf-breath'), { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 60%', duration: 0.5, ease: 'back.out(2.2)' })
+      const w = wave()
+      if (w) hello.add(w, '-=0.1')
+    }
     return () => {
       next?.kill()
       blinkTl?.kill()
       breathe.kill()
+      hello?.progress(1).kill()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // The eye follows the pointer.
   useEffect(() => {
     const el = svg.current
     if (!el || !follow || reduced()) return
-    const pupil = q('.bf-pupil')
+    const pupil = el.querySelector('.bf-pupil')
     const x = gsap.quickTo(pupil, 'x', { duration: 0.35, ease: 'power3' })
     const y = gsap.quickTo(pupil, 'y', { duration: 0.35, ease: 'power3' })
     const move = (e: PointerEvent) => {
@@ -78,9 +103,9 @@ export const BloomFace = forwardRef<BloomFaceHandle, { size?: number; mood?: Fac
       const dx = e.clientX - (r.left + r.width / 2)
       const dy = e.clientY - (r.top + r.height / 2)
       const d = Math.hypot(dx, dy) || 1
-      const k = Math.min(6, d / 30)
+      const k = Math.min(5, d / 30)
       x((dx / d) * k)
-      y((dy / d) * k)
+      y((dy / d) * k * 0.8)
     }
     window.addEventListener('pointermove', move, { passive: true })
     return () => window.removeEventListener('pointermove', move)
@@ -94,36 +119,44 @@ export const BloomFace = forwardRef<BloomFaceHandle, { size?: number; mood?: Fac
   return (
     <svg ref={svg} className={`bloom-face ${className ?? ''}`} width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={label}>
       <defs>
-        <linearGradient id={`bf-grad-${uid}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#ffb07a" />
-          <stop offset="0.55" stopColor="#f07a4a" />
-          <stop offset="1" stopColor="#d9503a" />
+        <linearGradient id={`bf-body-${uid}`} x1="0.2" y1="0" x2="0.8" y2="1">
+          <stop offset="0" stopColor="#ff7a59" />
+          <stop offset="0.55" stopColor="#ff9f5a" />
+          <stop offset="1" stopColor="#ffd66b" />
         </linearGradient>
-        <linearGradient id={`bf-grad2-${uid}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ffd3a8" />
-          <stop offset="1" stopColor="#f59a6b" />
+        <linearGradient id={`bf-eye-${uid}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#fff4ea" />
         </linearGradient>
       </defs>
       <g className="bf-body">
-        <path className="bf-leaf" d="M50 14 C 54 4, 66 2, 70 6 C 64 8, 58 12, 52 18 Z" fill="#6cc04a" />
-        <g className="bf-petals">
-          {[0, 90, 180, 270].map((a) => (
-            <ellipse key={a} cx="50" cy="28" rx="20" ry="22" fill={`url(#bf-grad2-${uid})`} transform={`rotate(${a} 50 50)`} />
-          ))}
-        </g>
-        <rect x="22" y="22" width="56" height="56" rx="22" fill={`url(#bf-grad-${uid})`} />
-        <ellipse cx="38" cy="36" rx="9" ry="5" fill="#ffffff55" transform="rotate(-25 38 36)" />
-        <g className="bf-eye">
-          <rect x="36" y="38" width="28" height="26" rx="9" fill="#fff" />
-          <g className="bf-pupil">
-            <rect x="44" y="45" width="12" height="12" rx="3.5" fill="#1d1d2b" />
-            <circle cx="53" cy="48" r="2" fill="#fff" />
+        {/* waving arm (hidden until it waves) */}
+        <g className="bf-arm" opacity="0">
+          <g className="bf-arm-swing">
+            <path d="M78 64 C 86 60, 90 50, 88 42" stroke="#ff8a5a" strokeWidth="7" strokeLinecap="round" fill="none" />
+            <circle cx="88" cy="40" r="6" fill="#ffb36b" stroke="#ff8a5a" strokeWidth="2" />
           </g>
-          <rect className="bf-lid" x="35" y="37" width="30" height="28" rx="10" fill="#f07a4a" />
         </g>
-        <path className="bf-happy" d="M38 54 Q50 40 62 54" stroke="#fff" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0" />
-        <ellipse cx="30" cy="62" rx="5" ry="3" fill="#ff8fa3" opacity="0.6" />
-        <ellipse cx="70" cy="62" rx="5" ry="3" fill="#ff8fa3" opacity="0.6" />
+        <g className="bf-breath">
+          {/* leaf sprout */}
+          <path d="M50 12 C 50 6, 56 1, 63 2 C 61 8, 56 12, 50 14 Z" fill="#6cc04a" />
+          <path d="M50 14 C 50 9, 45 5, 39 6 C 41 11, 45 14, 50 15 Z" fill="#8fd46a" />
+          {/* rounded diamond body */}
+          <rect x="21" y="23" width="58" height="58" rx="17" transform="rotate(45 50 52)" fill={`url(#bf-body-${uid})`} />
+          <path d="M28 40 Q 36 28, 48 24" stroke="#ffffff66" strokeWidth="4" strokeLinecap="round" fill="none" />
+          {/* window eye with square pupil */}
+          <g className="bf-eye">
+            <rect x="36" y="38" width="28" height="27" rx="7" fill={`url(#bf-eye-${uid})`} />
+            <g className="bf-pupil">
+              <rect x="43" y="41" width="14" height="12" rx="3" fill="#1f1d2b" />
+              <rect x="52" y="43" width="3" height="3" rx="1" fill="#fff" />
+            </g>
+            <rect className="bf-lid" x="35" y="37" width="30" height="29" rx="8" fill="#ff9458" />
+          </g>
+          <path className="bf-happy" d="M39 55 Q50 42 61 55" stroke="#fff" strokeWidth="5.5" strokeLinecap="round" fill="none" opacity="0" />
+          <ellipse cx="31" cy="64" rx="4.5" ry="2.8" fill="#ff6f7f" opacity="0.45" />
+          <ellipse cx="69" cy="64" rx="4.5" ry="2.8" fill="#ff6f7f" opacity="0.45" />
+        </g>
       </g>
     </svg>
   )

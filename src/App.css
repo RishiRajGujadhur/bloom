@@ -2596,3 +2596,29 @@ html[data-nav='hamburger'] main {
   margin-left: 0;
   width: 100%;
 }
+
+/* Drawer opens from the right, where its button is. */
+@media (max-width: 900px) {
+  .sidebar {
+    inset: 0 0 0 auto;
+    transform: translateX(100%);
+    border-right: 0;
+    border-left: 1px solid var(--border-color);
+  }
+  .topbar {
+    padding-right: 58px;
+  }
+}
+html[data-nav='hamburger'] .sidebar {
+  inset: 0 0 0 auto;
+  transform: translateX(100%);
+  border-right: 0;
+  border-left: 1px solid var(--border-color);
+}
+html[data-nav='hamburger'][data-sidebar='open'] .sidebar,
+html[data-sidebar='open'] .sidebar {
+  transform: translateX(0);
+}
+html[data-nav='hamburger'] .topbar {
+  padding-right: 60px;
+}
