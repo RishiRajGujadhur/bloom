@@ -20,6 +20,7 @@ import {
   type Style,
   type Technique,
 } from './dojoMoves'
+import { ShowMore } from '../../components/ui/Flow'
 import './dojo.css'
 
 const on = (id: string) => subOn('dojo', id)
@@ -177,7 +178,8 @@ export function DojoPage() {
           ))}
         </div>
       </div>
-      <div className="dojo-grid">
+      {!visible.length && <p className="studio-empty">No techniques match. Pick another style or type.</p>}
+      <ShowMore className="dojo-grid" initial={8} label="techniques">
         {visible.map((t) => (
           <button key={t.id} type="button" className="studio-card dojo-card" onClick={() => choose(t)}>
             <ExerciseFigure exercise={t} playing={false} animate={false} small mirror={s.southpaw} />
@@ -185,8 +187,7 @@ export function DojoPage() {
             <small>{t.style.map((x) => styleNames[x]).join(' · ')}</small>
           </button>
         ))}
-        {!visible.length && <p className="studio-empty">No techniques match. Pick another style or type.</p>}
-      </div>
+      </ShowMore>
     </div>
   )
 

@@ -699,3 +699,7 @@
     flex-wrap: wrap;
   }
 }
+
+.focus-layout {
+  align-items: start;
+}

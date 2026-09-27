@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Children, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ChevronDown } from 'lucide-react'
 import { readStore, writeStore } from '../studio/Studio'
@@ -182,4 +182,57 @@ export function setCompactTitles(on: boolean) {
     /* optional */
   }
   applyCompactTitles()
+}
+
+/**
+ * Show a few at a time: the first `initial` items, then "Show N more" steps
+ * and a "Show all". New items slide in with GSAP. Cuts scrolling on long
+ * lists and grids without hiding anything for good.
+ */
+export function ShowMore({ children, initial = 6, step, className, label = 'more', as = 'div' }: { children: ReactNode; initial?: number; step?: number; className?: string; label?: string; as?: 'div' | 'ul' | 'ol' }) {
+  const Tag = as
+  const items = Children.toArray(children)
+  const [count, setCount] = useState(initial)
+  const box = useRef<HTMLDivElement>(null)
+  const prev = useRef(initial)
+  useLayoutEffect(() => {
+    const el = box.current
+    if (!el || count <= prev.current || reduced()) {
+      prev.current = count
+      return
+    }
+    const fresh = [...el.children].slice(prev.current, count)
+    prev.current = count
+    const tw = gsap.from(fresh, { opacity: 0, y: 16, stagger: 0.04, duration: 0.35, ease: 'power2.out' })
+    return () => void tw.progress(1)
+  }, [count])
+  const shown = items.slice(0, count)
+  const rest = items.length - shown.length
+  const by = step ?? initial
+  return (
+    <>
+      <Tag ref={box as React.RefObject<never>} className={className}>
+        {shown}
+      </Tag>
+      {(rest > 0 || count > initial) && (
+        <div className="show-more">
+          {rest > 0 && (
+            <button type="button" className="show-more-btn" onClick={() => setCount(count + by)}>
+              Show {Math.min(by, rest)} {label}
+            </button>
+          )}
+          {rest > by && (
+            <button type="button" className="show-more-btn ghost" onClick={() => setCount(items.length)}>
+              Show all {items.length}
+            </button>
+          )}
+          {count > initial && rest === 0 && (
+            <button type="button" className="show-more-btn ghost" onClick={() => setCount(initial)}>
+              Show less
+            </button>
+          )}
+        </div>
+      )}
+    </>
+  )
 }

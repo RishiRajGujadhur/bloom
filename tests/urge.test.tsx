@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import App from '../src/App'
 import type { UrgeEvent } from '../src/model'
+import { showAll } from './helpers/showAll'
 import {
   buildUrgeInsight,
   calculateCorrelations,
@@ -106,6 +107,7 @@ test('the three-click logger saves an urge and immediately updates patterns', ()
 test('Settings can disable the feature without removing saved data', () => {
   render(<App />)
   fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true }))
+  showAll()
   const toggle = screen.getByRole('checkbox', {
     name: 'Enable Urge & trigger tracker',
   })

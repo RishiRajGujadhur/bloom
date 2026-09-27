@@ -87,7 +87,7 @@ import {
 } from 'lucide-react'
 import { Menu } from 'lucide-react'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
-import { compactTitles, setCompactTitles } from './components/ui/Flow'
+import { ShowMore, compactTitles, setCompactTitles } from './components/ui/Flow'
 import type { LucideIcon } from 'lucide-react'
 
 const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
@@ -787,7 +787,7 @@ export function SettingsPage({
                   </button>
                 </span>
               </header>
-              <div className={styles.featureRail}>
+              <ShowMore className={styles.featureRail} initial={query.trim() ? 999 : 6} label="more features">
           {keys.map((key) => {
             const title = titleOf(key)
             const Icon = featureIcons[key]
@@ -837,7 +837,7 @@ export function SettingsPage({
               </div>
             )
           })}
-              </div>
+              </ShowMore>
             </section>
           )
         })}

@@ -5,6 +5,7 @@ import path from 'node:path'
 import i18n, { resources } from '../src/i18n'
 import App from '../src/App'
 import { SettingsPage, defaultSettings } from '../src/SettingsPage'
+import { showAll } from './helpers/showAll'
 import { getStoredTheme } from '../src/utils/themeEngine'
 
 function SettingsHarness() {
@@ -132,6 +133,7 @@ test('pirate and slang English stay usable on the shared English sections', asyn
 test('French settings page renders translated feature copy', async () => {
   await i18n.changeLanguage('fr')
   render(<SettingsHarness />)
+  showAll()
 
   expect(screen.getByText('Apparence')).toBeInTheDocument()
   expect(screen.getByText('Fonctionnalités')).toBeInTheDocument()

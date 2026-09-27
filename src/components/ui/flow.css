@@ -213,3 +213,29 @@ html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .page-emb
   width: 28px;
   height: 28px;
 }
+
+.show-more {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.show-more-btn {
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-color, #e0703f) 45%, transparent);
+  background: color-mix(in srgb, var(--accent-color, #e0703f) 10%, var(--bg-surface, #fff));
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.show-more-btn.ghost {
+  background: none;
+  border-color: var(--border-color, #0002);
+  font-weight: 600;
+}

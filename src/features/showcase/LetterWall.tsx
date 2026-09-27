@@ -23,7 +23,7 @@ export function LetterWall({ entries, jars }: { entries: GratitudeEntry[]; jars:
   const board = useRef<HTMLDivElement>(null)
   const flipState = useRef<Flip.FlipState | null>(null)
   const letter = useRef<HTMLDivElement>(null)
-  const shown = useMemo(() => [...entries].sort((a, b) => b.at - a.at).filter((e) => filter === 'all' || (e.jarId ?? 'moments') === filter).slice(0, 40), [entries, filter])
+  const shown = useMemo(() => [...entries].sort((a, b) => b.at - a.at).filter((e) => filter === 'all' || (e.jarId ?? 'moments') === filter).slice(0, 24), [entries, filter])
   const pick = (f: string) => {
     if (board.current && !reduced()) flipState.current = Flip.getState(board.current.querySelectorAll('.lw-note'))
     setFilter(f)

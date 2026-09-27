@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import App from '../src/App'
+import { showAll } from './helpers/showAll'
 import { THEME_STORAGE_KEY } from '../src/utils/themeEngine'
 
 /**
@@ -31,6 +32,7 @@ test('the Settings destination swaps the dashboard for the settings page', () =>
 
 test("their feature flags survive the port and still control the UI", () => {
   openSettings()
+  showAll()
 
   expect(screen.getByText('Features')).toBeInTheDocument()
   expect(screen.getByText('Habit tracker')).toBeInTheDocument()
@@ -40,6 +42,7 @@ test("their feature flags survive the port and still control the UI", () => {
 
 test('every palette in the catalog is offered in Settings', () => {
   openSettings()
+  showAll()
   for (const label of [
     /Bloom Light/,
     /Bloom Dark/,
@@ -56,6 +59,7 @@ test('every palette in the catalog is offered in Settings', () => {
 
 test('choosing a palette repaints the document and persists', () => {
   openSettings()
+  showAll()
   expect(document.documentElement.getAttribute('data-theme')).toBe('bloom-light')
 
   fireEvent.click(screen.getByRole('button', { name: /Dracula/ }))
@@ -67,6 +71,7 @@ test('choosing a palette repaints the document and persists', () => {
 
 test('choosing a font personality repaints the document and persists', () => {
   openSettings()
+  showAll()
 
   fireEvent.click(screen.getByRole('button', { name: /Serif/ }))
 

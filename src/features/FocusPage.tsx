@@ -140,17 +140,18 @@ export function FocusPage({
   const doneToday = history.filter((h) => h.completedAt >= since).length
   return (
     <div id="focus-page" className="focus-layout grid grid-cols-1 gap-5 xl:grid-cols-2">
+      {/* Timer and set-up side by side, diorama and garden below: no empty gaps. */}
       {!active && (
-        <div className="xl:col-span-2">
-          <FocusDiorama data={data} />
-        </div>
-      )}
-      {!active && (
-        <div className="xl:col-span-2">
+        <div style={{ order: 2 }}>
           <FocusQuick data={data} scene={scene} setScene={setScene} onPlan={update} />
         </div>
       )}
-      <section className="card focus-room rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
+      {!active && (
+        <div style={{ order: 3 }}>
+          <FocusDiorama data={data} />
+        </div>
+      )}
+      <section style={{ order: 1 }} className="card focus-room rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
         {focusOn('growScenes') && scene !== 'pixel' ? (
           <GrowScene scene={scene} progress={progress} extra={focusOn('sceneScale') ? doneToday : 0} />
         ) : showCollectibles ? (
@@ -286,7 +287,7 @@ export function FocusPage({
               : ''}
         </p>
       </section>
-      <section className="card focus-garden rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
+      <section style={{ order: 4 }} className="card focus-garden rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
         <div className="section-title">
           <Timer size={20} />
           <h2>Your garden</h2>

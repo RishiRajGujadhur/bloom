@@ -7,6 +7,7 @@ import { createEpiphany, dueToday, grades, retention, review, type Epiphany } fr
 import { addEpiphany, useEpiphanies } from './epiphanyStore'
 import { EpiphaniesQuick } from '../quick/EpiphaniesQuick'
 import { BulbGarland } from '../showcase/BulbGarland'
+import { ShowMore } from '../../components/ui/Flow'
 import './epiphany.css'
 
 /** The forgetting curve for an insight, drawn on with GSAP. */
@@ -181,7 +182,7 @@ export function EpiphaniesPage({ today }: { today: string }) {
           you’d forget it.
         </p>
       )}
-      <ul className="epiphany-list">
+      <ShowMore as="ul" className="epiphany-list" initial={5} label="insights">
         {sorted.map((item) => (
           <li key={item.id} data-due={item.due <= today}>
             <blockquote>{item.text}</blockquote>
@@ -196,7 +197,7 @@ export function EpiphaniesPage({ today }: { today: string }) {
             </button>
           </li>
         ))}
-      </ul>
+      </ShowMore>
     </section>
   )
 }

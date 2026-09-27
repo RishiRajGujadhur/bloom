@@ -42,11 +42,11 @@ test('daybook has a dedicated page and hash navigation restores destinations', (
   ).not.toBeInTheDocument()
 })
 
-test('every destination offers one guide button, including settings', () => {
+test('the page tour starts from Bloom’s chat, not a heading button', () => {
   render(<App />)
-  expect(screen.getAllByRole('button', { name: 'Guide me' })).toHaveLength(1)
+  expect(screen.queryByRole('button', { name: 'Guide me' })).not.toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true }))
-  expect(screen.getAllByRole('button', { name: 'Guide me' })).toHaveLength(1)
+  expect(screen.queryByRole('button', { name: 'Guide me' })).not.toBeInTheDocument()
 })
 
 test('guide highlights only the current feature and cleans up on navigation', () => {
@@ -59,7 +59,7 @@ test('guide highlights only the current feature and cleans up on navigation', ()
       <FeatureGuide page="planning" />
     </>,
   )
-  fireEvent.click(screen.getByRole('button', { name: 'Guide me' }))
+  act(() => void window.dispatchEvent(new Event('bloom:tour')))
   expect(drive).toHaveBeenCalledTimes(1)
   const options = mockConfigure.mock.calls[0][0] as {
     steps: { element: string }[]
