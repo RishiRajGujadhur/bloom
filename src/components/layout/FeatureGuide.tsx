@@ -64,6 +64,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'english': { title: "English", description: "A little English every day." },
   'money': { title: "Money", description: "Know where it goes." },
   'street': { title: "Bloom Street", description: "Take a walk through your town." },
   'pointer': { title: "Pointer", description: "Make the pointer yours." },
@@ -241,6 +242,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'money': [
     step(".mn-report", "Your report", "This month and year, with the change since last time."),
     step(".mn-add", "Add spending", "Amount, place and a category in two taps."),
+  ],
+  'english': [
+    step(".en-path", "Your path", "Tap the glowing lesson to start. Finish four to unlock the next unit."),
+    step(".en-goal", "Daily goal", "Pick how much XP you want each day."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

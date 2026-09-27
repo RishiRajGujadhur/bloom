@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Languages as LanguagesF_englishLearning } from 'lucide-react'
 import { Wallet as WalletF_moneyTracker } from 'lucide-react'
 import { Store as StoreF_bloomStreet } from 'lucide-react'
 import { MousePointer2 as MousePointer2F_pointerFx } from 'lucide-react'
@@ -140,6 +141,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  englishLearning: LanguagesF_englishLearning,
   moneyTracker: WalletF_moneyTracker,
   bloomStreet: StoreF_bloomStreet,
   pointerFx: MousePointer2F_pointerFx,
@@ -227,6 +229,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  englishLearning: boolean
   moneyTracker: boolean
   bloomStreet: boolean
   pointerFx: boolean
@@ -323,6 +326,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    englishLearning: true,
     moneyTracker: true,
     bloomStreet: true,
     pointerFx: true,
@@ -411,6 +415,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'englishLearning',
   'moneyTracker',
   'bloomStreet',
   'pointerFx',

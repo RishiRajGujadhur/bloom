@@ -13,6 +13,7 @@ export type Act =
 export const pageActs: Record<string, Act> = {
   exercises: 'lift', workouts: 'lift', body: 'lift', intervals: 'timer',
   release: 'burn',
+  english: 'write',
   daybook: 'write', journal: 'write', ink: 'write', epiphanies: 'think', voice: 'music',
   sleep: 'sleep',
   meditate: 'meditate', breathe: 'meditate', breathwork: 'meditate', yoga: 'meditate', mala: 'meditate', taichi: 'meditate', monk: 'meditate',

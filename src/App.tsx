@@ -229,6 +229,9 @@ const StreetPage = lazy(() =>
 const MoneyPage = lazy(() =>
   import('./features/money/MoneyPage').then((m) => ({ default: m.MoneyPage })),
 )
+const EnglishPage = lazy(() =>
+  import('./features/english/EnglishPage').then((m) => ({ default: m.EnglishPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -761,6 +764,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'english' && !settings.features.englishLearning) ||
             (active === 'money' && !settings.features.moneyTracker) ||
             (active === 'street' && !settings.features.bloomStreet) ||
             (active === 'pointer' && !settings.features.pointerFx) ||
@@ -980,6 +984,10 @@ function App() {
             ) : active === 'money' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <MoneyPage />
+              </Suspense>
+            ) : active === 'english' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <EnglishPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

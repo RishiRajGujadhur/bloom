@@ -445,6 +445,10 @@ const common = {
         title: "Money & spending",
         description: "Track spending in any currency: budgets, charts, subscriptions, net worth, savings goals and CSV import.",
       },
+      englishLearning: {
+        title: "Learn English",
+        description: "A Duolingo-style English course: a lesson path, XP, streaks, hearts, leagues, quests, stories, speaking, pronunciation and a writing coach.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1542,6 +1546,10 @@ export const resources = {
           moneyTracker: {
             title: "Argent et dépenses",
             description: "Suivez vos dépenses dans n’importe quelle devise : budgets, graphiques, abonnements, patrimoine, objectifs et import CSV.",
+          },
+          englishLearning: {
+            title: "Apprendre l’anglais",
+            description: "Un cours d’anglais façon Duolingo : parcours de leçons, XP, séries, cœurs, ligues, quêtes, histoires, prononciation et coach d’écriture.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
