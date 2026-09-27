@@ -1,5 +1,5 @@
-export type GameId = 'nback' | 'memory' | 'stroop' | 'reaction' | 'maths' | 'simon' | 'rotate' | 'scramble' | 'track' | 'stream'
-export type Skill = 'memory' | 'attention' | 'speed' | 'maths' | 'spatial' | 'language'
+export type GameId = 'nback' | 'memory' | 'stroop' | 'reaction' | 'maths' | 'simon' | 'rotate' | 'scramble' | 'track' | 'stream' | 'matrix' | 'analogy' | 'faces' | 'replies'
+export type Skill = 'memory' | 'attention' | 'speed' | 'maths' | 'spatial' | 'language' | 'reasoning' | 'empathy'
 export const games: { id: GameId; name: string; emoji: string; skill: Skill; blurb: string }[] = [
   { id: 'nback', name: 'N-back', emoji: '🔲', skill: 'memory', blurb: 'Tap when the square repeats from N steps back.' },
   { id: 'memory', name: 'Memory grid', emoji: '🧩', skill: 'memory', blurb: 'Remember the lit tiles, then tap them.' },
@@ -11,6 +11,10 @@ export const games: { id: GameId; name: string; emoji: string; skill: Skill; blu
   { id: 'scramble', name: 'Word scramble', emoji: '🔤', skill: 'language', blurb: 'Unscramble the letters into a word.' },
   { id: 'track', name: 'Focus tracker', emoji: '🎯', skill: 'attention', blurb: 'Follow the marked dots as they move, then find them.' },
   { id: 'stream', name: 'Number stream', emoji: '🔢', skill: 'maths', blurb: 'Keep a running total of the numbers as they flash.' },
+  { id: 'matrix', name: 'Matrix puzzles', emoji: '🧩', skill: 'reasoning', blurb: 'Find the missing piece of a pattern. Trains reasoning (IQ).' },
+  { id: 'analogy', name: 'Quick analogies', emoji: '🔗', skill: 'reasoning', blurb: 'Analogies and number series against the clock.' },
+  { id: 'faces', name: 'Face reader', emoji: '🙂', skill: 'empathy', blurb: 'Read the emotion on a face. Trains empathy (EQ).' },
+  { id: 'replies', name: 'Kind reply', emoji: '💬', skill: 'empathy', blurb: 'Choose the emotionally wise response in real situations.' },
 ]
 export type Result = { at: number; game: GameId; level: number; score: number; accuracy: number }
 export type GamesStore = { levels: Record<GameId, number>; results: Result[]; sound: boolean }
@@ -105,7 +109,7 @@ export const reactionScore = (ms: number) => Math.round(Math.max(0, Math.min(100
 
 /** Recent performance per skill, 0–100. */
 export function skillScores(results: Result[]) {
-  const out: Record<Skill, number> = { memory: 0, attention: 0, speed: 0, maths: 0, spatial: 0, language: 0 }
+  const out: Record<Skill, number> = { memory: 0, attention: 0, speed: 0, maths: 0, spatial: 0, language: 0, reasoning: 0, empathy: 0 }
   for (const s of Object.keys(out) as Skill[]) {
     const r = results.filter((x) => games.find((g) => g.id === x.game)?.skill === s).slice(-6)
     out[s] = r.length ? Math.round(r.reduce((t, x) => t + Math.min(100, x.accuracy * 60 + x.level * 4), 0) / r.length) : 0

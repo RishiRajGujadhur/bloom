@@ -692,6 +692,10 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'focusTracker', title: 'Focus tracker', description: 'Follow moving dots (multiple-object tracking).' },
     { id: 'numberStream', title: 'Number stream', description: 'Running totals of flashing numbers.' },
     { id: 'personalBest', title: 'Personal-best fireworks', description: 'Fireworks when you beat your best score.' },
+    { id: 'assessments', title: 'IQ & EQ assessments', description: 'Reasoning (IQ-style) and emotional intelligence (EQ) check-ins.' },
+    { id: 'iqGames', title: 'Reasoning games', description: 'Matrix puzzles and quick analogies to train IQ skills.' },
+    { id: 'eqGames', title: 'Empathy games', description: 'Face reader and Kind reply to train EQ skills.' },
+    { id: 'leaderboard', title: 'Personal leaderboard', description: 'Your top runs and personal bests, this week or all time.' },
   ],
   goalRoadmap: [
     { id: "timeline", title: "Gantt timeline", description: "Every milestone on one timeline." },

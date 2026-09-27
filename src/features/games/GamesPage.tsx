@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Gamepad2, History, Play, Radar, Volume2, VolumeX } from 'lucide-react'
+import { Brain, Gamepad2, History, Play, Radar, Trophy, Volume2, VolumeX } from 'lucide-react'
 import { Rail, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
@@ -9,9 +9,10 @@ import { GAMES_KEY, dailyWorkout, games, mathsProblem, memoryPattern, memorySetu
 import './games.css'
 import { FocusTracker, MentalRotation, NumberStream, PatternEcho, WordScramble } from './NewGames'
 import { Fireworks } from 'fireworks-js'
+import { AnalogyGame, AssessTab, FaceReader, KindReply, Leaderboard, MatrixGame } from './Assess'
 
 const on = (id: string) => subOn('brainGames', id)
-const initialStore: GamesStore = { levels: { nback: 1, memory: 1, stroop: 1, reaction: 1, maths: 1, simon: 1, rotate: 1, scramble: 1, track: 1, stream: 1 }, results: [], sound: true }
+const initialStore: GamesStore = { levels: { nback: 1, memory: 1, stroop: 1, reaction: 1, maths: 1, simon: 1, rotate: 1, scramble: 1, track: 1, stream: 1, matrix: 1, analogy: 1, faces: 1, replies: 1 }, results: [], sound: true }
 
 /** Fireworks over the stage for a new personal best. */
 function celebrateBest(el: HTMLElement | null) {
@@ -303,7 +304,7 @@ export function GamesPage() {
     setRound((x) => x + 1)
     setTab('play')
   }
-  const subId: Record<GameId, string> = { nback: 'nback', memory: 'memoryGrid', stroop: 'stroop', reaction: 'reaction', maths: 'speedMaths', simon: 'patternEcho', rotate: 'rotation3d', scramble: 'wordScramble', track: 'focusTracker', stream: 'numberStream' }
+  const subId: Record<GameId, string> = { nback: 'nback', memory: 'memoryGrid', stroop: 'stroop', reaction: 'reaction', maths: 'speedMaths', simon: 'patternEcho', rotate: 'rotation3d', scramble: 'wordScramble', track: 'focusTracker', stream: 'numberStream', matrix: 'iqGames', analogy: 'iqGames', faces: 'eqGames', replies: 'eqGames' }
   const visible = games.filter((g) => on(subId[g.id]))
   const newProps = (g: GameId) => ({ level: store.levels[g], finish: finish(g), blip: (ok: boolean) => blip(ok, store.sound) })
   const props = (g: GameId) => ({ level: store.levels[g], finish: finish(g), sound: store.sound })
@@ -325,6 +326,10 @@ export function GamesPage() {
           {game === 'scramble' && <WordScramble {...newProps('scramble')} />}
           {game === 'track' && <FocusTracker {...newProps('track')} />}
           {game === 'stream' && <NumberStream {...newProps('stream')} />}
+          {game === 'matrix' && <MatrixGame {...newProps('matrix')} />}
+          {game === 'analogy' && <AnalogyGame {...newProps('analogy')} />}
+          {game === 'faces' && <FaceReader {...newProps('faces')} />}
+          {game === 'replies' && <KindReply {...newProps('replies')} />}
         </div>
       ) : (
         <div className="iv-programs">
@@ -413,6 +418,8 @@ export function GamesPage() {
       }
       tabs={[
         { id: 'play', label: game ? games.find((g) => g.id === game)!.name : 'Play', icon: game ? <Play size={15} /> : <Gamepad2 size={15} />, render: play },
+        ...(on('assessments') ? [{ id: 'assess', label: 'IQ & EQ', icon: <Brain size={15} />, render: () => <AssessTab /> }] : []),
+        ...(on('leaderboard') ? [{ id: 'leaders', label: 'Leaderboard', icon: <Trophy size={15} />, render: () => <Leaderboard results={store.results} /> }] : []),
         ...(on('skillRadar') || on('history') ? [{ id: 'stats', label: 'Skills', icon: on('skillRadar') ? <Radar size={15} /> : <History size={15} />, render: stats }] : []),
       ]}
       initial="play"
