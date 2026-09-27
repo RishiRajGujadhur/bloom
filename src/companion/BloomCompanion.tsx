@@ -275,18 +275,19 @@ export function BloomCompanion({
   }
   return (
     <>
-      <button
-        className="bloom-companion-launch has-face"
-        hidden={open && docked}
-        aria-expanded={open}
-        onClick={open ? onClose : onOpen}
-        onPointerEnter={() => launchFace.current?.react('excited')}
-        aria-label="Talk to Bloom"
-        data-hint="Ask Bloom anything about this page"
-      >
-        <BloomFace ref={launchFace} size={46} label="" waveOnMount={false} />
-        <span>Talk to Bloom</span>
-      </button>
+      {!open && (
+        <button
+          className="bloom-companion-launch has-face"
+          aria-expanded={open}
+          onClick={open ? onClose : onOpen}
+          onPointerEnter={() => launchFace.current?.react('excited')}
+          aria-label="Talk to Bloom"
+          data-hint="Ask Bloom anything about this page"
+        >
+          <BloomFace ref={launchFace} size={46} label="" waveOnMount={false} />
+          <span>Talk to Bloom</span>
+        </button>
+      )}
       {open && (
         <section
           ref={panel}
