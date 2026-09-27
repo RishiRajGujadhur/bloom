@@ -10,6 +10,8 @@ import { DAYBOOK_STORAGE_KEY } from '../../components/daybook/storage'
 import type { JournalEntry } from '../../components/daybook/types'
 import { angleForIndex, facingIndex, palaceDays, type PalaceDay } from './palaceModel'
 import './palace.css'
+import { YearRibbon } from '../showcase/YearRibbon'
+import { usePageActions } from '../../components/ui/PageMenu'
 import { Scene3D } from '../../components/ui/Scene3D'
 
 gsap.registerPlugin(Observer)
@@ -169,6 +171,12 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
   }, [days.length, reduced, spin])
 
   const day = days[selected]
+  usePageActions([
+    { id: 'pl-today', label: 'Back to today', icon: '📍', run: () => goTo(todayIndex) },
+    { id: 'pl-prev', label: 'Previous day', icon: '⬅️', run: () => goTo(selected - 1) },
+    { id: 'pl-next', label: 'Next day', icon: '➡️', run: () => goTo(selected + 1) },
+    { id: 'pl-zoom', label: zoomed ? 'Zoom out' : 'Zoom in', icon: '🔍', run: () => setZoomed((z) => !z) },
+  ])
   return (
     <section className="palace-page" aria-label="Memory palace">
       <div
@@ -223,6 +231,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
           </button>
         </div>
       </div>
+      {subOn('memoryPalace', 'ribbon') && <YearRibbon days={days} selected={selected} onPick={(i) => goTo(Math.max(0, Math.min(days.length - 1, i)))} />}
       <div className="palace-detail" aria-live="polite">
         {day.intensity === 0 && day.mood === null ? (
           <p className="wb-muted">A quiet day. Nothing recorded.</p>

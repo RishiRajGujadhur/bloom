@@ -207,6 +207,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'fog', title: 'Fog', description: 'Depth fog around the ring.' },
     { id: 'keyboard', title: 'Keyboard navigation', description: 'Arrow keys move between days.' },
     { id: 'zoom', title: 'Zoom on click', description: 'Clicking a day zooms in.' },
+    { id: 'ribbon', title: 'Year ribbon', description: 'The whole year as one strip; click any day to spin there.' },
   ],
   skillConstellation: [
     { id: 'starfield', title: 'Starfield', description: 'Background stars.' },
