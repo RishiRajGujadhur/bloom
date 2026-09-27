@@ -720,6 +720,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "templates", title: "Templates", description: "Morning, evening, workout and weekly reset." },
     { id: "week", title: "Week view", description: "What’s coming over seven days." },
     { id: "log", title: "Completion log", description: "Streaks from completed runs." },
+    { id: 'dial', title: 'Day dial', description: 'Today’s routines on an animated 24-hour clock.' },
   ],
   digitalWellbeing: [
     { id: "tracking", title: "Active time", description: "Counts time you’re actually using Bloom." },

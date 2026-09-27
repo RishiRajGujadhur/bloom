@@ -6,6 +6,8 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { dayKey } from '../../dates'
 import { ROUTINES_KEY, dayNames, describe, occursOn, streak, templates, totalMinutes, upcoming, type Routine, type RoutineStore } from './routineModel'
+import { DayDial } from '../showcase/DayDial'
+import { usePageActions } from '../../components/ui/PageMenu'
 import './routines.css'
 
 const on = (id: string) => subOn('routineScheduler', id)
@@ -103,11 +105,24 @@ export function RoutinesPage() {
     setPlaying(null)
   }
 
+  const nextUp = [...todays].filter((r) => (r.log.find((l) => l.date === today)?.done ?? 0) < r.steps.length).sort((a, b) => a.repeat.time.localeCompare(b.repeat.time))[0]
+  usePageActions([
+    ...(nextUp ? [{ id: 'rt-next', label: `Start ${nextUp.name}`, icon: nextUp.emoji, run: () => { setTab('today'); setPlaying(nextUp) } }] : []),
+    { id: 'rt-edit', label: 'Edit my routines', icon: '✏️', run: () => setTab('edit') },
+  ])
   const todayTab = () =>
     playing && on('player') ? (
       <Player routine={playing} onDone={finish(playing)} onClose={() => setPlaying(null)} />
     ) : (
       <div className="iv-programs">
+        {on('dial') && todays.length > 0 && (
+          <div className="rt-dial-row">
+            <DayDial
+              items={todays.map((r) => ({ id: r.id, time: r.repeat.time, emoji: r.emoji, color: r.color, label: r.name, done: (r.log.find((l) => l.date === today)?.done ?? 0) >= r.steps.length }))}
+              onPick={(id) => setPlaying(store.routines.find((r) => r.id === id) ?? null)}
+            />
+          </div>
+        )}
         <h3>Today</h3>
         {todays.length ? (
           <Rail label="Today’s routines">
@@ -141,7 +156,7 @@ export function RoutinesPage() {
                 <div key={key} className="rt-day" data-today={i === 0}>
                   <small>{d.toLocaleDateString([], { weekday: 'short' })}</small>
                   {store.routines.filter((r) => occursOn(r, key)).map((r) => (
-                    <span key={r.id} style={{ background: r.color }} title={r.name}>
+                    <span key={r.id} style={{ background: r.color }} data-hint={`${r.name} · ${r.repeat.time} · ${totalMinutes(r)} min`}>
                       {r.emoji}
                     </span>
                   ))}

@@ -650,3 +650,58 @@
   width: 100%;
   margin-bottom: 8px;
 }
+
+/* ---------- Day dial ---------- */
+.dd-dial {
+  width: min(100%, 240px);
+  overflow: visible;
+}
+
+.dd-face {
+  fill: var(--bg-surface, #fff);
+  stroke: var(--border-color, #0002);
+  stroke-width: 2;
+}
+
+.dd-daylight {
+  fill: none;
+  stroke: #ffd54f66;
+  stroke-width: 10;
+}
+
+.dd-tick {
+  stroke: var(--text-muted, #999);
+  stroke-width: 1.2;
+}
+
+.dd-hour {
+  font-size: 10px;
+  fill: var(--text-muted, #999);
+}
+
+.dd-hand {
+  stroke: #e2553f;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.dd-hub {
+  fill: #e2553f;
+}
+
+.dd-item {
+  cursor: pointer;
+}
+
+.dd-item circle {
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.dd-item.done {
+  opacity: 0.55;
+}
+
+.dd-item.next circle {
+  stroke: #e2553f;
+}

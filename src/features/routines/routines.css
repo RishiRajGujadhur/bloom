@@ -118,3 +118,8 @@
   background: var(--rt);
   transition: width 1s linear;
 }
+
+.rt-dial-row {
+  display: grid;
+  place-items: center;
+}
