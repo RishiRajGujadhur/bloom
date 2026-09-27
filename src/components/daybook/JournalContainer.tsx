@@ -18,6 +18,7 @@ import type { JournalEntry, JournalMode, JournalCategory } from './types'
 import { localizedJournalModes } from './mockData'
 import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
+import { DaybookQuick } from '../../features/quick/DaybookQuick'
 import { SemanticSearch } from './SemanticSearch'
 import './daybook.css'
 import { FlowMountain } from '../../features/flow/FlowMountain'
@@ -205,6 +206,7 @@ export function JournalContainer() {
           </>
         ) : (
           <div className="journal-direction">
+            <DaybookQuick modes={modes} onSelect={startPage} />
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
               <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
                 {recentPages.map((page) => {

@@ -424,3 +424,10 @@
   width: 100%;
   max-width: 320px;
 }
+
+.daybook-typed {
+  min-height: 1.6em;
+  margin: 0;
+  font-family: var(--font-hand, "Caveat", cursive);
+  font-size: 1.35rem;
+}

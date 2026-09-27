@@ -300,6 +300,9 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'writingCoach', title: 'Clear-writing coach', description: 'Long sentences, adverbs and passive voice on Clear writing pages.' },
     { id: 'meetingExport', title: 'Meeting to calendar', description: 'Export Meeting prep pages as a calendar event.' },
     { id: 'flourish', title: 'Ink flourish', description: 'A hand-drawn line inks itself under each title.' },
+    { id: 'moodPicks', title: 'Mood picks', description: 'Tap a mood; swipe through journals that suit it.' },
+    { id: 'timePicks', title: 'Time-of-day picks', description: 'Morning, afternoon or evening journals.' },
+    { id: 'typedSpark', title: 'Typed spark', description: 'A question types itself out to beat the blank page.' },
   ],
   languageSelector: [
     { id: 'dialects', title: 'Fun dialects', description: 'Pirate and slang English.' },
