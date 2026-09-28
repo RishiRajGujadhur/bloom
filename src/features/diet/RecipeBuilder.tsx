@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import gsap from 'gsap'
-import { ChefHat, Minus, Plus, Save, Trash2, Utensils } from 'lucide-react'
+import { ChefHat, ChevronLeft, ChevronRight, Minus, Pause, Play, Plus, Save, Trash2, Utensils } from 'lucide-react'
+import { prefersReducedMotion } from '../../utils/motion'
+import './cookAlong.css'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { db } from '../../search/db'
@@ -17,7 +19,7 @@ function KitchenScale({ grams, items }: { grams: number; items: string[] }) {
   const needle = useRef<SVGGElement>(null)
   const angle = Math.min(260, (grams / 2000) * 260) - 130
   useLayoutEffect(() => {
-    if (needle.current) gsap.to(needle.current, { rotation: angle, svgOrigin: '100 118', duration: 1, ease: 'elastic.out(1, 0.45)' })
+    if (needle.current) gsap.to(needle.current, { rotation: angle, svgOrigin: '100 118', duration: prefersReducedMotion() ? 0 : 1, ease: 'elastic.out(1, 0.45)' })
   }, [angle])
   return (
     <svg className="rb-scale" viewBox="0 0 200 190" aria-hidden="true">
@@ -47,6 +49,37 @@ function KitchenScale({ grams, items }: { grams: number; items: string[] }) {
   )
 }
 
+function CookAlong({ recipe, onClose }: { recipe: Recipe; onClose: () => void }) {
+  const steps = recipe.steps ?? []
+  const [index, setIndex] = useState(0)
+  const [seconds, setSeconds] = useState(300)
+  const [running, setRunning] = useState(false)
+  const card = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!running || seconds <= 0) return
+    const timer = window.setInterval(() => setSeconds((value) => Math.max(0, value - 1)), 1000)
+    return () => window.clearInterval(timer)
+  }, [running, seconds])
+  useEffect(() => {
+    if (seconds === 0) setRunning(false)
+  }, [seconds])
+  useLayoutEffect(() => {
+    if (!card.current || prefersReducedMotion()) return
+    const tween = gsap.fromTo(card.current, { y: 8, opacity: .6 }, { y: 0, opacity: 1, duration: .3, ease: 'power2.out' })
+    return () => { tween.progress(1).kill() }
+  }, [index])
+  const progress = ((index + 1) / steps.length) * 100
+  return (
+    <section className="diet-card cook-along" aria-label={`Cook along with ${recipe.name}`}>
+      <div className="cook-head"><ChefHat size={20} aria-hidden="true" /><strong>{recipe.name}</strong><button type="button" className="lab-secondary" onClick={onClose}>Close</button></div>
+      <div className="cook-progress"><svg viewBox="0 0 120 120" role="img" aria-label={`Step ${index + 1} of ${steps.length}`}><circle cx="60" cy="60" r="49" className="cook-track" /><circle cx="60" cy="60" r="49" className="cook-fill" strokeDasharray={`${progress * 3.08} 308`} /><path d="M38 72 Q60 87 82 72 M45 70 Q49 49 60 42 Q71 49 75 70" className="cook-pot" /></svg><span>{index + 1} / {steps.length}</span></div>
+      <div ref={card} className="cook-step" role="status">{steps[index]}</div>
+      <div className="cook-nav"><button type="button" disabled={index === 0} onClick={() => setIndex((value) => value - 1)}><ChevronLeft size={18} /> Previous</button><button type="button" disabled={index === steps.length - 1} onClick={() => setIndex((value) => value + 1)}>Next <ChevronRight size={18} /></button></div>
+      <div className="cook-timer"><span role="timer" aria-label="Kitchen timer">{Math.floor(seconds / 60).toString().padStart(2, '0')}:{(seconds % 60).toString().padStart(2, '0')}</span><button type="button" onClick={() => setSeconds((value) => Math.max(0, value - 60))} aria-label="Subtract one minute"><Minus size={16} /></button><button type="button" onClick={() => setRunning((value) => !value)} aria-label={running ? 'Pause timer' : 'Start timer'}>{running ? <Pause size={16} /> : <Play size={16} />}</button><button type="button" onClick={() => setSeconds((value) => Math.min(3600, value + 60))} aria-label="Add one minute"><Plus size={16} /></button></div>
+    </section>
+  )
+}
+
 export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: Meal) => void; state: DietState }) {
   const [query, setQuery] = useState('')
   const [pantry, setPantry] = useState<FoodRow[]>([])
@@ -56,6 +89,9 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
   const [cooked, setCooked] = useState(true)
   const [measured, setMeasured] = useState('')
   const [saved, setSaved] = useState<Recipe[]>([])
+  const [stepText, setStepText] = useState('')
+  const [steps, setSteps] = useState<string[]>([])
+  const [activeRecipe, setActiveRecipe] = useState<Recipe | null>(null)
   const saveBtn = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -109,7 +145,7 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
 
   const save = async () => {
     if (!rows.length) return
-    const r: Recipe = { id: crypto.randomUUID(), name: name.trim() || 'My recipe', servings, ingredients: rows.map(({ foodId, grams }) => ({ foodId, grams })), cooked: recipe.cooked, cookedWeight: recipe.cookedWeight, createdAt: Date.now() }
+    const r: Recipe = { id: crypto.randomUUID(), name: name.trim() || 'My recipe', servings, ingredients: rows.map(({ foodId, grams }) => ({ foodId, grams })), steps, cooked: recipe.cooked, cookedWeight: recipe.cookedWeight, createdAt: Date.now() }
     await db.recipes.put(r).catch(() => undefined)
     setSaved((s) => [r, ...s])
     burst(saveBtn.current, 'stars')
@@ -261,6 +297,12 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
               <Utensils size={15} /> Log one serving
             </button>
           </div>
+          <div className="cook-editor">
+            <strong>Preparation steps</strong>
+            <p>Add steps to make this recipe a guided cook-along.</p>
+            <ol>{steps.map((step, position) => <li key={`${step}-${position}`}>{step}<button type="button" className="icon-button" aria-label={`Remove step ${position + 1}`} onClick={() => setSteps((list) => list.filter((_, i) => i !== position))}><Trash2 size={14} /></button></li>)}</ol>
+            <form onSubmit={(event) => { event.preventDefault(); if (stepText.trim()) { setSteps((list) => [...list, stepText.trim()]); setStepText('') } }}><input aria-label="New preparation step" placeholder="e.g. Simmer for 10 minutes" maxLength={240} value={stepText} onChange={(event) => setStepText(event.target.value)} /><button type="submit" disabled={!stepText.trim()}><Plus size={16} /> Add step</button></form>
+          </div>
         </section>
       </DragDropContext>
 
@@ -281,6 +323,7 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
                   <button type="button" className="lab-secondary" onClick={() => log(r)}>
                     Log serving
                   </button>
+                  {!!r.steps?.length && <button type="button" className="lab-secondary" onClick={() => setActiveRecipe(r)}><ChefHat size={15} /> Cook along</button>}
                   <button
                     type="button"
                     className="icon-button"
@@ -298,6 +341,7 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
           </ul>
         </section>
       )}
+      {activeRecipe && !!activeRecipe.steps?.length && <CookAlong key={activeRecipe.id} recipe={activeRecipe} onClose={() => setActiveRecipe(null)} />}
     </div>
   )
 }

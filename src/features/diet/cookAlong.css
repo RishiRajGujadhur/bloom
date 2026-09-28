@@ -1,0 +1,36 @@
+.cook-editor {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border, #ded8d1);
+  padding-top: 1rem;
+}
+.cook-editor p { margin: .3rem 0 .8rem; color: var(--text-muted); }
+.cook-editor ol { display: grid; gap: .45rem; padding-left: 1.4rem; }
+.cook-editor li { padding-left: .25rem; }
+.cook-editor li .icon-button { margin-left: .5rem; vertical-align: middle; }
+.cook-editor form { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+.cook-editor input { flex: 1 1 15rem; min-width: 0; }
+.cook-editor form button, .cook-nav button, .cook-timer button {
+  display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+  min-height: 2.5rem; border: 1px solid var(--border, #ded8d1); border-radius: .75rem;
+  background: var(--bg-surface, #fff); color: inherit; cursor: pointer; padding: .4rem .7rem;
+}
+.cook-editor button:disabled, .cook-nav button:disabled { opacity: .45; cursor: default; }
+.cook-along { grid-column: 1 / -1; text-align: center; }
+.cook-head { display: flex; align-items: center; justify-content: center; gap: .55rem; }
+.cook-head strong { margin-right: auto; }
+.cook-progress { position: relative; width: 8rem; margin: .4rem auto; }
+.cook-progress svg { width: 100%; transform: rotate(-90deg); }
+.cook-track, .cook-fill { fill: none; stroke-width: 8; }
+.cook-track { stroke: #e6ede6; }
+.cook-fill { stroke: #75ac83; stroke-linecap: round; transition: stroke-dasharray .3s ease; }
+.cook-pot { fill: none; stroke: #d88562; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; transform: rotate(90deg); transform-origin: center; }
+.cook-progress span { position: absolute; left: 0; right: 0; bottom: -.2rem; font-size: .8rem; }
+.cook-step { max-width: 36rem; min-height: 3.5rem; margin: 1rem auto; font-size: 1.1rem; line-height: 1.5; }
+.cook-nav, .cook-timer { display: flex; align-items: center; justify-content: center; gap: .5rem; flex-wrap: wrap; }
+.cook-timer { margin-top: 1.25rem; }
+.cook-timer span { min-width: 5rem; font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 700; }
+html[data-reduce-motion='true'] .cook-fill { transition: none; }
+@media (max-width: 600px) {
+  .rb-saved li { flex-wrap: wrap; }
+  .rb-saved li > span { flex-basis: 100%; }
+}

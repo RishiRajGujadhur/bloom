@@ -9,6 +9,8 @@ export type Recipe = {
   name: string
   servings: number
   ingredients: Ingredient[]
+  /** Optional preparation instructions for cook-along mode. */
+  steps?: string[]
   /** Apply each ingredient's cooking yield (moisture loss or water absorbed). */
   cooked: boolean
   /** Optional measured weight of the finished dish, overriding the estimate. */

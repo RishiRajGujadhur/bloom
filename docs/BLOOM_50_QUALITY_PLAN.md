@@ -72,6 +72,15 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Captured 67 navigation pages at desktop and phone widths (134 screenshots). Automated checks found no page errors or document-level horizontal overflow. Visual spot checks covered Overview, To-dos, and mobile Settings; deeper visual review remains open.
 - 2026-09-29: Added WaterDo bubble completion mode for tasks and verified task completion in a browser.
 - 2026-09-29: Connected 90 clean source files to one motion preference check. Verified setting persistence across pages and three utility cases. Two files with concurrent edits remain untouched, and GSAP scenes without any preference guard still need review.
+- 2026-09-29: Added optional preparation steps to saved recipes and a cook-along view with SVG progress and a kitchen timer. Verified desktop and mobile flows in a browser.
+- 2026-09-29: Corrected the screenshot audit to detect Bloom's own error screen and pages stuck loading. Re-ran all 134 captures on a fresh local server; no page errors or document-level overflow were reported.
+
+## New feature areas
+
+- Cooking: deepen cook-along with technique lessons and safe, clear guidance. The first cook-along version is complete.
+- Music: add a practice path with rhythm, pitch, and short sessions.
+- Drawing: add guided exercises with a simple canvas and replayable strokes.
+- Health tracking: connect existing sleep, movement, food, mood, and focus data in understandable trends.
 
 ## Working order
 
