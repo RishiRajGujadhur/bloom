@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import rough from 'roughjs'
+import { pathLength } from '../../utils/svgLength'
 
 /**
  * A hand-drawn underline and quill that ink themselves in when a page opens
@@ -21,7 +22,7 @@ export function InkFlourish({ seed, color = '#d9653b' }: { seed: number; color?:
     const paths = el.querySelectorAll('path')
     const tl = gsap.timeline()
     paths.forEach((p) => {
-      const len = (p as SVGPathElement).getTotalLength?.() || 400
+      const len = pathLength(p, 400)
       gsap.set(p, { strokeDasharray: len, strokeDashoffset: len })
     })
     tl.to(paths, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', stagger: 0.05 })

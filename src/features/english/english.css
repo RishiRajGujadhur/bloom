@@ -368,3 +368,7 @@ html[data-theme='matrix'] .en-check, html[data-theme='matrix'] .en-node, html[da
   40% { transform: scale(1.05); }
 }
 html[data-theme='matrix'] .en-unit-head { color: #eafff0; }
+html[data-theme='matrix'] :is(.en-pic, .en-option, .studio-chip.mc, .avatar-option)[aria-pressed='true'],
+html[data-theme='matrix'] .avatar-option[aria-checked='true'] {
+  color: #39ff6a !important;
+}

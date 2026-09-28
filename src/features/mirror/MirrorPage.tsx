@@ -9,6 +9,7 @@ import { DAYBOOK_STORAGE_KEY } from '../../components/daybook/storage'
 import { GRATITUDE_KEY, MOOD_KEY } from '../wellbeing/store'
 import { agreement, byWeekday, daily, label, reframesFor, score, topWords, type Scored, type Source, type Text } from './mirrorModel'
 import './mirror.css'
+import { pathLength } from '../../utils/svgLength'
 
 const on = (id: string) => subOn('moodMirror', id)
 const readArray = <T,>(key: string): T[] => {
@@ -39,7 +40,7 @@ function Trend({ days }: { days: { date: string; value: number }[] }) {
   const path = useRef<SVGPathElement>(null)
   useLayoutEffect(() => {
     if (!path.current) return
-    const len = path.current.getTotalLength()
+    const len = pathLength(path.current, 300)
     gsap.fromTo(path.current, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.out' })
   }, [days.length])
   if (days.length < 2) return <p className="studio-empty">Write on two different days to see your tone over time.</p>

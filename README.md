@@ -12,6 +12,11 @@ A personal React 19 health-coaching dashboard with a Habitica-inspired purple pa
 | ![Money, Bloom Light theme](docs/screenshots/money-light.png) | ![Money, Matrix theme](docs/screenshots/money-matrix.png) |
 | ![Little Joys, Bloom Light theme](docs/screenshots/little-joys-light.png) | ![Little Joys, Matrix theme](docs/screenshots/little-joys-matrix.png) |
 | ![Tai Chi, Bloom Light theme](docs/screenshots/tai-chi-light.png) | ![Tai Chi, Matrix theme](docs/screenshots/tai-chi-matrix.png) |
+| ![Talk to Bloom — chat with typed commands, Bloom Light theme](docs/screenshots/chat-light.png) | ![Talk to Bloom — chat with typed commands, Matrix theme](docs/screenshots/chat-matrix.png) |
+| ![Brain games, Bloom Light theme](docs/screenshots/games-light.png) | ![Brain games, Matrix theme](docs/screenshots/games-matrix.png) |
+| ![English lesson, Bloom Light theme](docs/screenshots/english-lesson-light.png) | ![English lesson, Matrix theme](docs/screenshots/english-lesson-matrix.png) |
+| ![English story mode, Bloom Light theme](docs/screenshots/english-story-light.png) | ![English story mode, Matrix theme](docs/screenshots/english-story-matrix.png) |
+| ![English league, shop and badges, Bloom Light theme](docs/screenshots/english-league-light.png) | ![English league, shop and badges, Matrix theme](docs/screenshots/english-league-matrix.png) |
 
 To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome.
 

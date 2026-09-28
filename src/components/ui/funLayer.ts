@@ -1,5 +1,6 @@
 import gsap from 'gsap'
 import './funLayer.css'
+import { pathLength } from '../../utils/svgLength'
 
 /**
  * App-wide playful touches, all GSAP + SVG, so every feature feels alive:
@@ -58,7 +59,7 @@ function pageSquiggle() {
   const path = svgEl('path', { d, fill: 'none', stroke: accent, 'stroke-width': 3, 'stroke-linecap': 'round' })
   svg.appendChild(path)
   document.body.appendChild(svg)
-  const len = path.getTotalLength?.() || w * 1.3
+  const len = pathLength(path, w * 1.3)
   gsap.timeline({ onComplete: () => svg.remove() })
     .fromTo(path, { attr: { 'stroke-dasharray': len, 'stroke-dashoffset': len } }, { attr: { 'stroke-dashoffset': 0 }, duration: 0.7, ease: 'power2.inOut' })
     .to(svg, { opacity: 0, y: -8, duration: 0.35 }, '+=0.1')

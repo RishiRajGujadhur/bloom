@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
+import { pathLength } from '../../utils/svgLength'
 
 /**
  * A compact SVG sparkline that draws itself on with GSAP; dots show values on
@@ -20,7 +21,7 @@ export function Sparkline({ values, labels, unit, goodWhenDown = false, color = 
   useLayoutEffect(() => {
     const el = line.current
     if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const len = el.getTotalLength?.() || 300
+    const len = pathLength(el, 300)
     const tw = gsap.fromTo(el, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.out' })
     return () => void tw.progress(1)
   }, [d])

@@ -9,6 +9,7 @@ import { EYES_KEY, blinkClosed, exerciseById, exercises, nearFar, routine, strea
 import { WatchEye } from '../showcase/WatchEye'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './eyes.css'
+import { pathLength } from '../../utils/svgLength'
 
 const on = (id: string) => subOn('eyeCare', id)
 
@@ -54,7 +55,7 @@ function Guide({ ex, t, speed }: { ex: Exercise; t: number; speed: number }) {
   useEffect(() => {
     const p = track.current
     if (!p || !ex.path) return
-    const len = p.getTotalLength()
+    const len = pathLength(p, 300)
     const pt = p.getPointAtLength(((t * speed * 80) % len + len) % len)
     setDot({ x: pt.x, y: pt.y })
   }, [t, ex, speed])

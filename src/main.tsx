@@ -13,7 +13,10 @@ import { registerChartTheme } from './components/ui/chartTheme'
 import { installCardEntrance, installCardGlow, installTitleReveal } from './components/ui/cardGlow'
 import { installFunLayer } from './components/ui/funLayer'
 import { installAppHealth } from './components/ui/appHealth'
+import { installSafeFrom } from './utils/gsapSafeFrom'
 import { migrateLifeTools } from './components/daybook/storage'
+
+installSafeFrom()
 
 installInteractions()
 try {

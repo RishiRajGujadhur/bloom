@@ -9,6 +9,7 @@ import {
 import type { LucideProps } from 'lucide-react'
 import { subOn } from '../../features/subFeatures'
 import './flow.css'
+import { pathLength } from '../../utils/svgLength'
 
 /**
  * Animated page emblem: a Lucide icon whose strokes draw themselves on with
@@ -101,7 +102,7 @@ export function PageEmblem({ page }: { page: string }) {
     const parts = svg.querySelectorAll<SVGGeometryElement>('path, circle, rect, line, polyline, polygon, ellipse')
     const tl = gsap.timeline()
     parts.forEach((p) => {
-      const len = p.getTotalLength?.() || 60
+      const len = pathLength(p, 60)
       gsap.set(p, { strokeDasharray: len, strokeDashoffset: len })
     })
     tl.to(parts, { strokeDashoffset: 0, duration: 1.1, stagger: 0.08, ease: 'power2.inOut' }).fromTo(svg, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'sine.out' }, 0)

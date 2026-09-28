@@ -13,6 +13,7 @@ import '../run/run.css'
 import { Sparkline } from '../showcase/Sparkline'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './body.css'
+import { pathLength } from '../../utils/svgLength'
 
 const on = (id: string) => subOn('bodyProgress', id)
 
@@ -25,7 +26,7 @@ function TrendChart({ entries, measure, goal, units }: { entries: Entry[]; measu
   const g = goal != null ? display(goal, meta.unit, units).value : null
   useLayoutEffect(() => {
     if (!path.current) return
-    const len = path.current.getTotalLength()
+    const len = pathLength(path.current, 300)
     gsap.fromTo(path.current, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.out' })
   }, [measure, pts.length])
   if (pts.length < 2) return <p className="studio-empty">Two check-ins and your trend appears.</p>

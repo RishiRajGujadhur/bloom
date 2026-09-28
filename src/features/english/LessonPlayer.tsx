@@ -58,10 +58,11 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
     if (!card.current) return
     const tl = gsap.timeline()
     tl.fromTo(card.current, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' })
-      .from(card.current.querySelectorAll('.en-prompt .w'), { y: 14, opacity: 0, rotateX: -50, duration: 0.35, stagger: 0.04, ease: 'back.out(2)' }, 0.1)
-      .from(card.current.querySelectorAll('.en-option, .en-pic, .en-bank .en-chip, .en-speaker, .en-mic, .en-type'), { y: 18, opacity: 0, scale: 0.92, duration: 0.35, stagger: 0.05, ease: 'back.out(1.8)', clearProps: 'transform,opacity' }, 0.2)
+      // fromTo (not from): a killed-and-rerun effect must still end fully visible.
+      .fromTo(card.current.querySelectorAll('.en-prompt .w'), { y: 14, opacity: 0, rotateX: -50 }, { y: 0, opacity: 1, rotateX: 0, duration: 0.35, stagger: 0.04, ease: 'back.out(2)' }, 0.1)
+      .fromTo(card.current.querySelectorAll('.en-option, .en-pic, .en-bank .en-chip, .en-speaker, .en-mic, .en-type'), { y: 18, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.35, stagger: 0.05, ease: 'back.out(1.8)', clearProps: 'transform,opacity' }, 0.2)
     if (ex?.kind === 'listen') speak(ex.answer)
-    return () => void tl.kill()
+    return () => void tl.progress(1).kill()
   }, [i, ex])
   // Let Bloom's chat give hints for the question on screen.
   useEffect(() => {

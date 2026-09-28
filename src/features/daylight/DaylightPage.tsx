@@ -8,6 +8,7 @@ import { dayKey } from '../../dates'
 import { DAYLIGHT_KEY, altitude, cities, dayFraction, homeCity, hm as hmIn, moonName, plan, sunTimes, yearDayLengths, type DaylightStore } from './daylightModel'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './daylight.css'
+import { pathLength } from '../../utils/svgLength'
 
 const on = (id: string) => subOn('daylight', id)
 
@@ -26,7 +27,7 @@ function SunArc({ frac, alt, sunrise, sunset }: { frac: number | null; alt: numb
     // The sun rises from the horizon to where it is now, drawing the path it took.
     if (sun.current) tl.fromTo(sun.current, { x: 60, y: 260 }, { x, y, duration: reduced ? 0 : 1.6, ease: 'power2.out' })
     if (trail.current) {
-      const len = trail.current.getTotalLength?.() || 700
+      const len = pathLength(trail.current, 700)
       tl.fromTo(trail.current, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: len * (1 - f), duration: reduced ? 0 : 1.6, ease: 'power2.out' }, 0)
     }
     const spin = reduced || !rays.current ? null : gsap.to(rays.current, { rotate: 360, duration: 30, repeat: -1, ease: 'none', transformOrigin: '0 0' })

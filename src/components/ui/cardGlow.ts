@@ -1,5 +1,6 @@
 import gsap from 'gsap'
 import './cardGlow.css'
+import { pathLength } from '../../utils/svgLength'
 
 /**
  * Cards glow where the pointer is (Composio-style): blurred multicolour blobs
@@ -72,7 +73,7 @@ export function installCardEntrance() {
       cards.forEach((card, i) => {
         const parts = card.querySelectorAll<SVGGeometryElement>(':scope > :is(h2, h3) svg :is(path, circle, rect, line, polyline, polygon)')
         parts.forEach((p) => {
-          const len = p.getTotalLength?.() || 40
+          const len = pathLength(p, 40)
           gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.9, delay: 0.15 + i * 0.045, ease: 'power2.inOut', clearProps: 'strokeDasharray,strokeDashoffset' })
         })
       })

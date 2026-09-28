@@ -9,6 +9,7 @@ import { EpiphaniesQuick } from '../quick/EpiphaniesQuick'
 import { BulbGarland } from '../showcase/BulbGarland'
 import { ShowMore } from '../../components/ui/Flow'
 import './epiphany.css'
+import { pathLength } from '../../utils/svgLength'
 
 /** The forgetting curve for an insight, drawn on with GSAP. */
 export function ForgettingCurve({ item, width = 260, height = 70 }: { item: Pick<Epiphany, 'interval' | 'efactor'>; width?: number; height?: number }) {
@@ -23,7 +24,7 @@ export function ForgettingCurve({ item, width = 260, height = 70 }: { item: Pick
   useLayoutEffect(() => {
     const el = path.current
     if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const length = el.getTotalLength?.() ?? 300
+    const length = pathLength(el, 300)
     const tween = gsap.fromTo(el, { strokeDasharray: length, strokeDashoffset: length }, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.out' })
     return () => {
       tween.kill()
