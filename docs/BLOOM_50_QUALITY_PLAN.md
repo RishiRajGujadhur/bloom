@@ -32,7 +32,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 
 ## Everyday delight
 
-21. Todo: bubble-pop completion mode with a conventional fallback.
+21. Todo: bubble-pop completion mode with a conventional fallback. **Implemented in this pass.**
 22. Todo: small surprise for finishing a whole list.
 23. Habits: growing SVG garden for sustained streaks.
 24. Focus: visual progress that blooms during a session.
@@ -68,7 +68,9 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 
 ## Review log
 
-- 2026-09-29: Added persistent Reduce motion option and connected shared motion systems. Full page screenshot audit and feature-by-feature work remain open.
+- 2026-09-29: Added persistent Reduce motion option and connected shared motion systems.
+- 2026-09-29: Captured 67 navigation pages at desktop and phone widths (134 screenshots). Automated checks found no page errors or document-level horizontal overflow. Visual spot checks covered Overview, To-dos, and mobile Settings; deeper visual review remains open.
+- 2026-09-29: Added WaterDo bubble completion mode for tasks and verified task completion in a browser.
 
 ## Working order
 

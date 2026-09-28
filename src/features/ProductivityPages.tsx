@@ -12,6 +12,8 @@ import { usePageActions } from '../components/ui/PageMenu'
 const impactThreshold = () => (subOn('impactTasks', 'heavyOnly') ? 1 : 0)
 import { CardRail } from '../components/BloomExperience'
 import { useState, type Dispatch, type SetStateAction } from 'react'
+import gsap from 'gsap'
+import './waterdo.css'
 import {
   ArrowRight,
   Check,
@@ -164,6 +166,7 @@ export function ChallengesPage({
   )
 }
 export function TodoPage({ data, setData }: Props) {
+  const [waterDo, setWaterDo] = useState(() => localStorage.getItem('bloom-waterdo') === 'true')
   const [planning, setPlanning] = useState({ ...emptyPlanning })
   const [editPlanning, setEditPlanning] = useState({ ...emptyPlanning })
   const [perspective, setPerspective] = useState<PlanningFilter>({
@@ -350,6 +353,15 @@ export function TodoPage({ data, setData }: Props) {
           </>
         )}
       </form>
+      <button type="button" className="waterdo-toggle" aria-pressed={waterDo} onClick={() => {
+        setWaterDo((value) => {
+          localStorage.setItem('bloom-waterdo', String(!value))
+          return !value
+        })
+      }} aria-label="WaterDo bubble completion mode" title="WaterDo: pop bubbles to finish tasks">
+        <svg viewBox="0 0 28 28" width="24" height="24" aria-hidden="true"><circle cx="14" cy="14" r="10" /><path d="M8 11c1-3 3-5 6-5" /><circle cx="20" cy="19" r="1" /></svg>
+        <span>WaterDo</span>
+      </button>
       <div className="segmented" aria-label="Filter tasks">
         {['open', 'today', 'done'].map((value) => (
           <button
@@ -419,7 +431,7 @@ export function TodoPage({ data, setData }: Props) {
             >
               <div className="task-row">
                 <button
-                  className={`task-check ${task.done ? 'done' : ''}`}
+                  className={`task-check ${task.done ? 'done' : ''} ${waterDo ? 'waterdo-bubble' : ''}`}
                   aria-label={`Complete ${task.title}`}
                   aria-pressed={task.done}
                   disabled={
@@ -433,11 +445,20 @@ export function TodoPage({ data, setData }: Props) {
                         : undefined
                   }
                   onClick={(event) => {
+                    if (waterDo && !task.done && !loadSettings().reducedMotion && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                      const source = event.currentTarget
+                      const rect = source.getBoundingClientRect()
+                      const bubble = source.cloneNode(true) as HTMLElement
+                      bubble.setAttribute('aria-hidden', 'true')
+                      bubble.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;pointer-events:none;z-index:9999`
+                      document.body.appendChild(bubble)
+                      gsap.to(bubble, { scale: 1.8, opacity: 0, duration: 0.35, ease: 'power2.out', onComplete: () => bubble.remove() })
+                    }
                     // Heavy tasks become physics objects when completed.
                     const weight = task.done ? 0 : taskWeight(task)
                     const row = event.currentTarget.closest('.task-row')
                     if (
-                      weight >= impactThreshold() &&
+                      !waterDo && weight >= impactThreshold() &&
                       row &&
                       loadSettings().features.impactTasks &&
                       launchImpact({ taskId: task.id, title: task.title, rect: row.getBoundingClientRect(), weight })
@@ -447,7 +468,7 @@ export function TodoPage({ data, setData }: Props) {
                     setData((current) => toggleTodo(current, task.id))
                   }}
                 >
-                  <Check size={18} />
+                  {waterDo && !task.done ? <svg viewBox="0 0 28 28" width="22" height="22" aria-hidden="true"><circle cx="14" cy="14" r="10" /><path d="M8 11c1-3 3-5 6-5" /></svg> : <Check size={18} />}
                 </button>
                 {editing === task.id ? (
                   <form

@@ -1,0 +1,18 @@
+import { chromium } from 'playwright'
+
+const browser = await chromium.launch({ headless: true })
+const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
+await context.addInitScript(() => localStorage.setItem('bloom-welcome-v1', JSON.stringify({ at: Date.now(), answers: null })))
+const page = await context.newPage()
+await page.goto('http://127.0.0.1:5173/#todos')
+await page.getByRole('textbox', { name: 'New task' }).fill('Pop this bubble')
+await page.getByRole('button', { name: 'Add', exact: true }).click()
+await page.getByRole('button', { name: 'WaterDo bubble completion mode' }).click()
+await page.getByRole('button', { name: 'Complete Pop this bubble' }).waitFor()
+await page.screenshot({ path: 'docs/screenshots/page-audit-2026-09-29/waterdo-before.png' })
+await page.getByRole('button', { name: 'Complete Pop this bubble' }).click()
+await page.getByRole('button', { name: 'Completed' }).click()
+await page.getByText('Pop this bubble', { exact: true }).waitFor()
+await page.screenshot({ path: 'docs/screenshots/page-audit-2026-09-29/waterdo-completed.png' })
+console.log('WaterDo completion verified')
+await browser.close()
