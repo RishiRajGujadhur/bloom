@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useRef, type CSSProperties, type MouseEvent } from 'react'
 import gsap from 'gsap'
 import './gameCards.css'
@@ -106,7 +107,7 @@ export function GameCard({ id, title, index, level, onClick }: Props) {
   const sceneTimeline = useRef<gsap.core.Timeline | null>(null)
   const palette = palettes[id] ?? palettes.nback
   const effect = ['rain', 'bubbles', 'sparks', 'rays', 'comets', 'drift'][(index * 5 + 2) % 6]
-  const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const reduced = () => prefersReducedMotion()
   const enter = () => {
     if (!ref.current || reduced()) return
     active.current = true

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { Children, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ChevronDown } from 'lucide-react'
@@ -6,7 +7,7 @@ import { subOn } from '../../features/subFeatures'
 import { emblems } from './PageEmblem'
 import './flow.css'
 
-const reduced = () => typeof window !== 'undefined' && (document.documentElement.dataset.reduceMotion === 'true' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
+const reduced = prefersReducedMotion
 const narrow = () => typeof window !== 'undefined' && !!window.matchMedia?.('(max-width: 720px)').matches
 
 /**

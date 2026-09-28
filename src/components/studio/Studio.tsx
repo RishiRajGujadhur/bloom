@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { Children, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import gsap from 'gsap'
@@ -13,7 +14,7 @@ import './shared.css'
  */
 export type StudioTab = { id: string; label: string; icon?: ReactNode; render: () => ReactNode }
 
-const reduced = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => typeof window !== 'undefined' && prefersReducedMotion()
 
 export function Studio({
   name,

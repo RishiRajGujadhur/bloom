@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useDraggable, useDroppable, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
@@ -33,7 +34,7 @@ function BreathCue({ seconds, running }: { seconds: number; running: boolean }) 
   const el = useRef<HTMLDivElement>(null)
   const [label, setLabel] = useState('Inhale')
   useLayoutEffect(() => {
-    if (!el.current || !running || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el.current || !running || prefersReducedMotion()) return
     const tl = gsap
       .timeline({ repeat: -1 })
       .call(() => setLabel('Inhale'))

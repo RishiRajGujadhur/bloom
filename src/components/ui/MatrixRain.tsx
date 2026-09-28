@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useSyncExternalStore } from 'react'
 
 /** The active theme id, live (reads html[data-theme]). */
@@ -18,7 +19,7 @@ export function MatrixRain() {
   const canvas = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const el = canvas.current
-    if (!on || !el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!on || !el || prefersReducedMotion()) return
     const ctx = el.getContext('2d')
     if (!ctx) return
     const glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ0123456789BLOOM♥✿'

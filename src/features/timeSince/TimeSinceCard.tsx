@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useMemo, useState } from 'react'
 import FlipNumbersModule from 'react-flip-numbers'
 import { format } from 'date-fns'
@@ -19,7 +20,7 @@ function Board({ counter, now, removable, onRemove }: { counter: Counter; now: n
   const parts = counterParts(counter, now)
   const numbers = flapString(parts)
   const reduced =
-    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' && prefersReducedMotion()
   const flap = subOn('timeSince', 'splitFlap') && !reduced
   return (
     <li className="ts-row" data-kind={counter.kind}>

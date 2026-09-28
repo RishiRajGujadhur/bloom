@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import Typed from 'typed.js'
 import { SwipeDeck } from '../../components/ui/SwipeDeck'
@@ -28,7 +29,7 @@ function TypedPrompt({ lines }: { lines: string[] }) {
   const el = useRef<HTMLSpanElement>(null)
   useEffect(() => {
     if (!el.current) return
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    if (prefersReducedMotion()) {
       el.current.textContent = lines[0]
       return
     }

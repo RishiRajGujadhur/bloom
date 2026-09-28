@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { NextStep } from '../dailyFlow/DailyFlow'
 import { subOn } from '../subFeatures'
 import { useRef, useState } from 'react'
@@ -34,7 +35,7 @@ export function ReleasePage() {
   }))
   const reduced =
     typeof window !== 'undefined' &&
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    prefersReducedMotion()
 
   const overFire = () => {
     const a = cardRef.current?.getBoundingClientRect()

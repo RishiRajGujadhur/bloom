@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ChevronDown, Sparkles } from 'lucide-react'
@@ -13,7 +14,7 @@ export function QuickPanel({ id, title, children }: { id: string; title: string;
   const [open, setOpen] = useState(() => readStore<Record<string, boolean>>(key, {})[id] ?? false)
   const body = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    if (!open || !body.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!open || !body.current || prefersReducedMotion()) return
     const tw = gsap.from(body.current, { height: 0, opacity: 0, duration: 0.35, ease: 'power2.out', clearProps: 'height' })
     return () => void tw.revert()
   }, [open])

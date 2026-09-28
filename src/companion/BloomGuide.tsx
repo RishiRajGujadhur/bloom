@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import Fuse from 'fuse.js'
@@ -92,7 +93,7 @@ export function BloomGuide({
 
   // Chips pop in whenever Bloom offers new choices.
   useLayoutEffect(() => {
-    if (!chips.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!chips.current || prefersReducedMotion()) return
     const tw = gsap.fromTo(chips.current.children, { y: 12, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, stagger: 0.04, duration: 0.3, ease: 'back.out(2)' })
     return () => void tw.progress(1)
   }, [choices])

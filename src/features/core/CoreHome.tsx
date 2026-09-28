@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import gsap from 'gsap'
 import { ArrowRight, Check, Moon, Sparkles, Sun, Sunrise, X } from 'lucide-react'
@@ -177,7 +178,7 @@ export function GrowthGarden({ data, today }: Pick<Props, 'data' | 'today'>) {
   const root = useRef<SVGSVGElement>(null)
   const idx = stages.findIndex((s) => s.id === g.stage.id)
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.fromTo('.gg-plant', { strokeDashoffset: 300 }, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.out' })
       gsap.from('.gg-flower', { scale: 0, transformOrigin: '50% 100%', duration: 0.5, stagger: 0.012, ease: 'back.out(2)' })

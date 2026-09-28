@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import gsap from 'gsap'
@@ -7,7 +8,7 @@ import type { FeatureFlags } from '../../SettingsPage'
 import { questions, themeSwatches, type Answers } from './welcomeModel'
 import './welcome.css'
 
-const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => !!prefersReducedMotion()
 type Step = 'intro' | number | 'build' | 'done'
 
 /** Drifting SVG petals behind the whole flow. */

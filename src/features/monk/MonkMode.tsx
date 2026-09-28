@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import gsap from 'gsap'
@@ -13,7 +14,7 @@ import './monk.css'
 type Word = { id: number; text: string; born: number }
 type Grain = { x: number; y: number; vx: number; vy: number; life: number; size: number; color: string }
 
-const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => prefersReducedMotion()
 
 /** Sample the word's glyph pixels into grains positioned where the word sat. */
 function grainsFor(el: HTMLElement, smoke: boolean): Grain[] {

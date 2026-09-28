@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import { Brain, Gamepad2, History, Play, Radar, Trophy, Volume2, VolumeX } from 'lucide-react'
 import { Rail, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
@@ -18,7 +19,7 @@ const initialStore: GamesStore = { levels: { nback: 1, memory: 1, stroop: 1, rea
 
 /** Fireworks over the stage for a new personal best. */
 function celebrateBest(el: HTMLElement | null) {
-  if (!el || !on('personalBest') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  if (!el || !on('personalBest') || prefersReducedMotion()) return
   const fw = new Fireworks(el, { particles: 60, traceSpeed: 4, explosion: 6, intensity: 25 })
   fw.start()
   setTimeout(() => fw.waitStop(true), 2600)

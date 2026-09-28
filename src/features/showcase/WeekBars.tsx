@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -12,7 +13,7 @@ export function WeekBars({ days, unit, color = '#546e7a' }: { days: DayBar[]; un
   const root = useRef<SVGSVGElement>(null)
   const max = Math.max(1, ...days.map((d) => d.value))
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const tw = gsap.from(root.current.querySelectorAll('.wb-plate'), { y: -60, opacity: 0, stagger: 0.03, duration: 0.45, ease: 'bounce.out' })
     return () => void tw.progress(1)
   }, [days.map((d) => d.value).join()]) // eslint-disable-line react-hooks/exhaustive-deps

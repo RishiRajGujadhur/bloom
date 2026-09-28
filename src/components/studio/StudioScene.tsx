@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 
@@ -30,7 +31,7 @@ export function StudioScene({
         : 'M0 430 C 150 360, 300 500, 500 430 S 850 360, 1000 430'
 
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.utils.toArray<SVGCircleElement>('.ss-orb').forEach((orb, i) => {
         gsap.to(orb, { x: gsap.utils.random(-120, 120), y: gsap.utils.random(-80, 80), scale: gsap.utils.random(0.8, 1.25), duration: gsap.utils.random(9, 16), repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i })

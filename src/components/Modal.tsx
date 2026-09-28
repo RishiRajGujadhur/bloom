@@ -1,12 +1,9 @@
+import { prefersReducedMotion } from '../utils/motion'
 import { useCallback, useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
 import { X } from 'lucide-react'
-
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 /**
  * Native <dialog> (focus trap, Esc, inert page) with a soft entrance from CSS

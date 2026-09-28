@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import { lottieIconData, segments, type LottieIconName } from './lottieIcons'
 
@@ -8,7 +9,7 @@ type Player = {
 }
 
 const reducedMotion = () =>
-  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  prefersReducedMotion() ?? false
 
 /**
  * Animated SVG icon (Lottie). It listens on its closest action element, so a

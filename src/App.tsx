@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from './utils/motion'
 import { subOn } from './features/subFeatures'
 import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
@@ -383,7 +384,7 @@ function App() {
   }, [active])
   // Page entrance: the new page's blocks settle in with a soft stagger.
   useLayoutEffect(() => {
-    if (settings.reducedMotion || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (settings.reducedMotion || prefersReducedMotion()) return
     const blocks = document.querySelectorAll(
       '.page-content > :not(.bloom-heading):not([hidden]), .overview-grid > div > *, .ov-stats > *',
     )

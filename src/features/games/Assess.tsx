@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { setQuiz } from '../../companion/quizContext'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -30,7 +31,7 @@ import { games, type Result } from './gamesModel'
 import './assess.css'
 
 type Finish = (score: number, accuracy: number) => void
-const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => !!prefersReducedMotion()
 export const ASSESS_KEY = 'bloom-assess-v1'
 export type AssessStore = { iq: { at: number; score: number; correct: number; total: number; seconds: number }[]; eq: ({ at: number } & EqResult)[] }
 export const readAssess = (): AssessStore => ({ iq: [], eq: [], ...readStore<Partial<AssessStore>>(ASSESS_KEY, {}) })

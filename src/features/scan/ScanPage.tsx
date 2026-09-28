@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { AlertTriangle, Camera, CameraOff, GitCompare, History, Loader2, ScanBarcode, Search, Utensils } from 'lucide-react'
@@ -33,7 +34,7 @@ function Grade({ label, value, scale }: { label: string; value?: string | number
 function Cubes({ n }: { n: number }) {
   const root = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const t = gsap.from(root.current.children, { y: -60, opacity: 0, rotation: () => gsap.utils.random(-40, 40), duration: 0.6, stagger: 0.06, ease: 'bounce.out' })
     return () => void t.progress(1).kill()
   }, [n])

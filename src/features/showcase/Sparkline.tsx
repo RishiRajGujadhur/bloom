@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -20,7 +21,7 @@ export function Sparkline({ values, labels, unit, goodWhenDown = false, color = 
   const good = goodWhenDown ? delta <= 0 : delta >= 0
   useLayoutEffect(() => {
     const el = line.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const len = pathLength(el, 300)
     const tw = gsap.fromTo(el, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.out' })
     return () => void tw.progress(1)

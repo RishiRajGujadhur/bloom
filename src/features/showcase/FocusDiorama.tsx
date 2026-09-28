@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import type { AppData } from '../../model'
@@ -23,7 +24,7 @@ export function FocusDiorama({ data }: { data: AppData }) {
   }))
   const total = byDay.reduce((t, d) => t + d.sessions.length, 0)
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const tw = gsap.from(root.current.querySelectorAll('.fd-tile'), { y: 30, scale: 0.6, opacity: 0, stagger: 0.05, duration: 0.5, ease: 'back.out(2)' })
     return () => void tw.progress(1)
   }, [total])

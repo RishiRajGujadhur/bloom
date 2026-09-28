@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Droplet, Plus, Trash2, Utensils } from 'lucide-react'
@@ -25,7 +26,7 @@ import type { FeaturePageProps } from '../shared/pageProps'
 import { DietQuick } from '../quick/DietQuick'
 import './diet.css'
 
-const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => prefersReducedMotion()
 
 function useDiet() {
   const [state, setState] = useState<DietState>(readDiet)

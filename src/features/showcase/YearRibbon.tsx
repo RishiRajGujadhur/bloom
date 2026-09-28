@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -11,7 +12,7 @@ export function YearRibbon({ days, selected, onPick }: { days: { date: string; i
   const w = 360 / Math.max(1, days.length)
   useLayoutEffect(() => {
     if (!marker.current) return
-    const tw = gsap.to(marker.current, { attr: { x: selected * w - 1 }, duration: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 0.5, ease: 'power3.out' })
+    const tw = gsap.to(marker.current, { attr: { x: selected * w - 1 }, duration: prefersReducedMotion() ? 0 : 0.5, ease: 'power3.out' })
     return () => void tw.progress(1)
   }, [selected, w])
   return (

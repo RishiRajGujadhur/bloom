@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 
@@ -23,7 +24,7 @@ export function NightSky({ quality, children }: { quality: number; children?: Re
 
   useLayoutEffect(() => {
     const svg = root.current
-    if (!svg || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!svg || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.utils.toArray<SVGCircleElement>('.ns-star').forEach((star) => {
         gsap.to(star, {

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 import { createNoise2D } from 'simplex-noise'
@@ -118,7 +119,7 @@ export function GrowScene({ scene, progress, extra = 0 }: { scene: SceneId; prog
     if (!els) return
     const fresh = [...els].slice(prev.current, shown)
     prev.current = shown
-    if (!fresh.length || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!fresh.length || prefersReducedMotion()) return
     const tw = gsap.from(fresh, { scale: 0, opacity: 0, transformOrigin: '50% 100%', duration: 0.6, stagger: 0.08, ease: 'back.out(2.2)' })
     return () => void tw.progress(1)
   }, [shown])

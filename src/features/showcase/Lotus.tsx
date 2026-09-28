@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -10,7 +11,7 @@ export function Lotus({ seconds, running, color = '#b39ddb' }: { seconds: number
   const svg = useRef<SVGSVGElement>(null)
   useEffect(() => {
     const el = svg.current
-    if (!el || !running || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || !running || prefersReducedMotion()) return
     const petals = el.querySelectorAll<SVGPathElement>('.lo-petal')
     const tl = gsap.timeline({ repeat: -1, yoyo: true, defaults: { duration: seconds / 2, ease: 'sine.inOut' } })
     tl.to(petals, { rotate: (i: number) => (i - (petals.length - 1) / 2) * 22, transformOrigin: '50% 100%' }).to(el.querySelector('.lo-glow'), { attr: { r: 70 }, opacity: 0.55 }, 0)

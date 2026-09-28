@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -11,7 +12,7 @@ export function MixOrbit({ layers, playing }: { layers: { id: string; emoji: str
   const active = layers.filter((l) => l.volume > 0)
   useEffect(() => {
     const el = ring.current
-    if (!el || !playing || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || !playing || prefersReducedMotion()) return
     const spin = gsap.to(el, { rotate: 360, svgOrigin: '100 100', duration: 40, repeat: -1, ease: 'none' })
     const counter = gsap.to(el.querySelectorAll('text'), { rotate: -360, transformOrigin: '50% 50%', duration: 40, repeat: -1, ease: 'none' })
     const bob = gsap.to(el.querySelectorAll('.mo-planet'), { scale: 1.12, transformOrigin: '50% 50%', yoyo: true, repeat: -1, duration: 1.2, stagger: 0.3, ease: 'sine.inOut' })

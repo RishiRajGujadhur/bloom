@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { CalendarDays, Check, ListPlus, PauseCircle, Play, Plus, Repeat, SkipForward, Trash2 } from 'lucide-react'
@@ -30,7 +31,7 @@ function Player({ routine, onDone, onClose }: { routine: Routine; onDone: (n: nu
     return () => clearTimeout(t)
   })  
   useLayoutEffect(() => {
-    if (card.current && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) gsap.fromTo(card.current, { y: 30, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.8)' })
+    if (card.current && !prefersReducedMotion()) gsap.fromTo(card.current, { y: 30, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.8)' })
   }, [i])
   const next = () => {
     if (i + 1 >= routine.steps.length) {

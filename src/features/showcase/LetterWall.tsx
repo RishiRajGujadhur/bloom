@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import gsap from 'gsap'
@@ -9,7 +10,7 @@ import { subOn } from '../subFeatures'
 import './showcase.css'
 
 gsap.registerPlugin(Flip)
-const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => !!prefersReducedMotion()
 const tilt = (id: string) => ((id.charCodeAt(0) + id.charCodeAt(id.length - 1)) % 11) - 5
 
 /**

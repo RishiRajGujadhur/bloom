@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 
@@ -8,7 +9,7 @@ import gsap from 'gsap'
  *   - shake: the whole jar wobbles
  * Notes are folded paper hearts/stars stacked from the bottom.
  */
-const reduced = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => typeof window !== 'undefined' && prefersReducedMotion()
 
 const seeded = (i: number) => {
   const x = Math.sin(i * 12.9898) * 43758.5453

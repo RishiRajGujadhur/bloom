@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './swipe.css'
@@ -32,7 +33,7 @@ export function MoodGuide({
   const root = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     const el = root.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const tw = gsap.from(el.querySelectorAll('.mood-guide-chip'), { y: 10, opacity: 0, duration: 0.3, stagger: 0.035, ease: 'power2.out' })
     return () => void tw.revert()
   }, [])

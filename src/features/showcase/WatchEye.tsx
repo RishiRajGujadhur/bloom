@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -12,7 +13,7 @@ export function WatchEye({ minutesLeft, every }: { minutesLeft: number; every: n
   const share = Math.max(0, Math.min(1, minutesLeft / every))
   useEffect(() => {
     const el = svg.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const pupil = el.querySelector('.we-pupil')
     const x = gsap.quickTo(pupil, 'x', { duration: 0.35, ease: 'power3' })
     const y = gsap.quickTo(pupil, 'y', { duration: 0.35, ease: 'power3' })

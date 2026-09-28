@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 import { hierarchy, pack } from 'd3-hierarchy'
@@ -27,7 +28,7 @@ function DayTiles({ store }: { store: MoneyStore }) {
   })
   const max = Math.max(1, ...list.map((x) => x.v))
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const tw = gsap.from(root.current.children, { scale: 0.4, opacity: 0, stagger: { each: 0.01, grid: [8, 8], from: 'start' }, duration: 0.35, ease: 'back.out(2)' })
     return () => void tw.progress(1)
   }, [])
@@ -57,7 +58,7 @@ function CirclePack({ store }: { store: MoneyStore }) {
     return pack<typeof data>().size([320, 320]).padding(4)(root as never).descendants().slice(1)
   }, [store.txns])
   useLayoutEffect(() => {
-    if (!svg.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!svg.current || prefersReducedMotion()) return
     const tw = gsap.from(svg.current.querySelectorAll('circle'), { attr: { r: 0 }, stagger: 0.02, duration: 0.6, ease: 'elastic.out(1, 0.6)' })
     return () => void tw.progress(1)
   }, [nodes.length])
@@ -102,7 +103,7 @@ function SpendRadar({ store }: { store: MoneyStore }) {
   const green = isMatrix() ? '#39ff6a' : '#35d0a0'
   const amber = '#f5c542'
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const tw = gsap.from(root.current.querySelectorAll('.mr-shape'), { scale: 0, transformOrigin: '130px 130px', duration: 1.1, stagger: 0.2, ease: 'elastic.out(1, 0.55)' })
     return () => void tw.progress(1)
   }, [store.txns.length])

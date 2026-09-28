@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { useDrag } from '@use-gesture/react'
 import gsap from 'gsap'
@@ -37,7 +38,7 @@ export function SwipeDeck<T extends SwipeCard>({
   const decided = new Set(history.map((h) => h.card.id))
   const visible = cards.filter((c) => !decided.has(c.id))
   const card = visible[0]
-  const reduced = typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const reduced = typeof window !== 'undefined' && !!prefersReducedMotion()
 
   useLayoutEffect(() => {
     if (!top.current || reduced) return

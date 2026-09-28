@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 import type { AvatarDrawing } from '../../components/ui/avatarStyle'
@@ -30,7 +31,7 @@ export function UnitScene({ theme, dense = false, className }: { theme: UnitThem
   const fx = theme.effect
 
   useLayoutEffect(() => {
-    if (!ref.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!ref.current || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       const p = '.fx-p'
       if (fx === 'rain' || fx === 'storm') {

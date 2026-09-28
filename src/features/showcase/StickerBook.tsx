@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import gsap from 'gsap'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -35,7 +36,7 @@ export function StickerBook({ data, setData, today }: { data: AppData; setData: 
       : [],
   )
   useLayoutEffect(() => {
-    if (!page.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!page.current || prefersReducedMotion()) return
     const tw = gsap.from(page.current.querySelectorAll('.sb-sticker'), { scale: 2.2, opacity: 0, rotate: () => gsap.utils.random(-40, 40), duration: 0.35, stagger: 0.012, ease: 'back.out(2.5)' })
     return () => void tw.progress(1)
   }, [offset, total])

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { shopItems, type ShopItem } from '../rewards/shop'
@@ -22,7 +23,7 @@ export function ShopWindow({ owned, balance, onBuy }: { owned: string[]; balance
   usePageActions(cheapest ? [{ id: 'shop-best', label: `Buy ${cheapest.name} (${cheapest.price} 🌸)`, icon: cheapest.emoji, run: () => onBuy(cheapest) }] : [])
   useLayoutEffect(() => {
     const el = root.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.from('.sw-item', { y: -30, opacity: 0, stagger: 0.04, duration: 0.5, ease: 'bounce.out' })
       gsap.to('.sw-tag', { rotate: 8, transformOrigin: '50% 0%', yoyo: true, repeat: -1, duration: 1.4, ease: 'sine.inOut', stagger: 0.2 })

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Brain, Headphones, Music2, Pause, Play, Timer } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
@@ -120,7 +121,7 @@ export function SoundsPage({ setData }: FeaturePageProps) {
   const halo = useRef<SVGSVGElement>(null)
   useEffect(() => {
     const el = halo.current
-    if (!el || !playing || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || !playing || prefersReducedMotion()) return
     const beat = 60 / mode.bpm
     const tl = gsap.timeline({ repeat: -1 })
     tl.fromTo(el.querySelectorAll('circle'), { attr: { r: 46 }, opacity: 0.6 }, { attr: { r: 96 }, opacity: 0, duration: beat * 4, stagger: beat * 4 / 3, ease: 'sine.out' })

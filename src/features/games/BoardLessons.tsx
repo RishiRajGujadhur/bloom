@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import { Chess, type Square } from 'chess.js'
 import gsap from 'gsap'
@@ -38,7 +39,7 @@ export function BoardLessons({ kind }: { kind: Kind }) {
   const lesson = lessons[level]
   useEffect(() => {
     const board = boardRef.current
-    if (!board || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!board || prefersReducedMotion()) return
     const ctx = gsap.context(() => gsap.from('.bl-cell', { opacity: 0, scale: 0.88, duration: 0.28, stagger: { amount: 0.32, from: 'center' }, ease: 'back.out(1.5)' }), board)
     return () => ctx.revert()
   }, [kind, level])
@@ -50,7 +51,7 @@ export function BoardLessons({ kind }: { kind: Kind }) {
     setComplete(false)
     setMessage('Pick the highlighted piece to begin.')
   }
-  const success = () => { setComplete(true); setSelected(null); setMessage('Excellent move! Lesson complete.'); if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) gsap.fromTo(boardRef.current, { scale: 1.025 }, { scale: 1, duration: 0.45, ease: 'elastic.out(1, 0.4)' }) }
+  const success = () => { setComplete(true); setSelected(null); setMessage('Excellent move! Lesson complete.'); if (!prefersReducedMotion()) gsap.fromTo(boardRef.current, { scale: 1.025 }, { scale: 1, duration: 0.45, ease: 'elastic.out(1, 0.4)' }) }
   const playChess = (r: number, c: number) => {
     const target = square(r, c)
     if (!selected) { if (chess.get(target)?.color === 'w') setSelected([r, c]); return }

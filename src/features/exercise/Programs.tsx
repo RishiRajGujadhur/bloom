@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import rough from 'roughjs'
@@ -26,7 +27,7 @@ function ProgramArt({ p }: { p: Program }) {
       rc.circle(40, 40, 64, { stroke: '#e0703f', strokeWidth: 2, fill: '#f7b27a55', fillStyle: 'hachure', seed }),
       rc.arc(40, 40, 76, 76, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * Math.min(p.ids.length, 8)) / 8, false, { stroke: '#3f7fd0', strokeWidth: 2.5, seed }),
     )
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (prefersReducedMotion()) return
     const tw = gsap.from(el.querySelectorAll('path'), { opacity: 0, scale: 0.6, transformOrigin: '40px 40px', duration: 0.6, stagger: 0.04, ease: 'back.out(2)' })
     return () => void tw.revert()
   }, [p.id, p.ids.length])

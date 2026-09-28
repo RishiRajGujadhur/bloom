@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import confetti from 'canvas-confetti'
@@ -23,7 +24,7 @@ export type MomentDetail = {
 }
 export const showMoment = (d: MomentDetail) => window.dispatchEvent(new CustomEvent<MomentDetail>(MOMENT_EVENT, { detail: d }))
 
-const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => prefersReducedMotion()
 
 function chime(rare: boolean) {
   try {

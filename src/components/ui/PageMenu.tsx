@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import * as CM from '@radix-ui/react-context-menu'
 import gsap from 'gsap'
@@ -105,7 +106,7 @@ export function PageMenu({ page, children, common }: { page: string; children: R
     return () => window.removeEventListener('contextmenu', pass, true)
   }, [])
   useLayoutEffect(() => {
-    if (!open || !content.current || !subOn('pointerFx', 'menuMotion') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!open || !content.current || !subOn('pointerFx', 'menuMotion') || prefersReducedMotion()) return
     const tw = gsap.from(content.current.querySelectorAll('.pm-item, .pm-label'), { x: -8, opacity: 0, stagger: 0.02, duration: 0.18, ease: 'power2.out' })
     return () => void tw.progress(1)
   }, [open])

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -14,7 +15,7 @@ export function StageTrack({ stages, hours, goal, max = 36 }: { stages: Stage[];
   const marker = useRef<SVGGElement>(null)
   const x = (h: number) => 16 + (Math.min(h, max) / max) * 368
   useLayoutEffect(() => {
-    const d = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 1.2
+    const d = prefersReducedMotion() ? 0 : 1.2
     const tl = gsap.timeline()
     tl.to(fill.current, { attr: { width: x(hours) - 16 }, duration: d, ease: 'power2.out' }).to(marker.current, { x: x(hours), duration: d, ease: 'power2.out' }, 0)
     return () => void tl.progress(1)

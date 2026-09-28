@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { subOn } from '../../features/subFeatures'
@@ -13,7 +14,7 @@ const SKIP = '.swipe-card, .react-flow, .bk-book, canvas, [data-no-press], .wf-o
 
 export function GsapControls() {
   useEffect(() => {
-    if (!window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !subOn('pointerFx', 'gsapControls', { ignoreParent: true })) return
+    if (!window.matchMedia || prefersReducedMotion() || !subOn('pointerFx', 'gsapControls', { ignoreParent: true })) return
     let pressed: HTMLElement | null = null
     const target = (e: Event) => {
       const t = (e.target as HTMLElement | null)?.closest<HTMLElement>(CONTROL)

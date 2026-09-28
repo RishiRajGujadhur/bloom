@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../utils/motion'
 import {
   Children,
   useEffect,
@@ -52,7 +53,7 @@ export function CardRail({
       left: direction * node.clientWidth * 0.85,
       behavior:
         document.documentElement.dataset.bloomMotion === 'paused' ||
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        prefersReducedMotion()
           ? 'auto'
           : 'smooth',
     })

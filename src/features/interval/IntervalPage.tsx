@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Timer } from 'easytimer.js'
 import gsap from 'gsap'
@@ -82,7 +83,7 @@ export function IntervalPage() {
       lastIndex.current = pos.index
       if (on('beeps')) beep(pos.segment.kind === 'work' ? 1046 : 660, 0.35)
       if (on('voice')) say(`${pos.segment.label}${pos.segment.round && on('rounds') ? `, round ${pos.segment.round}` : ''}`)
-      if (stage.current && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
+      if (stage.current && !prefersReducedMotion())
         gsap.fromTo(stage.current, { scale: 0.96 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.5)' })
     } else if (pos.left <= 3 && on('beeps')) beep(880)
     if (pos.segment.kind === 'work' && Math.round(pos.into) === Math.round(pos.segment.seconds / 2) && pos.segment.seconds >= 60 && on('voice')) say('Halfway')
@@ -151,7 +152,7 @@ export function IntervalPage() {
   // Flash the stage when a new segment starts, so the change is felt, not just read.
   const segIndex = pos?.index ?? -1
   useEffect(() => {
-    if (segIndex < 1 || !stage.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (segIndex < 1 || !stage.current || prefersReducedMotion()) return
     const tw = gsap.fromTo(stage.current, { scale: 0.97, boxShadow: '0 0 0 10px var(--seg)' }, { scale: 1, boxShadow: '0 0 0 0px var(--seg)', duration: 0.6, ease: 'elastic.out(1, 0.5)' })
     return () => void tw.progress(1)
   }, [segIndex])

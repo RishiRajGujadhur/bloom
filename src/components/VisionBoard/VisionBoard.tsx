@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { subOn } from '../../features/subFeatures'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
@@ -229,7 +230,7 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
   // Pin the board together when it opens: notes pop in one by one (GSAP).
   const popped = useRef(false)
   useEffect(() => {
-    if (!ready || popped.current || !area.current || !subOn('visionBoard', 'popIn') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!ready || popped.current || !area.current || !subOn('visionBoard', 'popIn') || prefersReducedMotion()) return
     popped.current = true
     const t = window.setTimeout(() => {
       const els = area.current?.querySelectorAll('.react-flow__node > *')

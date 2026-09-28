@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ArrowDownRight, ArrowUpRight, BarChart3, PiggyBank, Plus, Receipt, Sparkles, Trash2, Upload, Wallet } from 'lucide-react'
@@ -43,7 +44,7 @@ function Count({ minor, code }: { minor: number; code: string }) {
     const node = el.current
     if (!node) return
     const o = { v: 0 }
-    const tw = gsap.to(o, { v: minor, duration: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 1, ease: 'power2.out', onUpdate: () => void (node.textContent = formatMoney(Math.round(o.v), code)) })
+    const tw = gsap.to(o, { v: minor, duration: prefersReducedMotion() ? 0 : 1, ease: 'power2.out', onUpdate: () => void (node.textContent = formatMoney(Math.round(o.v), code)) })
     // Always land on the real value, even if animation frames are paused.
     const done = window.setTimeout(() => void (node.textContent = formatMoney(minor, code)), 1200)
     return () => {

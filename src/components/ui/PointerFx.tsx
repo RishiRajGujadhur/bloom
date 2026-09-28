@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
 import MouseFollower from 'mouse-follower'
@@ -82,7 +83,7 @@ export function cursorCss(shape: Shape, color: string, size: number) {
 }
 
 const canHover = () => typeof window !== 'undefined' && !!window.matchMedia?.('(hover: hover) and (pointer: fine)').matches
-const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => !!prefersReducedMotion()
 
 let registered = false
 

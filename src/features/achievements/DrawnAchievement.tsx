@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
@@ -54,7 +55,7 @@ function Drawing({ kind }: { kind: AchievementKind }) {
   useEffect(() => {
     const svg = host.current
     if (!svg) return
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     if (reduced) {
       setFilled(true)
       return

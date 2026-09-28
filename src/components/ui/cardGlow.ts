@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import gsap from 'gsap'
 import './cardGlow.css'
 import { pathLength } from '../../utils/svgLength'
@@ -9,7 +10,7 @@ import { pathLength } from '../../utils/svgLength'
  */
 const CARD = '.studio-card, .card, .en-unit-head, .avatar-option'
 export function installCardGlow() {
-  if (typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  if (typeof window === 'undefined' || prefersReducedMotion()) return
   let current: HTMLElement | null = null
   let setX: ((v: number) => void) | null = null
   let setY: ((v: number) => void) | null = null
@@ -51,7 +52,7 @@ export function installCardGlow() {
 
 /** Page titles sweep in (clip + letter-spacing) on every page change; no DOM rewriting, so React stays in charge. */
 export function installTitleReveal() {
-  if (typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  if (typeof window === 'undefined' || prefersReducedMotion()) return
   const run = () =>
     window.setTimeout(() => {
       const h = document.querySelector<HTMLElement>('main h1')
@@ -64,7 +65,7 @@ export function installTitleReveal() {
 
 /** Cards on a newly opened page rise in with a short stagger and their heading icons draw in, so every page enters the same way. */
 export function installCardEntrance() {
-  if (typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  if (typeof window === 'undefined' || prefersReducedMotion()) return
   const run = () =>
     window.setTimeout(() => {
       const cards = [...document.querySelectorAll<HTMLElement>('main :is(.studio-card, .card)')].filter((c) => c.getBoundingClientRect().top < window.innerHeight).slice(0, 14)

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import { createTimeline, type Timeline } from 'animejs'
 import type { Exercise, Joint, Pose } from './exercises'
@@ -146,7 +147,7 @@ export function ExerciseFigure({
   useEffect(() => {
     if (
       !animate ||
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      prefersReducedMotion()
     )
       return
     const [down, hold, up] = exercise.tempo.map((s) => Math.max(1, s * 1000))

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -10,7 +11,7 @@ export function Strider({ active, walk = false, color = '#e0703f' }: { active: b
   const svg = useRef<SVGSVGElement>(null)
   useEffect(() => {
     const el = svg.current
-    if (!el || !active || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || !active || prefersReducedMotion()) return
     const swing = walk ? 22 : 40
     const d = walk ? 0.5 : 0.28
     const q = (s: string) => el.querySelector(s)

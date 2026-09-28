@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import * as SunCalc from 'suncalc'
@@ -20,7 +21,7 @@ import './joys.css'
  *   Postcard (a shareable SVG card with a QR code from qrcode).
  */
 const on = (id: string) => subOn('littleJoys', id)
-const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => prefersReducedMotion()
 const JOYS_KEY = 'bloom-joys-v1'
 type JoysStore = { water: Record<string, number>; goal: number; kind: Record<string, boolean>; lat: number; lon: number; moodHex: string }
 // Until the user shares a location, guess one from the time zone so sunrise/sunset land near local time.

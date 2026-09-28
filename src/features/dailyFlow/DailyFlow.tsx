@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ArrowRight, Moon, Sparkles, Sunrise } from 'lucide-react'
@@ -88,7 +89,7 @@ export function DailyFlowCard({
   const next = nextStep(steps)
   const list = useRef<HTMLOListElement>(null)
   useLayoutEffect(() => {
-    if (!list.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!list.current || prefersReducedMotion()) return
     const tween = gsap.from(list.current.children, { x: -10, opacity: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out' })
     return () => {
       tween.revert()
@@ -173,7 +174,7 @@ export function NextStep({
 }) {
   const card = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    if (!card.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!card.current || prefersReducedMotion()) return
     const tween = gsap.from(card.current, { y: 12, opacity: 0, duration: 0.45, ease: 'back.out(1.8)' })
     return () => {
       tween.revert()

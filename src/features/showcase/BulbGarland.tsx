@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { retention, type Epiphany } from '../epiphany/epiphanyModel'
@@ -22,7 +23,7 @@ export function BulbGarland({ list }: { list: Epiphany[] }) {
   usePageActions(shown.length ? [{ id: 'garland-flip', label: flipped.size ? 'Turn all bulbs back' : 'Flip every bulb', icon: '💡', run: () => setFlipped(flipped.size ? new Set() : new Set(shown.map((e) => e.id))) }] : [])
   useLayoutEffect(() => {
     const el = root.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.from('.bg-bulb', { y: -80, opacity: 0, stagger: 0.06, duration: 0.8, ease: 'elastic.out(1, 0.5)' })
       gsap.utils.toArray<HTMLElement>('.bg-bulb').forEach((b, i) =>
@@ -36,7 +37,7 @@ export function BulbGarland({ list }: { list: Epiphany[] }) {
     const next = new Set(flipped)
     if (next.has(id)) next.delete(id)
     else next.add(id)
-    if (card && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) gsap.fromTo(card, { rotateY: 90 }, { rotateY: 0, duration: 0.35, ease: 'power2.out' })
+    if (card && !prefersReducedMotion()) gsap.fromTo(card, { rotateY: 90 }, { rotateY: 0, duration: 0.35, ease: 'power2.out' })
     setFlipped(next)
   }
   if (!subOn('epiphanies', 'garland') || !shown.length) return null

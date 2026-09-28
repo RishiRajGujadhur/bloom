@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../utils/motion'
 import { launchImpact } from './impact/ImpactLayer'
 import { taskWeight } from './impact/impactModel'
 import { burst } from '../components/ui/celebrate'
@@ -445,7 +446,7 @@ export function TodoPage({ data, setData }: Props) {
                         : undefined
                   }
                   onClick={(event) => {
-                    if (waterDo && !task.done && !loadSettings().reducedMotion && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    if (waterDo && !task.done && !loadSettings().reducedMotion && !prefersReducedMotion()) {
                       const source = event.currentTarget
                       const rect = source.getBoundingClientRect()
                       const bubble = source.cloneNode(true) as HTMLElement

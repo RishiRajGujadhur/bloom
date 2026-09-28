@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import type { AppData } from '../../model'
 import { dayKey } from '../../dates'
@@ -15,7 +16,7 @@ import './impact.css'
 export type ImpactRequest = { taskId: string; title: string; rect: DOMRect; weight: number }
 const EVENT = 'bloom:impact'
 export function launchImpact(request: ImpactRequest) {
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false
+  if (prefersReducedMotion()) return false
   window.dispatchEvent(new CustomEvent<ImpactRequest>(EVENT, { detail: request }))
   return true
 }

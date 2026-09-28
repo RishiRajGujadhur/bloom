@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -14,7 +15,7 @@ export const CardPiles = forwardRef<PilesHandle, { due: number; learning: number
   useImperativeHandle(ref, () => ({
     fly(to) {
       const el = svg.current?.querySelector<SVGRectElement>('.cp-fly')
-      if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+      if (!el || prefersReducedMotion()) return
       gsap.timeline()
         .set(el, { opacity: 1, x: 0, y: 0, rotate: 0 })
         .to(el, { x: piles[to] - 50, y: -30, rotate: to === 'known' ? 20 : -10, duration: 0.25, ease: 'power2.out' })

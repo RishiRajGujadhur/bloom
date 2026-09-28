@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Archive, FileDown, FlaskConical, Loader2 } from 'lucide-react'
@@ -38,7 +39,7 @@ const cellColor = (r: number | null) => {
 function Heatmap({ m, onPick, pick }: { m: ReturnType<typeof matrix>; onPick: (a: MetricId, b: MetricId) => void; pick: [MetricId, MetricId] }) {
   const root = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const t = gsap.from(root.current.querySelectorAll('.lab-cell'), { scale: 0.3, opacity: 0, duration: 0.45, stagger: { grid: [metrics.length, metrics.length], from: 'start', amount: 0.8 }, ease: 'back.out(2)' })
     return () => void t.progress(1).kill()
   }, [])

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import gsap from 'gsap'
 
 /**
@@ -5,7 +6,7 @@ import gsap from 'gsap'
  * floats up (GSAP). Works on any positioned container.
  */
 export function ripple(host: HTMLElement | null, e: { clientX: number; clientY: number } | null, label = '', color = '#ffd54f', big = false) {
-  if (!host || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  if (!host || prefersReducedMotion()) return
   const r = host.getBoundingClientRect()
   const x = e ? e.clientX - r.left : r.width / 2
   const y = e ? e.clientY - r.top : r.height / 2

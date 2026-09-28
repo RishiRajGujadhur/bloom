@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { subOn } from '../../features/subFeatures'
 import { useEffect, useRef } from 'react'
 import { driver } from 'driver.js'
@@ -586,7 +587,7 @@ export function FeatureGuide({ page }: { page: NavKey }) {
         typeof item.element === 'string' &&
         document.querySelector(item.element),
     )
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     let talkTimer: ReturnType<typeof setTimeout> | undefined
     tour.current = driver({
       animate: !reduced,

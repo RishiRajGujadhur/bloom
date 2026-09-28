@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
@@ -17,7 +18,7 @@ export function SummitTrail({ climbers, onPick }: { climbers: Climber[]; onPick:
     const svg = root.current
     // MotionPath needs real SVG geometry (absent in test DOMs).
     if (!svg || typeof svg.getCTM !== 'function') return
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     const tweens = climbers.map((c) =>
       gsap.fromTo(
         svg.querySelector(`[data-climber="${c.id}"]`),

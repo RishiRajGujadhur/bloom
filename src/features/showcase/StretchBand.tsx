@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -10,7 +11,7 @@ export function StretchBand({ playing, color = '#4db6ac' }: { playing: boolean; 
   const path = useRef<SVGPathElement>(null)
   useEffect(() => {
     const el = path.current
-    if (!el || !playing || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || !playing || prefersReducedMotion()) return
     const tl = gsap.timeline({ repeat: -1, yoyo: true })
     tl.to(el, { attr: { d: 'M10 20 Q150 34 290 20' }, duration: 4, ease: 'sine.inOut' })
     return () => {

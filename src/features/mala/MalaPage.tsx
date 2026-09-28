@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import Zdog from 'zdog'
 import { History, Palette, Play, Plus, Pause, Sparkles } from 'lucide-react'
@@ -53,7 +54,7 @@ function MalaRing({ count, theme }: { count: number; theme: ThemeId }) {
     new Zdog.Cone({ addTo: ring, translate: { x: 0, z: R + 30, y: 0 }, diameter: 14, length: 24, stroke: 2, color: t.thread, fill: true, rotate: { x: -Zdog.TAU / 4 } })
     state.current = { illo, beads, spin: 0, target: 0 }
     let raf = 0
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     const tick = () => {
       const s = state.current!
       s.spin += (s.target - s.spin) * (reduced ? 1 : 0.12)

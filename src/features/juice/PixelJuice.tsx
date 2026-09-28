@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
 import confetti from 'canvas-confetti'
@@ -8,7 +9,7 @@ import './juice.css'
 export const JUICE_EVENT = 'bloom:juice'
 export type JuiceDetail = { x: number; y: number; big?: boolean; label?: string; seed?: number }
 
-const reduced = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => typeof window !== 'undefined' && prefersReducedMotion()
 
 /** Fire from anywhere: a habit tick, a finished quest… */
 export function juice(detail: JuiceDetail) {

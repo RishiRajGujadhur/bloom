@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import Matter from 'matter-js'
 import type { MoodEntry } from '../wellbeing/store'
@@ -43,7 +44,7 @@ export function MarbleJar({ entries }: { entries: MoodEntry[] }) {
       Matter.Bodies.rectangle(28, H / 2 + 20, 16, H - 40, { ...wall, angle: -0.06 }),
       Matter.Bodies.rectangle(W - 28, H / 2 + 20, 16, H - 40, { ...wall, angle: 0.06 }),
     ])
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     const marbles: { body: Matter.Body; entry: MoodEntry }[] = []
     const drop = (entry: MoodEntry, i: number) => {
       const body = Matter.Bodies.circle(W / 2 + (Math.random() - 0.5) * 80, reduced ? H - 40 - Math.floor(i / 8) * 18 : -20 - i * 4, 9, { restitution: 0.35, friction: 0.05 })

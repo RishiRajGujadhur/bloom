@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Transformer } from 'markmap-lib'
 import { Markmap } from 'markmap-view'
@@ -59,7 +60,7 @@ export function MindMapPage() {
     if (revealed.current === map.id) return
     revealed.current = map.id
     const nodes = wrap.current?.querySelectorAll('g.markmap-node')
-    if (!nodes?.length || !subOn('mindMaps', 'grow') || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!nodes?.length || !subOn('mindMaps', 'grow') || prefersReducedMotion()) return
     gsap.from(nodes, { opacity: 0, scale: 0.4, transformOrigin: '0% 50%', stagger: 0.04, duration: 0.45, ease: 'back.out(2)' })
   }
   const view = useRef<Markmap | null>(null)

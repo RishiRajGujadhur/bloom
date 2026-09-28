@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import Particles, { ParticlesProvider } from '@tsparticles/react'
@@ -54,7 +55,7 @@ function bell() {
 function Halo({ running }: { running: boolean }) {
   const el = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    if (!el.current || !running || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el.current || !running || prefersReducedMotion()) return
     const t = gsap.to(el.current, { scale: 1.25, opacity: 0.9, duration: 5, repeat: -1, yoyo: true, ease: 'sine.inOut' })
     return () => void t.kill()
   }, [running])

@@ -7,7 +7,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 ## Foundation
 
 1. Persistent Reduce motion switch in Settings. **Implemented in this pass.**
-2. Honor device motion preference in every GSAP scene.
+2. Honor the app and device motion preferences in every GSAP scene. **In progress: 90 source files connected to the shared preference; remaining scenes need an audit.**
 3. Pause offscreen and hidden-tab animation work.
 4. Prefer SVG shapes and paths for distinctive page art.
 5. Give every page a purposeful, lightweight motion signature.
@@ -71,6 +71,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Added persistent Reduce motion option and connected shared motion systems.
 - 2026-09-29: Captured 67 navigation pages at desktop and phone widths (134 screenshots). Automated checks found no page errors or document-level horizontal overflow. Visual spot checks covered Overview, To-dos, and mobile Settings; deeper visual review remains open.
 - 2026-09-29: Added WaterDo bubble completion mode for tasks and verified task completion in a browser.
+- 2026-09-29: Connected 90 clean source files to one motion preference check. Verified setting persistence across pages and three utility cases. Two files with concurrent edits remain untouched, and GSAP scenes without any preference guard still need review.
 
 ## Working order
 

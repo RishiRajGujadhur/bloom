@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import gsap from 'gsap'
 import { Moon, Pause, Play, Save, SlidersHorizontal, Sparkles, Trash2 } from 'lucide-react'
@@ -17,7 +18,7 @@ type Store = { mix: Mix; saved: { id: string; name: string; mix: Mix }[]; sleep:
 function Scene({ mix }: { mix: Mix }) {
   const root = useRef<SVGSVGElement>(null)
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.utils.toArray<SVGLineElement>('.mx-drop').forEach((d) => gsap.fromTo(d, { y: -80 }, { y: 640, duration: gsap.utils.random(0.6, 1.1), repeat: -1, delay: gsap.utils.random(0, 1), ease: 'none' }))
       gsap.to('.mx-wave', { x: -200, duration: 6, repeat: -1, yoyo: true, ease: 'sine.inOut', stagger: 1.2 })

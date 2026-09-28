@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import chroma from 'chroma-js'
@@ -42,7 +43,7 @@ export function LivingSeedling({ data }: { data: AppData }) {
   const root = useRef<SVGSVGElement>(null)
   useLayoutEffect(() => {
     const el = root.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const tl = gsap.timeline()
     tl.from(el.querySelector('.ls-stem'), { scaleY: 0, transformOrigin: '50% 100%', duration: 0.8, ease: 'power2.out' })
       .from(el.querySelectorAll('.ls-leaf'), { scale: 0, transformOrigin: '50% 100%', stagger: 0.06, duration: 0.4, ease: 'back.out(2)' }, '-=0.3')

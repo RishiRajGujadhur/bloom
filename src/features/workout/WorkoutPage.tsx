@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Chart as ChartJS, BarElement, CategoryScale, Filler, LinearScale, LineElement, PointElement, Tooltip } from 'chart.js'
@@ -37,7 +38,7 @@ function Barbell({ perSide }: { perSide: number[] }) {
   const root = useRef<SVGGElement>(null)
   const key = perSide.join(',')
   useLayoutEffect(() => {
-    if (!root.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!root.current || prefersReducedMotion()) return
     const t = gsap.fromTo(root.current.querySelectorAll('.wo-plate'), { scaleY: 0.2, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.45, stagger: 0.05, ease: 'back.out(2)', transformOrigin: '50% 50%' })
     return () => void t.progress(1).kill()
   }, [key])

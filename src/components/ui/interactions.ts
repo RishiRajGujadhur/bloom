@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 /**
  * App-wide micro-interactions, delegated from the document so every action
  * element gets them without per-component wiring:
@@ -13,7 +14,7 @@ const ACTIONS =
 
 export function installInteractions(root: Document = document) {
   const reduced = () =>
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+    prefersReducedMotion() ?? false
   const outTimers = new WeakMap<Element, ReturnType<typeof setTimeout>>()
 
   const onOver = (event: PointerEvent) => {

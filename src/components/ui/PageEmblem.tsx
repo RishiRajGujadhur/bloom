@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef, type ComponentType } from 'react'
 import gsap from 'gsap'
 import {
@@ -98,7 +99,7 @@ export function PageEmblem({ page }: { page: string }) {
   const e = emblems[page] ?? fallback
   useLayoutEffect(() => {
     const svg = host.current?.querySelector('svg')
-    if (!svg || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || !subOn('pointerFx', 'emblems', { ignoreParent: true })) return
+    if (!svg || prefersReducedMotion() || !subOn('pointerFx', 'emblems', { ignoreParent: true })) return
     const parts = svg.querySelectorAll<SVGGeometryElement>('path, circle, rect, line, polyline, polygon, ellipse')
     const tl = gsap.timeline()
     parts.forEach((p) => {

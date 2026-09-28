@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import {
   useCallback,
   useEffect,
@@ -156,7 +157,7 @@ export const buildings: Building[] = [
 
 const W = 300
 const reduced = () =>
-  !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  !!prefersReducedMotion()
 
 const visitedRecently = () => new Set<string>(readRecentPages())
 

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -16,7 +17,7 @@ export function CapacityRing({ capacity, booked, deep, label }: { capacity: numb
   const deepShare = capacity ? Math.min(1, deep / capacity) : 0
   const over = booked > capacity && capacity > 0
   useLayoutEffect(() => {
-    const d = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 0.9
+    const d = prefersReducedMotion() ? 0 : 0.9
     const tl = gsap.timeline()
     tl.to(outer.current, { strokeDashoffset: C * (1 - used), duration: d, ease: 'power3.out' }).to(inner.current, { strokeDashoffset: c * (1 - deepShare), duration: d, ease: 'power3.out' }, 0)
     return () => void tl.progress(1)

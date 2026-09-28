@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import gsap from 'gsap'
 import './funLayer.css'
 import { pathLength } from '../../utils/svgLength'
@@ -9,7 +10,7 @@ import { pathLength } from '../../utils/svgLength'
  *   - a hand-drawn squiggle sweeps across the top on every page change
  */
 const NS = 'http://www.w3.org/2000/svg'
-const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => prefersReducedMotion()
 const colors = ['#58cc02', '#ffc800', '#1cb0f6', '#ff4b4b', '#ce82ff', '#ff9600']
 
 function svgEl<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number>) {

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { subOn } from '../subFeatures'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
@@ -127,7 +128,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
   const [zoomed, setZoomed] = useState(false)
   const stage = useRef<HTMLDivElement>(null)
   const reduced =
-    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' && prefersReducedMotion()
 
   const goTo = (index: number) => {
     const target = angleForIndex(((index % days.length) + days.length) % days.length, days.length, spin.angle)

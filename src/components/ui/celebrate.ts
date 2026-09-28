@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { loadSettings } from '../../SettingsPage'
 import { subOn } from '../../features/subFeatures'
 
@@ -27,7 +28,7 @@ function pixelShapes(confetti: Confetti) {
 
 const enabled = () => {
   if (typeof window === 'undefined') return false
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false
+  if (prefersReducedMotion()) return false
   try {
     return loadSettings().features.celebrations !== false
   } catch {

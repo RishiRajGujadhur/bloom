@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import rough from 'roughjs'
@@ -18,7 +19,7 @@ export function InkFlourish({ seed, color = '#d9653b' }: { seed: number; color?:
     const line = rc.path('M6 22 C 80 8, 160 30, 240 16 S 380 10, 420 20', { stroke: color, strokeWidth: 2.4, roughness: 1.4, bowing: 2, seed })
     const dot = rc.circle(432, 20, 7, { fill: color, fillStyle: 'solid', stroke: color, seed })
     el.append(line, dot)
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (prefersReducedMotion()) return
     const paths = el.querySelectorAll('path')
     const tl = gsap.timeline()
     paths.forEach((p) => {

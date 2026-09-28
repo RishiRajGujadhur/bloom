@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { annotate } from 'rough-notation'
@@ -65,13 +66,13 @@ function Belt({ reps }: { reps: number }) {
   const label = useRef<HTMLElement>(null)
   useLayoutEffect(() => {
     const el = knot.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const tw = gsap.from(el.querySelectorAll('path'), { scaleY: 0, transformOrigin: '50% 0%', duration: 0.7, stagger: 0.12, ease: 'back.out(2)' })
     return () => void tw.revert()
   }, [belt.id])
   useEffect(() => {
     if (!label.current || !on('beltNotation')) return
-    const a = annotate(label.current, { type: 'box', color: belt.id === 'white' ? '#999' : belt.color, padding: 4, animate: !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches })
+    const a = annotate(label.current, { type: 'box', color: belt.id === 'white' ? '#999' : belt.color, padding: 4, animate: !prefersReducedMotion() })
     a.show()
     return () => a.remove()
   }, [belt.id, belt.color])

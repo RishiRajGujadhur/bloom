@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Coffee, LocateFixed, MoonStar, Sun, SunMedium, Sunrise } from 'lucide-react'
@@ -22,7 +23,7 @@ function SunArc({ frac, alt, sunrise, sunset }: { frac: number | null; alt: numb
   const rays = useRef<SVGGElement>(null)
   const clouds = useRef<SVGGElement>(null)
   useLayoutEffect(() => {
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     const tl = gsap.timeline()
     // The sun rises from the horizon to where it is now, drawing the path it took.
     if (sun.current) tl.fromTo(sun.current, { x: 60, y: 260 }, { x, y, duration: reduced ? 0 : 1.6, ease: 'power2.out' })

@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import gsap from 'gsap'
@@ -20,7 +21,7 @@ const palette: Record<string, [string, string]> = {
   gamified: ['#63c132', '#3f9a1a'],
 }
 const reduced = () =>
-  !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  !!prefersReducedMotion()
 
 type Book = { mode: JournalMode; pages: JournalEntry[] }
 

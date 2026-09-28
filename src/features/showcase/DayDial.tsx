@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './showcase.css'
@@ -23,7 +24,7 @@ export function DayDial({ items, onPick, now = new Date() }: { items: DialItem[]
   const next = [...items].filter((i) => !i.done && toMin(i.time) >= nowMin - 30).sort((a, b) => toMin(a.time) - toMin(b.time))[0]
   useLayoutEffect(() => {
     if (!hand.current || !root.current) return
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const reduced = prefersReducedMotion()
     const tl = gsap.timeline()
     tl.fromTo(hand.current, { rotate: 0 }, { rotate: (nowMin / 1440) * 360, svgOrigin: '100 100', duration: reduced ? 0 : 1.4, ease: 'power3.out' })
     tl.from(root.current.querySelectorAll('.dd-item'), { scale: 0, transformOrigin: 'center', stagger: 0.08, duration: reduced ? 0 : 0.4, ease: 'back.out(3)' }, 0.3)

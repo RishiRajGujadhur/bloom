@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { setQuiz } from '../../companion/quizContext'
@@ -22,10 +23,10 @@ function FlipCard({ card, flipped, reversed, onFlip }: { card: Card; flipped: bo
   const el = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     if (!el.current) return
-    gsap.to(el.current, { rotationY: flipped ? 180 : 0, duration: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 0.6, ease: 'back.out(1.4)' })
+    gsap.to(el.current, { rotationY: flipped ? 180 : 0, duration: prefersReducedMotion() ? 0 : 0.6, ease: 'back.out(1.4)' })
   }, [flipped])
   useLayoutEffect(() => {
-    if (!el.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el.current || prefersReducedMotion()) return
     gsap.fromTo(el.current.parentElement, { x: 80, opacity: 0, rotation: 4 }, { x: 0, opacity: 1, rotation: 0, duration: 0.5, ease: 'power3.out' })
   }, [card.id])
   const cloze = on('cloze') && hasCloze(card.front)

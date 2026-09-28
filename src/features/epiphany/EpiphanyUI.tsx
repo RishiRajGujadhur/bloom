@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { Brain, Eye, Lightbulb, Plus, Sparkles, Trash2 } from 'lucide-react'
@@ -23,7 +24,7 @@ export function ForgettingCurve({ item, width = 260, height = 70 }: { item: Pick
   const reviewX = 8 + Math.min(1, (item.interval || 1) / days) * (width - 16)
   useLayoutEffect(() => {
     const el = path.current
-    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (!el || prefersReducedMotion()) return
     const length = pathLength(el, 300)
     const tween = gsap.fromTo(el, { strokeDasharray: length, strokeDashoffset: length }, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.out' })
     return () => {
