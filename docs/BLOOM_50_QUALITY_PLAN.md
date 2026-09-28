@@ -8,7 +8,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 
 1. Persistent Reduce motion switch in Settings. **Implemented in this pass.**
 2. Honor the app and device motion preferences in every GSAP scene. **In progress: 90 source files connected to the shared preference; remaining scenes need an audit.**
-3. Pause offscreen and hidden-tab animation work.
+3. Pause hidden-tab GSAP work. **Implemented.** Pause offscreen scenes individually in a later pass.
 4. Prefer SVG shapes and paths for distinctive page art.
 5. Give every page a purposeful, lightweight motion signature.
 6. Keep animations tied to feedback and meaning.
@@ -74,6 +74,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Connected 90 clean source files to one motion preference check. Verified setting persistence across pages and three utility cases. Two files with concurrent edits remain untouched, and GSAP scenes without any preference guard still need review.
 - 2026-09-29: Added optional preparation steps to saved recipes and a cook-along view with SVG progress and a kitchen timer. Verified desktop and mobile flows in a browser.
 - 2026-09-29: Corrected the screenshot audit to detect Bloom's own error screen and pages stuck loading. Re-ran all 134 captures on a fresh local server; no page errors or document-level overflow were reported.
+- 2026-09-29: Paused the global GSAP timeline while the tab is hidden, restoring its prior state when visible. TypeScript and lifecycle tests passed.
 
 ## New feature areas
 

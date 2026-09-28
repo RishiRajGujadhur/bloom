@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from './utils/motion'
+import { pauseGsapWhenHidden } from './utils/gsapVisibility'
 import { subOn } from './features/subFeatures'
 import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
@@ -349,6 +350,7 @@ function TextForm({
   )
 }
 function App() {
+  useEffect(pauseGsapWhenHidden, [])
   const { t } = useTranslation(undefined, { i18n })
   const { data, setData, error, blocked, resumeSaving } = useCoach()
   useFocusLifecycle(data, setData)
