@@ -78,11 +78,12 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Replaced compact page heading text with the existing animated SVG emblems. Page names remain as semantic headings and appear on hover or keyboard focus. Checked desktop and mobile screenshots.
 - 2026-09-29: Added visible previous/next controls and arrow-key scrolling to the related-feature rail. Verified on a phone-sized viewport.
 - 2026-09-29: Added Rhythm lab to Focus sounds: a metronome, SVG beat guide, keyboard tapping, early/late feedback, and a saved best score. Verified timing logic and desktop/mobile flows.
+- 2026-09-29: Added Pitch lab to Focus sounds: ten higher/lower listening questions, two difficulty levels, note-name explanations, SVG staff feedback, and a saved best score. Corrected the Sounds studio width on phones and verified desktop/mobile flows.
 
 ## New feature areas
 
 - Cooking: deepen cook-along with technique lessons and safe, clear guidance. The first cook-along version is complete.
-- Music: Rhythm lab is available under Focus sounds. Add pitch practice and short guided sessions next.
+- Music: Rhythm lab and Pitch lab are available under Focus sounds. Add short guided sessions next.
 - Drawing: add guided exercises with a simple canvas and replayable strokes.
 - Health tracking: connect existing sleep, movement, food, mood, and focus data in understandable trends.
 
