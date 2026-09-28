@@ -888,6 +888,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "palette", title: "Palette", description: "Copyable colours from your mood." },
     { id: "download", title: "Download postcard", description: "Save your card as SVG." },
   ],
+  codeLearning: [
+    { id: "quiz", title: "Code quiz", description: "Predict the output and concept questions." },
+    { id: "challenges", title: "Challenges", description: "Solve problems against hidden tests." },
+    { id: "cheatsheets", title: "Cheat sheets", description: "Searchable syntax reminders." },
+    { id: "certificate", title: "Certificate", description: "An animated certificate when you finish." },
+    { id: "hints", title: "Hints", description: "A nudge when you are stuck." },
+    { id: "unstuck", title: "Get unstuck", description: "Show the solution." },
+    { id: "drafts", title: "Saved drafts", description: "Your code is kept per lesson." },
+    { id: "syntax", title: "Friendly syntax errors", description: "Line numbers and plain messages." },
+    { id: "sandbox", title: "Safe sandbox", description: "Code runs in a worker with a time limit." },
+    { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom’s chat for a hint." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Code2 as Code2F_codeLearning } from 'lucide-react'
 import { Gift as GiftF_littleJoys } from 'lucide-react'
 import { Languages as LanguagesF_englishLearning } from 'lucide-react'
 import { Wallet as WalletF_moneyTracker } from 'lucide-react'
@@ -145,6 +146,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  codeLearning: Code2F_codeLearning,
   littleJoys: GiftF_littleJoys,
   englishLearning: LanguagesF_englishLearning,
   moneyTracker: WalletF_moneyTracker,
@@ -234,6 +236,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  codeLearning: boolean
   littleJoys: boolean
   englishLearning: boolean
   moneyTracker: boolean
@@ -332,6 +335,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    codeLearning: true,
     littleJoys: true,
     englishLearning: true,
     moneyTracker: true,
@@ -422,6 +426,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'codeLearning',
   'littleJoys',
   'englishLearning',
   'moneyTracker',

@@ -17,6 +17,8 @@ A personal React 19 health-coaching dashboard with a Habitica-inspired purple pa
 | ![English lesson, Bloom Light theme](docs/screenshots/english-lesson-light.png) | ![English lesson, Matrix theme](docs/screenshots/english-lesson-matrix.png) |
 | ![English story mode, Bloom Light theme](docs/screenshots/english-story-light.png) | ![English story mode, Matrix theme](docs/screenshots/english-story-matrix.png) |
 | ![English league, shop and badges, Bloom Light theme](docs/screenshots/english-league-light.png) | ![English league, shop and badges, Matrix theme](docs/screenshots/english-league-matrix.png) |
+| ![Learn to code, Bloom Light theme](docs/screenshots/code-light.png) | ![Learn to code, Matrix theme](docs/screenshots/code-matrix.png) |
+| ![Code quiz, Bloom Light theme](docs/screenshots/code-quiz-light.png) | ![Code quiz, Matrix theme](docs/screenshots/code-quiz-matrix.png) |
 | ![English speak lab, Bloom Light theme](docs/screenshots/english-speak-light.png) | ![English speak lab, Matrix theme](docs/screenshots/english-speak-matrix.png) |
 | ![English writing coach, Bloom Light theme](docs/screenshots/english-write-light.png) | ![English writing coach, Matrix theme](docs/screenshots/english-write-matrix.png) |
 | ![Money charts, Bloom Light theme](docs/screenshots/money-charts-light.png) | ![Money charts, Matrix theme](docs/screenshots/money-charts-matrix.png) |
@@ -41,6 +43,7 @@ To regenerate them, start the dev server (`npm run dev`) and run `node scripts/s
 
 - **Bloom, your companion:** nine switchable avatars (Bloom, Robot, Mood orb, Sparky, Beacon, Tinker, Pixel Bloom, Globe and more), animated with GSAP and SVG. Bloom acts out each page (lifting a dumbbell on Exercise, burning a note on Let it go…). In the chat you can type commands: log expenses, add to-dos, check off habits, log mood and gratitude, and get quiz hints.
 - **Bloom English:** a Duolingo-style course with a lesson path, XP, streaks, hearts, leagues, quests, stories, speaking and pronunciation, a writing coach, themed weather scenes for every unit, and **Story mode**: a tournament side quest with a Remotion intro video.
+- **Learn to code:** a Codecademy-style JavaScript course with a CodeMirror editor, a sandboxed runner (Web Worker with a time limit), instant checklists (console output, probes and acorn syntax-tree checks), hints, Get unstuck, a quiz, challenges, searchable cheat sheets and an animated certificate.
 - **Money:** spending in any currency, with budgets, charts (circle packing, candlesticks, calendar heatmap, glowing radar), a plan tab and CSV import.
 - **Little Joys:** hydration, sky (moon phase and the sun's arc), a kindness deck, mood colours and a QR postcard.
 - **Themes:** Bloom Light and Dark, **Matrix** (phosphor green, CRT scanlines, glyph rain), five **Glow** gradient themes, and more. Cards light up under the pointer.

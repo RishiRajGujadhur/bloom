@@ -20,6 +20,8 @@ const pages = [
   ['english', 'english-lesson', [click('.en-node.is-current'), click('.en-pic')]],
   ['english', 'english-story', [tab('Story'), click('.st-video-skip')]],
   ['english', 'english-league', [tab('League')]],
+  ['code', 'code', [click('.cd-chip:nth-child(1)')]],
+  ['code', 'code-quiz', [tab('Quiz'), click('.cd-opt')]],
   ['english', 'english-speak', [tab('Speak')]],
   ['english', 'english-write', [tab('Write')]],
   ['money', 'money-charts', [tab('Charts'), async (page) => page.waitForTimeout(2500)]],

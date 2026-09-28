@@ -165,6 +165,7 @@ const captions: Record<NavKey, string> = {
   energy: 'Debug your week.',
   lab: 'What moves together.',
   taichi: 'Root down. Breathe low.',
+  'code': "Write real JavaScript, one small step at a time.",
   'joys': "Small things, done with delight.",
   'english': "A little English every day.",
   'money': "Know where it goes.",

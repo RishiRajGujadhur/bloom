@@ -321,3 +321,10 @@ html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) h1 {
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+
+/* Page-bar link chips scroll sideways; fade the edge so a clipped chip reads as "more this way". */
+.studio-head-slot .link-rail {
+  -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, #000 88%, transparent);
+  padding-right: 18px;
+}

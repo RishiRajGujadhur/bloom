@@ -14,6 +14,7 @@ export const pageActs: Record<string, Act> = {
   exercises: 'lift', workouts: 'lift', body: 'lift', intervals: 'timer',
   release: 'burn',
   english: 'write',
+  code: 'think',
   joys: 'hearts',
   daybook: 'write', journal: 'write', ink: 'write', epiphanies: 'think', voice: 'music',
   sleep: 'sleep',

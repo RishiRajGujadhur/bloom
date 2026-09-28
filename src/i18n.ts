@@ -453,6 +453,10 @@ const common = {
         title: "Little Joys",
         description: "Hydration glass, moon and sun sky, a daily kindness card, breathing mood colours and a shareable postcard.",
       },
+      codeLearning: {
+        title: "Learn to code",
+        description: "A Codecademy-style JavaScript course: an in-browser editor, instant checks, quizzes, challenges, cheat sheets and a certificate.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1558,6 +1562,10 @@ export const resources = {
           littleJoys: {
             title: "Petites joies",
             description: "Hydratation, ciel lune et soleil, carte de gentillesse, couleurs d’humeur et carte postale.",
+          },
+          codeLearning: {
+            title: "Apprendre à coder",
+            description: "Un cours JavaScript façon Codecademy : éditeur dans le navigateur, vérifications instantanées, quiz, défis, aide-mémoire et certificat.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
