@@ -876,6 +876,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "badges", title: "Achievements", description: "Badges for milestones." },
     { id: "charts", title: "Progress chart", description: "XP per day." },
   ],
+  littleJoys: [
+    { id: "hydration", title: "Hydration", description: "A glass that fills as you drink." },
+    { id: "sky", title: "Sky", description: "Moon phase and the sun's path today." },
+    { id: "kindness", title: "Kindness deck", description: "One small kind act a day." },
+    { id: "moodColours", title: "Mood colours", description: "Breathing colour blobs for your mood." },
+    { id: "postcard", title: "Postcard", description: "A shareable card with a QR code." },
+    { id: "weekWater", title: "Week of water", description: "Seven-day hydration bars." },
+    { id: "goldenHour", title: "Golden hour", description: "When the light is loveliest." },
+    { id: "kindStreak", title: "Kindness streak", description: "Days in a row of kindness." },
+    { id: "palette", title: "Palette", description: "Copyable colours from your mood." },
+    { id: "download", title: "Download postcard", description: "Save your card as SVG." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

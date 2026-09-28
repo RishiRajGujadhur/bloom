@@ -449,6 +449,10 @@ const common = {
         title: "Learn English",
         description: "A Duolingo-style English course: a lesson path, XP, streaks, hearts, leagues, quests, stories, speaking, pronunciation and a writing coach.",
       },
+      littleJoys: {
+        title: "Little Joys",
+        description: "Hydration glass, moon and sun sky, a daily kindness card, breathing mood colours and a shareable postcard.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1550,6 +1554,10 @@ export const resources = {
           englishLearning: {
             title: "Apprendre l’anglais",
             description: "Un cours d’anglais façon Duolingo : parcours de leçons, XP, séries, cœurs, ligues, quêtes, histoires, prononciation et coach d’écriture.",
+          },
+          littleJoys: {
+            title: "Petites joies",
+            description: "Hydratation, ciel lune et soleil, carte de gentillesse, couleurs d’humeur et carte postale.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

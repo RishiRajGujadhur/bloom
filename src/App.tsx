@@ -232,6 +232,9 @@ const MoneyPage = lazy(() =>
 const EnglishPage = lazy(() =>
   import('./features/english/EnglishPage').then((m) => ({ default: m.EnglishPage })),
 )
+const JoysPage = lazy(() =>
+  import('./features/joys/JoysPage').then((m) => ({ default: m.JoysPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -764,6 +767,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'joys' && !settings.features.littleJoys) ||
             (active === 'english' && !settings.features.englishLearning) ||
             (active === 'money' && !settings.features.moneyTracker) ||
             (active === 'street' && !settings.features.bloomStreet) ||
@@ -988,6 +992,10 @@ function App() {
             ) : active === 'english' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <EnglishPage data={data} setData={setData} today={today} onNavigate={jump} />
+              </Suspense>
+            ) : active === 'joys' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <JoysPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

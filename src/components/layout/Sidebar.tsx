@@ -37,6 +37,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Gift as GiftF_littleJoys } from 'lucide-react'
 import { Languages as LanguagesF_englishLearning } from 'lucide-react'
 import { Wallet as WalletF_moneyTracker } from 'lucide-react'
 import { Store as StoreF_bloomStreet } from 'lucide-react'
@@ -112,6 +113,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'joys'
   | 'english'
   | 'money'
   | 'street'
@@ -158,7 +160,7 @@ export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
 
 export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
-  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap', 'money', 'english'] },
+  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap', 'money', 'english', 'joys'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
   { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps', 'pointer', 'street'] },
@@ -425,6 +427,7 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'joys', title: "Little Joys", Icon: GiftF_littleJoys, requires: 'littleJoys' },
     { key: 'english', title: "English", Icon: LanguagesF_englishLearning, requires: 'englishLearning' },
     { key: 'money', title: "Money", Icon: WalletF_moneyTracker, requires: 'moneyTracker' },
     { key: 'street', title: "Bloom Street", Icon: StoreF_bloomStreet, requires: 'bloomStreet' },
