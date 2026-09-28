@@ -149,6 +149,7 @@
 }
 
 .dojo-belt strong {
+  margin-bottom: 8px; /* room for the hand-drawn box around the belt name */
   justify-self: start;
   width: fit-content;
 }

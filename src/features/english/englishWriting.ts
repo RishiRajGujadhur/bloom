@@ -7,6 +7,22 @@ import Sentiment from 'sentiment'
 import { syllable } from 'syllable'
 import { lemma, norm } from './englishNlp'
 
+/**
+ * write-good (and some checks it uses) assign to an undeclared `match`
+ * variable, which throws once bundled as a strict ES module. Giving it a
+ * global binding makes those assignments legal again; any other failure just
+ * means no style suggestions rather than a crashed page.
+ */
+const g = globalThis as unknown as { match?: unknown }
+if (!('match' in g)) g.match = undefined
+function safeWriteGood(text: string) {
+  try {
+    return writeGood(text)
+  } catch {
+    return []
+  }
+}
+
 /* Writing analysis lives apart from the lesson helpers so its libraries only
    load when the Write tab opens. */
 
@@ -29,7 +45,8 @@ const sentimentModel = new Sentiment()
 
 /** Writing coach: suggestions, readability, CEFR estimate and tone. */
 export function analyseWriting(text: string) {
-  const sentences = Math.max(1, (text.match(/[.!?]+(\s|$)/g) ?? []).length || (text.trim() ? 1 : 0))
+  // An empty box has 0 sentences; any text has at least 1.
+  const sentences = text.trim() ? Math.max(1, (text.match(/[.!?]+(\s|$)/g) ?? []).length) : 0
   const words = text.trim() ? text.trim().split(/\s+/) : []
   const syl = words.reduce((a, w) => a + syllable(w), 0)
   const chars = words.join('').replace(/[^a-z0-9]/gi, '').length
@@ -44,7 +61,7 @@ export function analyseWriting(text: string) {
   const cefr = !words.length ? '—' : score < 1.6 ? 'A1' : score < 2.2 ? 'A2' : score < 2.8 ? 'B1' : score < 3.4 ? 'B2' : score < 4 ? 'C1' : 'C2'
   const tone = sentimentModel.analyze(text).comparative
   return {
-    suggestions: writeGood(text).map((s) => ({ ...s, text: text.slice(s.index, s.index + s.offset) })),
+    suggestions: safeWriteGood(text).map((s) => ({ ...s, text: text.slice(s.index, s.index + s.offset) })),
     ease,
     ari,
     cefr,

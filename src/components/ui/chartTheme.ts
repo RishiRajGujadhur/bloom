@@ -27,10 +27,13 @@ export function registerChartTheme() {
         d.backgroundColor = Array.isArray(d.backgroundColor) ? (d.backgroundColor as unknown[]).map((_, k) => `${matrixPalette[k % matrixPalette.length]}cc`) : `${c}33`
         d.pointBackgroundColor = c
       })
-      const scales = chart.options.scales as Record<string, { grid?: { color?: string }; ticks?: { color?: string } }> | undefined
-      for (const s of Object.values(scales ?? {})) {
-        s.grid = { ...s.grid, color: '#1d5a2e66' }
-        s.ticks = { ...s.ticks, color: '#6fdc8c' }
+      // Edit the raw config (chart.options is a resolver proxy: spreading it corrupts Chart.js).
+      const scales = (chart.config.options as { scales?: Record<string, { grid?: { color?: string }; ticks?: { color?: string } }> } | undefined)?.scales
+      for (const sc of Object.values(scales ?? {})) {
+        sc.grid ??= {}
+        sc.grid.color = '#1d5a2e66'
+        sc.ticks ??= {}
+        sc.ticks.color = '#6fdc8c'
       }
     },
     beforeDatasetsDraw(chart) {

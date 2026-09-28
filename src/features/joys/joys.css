@@ -140,3 +140,19 @@
   font-size: 20px;
   color: #3a2a1a;
 }
+.jy-cta {
+  border: 0;
+  border-radius: 14px;
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #58cc02, #1cb0f6);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #1480b3;
+  transition: transform 160ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.jy-cta:hover:not(:disabled) { transform: translateY(-2px); }
+.jy-cta:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #1480b3; }
+.jy-cta:disabled { opacity: 0.55; cursor: default; }
+html[data-theme='matrix'] .jy-cta { color: #021006; background: #39ff6a; box-shadow: 0 4px 0 #1f7a3a; }

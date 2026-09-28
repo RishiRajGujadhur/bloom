@@ -454,3 +454,8 @@ html[data-theme^='glow-'] :is(.primary, .ov-primary, .feature-primary, .now-prim
   background: linear-gradient(135deg, var(--g3), var(--g1) 45%, var(--g2));
   color: #07070c;
 }
+html[data-theme='matrix'] .sleep-hours {
+  background: radial-gradient(circle at 35% 30%, #39ff6a, #0f3a1c);
+  color: #021006;
+  text-shadow: none;
+}

@@ -75,7 +75,7 @@ function Hydration({ store, save, today }: { store: JoysStore; save: (f: (s: Joy
         <strong className="jy-big">{glasses} / {store.goal}</strong>
         <div className="jy-row">
           <button type="button" className="studio-btn" onClick={() => add(-1)} disabled={!glasses}>−</button>
-          <button type="button" className="en-check" onClick={(e) => add(1, e.currentTarget)}>+ Glass</button>
+          <button type="button" className="jy-cta" onClick={(e) => add(1, e.currentTarget)}>+ Glass</button>
         </div>
         <label className="jy-small">Daily goal <input type="number" min={1} max={20} className="studio-input" value={store.goal} onChange={(e) => save((s) => ({ ...s, goal: Math.max(1, Number(e.target.value) || 8) }))} /></label>
       </section>
@@ -109,6 +109,7 @@ function moonPath(age: number) {
 }
 function Sky({ store, save }: { store: JoysStore; save: (f: (s: JoysStore) => JoysStore) => void }) {
   const svg = useRef<SVGSVGElement>(null)
+  const moonSvg = useRef<SVGSVGElement>(null)
   const now = new Date()
   const raw = SunCalc.getTimes(now, store.lat, store.lon)
   // Polar days/nights have no sunrise or sunset: fall back to 6:00 / 18:00.
@@ -120,7 +121,7 @@ function Sky({ store, save }: { store: JoysStore; save: (f: (s: JoysStore) => Jo
   const isDay = now > times.sunrise && now < times.sunset
   useLayoutEffect(() => {
     if (!svg.current) return
-    const moon = svg.current.querySelector('.sk-lit')
+    const moon = moonSvg.current?.querySelector('.sk-lit')
     const sun = svg.current.querySelector('.sk-sun')
     const o = { a: 0, t: 0 }
     const draw = () => {
@@ -156,7 +157,7 @@ function Sky({ store, save }: { store: JoysStore; save: (f: (s: JoysStore) => Jo
         <p className="quick-note">Golden hour from {fmt(times.goldenHour)} — a lovely time for a walk.</p>
       </section>
       <section className="studio-card jy-center">
-        <svg className="sk-moon" viewBox="-80 -80 160 160" role="img" aria-label={phaseName}>
+        <svg ref={moonSvg} className="sk-moon" viewBox="-80 -80 160 160" role="img" aria-label={phaseName}>
           <circle r="62" fill="#20233a" />
           <path className="sk-lit" d={moonPath(0)} fill="#f4f1de" />
           <circle cx="-18" cy="-14" r="8" fill="#0000000d" /><circle cx="20" cy="18" r="11" fill="#0000000d" /><circle cx="10" cy="-30" r="5" fill="#0000000d" />
@@ -213,7 +214,7 @@ function Kindness({ store, save, today }: { store: JoysStore; save: (f: (s: Joys
           </div>
         </div>
         <div className="jy-row">
-          <button type="button" className="en-check" disabled={done} onClick={(e) => { save((s) => ({ ...s, kind: { ...s.kind, [today]: true } })); burst(e.currentTarget, 'stars'); logActivity('kindness', {}) }}>{done ? 'Done today ✓' : 'I did it!'}</button>
+          <button type="button" className="jy-cta" disabled={done} onClick={(e) => { save((s) => ({ ...s, kind: { ...s.kind, [today]: true } })); burst(e.currentTarget, 'stars'); logActivity('kindness', {}) }}>{done ? 'Done today ✓' : 'I did it!'}</button>
           <button type="button" className="studio-btn" onClick={() => { setExtra((n) => n + 1); if (!flipped) flip() }}>Another idea</button>
         </div>
         <small>{streak}-day kindness streak</small>
@@ -323,7 +324,7 @@ function Postcard({ data, today }: { data: AppData; today: string }) {
   return (
     <div className="jy-grid">
       <section className="studio-card jy-center">
-        <svg ref={svg} className="pc-svg" viewBox="0 0 420 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Your Bloom postcard">
+        <svg ref={svg} className="pc-svg" data-matrix-native viewBox="0 0 420 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Your Bloom postcard">
           <g className="pc-card">
             <rect x="10" y="10" width="400" height="250" rx="14" fill="#fffaf2" stroke="#e6d8c3" strokeWidth="2" />
             <rect x="10" y="10" width="400" height="10" rx="5" fill="#ff8a5a" />
@@ -342,7 +343,7 @@ function Postcard({ data, today }: { data: AppData; today: string }) {
         </svg>
         <div className="jy-row wrap">
           <input className="studio-input" value={msg} maxLength={90} aria-label="Postcard message" onChange={(e) => setMsg(e.target.value)} />
-          <button type="button" className="en-check" onClick={download}>Download</button>
+          <button type="button" className="jy-cta" onClick={download}>Download</button>
         </div>
       </section>
     </div>

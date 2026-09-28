@@ -17,8 +17,25 @@ A personal React 19 health-coaching dashboard with a Habitica-inspired purple pa
 | ![English lesson, Bloom Light theme](docs/screenshots/english-lesson-light.png) | ![English lesson, Matrix theme](docs/screenshots/english-lesson-matrix.png) |
 | ![English story mode, Bloom Light theme](docs/screenshots/english-story-light.png) | ![English story mode, Matrix theme](docs/screenshots/english-story-matrix.png) |
 | ![English league, shop and badges, Bloom Light theme](docs/screenshots/english-league-light.png) | ![English league, shop and badges, Matrix theme](docs/screenshots/english-league-matrix.png) |
+| ![English speak lab, Bloom Light theme](docs/screenshots/english-speak-light.png) | ![English speak lab, Matrix theme](docs/screenshots/english-speak-matrix.png) |
+| ![English writing coach, Bloom Light theme](docs/screenshots/english-write-light.png) | ![English writing coach, Matrix theme](docs/screenshots/english-write-matrix.png) |
+| ![Money charts, Bloom Light theme](docs/screenshots/money-charts-light.png) | ![Money charts, Matrix theme](docs/screenshots/money-charts-matrix.png) |
+| ![Little Joys — sky, Bloom Light theme](docs/screenshots/little-joys-sky-light.png) | ![Little Joys — sky, Matrix theme](docs/screenshots/little-joys-sky-matrix.png) |
+| ![Little Joys — postcard, Bloom Light theme](docs/screenshots/little-joys-postcard-light.png) | ![Little Joys — postcard, Matrix theme](docs/screenshots/little-joys-postcard-matrix.png) |
+| ![To-dos, Bloom Light theme](docs/screenshots/todos-light.png) | ![To-dos, Matrix theme](docs/screenshots/todos-matrix.png) |
+| ![Calendar, Bloom Light theme](docs/screenshots/calendar-light.png) | ![Calendar, Matrix theme](docs/screenshots/calendar-matrix.png) |
+| ![Focus, Bloom Light theme](docs/screenshots/focus-light.png) | ![Focus, Matrix theme](docs/screenshots/focus-matrix.png) |
+| ![Daybook, Bloom Light theme](docs/screenshots/daybook-light.png) | ![Daybook, Matrix theme](docs/screenshots/daybook-matrix.png) |
+| ![Meditate, Bloom Light theme](docs/screenshots/meditate-light.png) | ![Meditate, Matrix theme](docs/screenshots/meditate-matrix.png) |
+| ![Sleep, Bloom Light theme](docs/screenshots/sleep-light.png) | ![Sleep, Matrix theme](docs/screenshots/sleep-matrix.png) |
+| ![Let it go, Bloom Light theme](docs/screenshots/let-it-go-light.png) | ![Let it go, Matrix theme](docs/screenshots/let-it-go-matrix.png) |
+| ![Workouts, Bloom Light theme](docs/screenshots/workouts-light.png) | ![Workouts, Matrix theme](docs/screenshots/workouts-matrix.png) |
+| ![Yoga, Bloom Light theme](docs/screenshots/yoga-light.png) | ![Yoga, Matrix theme](docs/screenshots/yoga-matrix.png) |
+| ![Dojo, Bloom Light theme](docs/screenshots/dojo-light.png) | ![Dojo, Matrix theme](docs/screenshots/dojo-matrix.png) |
+| ![Bloom World (3D), Bloom Light theme](docs/screenshots/bloom-world-light.png) | ![Bloom World (3D), Matrix theme](docs/screenshots/bloom-world-matrix.png) |
+| ![Settings — avatar picker, Bloom Light theme](docs/screenshots/settings-avatars-light.png) | ![Settings — avatar picker, Matrix theme](docs/screenshots/settings-avatars-matrix.png) |
 
-To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome.
+To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome, and doubles as a smoke test: it records console errors, uncaught exceptions, crashed pages and blank pages for every shot in `docs/screenshots/report.json`.
 
 ## Highlights
 
