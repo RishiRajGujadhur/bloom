@@ -585,8 +585,8 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
-          <strong>Compact page titles</strong>
-          <small>Slim, one-line page titles so more of each page fits on screen.</small>
+          <strong>Icon page headings</strong>
+          <small>Use each page’s illustrated icon as its heading. Hover or focus it to see the page name.</small>
         </span>
         <span className={styles.switch} data-size="small">
           <input
@@ -596,7 +596,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
               setCompact(e.target.checked)
               setCompactTitles(e.target.checked)
             }}
-            aria-label="Compact page titles"
+            aria-label="Icon page headings"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>

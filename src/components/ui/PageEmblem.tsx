@@ -94,7 +94,7 @@ function idle(el: SVGSVGElement) {
   return gsap.to(el, { y: -4, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 })
 }
 
-export function PageEmblem({ page }: { page: string }) {
+export function PageEmblem({ page, label }: { page: string; label: string }) {
   const host = useRef<HTMLSpanElement>(null)
   const e = emblems[page] ?? fallback
   useLayoutEffect(() => {
@@ -117,8 +117,8 @@ export function PageEmblem({ page }: { page: string }) {
     }
   }, [page, e.motion])
   return (
-    <span ref={host} className="page-emblem" style={{ ['--emblem' as string]: 'var(--accent-color)' }} aria-hidden="true" key={page}>
-      <e.Icon size={46} strokeWidth={1.6} data-animated />
+    <span ref={host} className="page-emblem" style={{ ['--emblem' as string]: 'var(--accent-color)' }} role="img" aria-label={label} tabIndex={0} data-hint={label} key={page}>
+      <e.Icon size={46} strokeWidth={1.6} data-animated aria-hidden="true" />
     </span>
   )
 }

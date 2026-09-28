@@ -19,8 +19,8 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 
 ## Navigation and clarity
 
-11. Keep page headings available to screen readers when visually compact.
-12. Use icon tooltips with keyboard focus equivalents.
+11. Keep page headings available to screen readers when visually compact. **Implemented for page headings.**
+12. Use icon tooltips with keyboard focus equivalents. **Implemented for page emblems; audit other icons.**
 13. Make important actions discoverable without hover.
 14. Give icon buttons clear accessible names.
 15. Use horizontal rails with arrow controls where a long list is avoidable.
@@ -75,6 +75,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Added optional preparation steps to saved recipes and a cook-along view with SVG progress and a kitchen timer. Verified desktop and mobile flows in a browser.
 - 2026-09-29: Corrected the screenshot audit to detect Bloom's own error screen and pages stuck loading. Re-ran all 134 captures on a fresh local server; no page errors or document-level overflow were reported.
 - 2026-09-29: Paused the global GSAP timeline while the tab is hidden, restoring its prior state when visible. TypeScript and lifecycle tests passed.
+- 2026-09-29: Replaced compact page heading text with the existing animated SVG emblems. Page names remain as semantic headings and appear on hover or keyboard focus. Checked desktop and mobile screenshots.
 
 ## New feature areas
 

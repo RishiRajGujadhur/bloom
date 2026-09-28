@@ -280,7 +280,7 @@ export function BloomHeading({
         <p>{captions[page]}</p>
         {actions && <div className="bloom-hero-actions">{actions}</div>}
       </div>
-      {!hero && <PageEmblem page={page} />}
+      {!hero && <PageEmblem page={page} label={title} />}
       <div className="bloom-sculpture" aria-hidden="true" hidden={!hero}>
         <div className="bloom-orbit" />
         <div className="bloom-flower">
