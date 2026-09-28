@@ -4,6 +4,8 @@
     "page": "collectibles",
     "overflow": false,
     "heading": "My Collectibles",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -11,6 +13,8 @@
     "page": "calendar",
     "overflow": false,
     "heading": "Full calendar",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -18,6 +22,8 @@
     "page": "todos",
     "overflow": false,
     "heading": "To-dos",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -25,6 +31,8 @@
     "page": "challenges",
     "overflow": false,
     "heading": "Challenges",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -32,6 +40,8 @@
     "page": "focus",
     "overflow": false,
     "heading": "Focus",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -39,6 +49,8 @@
     "page": "growth",
     "overflow": false,
     "heading": "Growth",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -46,6 +58,8 @@
     "page": "overview",
     "overflow": false,
     "heading": "A little intention. A lot of good ahead.",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -53,6 +67,8 @@
     "page": "habits",
     "overflow": false,
     "heading": "Habits",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -60,6 +76,8 @@
     "page": "journal",
     "overflow": false,
     "heading": "Guided journal",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -67,6 +85,8 @@
     "page": "daybook",
     "overflow": false,
     "heading": "Daybook",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -74,6 +94,8 @@
     "page": "planning",
     "overflow": false,
     "heading": "Intentions",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -81,6 +103,8 @@
     "page": "settings",
     "overflow": false,
     "heading": "Make it yours",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -88,6 +112,8 @@
     "page": "vision-board",
     "overflow": false,
     "heading": "Vision Board",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -95,6 +121,8 @@
     "page": "urges",
     "overflow": false,
     "heading": "Urges",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -102,6 +130,8 @@
     "page": "world",
     "overflow": false,
     "heading": "Bloom World",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -109,13 +139,17 @@
     "page": "breathe",
     "overflow": false,
     "heading": "Breathe",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "mood",
     "overflow": false,
-    "heading": "",
+    "heading": "Mood check-in",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -123,6 +157,8 @@
     "page": "gratitude",
     "overflow": false,
     "heading": "Gratitude jar",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -130,6 +166,8 @@
     "page": "sleep",
     "overflow": false,
     "heading": "Sleep",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -137,13 +175,17 @@
     "page": "shop",
     "overflow": false,
     "heading": "Petal shop",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "release",
     "overflow": false,
-    "heading": "",
+    "heading": "Let it go",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -151,6 +193,8 @@
     "page": "focus-room",
     "overflow": false,
     "heading": "Focus room",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -158,6 +202,8 @@
     "page": "explore",
     "overflow": false,
     "heading": "Explore data",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -165,13 +211,17 @@
     "page": "yearbook",
     "overflow": false,
     "heading": "Year book",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "palace",
     "overflow": false,
-    "heading": "",
+    "heading": "Memory palace",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -179,13 +229,17 @@
     "page": "journey",
     "overflow": false,
     "heading": "Streak journey",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "places",
     "overflow": false,
-    "heading": "",
+    "heading": "Places",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -193,6 +247,8 @@
     "page": "posture",
     "overflow": false,
     "heading": "Posture guard",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -200,13 +256,17 @@
     "page": "epiphanies",
     "overflow": false,
     "heading": "Epiphanies",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "diet",
     "overflow": false,
-    "heading": "",
+    "heading": "Nourish",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -214,6 +274,8 @@
     "page": "monk",
     "overflow": false,
     "heading": "Monk mode",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -221,6 +283,8 @@
     "page": "voice",
     "overflow": false,
     "heading": "Voice memos",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -228,6 +292,8 @@
     "page": "energy",
     "overflow": false,
     "heading": "Energy flow",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -235,6 +301,8 @@
     "page": "lab",
     "overflow": false,
     "heading": "Correlations",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -242,20 +310,26 @@
     "page": "taichi",
     "overflow": false,
     "heading": "Tai Chi",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "code",
     "overflow": false,
-    "heading": "Code",
+    "heading": "",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "joys",
     "overflow": false,
-    "heading": "",
+    "heading": "Little Joys",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -263,6 +337,8 @@
     "page": "english",
     "overflow": false,
     "heading": "English",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -270,13 +346,17 @@
     "page": "money",
     "overflow": false,
     "heading": "Money",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "street",
     "overflow": false,
-    "heading": "",
+    "heading": "Bloom Street",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -284,6 +364,8 @@
     "page": "pointer",
     "overflow": false,
     "heading": "Pointer",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -291,6 +373,8 @@
     "page": "dojo",
     "overflow": false,
     "heading": "Dojo",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -298,6 +382,8 @@
     "page": "affirm",
     "overflow": false,
     "heading": "Affirmations",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -305,6 +391,8 @@
     "page": "daylight",
     "overflow": false,
     "heading": "Daylight",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -312,6 +400,8 @@
     "page": "eyes",
     "overflow": false,
     "heading": "Eye care",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -319,13 +409,17 @@
     "page": "screen",
     "overflow": false,
     "heading": "Screen time",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "routines",
     "overflow": false,
-    "heading": "",
+    "heading": "Routines",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -333,6 +427,8 @@
     "page": "roadmap",
     "overflow": false,
     "heading": "Goal roadmap",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -340,6 +436,8 @@
     "page": "games",
     "overflow": false,
     "heading": "Brain games",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -347,6 +445,8 @@
     "page": "cards",
     "overflow": false,
     "heading": "Flashcards",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -354,6 +454,8 @@
     "page": "mindmaps",
     "overflow": false,
     "heading": "Mind maps",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -361,20 +463,26 @@
     "page": "mirror",
     "overflow": false,
     "heading": "Mood mirror",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "ink",
     "overflow": false,
-    "heading": "",
+    "heading": "Ink journal",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "mala",
     "overflow": false,
-    "heading": "",
+    "heading": "Mala",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -382,13 +490,17 @@
     "page": "breathwork",
     "overflow": false,
     "heading": "Breathwork",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "meditate",
     "overflow": false,
-    "heading": "",
+    "heading": "Meditate",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -396,13 +508,17 @@
     "page": "mixer",
     "overflow": false,
     "heading": "Soundscapes",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "sounds",
     "overflow": false,
-    "heading": "",
+    "heading": "Focus sounds",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -410,6 +526,8 @@
     "page": "fasting",
     "overflow": false,
     "heading": "Fasting",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -417,6 +535,8 @@
     "page": "scan",
     "overflow": false,
     "heading": "Food scanner",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -424,13 +544,17 @@
     "page": "body",
     "overflow": false,
     "heading": "Body progress",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "run",
     "overflow": false,
-    "heading": "",
+    "heading": "Run & walk",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -438,13 +562,17 @@
     "page": "stretch",
     "overflow": false,
     "heading": "Stretch",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "desktop",
     "page": "yoga",
     "overflow": false,
-    "heading": "",
+    "heading": "Yoga",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -452,6 +580,8 @@
     "page": "intervals",
     "overflow": false,
     "heading": "Intervals",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -459,6 +589,8 @@
     "page": "workouts",
     "overflow": false,
     "heading": "Workouts",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -466,6 +598,8 @@
     "page": "exercises",
     "overflow": false,
     "heading": "Exercises",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -473,6 +607,8 @@
     "page": "collectibles",
     "overflow": false,
     "heading": "My Collectibles",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -480,6 +616,8 @@
     "page": "calendar",
     "overflow": false,
     "heading": "Full calendar",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -487,6 +625,8 @@
     "page": "todos",
     "overflow": false,
     "heading": "To-dos",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -494,6 +634,8 @@
     "page": "challenges",
     "overflow": false,
     "heading": "Challenges",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -501,6 +643,8 @@
     "page": "focus",
     "overflow": false,
     "heading": "Focus",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -508,6 +652,8 @@
     "page": "growth",
     "overflow": false,
     "heading": "Growth",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -515,6 +661,8 @@
     "page": "overview",
     "overflow": false,
     "heading": "A little intention. A lot of good ahead.",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -522,6 +670,8 @@
     "page": "habits",
     "overflow": false,
     "heading": "Habits",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -529,6 +679,8 @@
     "page": "journal",
     "overflow": false,
     "heading": "Guided journal",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -536,6 +688,8 @@
     "page": "daybook",
     "overflow": false,
     "heading": "Daybook",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -543,6 +697,8 @@
     "page": "planning",
     "overflow": false,
     "heading": "Intentions",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -550,6 +706,8 @@
     "page": "settings",
     "overflow": false,
     "heading": "Make it yours",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -557,6 +715,8 @@
     "page": "vision-board",
     "overflow": false,
     "heading": "Vision Board",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -564,6 +724,8 @@
     "page": "urges",
     "overflow": false,
     "heading": "Urges",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -571,6 +733,8 @@
     "page": "world",
     "overflow": false,
     "heading": "Bloom World",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -578,13 +742,17 @@
     "page": "breathe",
     "overflow": false,
     "heading": "Breathe",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "mood",
     "overflow": false,
-    "heading": "",
+    "heading": "Mood check-in",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -592,6 +760,8 @@
     "page": "gratitude",
     "overflow": false,
     "heading": "Gratitude jar",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -599,6 +769,8 @@
     "page": "sleep",
     "overflow": false,
     "heading": "Sleep",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -606,6 +778,8 @@
     "page": "shop",
     "overflow": false,
     "heading": "Petal shop",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -613,6 +787,8 @@
     "page": "release",
     "overflow": false,
     "heading": "Let it go",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -620,13 +796,17 @@
     "page": "focus-room",
     "overflow": false,
     "heading": "Focus room",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "explore",
     "overflow": false,
-    "heading": "",
+    "heading": "Explore data",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -634,6 +814,8 @@
     "page": "yearbook",
     "overflow": false,
     "heading": "Year book",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -641,6 +823,8 @@
     "page": "palace",
     "overflow": false,
     "heading": "Memory palace",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -648,13 +832,17 @@
     "page": "journey",
     "overflow": false,
     "heading": "Streak journey",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "places",
     "overflow": false,
-    "heading": "",
+    "heading": "Places",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -662,6 +850,8 @@
     "page": "posture",
     "overflow": false,
     "heading": "Posture guard",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -669,13 +859,17 @@
     "page": "epiphanies",
     "overflow": false,
     "heading": "Epiphanies",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "diet",
     "overflow": false,
-    "heading": "",
+    "heading": "Nourish",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -683,6 +877,8 @@
     "page": "monk",
     "overflow": false,
     "heading": "Monk mode",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -690,6 +886,8 @@
     "page": "voice",
     "overflow": false,
     "heading": "Voice memos",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -697,6 +895,8 @@
     "page": "energy",
     "overflow": false,
     "heading": "Energy flow",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -704,6 +904,8 @@
     "page": "lab",
     "overflow": false,
     "heading": "Correlations",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -711,6 +913,8 @@
     "page": "taichi",
     "overflow": false,
     "heading": "Tai Chi",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -718,6 +922,8 @@
     "page": "code",
     "overflow": false,
     "heading": "Code",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -725,6 +931,8 @@
     "page": "joys",
     "overflow": false,
     "heading": "Little Joys",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -732,20 +940,26 @@
     "page": "english",
     "overflow": false,
     "heading": "English",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "money",
     "overflow": false,
-    "heading": "",
+    "heading": "Money",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "street",
     "overflow": false,
-    "heading": "",
+    "heading": "Bloom Street",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -753,6 +967,8 @@
     "page": "pointer",
     "overflow": false,
     "heading": "Pointer",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -760,6 +976,8 @@
     "page": "dojo",
     "overflow": false,
     "heading": "Dojo",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -767,13 +985,17 @@
     "page": "affirm",
     "overflow": false,
     "heading": "Affirmations",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "daylight",
     "overflow": false,
-    "heading": "",
+    "heading": "Daylight",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -781,6 +1003,8 @@
     "page": "eyes",
     "overflow": false,
     "heading": "Eye care",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -788,6 +1012,8 @@
     "page": "screen",
     "overflow": false,
     "heading": "Screen time",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -795,6 +1021,8 @@
     "page": "routines",
     "overflow": false,
     "heading": "Routines",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -802,6 +1030,8 @@
     "page": "roadmap",
     "overflow": false,
     "heading": "Goal roadmap",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -809,6 +1039,8 @@
     "page": "games",
     "overflow": false,
     "heading": "Brain games",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -816,13 +1048,17 @@
     "page": "cards",
     "overflow": false,
     "heading": "Flashcards",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "mindmaps",
     "overflow": false,
-    "heading": "",
+    "heading": "Mind maps",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -830,6 +1066,8 @@
     "page": "mirror",
     "overflow": false,
     "heading": "Mood mirror",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -837,6 +1075,8 @@
     "page": "ink",
     "overflow": false,
     "heading": "Ink journal",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -844,6 +1084,8 @@
     "page": "mala",
     "overflow": false,
     "heading": "Mala",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -851,13 +1093,17 @@
     "page": "breathwork",
     "overflow": false,
     "heading": "Breathwork",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "meditate",
     "overflow": false,
-    "heading": "",
+    "heading": "Meditate",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -865,13 +1111,17 @@
     "page": "mixer",
     "overflow": false,
     "heading": "Soundscapes",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "sounds",
     "overflow": false,
-    "heading": "",
+    "heading": "Focus sounds",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -879,6 +1129,8 @@
     "page": "fasting",
     "overflow": false,
     "heading": "Fasting",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -886,13 +1138,17 @@
     "page": "scan",
     "overflow": false,
     "heading": "Food scanner",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
     "label": "mobile",
     "page": "body",
     "overflow": false,
-    "heading": "",
+    "heading": "Body progress",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -900,6 +1156,8 @@
     "page": "run",
     "overflow": false,
     "heading": "Run & walk",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -907,6 +1165,8 @@
     "page": "stretch",
     "overflow": false,
     "heading": "Stretch",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -914,6 +1174,8 @@
     "page": "yoga",
     "overflow": false,
     "heading": "Yoga",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -921,6 +1183,8 @@
     "page": "intervals",
     "overflow": false,
     "heading": "Intervals",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -928,6 +1192,8 @@
     "page": "workouts",
     "overflow": false,
     "heading": "Workouts",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   },
   {
@@ -935,6 +1201,8 @@
     "page": "exercises",
     "overflow": false,
     "heading": "Exercises",
+    "errorScreen": false,
+    "stuckLoading": false,
     "errors": []
   }
 ]
