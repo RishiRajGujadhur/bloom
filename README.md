@@ -127,6 +127,9 @@ Bloom is built on these open-source packages (runtime dependencies from `package
 |---|---|
 | [`@chatscope/chat-ui-kit-react`](https://www.npmjs.com/package/@chatscope/chat-ui-kit-react) | companion |
 | [`@chatscope/chat-ui-kit-styles`](https://www.npmjs.com/package/@chatscope/chat-ui-kit-styles) | companion |
+| [`@codemirror/lang-javascript`](https://www.npmjs.com/package/@codemirror/lang-javascript) | code |
+| [`@codemirror/theme-one-dark`](https://www.npmjs.com/package/@codemirror/theme-one-dark) | code |
+| [`@codemirror/view`](https://www.npmjs.com/package/@codemirror/view) | code |
 | [`@dnd-kit/core`](https://www.npmjs.com/package/@dnd-kit/core) | english, yoga |
 | [`@dnd-kit/sortable`](https://www.npmjs.com/package/@dnd-kit/sortable) | english, yoga |
 | [`@dnd-kit/utilities`](https://www.npmjs.com/package/@dnd-kit/utilities) | english, yoga |
@@ -168,10 +171,13 @@ Bloom is built on these open-source packages (runtime dependencies from `package
 | [`@tsparticles/react`](https://www.npmjs.com/package/@tsparticles/react) | meditate |
 | [`@tsparticles/slim`](https://www.npmjs.com/package/@tsparticles/slim) | meditate |
 | [`@turf/turf`](https://www.npmjs.com/package/@turf/turf) | run |
+| [`@uiw/react-codemirror`](https://www.npmjs.com/package/@uiw/react-codemirror) | code |
 | [`@use-gesture/react`](https://www.npmjs.com/package/@use-gesture/react) | release, ui |
 | [`@xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers) | search, voice |
 | [`@xyflow/react`](https://www.npmjs.com/package/@xyflow/react) | VisionBoard |
 | [`@zxing/browser`](https://www.npmjs.com/package/@zxing/browser) | scan |
+| [`acorn`](https://www.npmjs.com/package/acorn) | code |
+| [`acorn-walk`](https://www.npmjs.com/package/acorn-walk) | code |
 | [`an-array-of-english-words`](https://www.npmjs.com/package/an-array-of-english-words) | english |
 | [`animejs`](https://www.npmjs.com/package/animejs) | exercise |
 | [`automated-readability`](https://www.npmjs.com/package/automated-readability) | english |
@@ -190,7 +196,7 @@ Bloom is built on these open-source packages (runtime dependencies from `package
 | [`date-fns`](https://www.npmjs.com/package/date-fns) | quick, timeSince |
 | [`dexie`](https://www.npmjs.com/package/dexie) | search |
 | [`diff`](https://www.npmjs.com/package/diff) | daybook |
-| [`dompurify`](https://www.npmjs.com/package/dompurify) | cards |
+| [`dompurify`](https://www.npmjs.com/package/dompurify) | cards, code |
 | [`double-metaphone`](https://www.npmjs.com/package/double-metaphone) | english |
 | [`driver.js`](https://www.npmjs.com/package/driver.js) | layout, rpg |
 | [`easytimer.js`](https://www.npmjs.com/package/easytimer.js) | interval |
@@ -202,8 +208,8 @@ Bloom is built on these open-source packages (runtime dependencies from `package
 | [`framer-motion`](https://www.npmjs.com/package/framer-motion) | achievements, app shell, collectibles, daybook, journal, posture, reminders, rewards, rpg, sleep, urgeClock.tsx, wellbeing, world |
 | [`franc-min`](https://www.npmjs.com/package/franc-min) | english |
 | [`frappe-gantt`](https://www.npmjs.com/package/frappe-gantt) | roadmap |
-| [`fuse.js`](https://www.npmjs.com/package/fuse.js) | companion, english, exercise |
-| [`gsap`](https://www.npmjs.com/package/gsap) | VisionBoard, app shell, body, cards, companion, core, dailyFlow, daybook, daylight, diet, dojo, english, epiphany, exercise, fasting, games, interval, journey, joys, juice, lab, meditate, mindmap, mirror, mixer, money, monk, palace, quick, release, routines, rpg, scan, showcase, sleep, sounds, street, studio, ui, welcome, wellbeing, workout, world, yoga |
+| [`fuse.js`](https://www.npmjs.com/package/fuse.js) | code, companion, english, exercise |
+| [`gsap`](https://www.npmjs.com/package/gsap) | VisionBoard, app shell, body, cards, code, companion, core, dailyFlow, daybook, daylight, diet, dojo, english, epiphany, exercise, fasting, games, interval, journey, joys, juice, lab, meditate, mindmap, mirror, mixer, money, monk, palace, quick, release, routines, rpg, scan, showcase, sleep, sounds, street, studio, ui, utils, welcome, wellbeing, workout, world, yoga |
 | [`howler`](https://www.npmjs.com/package/howler) | AudioMixerContext |
 | [`i18next`](https://www.npmjs.com/package/i18next) | translations |
 | [`ics`](https://www.npmjs.com/package/ics) | daybook |
@@ -211,9 +217,9 @@ Bloom is built on these open-source packages (runtime dependencies from `package
 | [`leaflet`](https://www.npmjs.com/package/leaflet) | places, run |
 | [`lightweight-charts`](https://www.npmjs.com/package/lightweight-charts) | money |
 | [`lottie-web`](https://www.npmjs.com/package/lottie-web) | ui |
-| [`lucide-react`](https://www.npmjs.com/package/lucide-react) | AdoptLibrary.tsx, AudioMixer.tsx, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, LanguageSelector.tsx, Modal.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, achievements, affirm, app shell, body, breathwork, cards, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, focusRoom, games, icons, ink, interval, journal, joys, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, settings, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, ui, urgeClock.tsx, voice, welcome, wellbeing, workout, yearbook, yoga |
+| [`lucide-react`](https://www.npmjs.com/package/lucide-react) | AdoptLibrary.tsx, AudioMixer.tsx, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, LanguageSelector.tsx, Modal.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, achievements, affirm, app shell, body, breathwork, cards, code, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, focusRoom, games, icons, ink, interval, journal, joys, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, settings, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, ui, urgeClock.tsx, voice, welcome, wellbeing, workout, yearbook, yoga |
 | [`lunarphase-js`](https://www.npmjs.com/package/lunarphase-js) | joys |
-| [`marked`](https://www.npmjs.com/package/marked) | cards |
+| [`marked`](https://www.npmjs.com/package/marked) | cards, code |
 | [`markmap-lib`](https://www.npmjs.com/package/markmap-lib) | mindmap |
 | [`markmap-view`](https://www.npmjs.com/package/markmap-view) | mindmap |
 | [`mathjs`](https://www.npmjs.com/package/mathjs) | diet |
@@ -230,7 +236,7 @@ Bloom is built on these open-source packages (runtime dependencies from `package
 | [`pixi.js`](https://www.npmjs.com/package/pixi.js) | games |
 | [`pluralize`](https://www.npmjs.com/package/pluralize) | english |
 | [`qrcode`](https://www.npmjs.com/package/qrcode) | joys |
-| [`react`](https://www.npmjs.com/package/react) | AdoptLibrary.tsx, AudioMixer.tsx, AudioMixerContext, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, Modal.tsx, PersonalInsights.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, VisionBoard, achievements, affirm, app shell, app start-up, body, breathwork, cards, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, flow, focusRoom, games, icons, impact, ink, interval, journal, journey, joys, juice, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, quick, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, search, settings, shared, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, tsparticles react.d, ui, urgeClock.tsx, useCoach, voice, welcome, wellbeing, workout, world, yearbook, yoga |
+| [`react`](https://www.npmjs.com/package/react) | AdoptLibrary.tsx, AudioMixer.tsx, AudioMixerContext, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, Modal.tsx, PersonalInsights.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, VisionBoard, achievements, affirm, app shell, app start-up, body, breathwork, cards, code, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, flow, focusRoom, games, icons, impact, ink, interval, journal, journey, joys, juice, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, quick, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, search, settings, shared, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, tsparticles react.d, ui, urgeClock.tsx, useCoach, voice, welcome, wellbeing, workout, world, yearbook, yoga |
 | [`react-calendar-heatmap`](https://www.npmjs.com/package/react-calendar-heatmap) | fasting |
 | [`react-chartjs-2`](https://www.npmjs.com/package/react-chartjs-2) | english, workout |
 | [`react-compare-slider`](https://www.npmjs.com/package/react-compare-slider) | body |
