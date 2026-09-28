@@ -19,8 +19,10 @@ const IntroPlayer = lazy(() => import('./video/IntroPlayer').then((m) => ({ defa
  * Word Well. Three matches, Persona-style dialogue before and after each one,
  * and a bonus wheel after every win.
  */
-type Who = { name: string; face: AvatarDrawing; color: string }
-const cast: Record<string, Who> = {
+export type Who = { name: string; face: AvatarDrawing; color: string; tint?: string }
+export const cast: Record<string, Who> = {
+  tinker: { name: 'Professor Tinker', face: 'tinker', color: '#ff8a2a' },
+  glitch: { name: 'GLITCH', face: 'robot', color: '#ff4b4b', tint: 'hue-rotate(230deg) saturate(2.2)' },
   bloom: { name: 'Bloom', face: 'bloom', color: '#ff8a5a' },
   mochi: { name: 'Mochi', face: 'orb', color: '#8f7ae5' },
   globe: { name: 'Professor Globe', face: 'globe', color: '#4a5fd6' },
@@ -29,7 +31,7 @@ const cast: Record<string, Who> = {
   unit7: { name: 'UNIT-7', face: 'robot', color: '#39ff6a' },
   beacon: { name: 'Beacon (referee)', face: 'beacon', color: '#ff8a2a' },
 }
-type Line = [keyof typeof cast, string]
+export type Line = [keyof typeof cast, string]
 type Level = { id: string; title: string; place: string; rival: keyof typeof cast; rivalScore: number; unit: number; sky: [string, string]; before: Line[]; after: Line[]; lose: Line[] }
 
 const prologue: Line[] = [
@@ -92,7 +94,7 @@ const STORY_KEY = 'bloom-english-story-v1'
 type StoryState = { cleared: number; seenPrologue: boolean }
 
 /* ---------- Scene: an animated SVG backdrop with drifting letters and stage lights ---------- */
-function Scene({ sky, children, final }: { sky: [string, string]; children?: React.ReactNode; final?: boolean }) {
+export function Scene({ sky, children, final }: { sky: [string, string]; children?: React.ReactNode; final?: boolean }) {
   const ref = useRef<SVGSVGElement>(null)
   const letters = useMemo(() => Array.from({ length: 16 }, (_, i) => ({ ch: 'ABCDEFGHIJKLMNOPRSTUWY'[(i * 7) % 22], x: (i * 61) % 800, y: 40 + ((i * 97) % 300), s: 14 + (i % 4) * 6 })), [])
   useLayoutEffect(() => {
@@ -130,7 +132,7 @@ function Scene({ sky, children, final }: { sky: [string, string]; children?: Rea
 }
 
 /* ---------- Persona-style dialogue box with a sliding portrait and typewriter text ---------- */
-function Dialogue({ lines, sky, onDone, final }: { lines: Line[]; sky: [string, string]; onDone: () => void; final?: boolean }) {
+export function Dialogue({ lines, sky, onDone, final }: { lines: Line[]; sky: [string, string]; onDone: () => void; final?: boolean }) {
   const [i, setI] = useState(0)
   const [shown, setShown] = useState(0)
   const portrait = useRef<HTMLDivElement>(null)
@@ -158,7 +160,7 @@ function Dialogue({ lines, sky, onDone, final }: { lines: Line[]; sky: [string, 
   return (
     <Scene sky={sky} final={final}>
       <div className="st-stage" onClick={next} role="button" tabIndex={0} aria-label="Next line" onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && next()}>
-        <div ref={portrait} className="st-portrait" style={{ ['--who' as string]: c.color }}>
+        <div ref={portrait} className="st-portrait" style={{ ['--who' as string]: c.color, filter: c.tint }}>
           <BloomFace variant={c.face} size={150} follow={false} waveOnMount={false} label={c.name} />
         </div>
         <div ref={box} className="st-box" style={{ ['--who' as string]: c.color }}>
@@ -173,7 +175,7 @@ function Dialogue({ lines, sky, onDone, final }: { lines: Line[]; sky: [string, 
 }
 
 /* ---------- VS splash ---------- */
-function Versus({ level, onGo }: { level: Level; onGo: () => void }) {
+export function Versus({ level, onGo }: { level: Pick<Level, 'title' | 'place' | 'rival' | 'rivalScore'>; onGo: () => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const rival = cast[level.rival]
   useLayoutEffect(() => {
@@ -194,7 +196,7 @@ function Versus({ level, onGo }: { level: Level; onGo: () => void }) {
       {[0, 1, 2].map((k) => <i key={k} className="vs-stripe" />)}
       <div className="vs-left"><BloomFace variant="bloom" size={120} follow={false} waveOnMount={false} label="You and Bloom" /><strong>You</strong></div>
       <span className="vs-mark">VS</span>
-      <div className="vs-right"><BloomFace variant={rival.face} size={120} follow={false} waveOnMount={false} label={rival.name} /><strong>{rival.name}</strong></div>
+      <div className="vs-right" style={{ filter: rival.tint }}><BloomFace variant={rival.face} size={120} follow={false} waveOnMount={false} label={rival.name} /><strong>{rival.name}</strong></div>
       <div className="vs-info">
         <h3>{level.title}</h3>
         <p>{level.place} · beat {rival.name}’s score of <strong>{Math.round(level.rivalScore * 100)}%</strong></p>
@@ -205,7 +207,7 @@ function Versus({ level, onGo }: { level: Level; onGo: () => void }) {
 }
 
 /* ---------- Bonus wheel ---------- */
-const prizes = [
+export const prizes = [
   { label: '+10 XP', color: '#58cc02', xp: 10 },
   { label: '+20 💎', color: '#1cb0f6', gems: 20 },
   { label: '+5 XP', color: '#ff9600', xp: 5 },
@@ -213,7 +215,7 @@ const prizes = [
   { label: '+50 XP!', color: '#ffc800', xp: 50 },
   { label: '+15 💎', color: '#ce82ff', gems: 15 },
 ]
-function Wheel({ onPrize }: { onPrize: (p: (typeof prizes)[number]) => void }) {
+export function Wheel({ onPrize }: { onPrize: (p: (typeof prizes)[number]) => void }) {
   const wheel = useRef<SVGGElement>(null)
   const [spun, setSpun] = useState<string | null>(null)
   const [spinning, setSpinning] = useState(false)
@@ -308,7 +310,7 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
   if (step.kind === 'video')
     return (
       <Suspense fallback={<p role="status">Loading the intro…</p>}>
-        <IntroPlayer onEnd={() => setStep(step.then)} />
+        <IntroPlayer video="wordWell" onEnd={() => setStep(step.then)} />
       </Suspense>
     )
   if (step.kind === 'talk')

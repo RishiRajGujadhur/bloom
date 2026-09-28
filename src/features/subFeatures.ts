@@ -889,6 +889,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "download", title: "Download postcard", description: "Save your card as SVG." },
   ],
   codeLearning: [
+    { id: "storyMode", title: "Code Cup story", description: "A tournament story with videos, rivals and duels." },
     { id: "quiz", title: "Code quiz", description: "Predict the output and concept questions." },
     { id: "challenges", title: "Challenges", description: "Solve problems against hidden tests." },
     { id: "cheatsheets", title: "Cheat sheets", description: "Searchable syntax reminders." },

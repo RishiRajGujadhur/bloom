@@ -12,6 +12,7 @@ import { challenges, cheatsheets, lessons, modules, quiz, type Check } from './c
 import { runCode, type RunResult } from './codeRunner'
 import './code.css'
 
+const CodeStory = lazy(() => import('./CodeStory').then((m) => ({ default: m.CodeStory })))
 const Editor = lazy(() => import('./Editor').then((m) => ({ default: m.Editor })))
 const on = (id: string) => subOn('codeLearning', id)
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -293,6 +294,7 @@ export function CodePage() {
       aside={<span className="cd-aside"><Trophy size={15} /> {store.xp} XP · {doneCount}/{lessons.length}</span>}
       tabs={[
         { id: 'learn', label: 'Learn', icon: <Code2 size={15} />, render: learnTab },
+        ...(on('storyMode') ? [{ id: 'story', label: 'Code Cup', icon: <Trophy size={15} />, render: () => <Suspense fallback={<p role="status">Loading…</p>}><CodeStory onXp={(n) => save((st) => ({ ...st, xp: st.xp + n }))} /></Suspense> }] : []),
         ...(on('quiz') ? [{ id: 'quiz', label: 'Quiz', icon: <HelpCircle size={15} />, render: () => <Quiz store={store} save={save} /> }] : []),
         ...(on('challenges') ? [{
           id: 'challenges', label: 'Challenges', icon: <Swords size={15} />, render: () => (

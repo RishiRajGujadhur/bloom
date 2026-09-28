@@ -17,6 +17,8 @@ A personal React 19 health-coaching dashboard with a Habitica-inspired purple pa
 | ![English lesson, Bloom Light theme](docs/screenshots/english-lesson-light.png) | ![English lesson, Matrix theme](docs/screenshots/english-lesson-matrix.png) |
 | ![English story mode, Bloom Light theme](docs/screenshots/english-story-light.png) | ![English story mode, Matrix theme](docs/screenshots/english-story-matrix.png) |
 | ![English league, shop and badges, Bloom Light theme](docs/screenshots/english-league-light.png) | ![English league, shop and badges, Matrix theme](docs/screenshots/english-league-matrix.png) |
+| ![Code Cup intro video](docs/screenshots/codecup-intro.png) | ![Code Cup duel against UNIT-7](docs/screenshots/codecup-duel.png) |
+| ![Code Cup versus screen](docs/screenshots/codecup-versus.png) | ![Code Cup finale video](docs/screenshots/codecup-finale.png) |
 | ![Learn to code, Bloom Light theme](docs/screenshots/code-light.png) | ![Learn to code, Matrix theme](docs/screenshots/code-matrix.png) |
 | ![Code quiz, Bloom Light theme](docs/screenshots/code-quiz-light.png) | ![Code quiz, Matrix theme](docs/screenshots/code-quiz-matrix.png) |
 | ![English speak lab, Bloom Light theme](docs/screenshots/english-speak-light.png) | ![English speak lab, Matrix theme](docs/screenshots/english-speak-matrix.png) |
@@ -44,6 +46,7 @@ To regenerate them, start the dev server (`npm run dev`) and run `node scripts/s
 - **Bloom, your companion:** nine switchable avatars (Bloom, Robot, Mood orb, Sparky, Beacon, Tinker, Pixel Bloom, Globe and more), animated with GSAP and SVG. Bloom acts out each page (lifting a dumbbell on Exercise, burning a note on Let it go…). In the chat you can type commands: log expenses, add to-dos, check off habits, log mood and gratitude, and get quiz hints.
 - **Bloom English:** a Duolingo-style course with a lesson path, XP, streaks, hearts, leagues, quests, stories, speaking and pronunciation, a writing coach, themed weather scenes for every unit, and **Story mode**: a tournament side quest with a Remotion intro video.
 - **Learn to code:** a Codecademy-style JavaScript course with a CodeMirror editor, a sandboxed runner (Web Worker with a time limit), instant checklists (console output, probes and acorn syntax-tree checks), hints, Get unstuck, a quiz, challenges, searchable cheat sheets and an animated certificate.
+- **The Code Cup (story mode for Learn to code):** a tournament side quest — GLITCH has scrambled the Lighthouse code and Bloom World is going dark. Three code duels (predict the output / spot the bug) against racing rivals Mochi, Sparky and UNIT-7, Persona-style dialogue, a bonus wheel, and two Remotion videos: an intro and a finale that plays when you win the Cup.
 - **Money:** spending in any currency, with budgets, charts (circle packing, candlesticks, calendar heatmap, glowing radar), a plan tab and CSV import.
 - **Little Joys:** hydration, sky (moon phase and the sun's arc), a kindness deck, mood colours and a QR postcard.
 - **Themes:** Bloom Light and Dark, **Matrix** (phosphor green, CRT scanlines, glyph rain), five **Glow** gradient themes, and more. Cards light up under the pointer.
