@@ -74,6 +74,7 @@ import { GrowthGarden, NowCard, Onboarding, WelcomeBack } from './features/core/
 import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
+import { PageBoundary } from './components/ui/PageBoundary'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
 import { EpiphaniesPage, EpiphanyGate } from './features/epiphany/EpiphanyUI'
 import { habitStats } from './features/habits'
@@ -649,6 +650,7 @@ function App() {
           <div
             className={`page-content feature-page page-${active}${simpleHome ? ' is-simple-home' : ''} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
           >
+            <PageBoundary key={active} onHome={() => jump('overview' as never)}>
             {active === 'overview' && (
               <div className="overview-bar">
                 <nav className="overview-switch" aria-label="Overview sections">
@@ -1486,6 +1488,7 @@ function App() {
                 </div>
               </>
             )}
+            </PageBoundary>
           </div>
         </main>
         </PageMenu>

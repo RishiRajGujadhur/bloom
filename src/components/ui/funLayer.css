@@ -41,3 +41,32 @@ main h1 { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .bloom-slider-value { animation: none; }
 }
+
+.page-crash {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  max-width: 520px;
+  margin: 40px auto;
+  text-align: center;
+}
+.page-crash h2 { margin: 0; }
+.page-crash p { margin: 0; color: var(--text-secondary); }
+.page-crash-actions { display: flex; gap: 8px; }
+.page-crash details { font-size: 0.8rem; color: var(--text-muted); }
+
+.net-pill {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 10001;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px -10px #0006;
+  animation: net-in 400ms cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.net-pill.warn { background: #3a2a1a; color: #ffd59a; }
+.net-pill.ok { background: #1f5a2a; color: #d7ffb8; }
+@keyframes net-in { from { transform: translate(-50%, 30px); opacity: 0; } }

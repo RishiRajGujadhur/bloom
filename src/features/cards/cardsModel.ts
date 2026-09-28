@@ -1,5 +1,6 @@
 import { supermemo, type SuperMemoGrade } from 'supermemo'
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 export type Card = { id: string; deck: string; front: string; back: string; tags: string[]; interval: number; repetition: number; efactor: number; due: string; reviews: number; lapses: number }
 export type Deck = { id: string; name: string; emoji: string }
@@ -35,13 +36,9 @@ export const hasCloze = (s: string) => /\{\{c\d+::[^}]+\}\}/.test(s)
 export const clozeFront = (s: string) => s.replace(/\{\{c\d+::([^}]+)\}\}/g, '[…]')
 export const clozeBack = (s: string) => s.replace(/\{\{c\d+::([^}]+)\}\}/g, '**$1**')
 
-/** Markdown → safe HTML: marked output with scripts, handlers and javascript: URLs stripped. */
+/** Markdown → safe HTML: marked output sanitised by DOMPurify (no scripts, handlers or javascript: URLs). */
 export function render(md: string) {
-  const html = marked.parse(md, { async: false, gfm: true, breaks: true }) as string
-  return html
-    .replace(/<\s*(script|iframe|object|embed|style)[\s\S]*?<\/\s*\1\s*>/gi, '')
-    .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-    .replace(/(href|src)\s*=\s*(["'])\s*javascript:[^"']*\2/gi, '$1="#"')
+  return DOMPurify.sanitize(marked.parse(md, { async: false, gfm: true, breaks: true }) as string)
 }
 
 /** Import "front<TAB or ;>back" lines (CSV-ish, Anki text export). */

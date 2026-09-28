@@ -94,6 +94,7 @@ import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
 import { ShowMore, compactTitles, setCompactTitles } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
 import { DataReset } from './settings/DataReset'
+import { InstallApp } from './settings/InstallApp'
 import type { LucideIcon } from 'lucide-react'
 
 const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
@@ -927,6 +928,9 @@ export function SettingsPage({
         <AvatarPicker />
       </section>
 
+      <section className={styles.card}>
+        <InstallApp />
+      </section>
       <section className={styles.card}>
         <DataReset />
       </section>

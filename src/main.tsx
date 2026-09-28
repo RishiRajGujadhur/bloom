@@ -12,6 +12,7 @@ import { pixelIconsOn } from './icons/pixelated'
 import { registerChartTheme } from './components/ui/chartTheme'
 import { installCardEntrance, installCardGlow, installTitleReveal } from './components/ui/cardGlow'
 import { installFunLayer } from './components/ui/funLayer'
+import { installAppHealth } from './components/ui/appHealth'
 import { migrateLifeTools } from './components/daybook/storage'
 
 installInteractions()
@@ -37,3 +38,4 @@ installCardGlow()
 installTitleReveal()
 installCardEntrance()
 installFunLayer()
+installAppHealth()

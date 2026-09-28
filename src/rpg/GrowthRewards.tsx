@@ -280,7 +280,6 @@ export function GrowthRewards({
       )}
       <div
         className="growth-notices"
-        aria-label="Growth rewards"
         aria-live="polite"
         aria-atomic="true"
       >
