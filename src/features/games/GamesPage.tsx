@@ -10,6 +10,8 @@ import './games.css'
 import { FocusTracker, MentalRotation, NumberStream, PatternEcho, WordScramble } from './NewGames'
 import { Fireworks } from 'fireworks-js'
 import { AnalogyGame, AssessTab, FaceReader, KindReply, Leaderboard, MatrixGame } from './Assess'
+import { BoardLessons } from './BoardLessons'
+import { GameCard } from './GameCard'
 
 const on = (id: string) => subOn('brainGames', id)
 const initialStore: GamesStore = { levels: { nback: 1, memory: 1, stroop: 1, reaction: 1, maths: 1, simon: 1, rotate: 1, scramble: 1, track: 1, stream: 1, matrix: 1, analogy: 1, faces: 1, replies: 1 }, results: [], sound: true }
@@ -280,6 +282,7 @@ export function GamesPage() {
     })
   const [tab, setTab] = useState('play')
   const [game, setGame] = useState<GameId | null>(null)
+  const [boardGame, setBoardGame] = useState<'chess' | 'checkers' | null>(null)
   const [last, setLast] = useState<Result | null>(null)
   const [round, setRound] = useState(0)
   const today = dayKey()
@@ -311,7 +314,7 @@ export function GamesPage() {
 
   const play = () => (
     <div ref={stage} className="bg-stage">
-      {game ? (
+      {boardGame ? <div className="bg-game"><button type="button" className="studio-chip bg-quit" onClick={() => setBoardGame(null)}>← All games</button><BoardLessons key={boardGame} kind={boardGame} /></div> : game ? (
         <div key={round} className="bg-game">
           <button type="button" className="studio-chip bg-quit" onClick={() => setGame(null)}>
             ← All games
@@ -359,14 +362,11 @@ export function GamesPage() {
             </div>
           )}
           <Rail label="Games">
-            {visible.map((g) => (
+            {on('chessLessons') && <div role="listitem"><GameCard id="chess" title="Chess quest" index={0} onClick={() => setBoardGame('chess')} /></div>}
+            {on('checkersLessons') && <div role="listitem"><GameCard id="checkers" title="Checkers quest" index={1} onClick={() => setBoardGame('checkers')} /></div>}
+            {visible.map((g, index) => (
               <div key={g.id} role="listitem">
-                <button type="button" className="iv-card" onClick={() => start(g.id)}>
-                  <span aria-hidden="true">{g.emoji}</span>
-                  <strong>{g.name}</strong>
-                  <small>{g.blurb}</small>
-                  {on('adaptive') && <small>Level {store.levels[g.id]}</small>}
-                </button>
+                <GameCard id={g.id} title={g.name} index={index + 2} level={on('adaptive') ? store.levels[g.id] : undefined} onClick={() => start(g.id)} />
               </div>
             ))}
           </Rail>
@@ -407,7 +407,7 @@ export function GamesPage() {
       name="games"
       accent="#8f7ae5"
       tab={tab}
-      onTab={(t) => (t !== 'play' && setGame(null), setTab(t))}
+      onTab={(t) => (t !== 'play' && (setGame(null), setBoardGame(null)), setTab(t))}
       scene={<StudioScene colors={['#c9b8ff', '#9fdcc8', '#ffd89b']} line="pulse" />}
       aside={
         on('sounds') ? (

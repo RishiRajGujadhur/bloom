@@ -1,0 +1,53 @@
+.game-card { position:relative; display:block;width:174px;height:264px;padding:0;border:2px solid color-mix(in srgb,var(--gc-a),white 25%);border-radius:14px;color:#fff;text-align:left;cursor:pointer;isolation:isolate;transform-style:preserve-3d;background:linear-gradient(160deg,color-mix(in srgb,var(--gc-a),#11143d 38%),#101438 65%,#090c25);box-shadow:0 7px 13px #03051b66;transition:box-shadow .25s; }
+.game-card:hover,.game-card:focus-visible {z-index:4;box-shadow:0 14px 23px #02051a88;}
+.gc-pattern {position:absolute;inset:0;overflow:hidden;border-radius:12px;background:repeating-linear-gradient(0deg,transparent 0 16px,color-mix(in srgb,var(--gc-b),transparent 38%) 18px 27px,transparent 29px 60px),linear-gradient(135deg,var(--gc-a),transparent 70%);background-size:100% 120px,100% 100%;background-position:0 0,center;opacity:.48;pointer-events:none;}
+.gc-pattern::after {content:'';position:absolute;inset:-40%;background:repeating-conic-gradient(from 35deg at 55% 42%,transparent 0 15deg,color-mix(in srgb,var(--gc-b),transparent 70%) 16deg 22deg,transparent 25deg 45deg);opacity:.4;}
+.game-card:hover .gc-pattern,.game-card:focus-visible .gc-pattern {animation:gc-gradient-slide 4s linear infinite;}
+@keyframes gc-gradient-slide {to {background-position:0 -120px,center}}
+.gc-prism {position:absolute;inset:0;border-radius:12px;z-index:2;pointer-events:none;opacity:0;mix-blend-mode:screen;background:linear-gradient(112deg,transparent 5%,#ff8fb650 20%,#ffe48a66 35%,#96ffdb72 49%,#77b7ff68 63%,#c99aff60 78%,transparent 95%);background-size:190% 100%;background-position:30% 0;transition:opacity .2s;}
+.game-card:hover .gc-prism,.game-card:focus-visible .gc-prism {opacity:.72;animation:gc-prism-sweep 2.8s ease-in-out infinite alternate;}
+@keyframes gc-prism-sweep {to {background-position:90% 0}}
+.gc-weather {position:absolute;inset:0;overflow:hidden;border-radius:12px;z-index:1;pointer-events:none;opacity:0;transition:opacity .2s;}
+.game-card:hover .gc-weather,.game-card:focus-visible .gc-weather {opacity:.7;}
+.gc-weather i {position:absolute;display:block;left:var(--left);top:var(--top);bottom:var(--bottom);}
+.gc-weather i:nth-child(1){--left:10%;--top:14%;--bottom:8%}.gc-weather i:nth-child(2){--left:22%;--top:24%;--bottom:19%}.gc-weather i:nth-child(3){--left:34%;--top:34%;--bottom:30%}.gc-weather i:nth-child(4){--left:46%;--top:44%;--bottom:41%}.gc-weather i:nth-child(5){--left:58%;--top:54%;--bottom:52%}.gc-weather i:nth-child(6){--left:70%;--top:64%;--bottom:63%}.gc-weather i:nth-child(7){--left:82%;--top:74%;--bottom:74%}
+.gc-weather i:nth-child(2){animation-delay:-.38s}.gc-weather i:nth-child(3){animation-delay:-.81s}.gc-weather i:nth-child(4){animation-delay:-1.17s}.gc-weather i:nth-child(5){animation-delay:-1.54s}.gc-weather i:nth-child(6){animation-delay:-.62s}.gc-weather i:nth-child(7){animation-delay:-1.92s}
+.gc-weather-rain {background:repeating-linear-gradient(105deg,transparent 0 21px,#bcecff68 22px 23px,transparent 24px 40px);background-size:120px 120px;}
+.game-card:hover .gc-weather-rain,.game-card:focus-visible .gc-weather-rain {animation:gc-rainfall .85s linear infinite;}
+@keyframes gc-rainfall {to {background-position:-30px 120px}}
+.gc-weather-bubbles i {top:auto;bottom:-20px;width:11px;height:11px;border:2px solid #d8faffb8;border-radius:50%;box-shadow:inset 0 0 5px #a3f6ff55;}
+.game-card:hover .gc-weather-bubbles i,.game-card:focus-visible .gc-weather-bubbles i {animation:gc-bubble-rise 2.4s linear infinite;}
+@keyframes gc-bubble-rise {to {transform:translate(12px,-290px) scale(.55);opacity:0}}
+.gc-weather-sparks i {bottom:auto;width:6px;height:6px;background:#fff6c2;transform:rotate(45deg);box-shadow:0 0 8px #ffdba5;}
+.game-card:hover .gc-weather-sparks i,.game-card:focus-visible .gc-weather-sparks i {animation:gc-spark-pop 1.5s ease-in-out infinite alternate;}
+@keyframes gc-spark-pop {50% {transform:rotate(45deg) scale(1.8);opacity:1}to {transform:rotate(45deg) scale(.25);opacity:.15}}
+.gc-weather-rays {background:repeating-linear-gradient(125deg,transparent 0 24px,#fff5bc55 25px 28px,transparent 29px 52px);}
+.game-card:hover .gc-weather-rays,.game-card:focus-visible .gc-weather-rays {animation:gc-rays-breathe 1.8s ease-in-out infinite alternate;}
+@keyframes gc-rays-breathe {to {opacity:.17;transform:translateY(-12px)}}
+.gc-weather-comets i {left:-35px;bottom:auto;width:30px;height:2px;border-radius:50%;background:linear-gradient(90deg,transparent,#efffff);box-shadow:0 0 7px #b8dfff;}
+.game-card:hover .gc-weather-comets i,.game-card:focus-visible .gc-weather-comets i {animation:gc-comet-cross 1.8s linear infinite;}
+@keyframes gc-comet-cross {to {transform:translate(230px,45px);opacity:0}}
+.gc-weather-drift i {top:auto;width:7px;height:7px;border-radius:45% 55% 45% 55%;background:var(--gc-b);box-shadow:0 0 8px var(--gc-b);}
+.game-card:hover .gc-weather-drift i,.game-card:focus-visible .gc-weather-drift i {animation:gc-drift-float 2.2s ease-in-out infinite alternate;}
+@keyframes gc-drift-float {to {transform:translate(14px,-22px) rotate(25deg);opacity:.2}}
+.gc-rainbow {position:absolute;inset:-2px;border-radius:14px;z-index:2;background:linear-gradient(90deg,#ff667c,#ffcf66,#8bf7a6,#68cfff,#a98aff) top/100% 2px no-repeat,linear-gradient(90deg,#a98aff,#68cfff,#8bf7a6,#ffcf66,#ff667c) bottom/100% 2px no-repeat,linear-gradient(180deg,#ff667c,#ffcf66,#8bf7a6,#68cfff,#a98aff) left/2px 100% no-repeat,linear-gradient(180deg,#a98aff,#68cfff,#8bf7a6,#ffcf66,#ff667c) right/2px 100% no-repeat;opacity:0;pointer-events:none;transition:opacity .2s;}
+.game-card:hover .gc-rainbow,.game-card:focus-visible .gc-rainbow {opacity:1;}
+.gc-number,.gc-mark {position:absolute;top:12px;z-index:7;font-weight:900;font-size:13px;text-shadow:0 2px 4px #15143a;}.gc-number {left:13px}.gc-mark {right:13px;font-size:18px;}
+.gc-art {position:absolute;inset:25px 10px 45px;display:grid;place-items:center;z-index:3;pointer-events:none;transform-style:preserve-3d;}
+.gc-scene {width:154px;height:154px;color:var(--gc-b);overflow:visible;filter:drop-shadow(0 7px 5px #07092d88);}.gc-main-shape {transform-box:fill-box;transform-origin:center;}.gc-glyph {font-size:94px;font-family:Georgia,serif;font-weight:900;fill:#f7faff;stroke:var(--gc-a);stroke-width:2px;paint-order:stroke fill;filter:drop-shadow(3px 4px 0 #1b2462);}.gc-scene-maths .gc-glyph,.gc-scene-scramble .gc-glyph,.gc-scene-stream .gc-glyph {font-size:66px}.gc-scene-chess .gc-glyph {font-size:103px;}
+.gc-bottom {position:absolute;z-index:5;bottom:0;left:0;right:0;padding:32px 12px 11px;border-radius:0 0 12px 12px;background:linear-gradient(transparent,#101331d9 35%,#0c1029 100%);transform-style:preserve-3d;}.gc-title {display:block;position:relative;font-size:17px;line-height:1.08;font-weight:950;font-style:italic;letter-spacing:-.035em;text-shadow:1px 2px 0 #222354;transform-style:preserve-3d;}.gc-title-line {display:block;width:100%;height:9px;margin-top:2px;color:var(--gc-b);opacity:.5;}.gc-title-line path {stroke-dasharray:160;stroke-dashoffset:160;}.game-card:hover .gc-title-line path,.game-card:focus-visible .gc-title-line path {animation:gc-draw .65s ease-out forwards;}.game-card:hover .gc-title,.game-card:focus-visible .gc-title {background:linear-gradient(110deg,#fff,var(--gc-b),#fff,var(--gc-a),#fff);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:gc-title-shine 1.4s ease-in-out infinite alternate;}@keyframes gc-draw {to{stroke-dashoffset:0}}@keyframes gc-title-shine {to{background-position:100% 0}}
+.gc-footer {display:flex;align-items:center;justify-content:space-between;margin-top:7px}.gc-footer small {font-size:9px;letter-spacing:.16em;font-weight:800;color:#d7def8}.gc-play {width:24px;height:24px;border:1px solid #ffffffa8;border-radius:50%;display:grid;place-items:center;font-size:10px;color:#fff;}
+.studio-rail:has(.game-card) {grid-auto-columns:174px;gap:22px;padding:23px 18px 30px;perspective:900px;overflow-y:visible;}.studio-rail.is-all:has(.game-card) {grid-template-columns:repeat(auto-fill,minmax(174px,1fr));}.studio-rail:has(.game-card)>* {min-width:0;}
+@media (prefers-reduced-motion:reduce) {.game-card,.game-card * {animation:none!important;transition:none!important}.game-card:hover,.game-card:focus-visible {transform:none!important}}
+
+/* Calm character palette; the foil and atmosphere stay behind the artwork. */
+.game-card {background:linear-gradient(155deg,color-mix(in srgb,var(--gc-a),#074dce 55%),#122565 68%,#101a49);}
+.gc-pattern {opacity:.18;}
+.gc-pattern::after {opacity:.18;}
+.gc-scene {filter:drop-shadow(0 7px 3px #07112f55);}
+.gc-title {color:var(--gc-b);text-shadow:0 1px 1px #07112f;}
+.game-card:hover .gc-title,.game-card:focus-visible .gc-title {background:none;color:var(--gc-b);animation:none;filter:none;}
+.gc-title-line {opacity:.8;}
+.gc-bottom {background:linear-gradient(transparent,#10245fc9 40%,#10245f 100%);}
+.gc-rainbow {opacity:0;}
+.game-card:hover .gc-rainbow,.game-card:focus-visible .gc-rainbow {opacity:1;}

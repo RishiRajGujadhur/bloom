@@ -690,6 +690,8 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'piles', title: 'Card piles', description: 'Due, learning and known piles; graded cards fly to their pile.' },
   ],
   brainGames: [
+    { id: 'chessLessons', title: 'Learn chess', description: 'Guided chess lessons with legal moves and feedback.' },
+    { id: 'checkersLessons', title: 'Learn checkers', description: 'Guided lessons for steps, captures and kings.' },
     { id: "nback", title: "N-back", description: "A classic working-memory trainer." },
     { id: "memoryGrid", title: "Memory grid", description: "Recall lit tiles on a growing grid." },
     { id: "stroop", title: "Colour clash", description: "Stroop test for focus." },

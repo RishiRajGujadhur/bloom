@@ -80,6 +80,7 @@
     "automated-readability": "^2.0.1",
     "canvas-confetti": "^1.9.4",
     "chart.js": "^4.5.1",
+    "chess.js": "^1.4.0",
     "chroma-js": "^3.2.0",
     "chrono-node": "^2.10.1",
     "cmdk": "^1.1.1",
