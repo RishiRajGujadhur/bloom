@@ -327,6 +327,10 @@ html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) h1 {
   white-space: nowrap;
   border: 0;
 }
+.link-rail-shell { display: flex; align-items: center; gap: .25rem; min-width: 0; width: 100%; }
+.link-rail-shell .link-rail { flex: 1; min-width: 0; }
+.link-rail-arrow { flex: 0 0 1.8rem; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border: 1px solid var(--border-color); border-radius: 50%; background: var(--bg-surface); color: inherit; cursor: pointer; }
+.link-rail-arrow:disabled { opacity: .4; cursor: default; }
 html[data-compact-titles] .bloom-heading.feature-heading:not(.is-hero) .bloom-heading-copy {
   flex: 0 0 0;
   width: 0;

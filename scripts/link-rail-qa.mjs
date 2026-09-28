@@ -1,0 +1,17 @@
+import { chromium } from 'playwright'
+
+const browser = await chromium.launch({ headless: true })
+const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' })
+await context.addInitScript(() => localStorage.setItem('bloom-welcome-v1', JSON.stringify({ at: Date.now(), answers: null })))
+const page = await context.newPage()
+await page.goto('http://127.0.0.1:5176/#todos')
+const rail = page.getByRole('navigation', { name: 'Works well with' })
+await rail.waitFor()
+await page.getByRole('button', { name: 'Next related feature' }).click()
+if (await rail.evaluate((node) => node.scrollLeft) <= 0) throw new Error('Arrow did not move related features')
+await rail.focus()
+await page.keyboard.press('ArrowLeft')
+if (await rail.evaluate((node) => node.scrollLeft) > 2) throw new Error('Keyboard arrow did not return rail')
+await page.screenshot({ path: 'docs/screenshots/page-audit-2026-09-29/mobile-link-rail-arrows.png' })
+await browser.close()
+console.log('Related-feature rail arrows work with pointer and keyboard')

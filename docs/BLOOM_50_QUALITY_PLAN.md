@@ -23,8 +23,8 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 12. Use icon tooltips with keyboard focus equivalents. **Implemented for page emblems; audit other icons.**
 13. Make important actions discoverable without hover.
 14. Give icon buttons clear accessible names.
-15. Use horizontal rails with arrow controls where a long list is avoidable.
-16. Preserve a visible way to reach every rail item by keyboard.
+15. Use horizontal rails with arrow controls where a long list is avoidable. **Implemented for related features and existing card rails; review other lists.**
+16. Preserve a visible way to reach every rail item by keyboard. **Implemented for related features; audit other rails.**
 17. Remember a user’s last page and view.
 18. Offer fast search across features and content.
 19. Provide consistent breadcrumbs or return paths.
@@ -76,6 +76,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Corrected the screenshot audit to detect Bloom's own error screen and pages stuck loading. Re-ran all 134 captures on a fresh local server; no page errors or document-level overflow were reported.
 - 2026-09-29: Paused the global GSAP timeline while the tab is hidden, restoring its prior state when visible. TypeScript and lifecycle tests passed.
 - 2026-09-29: Replaced compact page heading text with the existing animated SVG emblems. Page names remain as semantic headings and appear on hover or keyboard focus. Checked desktop and mobile screenshots.
+- 2026-09-29: Added visible previous/next controls and arrow-key scrolling to the related-feature rail. Verified on a phone-sized viewport.
 
 ## New feature areas
 

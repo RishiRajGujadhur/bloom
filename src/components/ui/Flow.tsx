@@ -1,7 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { Children, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { readStore, writeStore } from '../studio/Studio'
 import { subOn } from '../../features/subFeatures'
 import { emblems } from './PageEmblem'
@@ -58,6 +58,18 @@ const title = (page: string) => page.replace(/-/g, ' ').replace(/^\w/, (c) => c.
 export function LinkRail({ page, names, enabled = () => true }: { page: string; names?: Record<string, string>; enabled?: (p: string) => boolean }) {
   const links = featureLinks[page]?.filter((l) => enabled(l.page))
   const row = useRef<HTMLDivElement>(null)
+  const [edges, setEdges] = useState({ start: true, end: true, scrollable: false })
+  useEffect(() => {
+    const node = row.current
+    if (!node) return
+    const update = () => setEdges({ start: node.scrollLeft <= 2, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 2, scrollable: node.scrollWidth > node.clientWidth + 2 })
+    update()
+    node.addEventListener('scroll', update, { passive: true })
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null
+    observer?.observe(node)
+    return () => { node.removeEventListener('scroll', update); observer?.disconnect() }
+  }, [page, links?.length])
+  const move = (direction: number) => row.current?.scrollBy({ left: direction * row.current.clientWidth * .75, behavior: reduced() ? 'auto' : 'smooth' })
   useLayoutEffect(() => {
     if (!row.current || reduced()) return
     const tw = gsap.from(row.current.children, { x: -12, opacity: 0, stagger: 0.06, duration: 0.35, ease: 'power2.out', delay: 0.4 })
@@ -65,7 +77,9 @@ export function LinkRail({ page, names, enabled = () => true }: { page: string; 
   }, [page])
   if (!links || !subOn('pointerFx', 'linkRail', { ignoreParent: true })) return null
   return (
-    <nav ref={row} className="link-rail" aria-label="Works well with">
+    <div className="link-rail-shell">
+      {edges.scrollable && <button type="button" className="link-rail-arrow" aria-label="Previous related feature" disabled={edges.start} onClick={() => move(-1)}><ChevronLeft size={16} /></button>}
+      <nav ref={row} className="link-rail" aria-label="Works well with" tabIndex={0} onKeyDown={(event) => { if (event.target === event.currentTarget && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) { event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1) } }}>
       {links.map((l) => {
         const e = emblems[l.page]
         return (
@@ -78,7 +92,9 @@ export function LinkRail({ page, names, enabled = () => true }: { page: string; 
           </a>
         )
       })}
-    </nav>
+      </nav>
+      {edges.scrollable && <button type="button" className="link-rail-arrow" aria-label="Next related feature" disabled={edges.end} onClick={() => move(1)}><ChevronRight size={16} /></button>}
+    </div>
   )
 }
 
