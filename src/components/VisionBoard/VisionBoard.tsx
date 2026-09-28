@@ -28,6 +28,7 @@ import { GoalNode, HabitNode, ImageNode } from './nodes/WhiteboardNodes'
 import gsap from 'gsap'
 import { usePageActions } from '../ui/PageMenu'
 import styles from './VisionBoard.module.css'
+import DrawingPractice from './DrawingPractice'
 
 const nodeTypes = { sticky: StickyNode, journal: JournalNode, badge: BadgeNode, image: ImageNode, goal: GoalNode, habit: HabitNode }
 type Habit = { id: string; title: string; dates: string[] }
@@ -588,9 +589,11 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
 }
 
 export default function VisionBoard(props: { badges: string[]; habits?: Habit[] }) {
+  const [practice, setPractice] = useState(false)
   return (
-    <ReactFlowProvider>
-      <Canvas {...props} />
-    </ReactFlowProvider>
+    practice ? <DrawingPractice onBack={() => setPractice(false)} /> : <>
+      <button className={styles.practiceLaunch} onClick={() => setPractice(true)} title="Open drawing practice" aria-label="Open drawing practice">✎ <span>Drawing practice</span></button>
+      <ReactFlowProvider><Canvas {...props} /></ReactFlowProvider>
+    </>
   )
 }

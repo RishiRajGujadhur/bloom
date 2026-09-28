@@ -79,6 +79,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Added visible previous/next controls and arrow-key scrolling to the related-feature rail. Verified on a phone-sized viewport.
 - 2026-09-29: Added Rhythm lab to Focus sounds: a metronome, SVG beat guide, keyboard tapping, early/late feedback, and a saved best score. Verified timing logic and desktop/mobile flows.
 - 2026-09-29: Added Pitch lab to Focus sounds: ten higher/lower listening questions, two difficulty levels, note-name explanations, SVG staff feedback, and a saved best score. Corrected the Sounds studio width on phones and verified desktop/mobile flows.
+- 2026-09-29: Added guided line, circle, and triangle tracing to Vision Board, with touch/mouse/pen input, SVG guide animation, stroke replay, gentle score feedback, and saved best scores. Verified a scored stroke, TypeScript, and desktop/mobile screenshots; mobile had no document-level horizontal overflow.
 
 ## New feature areas
 
