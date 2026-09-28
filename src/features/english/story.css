@@ -217,3 +217,9 @@
   .st-portrait { bottom: 150px; }
   .st-portrait svg { width: 100px; height: 100px; }
 }
+.st-video {
+  position: relative;
+}
+.st-video-skip {
+  z-index: 2;
+}

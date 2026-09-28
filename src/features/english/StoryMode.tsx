@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { BloomFace } from '../../components/ui/BloomFace'
 import type { AvatarDrawing } from '../../components/ui/avatarStyle'
@@ -10,6 +10,8 @@ import { LessonPlayer, type LessonResult } from './LessonPlayer'
 import { sfx } from './sfx'
 import { unitThemes } from './UnitScene'
 import './story.css'
+
+const IntroPlayer = lazy(() => import('./video/IntroPlayer').then((m) => ({ default: m.IntroPlayer })))
 
 /**
  * Story mode — "The Word Well": a short side quest. Bloom World is leaking
@@ -259,6 +261,7 @@ function Wheel({ onPrize }: { onPrize: (p: (typeof prizes)[number]) => void }) {
 /* ---------- The story flow ---------- */
 type Step =
   | { kind: 'map' }
+  | { kind: 'video'; then: Step }
   | { kind: 'talk'; lines: Line[]; sky: [string, string]; then: Step; final?: boolean }
   | { kind: 'vs'; level: number }
   | { kind: 'play'; level: number }
@@ -270,7 +273,8 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
     setState(s)
     writeStore(STORY_KEY, s)
   }
-  const [step, setStep] = useState<Step>(() => (state.seenPrologue ? { kind: 'map' } : { kind: 'talk', lines: prologue, sky: ['#fff0e0', '#ffc2a8'], then: { kind: 'map' } }))
+  // First visit: the Remotion intro video, then the prologue dialogue.
+  const [step, setStep] = useState<Step>(() => (state.seenPrologue ? { kind: 'map' } : { kind: 'video', then: { kind: 'talk', lines: prologue, sky: ['#fff0e0', '#ffc2a8'], then: { kind: 'map' } } }))
   const map = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -301,6 +305,12 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
     }
   }
 
+  if (step.kind === 'video')
+    return (
+      <Suspense fallback={<p role="status">Loading the intro…</p>}>
+        <IntroPlayer onEnd={() => setStep(step.then)} />
+      </Suspense>
+    )
   if (step.kind === 'talk')
     return <Dialogue key={step.lines[0][1]} lines={step.lines} sky={step.sky} final={step.final} onDone={() => { if (!state.seenPrologue) save({ ...state, seenPrologue: true }); setStep(step.then) }} />
   if (step.kind === 'vs') return <Versus level={levels[step.level]} onGo={() => setStep({ kind: 'play', level: step.level })} />
@@ -349,7 +359,10 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
           )
         })}
       </div>
-      <button type="button" className="en-link" onClick={() => setStep({ kind: 'talk', lines: prologue, sky: ['#fff0e0', '#ffc2a8'], then: { kind: 'map' } })}>Replay the prologue</button>
+      <div className="en-inline">
+        <button type="button" className="studio-btn" onClick={() => setStep({ kind: 'video', then: { kind: 'map' } })}>▶ Watch the intro</button>
+        <button type="button" className="en-link" onClick={() => setStep({ kind: 'talk', lines: prologue, sky: ['#fff0e0', '#ffc2a8'], then: { kind: 'map' } })}>Replay the prologue</button>
+      </div>
     </div>
   )
 }
