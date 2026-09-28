@@ -1,0 +1,19 @@
+.rhythm-lab { display: grid; gap: 1rem; max-width: 42rem; margin: 0 auto; }
+.rhythm-head { display: flex; align-items: flex-start; gap: .7rem; }
+.rhythm-head strong { font-size: 1.15rem; }
+.rhythm-head p { margin: .25rem 0 0; color: var(--text-muted); }
+.rhythm-tempo { display: grid; gap: .35rem; font-weight: 600; }
+.rhythm-tempo span { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+.rhythm-tempo input { width: 100%; accent-color: #a66bce; }
+.rhythm-score { width: min(100%, 360px); margin: .25rem auto; overflow: visible; }
+.rhythm-score path { fill: none; stroke: #d7c9e0; stroke-width: 5; }
+.rhythm-score circle { fill: #e6d7ef; stroke: #b68acb; stroke-width: 3; transition: r .16s ease, fill .16s ease; }
+.rhythm-score circle.is-active { fill: #9a61c0; stroke: #6e3892; }
+.rhythm-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .6rem; }
+.rhythm-actions button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 2.8rem; border: 1px solid var(--border-color); border-radius: .85rem; padding: .55rem .9rem; background: var(--bg-surface); color: inherit; cursor: pointer; }
+.rhythm-actions button:disabled { opacity: .45; cursor: default; }
+.rhythm-actions .rhythm-tap { min-width: 10rem; background: #e5d4f0; color: #39234b; border-color: #b992d0; font-weight: 700; }
+.rhythm-tap span { font-size: .7rem; font-weight: 400; opacity: .7; }
+.rhythm-feedback { display: flex; justify-content: center; gap: .55rem; flex-wrap: wrap; min-height: 1.5rem; text-align: center; }
+.rhythm-feedback span { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+html[data-reduce-motion='true'] .rhythm-score circle { transition: none; }

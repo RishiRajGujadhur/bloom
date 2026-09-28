@@ -77,11 +77,12 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Paused the global GSAP timeline while the tab is hidden, restoring its prior state when visible. TypeScript and lifecycle tests passed.
 - 2026-09-29: Replaced compact page heading text with the existing animated SVG emblems. Page names remain as semantic headings and appear on hover or keyboard focus. Checked desktop and mobile screenshots.
 - 2026-09-29: Added visible previous/next controls and arrow-key scrolling to the related-feature rail. Verified on a phone-sized viewport.
+- 2026-09-29: Added Rhythm lab to Focus sounds: a metronome, SVG beat guide, keyboard tapping, early/late feedback, and a saved best score. Verified timing logic and desktop/mobile flows.
 
 ## New feature areas
 
 - Cooking: deepen cook-along with technique lessons and safe, clear guidance. The first cook-along version is complete.
-- Music: add a practice path with rhythm, pitch, and short sessions.
+- Music: Rhythm lab is available under Focus sounds. Add pitch practice and short guided sessions next.
 - Drawing: add guided exercises with a simple canvas and replayable strokes.
 - Health tracking: connect existing sleep, movement, food, mood, and focus data in understandable trends.
 
