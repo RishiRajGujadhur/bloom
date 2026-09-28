@@ -280,6 +280,7 @@ export interface FeatureFlags {
 
 export interface AppSettings {
   features: FeatureFlags
+  reducedMotion?: boolean
   /** Sub-feature switches, keyed "feature.option"; missing means on. */
   sub?: Record<string, boolean>
 }
@@ -287,6 +288,7 @@ export interface AppSettings {
 export { SETTINGS_STORAGE_KEY }
 
 export const defaultSettings: AppSettings = {
+  reducedMotion: false,
   features: {
     dailySpin: false,
     collectibles: false,
@@ -492,7 +494,7 @@ function parseSettings(value: unknown): AppSettings | null {
         )
       : {}
   return isFeatureFlags(migrated)
-    ? { features: { ...migrated }, sub: sub as Record<string, boolean> }
+    ? { features: { ...migrated }, sub: sub as Record<string, boolean>, reducedMotion: candidate.reducedMotion === true }
     : null
 }
 
@@ -543,7 +545,7 @@ const matches = (text: string, query: string) => text.toLowerCase().includes(que
  * are labelled instead of greyed out.
  */
 /** Navigation style and a way back into onboarding. */
-function NavigationCard() {
+function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: boolean; setReducedMotion: (enabled: boolean) => void }) {
   const [hamburger, setHamburger] = useState(hamburgerNav)
   const [compact, setCompact] = useState(compactTitles)
   const [pixel, setPixel] = useState(pixelIconsOn)
@@ -553,6 +555,16 @@ function NavigationCard() {
         <Menu size={18} aria-hidden="true" />
         Navigation & setup
       </h2>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Reduce motion</strong>
+          <small>Use fewer animations throughout Bloom. This also helps slower phones and computers.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input type="checkbox" checked={reducedMotion} onChange={(e) => setReducedMotion(e.target.checked)} aria-label="Reduce motion" />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
       <label className={styles.subOption}>
         <span>
           <strong>Hamburger menu</strong>
@@ -919,7 +931,7 @@ export function SettingsPage({
         )}
       </section>
 
-      <NavigationCard />
+      <NavigationCard reducedMotion={settings.reducedMotion === true} setReducedMotion={(enabled) => setSettings((current) => ({ ...current, reducedMotion: enabled }))} />
 
       <section
         className={styles.card}

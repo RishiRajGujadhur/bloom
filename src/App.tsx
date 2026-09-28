@@ -383,7 +383,7 @@ function App() {
   }, [active])
   // Page entrance: the new page's blocks settle in with a soft stagger.
   useLayoutEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    if (settings.reducedMotion || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     const blocks = document.querySelectorAll(
       '.page-content > :not(.bloom-heading):not([hidden]), .overview-grid > div > *, .ov-stats > *',
     )
@@ -399,7 +399,7 @@ function App() {
     return () => {
       tween.progress(1).kill()
     }
-  }, [active])
+  }, [active, settings.reducedMotion])
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
@@ -452,6 +452,7 @@ function App() {
     document.documentElement.dataset.density = settings.features.compactMode
       ? 'compact'
       : 'comfortable'
+    document.documentElement.dataset.reduceMotion = settings.reducedMotion ? 'true' : 'false'
     // Switched-off sub-features, for CSS-level gates (see subFeatureGates.css).
     document.documentElement.dataset.off = Object.entries(settings.sub ?? {})
       .filter(([, on]) => on === false)
@@ -611,7 +612,7 @@ function App() {
     burst(null, 'stars')
   }
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={settings.reducedMotion ? 'always' : 'user'}>
       <div
         className="app-shell min-h-dvh bg-page font-app text-foreground"
         data-palette={data.rpg.palette}
@@ -631,7 +632,7 @@ function App() {
 
         <MatrixRain />
         <HoverHints />
-        <GsapControls />
+        {!settings.reducedMotion && <GsapControls />}
         {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
         <PageMenu page={active} common={menuCommon}>
         <main id="overview" className="min-w-0 flex-1">

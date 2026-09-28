@@ -6,7 +6,7 @@ import { subOn } from '../../features/subFeatures'
 import { emblems } from './PageEmblem'
 import './flow.css'
 
-const reduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const reduced = () => typeof window !== 'undefined' && (document.documentElement.dataset.reduceMotion === 'true' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
 const narrow = () => typeof window !== 'undefined' && !!window.matchMedia?.('(max-width: 720px)').matches
 
 /**
