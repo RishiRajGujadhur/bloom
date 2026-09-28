@@ -295,7 +295,7 @@
 
 /* Matrix: keep text dark on the bright banners and nodes */
 html[data-theme='matrix'] .en-banner { color: #021006; }
-html[data-theme='matrix'] .en-check, html[data-theme='matrix'] .en-node, html[data-theme='matrix'] .en-unit-head, html[data-theme='matrix'] .en-speaker { color: #021006; text-shadow: none; }
+html[data-theme='matrix'] .en-check, html[data-theme='matrix'] .en-node, html[data-theme='matrix'] .en-speaker { color: #021006; text-shadow: none; }
 
 /* ---- themed unit banners ---- */
 .en-unit-head {
@@ -367,3 +367,4 @@ html[data-theme='matrix'] .en-check, html[data-theme='matrix'] .en-node, html[da
 @keyframes en-pick {
   40% { transform: scale(1.05); }
 }
+html[data-theme='matrix'] .en-unit-head { color: #eafff0; }

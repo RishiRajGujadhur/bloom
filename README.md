@@ -2,6 +2,28 @@
 
 A personal React 19 health-coaching dashboard with a Habitica-inspired purple palette. No account or external AI service is required. Coaching uses a four-step reflection script.
 
+
+## Screenshots
+
+| Bloom Light | Matrix |
+|---|---|
+| ![Home, Bloom Light theme](docs/screenshots/home-light.png) | ![Home, Matrix theme](docs/screenshots/home-matrix.png) |
+| ![English course, Bloom Light theme](docs/screenshots/english-light.png) | ![English course, Matrix theme](docs/screenshots/english-matrix.png) |
+| ![Money, Bloom Light theme](docs/screenshots/money-light.png) | ![Money, Matrix theme](docs/screenshots/money-matrix.png) |
+| ![Little Joys, Bloom Light theme](docs/screenshots/little-joys-light.png) | ![Little Joys, Matrix theme](docs/screenshots/little-joys-matrix.png) |
+| ![Tai Chi, Bloom Light theme](docs/screenshots/tai-chi-light.png) | ![Tai Chi, Matrix theme](docs/screenshots/tai-chi-matrix.png) |
+
+To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome.
+
+## Highlights
+
+- **Bloom, your companion:** nine switchable avatars (Bloom, Robot, Mood orb, Sparky, Beacon, Tinker, Pixel Bloom, Globe and more), animated with GSAP and SVG. Bloom acts out each page (lifting a dumbbell on Exercise, burning a note on Let it go…). In the chat you can type commands: log expenses, add to-dos, check off habits, log mood and gratitude, and get quiz hints.
+- **Bloom English:** a Duolingo-style course with a lesson path, XP, streaks, hearts, leagues, quests, stories, speaking and pronunciation, a writing coach, themed weather scenes for every unit, and **Story mode**: a tournament side quest with a Remotion intro video.
+- **Money:** spending in any currency, with budgets, charts (circle packing, candlesticks, calendar heatmap, glowing radar), a plan tab and CSV import.
+- **Little Joys:** hydration, sky (moon phase and the sun's arc), a kindness deck, mood colours and a QR postcard.
+- **Themes:** Bloom Light and Dark, **Matrix** (phosphor green, CRT scanlines, glyph rain), five **Glow** gradient themes, and more. Cards light up under the pointer.
+- **Quality:** installable, works offline, per-page error recovery, DOMPurify sanitising, an accessibility audit, a Clear my data option and 300+ tests. See [docs/QUALITY.md](docs/QUALITY.md).
+
 ## Start
 
 Double-click **Start Bloom.cmd**, or run:
@@ -71,3 +93,160 @@ VS Code ESLint (`dbaeumer.vscode-eslint`) and Prettier (`esbenp.prettier-vscode`
 - `src/features/planning.ts`: project hierarchy, action availability, perspectives, and scheduling validation. The calendar uses FullCalendar's MIT-licensed standard React, time-grid, day-grid, list, and interaction plugins.
 
 This repository contains the complete Bloom dashboard application and its tests.
+
+## Open-source libraries
+
+Bloom is built on these open-source packages (runtime dependencies from `package.json`). The table is generated from the imports in `src/`, and "Where it is used" names the feature folder or area that imports each package.
+
+| Library | Where it is used |
+|---|---|
+| [`@chatscope/chat-ui-kit-react`](https://www.npmjs.com/package/@chatscope/chat-ui-kit-react) | companion |
+| [`@chatscope/chat-ui-kit-styles`](https://www.npmjs.com/package/@chatscope/chat-ui-kit-styles) | companion |
+| [`@dnd-kit/core`](https://www.npmjs.com/package/@dnd-kit/core) | english, yoga |
+| [`@dnd-kit/sortable`](https://www.npmjs.com/package/@dnd-kit/sortable) | english, yoga |
+| [`@dnd-kit/utilities`](https://www.npmjs.com/package/@dnd-kit/utilities) | english, yoga |
+| [`@fontsource/caveat`](https://www.npmjs.com/package/@fontsource/caveat) | global styles |
+| [`@fontsource/dm-sans`](https://www.npmjs.com/package/@fontsource/dm-sans) | global styles |
+| [`@fontsource/fira-code`](https://www.npmjs.com/package/@fontsource/fira-code) | global styles |
+| [`@fontsource/manrope`](https://www.npmjs.com/package/@fontsource/manrope) | global styles |
+| [`@fontsource/press-start-2p`](https://www.npmjs.com/package/@fontsource/press-start-2p) | global styles |
+| [`@fontsource/vt323`](https://www.npmjs.com/package/@fontsource/vt323) | global styles |
+| [`@formkit/auto-animate`](https://www.npmjs.com/package/@formkit/auto-animate) | quick |
+| [`@fullcalendar/daygrid`](https://www.npmjs.com/package/@fullcalendar/daygrid) | CalendarPage.tsx |
+| [`@fullcalendar/interaction`](https://www.npmjs.com/package/@fullcalendar/interaction) | CalendarPage.tsx |
+| [`@fullcalendar/list`](https://www.npmjs.com/package/@fullcalendar/list) | CalendarPage.tsx |
+| [`@fullcalendar/react`](https://www.npmjs.com/package/@fullcalendar/react) | CalendarPage.tsx |
+| [`@fullcalendar/timegrid`](https://www.npmjs.com/package/@fullcalendar/timegrid) | CalendarPage.tsx |
+| [`@hello-pangea/dnd`](https://www.npmjs.com/package/@hello-pangea/dnd) | diet |
+| [`@lottiefiles/react-lottie-player`](https://www.npmjs.com/package/@lottiefiles/react-lottie-player) | daybook, rpg |
+| [`@mediapipe/tasks-vision`](https://www.npmjs.com/package/@mediapipe/tasks-vision) | posture, taichi |
+| [`@mlc-ai/web-llm`](https://www.npmjs.com/package/@mlc-ai/web-llm) | companion |
+| [`@nivo/calendar`](https://www.npmjs.com/package/@nivo/calendar) | money |
+| [`@nivo/radar`](https://www.npmjs.com/package/@nivo/radar) | diet |
+| [`@nivo/sankey`](https://www.npmjs.com/package/@nivo/sankey) | energy |
+| [`@radix-ui/react-context-menu`](https://www.npmjs.com/package/@radix-ui/react-context-menu) | ui |
+| [`@radix-ui/react-dropdown-menu`](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu) | ui |
+| [`@radix-ui/react-hover-card`](https://www.npmjs.com/package/@radix-ui/react-hover-card) | rewards |
+| [`@radix-ui/react-popover`](https://www.npmjs.com/package/@radix-ui/react-popover) | reminders |
+| [`@radix-ui/react-select`](https://www.npmjs.com/package/@radix-ui/react-select) | ui |
+| [`@react-pdf/renderer`](https://www.npmjs.com/package/@react-pdf/renderer) | lab, yearbook |
+| [`@react-spring/web`](https://www.npmjs.com/package/@react-spring/web) | release |
+| [`@react-three/drei`](https://www.npmjs.com/package/@react-three/drei) | rpg, wellbeing, world |
+| [`@react-three/fiber`](https://www.npmjs.com/package/@react-three/fiber) | games, journey, palace, rpg, taichi, wellbeing, world |
+| [`@remotion/player`](https://www.npmjs.com/package/@remotion/player) | english |
+| [`@tiptap/extension-highlight`](https://www.npmjs.com/package/@tiptap/extension-highlight) | daybook |
+| [`@tiptap/extension-placeholder`](https://www.npmjs.com/package/@tiptap/extension-placeholder) | daybook |
+| [`@tiptap/extension-task-item`](https://www.npmjs.com/package/@tiptap/extension-task-item) | daybook |
+| [`@tiptap/extension-task-list`](https://www.npmjs.com/package/@tiptap/extension-task-list) | daybook |
+| [`@tiptap/react`](https://www.npmjs.com/package/@tiptap/react) | daybook |
+| [`@tiptap/starter-kit`](https://www.npmjs.com/package/@tiptap/starter-kit) | daybook |
+| [`@tsparticles/react`](https://www.npmjs.com/package/@tsparticles/react) | meditate |
+| [`@tsparticles/slim`](https://www.npmjs.com/package/@tsparticles/slim) | meditate |
+| [`@turf/turf`](https://www.npmjs.com/package/@turf/turf) | run |
+| [`@use-gesture/react`](https://www.npmjs.com/package/@use-gesture/react) | release, ui |
+| [`@xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers) | search, voice |
+| [`@xyflow/react`](https://www.npmjs.com/package/@xyflow/react) | VisionBoard |
+| [`@zxing/browser`](https://www.npmjs.com/package/@zxing/browser) | scan |
+| [`an-array-of-english-words`](https://www.npmjs.com/package/an-array-of-english-words) | english |
+| [`animejs`](https://www.npmjs.com/package/animejs) | exercise |
+| [`automated-readability`](https://www.npmjs.com/package/automated-readability) | english |
+| [`canvas-confetti`](https://www.npmjs.com/package/canvas-confetti) | core, juice, ui |
+| [`chart.js`](https://www.npmjs.com/package/chart.js) | english, ui, workout |
+| [`chroma-js`](https://www.npmjs.com/package/chroma-js) | rpg |
+| [`chrono-node`](https://www.npmjs.com/package/chrono-node) | quick |
+| [`cmdk`](https://www.npmjs.com/package/cmdk) | layout |
+| [`cmu-pronouncing-dictionary`](https://www.npmjs.com/package/cmu-pronouncing-dictionary) | english |
+| [`compromise`](https://www.npmjs.com/package/compromise) | companion, daybook, english |
+| [`compromise-speech`](https://www.npmjs.com/package/compromise-speech) | english |
+| [`currency.js`](https://www.npmjs.com/package/currency.js) | money |
+| [`cursor-effects`](https://www.npmjs.com/package/cursor-effects) | ui |
+| [`d3-hierarchy`](https://www.npmjs.com/package/d3-hierarchy) | money |
+| [`d3-shape`](https://www.npmjs.com/package/d3-shape) | flow |
+| [`date-fns`](https://www.npmjs.com/package/date-fns) | quick, timeSince |
+| [`dexie`](https://www.npmjs.com/package/dexie) | search |
+| [`diff`](https://www.npmjs.com/package/diff) | daybook |
+| [`dompurify`](https://www.npmjs.com/package/dompurify) | cards |
+| [`double-metaphone`](https://www.npmjs.com/package/double-metaphone) | english |
+| [`driver.js`](https://www.npmjs.com/package/driver.js) | layout, rpg |
+| [`easytimer.js`](https://www.npmjs.com/package/easytimer.js) | interval |
+| [`embla-carousel-react`](https://www.npmjs.com/package/embla-carousel-react) | ui |
+| [`fastest-levenshtein`](https://www.npmjs.com/package/fastest-levenshtein) | english |
+| [`fireworks-js`](https://www.npmjs.com/package/fireworks-js) | games |
+| [`flesch`](https://www.npmjs.com/package/flesch) | english |
+| [`formik`](https://www.npmjs.com/package/formik) | app shell, journal |
+| [`framer-motion`](https://www.npmjs.com/package/framer-motion) | achievements, app shell, collectibles, daybook, journal, posture, reminders, rewards, rpg, sleep, urgeClock.tsx, wellbeing, world |
+| [`franc-min`](https://www.npmjs.com/package/franc-min) | english |
+| [`frappe-gantt`](https://www.npmjs.com/package/frappe-gantt) | roadmap |
+| [`fuse.js`](https://www.npmjs.com/package/fuse.js) | companion, english, exercise |
+| [`gsap`](https://www.npmjs.com/package/gsap) | VisionBoard, app shell, body, cards, companion, core, dailyFlow, daybook, daylight, diet, dojo, english, epiphany, exercise, fasting, games, interval, journey, joys, juice, lab, meditate, mindmap, mirror, mixer, money, monk, palace, quick, release, routines, rpg, scan, showcase, sleep, sounds, street, studio, ui, welcome, wellbeing, workout, world, yoga |
+| [`howler`](https://www.npmjs.com/package/howler) | AudioMixerContext |
+| [`i18next`](https://www.npmjs.com/package/i18next) | translations |
+| [`ics`](https://www.npmjs.com/package/ics) | daybook |
+| [`jszip`](https://www.npmjs.com/package/jszip) | lab |
+| [`leaflet`](https://www.npmjs.com/package/leaflet) | places, run |
+| [`lightweight-charts`](https://www.npmjs.com/package/lightweight-charts) | money |
+| [`lottie-web`](https://www.npmjs.com/package/lottie-web) | ui |
+| [`lucide-react`](https://www.npmjs.com/package/lucide-react) | AdoptLibrary.tsx, AudioMixer.tsx, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, LanguageSelector.tsx, Modal.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, achievements, affirm, app shell, body, breathwork, cards, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, focusRoom, games, icons, ink, interval, journal, joys, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, settings, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, ui, urgeClock.tsx, voice, welcome, wellbeing, workout, yearbook, yoga |
+| [`lunarphase-js`](https://www.npmjs.com/package/lunarphase-js) | joys |
+| [`marked`](https://www.npmjs.com/package/marked) | cards |
+| [`markmap-lib`](https://www.npmjs.com/package/markmap-lib) | mindmap |
+| [`markmap-view`](https://www.npmjs.com/package/markmap-view) | mindmap |
+| [`mathjs`](https://www.npmjs.com/package/mathjs) | diet |
+| [`matter-js`](https://www.npmjs.com/package/matter-js) | impact, showcase |
+| [`meyda`](https://www.npmjs.com/package/meyda) | taichi |
+| [`minisearch`](https://www.npmjs.com/package/minisearch) | search |
+| [`mouse-follower`](https://www.npmjs.com/package/mouse-follower) | ui |
+| [`nosleep.js`](https://www.npmjs.com/package/nosleep.js) | breathwork |
+| [`number-to-words`](https://www.npmjs.com/package/number-to-words) | english |
+| [`page-flip`](https://www.npmjs.com/package/page-flip) | daybook |
+| [`papaparse`](https://www.npmjs.com/package/papaparse) | money |
+| [`perfect-freehand`](https://www.npmjs.com/package/perfect-freehand) | ink |
+| [`pixelarticons`](https://www.npmjs.com/package/pixelarticons) | icons |
+| [`pixi.js`](https://www.npmjs.com/package/pixi.js) | games |
+| [`pluralize`](https://www.npmjs.com/package/pluralize) | english |
+| [`qrcode`](https://www.npmjs.com/package/qrcode) | joys |
+| [`react`](https://www.npmjs.com/package/react) | AdoptLibrary.tsx, AudioMixer.tsx, AudioMixerContext, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, Modal.tsx, PersonalInsights.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, VisionBoard, achievements, affirm, app shell, app start-up, body, breathwork, cards, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, flow, focusRoom, games, icons, impact, ink, interval, journal, journey, joys, juice, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, quick, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, search, settings, shared, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, tsparticles react.d, ui, urgeClock.tsx, useCoach, voice, welcome, wellbeing, workout, world, yearbook, yoga |
+| [`react-calendar-heatmap`](https://www.npmjs.com/package/react-calendar-heatmap) | fasting |
+| [`react-chartjs-2`](https://www.npmjs.com/package/react-chartjs-2) | english, workout |
+| [`react-compare-slider`](https://www.npmjs.com/package/react-compare-slider) | body |
+| [`react-countdown-circle-timer`](https://www.npmjs.com/package/react-countdown-circle-timer) | stretch |
+| [`react-dom`](https://www.npmjs.com/package/react-dom) | BloomExperience.tsx, app start-up, daybook, monk, showcase, welcome |
+| [`react-flip-numbers`](https://www.npmjs.com/package/react-flip-numbers) | quick, timeSince |
+| [`react-i18next`](https://www.npmjs.com/package/react-i18next) | DashboardWelcome.tsx, LanguageSelector.tsx, Modal.tsx, SettingsPage, app shell, daybook, journal, layout, rpg, settings, translations, useCoach |
+| [`react-idle-timer`](https://www.npmjs.com/package/react-idle-timer) | screen |
+| [`react-leaflet`](https://www.npmjs.com/package/react-leaflet) | places |
+| [`react-querybuilder`](https://www.npmjs.com/package/react-querybuilder) | explore |
+| [`reading-time`](https://www.npmjs.com/package/reading-time) | daybook, reading time.d |
+| [`remotion`](https://www.npmjs.com/package/remotion) | english |
+| [`rough-notation`](https://www.npmjs.com/package/rough-notation) | dojo |
+| [`roughjs`](https://www.npmjs.com/package/roughjs) | daybook, exercise, eyes |
+| [`rrule`](https://www.npmjs.com/package/rrule) | routines |
+| [`seedrandom`](https://www.npmjs.com/package/seedrandom) | english, joys |
+| [`sentiment`](https://www.npmjs.com/package/sentiment) | companion, english, mirror, quick |
+| [`simple-statistics`](https://www.npmjs.com/package/simple-statistics) | lab |
+| [`simplex-noise`](https://www.npmjs.com/package/simplex-noise) | mixer, quick |
+| [`stopword`](https://www.npmjs.com/package/stopword) | english |
+| [`suncalc`](https://www.npmjs.com/package/suncalc) | daylight, joys, quick |
+| [`supermemo`](https://www.npmjs.com/package/supermemo) | cards, epiphany |
+| [`swiper`](https://www.npmjs.com/package/swiper) | affirm, showcase |
+| [`syllable`](https://www.npmjs.com/package/syllable) | english |
+| [`tailwindcss`](https://www.npmjs.com/package/tailwindcss) | global styles |
+| [`three`](https://www.npmjs.com/package/three) | games, journey, palace, rpg, taichi, wellbeing, world |
+| [`tinycolor2`](https://www.npmjs.com/package/tinycolor2) | joys |
+| [`tone`](https://www.npmjs.com/package/tone) | taichi |
+| [`ts-fsrs`](https://www.npmjs.com/package/ts-fsrs) | english |
+| [`tunajs`](https://www.npmjs.com/package/tunajs) | sounds |
+| [`typed.js`](https://www.npmjs.com/package/typed.js) | quick |
+| [`vivus`](https://www.npmjs.com/package/vivus) | achievements |
+| [`wavesurfer.js`](https://www.npmjs.com/package/wavesurfer.js) | voice |
+| [`wink-lemmatizer`](https://www.npmjs.com/package/wink-lemmatizer) | english |
+| [`write-good`](https://www.npmjs.com/package/write-good) | english |
+| [`zdog`](https://www.npmjs.com/package/zdog) | mala |
+| [`zod`](https://www.npmjs.com/package/zod) | collectibles, companion, model, rpg |
+
+Supporting packages (types, build plugins and peer packages of the above): `@fullcalendar/core`, `@gsap/react`, `@radix-ui/react-tooltip`, `@tailwindcss/vite`, `@tiptap/extensions`, `@types/chroma-js`, `@types/react-calendar-heatmap`, `@zxing/library`, `decimal.js`, `fast-diff`, `mustache`, `react-joyride`.
+
+Dev tooling includes Vite, vite-plugin-pwa (Workbox), TypeScript, ESLint, Jest with Testing Library, Playwright (screenshots) and axe-core (accessibility audit).
+
+Remotion is used under the [Remotion licence](https://www.remotion.dev/license), which is free for individuals and small teams.
+
