@@ -203,6 +203,7 @@
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   gap: 16px;
 }
+.sleep-mood-card{grid-column:1/-1}.sleep-mood-card h3{display:flex;align-items:center;color:var(--accent-color)}.sleep-mood-chart{display:block;width:100%;max-width:720px;height:auto;max-height:260px;margin:10px auto;overflow:visible}.sleep-mood-chart text{fill:var(--text-muted);font-size:10px}.sleep-mood-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12px}.sleep-mood-legend span:first-child{color:#6b7fd7}.sleep-mood-legend span:last-child{color:#e27396}
 .sleep-chart {
   position: relative;
   display: flex;

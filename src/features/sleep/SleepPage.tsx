@@ -4,7 +4,7 @@ import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { BedDouble, Check, Moon, Sparkles, Sunrise, Trash2 } from 'lucide-react'
-import { useStoredList } from '../wellbeing/store'
+import { MOOD_KEY, useStoredList, type MoodEntry } from '../wellbeing/store'
 import { useStoredValue } from './useStoredValue'
 import { LottieIcon } from '../../components/ui/LottieIcon'
 import { dayKey } from '../../dates'
@@ -40,6 +40,7 @@ type Tab = 'log' | 'wind-down' | 'insights'
 
 export function SleepPage() {
   const [entries, setEntries] = useStoredList<SleepEntry>(SLEEP_KEY)
+  const [moodEntries] = useStoredList<MoodEntry>(MOOD_KEY)
   const [settings, setSettings] = useStoredValue<SleepSettings>(
     SLEEP_SETTINGS_KEY,
     defaultSleepSettings,
@@ -84,6 +85,7 @@ export function SleepPage() {
       {tab === 'insights' && (
         <SleepInsights
           entries={entries}
+          moodEntries={moodEntries}
           settings={settings}
           onDelete={(id) => setEntries((list) => list.filter((e) => e.id !== id))}
         />
@@ -283,10 +285,12 @@ function WindDown({
 
 function SleepInsights({
   entries,
+  moodEntries,
   settings,
   onDelete,
 }: {
   entries: SleepEntry[]
+  moodEntries: MoodEntry[]
   settings: SleepSettings
   onDelete: (id: string) => void
 }) {
@@ -295,6 +299,11 @@ function SleepInsights({
     [entries],
   )
   const impact = factorImpact(entries)
+  const paired = useMemo(() => nights.flatMap((night) => {
+    const values = moodEntries.filter((entry) => dayKey(new Date(entry.at)) === night.date && Number.isFinite(entry.mood) && entry.mood >= 1 && entry.mood <= 5)
+    if (!values.length) return []
+    return [{ date: night.date, hours: duration(night.bedtime, night.wake), mood: values.reduce((sum, entry) => sum + entry.mood, 0) / values.length }]
+  }), [nights, moodEntries])
   if (!entries.length)
     return (
       <div className="sleep-card sleep-empty">
@@ -305,8 +314,34 @@ function SleepInsights({
   const max = Math.max(settings.targetHours + 1, ...nights.map((n) => duration(n.bedtime, n.wake)))
   return (
     <div className="sleep-insights">
+      <div className="sleep-card sleep-mood-card">
+        <h3 aria-label="Sleep and mood check-ins"><Moon size={18} aria-hidden="true" /> <span className="sr-only">Sleep and mood check-ins</span></h3>
+        {paired.length ? <>
+          <p className="wb-muted">Nights and mood check-ins on the same wake-up date. Each dot is one day.</p>
+          <svg className="sleep-mood-chart" viewBox="0 0 400 210" role="img" aria-label={`Sleep and mood on ${paired.length} matched ${paired.length === 1 ? 'day' : 'days'}`}>
+            <text x="4" y="23">12h</text><text x="14" y="83">0h</text><text x="18" y="122">5</text><text x="18" y="183">1</text>
+            <line x1="42" y1="80" x2="390" y2="80" stroke="currentColor" opacity=".25" />
+            <line x1="42" y1="180" x2="390" y2="180" stroke="currentColor" opacity=".25" />
+            <polyline fill="none" stroke="#6b7fd7" strokeWidth="2" points={paired.map((day, i) => `${paired.length === 1 ? 210 : 55 + i * 320 / (paired.length - 1)},${80 - Math.min(12, day.hours) * 5}`).join(' ')} />
+            <polyline fill="none" stroke="#e27396" strokeWidth="2" points={paired.map((day, i) => `${paired.length === 1 ? 210 : 55 + i * 320 / (paired.length - 1)},${180 - (day.mood - 1) * 15}`).join(' ')} />
+            {paired.map((day, i) => {
+              const x = paired.length === 1 ? 210 : 55 + i * 320 / (paired.length - 1)
+              const moodY = 180 - (day.mood - 1) * 15
+              const sleepY = 80 - Math.min(12, day.hours) * 5
+              return <g key={day.date}>
+                <circle cx={x} cy={sleepY} r="5" fill="#6b7fd7"><title>{day.date}: {day.hours} hours slept</title></circle>
+                <circle cx={x} cy={moodY} r="5" fill="#e27396"><title>{day.date}: mood {day.mood.toFixed(1)} of 5</title></circle>
+                {(i % 2 === 0 || paired.length <= 7) && <text x={x} y="200" textAnchor="middle">{day.date.slice(5)}</text>}
+              </g>
+            })}
+          </svg>
+          <p className="sleep-mood-legend"><span>● Sleep hours (0–12)</span><span>● Mood (1–5)</span></p>
+          <p className="wb-muted">Latest match: {paired[paired.length - 1].date} · {paired[paired.length - 1].hours}h sleep · mood {paired[paired.length - 1].mood.toFixed(1)}/5.</p>
+          <p className="wb-muted">These are your recorded days, not evidence that one caused the other.</p>
+        </> : <p className="wb-muted">Log a night and a mood check-in on its wake-up date to see them together.</p>}
+      </div>
       <div className="sleep-card">
-        <h3>Last {nights.length} nights</h3>
+        <h3>Last {nights.length} {nights.length === 1 ? 'night' : 'nights'}</h3>
         <div className="sleep-chart" role="img" aria-label="Hours slept per night">
           <span
             className="sleep-goal-line"
