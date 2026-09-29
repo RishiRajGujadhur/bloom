@@ -166,3 +166,24 @@ This phase is in addition to the remaining features 17–21 (Bills Inbox, Mornin
 - **OffscreenCanvas** is widely supported. A scene that can't transfer its canvas stays on the main thread.
 - **Location** is always opt-in, stored only on the device, and coarse (moods are rounded to a hexagon). Geofences only run while Bloom is open, with no background tracking.
 - **Overpass (M6)** and **light-pollution tiles (M9)** are the only new network data. Both are open-data services.
+
+---
+
+# Phase 3: platform polish across existing features
+
+New capabilities, each applied to features that already exist:
+
+| # | Upgrade | Applies to | Technology |
+|---|---|---|---|
+| P1 | **Your own desktop fonts** as the app font, with live preview and search | Settings, every page | Local Font Access (`queryLocalFonts`) |
+| P2 | **Away detection**: timers pause when you step away from the computer, and screen time excludes idle time | Focus, Focus room, Screen time | Idle Detection API |
+| P3 | **Screen stays on** during guided sessions | Meditate, Breathwork, Yoga, Stretch, Diet cook-along, Readiness scan, Form coach, Intervals | Screen Wake Lock API |
+| P4 | **Themed title bar**: the installed app draws its own title bar with search, streak and page title, in every theme | App shell, all themes | Window Controls Overlay + `theme-color` per theme |
+| P5 | **Houdini backgrounds**: generative paint-worklet patterns unique to each section of the app | Page backgrounds | CSS Paint API (Houdini) |
+| P6 | **Morphing navigation**: page changes cross-fade and the page title morphs into place | Sidebar navigation, tabs | View Transitions API |
+
+After Phase 3:
+
+- Page-specific SVG and GSAP backgrounds.
+- Right-click → Disable for any page in the sidebar, with a confirm prompt.
+- A 500-item quality-of-life list, worked through and pushed every 10 items.
