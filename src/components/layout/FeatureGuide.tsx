@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'cpr': { title: "CPR & first aid", description: "Hands that can save a life." },
   'globe': { title: "Globe quiz", description: "The world, one country at a time." },
   'sign': { title: "Sign alphabet", description: "A few letters can open a whole conversation." },
   'tuner': { title: "Tuner", description: "Close is good. In tune is magic." },
@@ -297,6 +298,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'globe': [
     step(".gq-globe", "The globe", "Drag to spin; click a country."),
     step(".gq-row", "Modes", "Find, name or capitals — pick a continent."),
+  ],
+  'cpr': [
+    step(".cp-body", "Chest", "Watch the hands press to the beat."),
+    step(".cp-tap", "Tap along", "Tap at 100–120 a minute."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

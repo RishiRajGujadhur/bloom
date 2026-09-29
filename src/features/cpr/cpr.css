@@ -1,0 +1,34 @@
+.cp-page { display: grid; grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr); gap: 24px; height: calc(100dvh - 230px); min-height: 560px; padding: 6px 4px; }
+@media (max-width: 900px) { .cp-page { grid-template-columns: 1fr; height: auto; } }
+.cp-stage { display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center; min-height: 0; }
+.cp-body { width: 100%; height: 100%; max-height: 420px; }
+.cp-count { display: grid; justify-items: center; }
+.cp-count strong { font: 900 clamp(3.4rem, 8vw, 6rem)/0.9 'Manrope', sans-serif; letter-spacing: -0.05em; color: #e0303f; }
+.cp-count strong.breathe { font-size: 2.6rem; color: #1cb0f6; }
+.cp-count span { color: var(--text-secondary); }
+.cp-side { display: grid; gap: 10px; align-content: start; overflow-y: auto; padding-right: 4px; }
+.cp-side h2 { margin: 0; font: 900 clamp(1.6rem, 3vw, 2.4rem)/1.05 'Manrope', sans-serif; letter-spacing: -0.03em; }
+.cp-eyebrow { margin: 0; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.7rem; color: #e0303f; }
+.cp-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cp-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 12px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.cp-chip.on { border-color: #e0303f; background: #e0303f18; }
+.cp-cta { border: 0; border-radius: 12px; padding: 9px 18px; background: #e0303f; color: #fff; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #9c1f2b; }
+.cp-practice { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--border-color); border-radius: 16px; background: var(--bg-surface); }
+.cp-gauge { width: 150px; color: var(--text-primary); }
+.cp-tap { display: grid; justify-items: center; width: 100%; padding: 14px; border: 2px dashed #e0303f; border-radius: 14px; background: #e0303f10; color: inherit; font: 900 1.2rem 'Manrope', sans-serif; cursor: pointer; touch-action: manipulation; }
+.cp-tap small { font: 500 0.75rem 'Manrope', sans-serif; color: var(--text-muted); }
+.cp-rate { margin: 6px 0 0; font-weight: 700; }
+.cp-steps { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.cp-steps button { width: 100%; text-align: left; border: 0; background: none; color: inherit; font: inherit; padding: 4px 0; cursor: pointer; }
+.cp-steps b { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 6px; border-radius: 7px; background: #e0303f; color: #fff; font-size: 0.8rem; }
+.cp-steps li.on b { background: #1cb0f6; }
+.cp-steps p { margin: 2px 0 6px 30px; color: var(--text-secondary); }
+.cp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.cp-card { position: relative; height: 118px; border: 0; padding: 0; background: none; color: inherit; font: inherit; cursor: pointer; perspective: 800px; }
+.cp-card .face { position: absolute; inset: 0; display: grid; align-content: center; gap: 2px; padding: 10px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-surface); backface-visibility: hidden; transition: transform 500ms cubic-bezier(0.3, 1.3, 0.5, 1); text-align: left; font-size: 0.82rem; }
+.cp-card .front em { font-style: normal; font-size: 1.5rem; }
+.cp-card .front small { color: var(--text-muted); }
+.cp-card .back { transform: rotateY(180deg); background: color-mix(in srgb, #1cb0f6 12%, var(--bg-surface)); overflow: auto; }
+.cp-card.flip .front { transform: rotateY(180deg); }
+.cp-card.flip .back { transform: rotateY(360deg); }
+html[data-theme='matrix'] .cp-cta { background: #39ff6a; color: #021006; box-shadow: 0 4px 0 #1f7a3a; }

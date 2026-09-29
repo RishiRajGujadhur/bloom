@@ -489,6 +489,10 @@ const common = {
         title: "Globe quiz",
         description: "Spin a globe to learn countries, where they are and their capitals.",
       },
+      cprCoach: {
+        title: "CPR & first-aid coach",
+        description: "Practise CPR rhythm with a 110 bpm coach and learn the steps for choking, bleeding, burns, stroke and more. A training aid, not medical advice.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1630,6 +1634,10 @@ export const resources = {
           globeQuiz: {
             title: "Quiz du globe",
             description: "Faites tourner un globe pour apprendre les pays et leurs capitales.",
+          },
+          cprCoach: {
+            title: "RCP et premiers secours",
+            description: "Pratiquez le rythme de la RCP et apprenez les gestes de premiers secours. Aide à la formation.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { HeartPulse as HeartPulseF_cprCoach } from 'lucide-react'
 import { Globe as GlobeF_globeQuiz } from 'lucide-react'
 import { Hand as HandF_signAlphabet } from 'lucide-react'
 import { AudioLines as AudioLinesF_tuner } from 'lucide-react'
@@ -154,6 +155,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  cprCoach: HeartPulseF_cprCoach,
   globeQuiz: GlobeF_globeQuiz,
   signAlphabet: HandF_signAlphabet,
   tuner: AudioLinesF_tuner,
@@ -252,6 +254,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  cprCoach: boolean
   globeQuiz: boolean
   signAlphabet: boolean
   tuner: boolean
@@ -361,6 +364,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    cprCoach: true,
     globeQuiz: true,
     signAlphabet: true,
     tuner: true,
@@ -460,6 +464,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'cprCoach',
   'globeQuiz',
   'signAlphabet',
   'tuner',

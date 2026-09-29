@@ -38,6 +38,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { HeartPulse as HeartPulseF_cprCoach } from 'lucide-react'
 import { Globe as GlobeF_globeQuiz } from 'lucide-react'
 import { Hand as HandF_signAlphabet } from 'lucide-react'
 import { AudioLines as AudioLinesF_tuner } from 'lucide-react'
@@ -123,6 +124,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'cpr'
   | 'globe'
   | 'sign'
   | 'tuner'
@@ -180,7 +182,7 @@ export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
 export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'roadmap', 'money', 'joys'] },
-  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess', 'typing', 'piano', 'tuner', 'sign', 'globe'] },
+  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess', 'typing', 'piano', 'tuner', 'sign', 'globe', 'cpr'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
   { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street', 'weeks', 'sky'] },
@@ -447,6 +449,7 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'cpr', title: "CPR & first aid", Icon: HeartPulseF_cprCoach, requires: 'cprCoach' },
     { key: 'globe', title: "Globe quiz", Icon: GlobeF_globeQuiz, requires: 'globeQuiz' },
     { key: 'sign', title: "Sign alphabet", Icon: HandF_signAlphabet, requires: 'signAlphabet' },
     { key: 'tuner', title: "Tuner", Icon: AudioLinesF_tuner, requires: 'tuner' },

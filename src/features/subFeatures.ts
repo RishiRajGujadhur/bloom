@@ -999,6 +999,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "score", title: "Score", description: "Right answers this session." },
     { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom for help." },
   ],
+  cprCoach: [
+    { id: "metronome", title: "Compression metronome", description: "110 per minute with a click." },
+    { id: "chest", title: "Animated chest", description: "Hands press, the heart pulses." },
+    { id: "breaths", title: "30:2 mode", description: "Rescue-breath pauses for trained rescuers." },
+    { id: "tapAlong", title: "Tap along", description: "Measure your own rhythm." },
+    { id: "gauge", title: "Rhythm gauge", description: "Faster or slower at a glance." },
+    { id: "steps", title: "DRSABCD", description: "The life-support steps." },
+    { id: "cards", title: "First-aid cards", description: "Choking, bleeding, burns, stroke, recovery, AED." },
+    { id: "awake", title: "Screen stays on", description: "The screen won’t sleep during practice." },
+    { id: "disclaimer", title: "Training aid", description: "Not a substitute for a course." },
+    { id: "celebrate", title: "Celebrations", description: "A burst for a steady rhythm." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

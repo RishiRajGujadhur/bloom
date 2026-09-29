@@ -265,6 +265,9 @@ const SignPage = lazy(() =>
 const GlobePage = lazy(() =>
   import('./features/globe/GlobePage').then((m) => ({ default: m.GlobePage })),
 )
+const CprPage = lazy(() =>
+  import('./features/cpr/CprPage').then((m) => ({ default: m.CprPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -800,6 +803,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'cpr' && !settings.features.cprCoach) ||
             (active === 'globe' && !settings.features.globeQuiz) ||
             (active === 'sign' && !settings.features.signAlphabet) ||
             (active === 'tuner' && !settings.features.tuner) ||
@@ -1074,6 +1078,10 @@ function App() {
             ) : active === 'globe' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <GlobePage />
+              </Suspense>
+            ) : active === 'cpr' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <CprPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
