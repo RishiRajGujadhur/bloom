@@ -87,3 +87,15 @@
   stroke-width: 2;
   opacity: 0;
 }
+
+/* The practice labs have more controls than the fixed-height player. Let the
+   page scroll once instead of nesting two vertical scrollbars. */
+.studio[data-studio='sounds']:has(.pitch-lab, .rhythm-lab) {
+  height: auto;
+  min-height: max(540px, calc(100dvh - 250px));
+}
+.studio[data-studio='sounds']:has(.pitch-lab, .rhythm-lab) .studio-panel,
+.studio[data-studio='sounds'] .pitch-lab,
+.studio[data-studio='sounds'] .rhythm-lab {
+  overflow: visible;
+}

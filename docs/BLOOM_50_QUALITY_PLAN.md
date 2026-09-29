@@ -84,6 +84,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Extended Bloom's Reduce motion setting to Sleep's floating duration, hover lift, transitions, and chart entrance. Verified both preference states in the browser, inspected desktop/mobile screenshots, and found no document-level horizontal overflow.
 - 2026-09-29: Added Melody echo, a three-round guided ear-training session with SVG staff, synthesized notes, immediate recall feedback, and saved session progress. Verified correct, incorrect, retry, and finish flows; inspected desktop/mobile screenshots and removed the session's nested vertical scroll.
 - 2026-09-29: Added previous/next buttons to shared studio tabs and automatic visibility for the selected section. Verified both directions and final-tab visibility on a phone; inspected desktop/mobile screenshots without document-level horizontal overflow.
+- 2026-09-29: Removed nested vertical scrolling from Rhythm and Pitch labs so their controls follow the page scroll. Verified both labs at desktop/mobile sizes and Pitch after feedback expands; inspected screenshots and found no document-level horizontal overflow.
 
 ## New feature areas
 
