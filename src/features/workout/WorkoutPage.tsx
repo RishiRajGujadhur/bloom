@@ -1,9 +1,9 @@
 import { prefersReducedMotion } from '../../utils/motion'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Chart as ChartJS, BarElement, CategoryScale, Filler, LinearScale, LineElement, PointElement, Tooltip } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
-import { Check, ChevronLeft, ChevronRight, Dumbbell, History, LineChart, Scale, Timer, Trophy } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, Dumbbell, History, LineChart, Scale, ScanFace, Timer, Trophy } from 'lucide-react'
 import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
@@ -12,6 +12,9 @@ import { WORKOUT_KEY, e1rm, liftById, lifts, load, plates, progress, prsFor, tem
 import { WeekBars } from '../showcase/WeekBars'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './workout.css'
+import './formcoach.css'
+
+const FormCoach = lazy(() => import('./FormCoach').then((m) => ({ default: m.FormCoach })))
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, BarElement, Tooltip, Filler)
 
@@ -353,6 +356,7 @@ export function WorkoutPage() {
       }
       tabs={[
         { id: 'train', label: 'Train', icon: <Dumbbell size={15} />, render: train },
+        ...(on('formCoach') ? [{ id: 'coach', label: 'Form coach', icon: <ScanFace size={15} />, render: () => <Suspense fallback={<p role="status">Loading the form coach…</p>}><FormCoach onLog={(liftId, reps) => { const set = { liftId, weight: 0, reps, at: Date.now() }; setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return open ? { ...s, workouts: s.workouts.map((w) => (w.id === open.id ? { ...w, sets: [...w.sets, set] } : w)) } : { ...s, workouts: [...s.workouts, { id: crypto.randomUUID(), name: 'Form coach', templateId: 'coach', startedAt: Date.now(), finishedAt: Date.now(), sets: [set] }] } }); logActivity('workout', { reps }) }} /></Suspense> }] : []),
         ...(on('progressChart') || on('volumeChart') ? [{ id: 'progress', label: 'Progress', icon: <LineChart size={15} />, render: progressTab }] : []),
         ...(on('muscleVolume') ? [{ id: 'muscles', label: 'Muscles', icon: <Dumbbell size={15} />, render: musclesTab }] : []),
         ...(on('plates') ? [{ id: 'plates', label: 'Plates', icon: <Scale size={15} />, render: platesTab }] : []),

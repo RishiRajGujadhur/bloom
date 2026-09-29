@@ -69,7 +69,7 @@ Features marked **(extends …)** upgrade an existing page.
 
 | # | Feature | How it's used | Sci-fi moment | Caps | Libraries | Status |
 |---|---|---|---|---|---|---|
-| 20 | **Form Coach** (extends Workout) | Every home workout | Put the laptop on the floor and train. Pose tracking on the GPU **counts your reps** for squats, push-ups, lunges and planks, and scores your **form** (depth, knee tracking, back angle). A glowing skeleton HUD flashes a correction when your form slips. Sets are logged into Workout automatically, hands-free. | GPU, MT, OPFS | `@mediapipe/tasks-vision` (PoseLandmarker, GPU delegate), `one-euro-filter` (smoothing), `ml-matrix`, `tone` (rep beeps), `gsap`, `comlink` | [ ] |
+| 20 | **Form Coach** (extends Workout) | Every home workout | Put the laptop on the floor and train. Pose tracking on the GPU **counts your reps** for squats, push-ups, lunges and planks, and scores your **form** (depth, knee tracking, back angle). A glowing skeleton HUD flashes a correction when your form slips. Sets are logged into Workout automatically, hands-free. | GPU, MT, OPFS | `@mediapipe/tasks-vision` (PoseLandmarker, GPU delegate), `one-euro-filter` (smoothing), `ml-matrix`, `tone` (rep beeps), `gsap`, `comlink` | [x] [shot](screenshots/wow-20-formcoach.png) |
 | 23 | **Burnout Radar: Code City** | Weekly | Your repos as a glowing 3D city. Each building is a file: its height is churn and its heat is late-night edits. A radar compares your **commit times, weekend work and meeting-free focus** against your sleep, mood and readiness from the app, and flags drift before burnout. | GPU, MT, FSA, SIMD | `isomorphic-git`, `three` (instanced meshes), `d3-hierarchy`, `simple-statistics`, `comlink`, `gsap` | [ ] |
 
 ## Numbering

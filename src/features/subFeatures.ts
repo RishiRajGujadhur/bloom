@@ -474,6 +474,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'faceHands', title: 'Face and hand detail', description: 'Animated mouth and fingers on the figure.' },
   ],
   workoutLog: [
+    { id: 'formCoach', title: 'Form coach', description: 'Camera rep counting and live form feedback.' },
     { id: "templates", title: "Templates", description: "Push, pull, legs, full body and home." },
     { id: "restTimer", title: "Rest timer", description: "Counts down after every set." },
     { id: "rpe", title: "Effort (RPE)", description: "Rate how hard each set felt." },

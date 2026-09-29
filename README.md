@@ -52,6 +52,7 @@ Built on Web Bluetooth, WebGPU, WebAssembly SIMD, multi-core workers, the Origin
 | **Bills Inbox**: photograph a letter; OpenCV flattens it, OCR reads it, deadlines get countdowns, and you can ask your paperwork questions | ![Bills Inbox](docs/screenshots/wow-17-bills.png) | ![Bills Inbox, Matrix](docs/screenshots/wow-17-bills-matrix.png) |
 | **Morning Briefing Radio**: a spoken summary of your day (calendar, tasks, readiness, bills, weather) in an on-device neural voice on WebGPU, with a live spectrum dial | ![Morning Briefing Radio](docs/screenshots/wow-18-briefing-hd.png) | ![Morning Briefing Radio, Matrix](docs/screenshots/wow-18-briefing-matrix.png) |
 | **Study Duel**: race a friend through the same English round peer to peer (Yjs CRDT over encrypted WebRTC), with racing score orbs and a shared whiteboard | ![Study Duel](docs/screenshots/wow-19-duel.png) | ![Study Duel, Matrix](docs/screenshots/wow-19-duel-matrix.png) |
+| **Form Coach**: camera rep counting with GPU pose tracking, live form faults (depth, chest, hips) and hands-free set logging in Workout | ![Form Coach](docs/screenshots/wow-20-formcoach.png) | ![Form Coach, Matrix](docs/screenshots/wow-20-formcoach-matrix.png) |
 <!-- advanced-features-end -->
 
 To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome, and doubles as a smoke test: it records console errors, uncaught exceptions, crashed pages and blank pages for every shot in `docs/screenshots/report.json`.

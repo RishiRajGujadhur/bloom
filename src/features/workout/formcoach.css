@@ -1,0 +1,39 @@
+.fc { display: grid; gap: 12px; padding: 18px; border-radius: 24px; color: #eafff6; background: radial-gradient(100% 90% at 100% 0%, #0e3b2c 0%, #07120e 60%, #030605 100%); border: 1px solid #ffffff1a; }
+.fc-head { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 10px; }
+.fc-head h3 { margin: 0; font: 900 1.5rem/1.1 'Manrope', sans-serif; letter-spacing: -0.02em; }
+.fc-eyebrow { margin: 0 0 2px; font: 800 0.7rem 'Manrope', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: #5dffc0; }
+.fc .caps-badge li { color: #9cc3b3; border-color: #ffffff26; }
+.fc .caps-badge li.on { color: #7dffc4; }
+.fc-ex { display: flex; gap: 6px; flex-wrap: wrap; }
+.fc-ex button { border: 1px solid #ffffff2a; background: #ffffff0d; color: #eafff6; border-radius: 999px; padding: 7px 16px; font: 800 0.88rem 'Manrope', sans-serif; cursor: pointer; }
+.fc-ex button.on { background: #5dffc0; color: #04160f; border-color: transparent; box-shadow: 0 0 20px -6px #5dffc0; }
+.fc-ex button:disabled:not(.on) { opacity: 0.5; }
+.fc-stage { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr); gap: 14px; }
+@media (max-width: 860px) { .fc-stage { grid-template-columns: 1fr; } }
+.fc-view { position: relative; aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden; background: radial-gradient(80% 70% at 50% 60%, #123a2d, #030605); }
+.fc-view::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, #5dffc008 0 1px, transparent 1px 4px); }
+.fc-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); opacity: 0.55; }
+.fc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fc-tip { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 20px; text-align: center; color: #9cc3b3; font-weight: 800; }
+.fc-fault { position: absolute; top: 14px; left: 50%; translate: -50% 0; padding: 8px 18px; border-radius: 999px; background: #ff5d5d; color: #1a0404; font: 900 1.1rem 'Manrope', sans-serif; box-shadow: 0 0 30px #ff5d5d99; }
+.fc-angle { position: absolute; bottom: 12px; left: 12px; padding: 3px 10px; border-radius: 999px; background: #030605cc; color: #5dffc0; font: 800 0.85rem 'Manrope', sans-serif; font-variant-numeric: tabular-nums; }
+.fc-side { display: grid; gap: 12px; align-content: start; justify-items: center; }
+.fc-ring { width: 180px; }
+.fc-ring-track { fill: none; stroke: #ffffff14; stroke-width: 12; }
+.fc-ring-fill { fill: none; stroke: #5dffc0; stroke-width: 12; stroke-linecap: round; transition: stroke-dasharray 0.4s; filter: drop-shadow(0 0 8px #5dffc0); }
+.fc-count { fill: #fff; font: 900 52px 'Manrope', sans-serif; }
+.fc-count-sub { fill: #9cc3b3; font: 800 12px 'Manrope', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; }
+.fc-held { display: grid; place-items: center; width: 180px; height: 180px; border-radius: 50%; border: 12px solid #5dffc0; box-shadow: 0 0 30px -8px #5dffc0; }
+.fc-held b { font: 900 3rem 'Manrope', sans-serif; }
+.fc-held small { color: #9cc3b3; font-weight: 800; text-align: center; }
+.fc-dots { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; min-height: 14px; }
+.fc-dot { width: 14px; height: 14px; border-radius: 50%; }
+.fc-dot.good { background: #5dffc0; box-shadow: 0 0 8px #5dffc0; }
+.fc-dot.ok { background: #ffd43b; }
+.fc-dot.bad { background: #ff5d5d; }
+.fc-actions { display: grid; gap: 8px; width: 100%; }
+.fc-cta { display: inline-flex; justify-content: center; align-items: center; gap: 6px; border: 0; border-radius: 14px; padding: 12px 16px; font: 900 0.98rem 'Manrope', sans-serif; color: #04160f; cursor: pointer; background: linear-gradient(90deg, #5dffc0, #7df9ff); width: 100%; }
+.fc-ghost { display: inline-flex; justify-content: center; align-items: center; gap: 6px; border: 1px solid #ffffff33; border-radius: 14px; padding: 10px 14px; font: 800 0.92rem 'Manrope', sans-serif; color: #eafff6; background: #ffffff08; cursor: pointer; }
+.fc-small { margin: 0; color: #9cc3b3; font-size: 0.8rem; text-align: center; }
+html[data-theme='matrix'] .fc { background: #030a05; }
+html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }

@@ -10,6 +10,7 @@ export const lifts: Lift[] = [
   { id: 'pullup', name: 'Pull-up', muscles: ['back', 'biceps'], bodyweight: true, step: 2.5 },
   { id: 'dip', name: 'Dip', muscles: ['triceps', 'chest'], bodyweight: true, step: 2.5 },
   { id: 'pushup', name: 'Push-up', muscles: ['chest', 'triceps'], bodyweight: true, step: 2.5 },
+  { id: 'airsquat', name: 'Air squat', muscles: ['quads', 'glutes'], bodyweight: true, step: 2.5 },
   { id: 'lunge', name: 'Lunge', muscles: ['quads', 'glutes'], step: 2 },
   { id: 'rdl', name: 'Romanian deadlift', muscles: ['hamstrings', 'glutes'], step: 2.5 },
   { id: 'curl', name: 'Biceps curl', muscles: ['biceps', 'forearms'], step: 1 },
