@@ -2,14 +2,14 @@
 
 Build one useful feature per commit and push it before starting the next. Count only working, verified features. Each learning activity needs a clear objective, practice, feedback, keyboard and phone support, saved progress where useful, and a reduced-motion path. Use original lessons and challenges; roadmap.sh informs the sequence, while Codewars informs short kata, test feedback, and solution comparison. Do not copy their content.
 
-Current count: **3 / 150**. Feature 1 is the learning path map, with four routes, prerequisites, saved practice marks, SVG progress, and GSAP entrance motion. Feature 2 is a four-question skill check per route with immediate explanations and a starting-chapter recommendation. Feature 3 is an editable HTML document builder with a sandboxed live preview and semantic checks. The existing JavaScript lessons, challenges, and unfinished Code Quest predate this count.
+Current count: **4 / 150**. Feature 1 is the learning path map, with four routes, prerequisites, saved practice marks, SVG progress, and GSAP entrance motion. Feature 2 is a four-question skill check per route with immediate explanations and a starting-chapter recommendation. Feature 3 is an editable HTML document builder with a sandboxed live preview and semantic checks. Feature 4 is an editable heading hierarchy repair challenge with an outline, targeted feedback, and saved progress. The existing JavaScript lessons, challenges, and unfinished Code Quest predate this count.
 
 ## Foundations and web (1–15)
 
 1. [x] Learning path map for web, React, Python, and problem solving.
 2. [x] Skill check that recommends a starting chapter.
 3. [x] HTML document builder with live semantic preview.
-4. [ ] Heading hierarchy repair challenge.
+4. [x] Heading hierarchy repair challenge.
 5. [ ] Accessible form labeling workshop.
 6. [ ] Links and navigation mini project.
 7. [ ] CSS selector detective kata.
