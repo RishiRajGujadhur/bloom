@@ -509,6 +509,10 @@ const common = {
         title: "Morning readiness scan",
         description: "A 60-second heart-rate-variability scan from a Bluetooth strap, your fingertip on the camera or a simulator, scored against your own baseline.",
       },
+      morningBriefing: {
+        title: "Morning briefing radio",
+        description: "A spoken 60–90 second summary of your day — calendar, tasks, readiness, bills and weather — read by an on-device voice.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1670,6 +1674,10 @@ export const resources = {
           readinessScan: {
             title: "Bilan de forme matinal",
             description: "Un scan de variabilité cardiaque de 60 secondes, comparé à votre propre référence.",
+          },
+          morningBriefing: {
+            title: "Radio du matin",
+            description: "Un résumé parlé de votre journée, lu par une voix sur l’appareil.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

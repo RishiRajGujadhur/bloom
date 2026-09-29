@@ -280,6 +280,9 @@ const PeoplePage = lazy(() =>
 const ReadinessPage = lazy(() =>
   import('./features/readiness/ReadinessPage').then((m) => ({ default: m.ReadinessPage })),
 )
+const BriefingPage = lazy(() =>
+  import('./features/briefing/BriefingPage').then((m) => ({ default: m.BriefingPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -815,6 +818,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'briefing' && !settings.features.morningBriefing) ||
             (active === 'readiness' && !settings.features.readinessScan) ||
             (active === 'people' && !settings.features.peopleGarden) ||
             (active === 'decide' && !settings.features.decisionLab) ||
@@ -1114,6 +1118,10 @@ function App() {
             ) : active === 'readiness' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <ReadinessPage />
+              </Suspense>
+            ) : active === 'briefing' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <BriefingPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

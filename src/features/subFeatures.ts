@@ -1067,6 +1067,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "advice", title: "Push or recover", description: "A suggestion for today’s training." },
     { id: "trend", title: "Baseline trend", description: "Your last 30 mornings with the normal band." },
   ],
+  morningBriefing: [
+    { id: "weather", title: "Weather", description: "Local forecast from Open-Meteo." },
+    { id: "calendar", title: "Calendar", description: "Today’s blocks in order." },
+    { id: "tasks", title: "Top tasks", description: "Due and overdue first." },
+    { id: "streaks", title: "Streaks", description: "Your longest habit streak." },
+    { id: "bills", title: "Bills", description: "Anything due this week from Bills Inbox." },
+    { id: "readiness", title: "Readiness", description: "This morning’s HRV score." },
+    { id: "hdVoice", title: "HD neural voice", description: "Kokoro text-to-speech on WebGPU." },
+    { id: "cache", title: "Offline replays", description: "Today’s audio cached on the device." },
+    { id: "rewrite", title: "Local AI rewrite", description: "The on-device model rephrases the script." },
+    { id: "dial", title: "Radio dial", description: "A live circular spectrum and transcript." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

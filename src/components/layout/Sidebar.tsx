@@ -38,6 +38,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Radio as RadioF_morningBriefing } from 'lucide-react'
 import { Activity as ActivityF_readinessScan } from 'lucide-react'
 import { Users as UsersF_peopleGarden } from 'lucide-react'
 import { Scale as ScaleF_decisionLab } from 'lucide-react'
@@ -128,6 +129,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'briefing'
   | 'readiness'
   | 'people'
   | 'decide'
@@ -188,7 +190,7 @@ interface SidebarProps {
 export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
 
 export const navSections: { label: string; keys: NavKey[] }[] = [
-  { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
+  { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines', 'briefing'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'roadmap', 'money', 'joys', 'people'] },
   { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess', 'typing', 'piano', 'tuner', 'sign', 'globe', 'cpr', 'reader'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
@@ -457,6 +459,7 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'briefing', title: "Morning briefing", Icon: RadioF_morningBriefing, requires: 'morningBriefing' },
     { key: 'readiness', title: "Morning readiness", Icon: ActivityF_readinessScan, requires: 'readinessScan' },
     { key: 'people', title: "People garden", Icon: UsersF_peopleGarden, requires: 'peopleGarden' },
     { key: 'decide', title: "Decision lab", Icon: ScaleF_decisionLab, requires: 'decisionLab' },

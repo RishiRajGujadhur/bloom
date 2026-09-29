@@ -136,6 +136,23 @@ export class LocalCompanion {
     return intentSchema.parse(JSON.parse(content))
   }
 
+  /** Plain-text generation (used by the Morning Briefing to rephrase its script). */
+  async generate(system: string, user: string, maxTokens = 320): Promise<string> {
+    if (!this.engine) throw new Error('Local AI is not ready.')
+    const reply = await this.bounded(
+      this.engine.chat.completions.create({
+        messages: [
+          { role: 'system', content: system },
+          { role: 'user', content: user.slice(0, 3000) },
+        ],
+        temperature: 0.6,
+        max_tokens: maxTokens,
+      }),
+      120_000,
+    )
+    return reply.choices[0]?.message.content?.trim() ?? ''
+  }
+
   dispose(reason = new Error('Local AI stopped.')) {
     this.controller.abort(reason)
     this.worker?.terminate()
