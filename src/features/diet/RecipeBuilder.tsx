@@ -11,6 +11,7 @@ import { searchFoods } from './foodStore'
 import type { FoodRow } from './nutrients'
 import { foodById, kcalPer100, parseQuantity, perServing, recipeTotals, type Ingredient, type Recipe } from './recipeModel'
 import { kindFor, type DietState, type Meal } from './dietModel'
+import { TechniqueTip } from './TechniqueTip'
 
 type Row = Ingredient & { key: string; text: string }
 
@@ -74,6 +75,7 @@ function CookAlong({ recipe, onClose }: { recipe: Recipe; onClose: () => void })
       <div className="cook-head"><ChefHat size={20} aria-hidden="true" /><strong>{recipe.name}</strong><button type="button" className="lab-secondary" onClick={onClose}>Close</button></div>
       <div className="cook-progress"><svg viewBox="0 0 120 120" role="img" aria-label={`Step ${index + 1} of ${steps.length}`}><circle cx="60" cy="60" r="49" className="cook-track" /><circle cx="60" cy="60" r="49" className="cook-fill" strokeDasharray={`${progress * 3.08} 308`} /><path d="M38 72 Q60 87 82 72 M45 70 Q49 49 60 42 Q71 49 75 70" className="cook-pot" /></svg><span>{index + 1} / {steps.length}</span></div>
       <div ref={card} className="cook-step" role="status">{steps[index]}</div>
+      <TechniqueTip key={`${recipe.id}-${index}`} step={steps[index]} />
       <div className="cook-nav"><button type="button" disabled={index === 0} onClick={() => setIndex((value) => value - 1)}><ChevronLeft size={18} /> Previous</button><button type="button" disabled={index === steps.length - 1} onClick={() => setIndex((value) => value + 1)}>Next <ChevronRight size={18} /></button></div>
       <div className="cook-timer"><span role="timer" aria-label="Kitchen timer">{Math.floor(seconds / 60).toString().padStart(2, '0')}:{(seconds % 60).toString().padStart(2, '0')}</span><button type="button" onClick={() => setSeconds((value) => Math.max(0, value - 60))} aria-label="Subtract one minute"><Minus size={16} /></button><button type="button" onClick={() => setRunning((value) => !value)} aria-label={running ? 'Pause timer' : 'Start timer'}>{running ? <Pause size={16} /> : <Play size={16} />}</button><button type="button" onClick={() => setSeconds((value) => Math.min(3600, value + 60))} aria-label="Add one minute"><Plus size={16} /></button></div>
     </section>

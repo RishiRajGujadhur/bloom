@@ -26,6 +26,16 @@
 .cook-pot { fill: none; stroke: #d88562; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; transform: rotate(90deg); transform-origin: center; }
 .cook-progress span { position: absolute; left: 0; right: 0; bottom: -.2rem; font-size: .8rem; }
 .cook-step { max-width: 36rem; min-height: 3.5rem; margin: 1rem auto; font-size: 1.1rem; line-height: 1.5; }
+.cook-technique { display: flex; align-items: center; gap: 1rem; max-width: 42rem; margin: .5rem auto 1.25rem; padding: .8rem 1rem; border: 1px solid var(--border-color); border-radius: 1rem; background: var(--bg-surface); text-align: left; }
+.cook-technique > div { flex: 1; min-width: 0; }.cook-technique > div > svg { color: var(--accent-color); vertical-align: middle; margin-right: .4rem; }.cook-technique strong { font-size: .95rem; }.cook-technique p { margin: .4rem 0; line-height: 1.45; }.cook-technique small { color: var(--text-secondary); }
+.cook-technique-art { width: 9rem; flex: none; }.cook-art-base { fill: #e9b781; stroke: #bd8050; stroke-width: 3; }.cook-art-window { fill: #fff6e8; }.cook-art-food { fill: #80b77c; stroke: #588c62; stroke-width: 2; }.cook-art-line { fill: none; stroke: #a46045; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }.cook-art-tool { fill: #ccd6db; stroke: #8e9ba1; stroke-width: 2; }
+.cook-technique button { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border: 1px solid var(--border-color); border-radius: 50%; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }.cook-technique button:hover { border-color: var(--accent-color); }.cook-technique button:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }.cook-technique button:disabled { opacity: .5; cursor: default; }
+@media (max-width: 600px) {
+  .cook-technique { display: grid; grid-template-columns: 1fr auto; gap: .25rem .75rem; }
+  .cook-technique > div { grid-column: 1 / -1; }
+  .cook-technique-art { width: 7rem; justify-self: center; }
+  .cook-technique button { justify-self: end; }
+}
 .cook-nav, .cook-timer { display: flex; align-items: center; justify-content: center; gap: .5rem; flex-wrap: wrap; }
 .cook-timer { margin-top: 1.25rem; }
 .cook-timer span { min-width: 5rem; font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 700; }
