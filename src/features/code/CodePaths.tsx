@@ -12,6 +12,7 @@ const HeadingRepair = lazy(() => import('./HeadingRepair').then((module) => ({ d
 const FormLabelWorkshop = lazy(() => import('./FormLabelWorkshop').then((module) => ({ default: module.FormLabelWorkshop })))
 const LinkNavigationLab = lazy(() => import('./LinkNavigationLab').then((module) => ({ default: module.LinkNavigationLab })))
 const SelectorDetective = lazy(() => import('./SelectorDetective').then((module) => ({ default: module.SelectorDetective })))
+const BoxModelLab = lazy(() => import('./BoxModelLab').then((module) => ({ default: module.BoxModelLab })))
 type Progress = Record<string, boolean>
 
 function readProgress(): Progress {
@@ -31,6 +32,7 @@ export function CodePaths() {
   const [labeling, setLabeling] = useState(false)
   const [linking, setLinking] = useState(false)
   const [detecting, setDetecting] = useState(false)
+  const [boxing, setBoxing] = useState(false)
   const detail = useRef<HTMLDivElement>(null)
   const path = codePaths.find((item) => item.id === pathId) ?? codePaths[0]
   const chapter = path.chapters[selectedIndex]
@@ -45,7 +47,7 @@ export function CodePaths() {
     return () => { tween.progress(1).kill() }
   }, [pathId, selectedIndex])
 
-  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0); setBuilding(false); setRepairing(false); setLabeling(false); setLinking(false); setDetecting(false) }
+  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0); setBuilding(false); setRepairing(false); setLabeling(false); setLinking(false); setDetecting(false); setBoxing(false) }
   const completeHtml = () => setCompleted((current) => {
     if (current['frontend:html']) return current
     const updated = { ...current, 'frontend:html': true }
@@ -63,8 +65,9 @@ export function CodePaths() {
     <div className="code-path-picker" role="group" aria-label="Programming learning path">
       {codePaths.map((item) => <button key={item.id} type="button" className="code-path-pick" aria-pressed={path.id === item.id} onClick={() => choosePath(item.id)} style={{ ['--path-color' as string]: item.color }}><Compass size={18} aria-hidden="true" />{item.name}</button>)}
     </div>
-    {detecting ? <Suspense fallback={<p role="status">Loading selector detective…</p>}><SelectorDetective onClose={() => setDetecting(false)} /></Suspense> : linking ? <Suspense fallback={<p role="status">Loading navigation project…</p>}><LinkNavigationLab onClose={() => setLinking(false)} /></Suspense> : labeling ? <Suspense fallback={<p role="status">Loading form workshop…</p>}><FormLabelWorkshop onClose={() => setLabeling(false)} /></Suspense> : repairing ? <Suspense fallback={<p role="status">Loading heading challenge…</p>}><HeadingRepair onClose={() => setRepairing(false)} /></Suspense> : building ? <Suspense fallback={<p role="status">Loading HTML builder…</p>}><HtmlDocumentBuilder onClose={() => setBuilding(false)} onComplete={completeHtml} /></Suspense> : checking ? <CodeSkillCheck key={path.id} path={path} onClose={() => setChecking(false)} onRecommend={(index) => { setSelectedIndex(index); setChecking(false) }} /> : <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
+    {boxing ? <Suspense fallback={<p role="status">Loading box model lab…</p>}><BoxModelLab onClose={() => setBoxing(false)} /></Suspense> : detecting ? <Suspense fallback={<p role="status">Loading selector detective…</p>}><SelectorDetective onClose={() => setDetecting(false)} /></Suspense> : linking ? <Suspense fallback={<p role="status">Loading navigation project…</p>}><LinkNavigationLab onClose={() => setLinking(false)} /></Suspense> : labeling ? <Suspense fallback={<p role="status">Loading form workshop…</p>}><FormLabelWorkshop onClose={() => setLabeling(false)} /></Suspense> : repairing ? <Suspense fallback={<p role="status">Loading heading challenge…</p>}><HeadingRepair onClose={() => setRepairing(false)} /></Suspense> : building ? <Suspense fallback={<p role="status">Loading HTML builder…</p>}><HtmlDocumentBuilder onClose={() => setBuilding(false)} onComplete={completeHtml} /></Suspense> : checking ? <CodeSkillCheck key={path.id} path={path} onClose={() => setChecking(false)} onRecommend={(index) => { setSelectedIndex(index); setChecking(false) }} /> : <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
       <div className="code-path-top"><div><span className="code-path-kicker">YOUR ROUTE</span><h2>{path.name}</h2><p>{count} of {path.chapters.length} practiced{next ? ` · next: ${next.title}` : ' · route complete'}</p></div><a href={path.source} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${path.name} roadmap at roadmap.sh`}>Explore roadmap <ArrowUpRight size={16} aria-hidden="true" /></a></div>
+      {path.id === 'frontend' && selectedIndex === 1 && <button type="button" className="code-path-open" onClick={() => setBoxing(true)}><FileCode2 size={16} aria-hidden="true" /> Open box model lab</button>}
       <div className="code-path-map" role="group" aria-label={`${path.name} chapters`}>
         <svg viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true"><path d="M30 6 H570" className="code-path-line-track" /><path d="M30 6 H570" className="code-path-line-fill" style={{ strokeDasharray: `${Math.min(1, count / (path.chapters.length - 1)) * 540} 540` }} /></svg>
         {path.chapters.map((item, index) => <button key={item.id} type="button" className="code-path-stop" aria-label={`Chapter ${index + 1}: ${item.title}${completed[`${path.id}:${item.id}`] ? ', practiced' : ''}`} aria-current={selectedIndex === index ? 'step' : undefined} onClick={() => setSelectedIndex(index)}>{completed[`${path.id}:${item.id}`] ? <Check size={18} aria-hidden="true" /> : index + 1}</button>)}
