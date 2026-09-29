@@ -38,6 +38,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Grid3x3 as Grid3x3F_lifeInWeeks } from 'lucide-react'
 import { Crown as CrownF_chessAcademy } from 'lucide-react'
 import { Code2 as Code2F_codeLearning } from 'lucide-react'
 import { Gift as GiftF_littleJoys } from 'lucide-react'
@@ -116,6 +117,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'weeks'
   | 'chess'
   | 'code'
   | 'joys'
@@ -169,7 +171,7 @@ export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
-  { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street'] },
+  { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street', 'weeks'] },
 ]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
@@ -433,6 +435,7 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'weeks', title: "Life in weeks", Icon: Grid3x3F_lifeInWeeks, requires: 'lifeInWeeks' },
     { key: 'chess', title: "Chess", Icon: CrownF_chessAcademy, requires: 'chessAcademy' },
     { key: 'code', title: "Learn to code", Icon: Code2F_codeLearning, requires: 'codeLearning' },
     { key: 'joys', title: "Little Joys", Icon: GiftF_littleJoys, requires: 'littleJoys' },

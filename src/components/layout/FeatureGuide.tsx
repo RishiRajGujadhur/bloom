@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'weeks': { title: "Life in weeks", description: "Every square is a week you can shape." },
   'chess': { title: "Chess", description: "Every grandmaster was once a beginner." },
   'code': { title: "Code", description: "Write real JavaScript, one small step at a time." },
   'joys': { title: "Little Joys", description: "Small things, done with delight." },
@@ -262,6 +263,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'chess': [
     step(".cb-board", "The board", "Tap a piece, then a glowing dot — or drag it."),
     step(".ch-lessons", "Lessons", "Pick a piece to learn."),
+  ],
+  'weeks': [
+    step(".lw-grid", "Your weeks", "Hover any square to see that week."),
+    step(".lw-add", "Chapters", "Add chapters and milestones."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

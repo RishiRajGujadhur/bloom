@@ -18,6 +18,7 @@ type Key = keyof FeatureFlags
 
 export const featureCategory: Record<Key, CategoryId> = {
   bloomCore: 'today',
+  lifeInWeeks: 'insights',
   chessAcademy: 'play',
   codeLearning: 'play',
   littleJoys: 'play',

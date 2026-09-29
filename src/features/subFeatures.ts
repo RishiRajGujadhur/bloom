@@ -915,6 +915,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom’s chat for the answer." },
     { id: "celebrate", title: "Celebrations", description: "Kinetic titles and confetti." },
   ],
+  lifeInWeeks: [
+    { id: "chapters", title: "Chapters", description: "Colour stretches of life." },
+    { id: "milestones", title: "Milestones", description: "Mark special weeks." },
+    { id: "counters", title: "Counters", description: "Weeks lived, summers and full moons ahead." },
+    { id: "ripple", title: "Ripple reveal", description: "The grid ripples out from now." },
+    { id: "hover", title: "Week details", description: "Hover any week for its date and age." },
+    { id: "expectancy", title: "Planning horizon", description: "Choose how many years to plan for." },
+    { id: "kinetic", title: "Kinetic headline", description: "Sundays left, animated." },
+    { id: "privacy", title: "Private", description: "Stored only on this device." },
+    { id: "pulse", title: "This week", description: "The current week pulses." },
+    { id: "palette", title: "Chapter colours", description: "Harmonious colours per chapter." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

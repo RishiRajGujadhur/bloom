@@ -461,6 +461,10 @@ const common = {
         title: "Chess Academy",
         description: "Learn how every piece moves, solve mate-in-one puzzles and play Bloom on an animated board.",
       },
+      lifeInWeeks: {
+        title: "Life in weeks",
+        description: "Your whole life as a grid of weeks, with chapters, milestones and the Sundays still ahead.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1574,6 +1578,10 @@ export const resources = {
           chessAcademy: {
             title: "Académie d’échecs",
             description: "Apprenez le déplacement des pièces, résolvez des mats en un coup et jouez contre Bloom.",
+          },
+          lifeInWeeks: {
+            title: "La vie en semaines",
+            description: "Toute votre vie en grille de semaines, avec chapitres, jalons et dimanches à venir.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
