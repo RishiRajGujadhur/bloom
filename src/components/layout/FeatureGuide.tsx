@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'chess': { title: "Chess", description: "Every grandmaster was once a beginner." },
   'code': { title: "Code", description: "Write real JavaScript, one small step at a time." },
   'joys': { title: "Little Joys", description: "Small things, done with delight." },
   'english': { title: "English", description: "A little English every day." },
@@ -257,6 +258,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'code': [
     step(".cd-map", "Course map", "Pick any lesson; rings fill as you finish."),
     step(".cd-run", "Run", "Run your code, or press Ctrl+Enter."),
+  ],
+  'chess': [
+    step(".cb-board", "The board", "Tap a piece, then a glowing dot — or drag it."),
+    step(".ch-lessons", "Lessons", "Pick a piece to learn."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

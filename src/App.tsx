@@ -241,6 +241,9 @@ const JoysPage = lazy(() =>
 const CodePage = lazy(() =>
   import('./features/code/CodePage').then((m) => ({ default: m.CodePage })),
 )
+const ChessPage = lazy(() =>
+  import('./features/chess/ChessPage').then((m) => ({ default: m.ChessPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -776,6 +779,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'chess' && !settings.features.chessAcademy) ||
             (active === 'code' && !settings.features.codeLearning) ||
             (active === 'joys' && !settings.features.littleJoys) ||
             (active === 'english' && !settings.features.englishLearning) ||
@@ -1010,6 +1014,10 @@ function App() {
             ) : active === 'code' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <CodePage />
+              </Suspense>
+            ) : active === 'chess' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <ChessPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

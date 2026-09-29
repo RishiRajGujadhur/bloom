@@ -457,6 +457,10 @@ const common = {
         title: "Learn to code",
         description: "A Codecademy-style JavaScript course: an in-browser editor, instant checks, quizzes, challenges, cheat sheets and a certificate.",
       },
+      chessAcademy: {
+        title: "Chess Academy",
+        description: "Learn how every piece moves, solve mate-in-one puzzles and play Bloom on an animated board.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1566,6 +1570,10 @@ export const resources = {
           codeLearning: {
             title: "Apprendre à coder",
             description: "Un cours JavaScript façon Codecademy : éditeur dans le navigateur, vérifications instantanées, quiz, défis, aide-mémoire et certificat.",
+          },
+          chessAcademy: {
+            title: "Académie d’échecs",
+            description: "Apprenez le déplacement des pièces, résolvez des mats en un coup et jouez contre Bloom.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

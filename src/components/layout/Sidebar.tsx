@@ -38,6 +38,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Crown as CrownF_chessAcademy } from 'lucide-react'
 import { Code2 as Code2F_codeLearning } from 'lucide-react'
 import { Gift as GiftF_littleJoys } from 'lucide-react'
 import { Languages as LanguagesF_englishLearning } from 'lucide-react'
@@ -115,6 +116,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'chess'
   | 'code'
   | 'joys'
   | 'english'
@@ -164,7 +166,7 @@ export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
 export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'roadmap', 'money', 'joys'] },
-  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps'] },
+  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
   { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street'] },
@@ -431,6 +433,7 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'chess', title: "Chess", Icon: CrownF_chessAcademy, requires: 'chessAcademy' },
     { key: 'code', title: "Learn to code", Icon: Code2F_codeLearning, requires: 'codeLearning' },
     { key: 'joys', title: "Little Joys", Icon: GiftF_littleJoys, requires: 'littleJoys' },
     { key: 'english', title: "English", Icon: LanguagesF_englishLearning, requires: 'englishLearning' },

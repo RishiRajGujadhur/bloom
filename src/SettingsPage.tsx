@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Crown as CrownF_chessAcademy } from 'lucide-react'
 import { Code2 as Code2F_codeLearning } from 'lucide-react'
 import { Gift as GiftF_littleJoys } from 'lucide-react'
 import { Languages as LanguagesF_englishLearning } from 'lucide-react'
@@ -146,6 +147,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  chessAcademy: CrownF_chessAcademy,
   codeLearning: Code2F_codeLearning,
   littleJoys: GiftF_littleJoys,
   englishLearning: LanguagesF_englishLearning,
@@ -236,6 +238,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  chessAcademy: boolean
   codeLearning: boolean
   littleJoys: boolean
   englishLearning: boolean
@@ -337,6 +340,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    chessAcademy: true,
     codeLearning: true,
     littleJoys: true,
     englishLearning: true,
@@ -428,6 +432,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'chessAcademy',
   'codeLearning',
   'littleJoys',
   'englishLearning',

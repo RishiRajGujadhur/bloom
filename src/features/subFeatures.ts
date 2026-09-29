@@ -903,6 +903,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "sandbox", title: "Safe sandbox", description: "Code runs in a worker with a time limit." },
     { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom’s chat for a hint." },
   ],
+  chessAcademy: [
+    { id: "lessons", title: "Piece lessons", description: "Collect stars with each piece." },
+    { id: "puzzles", title: "Mate-in-one puzzles", description: "Verified checkmate puzzles." },
+    { id: "play", title: "Play Bloom", description: "Three difficulty levels." },
+    { id: "hints", title: "Hints", description: "A nudge for each puzzle." },
+    { id: "drag", title: "Drag pieces", description: "Drag or tap to move." },
+    { id: "tilt", title: "Board tilt", description: "The board leans towards your pointer." },
+    { id: "moveList", title: "Move list", description: "Every move in notation." },
+    { id: "undo", title: "Undo", description: "Take back a move." },
+    { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom’s chat for the answer." },
+    { id: "celebrate", title: "Celebrations", description: "Kinetic titles and confetti." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
