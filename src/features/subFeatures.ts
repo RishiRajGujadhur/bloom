@@ -1011,6 +1011,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "disclaimer", title: "Training aid", description: "Not a substitute for a course." },
     { id: "celebrate", title: "Celebrations", description: "A burst for a steady rhythm." },
   ],
+  speedReader: [
+    { id: "rsvp", title: "One word at a time", description: "RSVP reading." },
+    { id: "focal", title: "Focal letter", description: "The anchor letter stays centred." },
+    { id: "speed", title: "Speed", description: "150–900 words per minute." },
+    { id: "pacing", title: "Smart pacing", description: "Pauses at commas and full stops." },
+    { id: "texts", title: "Built-in texts", description: "Three short reads." },
+    { id: "paste", title: "Your own text", description: "Paste anything." },
+    { id: "quiz", title: "Comprehension check", description: "Auto-generated questions." },
+    { id: "effective", title: "Effective speed", description: "Speed × understanding." },
+    { id: "chart", title: "Progress chart", description: "Your speed over time." },
+    { id: "space", title: "Space to pause", description: "Keyboard control." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

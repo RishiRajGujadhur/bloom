@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { ScanText as ScanTextF_speedReader } from 'lucide-react'
 import { HeartPulse as HeartPulseF_cprCoach } from 'lucide-react'
 import { Globe as GlobeF_globeQuiz } from 'lucide-react'
 import { Hand as HandF_signAlphabet } from 'lucide-react'
@@ -155,6 +156,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  speedReader: ScanTextF_speedReader,
   cprCoach: HeartPulseF_cprCoach,
   globeQuiz: GlobeF_globeQuiz,
   signAlphabet: HandF_signAlphabet,
@@ -254,6 +256,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  speedReader: boolean
   cprCoach: boolean
   globeQuiz: boolean
   signAlphabet: boolean
@@ -364,6 +367,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    speedReader: true,
     cprCoach: true,
     globeQuiz: true,
     signAlphabet: true,
@@ -464,6 +468,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'speedReader',
   'cprCoach',
   'globeQuiz',
   'signAlphabet',

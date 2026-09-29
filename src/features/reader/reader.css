@@ -1,0 +1,37 @@
+.rd-page { display: grid; grid-template-rows: auto 1fr auto; gap: 12px; height: calc(100dvh - 230px); min-height: 500px; padding: 6px 4px; }
+.rd-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+.rd-head h2 { margin: 0; font: 900 clamp(1.8rem, 3.8vw, 2.8rem)/1 'Manrope', sans-serif; letter-spacing: -0.03em; }
+.rd-eyebrow { margin: 0 0 4px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.72rem; color: var(--accent-color); }
+.rd-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.rd-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 12px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.rd-chip.on { border-color: #8f7ae5; background: color-mix(in srgb, #8f7ae5 16%, var(--bg-surface)); }
+.rd-stage { position: relative; display: grid; place-items: center; min-height: 0; border-radius: 26px; background: radial-gradient(circle at 50% 50%, color-mix(in srgb, #8f7ae5 10%, var(--bg-surface)), var(--bg-surface)); border: 1px solid var(--border-color); overflow: hidden; }
+.rd-arc { position: absolute; width: min(70%, 420px); opacity: 0.6; pointer-events: none; }
+.rd-arc-track { fill: none; stroke: var(--border-color); stroke-width: 1.2; }
+.rd-arc-fill { fill: none; stroke: #8f7ae5; stroke-width: 1.6; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50px 50px; transition: stroke-dashoffset 120ms linear; }
+.rd-window { position: relative; width: 100%; display: grid; place-items: center; padding: 30px 0; }
+.rd-guide { position: absolute; left: 50%; width: 2px; height: 22px; background: #ff4b4b; opacity: 0.6; }
+.rd-guide.top { top: 0; }
+.rd-guide.bottom { bottom: 0; }
+/* The focal letter sits exactly on the centre line. */
+.rd-word { display: grid; grid-template-columns: 1fr auto 1fr; width: 100%; font: 700 clamp(2.4rem, 6vw, 4.4rem)/1 'Fira Code', monospace; will-change: transform, opacity; }
+.rd-pre { text-align: right; }
+.rd-focal { color: #ff4b4b; }
+.rd-post { text-align: left; }
+.rd-paste { width: min(90%, 720px); }
+.rd-quiz { display: grid; gap: 14px; padding: 20px; width: min(92%, 760px); }
+.rd-q { display: grid; gap: 8px; }
+.rd-opt { padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.rd-opt.right { border-color: #58cc02; background: #58cc0218; }
+.rd-opt.wrong { border-color: #ff4b4b; background: #ff4b4b14; }
+.rd-result { margin: 0; font-size: 1.1rem; }
+.rd-foot { display: grid; grid-template-columns: minmax(200px, 1fr) auto auto minmax(200px, 1fr); gap: 14px; align-items: center; }
+@media (max-width: 900px) { .rd-foot { grid-template-columns: 1fr 1fr; } .rd-page { height: auto; } }
+.rd-speed { display: grid; gap: 4px; font-weight: 800; }
+.rd-speed input { accent-color: #8f7ae5; }
+.rd-cta { border: 0; border-radius: 14px; padding: 12px 22px; background: #8f7ae5; color: #fff; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #5b48b0; }
+.rd-cta:disabled { opacity: 0.5; }
+.rd-progress { font: 700 0.9rem 'Fira Code', monospace; color: var(--text-muted); }
+.rd-chart { height: 70px; }
+.rd-chart small { color: var(--text-muted); }
+html[data-theme='matrix'] .rd-cta { background: #39ff6a; color: #021006; box-shadow: 0 4px 0 #1f7a3a; }

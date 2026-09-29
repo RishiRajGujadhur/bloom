@@ -493,6 +493,10 @@ const common = {
         title: "CPR & first-aid coach",
         description: "Practise CPR rhythm with a 110 bpm coach and learn the steps for choking, bleeding, burns, stroke and more. A training aid, not medical advice.",
       },
+      speedReader: {
+        title: "Speed reader",
+        description: "Read faster with one-word-at-a-time RSVP, a focal letter, a comprehension check and a speed chart.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1638,6 +1642,10 @@ export const resources = {
           cprCoach: {
             title: "RCP et premiers secours",
             description: "Pratiquez le rythme de la RCP et apprenez les gestes de premiers secours. Aide à la formation.",
+          },
+          speedReader: {
+            title: "Lecture rapide",
+            description: "Lisez plus vite, un mot à la fois, avec lettre focale, vérification de compréhension et graphique.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
