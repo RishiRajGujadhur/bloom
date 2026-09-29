@@ -136,5 +136,8 @@ jest.mock('@chatscope/chat-ui-kit-react', () => {
 const realGetItem = Storage.prototype.getItem
 Storage.prototype.getItem = function (key: string) {
   const v = realGetItem.call(this, key)
-  return v === null && key === 'bloom-nav-hamburger' ? '0' : v
+  if (v === null && key === 'bloom-nav-hamburger') return '0'
+  // Sidebar groups start expanded in tests so every destination is reachable.
+  if (v === null && key === 'bloom-nav-groups') return '[0,1,2,3,4,5,6]'
+  return v
 }

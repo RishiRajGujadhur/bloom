@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
+  ChevronDown,
   BookOpen,
   CarFront,
   CalendarDays,
@@ -162,10 +163,11 @@ export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
 
 export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
-  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'cards', 'games', 'roadmap', 'money', 'english', 'joys', 'code'] },
+  { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'roadmap', 'money', 'joys'] },
+  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
-  { label: 'Explore', keys: ['vision-board', 'palace', 'explore', 'places', 'yearbook', 'energy', 'lab', 'mindmaps', 'pointer', 'street'] },
+  { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street'] },
 ]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
@@ -478,6 +480,30 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     .map((item, order) => ({ ...item, order, section: sectionOf(item.key) }))
     .sort((a, b) => a.section - b.section || a.order - b.order)
 
+  // Collapsible groups: remembered per device; the group holding the current page is always open.
+  const [openGroups, setOpenGroups] = useState<Set<number>>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('bloom-nav-groups') ?? 'null') as number[] | null
+      return new Set(saved ?? [0])
+    } catch {
+      return new Set([0])
+    }
+  })
+  const activeSection = sectionOf(active as NavKey)
+  const groupOpen = (section: number) => !isOpen || section >= navSections.length || section === activeSection || openGroups.has(section)
+  const toggleGroup = (section: number) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev)
+      if (next.has(section)) next.delete(section)
+      else next.add(section)
+      try {
+        localStorage.setItem('bloom-nav-groups', JSON.stringify([...next]))
+      } catch {
+        /* storage blocked */
+      }
+      return next
+    })
+
   const toggleLabel = isOpen ? t('sidebar.collapse') : t('sidebar.expand')
 
   const handleNavigate = (key: NavKey) => {
@@ -558,30 +584,49 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
           )}
         </button>
         <nav aria-label={t('navigation.main')}>
-          {visibleItems.map(({ key, title, Icon, section }, index) => (
-            <Fragment key={key}>
-            {(index === 0 || visibleItems[index - 1].section !== section) &&
-              section < navSections.length && (
-                <div className="nav-caption nav-section" aria-hidden="true" data-section={section}>
-                  {index === 0 ? t('navigation.space') : navSections[section].label}
-                </div>
-              )}
-            <button
-              key={key}
-              type="button"
-              className={active === key ? 'active' : ''}
-              data-section={section}
-              aria-current={active === key ? 'page' : undefined}
-              // Without the visible label the icon needs its own name.
-              {...(isOpen ? {} : { 'aria-label': title, title, 'data-hint': title, 'data-cursor-text': title })}
-              onClick={() => handleNavigate(key)}
-            >
-              <Icon size={19} aria-hidden="true" />
-              <span className={styles.navLabel}>{title}</span>
-              {active === key && <span className="nav-indicator" />}
-            </button>
-            </Fragment>
-          ))}
+          {visibleItems.map(({ key, title, Icon, section }, index) => {
+            const first = index === 0 || visibleItems[index - 1].section !== section
+            const expanded = groupOpen(section)
+            const count = visibleItems.filter((v) => v.section === section).length
+            return (
+              <Fragment key={key}>
+                {first && section < navSections.length && (
+                  isOpen ? (
+                    <button
+                      type="button"
+                      className="nav-caption nav-section nav-group"
+                      data-section={section}
+                      aria-expanded={expanded}
+                      onClick={() => toggleGroup(section)}
+                    >
+                      <span>{section === 0 ? t('navigation.space') : navSections[section].label}</span>
+                      <small>{count}</small>
+                      <ChevronDown size={14} aria-hidden="true" className="nav-group-chevron" />
+                    </button>
+                  ) : (
+                    <div className="nav-caption nav-section" aria-hidden="true" data-section={section}>
+                      {section === 0 ? t('navigation.space') : navSections[section].label}
+                    </div>
+                  )
+                )}
+                {expanded && (
+                  <button
+                    type="button"
+                    className={`nav-item ${active === key ? 'active' : ''}`}
+                    data-section={section}
+                    aria-current={active === key ? 'page' : undefined}
+                    // Without the visible label the icon needs its own name.
+                    {...(isOpen ? {} : { 'aria-label': title, title, 'data-hint': title, 'data-cursor-text': title })}
+                    onClick={() => handleNavigate(key)}
+                  >
+                    <Icon size={19} aria-hidden="true" />
+                    <span className={styles.navLabel}>{title}</span>
+                    {active === key && <span className="nav-indicator" />}
+                  </button>
+                )}
+              </Fragment>
+            )
+          })}
         </nav>
         <div className="sidebar-encourage" aria-hidden={!isOpen}>
           <p>

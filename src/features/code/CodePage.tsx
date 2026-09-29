@@ -14,6 +14,7 @@ import './code.css'
 
 const CodeStory = lazy(() => import('./CodeStory').then((m) => ({ default: m.CodeStory })))
 const Editor = lazy(() => import('./Editor').then((m) => ({ default: m.Editor })))
+const CodeQuestStory = lazy(() => import('./CodeQuestStory').then((m) => ({ default: m.CodeQuestStory })))
 const on = (id: string) => subOn('codeLearning', id)
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 const CODE_KEY = 'bloom-code-v1'
@@ -295,6 +296,7 @@ export function CodePage() {
       aside={<span className="cd-aside"><Trophy size={15} /> {store.xp} XP · {doneCount}/{lessons.length}</span>}
       tabs={[
         { id: 'learn', label: 'Learn', icon: <Code2 size={15} />, render: learnTab },
+        { id: 'game', label: '3D Code Quest', icon: <Swords size={15} />, render: () => <Suspense fallback={<p role="status">Loading 3D Code Quest…</p>}><CodeQuestStory /></Suspense> },
         ...(on('storyMode') ? [{ id: 'story', label: 'Code Cup', icon: <Trophy size={15} />, render: () => <Suspense fallback={<p role="status">Loading…</p>}><CodeStory onXp={(n) => save((st) => ({ ...st, xp: st.xp + n }))} /></Suspense> }] : []),
         ...(on('quiz') ? [{ id: 'quiz', label: 'Quiz', icon: <HelpCircle size={15} />, render: () => <Quiz store={store} save={save} /> }] : []),
         ...(on('challenges') ? [{

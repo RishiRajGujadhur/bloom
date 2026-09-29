@@ -322,3 +322,15 @@ test('returning to a wide screen restores the expanded column', () => {
   act(() => setNarrowScreen(false))
   expect(document.documentElement.dataset.sidebar).toBe('open')
 })
+
+test('sidebar groups collapse like dropdowns and remember it', async () => {
+  const { render, screen, fireEvent } = await import('@testing-library/react')
+  const { Sidebar } = await import('../src/components/layout/Sidebar')
+  localStorage.setItem('bloom-nav-groups', '[0]')
+  render(<Sidebar active="overview" onNavigate={() => {}} flags={{ englishLearning: true, codeLearning: true } as never} />)
+  const learn = screen.getByRole('button', { name: /learn/i, expanded: false })
+  expect(screen.queryByRole('button', { name: /learn to code/i })).toBeNull()
+  fireEvent.click(learn)
+  expect(screen.getByRole('button', { name: /learn to code/i })).toBeTruthy()
+  expect(JSON.parse(localStorage.getItem('bloom-nav-groups')!)).toContain(2)
+})

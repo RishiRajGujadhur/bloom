@@ -8,7 +8,7 @@ import { useMatrix } from './MatrixRain'
  *   robot – the green terminal robot
  *   orb   – a soft, blurry colour orb with a tiny face that drifts through moods
  */
-export type AvatarStyle = 'auto' | 'bloom' | 'robot' | 'orb' | 'spark' | 'beacon' | 'tinker' | 'pixel' | 'globe'
+export type AvatarStyle = 'auto' | 'bloom' | 'robot' | 'orb' | 'spark' | 'beacon' | 'tinker' | 'pixel' | 'globe' | 'stardroid' | 'nebula' | 'cosmocat'
 export const AVATAR_KEY = 'bloom-avatar-style'
 export const avatarStyles: { id: AvatarStyle; label: string; hint: string }[] = [
   { id: 'auto', label: 'Automatic', hint: 'Bloom, or the robot in the Matrix theme' },
@@ -20,6 +20,9 @@ export const avatarStyles: { id: AvatarStyle; label: string; hint: string }[] = 
   { id: 'tinker', label: 'Tinker', hint: 'Orange robot: turning gear and puffs of steam' },
   { id: 'pixel', label: 'Pixel Bloom', hint: '8-bit Bloom with stepped frames and twinkling pixels' },
   { id: 'globe', label: 'Globe', hint: 'A glossy 3D sphere that turns its head, with an orbiting moon' },
+  { id: 'stardroid', label: 'Star droid', hint: 'A cheerful little explorer robot with a blinking antenna' },
+  { id: 'nebula', label: 'Nebula', hint: 'A cosmic guide with a slowly orbiting ring' },
+  { id: 'cosmocat', label: 'Cosmo cat', hint: 'A curious space cat with a gentle floating motion' },
 ]
 
 const listeners = new Set<() => void>()

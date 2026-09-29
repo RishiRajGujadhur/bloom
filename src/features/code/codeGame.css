@@ -1,0 +1,24 @@
+.cq-game { display: grid; gap: 12px; width: min(100%, 1050px); margin: auto; color: var(--text-primary); }
+.cq-header { display: flex; justify-content: space-between; gap: 16px; align-items: start; }
+.cq-header small { color: #3e91ae; font-weight: 900; letter-spacing: .14em; }
+.cq-header h3 { margin: 3px 0; font-size: clamp(1.2rem, 2.4vw, 1.8rem); }
+.cq-header p { margin: 0; color: var(--text-secondary); }
+.cq-level { white-space: nowrap; border-radius: 999px; padding: 7px 12px; background: #227fa322; color: #257e9d; font-weight: 800; }
+.cq-scene { height: clamp(270px, 42vh, 450px); overflow: hidden; border: 1px solid #70cffa55; border-radius: 20px; background: #0a1b38; box-shadow: 0 18px 35px #0b27453a; }
+.cq-block-label { display: block; white-space: nowrap; padding: 3px 7px; color: #fff; font: 700 11px 'Fira Code', monospace; text-shadow: 0 1px 5px #001; }
+.cq-message { margin: 0; padding: 9px 13px; border-radius: 10px; background: #2d99c01b; min-height: 40px; }
+.cq-controls { display: grid; gap: 10px; }
+.cq-timer { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; font-weight: 800; }
+.cq-timer > div { height: 12px; overflow: hidden; border-radius: 999px; background: #304b64; }
+.cq-timer i { display: block; height: 100%; background: linear-gradient(90deg, #ff776d, #ffd55b, #43ddb2); transition: width 1s linear; }
+.cq-blocks, .cq-command-bar, .cq-program { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.cq-blocks button, .cq-command-bar button:not(.studio-btn):not(.cd-run), .cq-program button { border: 1px solid #6b89bd; border-radius: 10px; padding: 8px 10px; background: #243962; color: white; cursor: pointer; }
+.cq-blocks button { display: flex; align-items: center; gap: 7px; }
+.cq-blocks button.selected { outline: 3px solid #ffd45c; }
+.cq-blocks code, .cq-program { font-family: 'Fira Code', monospace; }
+.cq-blocks button b { border-radius: 50%; background: #ffffff33; padding: 2px 7px; }
+.cq-command-bar button:disabled, .cq-program button:disabled, .cq-blocks button:disabled { opacity: .55; cursor: not-allowed; }
+.cq-program { padding: 8px; border: 1px dashed var(--border-color); border-radius: 12px; min-height: 50px; }
+.cq-program span { color: var(--text-secondary); }
+.cq-hint { justify-self: start; border: 0; background: none; color: #237ea1; text-decoration: underline; cursor: pointer; }
+@media (max-width: 650px) { .cq-header { flex-direction: column; gap: 6px; } .cq-scene { height: 290px; } .cq-timer { grid-template-columns: 1fr; } .cq-blocks { flex-direction: column; align-items: stretch; } }

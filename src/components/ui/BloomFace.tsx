@@ -5,6 +5,7 @@ import './bloomFace.css'
 import { type AvatarDrawing, useAvatarDrawing } from './avatarStyle'
 import { OrangeBot, isOrange, orangeIdle } from './orangeBots'
 import { GlobeBot, PixelBot, extraIdle, isExtra } from './extraBots'
+import { SpaceBot, isSpace, spaceIdle } from './spaceBots'
 
 export type FaceMood = 'idle' | 'talk' | 'happy' | 'think' | 'excited' | 'wink' | 'wave' | 'cheer'
 export type BloomFaceHandle = { react: (mood: FaceMood) => void; actFor: (page: string) => void }
@@ -48,7 +49,7 @@ export const BloomFace = forwardRef<
   const drawing = variant ?? chosen
   const robot = drawing === 'robot'
   const orb = drawing === 'orb'
-  const orange = isOrange(drawing) || isExtra(drawing)
+  const orange = isOrange(drawing) || isExtra(drawing) || isSpace(drawing)
   const q = (s: string) => svg.current?.querySelector(s) as SVGElement | null
 
   const wave = () => {
@@ -185,6 +186,12 @@ export const BloomFace = forwardRef<
     return extraIdle(el, drawing)
   }, [drawing])
 
+  useEffect(() => {
+    const el = svg.current
+    if (!el || !isSpace(drawing) || reduced()) return
+    return spaceIdle(el)
+  }, [drawing])
+
   // Robot idle: antenna light pulses, a scanline sweeps the visor, the visor glances around.
   useEffect(() => {
     const el = svg.current
@@ -246,7 +253,9 @@ export const BloomFace = forwardRef<
         </linearGradient>
       </defs>
       <ellipse className="bf-shadow" cx="50" cy="102" rx="22" ry="3.5" fill={robot ? '#39ff6a' : orb ? '#6a72c8' : orange ? '#ff8a2a' : '#d9503a'} opacity="0.28" />
-      {drawing === 'pixel' ? (
+      {isSpace(drawing) ? (
+        <SpaceBot variant={drawing} uid={uid} />
+      ) : drawing === 'pixel' ? (
         <PixelBot />
       ) : drawing === 'globe' ? (
         <GlobeBot uid={uid} />

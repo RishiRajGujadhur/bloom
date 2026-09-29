@@ -10,6 +10,7 @@ import { readDiet } from '../diet/dietModel'
 import { ENERGY_KEY, type TimeLog } from '../energy/energyModel'
 import { dailyRows, findings, matrix, metrics, regression, strength, type MetricId } from './labModel'
 import { buildBackupZip, download } from './exportSuite'
+import { EnergyCompass } from '../innovation/EnergyCompass'
 import './lab.css'
 
 const readArray = <T,>(key: string): T[] => {
@@ -164,6 +165,7 @@ export function LabPage({ data, today }: FeaturePageProps) {
 
   return (
     <div className="lab-page">
+      <EnergyCompass />
       <section className="lab-card">
         <div className="lab-head">
           <h3>
