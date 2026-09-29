@@ -1,5 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useSyncExternalStore } from 'react'
+import { mountScene } from '../../platform/offscreen'
+import MatrixWorker from './matrixWorker?worker'
 
 /** The active theme id, live (reads html[data-theme]). */
 const subscribe = (l: () => void) => {
@@ -11,49 +13,28 @@ export const useThemeId = () => useSyncExternalStore(subscribe, () => document.d
 export const useMatrix = () => useThemeId() === 'matrix'
 
 /**
- * Matrix theme backdrop: slow falling glyph rain on a canvas behind the app.
- * Low opacity, ~20 fps, paused when the tab is hidden or motion is reduced.
+ * Matrix theme backdrop: slow falling glyph rain behind the app. It renders in
+ * a worker on an OffscreenCanvas (main-thread fallback), ~20 fps, paused when
+ * the tab is hidden, and off when motion is reduced.
  */
 export function MatrixRain() {
   const on = useMatrix()
-  const canvas = useRef<HTMLCanvasElement>(null)
+  const host = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const el = canvas.current
+    const el = host.current
     if (!on || !el || prefersReducedMotion()) return
-    const ctx = el.getContext('2d')
-    if (!ctx) return
-    const glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ0123456789BLOOM♥✿'
-    const size = 16
-    let cols: number[] = []
-    const resize = () => {
-      el.width = window.innerWidth
-      el.height = window.innerHeight
-      cols = Array.from({ length: Math.ceil(el.width / size) }, () => Math.random() * -50)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-    let last = 0
-    let raf = 0
-    const draw = (t: number) => {
-      raf = requestAnimationFrame(draw)
-      if (t - last < 50 || document.hidden) return
-      last = t
-      ctx.fillStyle = 'rgba(3, 10, 5, 0.12)'
-      ctx.fillRect(0, 0, el.width, el.height)
-      ctx.font = `${size}px VT323, monospace`
-      cols.forEach((y, i) => {
-        const ch = glyphs[Math.floor(Math.random() * glyphs.length)]
-        ctx.fillStyle = Math.random() < 0.04 ? '#d6ffe0' : '#39ff6a'
-        ctx.fillText(ch, i * size, y * size)
-        cols[i] = y * size > el.height && Math.random() > 0.975 ? 0 : y + 1
-      })
-    }
-    raf = requestAnimationFrame(draw)
+    const scene = mountScene<null>(el, {
+      data: null,
+      makeWorker: () => new MatrixWorker(),
+      loadFactory: () => import('./matrixScene').then((m) => m.createMatrixScene),
+    })
+    const vis = () => scene.send('visible', !document.hidden)
+    document.addEventListener('visibilitychange', vis)
     return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', vis)
+      scene.dispose()
     }
   }, [on])
   if (!on) return null
-  return <canvas ref={canvas} className="matrix-rain" aria-hidden="true" />
+  return <div ref={host} className="matrix-rain" aria-hidden="true" />
 }

@@ -132,7 +132,7 @@ export function CodeCityPage() {
       <section className="cc-main">
         <header className="cc-head">
           <div><p className="cc-eyebrow"><Building2 size={14} /> Burnout radar</p><h2>{name ? `${name} — ${files.length} files, ${commits.length} commits` : 'Your code as a city. Your rhythm as a radar.'}</h2></div>
-          <CapsBadge caps={['gpu', 'mt', 'fsa', 'simd']} />
+          <CapsBadge caps={['gpu', 'oc', 'mt', 'fsa', 'simd']} />
         </header>
         <div className="cc-actions">
           <button type="button" className="cc-cta" onClick={() => void openRepo()}><FolderGit2 size={16} /> Open a local repository</button>
