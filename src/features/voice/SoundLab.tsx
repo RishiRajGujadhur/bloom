@@ -122,7 +122,7 @@ export function SoundLab({ memo, onApply, onRestore }: { memo: VoiceMemo; onAppl
           <p className="sl-eyebrow">Sound Lab</p>
           <h4>Remove the noise, keep the voice</h4>
         </div>
-        <CapsBadge caps={['simd', 'mt', 'gpu', 'opfs', 'fsa']} />
+        <CapsBadge caps={['simd', 'mt', 'gpu', 'oc', 'opfs', 'fsa']} />
       </header>
       <div className="sl-grid">
         <div className="sl-stage">

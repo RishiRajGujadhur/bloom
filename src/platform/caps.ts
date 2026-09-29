@@ -2,7 +2,7 @@
  * What this device can do. Each advanced feature declares the capabilities it
  * uses; the badge shows which are live here and which fall back.
  */
-export type Cap = 'bt' | 'opfs' | 'gpu' | 'crdt' | 'simd' | 'mt' | 'fsa'
+export type Cap = 'bt' | 'opfs' | 'gpu' | 'crdt' | 'simd' | 'mt' | 'fsa' | 'oc' | 'cp'
 
 export const capInfo: Record<Cap, { label: string; long: string }> = {
   bt: { label: 'Bluetooth', long: 'Web Bluetooth: talks to real devices' },
@@ -12,6 +12,8 @@ export const capInfo: Record<Cap, { label: string; long: string }> = {
   simd: { label: 'SIMD', long: 'WebAssembly SIMD128: vectorised maths' },
   mt: { label: 'Multi-core', long: 'SharedArrayBuffer + Atomics: true multi-threading' },
   fsa: { label: 'Disk files', long: 'File System Access: open and save real files' },
+  oc: { label: 'Render thread', long: 'OffscreenCanvas: drawing runs in a worker, never blocking the page' },
+  cp: { label: 'Thermal aware', long: 'Compute Pressure: adapts when the CPU is under strain' },
 }
 
 // A tiny module using v128 instructions; it only validates where SIMD is supported.
@@ -28,6 +30,8 @@ export function hasCap(c: Cap): boolean {
     case 'simd': try { return typeof WebAssembly !== 'undefined' && WebAssembly.validate(SIMD_PROBE) } catch { return false }
     case 'mt': return typeof SharedArrayBuffer === 'function' && g.crossOriginIsolated === true
     case 'fsa': return typeof g.showOpenFilePicker === 'function'
+    case 'oc': return typeof HTMLCanvasElement !== 'undefined' && 'transferControlToOffscreen' in HTMLCanvasElement.prototype
+    case 'cp': return typeof g.PressureObserver === 'function'
   }
 }
 
