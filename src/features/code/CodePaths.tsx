@@ -15,6 +15,7 @@ const SelectorDetective = lazy(() => import('./SelectorDetective').then((module)
 const BoxModelLab = lazy(() => import('./BoxModelLab').then((module) => ({ default: module.BoxModelLab })))
 const FlexboxPlayground = lazy(() => import('./FlexboxPlayground').then((module) => ({ default: module.FlexboxPlayground })))
 const GridPuzzle = lazy(() => import('./GridPuzzle').then((module) => ({ default: module.GridPuzzle })))
+const BreakpointSimulator = lazy(() => import('./BreakpointSimulator').then((module) => ({ default: module.BreakpointSimulator })))
 type Progress = Record<string, boolean>
 
 function readProgress(): Progress {
@@ -37,6 +38,7 @@ export function CodePaths() {
   const [boxing, setBoxing] = useState(false)
   const [flexing, setFlexing] = useState(false)
   const [gridding, setGridding] = useState(false)
+  const [resizing, setResizing] = useState(false)
   const detail = useRef<HTMLDivElement>(null)
   const path = codePaths.find((item) => item.id === pathId) ?? codePaths[0]
   const chapter = path.chapters[selectedIndex]
@@ -51,7 +53,7 @@ export function CodePaths() {
     return () => { tween.progress(1).kill() }
   }, [pathId, selectedIndex])
 
-  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0); setBuilding(false); setRepairing(false); setLabeling(false); setLinking(false); setDetecting(false); setBoxing(false); setFlexing(false); setGridding(false) }
+  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0); setBuilding(false); setRepairing(false); setLabeling(false); setLinking(false); setDetecting(false); setBoxing(false); setFlexing(false); setGridding(false); setResizing(false) }
   const completeHtml = () => setCompleted((current) => {
     if (current['frontend:html']) return current
     const updated = { ...current, 'frontend:html': true }
@@ -69,11 +71,12 @@ export function CodePaths() {
     <div className="code-path-picker" role="group" aria-label="Programming learning path">
       {codePaths.map((item) => <button key={item.id} type="button" className="code-path-pick" aria-pressed={path.id === item.id} onClick={() => choosePath(item.id)} style={{ ['--path-color' as string]: item.color }}><Compass size={18} aria-hidden="true" />{item.name}</button>)}
     </div>
-    {gridding ? <Suspense fallback={<p role="status">Loading Grid puzzle…</p>}><GridPuzzle onClose={() => setGridding(false)} /></Suspense> : flexing ? <Suspense fallback={<p role="status">Loading Flexbox playground…</p>}><FlexboxPlayground onClose={() => setFlexing(false)} /></Suspense> : boxing ? <Suspense fallback={<p role="status">Loading box model lab…</p>}><BoxModelLab onClose={() => setBoxing(false)} /></Suspense> : detecting ? <Suspense fallback={<p role="status">Loading selector detective…</p>}><SelectorDetective onClose={() => setDetecting(false)} /></Suspense> : linking ? <Suspense fallback={<p role="status">Loading navigation project…</p>}><LinkNavigationLab onClose={() => setLinking(false)} /></Suspense> : labeling ? <Suspense fallback={<p role="status">Loading form workshop…</p>}><FormLabelWorkshop onClose={() => setLabeling(false)} /></Suspense> : repairing ? <Suspense fallback={<p role="status">Loading heading challenge…</p>}><HeadingRepair onClose={() => setRepairing(false)} /></Suspense> : building ? <Suspense fallback={<p role="status">Loading HTML builder…</p>}><HtmlDocumentBuilder onClose={() => setBuilding(false)} onComplete={completeHtml} /></Suspense> : checking ? <CodeSkillCheck key={path.id} path={path} onClose={() => setChecking(false)} onRecommend={(index) => { setSelectedIndex(index); setChecking(false) }} /> : <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
+    {resizing ? <Suspense fallback={<p role="status">Loading breakpoint simulator…</p>}><BreakpointSimulator onClose={() => setResizing(false)} /></Suspense> : gridding ? <Suspense fallback={<p role="status">Loading Grid puzzle…</p>}><GridPuzzle onClose={() => setGridding(false)} /></Suspense> : flexing ? <Suspense fallback={<p role="status">Loading Flexbox playground…</p>}><FlexboxPlayground onClose={() => setFlexing(false)} /></Suspense> : boxing ? <Suspense fallback={<p role="status">Loading box model lab…</p>}><BoxModelLab onClose={() => setBoxing(false)} /></Suspense> : detecting ? <Suspense fallback={<p role="status">Loading selector detective…</p>}><SelectorDetective onClose={() => setDetecting(false)} /></Suspense> : linking ? <Suspense fallback={<p role="status">Loading navigation project…</p>}><LinkNavigationLab onClose={() => setLinking(false)} /></Suspense> : labeling ? <Suspense fallback={<p role="status">Loading form workshop…</p>}><FormLabelWorkshop onClose={() => setLabeling(false)} /></Suspense> : repairing ? <Suspense fallback={<p role="status">Loading heading challenge…</p>}><HeadingRepair onClose={() => setRepairing(false)} /></Suspense> : building ? <Suspense fallback={<p role="status">Loading HTML builder…</p>}><HtmlDocumentBuilder onClose={() => setBuilding(false)} onComplete={completeHtml} /></Suspense> : checking ? <CodeSkillCheck key={path.id} path={path} onClose={() => setChecking(false)} onRecommend={(index) => { setSelectedIndex(index); setChecking(false) }} /> : <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
       <div className="code-path-top"><div><span className="code-path-kicker">YOUR ROUTE</span><h2>{path.name}</h2><p>{count} of {path.chapters.length} practiced{next ? ` · next: ${next.title}` : ' · route complete'}</p></div><a href={path.source} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${path.name} roadmap at roadmap.sh`}>Explore roadmap <ArrowUpRight size={16} aria-hidden="true" /></a></div>
       {path.id === 'frontend' && selectedIndex === 1 && <button type="button" className="code-path-open" onClick={() => setBoxing(true)}><FileCode2 size={16} aria-hidden="true" /> Open box model lab</button>}
       {path.id === 'frontend' && selectedIndex === 1 && <button type="button" className="code-path-open" onClick={() => setFlexing(true)}><FileCode2 size={16} aria-hidden="true" /> Open Flexbox playground</button>}
       {path.id === 'frontend' && selectedIndex === 1 && <button type="button" className="code-path-open" onClick={() => setGridding(true)}><FileCode2 size={16} aria-hidden="true" /> Solve Grid puzzle</button>}
+      {path.id === 'frontend' && selectedIndex === 1 && <button type="button" className="code-path-open" onClick={() => setResizing(true)}><FileCode2 size={16} aria-hidden="true" /> Simulate breakpoints</button>}
       <div className="code-path-map" role="group" aria-label={`${path.name} chapters`}>
         <svg viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true"><path d="M30 6 H570" className="code-path-line-track" /><path d="M30 6 H570" className="code-path-line-fill" style={{ strokeDasharray: `${Math.min(1, count / (path.chapters.length - 1)) * 540} 540` }} /></svg>
         {path.chapters.map((item, index) => <button key={item.id} type="button" className="code-path-stop" aria-label={`Chapter ${index + 1}: ${item.title}${completed[`${path.id}:${item.id}`] ? ', practiced' : ''}`} aria-current={selectedIndex === index ? 'step' : undefined} onClick={() => setSelectedIndex(index)}>{completed[`${path.id}:${item.id}`] ? <Check size={18} aria-hidden="true" /> : index + 1}</button>)}
