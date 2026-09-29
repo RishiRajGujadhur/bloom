@@ -65,3 +65,13 @@
   min-height: 44px;
   padding: 0;
 }
+
+.mx-aurora { position: relative; width: 100%; height: 120px; flex: none; border-radius: 18px; overflow: hidden; background: #060a1a; }
+.mx-aurora-host { position: absolute; inset: 0; }
+.mx-aurora-tag { position: absolute; left: 10px; bottom: 8px; padding: 2px 8px; border-radius: 999px; background: #060a1acc; color: #9ef0ff; font: 800 0.66rem 'Manrope', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+.mx-beats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; width: 100%; }
+.mx-beats button { display: grid; gap: 2px; padding: 8px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; font: 900 0.95rem 'Manrope', sans-serif; cursor: pointer; }
+.mx-beats button small { font-weight: 700; font-size: 0.72rem; color: var(--text-secondary); }
+.mx-beats button.on { border-color: #3f6fb5; background: color-mix(in srgb, #3f6fb5 16%, var(--bg-surface)); }
+html[data-theme='matrix'] .mx-beats button[aria-checked='true'] { color: #d6ffe0; background: #0b3a1a; }
+html[data-theme='matrix'] .mx-beats button[aria-checked='true'] small { color: #9dffb8; }

@@ -8,6 +8,7 @@ import { layers, mixer, presets, type Mix } from './mixerEngine'
 import '../sounds/sounds.css'
 import { MixOrbit } from '../showcase/MixOrbit'
 import { usePageActions } from '../../components/ui/PageMenu'
+import { Aurora } from './Aurora'
 import './mixer.css'
 
 const on = (id: string) => subOn('soundMixer', id)
@@ -120,6 +121,14 @@ export function MixerPage() {
         ))}
       </div>
       <div className="studio-card mx-side">
+        {on('aurora') && <Aurora playing={playing} />}
+        {(store.mix.binaural ?? 0) > 0 && (
+          <div className="mx-beats" role="radiogroup" aria-label="Binaural beat">
+            {[[2, 'Delta · sleep'], [6, 'Theta · drift'], [10, 'Alpha · calm focus'], [16, 'Beta · alert']].map(([hz, label]) => (
+              <button key={hz} type="button" role="radio" aria-checked={mixer.binauralBeat === hz} className={mixer.binauralBeat === hz ? 'on' : ''} onClick={() => mixer.setBeat(hz as number)}>{hz} Hz<small>{label}</small></button>
+            ))}
+          </div>
+        )}
         {on('orbit') && <MixOrbit playing={playing} layers={visible.map((l) => ({ id: l.id, emoji: l.emoji, label: l.label, volume: store.mix[l.id] ?? 0 }))} />}
         <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={36} /> : <Play size={36} />}

@@ -599,6 +599,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "pairFocus", title: "Counts as focus", description: "Finished focus sessions add to your focus minutes." },
   ],
   soundMixer: [
+    { id: 'aurora', title: 'Live aurora', description: 'The mix’s spectrum as an aurora on the render thread.' },
     { id: "natureLayers", title: "Nature layers", description: "Rain, wind, ocean, fire, birds and stream." },
     { id: "noiseColours", title: "Coloured noise", description: "White, pink and brown noise." },
     { id: "organic", title: "Organic motion", description: "Simplex noise drifts every layer so it never loops." },

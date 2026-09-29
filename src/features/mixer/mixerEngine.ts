@@ -1,11 +1,13 @@
 import { createNoise2D } from 'simplex-noise'
+import workletUrl from './noiseWorklet.ts?worker&url'
+import noiseWasmUrl from './noise.wasm?url'
 
 /**
  * Procedural soundscapes: every layer is synthesised (no audio files), then
  * simplex noise drifts each layer's level, tone and position so the scene
  * never loops — waves swell, wind gusts, fire crackles, birds wander.
  */
-export type LayerId = 'rain' | 'wind' | 'ocean' | 'fire' | 'birds' | 'stream' | 'white' | 'pink' | 'brown'
+export type LayerId = 'rain' | 'wind' | 'ocean' | 'fire' | 'birds' | 'stream' | 'white' | 'pink' | 'brown' | 'binaural'
 export const layers: { id: LayerId; label: string; emoji: string; noise?: boolean }[] = [
   { id: 'rain', label: 'Rain', emoji: '🌧️' },
   { id: 'wind', label: 'Wind', emoji: '🌬️' },
@@ -16,6 +18,7 @@ export const layers: { id: LayerId; label: string; emoji: string; noise?: boolea
   { id: 'white', label: 'White noise', emoji: '⚪', noise: true },
   { id: 'pink', label: 'Pink noise', emoji: '🌸', noise: true },
   { id: 'brown', label: 'Brown noise', emoji: '🟤', noise: true },
+  { id: 'binaural', label: 'Binaural 10 Hz', emoji: '🎧', noise: true },
 ]
 export type Mix = Partial<Record<LayerId, number>>
 export const presets: { id: string; name: string; emoji: string; mix: Mix }[] = [
@@ -70,6 +73,12 @@ class MixerEngine {
   spatial = true
   fade = true
   endsAt: number | null = null
+  /** Live noise generator (AudioWorklet running the Wasm SIMD kernel); null until loaded or if unsupported. */
+  private gen: AudioWorkletNode | null = null
+  engine: 'simd' | 'js' | 'buffer' = 'buffer'
+  analyser: AnalyserNode | null = null
+  binauralBeat = 10
+  private binaural: { l: OscillatorNode; r: OscillatorNode } | null = null
   private listeners = new Set<() => void>()
   subscribe(fn: () => void) {
     this.listeners.add(fn)
@@ -84,7 +93,6 @@ class MixerEngine {
     if (existing) return existing
     const ctx = this.ctx!
     const colour = id === 'white' || id === 'rain' || id === 'stream' ? 'white' : id === 'pink' || id === 'wind' ? 'pink' : 'brown'
-    const buffer = (this.buffers[colour] ??= noiseBuffer(ctx, colour))
     const gain = ctx.createGain()
     gain.gain.value = 0
     const filter = ctx.createBiquadFilter()
@@ -98,6 +106,7 @@ class MixerEngine {
       white: ['allpass', 1000, 0.7],
       pink: ['allpass', 1000, 0.7],
       brown: ['lowpass', 900, 0.7],
+      binaural: ['allpass', 1000, 0.7],
     }
     const [type, f, q] = setup[id]
     filter.type = type
@@ -105,7 +114,24 @@ class MixerEngine {
     filter.Q.value = q
     const pan = ctx.createStereoPanner()
     const c: Channel = { gain, filter, pan }
-    if (id !== 'birds') {
+    if (id === 'binaural') {
+      // Two pure tones a few hertz apart, one per ear: the brain hears the difference as a slow beat.
+      const merger = ctx.createChannelMerger(2)
+      const l = ctx.createOscillator()
+      const r = ctx.createOscillator()
+      l.frequency.value = 200
+      r.frequency.value = 200 + this.binauralBeat
+      l.connect(merger, 0, 0)
+      r.connect(merger, 0, 1)
+      l.start()
+      r.start()
+      merger.connect(filter)
+      this.binaural = { l, r }
+    } else if (id !== 'birds' && this.gen) {
+      // Endless noise from the audio-thread generator: output 0/1/2 = white/pink/brown.
+      this.gen.connect(filter, colour === 'white' ? 0 : colour === 'pink' ? 1 : 2)
+    } else if (id !== 'birds') {
+      const buffer = (this.buffers[colour] ??= noiseBuffer(ctx, colour))
       const src = ctx.createBufferSource()
       src.buffer = buffer
       src.loop = true
@@ -167,14 +193,41 @@ class MixerEngine {
         c.filter.frequency.setTargetAtTime(350 + 450 * (n + 1), ctx.currentTime, 0.5)
       } else if (l.id === 'stream') c.filter.frequency.setTargetAtTime(1300 + 300 * n, ctx.currentTime, 0.2)
       else if (!l.noise) level = vol * (0.85 + 0.15 * n)
-      c.gain.gain.setTargetAtTime(level * (l.noise ? 0.6 : 1), ctx.currentTime, 0.3)
-      if (this.spatial) c.pan.pan.setTargetAtTime(l.noise ? 0 : this.noise(this.t * 0.03, i * 20 + 5) * 0.8, ctx.currentTime, 1)
+      c.gain.gain.setTargetAtTime(level * (l.id === 'binaural' ? 0.25 : l.noise ? 0.6 : 1), ctx.currentTime, 0.3)
+      if (this.spatial && l.id !== 'binaural') c.pan.pan.setTargetAtTime(l.noise ? 0 : this.noise(this.t * 0.03, i * 20 + 5) * 0.8, ctx.currentTime, 1)
       if (vol > 0 && l.id === 'birds' && Math.random() < 0.05 + 0.1 * (n + 1)) {
         this.chirp(c, vol)
         if (Math.random() < 0.5) setTimeout(() => this.chirp(c, vol), 120)
       }
       if (vol > 0 && l.id === 'fire' && Math.random() < 0.25 + 0.2 * n) this.crackle(c, vol)
     })
+  }
+
+  /** Beat frequency: delta ≈ 2 Hz (sleep), theta 6, alpha 10 (calm focus), beta 16. */
+  setBeat(hz: number) {
+    this.binauralBeat = hz
+    if (this.binaural && this.ctx) this.binaural.r.frequency.setTargetAtTime(200 + hz, this.ctx.currentTime, 0.5)
+    this.emit()
+  }
+
+  /** Loads the AudioWorklet and compiles the SIMD kernel once. */
+  private async loadGenerator(ctx: AudioContext) {
+    if (!ctx.audioWorklet) return
+    try {
+      await ctx.audioWorklet.addModule(workletUrl)
+      let module: WebAssembly.Module | undefined
+      try {
+        module = await WebAssembly.compile(await (await fetch(noiseWasmUrl)).arrayBuffer())
+      } catch { module = undefined }
+      const node = new AudioWorkletNode(ctx, 'bloom-noise', { numberOfInputs: 0, numberOfOutputs: 3, outputChannelCount: [2, 2, 2], processorOptions: { module } })
+      await new Promise<void>((res) => {
+        node.port.onmessage = (e: MessageEvent<{ simd: boolean }>) => { this.engine = e.data.simd ? 'simd' : 'js'; res() }
+        setTimeout(res, 1000)
+      })
+      this.gen = node
+    } catch {
+      this.gen = null
+    }
   }
 
   setMix(mix: Mix) {
@@ -188,7 +241,12 @@ class MixerEngine {
       this.ctx = new AudioContext()
       this.master = this.ctx.createGain()
       this.master.gain.value = 0
-      this.master.connect(this.ctx.destination)
+      this.analyser = this.ctx.createAnalyser()
+      this.analyser.fftSize = 512
+      this.analyser.smoothingTimeConstant = 0.82
+      this.master.connect(this.analyser)
+      this.analyser.connect(this.ctx.destination)
+      await this.loadGenerator(this.ctx)
     }
     await this.ctx.resume()
     for (const l of layers) if ((this.mix[l.id] ?? 0) > 0) this.channel(l.id)
