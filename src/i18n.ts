@@ -505,6 +505,10 @@ const common = {
         title: "People garden",
         description: "Keep in touch with the people who matter: each is a plant that droops when it’s been a while and blooms when you talk.",
       },
+      readinessScan: {
+        title: "Morning readiness scan",
+        description: "A 60-second heart-rate-variability scan from a Bluetooth strap, your fingertip on the camera or a simulator, scored against your own baseline.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1662,6 +1666,10 @@ export const resources = {
           peopleGarden: {
             title: "Jardin des proches",
             description: "Restez en contact : chaque proche est une plante qui fleurit quand vous parlez.",
+          },
+          readinessScan: {
+            title: "Bilan de forme matinal",
+            description: "Un scan de variabilité cardiaque de 60 secondes, comparé à votre propre référence.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

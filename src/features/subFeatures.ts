@@ -1053,6 +1053,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "search", title: "Search", description: "Find someone quickly." },
     { id: "sway", title: "Sway", description: "Plants sway gently." },
   ],
+  readinessScan: [
+    { id: "bluetooth", title: "Bluetooth strap", description: "Pair any standard heart-rate strap or watch." },
+    { id: "camera", title: "Fingertip camera", description: "Measure your pulse with the camera and flash." },
+    { id: "simulated", title: "Simulated strap", description: "Try it without a device." },
+    { id: "hud", title: "Holographic HUD", description: "A pulsing heart and 60-second ring." },
+    { id: "tachogram", title: "Beat-to-beat chart", description: "Every heartbeat’s interval, live." },
+    { id: "rmssd", title: "HRV (RMSSD)", description: "The standard recovery marker." },
+    { id: "lfhf", title: "LF/HF balance", description: "Frequency-domain HRV via a SIMD FFT." },
+    { id: "score", title: "Readiness score", description: "Today against your 30-day baseline." },
+    { id: "advice", title: "Push or recover", description: "A suggestion for today’s training." },
+    { id: "trend", title: "Baseline trend", description: "Your last 30 mornings with the normal band." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

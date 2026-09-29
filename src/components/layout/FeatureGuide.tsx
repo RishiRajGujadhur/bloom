@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'readiness': { title: "Morning readiness", description: "Know when to push and when to rest." },
   'people': { title: "People garden", description: "Relationships grow where attention goes." },
   'decide': { title: "Decision lab", description: "Clear heads make kinder choices." },
   'reader': { title: "Speed reader", description: "Eyes still, mind moving." },
@@ -317,6 +318,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'people': [
     step(".pg-garden", "Your garden", "Tap a plant to see and water it."),
     step(".pg-card", "Plant someone", "Add a person and how often to talk."),
+  ],
+  'readiness': [
+    step(".rd-hud", "Scanner", "Your heart rate pulses here during the scan."),
+    step(".rd-sources", "Source", "Pick a strap, the camera or the simulator."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

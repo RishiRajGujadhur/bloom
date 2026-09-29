@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Activity as ActivityF_readinessScan } from 'lucide-react'
 import { Users as UsersF_peopleGarden } from 'lucide-react'
 import { Scale as ScaleF_decisionLab } from 'lucide-react'
 import { ScanText as ScanTextF_speedReader } from 'lucide-react'
@@ -158,6 +159,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  readinessScan: ActivityF_readinessScan,
   peopleGarden: UsersF_peopleGarden,
   decisionLab: ScaleF_decisionLab,
   speedReader: ScanTextF_speedReader,
@@ -260,6 +262,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  readinessScan: boolean
   peopleGarden: boolean
   decisionLab: boolean
   speedReader: boolean
@@ -373,6 +376,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    readinessScan: true,
     peopleGarden: true,
     decisionLab: true,
     speedReader: true,
@@ -476,6 +480,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'readinessScan',
   'peopleGarden',
   'decisionLab',
   'speedReader',
