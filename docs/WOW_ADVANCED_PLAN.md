@@ -147,7 +147,7 @@ The map already lives in Places (with offline tile caching) and Run. The idea is
 | C4 | **Semantic memory search** (Journal, Daybook, Epiphanies, Voice) | "Find entries that feel like this one": GPU text embeddings with a vector index in OPFS, plus a constellation map of related entries. | GPU, OPFS, MT | existing `@xenova/transformers`, `orama`, `d3-force` |
 | C5 ✅ | **Soundscape engine** (Sounds, Mixer) | Noise colours, rain and binaural beats generated live in an **AudioWorklet** with SIMD DSP, so nothing loops. The visualiser renders off-thread and lowers its detail under CPU pressure. | SIMD, OC, CP | AudioWorklet, PFFFT, `tone`, OffscreenCanvas |
 | C6 | **Parallel Correlation Lab** (Insights Lab) | Every metric against every other, with bootstrap confidence intervals, computed across all cores in about a second. | MT, SIMD | worker pool, `simple-statistics`, `ml-matrix` |
-| C7 | **Vision board files** (Vision board) | Save and open boards as `.bloomboard` files on disk, with images in OPFS. Send a board file to a friend and it opens straight into Bloom. | FSA, OPFS | File System Access, manifest file_handlers, `fflate` |
+| C7 ✅ | **Vision board files** (Vision board) | Save and open boards as `.bloomboard` files on disk, with images in OPFS. Send a board file to a friend and it opens straight into Bloom. | FSA, OPFS | File System Access, manifest file_handlers, `fflate` |
 
 ## Suggested order
 

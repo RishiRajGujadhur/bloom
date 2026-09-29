@@ -30,6 +30,10 @@ import { usePageActions } from '../ui/PageMenu'
 import styles from './VisionBoard.module.css'
 import DrawingPractice from './DrawingPractice'
 
+import { BOARD_EXT, BOARD_MIME, packBoard, unpackBoard, type BoardFile } from './boardFile'
+import { onLaunchFiles, openFiles } from '../../platform/fsa'
+import { opfsRead, opfsWrite } from '../../platform/opfs'
+
 const nodeTypes = { sticky: StickyNode, journal: JournalNode, badge: BadgeNode, image: ImageNode, goal: GoalNode, habit: HabitNode }
 type Habit = { id: string; title: string; dates: string[] }
 const edgeStyle = (row: { id: string; source: string; target: string; label?: string; sourceHandle?: string | null; targetHandle?: string | null }): Edge => ({
@@ -67,6 +71,8 @@ function readImage(file: File, max = 900): Promise<string> {
   })
 }
 const mime = 'application/bloom-board'
+type SaveHandle = FileSystemFileHandle & { createWritable: () => Promise<FileSystemWritableFileStream> }
+type Picker = { showSaveFilePicker?: (o: unknown) => Promise<SaveHandle> }
 const journalKey = 'mindfulness-dashboard-daybook-v1'
 
 function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] }) {
@@ -82,6 +88,97 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
   const area = useRef<HTMLDivElement>(null)
   const queue = useRef(Promise.resolve())
   const { screenToFlowPosition, fitView } = useReactFlow<CanvasNode>()
+  // .bloomboard files: the disk file this board was last saved to / opened from.
+  const [fileHandle, setFileHandle] = useState<SaveHandle | null>(null)
+  const [boardName, setBoardName] = useState('My vision board')
+  const [fileMsg, setFileMsg] = useState('')
+  const [backups, setBackups] = useState<string[]>([])
+  const [confirmOpen, setConfirmOpen] = useState<{ doc: BoardFile; handle: SaveHandle | null } | null>(null)
+  const listBackups = useCallback(async () => {
+    try {
+      const dir = await (await navigator.storage.getDirectory()).getDirectoryHandle('boards', { create: true })
+      const names: string[] = []
+      for await (const k of (dir as FileSystemDirectoryHandle & { keys: () => AsyncIterable<string> }).keys()) names.push(k)
+      setBackups(names.sort().reverse().slice(0, 5))
+    } catch { setBackups([]) }
+  }, [])
+  useEffect(() => { void listBackups() }, [listBackups])
+  const packCurrent = async () => packBoard(boardName, await db.vision_board_nodes.toArray(), await db.board_edges.toArray())
+  const saveToDisk = async (saveAs = false) => {
+    try {
+      const bytes = await packCurrent()
+      const blob = new Blob([bytes as Uint8Array<ArrayBuffer>], { type: BOARD_MIME })
+      const pick = (window as unknown as Picker).showSaveFilePicker
+      let h = saveAs ? null : fileHandle
+      if (!h && pick) h = await pick({ suggestedName: `${boardName}${BOARD_EXT}`, types: [{ description: 'Bloom board', accept: { [BOARD_MIME]: [BOARD_EXT] } }] })
+      if (h) {
+        const w = await h.createWritable()
+        await w.write(blob)
+        await w.close()
+        setFileHandle(h)
+        setFileMsg(`Saved to ${h.name}`)
+      } else {
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.download = `${boardName}${BOARD_EXT}`
+        a.click()
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+        setFileMsg('Downloaded.')
+      }
+    } catch (e) {
+      if ((e as Error).name !== 'AbortError') setFileMsg('The board could not be saved.')
+    }
+  }
+  /** Before replacing the board, keep a copy in the Origin Private File System. */
+  const backupCurrent = async () => {
+    const rows = await db.vision_board_nodes.count()
+    if (!rows) return
+    await opfsWrite(`boards/${new Date().toISOString().replace(/[:.]/g, '-')}${BOARD_EXT}`, new Blob([(await packCurrent()) as Uint8Array<ArrayBuffer>]))
+    await listBackups()
+  }
+  const loadDoc = async (doc: BoardFile) => {
+    await backupCurrent()
+    await db.transaction('rw', db.vision_board_nodes, db.board_edges, async () => {
+      await db.vision_board_nodes.clear()
+      await db.board_edges.clear()
+      await db.vision_board_nodes.bulkAdd(doc.nodes)
+      await db.board_edges.bulkAdd(doc.edges)
+    })
+    setNodes(doc.nodes.map((row) => ({ ...row, style: row.width ? { width: row.width, height: row.height } : undefined })) as CanvasNode[])
+    setEdges(doc.edges.map(edgeStyle))
+    setBoardName(doc.name)
+    setTimeout(() => void fitView({ padding: 0.25, duration: 500, maxZoom: 1.2 }), 60)
+  }
+  const openFile = async (file: File, handle: SaveHandle | null) => {
+    try {
+      const doc = unpackBoard(new Uint8Array(await file.arrayBuffer()))
+      if (nodes.length) setConfirmOpen({ doc, handle })
+      else { await loadDoc(doc); setFileHandle(handle); setFileMsg(`Opened ${file.name}`) }
+    } catch (e) {
+      setFileMsg((e as Error).message)
+    }
+  }
+  const pickAndOpen = async () => {
+    const [f] = await openFiles('Bloom board', { [BOARD_MIME]: [BOARD_EXT] })
+    if (f) await openFile(f.file, f.handle as SaveHandle | null)
+  }
+  const share = async () => {
+    const file = new File([(await packCurrent()) as Uint8Array<ArrayBuffer>], `${boardName}${BOARD_EXT}`, { type: BOARD_MIME })
+    if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title: boardName }).catch(() => {})
+    else await saveToDisk(true)
+  }
+  const restoreBackup = async (name: string) => {
+    const blob = await opfsRead(`boards/${name}`)
+    if (blob) await loadDoc(unpackBoard(new Uint8Array(await blob.arrayBuffer())))
+  }
+  // "Open with Bloom" from the OS (manifest file handler for .bloomboard).
+  useEffect(() => onLaunchFiles((fs) => { if (fs[0]) void openFile(fs[0].file, fs[0].handle as SaveHandle | null) }), []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Ctrl/Cmd+S saves the board to its file.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); void saveToDisk(e.shiftKey) } }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
 
   useEffect(() => {
     let cancelled = false
@@ -472,7 +569,33 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
             >
               Fit board
             </button>
+            {subOn('visionBoard', 'boardFiles') && (
+              <>
+                <button disabled={!ready} onClick={() => void saveToDisk()} title="Save to a .bloomboard file (Ctrl+S)">💾 {fileHandle ? 'Save' : 'Save file'}</button>
+                <button disabled={!ready} onClick={() => void pickAndOpen()}>📂 Open file</button>
+                <button disabled={!ready || !nodes.length} onClick={() => void share()}>⤴ Share</button>
+              </>
+            )}
           </div>
+          {(fileMsg || backups.length > 0) && subOn('visionBoard', 'boardFiles') && (
+            <div className={styles.fileBar} role="status">
+              <input aria-label="Board name" value={boardName} onChange={(e) => setBoardName(e.target.value)} />
+              {fileMsg && <span>{fileMsg}</span>}
+              {backups.length > 0 && (
+                <select aria-label="Restore a backup" value="" onChange={(e) => e.target.value && void restoreBackup(e.target.value)}>
+                  <option value="">↺ Restore a backup…</option>
+                  {backups.map((b) => <option key={b} value={b}>{b.replace(BOARD_EXT, '').replace(/T(\d\d)-(\d\d).*/, ' $1:$2')}</option>)}
+                </select>
+              )}
+            </div>
+          )}
+          {confirmOpen && (
+            <div className={styles.confirm} role="alertdialog" aria-label="Replace this board?">
+              <p>Open “{confirmOpen.doc.name}” ({confirmOpen.doc.nodes.length} cards)? Your current board is backed up first.</p>
+              <button onClick={() => { void loadDoc(confirmOpen.doc).then(() => { setFileHandle(confirmOpen.handle); setFileMsg(`Opened ${confirmOpen.doc.name}`); setConfirmOpen(null) }) }}>Open it</button>
+              <button onClick={() => setConfirmOpen(null)}>Cancel</button>
+            </div>
+          )}
           {library && (
             <aside
               className={styles.library}

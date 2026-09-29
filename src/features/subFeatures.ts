@@ -38,6 +38,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'agenda', title: 'Agenda view', description: 'A list view of the week.' },
   ],
   visionBoard: [
+    { id: 'boardFiles', title: 'Board files', description: 'Save, open and share boards as .bloomboard files.' },
     { id: 'badgeNodes', title: 'Badge nodes', description: 'Earned boss badges can be pinned to the board.' },
     { id: 'minimap', title: 'Minimap', description: 'Overview map in the corner.' },
     { id: 'grid', title: 'Dot grid', description: 'Background dots.' },

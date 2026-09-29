@@ -36,6 +36,7 @@ export default defineConfig({
           { action: '/#voice', accept: { 'audio/wav': ['.wav'], 'audio/mp4': ['.m4a'], 'audio/webm': ['.webm'] } },
           { action: '/#run', accept: { 'application/gpx+xml': ['.gpx'] } },
           { action: '/#money', accept: { 'application/pdf': ['.pdf'] } },
+          { action: '/#vision-board', accept: { 'application/vnd.bloom.board+zip': ['.bloomboard'] } },
         ],
       },
       workbox: {
