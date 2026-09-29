@@ -9,6 +9,7 @@ module.exports = {
     '^swiper/css.*$': '<rootDir>/tests/styleMock.cjs',
     '\\.(webp|png|jpe?g|svg)$': '<rootDir>/tests/fileMock.cjs',
     '\\?worker$': '<rootDir>/tests/workerMock.cjs',
+    '\\?(worker&url|url)$': '<rootDir>/tests/fileMock.cjs',
   },
   // d3-shape/d3-path ship ESM only; let Babel compile them for Jest.
   transformIgnorePatterns: ['/node_modules/(?!(d3-shape|d3-path|marked|@formkit|swiper|ssr-window|dom7)/)'],

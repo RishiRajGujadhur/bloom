@@ -203,7 +203,7 @@ test('soundscape presets only use known layers', async () => {
   const { layers, presets } = await import('../src/features/mixer/mixerEngine')
   const ids = new Set(layers.map((l) => l.id))
   for (const p of presets) for (const k of Object.keys(p.mix)) expect(ids.has(k as never)).toBe(true)
-  expect(layers.filter((l) => l.noise)).toHaveLength(3)
+  expect(layers.filter((l) => l.noise)).toHaveLength(4)
 })
 
 test('meditation: scripts scale to length, bells and streaks', () => {
