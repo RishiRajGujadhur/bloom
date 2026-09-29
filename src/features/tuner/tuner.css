@@ -1,0 +1,36 @@
+.tu-page {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.3fr) minmax(260px, 1fr);
+  gap: 24px;
+  height: calc(100dvh - 230px);
+  min-height: 500px;
+  padding: 6px 4px;
+  align-items: center;
+}
+@media (max-width: 900px) { .tu-page { grid-template-columns: 1fr; height: auto; } }
+.tu-gauge-wrap { display: grid; justify-items: center; gap: 4px; }
+.tu-gauge { width: 100%; max-width: 620px; overflow: visible; }
+.tu-tick { stroke: var(--text-muted); stroke-width: 2; }
+.tu-lbl { font: 900 22px 'Manrope', sans-serif; fill: var(--text-muted); }
+.tu-note { display: grid; justify-items: center; gap: 2px; }
+.tu-note strong { font: 900 clamp(4rem, 9vw, 7rem)/0.9 'Manrope', sans-serif; letter-spacing: -0.05em; color: var(--c); transition: color 200ms; }
+.tu-note sub { font-size: 0.35em; color: var(--text-muted); }
+.tu-note span { font: 600 1rem 'Fira Code', monospace; color: var(--text-secondary); }
+.tu-note em { font-style: normal; font-weight: 900; color: #58cc02; }
+.tu-note.in strong { text-shadow: 0 0 30px #58cc0288; }
+.tu-side { display: grid; gap: 12px; align-content: center; }
+.tu-side h2 { margin: 0; font: 900 clamp(1.8rem, 3.4vw, 2.6rem)/1.05 'Manrope', sans-serif; letter-spacing: -0.03em; }
+.tu-eyebrow { margin: 0; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.72rem; color: var(--accent-color); }
+.tu-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tu-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 14px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.tu-chip.on { border-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 16%, var(--bg-surface)); }
+.tu-strings { display: flex; gap: 8px; flex-wrap: wrap; }
+.tu-string { display: grid; place-items: center; width: 62px; height: 70px; border: 2px solid var(--border-color); border-bottom-width: 4px; border-radius: 16px; background: var(--bg-surface); color: inherit; font: inherit; cursor: pointer; transition: transform 160ms cubic-bezier(0.3, 1.6, 0.5, 1); }
+.tu-string:hover { transform: translateY(-3px); }
+.tu-string strong { font: 900 1.5rem 'Manrope', sans-serif; }
+.tu-string small { color: var(--text-muted); font-size: 0.7rem; }
+.tu-string.near { border-color: #ffc800; }
+.tu-string.good { border-color: #58cc02; background: #58cc0218; }
+.tu-hint { margin: 0; color: var(--text-muted); font-size: 0.88rem; }
+.tu-error { margin: 0; color: #ff4b4b; }
+.tu-cta { justify-self: start; border: 0; border-radius: 14px; padding: 12px 22px; background: var(--accent-color); color: var(--text-on-accent, #fff); font: inherit; font-weight: 900; font-size: 1.05rem; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--accent-color) 60%, #000); }

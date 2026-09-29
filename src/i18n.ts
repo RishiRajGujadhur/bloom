@@ -477,6 +477,10 @@ const common = {
         title: "Piano & ear trainer",
         description: "A playable piano for mouse, touch or keyboard, with note quests, interval and chord ear training and follow-along songs.",
       },
+      tuner: {
+        title: "Tuner",
+        description: "Tune a guitar, ukulele, bass or your voice through the microphone, with a springy gauge and reference tones.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1606,6 +1610,10 @@ export const resources = {
           pianoTrainer: {
             title: "Piano et oreille",
             description: "Un piano jouable, avec quêtes de notes, entraînement de l’oreille et chansons à suivre.",
+          },
+          tuner: {
+            title: "Accordeur",
+            description: "Accordez guitare, ukulélé, basse ou voix au micro, avec une jauge animée et des notes de référence.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

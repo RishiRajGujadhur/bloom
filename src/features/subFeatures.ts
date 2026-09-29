@@ -963,6 +963,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "ripples", title: "Ripples", description: "Keys ripple when pressed." },
     { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom for an ear-training hint." },
   ],
+  tuner: [
+    { id: "mic", title: "Microphone tuner", description: "Live pitch from your mic." },
+    { id: "gauge", title: "Gauge", description: "A springy needle in cents." },
+    { id: "presets", title: "Instruments", description: "Guitar, ukulele, bass and voice." },
+    { id: "reference", title: "Reference tones", description: "Hear each string's note." },
+    { id: "closest", title: "Closest string", description: "Highlights the string you are tuning." },
+    { id: "inTune", title: "In-tune ring", description: "A ring bursts when you hit it." },
+    { id: "clarity", title: "Clarity", description: "How clean the signal is." },
+    { id: "frequency", title: "Frequency", description: "Hertz and cents." },
+    { id: "idle", title: "Idle sweep", description: "The needle breathes before you start." },
+    { id: "private", title: "Private", description: "Audio never leaves the device." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

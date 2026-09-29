@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'tuner': { title: "Tuner", description: "Close is good. In tune is magic." },
   'piano': { title: "Piano & ear", description: "Music is a language you can learn." },
   'typing': { title: "Typing dojo", description: "Eyes up, fingers home." },
   'sky': { title: "Night sky", description: "Look up — something beautiful is there." },
@@ -282,6 +283,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'piano': [
     step(".pn-piano", "The piano", "Click, tap or use Z–M and Q–U."),
     step(".pn-modes", "Modes", "Play, find notes, train your ear or follow songs."),
+  ],
+  'tuner': [
+    step(".tu-gauge", "Gauge", "Centre is in tune; left is flat, right is sharp."),
+    step(".tu-strings", "Strings", "Tap one to hear its note."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
