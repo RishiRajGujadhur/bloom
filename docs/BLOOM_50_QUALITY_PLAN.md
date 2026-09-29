@@ -90,6 +90,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Added a programming skill check with four original questions per route, immediate explanations, an SVG progress guide, and a first-gap starting recommendation. Verified a mixed-answer journey and phone layout; the learning path view now follows the page scroll instead of clipping answers in a short inner panel.
 - 2026-09-29: Added an HTML document builder under the first web chapter. It saves the draft, shows a sandboxed live preview, checks five semantic requirements, animates an SVG completion meter, and marks the chapter practiced after success. Verified incomplete and complete flows plus desktop/mobile layouts.
 - 2026-09-29: Added a three-page links and navigation mini project under the first web chapter. It checks working unique destinations, descriptive link text, landmarks, and headings; saves edits; and animates an SVG route map unless reduced motion is enabled. Verified failed and completed checks plus desktop/mobile screenshots without horizontal overflow.
+- 2026-09-29: Added a three-case CSS selector detective kata in the web CSS chapter. Learners practice class, direct-child, and attribute selectors; an SVG evidence board shows matches and exact feedback identifies missing clues or decoys. Progress saves locally, GSAP respects reduced motion, and desktop/mobile layouts were inspected without document-level horizontal overflow.
 
 ## New feature areas
 
