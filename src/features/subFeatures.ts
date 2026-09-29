@@ -1081,6 +1081,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "rewrite", title: "Local AI rewrite", description: "The on-device model rephrases the script." },
     { id: "dial", title: "Radio dial", description: "A live circular spectrum and transcript." },
   ],
+  codeCity: [
+    { id: "openRepo", title: "Open a repository", description: "Read-only access to a local git folder." },
+    { id: "multicore", title: "Every core", description: "Commit trees walked in parallel workers." },
+    { id: "city", title: "3D city", description: "Files as buildings by folder." },
+    { id: "heat", title: "Late-night heat", description: "Colour shows 10 pm–5 am changes." },
+    { id: "hover", title: "Hover to read", description: "File path, changes and size." },
+    { id: "radar", title: "Burnout radar", description: "Seven rhythm and wellbeing axes." },
+    { id: "sleep", title: "Sleep link", description: "Blends in your Bloom sleep log." },
+    { id: "mood", title: "Mood link", description: "Blends in recent mood check-ins." },
+    { id: "hottest", title: "Hottest files", description: "The files you change most." },
+    { id: "sample", title: "Sample city", description: "Explore without a repository." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

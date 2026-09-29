@@ -513,6 +513,10 @@ const common = {
         title: "Morning briefing radio",
         description: "A spoken 60–90 second summary of your day — calendar, tasks, readiness, bills and weather — read by an on-device voice.",
       },
+      codeCity: {
+        title: "Code city & burnout radar",
+        description: "Your git repositories as a 3D city (height = changes, colour = late-night work) and a radar that sets your commit rhythm against sleep, mood and readiness.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1678,6 +1682,10 @@ export const resources = {
           morningBriefing: {
             title: "Radio du matin",
             description: "Un résumé parlé de votre journée, lu par une voix sur l’appareil.",
+          },
+          codeCity: {
+            title: "Ville du code",
+            description: "Vos dépôts git en ville 3D et un radar d’épuisement.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
