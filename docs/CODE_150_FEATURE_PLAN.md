@@ -38,6 +38,7 @@ Current count: **29 / 150**. Feature 1 is the learning path map, with four route
 27. [x] Fetch loading and error challenge.
 28. [x] Local storage state project.
 29. [x] JavaScript module organizer.
+   - Verification repair: aligned the focused test with the shipped six-statement sorter and validated saved module choices before using them.
 30. [ ] Interactive task-list capstone.
 
 ## TypeScript (31–45)
