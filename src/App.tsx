@@ -274,6 +274,9 @@ const ReaderPage = lazy(() =>
 const DecidePage = lazy(() =>
   import('./features/decide/DecidePage').then((m) => ({ default: m.DecidePage })),
 )
+const PeoplePage = lazy(() =>
+  import('./features/people/PeoplePage').then((m) => ({ default: m.PeoplePage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -809,6 +812,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'people' && !settings.features.peopleGarden) ||
             (active === 'decide' && !settings.features.decisionLab) ||
             (active === 'reader' && !settings.features.speedReader) ||
             (active === 'cpr' && !settings.features.cprCoach) ||
@@ -1098,6 +1102,10 @@ function App() {
             ) : active === 'decide' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <DecidePage />
+              </Suspense>
+            ) : active === 'people' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <PeoplePage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

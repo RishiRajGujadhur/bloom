@@ -40,3 +40,12 @@ test('logs mood and gratitude', () => {
   expect(runCommand('I feel awful', ctx())?.reply).toMatch(/breathing/)
   expect(runCommand('grateful for sunshine', ctx())?.reply).toMatch(/sunshine/)
 })
+
+test('mood logging from chat keeps earlier entries', () => {
+  localStorage.setItem('bloom-mood-v1', JSON.stringify([{ id: 'old', at: 1, mood: 2, note: '' }]))
+  runCommand('mood 5', ctx())
+  const list = JSON.parse(localStorage.getItem('bloom-mood-v1')!)
+  expect(Array.isArray(list)).toBe(true)
+  expect(list.map((x: { id: string }) => x.id)).toContain('old')
+  expect(list).toHaveLength(2)
+})

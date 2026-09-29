@@ -1035,6 +1035,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "strongest", title: "Strongest reason", description: "Where the leader wins." },
     { id: "private", title: "Private", description: "Saved on this device." },
   ],
+  peopleGarden: [
+    { id: "plants", title: "Plants", description: "Each person is a plant." },
+    { id: "health", title: "Health", description: "Plants droop as time passes." },
+    { id: "water", title: "We talked", description: "Water a plant when you connect." },
+    { id: "rhythms", title: "Rhythms", description: "Weekly to every season." },
+    { id: "suggestions", title: "Reach out today", description: "Who is overdue." },
+    { id: "birthdays", title: "Birthdays", description: "Upcoming birthdays." },
+    { id: "calendar", title: "Calendar export", description: "Birthdays as an .ics file." },
+    { id: "notes", title: "Notes", description: "Things to remember." },
+    { id: "search", title: "Search", description: "Find someone quickly." },
+    { id: "sway", title: "Sway", description: "Plants sway gently." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

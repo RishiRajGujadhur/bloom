@@ -501,6 +501,10 @@ const common = {
         title: "Decision lab",
         description: "Weigh choices in a decision matrix, see them race as bars, then gut-check with a 3D coin and the 10/10/10 test.",
       },
+      peopleGarden: {
+        title: "People garden",
+        description: "Keep in touch with the people who matter: each is a plant that droops when it’s been a while and blooms when you talk.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1654,6 +1658,10 @@ export const resources = {
           decisionLab: {
             title: "Labo de décision",
             description: "Pesez vos choix dans une matrice, puis vérifiez votre intuition avec une pièce 3D.",
+          },
+          peopleGarden: {
+            title: "Jardin des proches",
+            description: "Restez en contact : chaque proche est une plante qui fleurit quand vous parlez.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

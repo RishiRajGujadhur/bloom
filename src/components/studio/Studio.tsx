@@ -270,7 +270,13 @@ export function Segmented<T extends string>({ value, options, onChange, label }:
 export function readStore<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key)
-    return raw ? ({ ...fallback, ...(JSON.parse(raw) as object) } as T) : fallback
+    if (!raw) return fallback
+    const parsed = JSON.parse(raw) as unknown
+    // Only merge plain objects over the defaults; arrays (and other values) are
+    // returned as saved — spreading an array into an object would break it.
+    if (Array.isArray(fallback) || Array.isArray(parsed)) return (Array.isArray(parsed) ? parsed : fallback) as T
+    if (parsed && typeof parsed === 'object' && fallback && typeof fallback === 'object') return { ...fallback, ...(parsed as object) } as T
+    return (parsed ?? fallback) as T
   } catch {
     return fallback
   }

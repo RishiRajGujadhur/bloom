@@ -1,0 +1,29 @@
+.pg-page { display: grid; grid-template-columns: minmax(360px, 1.5fr) minmax(260px, 1fr); gap: 20px; height: calc(100dvh - 230px); min-height: 520px; padding: 6px 4px; }
+@media (max-width: 960px) { .pg-page { grid-template-columns: 1fr; height: auto; } }
+.pg-garden-wrap { display: grid; grid-template-rows: auto 1fr; gap: 10px; min-height: 0; border-radius: 26px; padding: 16px; background: linear-gradient(180deg, color-mix(in srgb, #bfe6ff 30%, var(--bg-surface)), color-mix(in srgb, #d7f5c4 40%, var(--bg-surface))); border: 1px solid var(--border-color); }
+.pg-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+.pg-head h2 { margin: 0; font: 900 clamp(1.6rem, 3vw, 2.4rem)/1.05 'Manrope', sans-serif; letter-spacing: -0.03em; }
+.pg-eyebrow { margin: 0 0 4px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.72rem; color: #3f8a02; }
+.pg-search { width: 200px; }
+.pg-garden { width: 100%; height: 100%; min-height: 0; overflow: visible; }
+.pg-plant { cursor: pointer; outline: none; }
+.pg-plant.sel .pg-pot { stroke: var(--accent-color); stroke-width: 3; }
+.pg-plant:focus-visible .pg-pot { stroke: var(--accent-color); stroke-width: 3; }
+.pg-pot { fill: #d9794f; stroke: #a8532f; stroke-width: 1.5; }
+.pg-pot-shadow { fill: #0000001a; }
+.pg-face { font-size: 14px; }
+.pg-name { font: 800 12px 'Manrope', sans-serif; fill: var(--text-primary); }
+.pg-empty { display: grid; place-items: center; text-align: center; color: var(--text-secondary); font-size: 1.1rem; }
+.pg-side { display: grid; gap: 12px; align-content: start; overflow-y: auto; }
+.pg-card { display: grid; gap: 8px; padding: 14px; border-radius: 18px; border: 1px solid var(--border-color); background: var(--bg-surface); }
+.pg-card h3, .pg-card p { margin: 0; }
+.pg-card label { display: grid; gap: 4px; font-weight: 700; font-size: 0.9rem; }
+.pg-row { display: flex; gap: 6px; }
+.pg-emoji { width: 64px; }
+.pg-cta { border: 0; border-radius: 12px; padding: 9px 16px; background: #58cc02; color: #fff; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #3f8a02; }
+.pg-ghost { border: 1px solid var(--border-color); border-radius: 12px; padding: 7px 12px; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.pg-sugg { display: grid; text-align: left; border: 0; border-radius: 12px; padding: 8px 10px; background: color-mix(in srgb, #ffc800 12%, var(--bg-surface)); color: inherit; font: inherit; font-weight: 800; cursor: pointer; }
+.pg-sugg small { font-weight: 500; color: var(--text-secondary); }
+.pg-bday small { color: var(--text-muted); }
+html[data-theme='matrix'] .pg-garden-wrap { background: linear-gradient(180deg, #06140b, #0b2a14); }
+.pg-plant { transform: none !important; }

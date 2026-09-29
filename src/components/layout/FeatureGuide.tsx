@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'people': { title: "People garden", description: "Relationships grow where attention goes." },
   'decide': { title: "Decision lab", description: "Clear heads make kinder choices." },
   'reader': { title: "Speed reader", description: "Eyes still, mind moving." },
   'cpr': { title: "CPR & first aid", description: "Hands that can save a life." },
@@ -312,6 +313,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'decide': [
     step(".dc-matrix", "Matrix", "Tap squares to score each option."),
     step(".dc-gut", "Gut check", "Flip the coin and notice how you feel."),
+  ],
+  'people': [
+    step(".pg-garden", "Your garden", "Tap a plant to see and water it."),
+    step(".pg-card", "Plant someone", "Add a person and how often to talk."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),
