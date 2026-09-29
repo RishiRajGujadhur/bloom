@@ -1,0 +1,39 @@
+.tr-page { display: grid; gap: 12px; }
+.tr-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tr-pick { display: flex; align-items: center; gap: 8px; font-weight: 800; }
+.tr-pick select { min-width: 220px; }
+.tr { display: grid; gap: 12px; padding: 16px; border-radius: 24px; color: #e6f1ff; background: radial-gradient(120% 100% at 100% 0%, #10244d 0%, #060b18 60%); border: 1px solid #ffffff1a; position: relative; overflow: hidden; }
+.tr::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, #ffffff05 0 1px, transparent 1px 3px); }
+.tr-wait { min-height: 200px; place-items: center; font-weight: 800; }
+.tr-head { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 10px; }
+.tr-head h3 { margin: 0; font: 900 1.4rem/1.1 'Manrope', sans-serif; letter-spacing: -0.02em; }
+.tr-eyebrow { margin: 0 0 2px; font: 800 0.7rem 'Manrope', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: #7df9ff; }
+.tr .caps-badge li { color: #9fb4d9; border-color: #ffffff26; }
+.tr .caps-badge li.on { color: #7dffc4; }
+.tr-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr); gap: 12px; }
+@media (max-width: 900px) { .tr-grid { grid-template-columns: 1fr; } }
+.tr-scene { position: relative; min-height: 360px; border-radius: 18px; overflow: hidden; background: radial-gradient(90% 70% at 50% 110%, #1e3a8a66, transparent), #060b18; }
+.tr-canvas { position: absolute; inset: 0; }
+.tr-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+.tr-backend { position: absolute; top: 10px; left: 12px; font: 800 0.65rem 'Manrope', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #7df9ff; padding: 2px 8px; border: 1px solid #7df9ff55; border-radius: 999px; background: #060b18aa; }
+.tr-right { display: grid; grid-template-rows: 1fr auto; gap: 10px; min-height: 360px; }
+.tr-map { min-height: 240px; border-radius: 18px; overflow: hidden; }
+.tr-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.tr-stats div { display: grid; padding: 10px 12px; border-radius: 14px; background: #ffffff0a; border: 1px solid #ffffff14; }
+.tr-stats b { font: 900 1.35rem 'Manrope', sans-serif; color: #fff; }
+.tr-stats small { color: #9fb4d9; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.66rem; }
+.tr-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.tr-controls input[type='range'] { flex: 1; min-width: 160px; accent-color: #7df9ff; }
+.tr-play { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 0; font-size: 1rem; cursor: pointer; color: #041022; background: linear-gradient(135deg, #7df9ff, #a3e635); box-shadow: 0 0 24px -4px #7df9ff; }
+.tr-clock { font: 800 0.9rem 'Manrope', sans-serif; font-variant-numeric: tabular-nums; color: #cfe3ff; }
+.tr-seg { display: inline-flex; border: 1px solid #ffffff26; border-radius: 999px; overflow: hidden; }
+.tr-seg button { border: 0; background: transparent; color: #cfe3ff; padding: 6px 12px; font: 800 0.78rem 'Manrope', sans-serif; cursor: pointer; }
+.tr-seg button.on { background: #7df9ff; color: #041022; }
+.tr-profile-wrap { position: relative; padding-top: 18px; }
+.tr-profile { display: block; width: 100%; height: 120px; overflow: visible; }
+.tr-cursor { stroke: #fff; stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.7; }
+.tr-cursor-dot { position: absolute; width: 12px; height: 12px; margin: calc(18px - 6px) 0 0 -6px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px #7df9ff, 0 0 14px #7df9ff; pointer-events: none; }
+.tr-cursor-label { position: absolute; top: 0; color: #e6f1ff; font: 800 11px 'Manrope', sans-serif; white-space: nowrap; pointer-events: none; }
+.tr-foot { margin: 0; color: #7f93b8; font-size: 0.78rem; }
+html[data-theme='matrix'] .tr { background: radial-gradient(120% 100% at 100% 0%, #0b2a14, #030a05 60%); }
+html[data-theme='matrix'] .tr-seg button.on, html[data-theme='matrix'] .tr-seg button[aria-checked='true'] { color: #041022; }

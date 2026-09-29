@@ -1,6 +1,6 @@
 import { along, length, lineString } from '@turf/turf'
 
-export type Pt = { lat: number; lng: number; t: number }
+export type Pt = { lat: number; lng: number; t: number; ele?: number }
 export type Run = { id: string; at: number; kind: 'run' | 'walk'; km: number; seconds: number; points: Pt[]; manual?: boolean }
 export type RunStore = { runs: Run[]; units: 'km' | 'mi'; weeklyGoal: number }
 export const RUN_KEY = 'bloom-runs-v1'

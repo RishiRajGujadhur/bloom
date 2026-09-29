@@ -536,6 +536,9 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "replay", title: "Route replay", description: "Watch a past route redraw on the map." },
     { id: "weeklyGoal", title: "Weekly goal", description: "A ring for this week’s distance." },
     { id: 'strider', title: 'Moving runner', description: 'A little runner that strides while you move.' },
+    { id: 'terrain', title: '3D terrain replay', description: 'Fly a drone along your route over its own elevation.' },
+    { id: 'gpxImport', title: 'Open GPX', description: 'Bring in runs and hikes from a watch or another app.' },
+    { id: 'gpxExport', title: 'Export GPX', description: 'Save any route as a .gpx file.' },
   ],
   bodyProgress: [
     { id: "measurements", title: "Measurements", description: "Waist, chest, hips, arm, thigh, body fat." },

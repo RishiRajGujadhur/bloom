@@ -1,14 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { Flag, Footprints, Map as MapIcon, Medal, Pause, Play, PlusCircle, Route, Square, Trophy } from 'lucide-react'
+import { Download, Flag, FolderOpen, Footprints, Map as MapIcon, Medal, Mountain, Pause, Play, PlusCircle, Route, Square, Trophy } from 'lucide-react'
 import { Rail, Segmented, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { RUN_KEY, bests, demoRoute, distanceKm, fmtPace, fmtTime, pace, pointAt, splits, toUnits, weekKm, type Pt, type Run, type RunStore } from './runModel'
 import { Strider } from '../showcase/Strider'
 import { usePageActions } from '../../components/ui/PageMenu'
+import { onLaunchFiles, openFiles, saveFile } from '../../platform/fsa'
+import { demoHills, parseGpx, simplifyRoute, toGpx } from './terrainModel'
 import './run.css'
+import './terrain.css'
+
+const TerrainReplay = lazy(() => import('./TerrainReplay').then((m) => ({ default: m.TerrainReplay })))
 
 const on = (id: string) => subOn('runTracker', id)
 const say = (t: string) => {
@@ -113,6 +118,32 @@ export function RunPage() {
   const spoken = useRef(0)
   const finishBtn = useRef<HTMLButtonElement>(null)
 
+  const [terrainId, setTerrainId] = useState<string | null>(null)
+  const routed = store.runs.filter((r) => r.points.length > 10)
+  const terrainRun = routed.find((r) => r.id === terrainId) ?? routed[routed.length - 1] ?? null
+  /** A route from a GPX file (or the sample) becomes a saved run and opens in 3D. */
+  const addRoute = (pts: Pt[]) => {
+    const points = simplifyRoute(pts)
+    const km = distanceKm(points)
+    const seconds = Math.max(1, (points[points.length - 1].t - points[0].t) / 1000)
+    const run: Run = { id: crypto.randomUUID(), at: points[0].t, kind: km / (seconds / 3600) > 7.5 ? 'run' : 'walk', km: Math.round(km * 100) / 100, seconds: Math.round(seconds), points }
+    setStore((s) => ({ ...s, runs: [...s.runs, run] }))
+    setTerrainId(run.id)
+    setTab('terrain')
+    setError('')
+  }
+  const importGpx = async (files: { file: File }[]) => {
+    for (const { file } of files) {
+      try {
+        const { points } = parseGpx(await file.text())
+        addRoute(points)
+      } catch (e) {
+        setError(`${file.name}: ${(e as Error).message}`)
+      }
+    }
+  }
+  useEffect(() => onLaunchFiles((f) => void importGpx(f)), []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const km = distanceKm(points)
   const seconds = startedAt ? (status === 'demo' && points.length ? (points[points.length - 1].t - points[0].t) / 1000 : (now - startedAt - pausedFor) / 1000) : 0
   const split = splits(points, units)
@@ -139,7 +170,7 @@ export function RunPage() {
     watch.current = navigator.geolocation.watchPosition(
       (p) => {
         if (p.coords.accuracy > 40) return
-        setPoints((list) => [...list, { lat: p.coords.latitude, lng: p.coords.longitude, t: p.timestamp }])
+        setPoints((list) => [...list, { lat: p.coords.latitude, lng: p.coords.longitude, t: p.timestamp, ele: p.coords.altitude ?? undefined }])
       },
       () => setError('Location permission was not granted.'),
       { enableHighAccuracy: true, maximumAge: 2000 },
@@ -292,6 +323,42 @@ export function RunPage() {
     </div>
   )
 
+  const terrain = () => (
+    <div className="tr-page">
+      <div className="tr-bar">
+        {routed.length > 0 && (
+          <label className="tr-pick">
+            Route
+            <select className="studio-input" value={terrainRun?.id ?? ''} onChange={(e) => setTerrainId(e.target.value)}>
+              {[...routed].reverse().map((r) => <option key={r.id} value={r.id}>{new Date(r.at).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {toUnits(r.km, units).toFixed(1)} {units} {r.kind}</option>)}
+            </select>
+          </label>
+        )}
+        {on('gpxImport') && (
+          <button type="button" className="studio-chip" onClick={() => void openFiles('GPS tracks', { 'application/gpx+xml': ['.gpx'] }, true).then(importGpx)}>
+            <FolderOpen size={14} /> Open GPX
+          </button>
+        )}
+        <button type="button" className="studio-chip" onClick={() => addRoute(demoHills(Date.now() - 50 * 60_000))}>
+          <Mountain size={14} /> Sample hilly run
+        </button>
+        {on('gpxExport') && terrainRun && (
+          <button type="button" className="studio-chip" onClick={() => void saveFile(new Blob([toGpx(`Bloom ${terrainRun.kind}`, terrainRun.points)], { type: 'application/gpx+xml' }), `bloom-${terrainRun.kind}-${new Date(terrainRun.at).toISOString().slice(0, 10)}.gpx`, { 'application/gpx+xml': ['.gpx'] })}>
+            <Download size={14} /> Export GPX
+          </button>
+        )}
+      </div>
+      {error && <p className="voice-error">{error}</p>}
+      {terrainRun ? (
+        <Suspense fallback={<div className="tr tr-wait">Building the terrain…</div>}>
+          <TerrainReplay run={terrainRun} units={units} />
+        </Suspense>
+      ) : (
+        <p className="studio-empty">Open a GPX file from your watch or phone, or try the sample hilly run, to fly along it in 3D.</p>
+      )}
+    </div>
+  )
+
   const records = () => (
     <div className="studio-split">
       <div className="studio-card">
@@ -358,6 +425,7 @@ export function RunPage() {
       tabs={[
         { id: 'track', label: 'Track', icon: <Footprints size={15} />, render: track },
         ...(on('manual') || on('weeklyGoal') ? [{ id: 'log', label: 'Log & goal', icon: <PlusCircle size={15} />, render: manual }] : []),
+        ...(on('terrain') ? [{ id: 'terrain', label: '3D replay', icon: <Mountain size={15} />, render: terrain }] : []),
         ...(on('bests') ? [{ id: 'records', label: 'Records', icon: <Trophy size={15} />, render: records }] : []),
       ]}
     />
