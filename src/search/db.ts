@@ -58,6 +58,10 @@ export interface VoiceMemo {
   transcript?: string
   /** Whisper chunks with [start, end] seconds, linked to waveform playback. */
   chunks?: { text: string; start: number; end: number | null }[]
+  /** Set once Sound Lab has cleaned it; the untouched original is kept in OPFS. */
+  cleaned?: boolean
+  /** Disk file it was opened from (File System Access), so a cleaned WAV can be saved back. */
+  handle?: FileSystemFileHandle
 }
 
 class JournalDatabase extends Dexie {

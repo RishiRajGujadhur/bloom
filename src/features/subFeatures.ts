@@ -389,6 +389,9 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'transcribe', title: 'On-device transcription', description: 'Whisper runs in your browser.' },
     { id: 'extract', title: 'Key points & ideas', description: 'Bullets, habit ideas and mood tags.' },
     { id: 'toDaybook', title: 'Send to Daybook', description: 'Open the transcript as a Daybook page.' },
+    { id: 'soundLab', title: 'Sound Lab', description: 'Remove noise, level the voice and trim silences.' },
+    { id: 'spectrogram3d', title: '3D spectrogram', description: 'A spectral mountain of the recording.' },
+    { id: 'openFile', title: 'Open audio files', description: 'Bring in .wav, .m4a or .webm from disk.' },
   ],
   insightsLab: [
     { id: 'findings', title: 'Top findings', description: 'The strongest relationships in plain words.' },

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { BookOpen, Loader2, Mic, Pause, Play, Plus, Sparkles, Square, Trash2 } from 'lucide-react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { AudioLines, BookOpen, FolderOpen, Loader2, Mic, Pause, Play, Plus, Sparkles, Square, Trash2 } from 'lucide-react'
 import type WaveSurfer from 'wavesurfer.js'
 import type { FeaturePageProps } from '../shared/pageProps'
 import { subOn } from '../subFeatures'
@@ -10,7 +10,14 @@ import { openDaybookPage } from '../../components/layout/CommandPalette'
 import { burst } from '../../components/ui/celebrate'
 import WhisperWorker from './whisperWorker?worker'
 import { extract, toTipTap } from './voiceExtract'
+import { onLaunchFiles, openFiles, type Opened } from '../../platform/fsa'
+import { opfsDelete, opfsRead, opfsWrite } from '../../platform/opfs'
+import { useObjectUrl } from './useObjectUrl'
 import './voice.css'
+import './soundlab.css'
+
+const SoundLab = lazy(() => import('./SoundLab').then((m) => ({ default: m.SoundLab })))
+const AUDIO_ACCEPT = { 'audio/*': ['.wav', '.m4a', '.mp3', '.webm', '.ogg'] }
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
@@ -115,11 +122,11 @@ function MemoCard({
   const [time, setTime] = useState(0)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const [url] = useState(() => URL.createObjectURL(memo.blob))
-  useEffect(() => () => URL.revokeObjectURL(url), [url])
+  const [lab, setLab] = useState(false)
+  const url = useObjectUrl(memo.blob)
 
   useEffect(() => {
-    if (!subOn('voiceMemos', 'waveform') || !host.current) return
+    if (!subOn('voiceMemos', 'waveform') || !host.current || !url) return
     let cancelled = false
     void import('wavesurfer.js').then(({ default: WS }) => {
       if (cancelled || !host.current) return
@@ -191,6 +198,17 @@ function MemoCard({
     props.onNavigate('daybook')
     openDaybookPage(id)
   }
+  // The untouched original goes to the Origin Private File System the first time a memo is cleaned.
+  const applyClean = async (blob: Blob, duration: number) => {
+    if (!memo.cleaned) await opfsWrite(`voice-originals/${memo.id}`, memo.blob)
+    onChange({ ...memo, blob, mimeType: 'audio/wav', duration, cleaned: true, transcript: undefined, chunks: undefined })
+  }
+  const restore = async () => {
+    const orig = await opfsRead(`voice-originals/${memo.id}`)
+    if (!orig) return
+    onChange({ ...memo, blob: orig, cleaned: false, transcript: undefined, chunks: undefined })
+    await opfsDelete(`voice-originals/${memo.id}`)
+  }
   const info = memo.transcript ? extract(memo.transcript) : null
   const activeChunk = memo.chunks?.findIndex((c) => time >= c.start && (c.end == null || time < c.end)) ?? -1
 
@@ -216,7 +234,17 @@ function MemoCard({
       {subOn('voiceMemos', 'waveform') ? (
         <div ref={host} className="voice-wave" />
       ) : (
-        <audio ref={audio} src={url} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)} />
+        <audio ref={audio} src={url ?? undefined} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)} />
+      )}
+      {subOn('voiceMemos', 'soundLab') && (
+        <button className="voice-action sl-open" type="button" onClick={() => setLab((v) => !v)} aria-expanded={lab}>
+          <AudioLines size={15} /> {lab ? 'Close Sound Lab' : memo.cleaned ? 'Sound Lab · cleaned ✓' : 'Sound Lab · remove noise'}
+        </button>
+      )}
+      {lab && (
+        <Suspense fallback={<p className="voice-meta">Opening Sound Lab…</p>}>
+          <SoundLab memo={memo} onApply={applyClean} onRestore={restore} />
+        </Suspense>
       )}
       {subOn('voiceMemos', 'transcribe') && !memo.transcript && (
         <button className="voice-action" type="button" onClick={run} disabled={busy}>
@@ -337,6 +365,27 @@ export function VoicePage(props: FeaturePageProps) {
       setError('Microphone access was blocked. Allow it in your browser to record.')
     }
   }
+  const importFiles = useCallback(async (files: Opened[]) => {
+    const added: VoiceMemo[] = []
+    for (const { file, handle } of files) {
+      let duration: number
+      try {
+        const ctx = new AudioContext()
+        duration = (await ctx.decodeAudioData(await file.arrayBuffer())).duration
+        void ctx.close()
+      } catch {
+        setError(`${file.name} isn't an audio file this browser can read.`)
+        continue
+      }
+      const memo: VoiceMemo = { id: crypto.randomUUID(), createdAt: Date.now(), duration, mimeType: file.type || 'audio/wav', blob: file, title: file.name.replace(/\.[^.]+$/, ''), handle: handle ?? undefined }
+      await db.voice_memos.put(memo)
+      added.push(memo)
+    }
+    if (added.length) setMemos((m) => [...added, ...m])
+  }, [])
+  // Opened from the OS ("Open with Bloom") via the manifest's file_handlers.
+  useEffect(() => onLaunchFiles((files) => void importFiles(files)), [importFiles])
+
   const stop = () => {
     recorder.current?.stop()
     recorder.current = null
@@ -361,6 +410,11 @@ export function VoicePage(props: FeaturePageProps) {
             <p>Ramble freely. Bloom can transcribe it on this device and pull out the key points, ideas and mood. Audio never leaves your browser.</p>
           )}
           {error && <p className="voice-error">{error}</p>}
+          {subOn('voiceMemos', 'openFile') && !stream && (
+            <button className="voice-action" type="button" onClick={() => void openFiles('Audio', AUDIO_ACCEPT, true).then(importFiles)}>
+              <FolderOpen size={15} /> Open audio files
+            </button>
+          )}
         </div>
       </section>
       {memos.length === 0 ? (

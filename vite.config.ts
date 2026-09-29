@@ -4,8 +4,15 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Cross-origin isolation unlocks SharedArrayBuffer + Atomics (multi-core
+// workers, threaded Wasm). `credentialless` keeps cross-origin CDN/model
+// downloads working without each one sending CORP headers.
+const isolation = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'credentialless' }
+
 // https://vite.dev/config/
 export default defineConfig({
+  server: { headers: isolation },
+  preview: { headers: isolation },
   plugins: [
     react(),
     tailwindcss(),
@@ -24,6 +31,12 @@ export default defineConfig({
         display: 'standalone',
         start_url: '/',
         icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }],
+        // The installed app can be the OS handler for these files (see src/platform/fileHandlers.ts).
+        file_handlers: [
+          { action: '/#voice', accept: { 'audio/wav': ['.wav'], 'audio/mp4': ['.m4a'], 'audio/webm': ['.webm'] } },
+          { action: '/#run', accept: { 'application/gpx+xml': ['.gpx'] } },
+          { action: '/#money', accept: { 'application/pdf': ['.pdf'] } },
+        ],
       },
       workbox: {
         // Precache only the shell; every page chunk is cached on first visit (runtime rule below).
