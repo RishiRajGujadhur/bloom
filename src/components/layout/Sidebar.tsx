@@ -38,6 +38,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Piano as PianoF_pianoTrainer } from 'lucide-react'
 import { Keyboard as KeyboardF_typingDojo } from 'lucide-react'
 import { Telescope as TelescopeF_nightSky } from 'lucide-react'
 import { Grid3x3 as Grid3x3F_lifeInWeeks } from 'lucide-react'
@@ -119,6 +120,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'piano'
   | 'typing'
   | 'sky'
   | 'weeks'
@@ -172,7 +174,7 @@ export const pageRequires: Partial<Record<NavKey, keyof FeatureFlags>> = {}
 export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Today', keys: ['overview', 'planning', 'todos', 'calendar', 'focus', 'focus-room', 'routines'] },
   { label: 'Grow', keys: ['habits', 'challenges', 'growth', 'journey', 'urges', 'world', 'shop', 'collectibles', 'diet', 'scan', 'fasting', 'roadmap', 'money', 'joys'] },
-  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess', 'typing'] },
+  { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess', 'typing', 'piano'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo'] },
   { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street', 'weeks', 'sky'] },
@@ -439,6 +441,7 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'piano', title: "Piano & ear", Icon: PianoF_pianoTrainer, requires: 'pianoTrainer' },
     { key: 'typing', title: "Typing dojo", Icon: KeyboardF_typingDojo, requires: 'typingDojo' },
     { key: 'sky', title: "Night sky", Icon: TelescopeF_nightSky, requires: 'nightSky' },
     { key: 'weeks', title: "Life in weeks", Icon: Grid3x3F_lifeInWeeks, requires: 'lifeInWeeks' },

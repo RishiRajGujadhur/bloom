@@ -166,6 +166,7 @@ const captions: Record<NavKey, string> = {
   energy: 'Debug your week.',
   lab: 'What moves together.',
   taichi: 'Root down. Breathe low.',
+  'piano': "Music is a language you can learn.",
   'typing': "Eyes up, fingers home.",
   'sky': "Look up — something beautiful is there.",
   'weeks': "Every square is a week you can shape.",

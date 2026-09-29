@@ -170,6 +170,7 @@
     "tailwindcss": "^4.3.3",
     "three": "^0.186.1",
     "tinycolor2": "^1.6.0",
+    "tonal": "^6.4.3",
     "tone": "^15.1.22",
     "ts-fsrs": "5.4.2",
     "tunajs": "^1.1.3",

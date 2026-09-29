@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'piano': { title: "Piano & ear", description: "Music is a language you can learn." },
   'typing': { title: "Typing dojo", description: "Eyes up, fingers home." },
   'sky': { title: "Night sky", description: "Look up — something beautiful is there." },
   'weeks': { title: "Life in weeks", description: "Every square is a week you can shape." },
@@ -277,6 +278,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'typing': [
     step(".ty-stage", "Your line", "Just start typing the highlighted letter."),
     step(".ty-kb", "Keyboard", "The glowing key is next; its colour is the finger to use."),
+  ],
+  'piano': [
+    step(".pn-piano", "The piano", "Click, tap or use Z–M and Q–U."),
+    step(".pn-modes", "Modes", "Play, find notes, train your ear or follow songs."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

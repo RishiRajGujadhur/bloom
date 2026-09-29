@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Piano as PianoF_pianoTrainer } from 'lucide-react'
 import { Keyboard as KeyboardF_typingDojo } from 'lucide-react'
 import { Telescope as TelescopeF_nightSky } from 'lucide-react'
 import { Grid3x3 as Grid3x3F_lifeInWeeks } from 'lucide-react'
@@ -150,6 +151,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  pianoTrainer: PianoF_pianoTrainer,
   typingDojo: KeyboardF_typingDojo,
   nightSky: TelescopeF_nightSky,
   lifeInWeeks: Grid3x3F_lifeInWeeks,
@@ -244,6 +246,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  pianoTrainer: boolean
   typingDojo: boolean
   nightSky: boolean
   lifeInWeeks: boolean
@@ -349,6 +352,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    pianoTrainer: true,
     typingDojo: true,
     nightSky: true,
     lifeInWeeks: true,
@@ -444,6 +448,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'pianoTrainer',
   'typingDojo',
   'nightSky',
   'lifeInWeeks',

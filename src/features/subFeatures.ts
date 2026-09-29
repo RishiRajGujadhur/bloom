@@ -951,6 +951,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "glide", title: "Gliding line", description: "The text slides as you type." },
     { id: "celebrate", title: "Celebrations", description: "Confetti when you finish." },
   ],
+  pianoTrainer: [
+    { id: "play", title: "Free play", description: "Play with mouse, touch or keyboard." },
+    { id: "quest", title: "Note quest", description: "Find the note on the keys." },
+    { id: "intervals", title: "Intervals", description: "Name the gap between two notes." },
+    { id: "chords", title: "Chords", description: "Major, minor and more by ear." },
+    { id: "songs", title: "Songs", description: "Follow falling notes." },
+    { id: "mnemonics", title: "Song mnemonics", description: "Remember intervals by famous tunes." },
+    { id: "keyboard", title: "Computer keys", description: "Play from your keyboard." },
+    { id: "colours", title: "Pitch colours", description: "Each note has its own colour." },
+    { id: "ripples", title: "Ripples", description: "Keys ripple when pressed." },
+    { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom for an ear-training hint." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

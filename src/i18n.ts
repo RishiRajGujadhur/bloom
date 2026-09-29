@@ -473,6 +473,10 @@ const common = {
         title: "Typing dojo",
         description: "Learn touch typing: an animated keyboard shows the next key and finger, with real-word drills and a WPM chart.",
       },
+      pianoTrainer: {
+        title: "Piano & ear trainer",
+        description: "A playable piano for mouse, touch or keyboard, with note quests, interval and chord ear training and follow-along songs.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1598,6 +1602,10 @@ export const resources = {
           typingDojo: {
             title: "Dojo de dactylographie",
             description: "Apprenez à taper à l’aveugle avec un clavier animé, des mots réels et un graphique de vitesse.",
+          },
+          pianoTrainer: {
+            title: "Piano et oreille",
+            description: "Un piano jouable, avec quêtes de notes, entraînement de l’oreille et chansons à suivre.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
