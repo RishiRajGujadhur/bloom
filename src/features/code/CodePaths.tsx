@@ -9,6 +9,7 @@ import './codePaths.css'
 const STORAGE_KEY = 'bloom-code-paths-v1'
 const HtmlDocumentBuilder = lazy(() => import('./HtmlDocumentBuilder').then((module) => ({ default: module.HtmlDocumentBuilder })))
 const HeadingRepair = lazy(() => import('./HeadingRepair').then((module) => ({ default: module.HeadingRepair })))
+const FormLabelWorkshop = lazy(() => import('./FormLabelWorkshop').then((module) => ({ default: module.FormLabelWorkshop })))
 type Progress = Record<string, boolean>
 
 function readProgress(): Progress {
@@ -25,6 +26,7 @@ export function CodePaths() {
   const [checking, setChecking] = useState(false)
   const [building, setBuilding] = useState(false)
   const [repairing, setRepairing] = useState(false)
+  const [labeling, setLabeling] = useState(false)
   const detail = useRef<HTMLDivElement>(null)
   const path = codePaths.find((item) => item.id === pathId) ?? codePaths[0]
   const chapter = path.chapters[selectedIndex]
@@ -39,7 +41,7 @@ export function CodePaths() {
     return () => { tween.progress(1).kill() }
   }, [pathId, selectedIndex])
 
-  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0); setBuilding(false); setRepairing(false) }
+  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0); setBuilding(false); setRepairing(false); setLabeling(false) }
   const completeHtml = () => setCompleted((current) => {
     if (current['frontend:html']) return current
     const updated = { ...current, 'frontend:html': true }
@@ -57,13 +59,13 @@ export function CodePaths() {
     <div className="code-path-picker" role="group" aria-label="Programming learning path">
       {codePaths.map((item) => <button key={item.id} type="button" className="code-path-pick" aria-pressed={path.id === item.id} onClick={() => choosePath(item.id)} style={{ ['--path-color' as string]: item.color }}><Compass size={18} aria-hidden="true" />{item.name}</button>)}
     </div>
-    {repairing ? <Suspense fallback={<p role="status">Loading heading challenge…</p>}><HeadingRepair onClose={() => setRepairing(false)} /></Suspense> : building ? <Suspense fallback={<p role="status">Loading HTML builder…</p>}><HtmlDocumentBuilder onClose={() => setBuilding(false)} onComplete={completeHtml} /></Suspense> : checking ? <CodeSkillCheck key={path.id} path={path} onClose={() => setChecking(false)} onRecommend={(index) => { setSelectedIndex(index); setChecking(false) }} /> : <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
+    {labeling ? <Suspense fallback={<p role="status">Loading form workshop…</p>}><FormLabelWorkshop onClose={() => setLabeling(false)} /></Suspense> : repairing ? <Suspense fallback={<p role="status">Loading heading challenge…</p>}><HeadingRepair onClose={() => setRepairing(false)} /></Suspense> : building ? <Suspense fallback={<p role="status">Loading HTML builder…</p>}><HtmlDocumentBuilder onClose={() => setBuilding(false)} onComplete={completeHtml} /></Suspense> : checking ? <CodeSkillCheck key={path.id} path={path} onClose={() => setChecking(false)} onRecommend={(index) => { setSelectedIndex(index); setChecking(false) }} /> : <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
       <div className="code-path-top"><div><span className="code-path-kicker">YOUR ROUTE</span><h2>{path.name}</h2><p>{count} of {path.chapters.length} practiced{next ? ` · next: ${next.title}` : ' · route complete'}</p></div><a href={path.source} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${path.name} roadmap at roadmap.sh`}>Explore roadmap <ArrowUpRight size={16} aria-hidden="true" /></a></div>
       <div className="code-path-map" role="group" aria-label={`${path.name} chapters`}>
         <svg viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true"><path d="M30 6 H570" className="code-path-line-track" /><path d="M30 6 H570" className="code-path-line-fill" style={{ strokeDasharray: `${Math.min(1, count / (path.chapters.length - 1)) * 540} 540` }} /></svg>
         {path.chapters.map((item, index) => <button key={item.id} type="button" className="code-path-stop" aria-label={`Chapter ${index + 1}: ${item.title}${completed[`${path.id}:${item.id}`] ? ', practiced' : ''}`} aria-current={selectedIndex === index ? 'step' : undefined} onClick={() => setSelectedIndex(index)}>{completed[`${path.id}:${item.id}`] ? <Check size={18} aria-hidden="true" /> : index + 1}</button>)}
       </div>
-      <div ref={detail} className="code-path-detail"><div className="code-path-detail-copy"><span className="code-path-kicker">CHAPTER {selectedIndex + 1} OF {path.chapters.length}</span><h3>{chapter.title}</h3><p>{chapter.practice}</p><small>Build: {chapter.project}</small>{path.id === 'frontend' && selectedIndex === 0 && <><button type="button" className="code-path-open" onClick={() => setBuilding(true)}><FileCode2 size={16} aria-hidden="true" /> Open HTML builder</button><button type="button" className="code-path-open" onClick={() => setRepairing(true)}><FileCode2 size={16} aria-hidden="true" /> Repair heading hierarchy</button></>}</div><div className="code-path-actions"><button type="button" className="code-path-nav" aria-label="Previous chapter" disabled={selectedIndex === 0} onClick={() => setSelectedIndex((value) => value - 1)}><ChevronLeft size={18} aria-hidden="true" /></button><button type="button" className="code-path-mark" onClick={mark} disabled={!available} aria-label={`${done ? 'Clear practice mark for' : 'Mark practiced'} ${chapter.title}`}>{done ? 'Practiced ✓' : available ? 'Mark practiced' : <><LockKeyhole size={15} aria-hidden="true" /> Finish previous chapter</>}</button><button type="button" className="code-path-nav" aria-label="Next chapter" disabled={selectedIndex === path.chapters.length - 1} onClick={() => setSelectedIndex((value) => value + 1)}><ChevronRight size={18} aria-hidden="true" /></button></div></div>
+      <div ref={detail} className="code-path-detail"><div className="code-path-detail-copy"><span className="code-path-kicker">CHAPTER {selectedIndex + 1} OF {path.chapters.length}</span><h3>{chapter.title}</h3><p>{chapter.practice}</p><small>Build: {chapter.project}</small>{path.id === 'frontend' && selectedIndex === 0 && <><button type="button" className="code-path-open" onClick={() => setBuilding(true)}><FileCode2 size={16} aria-hidden="true" /> Open HTML builder</button><button type="button" className="code-path-open" onClick={() => setRepairing(true)}><FileCode2 size={16} aria-hidden="true" /> Repair heading hierarchy</button><button type="button" className="code-path-open" onClick={() => setLabeling(true)}><FileCode2 size={16} aria-hidden="true" /> Practice form labels</button></>}</div><div className="code-path-actions"><button type="button" className="code-path-nav" aria-label="Previous chapter" disabled={selectedIndex === 0} onClick={() => setSelectedIndex((value) => value - 1)}><ChevronLeft size={18} aria-hidden="true" /></button><button type="button" className="code-path-mark" onClick={mark} disabled={!available} aria-label={`${done ? 'Clear practice mark for' : 'Mark practiced'} ${chapter.title}`}>{done ? 'Practiced ✓' : available ? 'Mark practiced' : <><LockKeyhole size={15} aria-hidden="true" /> Finish previous chapter</>}</button><button type="button" className="code-path-nav" aria-label="Next chapter" disabled={selectedIndex === path.chapters.length - 1} onClick={() => setSelectedIndex((value) => value + 1)}><ChevronRight size={18} aria-hidden="true" /></button></div></div>
     </section>}
   </div>
 }
