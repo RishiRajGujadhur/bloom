@@ -13,6 +13,8 @@ import { extract, toTipTap } from './voiceExtract'
 import { onLaunchFiles, openFiles, type Opened } from '../../platform/fsa'
 import { opfsDelete, opfsRead, opfsWrite } from '../../platform/opfs'
 import { useObjectUrl } from './useObjectUrl'
+import { capturePlace } from '../places/placesStore'
+import { loadSettings } from '../../SettingsPage'
 import './voice.css'
 import './soundlab.css'
 
@@ -355,6 +357,7 @@ export function VoicePage(props: FeaturePageProps) {
         }
         await db.voice_memos.put(memo)
         setMemos((m) => [memo, ...m])
+        if (loadSettings().features.placesMap && subOn('placesMap', 'memoCapture')) capturePlace('memo', null, { ref: memo.id, label: memo.title })
       }
       started.current = Date.now()
       setElapsed(0)

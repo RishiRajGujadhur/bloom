@@ -232,6 +232,13 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'autoMood', title: 'Set mood from orb', description: 'The orb picks your 1–5 mood.' },
   ],
   placesMap: [
+    { id: 'moodHexes', title: 'Mood geography', description: 'Moods on privacy-friendly hexagons.' },
+    { id: 'moneyLayer', title: 'Money map', description: 'Spending circles by shop, with receipts.' },
+    { id: 'spendCapture', title: 'Pin spending', description: 'Remember where you spent (Places on).' },
+    { id: 'memoryPins', title: 'Memory pins', description: 'Daybook pages and voice memos on the map.' },
+    { id: 'memoCapture', title: 'Pin voice memos', description: 'Remember where a memo was recorded.' },
+    { id: 'onThisSpot', title: 'On this spot…', description: 'Resurface what you wrote nearby.' },
+    { id: 'placeHabits', title: 'Place habits', description: 'Check in a habit when you arrive.' },
     { id: 'heat', title: 'Heat halos', description: 'Soft halos sized by visits.' },
     { id: 'offlineTiles', title: 'Offline map tiles', description: 'Cache tiles for offline use.' },
     { id: 'moodCapture', title: 'Save with mood check-ins', description: 'Location on each mood check-in.' },

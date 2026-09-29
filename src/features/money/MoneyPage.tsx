@@ -35,6 +35,11 @@ import {
 import './money.css'
 
 import './receipts.css'
+import { capturePlace } from '../places/placesStore'
+import { loadSettings } from '../../SettingsPage'
+
+/** Pins a spend to where you are (only when Places is on) for the Life Map's money layer. */
+const pinSpend = (t: Txn) => { if (!t.income && loadSettings().features.placesMap && subOn('placesMap', 'spendCapture')) capturePlace('spend', null, { ref: t.id, label: t.place, amount: t.amount, category: t.category }) }
 
 const BillsInbox = lazy(() => import('./BillsInbox').then((m) => ({ default: m.BillsInbox })))
 const ReceiptLens = lazy(() => import('./ReceiptLens').then((m) => ({ default: m.ReceiptLens })))
@@ -119,6 +124,7 @@ export function MoneyPage() {
     if (!n || n <= 0) return
     const txn: Txn = { id: crypto.randomUUID(), date: today, amount: toMinor(n), category: income ? 'other' : category, place: place.trim(), income }
     save((s) => ({ ...s, txns: [txn, ...s.txns] }))
+    pinSpend(txn)
     setAmount('')
     setPlace('')
     burst(addBtn.current, 'coins')
@@ -449,8 +455,8 @@ export function MoneyPage() {
       }
       tabs={[
         { id: 'spend', label: 'Spend', icon: <Receipt size={15} />, render: spendTab },
-        ...(on('receipts') ? [{ id: 'receipts', label: 'Receipts', icon: <ScanLine size={15} />, render: () => <Suspense fallback={<p role="status">Loading Receipt Lens…</p>}><ReceiptLens code={code} onAdd={(txns) => { save((s) => ({ ...s, txns: [...txns, ...s.txns] })); txns.forEach((x) => logActivity('money', { amount: x.amount / 100 })) }} /></Suspense> }] : []),
-        ...(on('billsInbox') ? [{ id: 'bills', label: 'Bills', icon: <Mail size={15} />, render: () => <Suspense fallback={<p role="status">Loading Bills Inbox…</p>}><BillsInbox code={code} bills={store.bills ?? []} onBills={(f) => save((s) => ({ ...s, bills: f(s.bills ?? []) }))} onPaid={(t) => save((s) => ({ ...s, txns: [t, ...s.txns] }))} /></Suspense> }] : []),
+        ...(on('receipts') ? [{ id: 'receipts', label: 'Receipts', icon: <ScanLine size={15} />, render: () => <Suspense fallback={<p role="status">Loading Receipt Lens…</p>}><ReceiptLens code={code} onAdd={(txns) => { save((s) => ({ ...s, txns: [...txns, ...s.txns] })); txns.forEach(pinSpend); txns.forEach((x) => logActivity('money', { amount: x.amount / 100 })) }} /></Suspense> }] : []),
+        ...(on('billsInbox') ? [{ id: 'bills', label: 'Bills', icon: <Mail size={15} />, render: () => <Suspense fallback={<p role="status">Loading Bills Inbox…</p>}><BillsInbox code={code} bills={store.bills ?? []} onBills={(f) => save((s) => ({ ...s, bills: f(s.bills ?? []) }))} onPaid={(t) => { save((s) => ({ ...s, txns: [t, ...s.txns] })); pinSpend(t) }} /></Suspense> }] : []),
         ...(on('budgets') ? [{ id: 'budgets', label: 'Budgets', icon: <PiggyBank size={15} />, render: budgetsTab }] : []),
         ...(on('charts') ? [{ id: 'charts', label: 'Charts', icon: <BarChart3 size={15} />, render: () => <Suspense fallback={<p role="status">Loading charts…</p>}><MoneyCharts store={store} /></Suspense> }] : []),
         ...(on('premium') ? [{ id: 'plan', label: 'Plan', icon: <Sparkles size={15} />, render: premiumTab }] : []),

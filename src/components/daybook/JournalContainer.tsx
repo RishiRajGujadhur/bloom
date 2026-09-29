@@ -94,7 +94,7 @@ export function JournalContainer() {
       return updated
     })
     if (close) {
-      if (loadSettings().features.placesMap && subOn('placesMap', 'daybookCapture')) capturePlace('daybook')
+      if (loadSettings().features.placesMap && subOn('placesMap', 'daybookCapture')) capturePlace('daybook', null, { ref: next.id, label: next.modeTitle })
       setSelected(null)
       setEntryId(null)
     } else setEntryId(next.id)

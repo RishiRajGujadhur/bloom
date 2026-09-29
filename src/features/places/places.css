@@ -93,3 +93,22 @@ html[data-mode='dark'] .places-tiles {
     grid-template-columns: 1fr;
   }
 }
+
+.places-map { position: relative; }
+.lm-layers { position: absolute; z-index: 500; top: 10px; left: 50px; right: 10px; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
+.lm-layers > * { pointer-events: auto; }
+.lm-layers button, .lm-layers select { border: 1px solid #ffffffcc; border-radius: 999px; padding: 5px 12px; font: 800 0.8rem 'Manrope', sans-serif; background: #ffffffe6; color: #1c1c28; cursor: pointer; box-shadow: 0 4px 14px -6px #0006; backdrop-filter: blur(6px); }
+.lm-layers button.on { background: #1c1c28; color: #fff; border-color: #1c1c28; }
+.lm-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lm-spot { perspective: 600px; padding: 14px; border-radius: 18px; color: #fff; background: linear-gradient(135deg, #7c5cff, #ff8a3d); box-shadow: 0 14px 34px -14px #7c5cff; display: grid; gap: 6px; }
+.lm-spot p { margin: 0; }
+.lm-spot-eyebrow { font: 800 0.7rem 'Manrope', sans-serif; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.85; }
+.lm-habit-here { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: color-mix(in srgb, #22c55e 14%, var(--bg-surface)); border: 1px solid #22c55e66; }
+.lm-shop, .lm-pin { display: grid; gap: 6px; padding: 12px; border-radius: 16px; border: 1px solid var(--border-color); background: var(--bg-surface); }
+.lm-shop h3, .lm-pin h3 { margin: 0; font-size: 1rem; }
+.lm-shop p { margin: 0; color: var(--text-secondary); }
+.lm-receipts { display: flex; gap: 6px; }
+.lm-receipts img { width: 64px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); }
+.lm-pin select { flex: 1; min-width: 0; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; }
+html[data-theme='matrix'] .lm-layers button.on { background: #39ff6a; color: #031008; }
+.lm-arrive { position: fixed; z-index: 9000; left: 50%; bottom: 24px; translate: -50% 0; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 18px; background: var(--bg-surface); border: 1px solid #22c55e88; box-shadow: 0 20px 50px -20px #0008; max-width: calc(100vw - 32px); }

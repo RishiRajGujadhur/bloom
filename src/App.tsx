@@ -4,6 +4,7 @@ import { subOn } from './features/subFeatures'
 import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
 import { BloomCompanion } from './companion/BloomCompanion'
+import { PlaceWatcher } from './features/places/PlaceWatcher'
 import {
   CustomizeMenu,
   FocusCard,
@@ -679,6 +680,7 @@ function App() {
         {settings.features.pointerFx && <PointerFx page={active} />}
 
         <MatrixRain />
+        {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}
         <HoverHints />
         {!settings.reducedMotion && <GsapControls />}
         {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
@@ -921,7 +923,7 @@ function App() {
               </Suspense>
             ) : active === 'places' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
-                <PlacesPage />
+                <PlacesPage data={data} setData={setData} today={today} onNavigate={jump} />
               </Suspense>
             ) : active === 'diet' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

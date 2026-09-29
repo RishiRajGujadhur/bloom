@@ -8,10 +8,19 @@ export type PlacePoint = {
   lat: number
   lng: number
   at: number
-  kind: 'mood' | 'daybook' | 'manual'
+  kind: 'mood' | 'daybook' | 'manual' | 'spend' | 'memo'
   mood: number | null
+  /** Id of the thing recorded here (transaction, Daybook page, voice memo). */
+  ref?: string
+  /** Short label: shop name, page title or memo title. */
+  label?: string
+  /** Spend points: amount in minor units and the Money category. */
+  amount?: number
+  category?: string
 }
-export type PlacesState = { enabled: boolean; points: PlacePoint[]; names: Record<string, string> }
+/** A habit tied to a place: arriving there (while Bloom is open) offers a check-in. */
+export type PlaceHabit = { id: string; habitId: string; lat: number; lng: number; radius: number; label: string }
+export type PlacesState = { enabled: boolean; points: PlacePoint[]; names: Record<string, string>; habits?: PlaceHabit[] }
 export const PLACES_KEY = 'bloom-places-v1'
 export const emptyPlaces: PlacesState = { enabled: false, points: [], names: {} }
 
@@ -32,7 +41,7 @@ export function savePlaces(state: PlacesState) {
 }
 
 /** Records the current position if the user opted in. Never throws. */
-export function capturePlace(kind: PlacePoint['kind'], mood: number | null = null) {
+export function capturePlace(kind: PlacePoint['kind'], mood: number | null = null, extra: Pick<PlacePoint, 'ref' | 'label' | 'amount' | 'category'> = {}) {
   const state = readPlaces()
   if (!state.enabled || typeof navigator === 'undefined' || !navigator.geolocation) return
   navigator.geolocation.getCurrentPosition(
@@ -50,6 +59,7 @@ export function capturePlace(kind: PlacePoint['kind'], mood: number | null = nul
             at: Date.now(),
             kind,
             mood,
+            ...extra,
           },
         ],
       })
