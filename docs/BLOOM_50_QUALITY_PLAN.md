@@ -81,6 +81,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Added Pitch lab to Focus sounds: ten higher/lower listening questions, two difficulty levels, note-name explanations, SVG staff feedback, and a saved best score. Corrected the Sounds studio width on phones and verified desktop/mobile flows.
 - 2026-09-29: Added guided line, circle, and triangle tracing to Vision Board, with touch/mouse/pen input, SVG guide animation, stroke replay, gentle score feedback, and saved best scores. Verified a scored stroke, TypeScript, and desktop/mobile screenshots; mobile had no document-level horizontal overflow.
 - 2026-09-29: Added a paired sleep and mood SVG view to Sleep Insights, joining nights to check-ins on wake-up date and labeling each recorded value. Verified empty and paired states plus desktop/mobile screenshots without horizontal overflow; centered the single-day plot and corrected the singular night label.
+- 2026-09-29: Extended Bloom's Reduce motion setting to Sleep's floating duration, hover lift, transitions, and chart entrance. Verified both preference states in the browser, inspected desktop/mobile screenshots, and found no document-level horizontal overflow.
 
 ## New feature areas
 

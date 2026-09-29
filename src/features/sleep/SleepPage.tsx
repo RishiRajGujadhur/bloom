@@ -8,6 +8,7 @@ import { MOOD_KEY, useStoredList, type MoodEntry } from '../wellbeing/store'
 import { useStoredValue } from './useStoredValue'
 import { LottieIcon } from '../../components/ui/LottieIcon'
 import { dayKey } from '../../dates'
+import { prefersReducedMotion } from '../../utils/motion'
 import {
   SLEEP_KEY,
   SLEEP_SETTINGS_KEY,
@@ -134,7 +135,7 @@ function SleepLog({
           <Moon size={18} aria-hidden="true" /> Bedtime
           <input type="time" value={bedtime} onChange={(e) => setBedtime(e.target.value)} required />
         </label>
-        <motion.span key={hours} className="sleep-hours" initial={{ scale: 0.9 }} animate={{ scale: 1 }}>
+        <motion.span key={hours} className="sleep-hours" initial={prefersReducedMotion() ? false : { scale: 0.9 }} animate={{ scale: 1 }}>
           {hours}h
         </motion.span>
         <label>
@@ -355,7 +356,7 @@ function SleepInsights({
                 <motion.span
                   className="sleep-bar"
                   data-quality={n.quality}
-                  initial={{ height: 0 }}
+                  initial={prefersReducedMotion() ? false : { height: 0 }}
                   animate={{ height: `${(h / max) * 100}%` }}
                   title={`${n.date}: ${h}h`}
                 />

@@ -342,3 +342,8 @@
     animation: none;
   }
 }
+:root[data-reduce-motion='true'] .sleep-hours { animation: none; }
+:root[data-reduce-motion='true'] .sleep-quality button,
+:root[data-reduce-motion='true'] .sleep-moon,
+:root[data-reduce-motion='true'] .night-sky .sleep-stat { transition: none; }
+:root[data-reduce-motion='true'] .night-sky .sleep-stat:hover { transform: none; }
