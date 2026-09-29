@@ -20,6 +20,7 @@
 .code-path-stop[aria-current='step'] { border-color: var(--path-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--path-color) 20%, transparent); }.code-path-stop:has(svg) { border-color: var(--path-color); color: var(--path-color); }
 .code-path-detail { display: flex; justify-content: space-between; align-items: end; gap: 1rem; border: 1px solid var(--path-color); border-radius: .9rem; padding: .8rem 1rem; min-height: 8.5rem; }
 .code-path-detail h3 { margin: .15rem 0; font-size: 1rem; }.code-path-detail p { margin: .2rem 0; line-height: 1.4; }.code-path-detail small { color: var(--text-secondary); }
+.code-path-open { display: inline-flex; align-items: center; gap: .35rem; margin-top: .5rem; min-height: 2.5rem; border: 1px solid var(--path-color); border-radius: .65rem; padding: .35rem .6rem; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }
 .code-path-actions { display: flex; align-items: center; gap: .4rem; flex: none; }
 .code-path-actions button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 2.5rem; border: 1px solid var(--path-color); border-radius: .65rem; padding: .35rem .6rem; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }.code-path-actions button:disabled { border-color: var(--border-color); opacity: .55; cursor: default; }
 .code-path-stop:focus-visible, .code-path-pick:focus-visible, .code-path-actions button:focus-visible, .code-path-top a:focus-visible { outline: 2px solid var(--path-color); outline-offset: 2px; }
