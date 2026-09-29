@@ -31,6 +31,10 @@
   justify-content: space-between;
   gap: 10px;
 }
+.studio-tab-nav { display: flex; align-items: center; gap: 6px; max-width: 100%; min-width: 0; }
+.studio-tab-arrow { display: grid; place-items: center; flex: none; width: 40px; height: 40px; padding: 0; border: 1px solid var(--border-color); border-radius: 50%; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }
+.studio-tab-arrow:hover { border-color: var(--studio); color: var(--studio); }
+.studio-tab-arrow:focus-visible { outline: 2px solid var(--studio); outline-offset: 2px; }
 .studio-tabs {
   position: relative;
   display: grid;
@@ -41,6 +45,7 @@
   background: color-mix(in oklab, var(--bg-surface) 70%, transparent);
   border: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
+  min-width: 0;
   max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
@@ -283,6 +288,8 @@
   border: 3px solid var(--studio, var(--accent-color));
 }
 @media (max-width: 900px) {
+  .studio-tab-nav { width: 100%; }
+  .studio-tabs { flex: 1; }
   .studio {
     height: auto;
     min-height: calc(100dvh - 200px);

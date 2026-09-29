@@ -83,6 +83,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Added a paired sleep and mood SVG view to Sleep Insights, joining nights to check-ins on wake-up date and labeling each recorded value. Verified empty and paired states plus desktop/mobile screenshots without horizontal overflow; centered the single-day plot and corrected the singular night label.
 - 2026-09-29: Extended Bloom's Reduce motion setting to Sleep's floating duration, hover lift, transitions, and chart entrance. Verified both preference states in the browser, inspected desktop/mobile screenshots, and found no document-level horizontal overflow.
 - 2026-09-29: Added Melody echo, a three-round guided ear-training session with SVG staff, synthesized notes, immediate recall feedback, and saved session progress. Verified correct, incorrect, retry, and finish flows; inspected desktop/mobile screenshots and removed the session's nested vertical scroll.
+- 2026-09-29: Added previous/next buttons to shared studio tabs and automatic visibility for the selected section. Verified both directions and final-tab visibility on a phone; inspected desktop/mobile screenshots without document-level horizontal overflow.
 
 ## New feature areas
 

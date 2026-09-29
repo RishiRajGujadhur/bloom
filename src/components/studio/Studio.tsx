@@ -45,9 +45,18 @@ export function Studio({
     onTab?.(id)
   }
   const panel = useRef<HTMLDivElement>(null)
+  const tabStrip = useRef<HTMLDivElement>(null)
   const dir = useRef(1)
   const index = Math.max(0, visible.findIndex((t) => t.id === active))
   const tab = visible[index]
+
+  useEffect(() => {
+    const strip = tabStrip.current
+    const selected = strip?.children[index] as HTMLElement | undefined
+    if (!strip || !selected) return
+    const left = selected.offsetLeft - (strip.clientWidth - selected.clientWidth) / 2
+    strip.scrollTo({ left, behavior: reduced() ? 'instant' : 'smooth' })
+  }, [active, index])
 
   useLayoutEffect(() => {
     if (!panel.current || reduced()) return
@@ -71,7 +80,9 @@ export function Studio({
       )}
       <div className="studio-bar">
         {visible.length > 1 && (
-          <div className="studio-tabs" role="tablist" aria-label={`${name} sections`}>
+          <div className="studio-tab-nav">
+          <button type="button" className="studio-tab-arrow" aria-label={`Previous section: ${visible[(index - 1 + visible.length) % visible.length].label}`} title="Previous section" onClick={() => go(index - 1)}><ChevronLeft size={18} aria-hidden="true" /></button>
+          <div ref={tabStrip} className="studio-tabs" role="tablist" aria-label={`${name} sections`}>
             {visible.map((t, i) => (
               <button
                 key={t.id}
@@ -95,6 +106,8 @@ export function Studio({
               </button>
             ))}
             <span className="studio-tab-ink" style={{ ['--i' as string]: index, ['--n' as string]: visible.length } as CSSProperties} aria-hidden="true" />
+          </div>
+          <button type="button" className="studio-tab-arrow" aria-label={`Next section: ${visible[(index + 1) % visible.length].label}`} title="Next section" onClick={() => go(index + 1)}><ChevronRight size={18} aria-hidden="true" /></button>
           </div>
         )}
         <div className="studio-head-slot" ref={(el) => setHeadSlot(el)} />
