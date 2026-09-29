@@ -2,7 +2,7 @@
 
 Build one useful feature per commit and push it before starting the next. Count only working, verified features. Each learning activity needs a clear objective, practice, feedback, keyboard and phone support, saved progress where useful, and a reduced-motion path. Use original lessons and challenges; roadmap.sh informs the sequence, while Codewars informs short kata, test feedback, and solution comparison. Do not copy their content.
 
-Current count: **8 / 150**. Feature 1 is the learning path map, with four routes, prerequisites, saved practice marks, SVG progress, and GSAP entrance motion. Feature 2 is a four-question skill check per route with immediate explanations and a starting-chapter recommendation. Feature 3 is an editable HTML document builder with a sandboxed live preview and semantic checks. Feature 4 is an editable heading hierarchy repair challenge with an outline, targeted feedback, and saved progress. Feature 5 is a form labeling workshop with connected-label feedback and saved progress. Feature 6 is an editable three-page navigation mini project with route testing, semantic checks, an animated SVG map, and saved work. Feature 7 is a three-case CSS selector detective kata with an SVG evidence board, exact-match feedback, and saved progress. Feature 8 is a box model SVG manipulator with sizing controls, measured dimensions, animated feedback, and saved progress. The existing JavaScript lessons, challenges, and unfinished Code Quest predate this count.
+Current count: **9 / 150**. Feature 1 is the learning path map, with four routes, prerequisites, saved practice marks, SVG progress, and GSAP entrance motion. Feature 2 is a four-question skill check per route with immediate explanations and a starting-chapter recommendation. Feature 3 is an editable HTML document builder with a sandboxed live preview and semantic checks. Feature 4 is an editable heading hierarchy repair challenge with an outline, targeted feedback, and saved progress. Feature 5 is a form labeling workshop with connected-label feedback and saved progress. Feature 6 is an editable three-page navigation mini project with route testing, semantic checks, an animated SVG map, and saved work. Feature 7 is a three-case CSS selector detective kata with an SVG evidence board, exact-match feedback, and saved progress. Feature 8 is a box model SVG manipulator with sizing controls, measured dimensions, animated feedback, and saved progress. Feature 9 is a three-task Flexbox playground with animated SVG item positions, axis feedback, and saved progress. The existing JavaScript lessons, challenges, and unfinished Code Quest predate this count.
 
 ## Foundations and web (1–15)
 
@@ -14,7 +14,7 @@ Current count: **8 / 150**. Feature 1 is the learning path map, with four routes
 6. [x] Links and navigation mini project.
 7. [x] CSS selector detective kata.
 8. [x] Box model SVG manipulator.
-9. [ ] Flexbox alignment playground.
+9. [x] Flexbox alignment playground.
 10. [ ] Grid layout puzzle.
 11. [ ] Responsive breakpoint simulator.
 12. [ ] Color contrast repair challenge.
