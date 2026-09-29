@@ -465,6 +465,10 @@ const common = {
         title: "Life in weeks",
         description: "Your whole life as a grid of weeks, with chapters, milestones and the Sundays still ahead.",
       },
+      nightSky: {
+        title: "Night sky",
+        description: "See which planets, stars and constellations are above you now, with a moving sky dome and star-hopping tips.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1582,6 +1586,10 @@ export const resources = {
           lifeInWeeks: {
             title: "La vie en semaines",
             description: "Toute votre vie en grille de semaines, avec chapitres, jalons et dimanches à venir.",
+          },
+          nightSky: {
+            title: "Ciel nocturne",
+            description: "Planètes, étoiles et constellations au-dessus de vous, avec un dôme céleste animé.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

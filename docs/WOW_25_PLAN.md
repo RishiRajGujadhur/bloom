@@ -53,7 +53,7 @@ Bloom borrows these *techniques* with original visuals and copy. Nothing is copi
 |---|---|---|---|---|---|
 | 1 | **Chess Academy**: learn the pieces, rules and tactics, then play Bloom | Learn | An SVG board where pieces glide (GSAP), legal-move dots and a mate burst | chess.js, @use-gesture/react, gsap, canvas-confetti, seedrandom | [x] [Learn](screenshots/wow-01-chess.png) · [Play](screenshots/wow-01-chess-play.png) · [Puzzle](screenshots/wow-01-chess-puzzle.png) |
 | 2 | **Life in Weeks**: your life as a grid of weeks, with milestones | Explore | 4,000+ SVG cells that ripple in, plus a kinetic headline | date-fns, d3-scale, gsap, chroma-js, zod | [x] [Screenshot](screenshots/wow-02-life-in-weeks.png) |
-| 3 | **Night Sky**: which planets and the moon are up now, with a star-hop guide | Explore | A rotating SVG sky dome with glowing planets | astronomy-engine, d3-geo, suncalc, gsap, date-fns | [ ] |
+| 3 | **Night Sky**: which planets and the moon are up now, with a star-hop guide | Explore | A rotating SVG sky dome with glowing planets | astronomy-engine, d3-geo, suncalc, gsap, date-fns | [x] [Screenshot](screenshots/wow-03-night-sky.png) |
 | 4 | **Typing Dojo**: learn touch typing | Learn | An SVG keyboard that lights the next key, and live WPM | fastest-levenshtein, chart.js, gsap, seedrandom, canvas-confetti | [ ] |
 | 5 | **Piano & Ear Trainer**: notes, chords and intervals by ear | Learn | A playable SVG keyboard with glowing keys and a falling-note hero | tone, tonal, gsap, seedrandom, chroma-js | [ ] |
 | 6 | **Tuner**: tune a guitar, ukulele or your voice from the mic | Learn | A needle-gauge SVG with a live spring | pitchy, gsap, tone, d3-shape, chroma-js | [ ] |

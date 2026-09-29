@@ -927,6 +927,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "pulse", title: "This week", description: "The current week pulses." },
     { id: "palette", title: "Chapter colours", description: "Harmonious colours per chapter." },
   ],
+  nightSky: [
+    { id: "planets", title: "Planets", description: "Sun, Moon and five planets." },
+    { id: "stars", title: "Bright stars", description: "Forty of the brightest stars." },
+    { id: "constellations", title: "Constellations", description: "Five famous star patterns." },
+    { id: "starHop", title: "Star-hopping", description: "How to find each pattern." },
+    { id: "timeTravel", title: "Time slider", description: "Move the sky ±12 hours." },
+    { id: "play", title: "Play", description: "Sweep six hours ahead." },
+    { id: "moon", title: "Moon phase", description: "Phase and how much is lit." },
+    { id: "location", title: "Your location", description: "Use the device location." },
+    { id: "twinkle", title: "Twinkle", description: "Stars shimmer." },
+    { id: "labels", title: "Labels", description: "Names on hover." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

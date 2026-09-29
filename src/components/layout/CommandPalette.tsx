@@ -59,6 +59,7 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   energy: 'energySankey',
   lab: 'insightsLab',
   taichi: 'wuXing',
+  'sky': 'nightSky',
   'weeks': 'lifeInWeeks',
   'chess': 'chessAcademy',
   'code': 'codeLearning',

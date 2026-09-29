@@ -21,6 +21,8 @@ for (const [themeId, suffix] of [['bloom-light', ''], ['matrix', '-matrix']]) {
   page.on('console', (m) => m.type() === 'error' && !noise.test(m.text()) && problems.push(`${suffix || 'light'} console: ${m.text().slice(0, 240)}`))
   page.on('pageerror', (e) => problems.push(`${suffix || 'light'} exception: ${e.message.slice(0, 240)}`))
   await page.goto(`${base}/#${hash}`, { waitUntil: 'networkidle' })
+  // Wait for lazy pages (and Vite's first-time dependency bundling) to finish loading.
+  await page.waitForFunction(() => { const t = document.querySelector('main')?.innerText ?? ''; return t.length > 80 && !/Loading…\s*$/.test(t) }, null, { timeout: 90000 }).catch(() => {})
   await page.waitForTimeout(3500)
   if (tabName) {
     await page.getByRole('tab', { name: tabName, exact: true }).first().click({ force: true })
@@ -31,6 +33,7 @@ for (const [themeId, suffix] of [['bloom-light', ''], ['matrix', '-matrix']]) {
   const text = await page.locator('main').innerText().catch(() => '')
   if (/tripped over a root/.test(text)) problems.push(`${suffix || 'light'} crash: ${text.slice(0, 200)}`)
   if (!text.trim()) problems.push(`${suffix || 'light'} blank page`)
+  if (/Loading…\s*$/.test(text)) problems.push(`${suffix || 'light'} still loading`)
   await page.screenshot({ path: `docs/screenshots/${name}${suffix}.png` })
   await ctx.close()
 }
