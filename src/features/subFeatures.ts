@@ -987,6 +987,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "private", title: "Private", description: "Nothing is recorded or uploaded." },
     { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom for the answer in the quiz." },
   ],
+  globeQuiz: [
+    { id: "find", title: "Find it", description: "Click the country on the globe." },
+    { id: "name", title: "Name it", description: "Type the glowing country." },
+    { id: "capitals", title: "Capitals", description: "Pick the capital." },
+    { id: "continents", title: "Continents", description: "Focus on one continent." },
+    { id: "spin", title: "Spin to answer", description: "The globe glides to each country." },
+    { id: "drag", title: "Drag to spin", description: "Turn the globe yourself." },
+    { id: "idle", title: "Idle rotation", description: "A slow spin while you think." },
+    { id: "fuzzy", title: "Forgiving answers", description: "Small typos are fine." },
+    { id: "score", title: "Score", description: "Right answers this session." },
+    { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom for help." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

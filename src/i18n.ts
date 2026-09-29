@@ -485,6 +485,10 @@ const common = {
         title: "Sign alphabet",
         description: "Learn ASL fingerspelling with an animated hand, a quiz, and on-device hand tracking to practise words.",
       },
+      globeQuiz: {
+        title: "Globe quiz",
+        description: "Spin a globe to learn countries, where they are and their capitals.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1622,6 +1626,10 @@ export const resources = {
           signAlphabet: {
             title: "Alphabet signé",
             description: "Apprenez l’épellation digitale ASL avec une main animée, un quiz et un suivi de la main.",
+          },
+          globeQuiz: {
+            title: "Quiz du globe",
+            description: "Faites tourner un globe pour apprendre les pays et leurs capitales.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',
