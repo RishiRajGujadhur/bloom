@@ -837,6 +837,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
   moneyTracker: [
     { id: "currency", title: "Currency", description: "Pick the currency Bloom uses for money." },
     { id: 'receipts', title: 'Receipt Lens', description: 'Scan receipts on-device and turn them into transactions.' },
+    { id: 'billsInbox', title: 'Bills Inbox', description: 'Scan letters and bills into deadlines, and ask about them.' },
     { id: "places", title: "Top places", description: "Where you spend the most." },
     { id: "autoCategory", title: "Smart categories", description: "Guess the category from the place." },
     { id: "budgets", title: "Budgets", description: "Monthly limits per category with rings." },

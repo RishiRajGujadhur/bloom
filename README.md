@@ -49,6 +49,7 @@ Built on Web Bluetooth, WebGPU, WebAssembly SIMD, multi-core workers, the Origin
 | **Terrain Replay**: fly a drone along a GPX route over its own elevation, in sync with the map | ![Terrain Replay](docs/screenshots/wow-14-terrain.png) | ![Terrain Replay, Matrix](docs/screenshots/wow-14-terrain-matrix.png) |
 | **Morning Readiness Scan**: 60-second HRV from a Bluetooth strap, the fingertip camera or a simulator | ![Readiness](docs/screenshots/wow-15-readiness.png) | ![Readiness, Matrix](docs/screenshots/wow-15-readiness-matrix.png) |
 | **Receipt Lens**: on-device OCR on every core turns receipts into Money transactions | ![Receipt Lens](docs/screenshots/wow-16-receipts.png) | ![Receipt Lens, Matrix](docs/screenshots/wow-16-receipts-matrix.png) |
+| **Bills Inbox**: photograph a letter; OpenCV flattens it, OCR reads it, deadlines get countdowns, and you can ask your paperwork questions | ![Bills Inbox](docs/screenshots/wow-17-bills.png) | ![Bills Inbox, Matrix](docs/screenshots/wow-17-bills-matrix.png) |
 <!-- advanced-features-end -->
 
 To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome, and doubles as a smoke test: it records console errors, uncaught exceptions, crashed pages and blank pages for every shot in `docs/screenshots/report.json`.

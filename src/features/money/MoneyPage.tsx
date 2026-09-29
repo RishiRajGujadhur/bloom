@@ -1,7 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ArrowDownRight, ArrowUpRight, BarChart3, PiggyBank, Plus, Receipt, ScanLine, Sparkles, Trash2, Upload, Wallet } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, BarChart3, PiggyBank, Plus, Receipt, ScanLine, Sparkles, Mail, Trash2, Upload, Wallet } from 'lucide-react'
 import { Rail, Slider, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { ShowMore } from '../../components/ui/Flow'
 import { usePageActions } from '../../components/ui/PageMenu'
@@ -36,6 +36,7 @@ import './money.css'
 
 import './receipts.css'
 
+const BillsInbox = lazy(() => import('./BillsInbox').then((m) => ({ default: m.BillsInbox })))
 const ReceiptLens = lazy(() => import('./ReceiptLens').then((m) => ({ default: m.ReceiptLens })))
 const MoneyCharts = lazy(() => import('./MoneyCharts').then((m) => ({ default: m.MoneyCharts })))
 const on = (id: string) => subOn('moneyTracker', id)
@@ -449,6 +450,7 @@ export function MoneyPage() {
       tabs={[
         { id: 'spend', label: 'Spend', icon: <Receipt size={15} />, render: spendTab },
         ...(on('receipts') ? [{ id: 'receipts', label: 'Receipts', icon: <ScanLine size={15} />, render: () => <Suspense fallback={<p role="status">Loading Receipt Lens…</p>}><ReceiptLens code={code} onAdd={(txns) => { save((s) => ({ ...s, txns: [...txns, ...s.txns] })); txns.forEach((x) => logActivity('money', { amount: x.amount / 100 })) }} /></Suspense> }] : []),
+        ...(on('billsInbox') ? [{ id: 'bills', label: 'Bills', icon: <Mail size={15} />, render: () => <Suspense fallback={<p role="status">Loading Bills Inbox…</p>}><BillsInbox code={code} bills={store.bills ?? []} onBills={(f) => save((s) => ({ ...s, bills: f(s.bills ?? []) }))} onPaid={(t) => save((s) => ({ ...s, txns: [t, ...s.txns] }))} /></Suspense> }] : []),
         ...(on('budgets') ? [{ id: 'budgets', label: 'Budgets', icon: <PiggyBank size={15} />, render: budgetsTab }] : []),
         ...(on('charts') ? [{ id: 'charts', label: 'Charts', icon: <BarChart3 size={15} />, render: () => <Suspense fallback={<p role="status">Loading charts…</p>}><MoneyCharts store={store} /></Suspense> }] : []),
         ...(on('premium') ? [{ id: 'plan', label: 'Plan', icon: <Sparkles size={15} />, render: premiumTab }] : []),

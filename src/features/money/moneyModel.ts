@@ -18,6 +18,8 @@ export type MoneyStore = {
   worthLog: { date: string; value: number }[]
   goals: Goal[]
   subscriptionsOff: string[]
+  /** Bills Inbox: scanned bills and letters (images live in OPFS). */
+  bills?: import('./billsModel').Bill[]
 }
 export const MONEY_KEY = 'bloom-money-v1'
 export const emptyMoney: MoneyStore = { currency: 'USD', txns: [], budgets: [], holdings: [], worthLog: [], goals: [], subscriptionsOff: [] }
