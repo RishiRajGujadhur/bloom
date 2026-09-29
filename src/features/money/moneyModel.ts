@@ -6,7 +6,7 @@ import Papa from 'papaparse'
  * units (cents) and summed with currency.js so totals never drift.
  */
 export type Category = { id: string; name: string; emoji: string; color: string; bucket: 'fixed' | 'flexible' | 'non-monthly' }
-export type Txn = { id: string; date: string; amount: number; category: string; place: string; note?: string; income?: boolean }
+export type Txn = { id: string; date: string; amount: number; category: string; place: string; note?: string; income?: boolean; /** OPFS path of the scanned receipt image (Receipt Lens). */ receipt?: string }
 export type Budget = { category: string; limit: number }
 export type Holding = { id: string; name: string; kind: 'asset' | 'debt'; value: number }
 export type Goal = { id: string; name: string; target: number; saved: number; emoji: string }
