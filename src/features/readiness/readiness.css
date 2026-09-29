@@ -44,7 +44,7 @@
 .rd-zone.recover { stroke: #ff4d6d; }
 .rd-zone.steady { stroke: #facc15; }
 .rd-zone.push { stroke: #a3e635; }
-.rd-needle { stroke: #fff; stroke-width: 4; stroke-linecap: round; filter: drop-shadow(0 0 6px #fff); }
+.rd-needle { fill: #fff; filter: drop-shadow(0 0 6px #ffffffaa); }
 .rd-hub { fill: #fff; }
 .rd-score { fill: #fff; font: 900 30px 'Manrope', sans-serif; }
 .rd-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }

@@ -20,6 +20,9 @@ The bar for every feature:
 | **SIMD** | WebAssembly SIMD128 |
 | **MT** | SharedArrayBuffer plus Atomics (true multi-core) |
 | **FSA** | File System Access API plus PWA file handlers |
+| **CP** | Compute Pressure API: CPU stress states (nominal, fair, serious, critical) |
+| **OC** | OffscreenCanvas: canvas rendering moved to a worker thread |
+| **MAP** | Joined to the map (Leaflet, as in Places and Run) |
 
 ## What's already in the app
 
@@ -93,3 +96,73 @@ Coverage: BT (15), OPFS (15–18, 20), GPU (13, 14, 17–20, 23), CRDT (19), SIM
 - **Bluetooth hardware (15)** runs in simulated-device mode for the demo and screenshots. Real devices work when paired.
 - Models are opt-in downloads with visible progress.
 - The Git features read local repositories only, and read-only.
+
+---
+
+# Phase 2: upgrading the existing features
+
+Money, Voice memos and Run have already been upgraded (13, 14, 16). This phase does the same for the rest of Bloom. There are three threads:
+
+1. **A calmer, smoother app:** Compute Pressure and OffscreenCanvas.
+2. **Everything on the map.**
+3. **Hardware and on-device compute** for pages that don't use them yet.
+
+Every idea below upgrades a page that already exists. None is a new standalone page, apart from Life Map (M1), which grows out of Places.
+
+## A. Platform: adaptive and off the main thread
+
+These are built once in `src/platform/`, then used by every heavy page.
+
+| # | Upgrade | What you'd notice | Caps | Libraries |
+|---|---|---|---|---|
+| A1 | **Thermal governor** (`platform/pressure.ts`) | Bloom watches CPU pressure through a `PressureObserver`. When your laptop heats up (**serious**), every 3D or particle scene steps down together: fewer particles, lower pixel ratio, 30 fps instead of 60. The worker pools shrink. At **critical**, heavy scenes pause behind a "cooling down" frost overlay. When pressure eases, quality returns. A header chip (calm, warm, hot) with a live SVG thermometer shows the state. | CP, MT | Compute Pressure API, `gsap`, `zustand` (shared quality store) |
+| A2 | **Off-thread rendering** (`platform/offscreen.ts`) | Canvas animations (WebGPU scenes, Matrix rain, visualisers, the mood orb) render in a worker through `transferControlToOffscreen()`, so typing, scrolling and heavy work never make them stutter. A debug overlay compares main-thread and render-thread frame times. | OC, GPU, CP | OffscreenCanvas, `three` (WebGPURenderer in a worker), `comlink` |
+| A3 | **Apply A1 and A2 to what we've built** | Sound Lab's mountain, Terrain Replay, Readiness HUD, 3D World, Memory Palace, Tai Chi silk shader, Decision coin, Globe quiz and Matrix rain all move off the main thread and adapt to heat. | OC, CP, GPU | the same |
+| A4 | **Build-break coach** (extends Screen time and Stretch) | Long stretches of **serious** CPU pressure usually mean compiles, test runs or Docker builds. Bloom notices and offers a 90-second stretch while you wait. Screen time learns your "machine busy" hours. | CP | Compute Pressure API, `date-fns`, `gsap` |
+
+## B. Everything on the map
+
+The map already lives in Places (with offline tile caching) and Run. The idea is to make it the thread that joins your features together.
+
+| # | Upgrade | What you'd notice | Caps | Libraries |
+|---|---|---|---|---|
+| M1 | **Life Map** (extends Places) | One map with a layer for each feature: runs (speed heat), moods, spending, journal and voice notes, people and habits. A **time slider** replays a week, month or year. A density heatmap is drawn in an OffscreenCanvas worker, so the map stays at 60 fps with thousands of points. | MAP, OC, CP, OPFS | existing `leaflet`, `deck.gl` (heatmap layer), `h3-js` (hex bins), `@turf/turf`, `gsap` |
+| M2 | **Mood geography** (extends Mood and Journal) | Check-ins can carry a coarse location (a hexagon, never exact). The map shows **where you feel best**, such as the park, the café or home, as coloured hexagons, with insights like "You log calmer moods near water." | MAP | `h3-js`, `chroma-js`, `simple-statistics`, existing `leaflet` |
+| M3 | **Money map** (extends Money and Receipt Lens) | Transactions and receipts remember where they were added. Circles are sized by spend. Tapping a shop shows every receipt image from it (stored in OPFS). You'll see things like "Your coffee radius is 400 m." | MAP, OPFS | existing `leaflet`, `@turf/turf`, `d3-scale`, `gsap` |
+| M4 | **Memory pins** (extends Daybook, Voice memos and Epiphanies) | Notes and memos remember where they were made. **"On this spot…"**: when you're near somewhere you wrote something before, Bloom offers to show it (a geofence while the app is open). | MAP, OPFS | Geolocation, `@turf/turf`, existing `leaflet` |
+| M5 | **People on the globe** (extends People garden and Globe quiz) | Friends and family on the Globe quiz's 3D globe, with a live **day/night terminator** and their local times. "Good time to call" glows for anyone awake. Birthdays show as pins. | MAP, OC | existing `d3-geo` and `topojson-client`, `suncalc`, `gsap` |
+| M6 | **Run explorer** (extends Run and Terrain Replay) | A **"streets you've run" coverage map**: street segments light up as you run them, with a percentage of your neighbourhood explored. "Suggest a new loop" builds a route of a chosen distance through streets you haven't run yet. | MAP, SIMD, MT | Overpass API (OpenStreetMap streets), `@turf/turf`, existing `leaflet`, worker pool for route matching |
+| M7 | **Place habits** (extends Habits) | Habits can have a place: gym, library or park. When you arrive (while Bloom is open), a check-in prompt appears. A habit map shows where you actually keep your habits. | MAP | Geolocation, `@turf/turf`, existing `leaflet` |
+| M8 | **Daylight map** (extends Daylight and Sleep) | Your location with the sun's position and today's light window. It logs outdoor-light minutes by place, and links to Sleep: "More morning light on days you walk to the park." | MAP | `suncalc`, existing `leaflet`, `simple-statistics` |
+| M9 | **Dark-sky finder** (extends Night sky) | A map of the nearest dark-sky spots, from light-pollution tiles and the moon phase, with tonight's best time. It opens Night sky already set to that spot. | MAP | light-pollution tile layer, existing `astronomy-engine`, `leaflet` |
+| M10 | **Year in places** (extends Yearbook) | An animated flight across every place in your year, using the Terrain Replay renderer: runs, trips and moods in order, ending on your "home base" stats. | MAP, GPU, OC | `three` (WebGPU), existing `leaflet`, `gsap` |
+
+## C. Hardware and compute upgrades for other pages
+
+| # | Upgrade (extends) | What you'd notice | Caps | Libraries |
+|---|---|---|---|---|
+| C1 | **Heart-coherence breathing** (Breathe, Breathwork, Meditate) | Uses the Readiness sources (Bluetooth strap or fingertip camera). The breathing orb expands with your **live heart-rate variability**, and a coherence score climbs as your breathing and heartbeat lock together (about 6 breaths a minute). Rendered off-thread. | BT, SIMD, OC | readiness `sources.ts`, PFFFT (SIMD), `uplot`, `gsap` |
+| C2 | **Heart-rate zones** (Intervals, Workouts, Run) | Pair a strap once and every timer shows live heart-rate zones. Intervals can auto-advance when your heart rate recovers. Workouts log average and peak heart rate. | BT, OPFS | Web Bluetooth `heart_rate`, `uplot`, `tone` |
+| C3 | **Camera features off the main thread** (Posture, Eyes, Sign alphabet, Mirror) | MediaPipe runs in a worker on an OffscreenCanvas, and drops its frame rate under CPU pressure. The page stays smooth and the laptop stays cool. | OC, CP, GPU | `@mediapipe/tasks-vision` (worker), OffscreenCanvas |
+| C4 | **Semantic memory search** (Journal, Daybook, Epiphanies, Voice) | "Find entries that feel like this one": GPU text embeddings with a vector index in OPFS, plus a constellation map of related entries. | GPU, OPFS, MT | existing `@xenova/transformers`, `orama`, `d3-force` |
+| C5 | **Soundscape engine** (Sounds, Mixer) | Noise colours, rain and binaural beats generated live in an **AudioWorklet** with SIMD DSP, so nothing loops. The visualiser renders off-thread and lowers its detail under CPU pressure. | SIMD, OC, CP | AudioWorklet, PFFFT, `tone`, OffscreenCanvas |
+| C6 | **Parallel Correlation Lab** (Insights Lab) | Every metric against every other, with bootstrap confidence intervals, computed across all cores in about a second. | MT, SIMD | worker pool, `simple-statistics`, `ml-matrix` |
+| C7 | **Vision board files** (Vision board) | Save and open boards as `.bloomboard` files on disk, with images in OPFS. Send a board file to a friend and it opens straight into Bloom. | FSA, OPFS | File System Access, manifest file_handlers, `fflate` |
+
+## Suggested order
+
+1. **A1** thermal governor and **A2** off-thread rendering. Everything after benefits.
+2. **A3**, applying them to the WebGPU scenes already built.
+3. **M1 Life Map**, the hub that M2, M3, M4 and M7 plug into as layers.
+4. **C1** and **C2**. They reuse the Readiness code, so they're quick.
+5. **M5 People on the globe** and **M6 Run explorer**.
+6. The rest (A4, C3–C7, M8–M10).
+
+This phase is in addition to the remaining features 17–21 (Bills Inbox, Morning Briefing Radio, Study Duel, Form Coach and Code City).
+
+## Caveats for Phase 2
+
+- **Compute Pressure** works in Chrome and Edge on desktop. Elsewhere Bloom measures frame times instead, and still steps quality down when frames drop.
+- **OffscreenCanvas** is widely supported. A scene that can't transfer its canvas stays on the main thread.
+- **Location** is always opt-in, stored only on the device, and coarse (moods are rounded to a hexagon). Geofences only run while Bloom is open, with no background tracking.
+- **Overpass (M6)** and **light-pollution tiles (M9)** are the only new network data. Both are open-data services.

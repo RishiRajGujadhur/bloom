@@ -36,7 +36,7 @@ function Hud({ phase, left, bpm, beats, pulse }: { phase: Phase; left: number; b
   const C = 2 * Math.PI * 128
   const done = phase === 'scanning' ? 1 - left / SCAN_S : phase === 'done' ? 1 : 0
   return (
-    <svg className="rd-hud" viewBox="0 0 320 320" role="img" aria-label={phase === 'scanning' ? `${bpm} beats per minute, ${left} seconds left` : 'Readiness scanner'}>
+    <svg className="rd-hud" data-matrix-native viewBox="0 0 320 320" role="img" aria-label={phase === 'scanning' ? `${bpm} beats per minute, ${left} seconds left` : 'Readiness scanner'}>
       <defs>
         <radialGradient id="rd-core"><stop offset="0" stopColor="#ff4d6d" stopOpacity="0.5" /><stop offset="1" stopColor="#ff4d6d" stopOpacity="0" /></radialGradient>
         <linearGradient id="rd-arc" x1="0" x2="1"><stop offset="0" stopColor="#7df9ff" /><stop offset="1" stopColor="#ff4d6d" /></linearGradient>
@@ -67,21 +67,21 @@ function Gauge({ v }: { v: Verdict }) {
   const angle = v.score == null ? -90 : -90 + (v.score / 100) * 180
   useLayoutEffect(() => {
     if (!needle.current) return
-    if (reduced()) gsap.set(needle.current, { rotation: angle, svgOrigin: '120 120' })
-    else gsap.fromTo(needle.current, { rotation: -90 }, { rotation: angle, svgOrigin: '120 120', duration: 1.8, ease: 'elastic.out(1, 0.35)' })
+    if (reduced()) gsap.set(needle.current, { rotation: angle, transformOrigin: '50% 100%' })
+    else gsap.fromTo(needle.current, { rotation: -90, transformOrigin: '50% 100%' }, { rotation: angle, duration: 1.8, ease: 'elastic.out(1, 0.35)' })
   }, [angle])
   const arc = (a0: number, a1: number) => {
     const p = (a: number) => `${120 + 96 * Math.cos(((a - 180) * Math.PI) / 180)} ${120 + 96 * Math.sin(((a - 180) * Math.PI) / 180)}`
     return `M${p(a0)} A96 96 0 0 1 ${p(a1)}`
   }
   return (
-    <svg className="rd-gauge" viewBox="0 0 240 140" role="img" aria-label={v.score == null ? v.label : `Readiness ${v.score} of 100, ${v.label}`}>
+    <svg className="rd-gauge" data-matrix-native viewBox="0 0 240 168" role="img" aria-label={v.score == null ? v.label : `Readiness ${v.score} of 100, ${v.label}`}>
       <path d={arc(0, 80)} className="rd-zone recover" />
       <path d={arc(82, 124)} className="rd-zone steady" />
       <path d={arc(126, 180)} className="rd-zone push" />
-      <g ref={needle}><line x1="120" y1="120" x2="120" y2="36" className="rd-needle" /></g>
+      <g ref={needle}><path d="M116 120 L120 42 L124 120 Z" className="rd-needle" /></g>
       <circle cx="120" cy="120" r="8" className="rd-hub" />
-      <text x="120" y="104" textAnchor="middle" className="rd-score">{v.score ?? '…'}</text>
+      <text x="120" y="160" textAnchor="middle" className="rd-score">{v.score ?? '…'}</text>
     </svg>
   )
 }
@@ -173,7 +173,7 @@ export function ReadinessPage() {
       onError: (m: string) => setErr(m),
     }
     try {
-      session.current = source === 'bluetooth' ? await connectBluetooth(h) : source === 'camera' ? await cameraPpg({ ...h, onBpm: undefined }, video.current!) : simulate(h, { hr: 57, rsa: 48, seed: Date.now() % 1000 })
+      session.current = source === 'bluetooth' ? await connectBluetooth(h) : source === 'camera' ? await cameraPpg({ ...h, onBpm: undefined }, video.current!) : simulate(h, { hr: 57, rsa: 72, seed: Date.now() % 1000 })
       setDevice(session.current.name)
       setPhase('scanning')
     } catch (e) {

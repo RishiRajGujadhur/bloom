@@ -39,6 +39,18 @@ A personal React 19 health-coaching dashboard with a Habitica-inspired purple pa
 | ![Bloom World (3D), Bloom Light theme](docs/screenshots/bloom-world-light.png) | ![Bloom World (3D), Matrix theme](docs/screenshots/bloom-world-matrix.png) |
 | ![Settings — avatar picker, Bloom Light theme](docs/screenshots/settings-avatars-light.png) | ![Settings — avatar picker, Matrix theme](docs/screenshots/settings-avatars-matrix.png) |
 
+### Advanced features
+
+Built on Web Bluetooth, WebGPU, WebAssembly SIMD, multi-core workers, the Origin Private File System and File System Access (see [docs/WOW_ADVANCED_PLAN.md](docs/WOW_ADVANCED_PLAN.md)).
+
+| Feature | Bloom Light | Matrix |
+|---|---|---|
+| **Sound Lab**: one-tap noise removal for voice memos (RNNoise and a SIMD spectral gate, all cores, WebGPU spectrogram) | ![Sound Lab](docs/screenshots/wow-13-soundlab.png) | ![Sound Lab, Matrix](docs/screenshots/wow-13-soundlab-matrix.png) |
+| **Terrain Replay**: fly a drone along a GPX route over its own elevation, in sync with the map | ![Terrain Replay](docs/screenshots/wow-14-terrain.png) | ![Terrain Replay, Matrix](docs/screenshots/wow-14-terrain-matrix.png) |
+| **Morning Readiness Scan**: 60-second HRV from a Bluetooth strap, the fingertip camera or a simulator | ![Readiness](docs/screenshots/wow-15-readiness.png) | ![Readiness, Matrix](docs/screenshots/wow-15-readiness-matrix.png) |
+| **Receipt Lens**: on-device OCR on every core turns receipts into Money transactions | ![Receipt Lens](docs/screenshots/wow-16-receipts.png) | ![Receipt Lens, Matrix](docs/screenshots/wow-16-receipts-matrix.png) |
+<!-- advanced-features-end -->
+
 To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome, and doubles as a smoke test: it records console errors, uncaught exceptions, crashed pages and blank pages for every shot in `docs/screenshots/report.json`.
 
 ## Highlights
