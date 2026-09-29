@@ -6,7 +6,21 @@ import { differenceInCalendarDays, format } from 'date-fns'
 import { readStore, writeStore } from '../../components/studio/Studio'
 import { burst } from '../../components/ui/celebrate'
 import { daysSince, health, nextBirthday, rhythms, suggestions, type Person } from './peopleModel'
+import { PeopleGlobe } from './PeopleGlobe'
+import { callWindow, localTime } from './globeModel'
 import './people.css'
+
+/** City search via OpenStreetMap's Nominatim; the time zone comes offline from tz-lookup. */
+async function findCity(q: string) {
+  const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=en&q=${encodeURIComponent(q)}`)
+  const [hit] = (await r.json()) as { lat: string; lon: string; display_name: string }[]
+  if (!hit) return null
+  const { default: tzlookup } = await import('tz-lookup')
+  const lat = Number(hit.lat)
+  const lng = Number(hit.lon)
+  return { name: hit.display_name.split(',')[0], lat, lng, tz: tzlookup(lat, lng) as string }
+}
+const myTz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 /**
  * People Garden — the people who matter as plants in an SVG garden. Plants
@@ -57,6 +71,9 @@ export function PeoplePage() {
   const save = (f: (p: Person[]) => Person[]) => setPeople((x) => { const n = f(x); writeStore(KEY, n); return n })
   const [sel, setSel] = useState<string | null>(null)
   const [query, setQuery] = useState('')
+  const [view, setView] = useState<'garden' | 'globe'>('garden')
+  const [cityQ, setCityQ] = useState('')
+  const [cityMsg, setCityMsg] = useState('')
   const svg = useRef<SVGSVGElement>(null)
   const fuse = useMemo(() => new Fuse(people, { keys: ['name', 'notes'], threshold: 0.35 }), [people])
   const shown = query ? fuse.search(query).map((r) => r.item) : people
@@ -108,9 +125,17 @@ export function PeoplePage() {
             <p className="pg-eyebrow">People garden · {people.length} {people.length === 1 ? 'person' : 'people'}</p>
             <h2>Tend the people who matter</h2>
           </div>
-          <input className="studio-input pg-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find someone…" aria-label="Find someone" />
+          <div className="pg-headtools">
+            <div className="pg-view" role="radiogroup" aria-label="View">
+              <button type="button" role="radio" aria-checked={view === 'garden'} className={view === 'garden' ? 'on' : ''} onClick={() => setView('garden')}>🌱 Garden</button>
+              <button type="button" role="radio" aria-checked={view === 'globe'} className={view === 'globe' ? 'on' : ''} onClick={() => setView('globe')}>🌍 Globe</button>
+            </div>
+            <input className="studio-input pg-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find someone…" aria-label="Find someone" />
+          </div>
         </header>
-        {people.length ? (
+        {people.length && view === 'globe' ? (
+          <PeopleGlobe people={shown} selected={sel} onPick={setSel} />
+        ) : people.length ? (
           <svg ref={svg} className="pg-garden" viewBox={`0 0 ${W} ${H}`} role="group" aria-label="Your garden" data-matrix-native>
             <defs><linearGradient id="pg-soil" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#b98556" /><stop offset="1" stopColor="#7a5230" /></linearGradient></defs>
             {Array.from({ length: rows }, (_, r) => <rect key={r} x="0" y={r * 150 + 126} width={W} height="16" rx="8" fill="url(#pg-soil)" opacity="0.35" />)}
@@ -133,6 +158,26 @@ export function PeoplePage() {
                 {rhythms.map((r) => <option key={r.days} value={r.days}>{r.label}</option>)}
               </select>
             </label>
+            <form className="pg-city" onSubmit={(e) => {
+              e.preventDefault()
+              if (!cityQ.trim()) return
+              setCityMsg('Looking up…')
+              void findCity(cityQ).then((c) => {
+                if (!c) return setCityMsg('Couldn’t find that place.')
+                save((ps) => ps.map((p) => (p.id === person.id ? { ...p, city: c } : p)))
+                setCityMsg('')
+                setCityQ('')
+                setView('globe')
+              }).catch(() => setCityMsg('City search needs a connection.'))
+            }}>
+              <label>Lives in <input className="studio-input" value={cityQ} onChange={(e) => setCityQ(e.target.value)} placeholder={person.city ? person.city.name : 'City, e.g. Tokyo'} /></label>
+              <button type="submit" className="pg-ghost">Set</button>
+            </form>
+            {cityMsg && <small className="pg-citymsg">{cityMsg}</small>}
+            {person.city && (() => {
+              const w = callWindow(person.city.tz, myTz)
+              return <p className={`pg-local ${w.good ? 'good' : ''}`}>{w.awake ? '☀️' : '🌙'} {localTime(person.city.tz).label} in {person.city.name}{w.good ? ' · good time to call' : w.awake ? '' : ' · probably asleep'}</p>
+            })()}
             <label>Birthday <input type="date" className="studio-input" value={person.birthday ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, birthday: e.target.value || undefined } : p)))} /></label>
             <textarea className="studio-input" rows={3} placeholder="Things to remember: kids’ names, what they’re excited about…" value={person.notes ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, notes: e.target.value } : p)))} />
             <button type="button" className="pg-ghost" onClick={() => { save((ps) => ps.filter((p) => p.id !== person.id)); setSel(null) }}>Remove from garden</button>

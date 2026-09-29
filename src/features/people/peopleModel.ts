@@ -6,7 +6,7 @@ import { RRule } from 'rrule'
  * health falls as days pass beyond it. Birthdays recur yearly (rrule) so the
  * next one is always known.
  */
-export type Person = { id: string; name: string; emoji: string; every: number; last: string; birthday?: string; notes?: string }
+export type Person = { id: string; name: string; emoji: string; every: number; last: string; birthday?: string; notes?: string; city?: { name: string; lat: number; lng: number; tz: string } }
 export const rhythms = [
   { days: 7, label: 'Weekly' },
   { days: 14, label: 'Fortnightly' },

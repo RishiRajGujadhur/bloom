@@ -27,3 +27,31 @@
 .pg-bday small { color: var(--text-muted); }
 html[data-theme='matrix'] .pg-garden-wrap { background: linear-gradient(180deg, #06140b, #0b2a14); }
 .pg-plant { transform: none !important; }
+
+.pg-headtools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pg-view { display: inline-flex; border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; }
+.pg-view button { border: 0; background: transparent; padding: 7px 12px; font: 800 0.85rem 'Manrope', sans-serif; color: inherit; cursor: pointer; }
+.pg-view button.on { background: #58cc02; color: #fff; }
+.pg-city { display: flex; gap: 6px; align-items: end; }
+.pg-city label { flex: 1; }
+.pg-citymsg { color: var(--text-secondary); }
+.pg-local { margin: 0; padding: 6px 10px; border-radius: 10px; background: color-mix(in srgb, #5fb8ff 14%, var(--bg-surface)); font-weight: 700; }
+.pg-local.good { background: color-mix(in srgb, #58cc02 18%, var(--bg-surface)); }
+.pgl { position: relative; display: grid; place-items: center; min-height: 0; }
+.pgl-globe { width: 100%; max-width: 560px; height: 100%; max-height: 100%; cursor: grab; touch-action: none; }
+.pgl-grat { fill: none; stroke: #ffffff22; stroke-width: 0.6; }
+.pgl-land { fill: #9be08a; stroke: #2f6b3a; stroke-width: 0.5; }
+.pgl-dusk { fill: #06102a; opacity: 0.18; pointer-events: none; }
+.pgl-night { fill: #050b24; opacity: 0.42; pointer-events: none; }
+.pgl-pin { cursor: pointer; }
+.pgl-glow { fill: #7dffb0; }
+.pgl-bday { fill: none; stroke: #ff9ec4; stroke-width: 3; stroke-dasharray: 4 3; }
+.pgl-dot { stroke: #fff; stroke-width: 2.5; }
+.pgl-dot.awake { fill: #ffd166; }
+.pgl-dot.asleep { fill: #3b3f6b; }
+.pgl-pin.sel .pgl-dot { stroke: #58cc02; stroke-width: 4; }
+.pgl-emoji { font-size: 12px; }
+.pgl-label rect { fill: #0b1030d9; }
+.pgl-name { fill: #fff; font: 800 11px 'Manrope', sans-serif; }
+.pgl-time { fill: #b8c4ff; font: 700 10px 'Manrope', sans-serif; }
+.pgl-empty { position: absolute; bottom: 8px; margin: 0; color: var(--text-secondary); font-weight: 700; }
