@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Keyboard as KeyboardF_typingDojo } from 'lucide-react'
 import { Telescope as TelescopeF_nightSky } from 'lucide-react'
 import { Grid3x3 as Grid3x3F_lifeInWeeks } from 'lucide-react'
 import { Crown as CrownF_chessAcademy } from 'lucide-react'
@@ -149,6 +150,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  typingDojo: KeyboardF_typingDojo,
   nightSky: TelescopeF_nightSky,
   lifeInWeeks: Grid3x3F_lifeInWeeks,
   chessAcademy: CrownF_chessAcademy,
@@ -242,6 +244,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  typingDojo: boolean
   nightSky: boolean
   lifeInWeeks: boolean
   chessAcademy: boolean
@@ -346,6 +349,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    typingDojo: true,
     nightSky: true,
     lifeInWeeks: true,
     chessAcademy: true,
@@ -440,6 +444,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'typingDojo',
   'nightSky',
   'lifeInWeeks',
   'chessAcademy',

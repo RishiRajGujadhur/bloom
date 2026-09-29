@@ -250,6 +250,9 @@ const WeeksPage = lazy(() =>
 const SkyPage = lazy(() =>
   import('./features/sky/SkyPage').then((m) => ({ default: m.SkyPage })),
 )
+const TypingPage = lazy(() =>
+  import('./features/typing/TypingPage').then((m) => ({ default: m.TypingPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -785,6 +788,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'typing' && !settings.features.typingDojo) ||
             (active === 'sky' && !settings.features.nightSky) ||
             (active === 'weeks' && !settings.features.lifeInWeeks) ||
             (active === 'chess' && !settings.features.chessAcademy) ||
@@ -1034,6 +1038,10 @@ function App() {
             ) : active === 'sky' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <SkyPage />
+              </Suspense>
+            ) : active === 'typing' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <TypingPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

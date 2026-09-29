@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'typing': { title: "Typing dojo", description: "Eyes up, fingers home." },
   'sky': { title: "Night sky", description: "Look up — something beautiful is there." },
   'weeks': { title: "Life in weeks", description: "Every square is a week you can shape." },
   'chess': { title: "Chess", description: "Every grandmaster was once a beginner." },
@@ -272,6 +273,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'sky': [
     step(".sk-dome", "Sky dome", "The centre is straight up; the edge is the horizon."),
     step(".sk-scrub", "Time travel", "Slide or press play to move the sky."),
+  ],
+  'typing': [
+    step(".ty-stage", "Your line", "Just start typing the highlighted letter."),
+    step(".ty-kb", "Keyboard", "The glowing key is next; its colour is the finger to use."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

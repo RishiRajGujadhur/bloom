@@ -469,6 +469,10 @@ const common = {
         title: "Night sky",
         description: "See which planets, stars and constellations are above you now, with a moving sky dome and star-hopping tips.",
       },
+      typingDojo: {
+        title: "Typing dojo",
+        description: "Learn touch typing: an animated keyboard shows the next key and finger, with real-word drills and a WPM chart.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1590,6 +1594,10 @@ export const resources = {
           nightSky: {
             title: "Ciel nocturne",
             description: "Planètes, étoiles et constellations au-dessus de vous, avec un dôme céleste animé.",
+          },
+          typingDojo: {
+            title: "Dojo de dactylographie",
+            description: "Apprenez à taper à l’aveugle avec un clavier animé, des mots réels et un graphique de vitesse.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

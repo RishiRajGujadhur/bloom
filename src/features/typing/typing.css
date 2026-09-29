@@ -1,0 +1,52 @@
+.ty-page {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: 12px;
+  height: calc(100dvh - 230px);
+  min-height: 560px;
+  padding: 6px 4px;
+}
+.ty-head { display: flex; justify-content: space-between; gap: 16px; align-items: end; flex-wrap: wrap; }
+.ty-head h2 { margin: 0; font: 900 clamp(1.8rem, 3.6vw, 2.8rem)/1 'Manrope', sans-serif; letter-spacing: -0.03em; }
+.ty-eyebrow { margin: 0 0 4px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.72rem; color: var(--accent-color); }
+.ty-tip { margin: 6px 0 0; color: var(--text-secondary); }
+.ty-stats { display: flex; gap: 10px; }
+.ty-stats div { display: grid; min-width: 86px; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-surface); text-align: center; }
+.ty-stats strong { font: 900 1.7rem 'Manrope', sans-serif; }
+.ty-stats small { color: var(--text-muted); }
+.ty-stage {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 0;
+  border-radius: 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.ty-line { display: inline-flex; white-space: pre; padding: 0 40%; font: 600 clamp(1.8rem, 3.4vw, 2.6rem) 'Fira Code', monospace; }
+.ty-ch { color: var(--text-muted); transition: color 120ms; }
+.ty-ch.done { color: var(--text-primary); }
+.ty-ch.miss.done { color: #ff4b4b; }
+.ty-ch.cur { color: var(--text-primary); border-bottom: 4px solid var(--accent-color); animation: ty-blink 1s steps(2) infinite; }
+@keyframes ty-blink { 50% { border-bottom-color: transparent; } }
+.ty-hint { margin: 0; color: var(--text-secondary); }
+.ty-done { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ty-done strong { font: 900 1.4rem 'Manrope', sans-serif; }
+.ty-cta { border: 0; border-radius: 12px; padding: 8px 16px; background: var(--accent-color); color: var(--text-on-accent, #fff); font: inherit; font-weight: 800; cursor: pointer; }
+.ty-cta.ghost { background: transparent; color: inherit; border: 1px solid var(--border-color); }
+.ty-bottom { display: grid; grid-template-columns: minmax(0, 2fr) minmax(200px, 1fr); gap: 14px; min-height: 0; }
+@media (max-width: 900px) { .ty-bottom { grid-template-columns: 1fr; } .ty-page { height: auto; } }
+.ty-kb { width: 100%; height: 100%; max-height: 300px; }
+.ty-cap { fill: var(--bg-surface); stroke: color-mix(in srgb, var(--f) 55%, var(--border-color)); stroke-width: 2; transition: fill 120ms; }
+.ty-cap.next { fill: color-mix(in srgb, var(--f) 38%, var(--bg-surface)); stroke: var(--f); filter: drop-shadow(0 0 8px var(--f)); }
+.ty-cap.ok { fill: #58cc0255; }
+.ty-cap.bad { fill: #ff4b4b55; }
+.ty-key text { font: 700 17px 'Manrope', sans-serif; fill: var(--text-primary); text-transform: uppercase; pointer-events: none; }
+.ty-bump { fill: var(--text-muted); }
+.ty-side { display: grid; grid-template-rows: auto 1fr; gap: 10px; min-height: 0; }
+.ty-lessons { display: flex; flex-wrap: wrap; gap: 6px; }
+.ty-pill { width: 34px; height: 34px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 800; cursor: pointer; }
+.ty-pill.on { border-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 18%, var(--bg-surface)); }
+.ty-pill.done { color: #3f8a02; }
+.ty-chart { min-height: 140px; }

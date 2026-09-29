@@ -939,6 +939,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "twinkle", title: "Twinkle", description: "Stars shimmer." },
     { id: "labels", title: "Labels", description: "Names on hover." },
   ],
+  typingDojo: [
+    { id: "lessons", title: "Lessons", description: "Nine lessons from the home row to every letter." },
+    { id: "fingers", title: "Finger guide", description: "Each key coloured by its finger." },
+    { id: "glow", title: "Next key glow", description: "The next key pulses." },
+    { id: "realWords", title: "Real words", description: "Drills use real English words." },
+    { id: "wpm", title: "Speed", description: "Words per minute." },
+    { id: "accuracy", title: "Accuracy", description: "Mistakes are counted and shown." },
+    { id: "chart", title: "Progress chart", description: "WPM over your sessions." },
+    { id: "best", title: "Personal best", description: "Best speed per lesson." },
+    { id: "glide", title: "Gliding line", description: "The text slides as you type." },
+    { id: "celebrate", title: "Celebrations", description: "Confetti when you finish." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
