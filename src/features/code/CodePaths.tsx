@@ -1,0 +1,57 @@
+import { useLayoutEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ArrowUpRight, Check, ChevronLeft, ChevronRight, Compass, LockKeyhole } from 'lucide-react'
+import { prefersReducedMotion } from '../../utils/motion'
+import { codePaths, nextChapter, toggleChapter } from './learningPaths'
+import './codePaths.css'
+
+const STORAGE_KEY = 'bloom-code-paths-v1'
+type Progress = Record<string, boolean>
+
+function readProgress(): Progress {
+  try {
+    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}')
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : {}
+  } catch { return {} }
+}
+
+export function CodePaths() {
+  const [pathId, setPathId] = useState(codePaths[0].id)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [completed, setCompleted] = useState<Progress>(readProgress)
+  const detail = useRef<HTMLDivElement>(null)
+  const path = codePaths.find((item) => item.id === pathId) ?? codePaths[0]
+  const chapter = path.chapters[selectedIndex]
+  const next = nextChapter(path, completed)
+  const count = path.chapters.filter((item) => completed[`${path.id}:${item.id}`]).length
+  const done = !!completed[`${path.id}:${chapter.id}`]
+  const available = selectedIndex === 0 || !!completed[`${path.id}:${path.chapters[selectedIndex - 1].id}`]
+
+  useLayoutEffect(() => {
+    if (!detail.current || prefersReducedMotion()) return
+    const tween = gsap.fromTo(detail.current, { y: 10, opacity: .5 }, { y: 0, opacity: 1, duration: .32, ease: 'power2.out' })
+    return () => { tween.progress(1).kill() }
+  }, [pathId, selectedIndex])
+
+  const choosePath = (id: string) => { setPathId(id); setSelectedIndex(0) }
+  const mark = () => {
+    const updated = toggleChapter(path, completed, selectedIndex)
+    setCompleted(updated)
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(updated)) } catch { /* keep progress in this session */ }
+  }
+
+  return <div className="code-paths">
+    <p className="code-path-intro">Pick a direction. Practice each chapter, then build its small project. Checkmarks record practice you have done, not assessed mastery.</p>
+    <div className="code-path-picker" role="group" aria-label="Programming learning path">
+      {codePaths.map((item) => <button key={item.id} type="button" className="code-path-pick" aria-pressed={path.id === item.id} onClick={() => choosePath(item.id)} style={{ ['--path-color' as string]: item.color }}><Compass size={18} aria-hidden="true" />{item.name}</button>)}
+    </div>
+    <section className="code-path-board" style={{ ['--path-color' as string]: path.color }} aria-label={`${path.name} learning path`}>
+      <div className="code-path-top"><div><span className="code-path-kicker">YOUR ROUTE</span><h2>{path.name}</h2><p>{count} of {path.chapters.length} practiced{next ? ` · next: ${next.title}` : ' · route complete'}</p></div><a href={path.source} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${path.name} roadmap at roadmap.sh`}>Explore roadmap <ArrowUpRight size={16} aria-hidden="true" /></a></div>
+      <div className="code-path-map" role="group" aria-label={`${path.name} chapters`}>
+        <svg viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true"><path d="M30 6 H570" className="code-path-line-track" /><path d="M30 6 H570" className="code-path-line-fill" style={{ strokeDasharray: `${Math.min(1, count / (path.chapters.length - 1)) * 540} 540` }} /></svg>
+        {path.chapters.map((item, index) => <button key={item.id} type="button" className="code-path-stop" aria-label={`Chapter ${index + 1}: ${item.title}${completed[`${path.id}:${item.id}`] ? ', practiced' : ''}`} aria-current={selectedIndex === index ? 'step' : undefined} onClick={() => setSelectedIndex(index)}>{completed[`${path.id}:${item.id}`] ? <Check size={18} aria-hidden="true" /> : index + 1}</button>)}
+      </div>
+      <div ref={detail} className="code-path-detail"><div className="code-path-detail-copy"><span className="code-path-kicker">CHAPTER {selectedIndex + 1} OF {path.chapters.length}</span><h3>{chapter.title}</h3><p>{chapter.practice}</p><small>Build: {chapter.project}</small></div><div className="code-path-actions"><button type="button" className="code-path-nav" aria-label="Previous chapter" disabled={selectedIndex === 0} onClick={() => setSelectedIndex((value) => value - 1)}><ChevronLeft size={18} aria-hidden="true" /></button><button type="button" className="code-path-mark" onClick={mark} disabled={!available} aria-label={`${done ? 'Clear practice mark for' : 'Mark practiced'} ${chapter.title}`}>{done ? 'Practiced ✓' : available ? 'Mark practiced' : <><LockKeyhole size={15} aria-hidden="true" /> Finish previous chapter</>}</button><button type="button" className="code-path-nav" aria-label="Next chapter" disabled={selectedIndex === path.chapters.length - 1} onClick={() => setSelectedIndex((value) => value + 1)}><ChevronRight size={18} aria-hidden="true" /></button></div></div>
+    </section>
+  </div>
+}

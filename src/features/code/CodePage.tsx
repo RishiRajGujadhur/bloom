@@ -17,6 +17,7 @@ const Editor = lazy(() => import('./Editor').then((m) => ({ default: m.Editor })
 const on = (id: string) => subOn('codeLearning', id)
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 const CODE_KEY = 'bloom-code-v1'
+const CodePaths = lazy(() => import('./CodePaths').then((m) => ({ default: m.CodePaths })))
 type CodeStore = { done: Record<string, boolean>; drafts: Record<string, string>; xp: number; quiz: Record<string, boolean>; certificate: boolean }
 const empty: CodeStore = { done: {}, drafts: {}, xp: 0, quiz: {}, certificate: false }
 const md = (s: string) => DOMPurify.sanitize(marked.parse(s, { async: false }) as string)
@@ -346,6 +347,7 @@ export function CodePage() {
             </div>
           ),
         }] : []),
+        { id: 'paths', label: 'Learning paths', icon: <Code2 size={15} />, render: () => <Suspense fallback={<p role="status">Loading learning paths…</p>}><CodePaths /></Suspense> },
       ]}
     />
   )
