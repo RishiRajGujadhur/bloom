@@ -9,6 +9,7 @@ import gsap from 'gsap'
 import { usePageActions } from '../../components/ui/PageMenu'
 import { RhythmPractice } from './RhythmPractice'
 import { PitchPractice } from './PitchPractice'
+import { MelodyEcho } from './MelodyEcho'
 
 const modeHints: Record<Mode, string> = {
   focus: 'Beta rhythm (~16 Hz) for alert, steady work',
@@ -215,6 +216,7 @@ export function SoundsPage({ setData }: FeaturePageProps) {
       }
       tabs={[
         { id: 'player', label: 'Listen', icon: <Music2 size={15} />, render: player },
+        { id: 'melody', label: 'Melody echo', icon: <Music2 size={15} />, render: () => <MelodyEcho /> },
         { id: 'stats', label: 'Sessions', icon: <Timer size={15} />, render: stats },
         { id: 'rhythm', label: 'Rhythm lab', icon: <Music2 size={15} />, render: () => <RhythmPractice /> },
         { id: 'pitch', label: 'Pitch lab', icon: <Music2 size={15} />, render: () => <PitchPractice /> },
