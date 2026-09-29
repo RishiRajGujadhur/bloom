@@ -21,6 +21,7 @@ import './english.css'
 
 const EnglishPractice = lazy(() => import('./EnglishPractice').then((m) => ({ default: m.EnglishPractice })))
 const EnglishLab = lazy(() => import('./EnglishLab').then((m) => ({ default: m.EnglishLab })))
+const StudyDuel = lazy(() => import('./StudyDuel').then((m) => ({ default: m.StudyDuel })))
 const EnglishWrite = lazy(() => import('./EnglishWrite').then((m) => ({ default: m.EnglishWrite })))
 const StoryMode = lazy(() => import('./StoryMode').then((m) => ({ default: m.StoryMode })))
 const XpChart = lazy(() => import('./XpChart').then((m) => ({ default: m.XpChart })))
@@ -359,6 +360,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
         ...(on('review') ? [{ id: 'practice', label: 'Practice', icon: <Dumbbell size={15} />, render: () => lazyTab(<EnglishPractice store={store} save={save} today={today} onStart={(exs: Exercise[], title: string, kind: Session['kind']) => start({ title, exercises: exs, kind })} makeReview={makeReview} makeMistakes={makeMistakes} />) }] : []),
         ...(on('pronunciation') ? [{ id: 'speak', label: 'Speak', icon: <Mic size={15} />, render: () => lazyTab(<EnglishLab onXp={(n: number) => save((s) => earn(s, today, n))} />) }] : []),
         ...(on('writing') ? [{ id: 'write', label: 'Write', icon: <PenLine size={15} />, render: () => lazyTab(<EnglishWrite data={data} onFeedback={() => save((s) => ({ ...earn(s, today, 10), writings: s.writings + 1 }))} />) }] : []),
+        ...(on('duel') ? [{ id: 'duel', label: 'Duel', icon: <Swords size={15} />, render: () => lazyTab(<StudyDuel onXp={(n: number) => save((st) => earn(st, today, n))} />) }] : []),
         { id: 'shop', label: 'League', icon: <Trophy size={15} />, render: leagueTab },
         ...(on('stories') ? [{ id: 'stories', label: 'Stories', icon: <BookOpen size={15} />, render: () => lazyTab(<EnglishPractice mode="stories" store={store} save={save} today={today} onStart={() => {}} makeReview={makeReview} makeMistakes={makeMistakes} />) }] : []),
       ]}

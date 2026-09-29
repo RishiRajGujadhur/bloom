@@ -51,6 +51,7 @@ Built on Web Bluetooth, WebGPU, WebAssembly SIMD, multi-core workers, the Origin
 | **Receipt Lens**: on-device OCR on every core turns receipts into Money transactions | ![Receipt Lens](docs/screenshots/wow-16-receipts.png) | ![Receipt Lens, Matrix](docs/screenshots/wow-16-receipts-matrix.png) |
 | **Bills Inbox**: photograph a letter; OpenCV flattens it, OCR reads it, deadlines get countdowns, and you can ask your paperwork questions | ![Bills Inbox](docs/screenshots/wow-17-bills.png) | ![Bills Inbox, Matrix](docs/screenshots/wow-17-bills-matrix.png) |
 | **Morning Briefing Radio**: a spoken summary of your day (calendar, tasks, readiness, bills, weather) in an on-device neural voice on WebGPU, with a live spectrum dial | ![Morning Briefing Radio](docs/screenshots/wow-18-briefing-hd.png) | ![Morning Briefing Radio, Matrix](docs/screenshots/wow-18-briefing-matrix.png) |
+| **Study Duel**: race a friend through the same English round peer to peer (Yjs CRDT over encrypted WebRTC), with racing score orbs and a shared whiteboard | ![Study Duel](docs/screenshots/wow-19-duel.png) | ![Study Duel, Matrix](docs/screenshots/wow-19-duel-matrix.png) |
 <!-- advanced-features-end -->
 
 To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome, and doubles as a smoke test: it records console errors, uncaught exceptions, crashed pages and blank pages for every shot in `docs/screenshots/report.json`.
