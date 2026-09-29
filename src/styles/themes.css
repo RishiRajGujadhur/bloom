@@ -459,3 +459,8 @@ html[data-theme='matrix'] .sleep-hours {
   color: #021006;
   text-shadow: none;
 }
+/* Matrix: selected mode pills get a solid green fill so the global dark-ink rule stays readable. */
+html[data-theme='matrix'] :is(.sg-mode, .pn-mode)[aria-selected='true'] {
+  background: #39ff6a;
+  border-color: #39ff6a;
+}

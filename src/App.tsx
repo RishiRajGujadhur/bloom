@@ -259,6 +259,9 @@ const PianoPage = lazy(() =>
 const TunerPage = lazy(() =>
   import('./features/tuner/TunerPage').then((m) => ({ default: m.TunerPage })),
 )
+const SignPage = lazy(() =>
+  import('./features/sign/SignPage').then((m) => ({ default: m.SignPage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -794,6 +797,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'sign' && !settings.features.signAlphabet) ||
             (active === 'tuner' && !settings.features.tuner) ||
             (active === 'piano' && !settings.features.pianoTrainer) ||
             (active === 'typing' && !settings.features.typingDojo) ||
@@ -1058,6 +1062,10 @@ function App() {
             ) : active === 'tuner' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <TunerPage />
+              </Suspense>
+            ) : active === 'sign' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <SignPage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

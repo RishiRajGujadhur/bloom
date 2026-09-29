@@ -481,6 +481,10 @@ const common = {
         title: "Tuner",
         description: "Tune a guitar, ukulele, bass or your voice through the microphone, with a springy gauge and reference tones.",
       },
+      signAlphabet: {
+        title: "Sign alphabet",
+        description: "Learn ASL fingerspelling with an animated hand, a quiz, and on-device hand tracking to practise words.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1614,6 +1618,10 @@ export const resources = {
           tuner: {
             title: "Accordeur",
             description: "Accordez guitare, ukulélé, basse ou voix au micro, avec une jauge animée et des notes de référence.",
+          },
+          signAlphabet: {
+            title: "Alphabet signé",
+            description: "Apprenez l’épellation digitale ASL avec une main animée, un quiz et un suivi de la main.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

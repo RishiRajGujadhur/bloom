@@ -10,6 +10,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Hand as HandF_signAlphabet } from 'lucide-react'
 import { AudioLines as AudioLinesF_tuner } from 'lucide-react'
 import { Piano as PianoF_pianoTrainer } from 'lucide-react'
 import { Keyboard as KeyboardF_typingDojo } from 'lucide-react'
@@ -152,6 +153,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  signAlphabet: HandF_signAlphabet,
   tuner: AudioLinesF_tuner,
   pianoTrainer: PianoF_pianoTrainer,
   typingDojo: KeyboardF_typingDojo,
@@ -248,6 +250,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  signAlphabet: boolean
   tuner: boolean
   pianoTrainer: boolean
   typingDojo: boolean
@@ -355,6 +358,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    signAlphabet: true,
     tuner: true,
     pianoTrainer: true,
     typingDojo: true,
@@ -452,6 +456,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'signAlphabet',
   'tuner',
   'pianoTrainer',
   'typingDojo',

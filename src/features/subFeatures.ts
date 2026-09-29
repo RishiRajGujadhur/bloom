@@ -975,6 +975,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "idle", title: "Idle sweep", description: "The needle breathes before you start." },
     { id: "private", title: "Private", description: "Audio never leaves the device." },
   ],
+  signAlphabet: [
+    { id: "learn", title: "Learn letters", description: "An animated hand for each letter." },
+    { id: "quiz", title: "Quiz", description: "Name the hand shape." },
+    { id: "camera", title: "Camera practice", description: "Hand tracking on your device." },
+    { id: "hold", title: "Hold to sign", description: "A ring fills as you hold a letter." },
+    { id: "skeleton", title: "Hand skeleton", description: "See the tracked points." },
+    { id: "words", title: "Words", description: "Spell real words." },
+    { id: "scoring", title: "Scoring", description: "Letters right, by edit distance." },
+    { id: "undo", title: "Undo", description: "Remove the last letter." },
+    { id: "private", title: "Private", description: "Nothing is recorded or uploaded." },
+    { id: "bloomHints", title: "Bloom hints", description: "Ask Bloom for the answer in the quiz." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
