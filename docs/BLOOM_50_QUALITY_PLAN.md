@@ -87,6 +87,7 @@ Research basis: [Nielsen Norman Group usability heuristics](https://www.nngroup.
 - 2026-09-29: Removed nested vertical scrolling from Rhythm and Pitch labs so their controls follow the page scroll. Verified both labs at desktop/mobile sizes and Pitch after feedback expands; inspected screenshots and found no document-level horizontal overflow.
 - 2026-09-29: Added six step-aware cooking technique tips with replayable SVG motion cues to recipe cook-along. Verified knife-to-simmer step changes and inspected desktop/mobile screenshots; corrected narrow mobile text layout. TypeScript and focused matching test passed.
 - 2026-09-29: Began the 150-feature programming plan in `docs/CODE_150_FEATURE_PLAN.md`. Added a four-route learning path map with ordered chapters, local practice progress, compact SVG route, and GSAP chapter transition. Verified route switching, prerequisite gating, and desktop/mobile layout.
+- 2026-09-29: Added a programming skill check with four original questions per route, immediate explanations, an SVG progress guide, and a first-gap starting recommendation. Verified a mixed-answer journey and phone layout; the learning path view now follows the page scroll instead of clipping answers in a short inner panel.
 
 ## New feature areas
 
