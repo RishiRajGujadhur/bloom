@@ -271,6 +271,9 @@ const CprPage = lazy(() =>
 const ReaderPage = lazy(() =>
   import('./features/reader/ReaderPage').then((m) => ({ default: m.ReaderPage })),
 )
+const DecidePage = lazy(() =>
+  import('./features/decide/DecidePage').then((m) => ({ default: m.DecidePage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -806,6 +809,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'decide' && !settings.features.decisionLab) ||
             (active === 'reader' && !settings.features.speedReader) ||
             (active === 'cpr' && !settings.features.cprCoach) ||
             (active === 'globe' && !settings.features.globeQuiz) ||
@@ -1090,6 +1094,10 @@ function App() {
             ) : active === 'reader' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <ReaderPage />
+              </Suspense>
+            ) : active === 'decide' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <DecidePage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

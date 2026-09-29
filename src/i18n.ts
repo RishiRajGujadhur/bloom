@@ -497,6 +497,10 @@ const common = {
         title: "Speed reader",
         description: "Read faster with one-word-at-a-time RSVP, a focal letter, a comprehension check and a speed chart.",
       },
+      decisionLab: {
+        title: "Decision lab",
+        description: "Weigh choices in a decision matrix, see them race as bars, then gut-check with a 3D coin and the 10/10/10 test.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1646,6 +1650,10 @@ export const resources = {
           speedReader: {
             title: "Lecture rapide",
             description: "Lisez plus vite, un mot à la fois, avec lettre focale, vérification de compréhension et graphique.",
+          },
+          decisionLab: {
+            title: "Labo de décision",
+            description: "Pesez vos choix dans une matrice, puis vérifiez votre intuition avec une pièce 3D.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

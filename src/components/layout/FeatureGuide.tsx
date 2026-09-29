@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'decide': { title: "Decision lab", description: "Clear heads make kinder choices." },
   'reader': { title: "Speed reader", description: "Eyes still, mind moving." },
   'cpr': { title: "CPR & first aid", description: "Hands that can save a life." },
   'globe': { title: "Globe quiz", description: "The world, one country at a time." },
@@ -307,6 +308,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'reader': [
     step(".rd-window", "Reading window", "Keep your eyes on the red letter."),
     step(".rd-speed", "Speed", "Drag to read faster or slower."),
+  ],
+  'decide': [
+    step(".dc-matrix", "Matrix", "Tap squares to score each option."),
+    step(".dc-gut", "Gut check", "Flip the coin and notice how you feel."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

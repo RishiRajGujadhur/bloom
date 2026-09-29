@@ -1023,6 +1023,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "chart", title: "Progress chart", description: "Your speed over time." },
     { id: "space", title: "Space to pause", description: "Keyboard control." },
   ],
+  decisionLab: [
+    { id: "matrix", title: "Decision matrix", description: "Score options against what matters." },
+    { id: "weights", title: "Weights", description: "How much each thing matters." },
+    { id: "bars", title: "Racing bars", description: "Results animate as you score." },
+    { id: "coin", title: "3D coin", description: "A gut-check flip." },
+    { id: "feelings", title: "Feelings check", description: "Notice relief or disappointment." },
+    { id: "regret", title: "10/10/10", description: "The long-view test." },
+    { id: "typed", title: "Typed scores", description: "Type a score, even 3+1." },
+    { id: "options", title: "Up to four options", description: "Compare more than two." },
+    { id: "strongest", title: "Strongest reason", description: "Where the leader wins." },
+    { id: "private", title: "Private", description: "Saved on this device." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },
