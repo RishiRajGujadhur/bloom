@@ -30,7 +30,7 @@ export const templates = [
 ]
 
 export type WSet = { liftId: string; weight: number; reps: number; rpe?: number; at: number }
-export type Workout = { id: string; name: string; templateId: string; startedAt: number; finishedAt?: number; sets: WSet[] }
+export type Workout = { id: string; name: string; templateId: string; startedAt: number; finishedAt?: number; sets: WSet[]; note?: string }
 export type WorkoutStore = { workouts: Workout[]; rest: number; bodyweight: number }
 export const WORKOUT_KEY = 'bloom-workouts-v1'
 

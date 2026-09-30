@@ -250,6 +250,9 @@ export function WorkoutPage() {
                   {s.weight} kg × {s.reps}
                 </strong>
                 {s.rpe && <small>@{s.rpe}</small>}
+                <button type="button" className="wo-del-set" aria-label="Remove this set" onClick={() => setStore((st) => ({ ...st, workouts: st.workouts.map((w) => (w.id === active.id ? { ...w, sets: w.sets.filter((_, j) => j !== i) } : w)) }))}>
+                  ✕
+                </button>
               </li>
             ))}
           </ul>
@@ -262,6 +265,7 @@ export function WorkoutPage() {
             <Stat value={active.sets.length} label="sets" />
             <Stat value={`${volume(active.sets, store.bodyweight)} kg`} label="volume" />
           </div>
+          <textarea className="studio-input wo-note" rows={2} maxLength={400} placeholder="Notes: how it felt, what to change next time…" aria-label="Workout notes" value={active.note ?? ''} onChange={(e) => setStore((st) => ({ ...st, workouts: st.workouts.map((w) => (w.id === active.id ? { ...w, note: e.target.value } : w)) }))} />
           <button type="button" className="studio-go" data-variant="quiet" onClick={finish}>
             Finish workout
           </button>
