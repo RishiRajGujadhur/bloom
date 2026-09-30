@@ -286,4 +286,7 @@ export const GAMES: GameDef[] = [
   g(90, 'echo', 'Echo Talk', 'Reply like you’re really listening and watch them glow.', 'SVG · GSAP', 45,
     '<circle cx="22" cy="30" r="16" fill="currentColor" opacity=".3"/><circle cx="22" cy="30" r="8" fill="currentColor"/><path d="M36 14h22v14H44l-6 6v-6h-2z" fill="currentColor" opacity=".8"/><path d="M36 38c6 2 6 12 0 14M42 34c10 4 10 20 0 24" stroke="currentColor" stroke-width="2.5" fill="none"/>',
     () => import('./games/EchoTalk')),
+  g(91, 'boundary', 'Boundary Garden', 'Open the gates to helpers, close them to takers.', 'SVG', 120,
+    '<path d="M4 34h56" stroke="currentColor" stroke-width="3"/><path d="M8 20v28M16 20v28M44 20v28M52 20v28" stroke="currentColor" stroke-width="4"/><path d="M24 22v26M24 22l12 4v22" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="32" cy="12" r="4" fill="currentColor"/><circle cx="20" cy="56" r="3" fill="currentColor"/><circle cx="40" cy="56" r="3" fill="currentColor"/>',
+    () => import('./games/BoundaryGarden')),
 ]

@@ -217,3 +217,4 @@ Every game has:
 - Game 88: Receipt Rain — p5.js receipts flutter down. Steer the dispute folder under the ones with mistakes (charged twice, cancelled gym, shelf-price mismatch) and let the honest receipts fall.
 - Game 89: Mood Weather — clouds carrying everyday moments drift across the sky. Drag each to the feeling that names it (happy, sad, frustrated, worried, proud, lonely); unnamed clouds gather into a storm that darkens the sky.
 - Game 90: Echo Talk — friends share their news in speech bubbles. Pick replies that reflect and ask with curiosity rather than one-upping, quick-fixing or changing the subject; their GSAP glow warms and the "how heard they feel" meter fills.
+- Game 91: Boundary Garden — four SVG fence gates you open and close as visitors approach. Bees, robins and friends help the garden bloom; slugs, a hungry goat and the tool-borrowing neighbour drain it; shutting everything out slowly wilts it.
