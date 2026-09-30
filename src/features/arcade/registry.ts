@@ -190,4 +190,7 @@ export const GAMES: GameDef[] = [
   g(58, 'garage', 'Car Care Garage', 'Walk round the car: tyres, oil, lights, wipers.', 'Babylon.js 3D', 355,
     '<path d="M6 40l6-14h32l10 14z" fill="currentColor" opacity=".8"/><rect x="4" y="38" width="56" height="10" rx="4" fill="currentColor"/><circle cx="18" cy="50" r="6" fill="#fff" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="50" r="6" fill="#fff" stroke="currentColor" stroke-width="3"/><path d="M50 10l6 6-12 12-6-6z" fill="currentColor" opacity=".6"/>',
     () => import('./games/CarCare')),
+  g(59, 'jetlag', 'Jet Lag Globe', 'Nap when it’s night where you’re going. Land fresh.', 'Three.js shader', 235,
+    '<circle cx="30" cy="34" r="22" fill="none" stroke="currentColor" stroke-width="3"/><path d="M30 12a22 22 0 0 1 0 44z" fill="currentColor" opacity=".45"/><path d="M8 34h44M30 12c-8 8-8 36 0 44" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M44 8l14 4-4 4-6-2z" fill="currentColor"/>',
+    () => import('./games/JetLagGlobe')),
 ]

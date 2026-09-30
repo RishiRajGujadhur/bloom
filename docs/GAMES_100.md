@@ -185,3 +185,4 @@ Every game has:
 - Game 56: Conflict Knots — two p5.js verlet ropes tangled on a table, with live segment-intersection counting. Drag any part to tease them apart; drag too fast and a tension meter locks the tangle for a breath. Five tangles.
 - Game 57: Apology Origami — real polygon folding in SVG. Half-plane clipping splits each paper layer along the crease, and flaps rotate over it with a live preview while you drag the glowing corner to its ring. Envelope, fortune and cup.
 - Game 58: Car Care Garage — a Babylon.js car rolls into the bay. Orbit round it and tap each tyre, the oil, headlights and wipers to inspect (green okay, red glow needs work), then tap again to fix; flat tyres visibly squash. Five cars.
+- Game 59: Jet Lag Globe — a Three.js globe with a day/night shader and twinkling city lights. Plan an in-flight nap on a dial coloured by the destination's night, then fly a great-circle arc as the terminator sweeps across; land fresh across five trips.
