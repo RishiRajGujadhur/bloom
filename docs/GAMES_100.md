@@ -191,3 +191,4 @@ Every game has:
 - Game 62: Sunscreen Snake — a p5.js beach snake collecting shells from sunrise to sunset. A sun arc drives UV, sunscreen wears off, umbrellas give shade, bottles top you up, and the snake reddens as it burns.
 - Game 63: Spice Mixer — a GSAP-morphing six-axis flavour radar (sweet, salty, sour, bitter, heat, umami). Shake pinches from jars with falling-particle bursts to match each dish's dashed target shape; there's no taking a pinch back.
 - Game 64: Big Rocks Jar — matter-js big rocks (friends, sleep, exercise, learning, art), pebbles and hundreds of sand grains poured into a jar with a lid line. Pour the big things first or they won't fit.
+- Game 65: Toothbrush Tempo — an SVG dental arch of 28 teeth with plaque overlays on outer and inner faces. Eight zones glow in turn to the beat; press and scrub back-and-forth strokes (direction changes counted) with foam bubbles, and a report names the zone you missed most.

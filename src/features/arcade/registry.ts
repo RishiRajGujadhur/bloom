@@ -208,4 +208,7 @@ export const GAMES: GameDef[] = [
   g(64, 'rocks', 'Big Rocks Jar', 'Rocks, pebbles, sand — the order you pour decides what fits.', 'matter-js · canvas', 30,
     '<path d="M14 10h36v44a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="46" r="8" fill="currentColor"/><circle cx="40" cy="44" r="7" fill="currentColor" opacity=".8"/><circle cx="33" cy="32" r="6" fill="currentColor" opacity=".6"/><path d="M18 54h28" stroke="currentColor" stroke-width="4" stroke-dasharray="1 2" opacity=".5"/>',
     () => import('./games/BigRocks')),
+  g(65, 'teeth', 'Toothbrush Tempo', 'Follow the song zone by zone and scrub the plaque away.', 'SVG · GSAP', 190,
+    '<path d="M16 14c-8 0-10 10-6 22 3 10 5 20 9 20s4-12 7-12 3 12 7 12 6-10 9-20c4-12 2-22-6-22-5 0-7 3-10 3s-5-3-10-3z" fill="currentColor" opacity=".85"/><path d="M44 8l12-4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+    () => import('./games/ToothbrushTempo')),
 ]
