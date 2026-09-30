@@ -76,7 +76,9 @@ export function PeoplePage() {
   const [cityMsg, setCityMsg] = useState('')
   const svg = useRef<SVGSVGElement>(null)
   const fuse = useMemo(() => new Fuse(people, { keys: ['name', 'notes'], threshold: 0.35 }), [people])
-  const shown = query ? fuse.search(query).map((r) => r.item) : people
+  const [group, setGroup] = useState('All')
+  const groups = ['Family', 'Friends', 'Work', 'Other']
+  const shown = (query ? fuse.search(query).map((r) => r.item) : people).filter((p) => group === 'All' || (p.group ?? 'Other') === group)
   const person = people.find((p) => p.id === sel) ?? null
   const cols = Math.max(4, Math.min(6, Math.ceil(Math.sqrt(shown.length * 2))))
   const rows = Math.max(1, Math.ceil(shown.length / cols))
@@ -133,6 +135,15 @@ export function PeoplePage() {
             <input className="studio-input pg-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find someone…" aria-label="Find someone" />
           </div>
         </header>
+        {people.some((p) => p.group) && (
+          <div className="pg-groups" role="radiogroup" aria-label="Group">
+            {['All', ...groups].map((g) => (
+              <button key={g} type="button" role="radio" aria-checked={group === g} className={group === g ? 'on' : ''} onClick={() => setGroup(g)}>
+                {g}
+              </button>
+            ))}
+          </div>
+        )}
         {people.length && view === 'globe' ? (
           <PeopleGlobe people={shown} selected={sel} onPick={setSel} />
         ) : people.length ? (
@@ -153,6 +164,11 @@ export function PeoplePage() {
             <h3>{person.emoji} {person.name}</h3>
             <p>{daysSince(person) === 0 ? 'You talked today 💚' : `Last talked ${daysSince(person)} days ago`} · {Math.round(health(person) * 100)}% blooming</p>
             <button type="button" className="pg-cta" onClick={() => water(person.id)}>💧 We talked today</button>
+            <label>Group
+              <select className="studio-input" value={person.group ?? 'Other'} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, group: e.target.value } : p)))}>
+                {groups.map((g) => <option key={g}>{g}</option>)}
+              </select>
+            </label>
             <label>Keep in touch
               <select className="studio-input" value={person.every} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, every: Number(e.target.value) } : p)))}>
                 {rhythms.map((r) => <option key={r.days} value={r.days}>{r.label}</option>)}
