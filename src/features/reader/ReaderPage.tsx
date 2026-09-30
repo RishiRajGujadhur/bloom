@@ -19,7 +19,7 @@ Chart.register(CategoryScale, LineElement, LinearScale, PointElement, Filler, To
  * you took it in, and a chart tracks your effective speed.
  */
 const KEY = 'bloom-reader-v1'
-type Store = { wpm: number; runs: { at: number; wpm: number; score: number }[] }
+type Store = { wpm: number; runs: { at: number; wpm: number; score: number }[]; bookmark?: { textId: string; i: number; custom?: string; total: number } | null }
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 export function ReaderPage() {
@@ -39,6 +39,26 @@ export function ReaderPage() {
   const tokens = useMemo(() => tokenize(body), [body])
   const qs = useMemo(() => questions(body, 3, textId), [body, textId])
   const est = readingTime(body)
+
+  // Bookmark: remember where you stopped (on pause, and every 25 words).
+  useEffect(() => {
+    if (phase !== 'reading' || i === 0 || i >= tokens.length) return
+    if (playing && i % 25 !== 0) return
+    save((s) => ({ ...s, bookmark: { textId, i, total: tokens.length, ...(textId === 'custom' ? { custom } : {}) } }))
+  }, [i, playing, phase]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (phase === 'quiz' && store.bookmark) save((s) => ({ ...s, bookmark: null }))
+  }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
+  const bm = store.bookmark
+  const resumeBookmark = () => {
+    if (!bm) return
+    setTextId(bm.textId)
+    if (bm.custom) setCustom(bm.custom)
+    setI(bm.i)
+    setAnswers({})
+    setPhase('reading')
+    setPlaying(false)
+  }
 
   useEffect(() => {
     if (!playing) return
@@ -95,6 +115,19 @@ export function ReaderPage() {
           <button type="button" className={`rd-chip ${textId === 'custom' ? 'on' : ''}`} onClick={() => { setTextId('custom'); setPhase('ready'); setI(0); setPlaying(false) }}>Paste your own</button>
         </div>
       </header>
+      {bm && phase === 'ready' && (bm.textId === 'custom' || texts.some((t) => t.id === bm.textId)) && (
+        <div className="rd-bookmark">
+          <span>
+            🔖 You stopped at word {bm.i} of {bm.total} in <strong>{bm.textId === 'custom' ? 'your text' : texts.find((t) => t.id === bm.textId)!.title}</strong>
+          </span>
+          <button type="button" className="rd-chip on" onClick={resumeBookmark}>
+            Resume
+          </button>
+          <button type="button" className="rd-chip" aria-label="Forget bookmark" onClick={() => save((s) => ({ ...s, bookmark: null }))}>
+            ✕
+          </button>
+        </div>
+      )}
       <section className="rd-stage">
         <svg className="rd-arc" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45" className="rd-arc-track" /><circle ref={arc} cx="50" cy="50" r="45" className="rd-arc-fill" strokeDasharray="283" strokeDashoffset="283" /></svg>
         {phase === 'quiz' || phase === 'done' ? (

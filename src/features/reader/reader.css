@@ -38,3 +38,5 @@ html[data-theme='matrix'] .rd-cta { background: #39ff6a; color: #021006; box-sha
 .rd-paste-wrap { display: grid; gap: 8px; justify-items: start; width: min(640px, 100%); }
 .rd-paste-wrap .rd-paste { width: 100%; }
 .rd-clip-err { color: var(--text-muted); }
+.rd-bookmark { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 12px; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-surface); font-size: 14px; }
+.rd-bookmark span { flex: 1; min-width: 200px; }
