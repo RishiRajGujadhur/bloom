@@ -349,6 +349,18 @@ export function TodoPage({ data, setData }: Props) {
                   onChange={(event) => setDue(event.target.value)}
                   required
                 />
+                <span className="due-chips">
+                  {([['Today', 0], ['Tomorrow', 1], ['Next week', 7]] as const).map(([label, n]) => {
+                    const d = new Date()
+                    d.setDate(d.getDate() + n)
+                    const v = dayKey(d)
+                    return (
+                      <button key={label} type="button" aria-pressed={due === v} onClick={() => setDue(v)}>
+                        {label}
+                      </button>
+                    )
+                  })}
+                </span>
               </label>
               <label>
                 Priority
