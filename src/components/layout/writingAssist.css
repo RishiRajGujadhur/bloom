@@ -1,0 +1,9 @@
+.wa-bar { position: fixed; z-index: 60; display: flex; gap: 6px; align-items: center; padding: 4px 8px; border-radius: 999px; background: var(--surface, #fff); color: var(--text, #222); box-shadow: 0 4px 16px rgb(0 0 0 / 0.12); font-size: 0.78rem; border: 1px solid color-mix(in srgb, currentColor 12%, transparent); }
+.wa-bar span { opacity: 0.75; white-space: nowrap; }
+.wa-bar button { border: 0; background: transparent; color: inherit; cursor: pointer; padding: 3px 8px; border-radius: 999px; font-size: 0.78rem; }
+.wa-bar button:hover, .wa-bar button.on { background: color-mix(in srgb, var(--accent, #e76f51) 18%, transparent); }
+body.wa-focus main > * { transition: opacity 0.3s; }
+body.wa-focus aside, body.wa-focus header, body.wa-focus nav { opacity: 0.15; transition: opacity 0.3s; }
+body.wa-focus main *:not(:has(.wa-focus-target)):not(.wa-focus-target) { opacity: 0.25; }
+body.wa-focus .wa-focus-target { opacity: 1 !important; position: relative; z-index: 55; box-shadow: 0 0 0 9999px rgb(0 0 0 / 0.06); }
+[data-theme='matrix'] .wa-bar { background: #001a08; color: #00ff66; }
