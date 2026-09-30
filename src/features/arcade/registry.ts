@@ -244,4 +244,7 @@ export const GAMES: GameDef[] = [
   g(76, 'lanterns', 'Wind-Down Lanterns', 'Light the lanterns, fold away the screens, stroll home sleepy.', 'Three.js 3D', 265,
     '<path d="M32 60c-2-18-18-22-18-40" stroke="currentColor" stroke-width="3" fill="none" opacity=".4"/><rect x="36" y="10" width="4" height="40" fill="currentColor"/><circle cx="38" cy="10" r="6" fill="currentColor"/><circle cx="38" cy="10" r="12" fill="currentColor" opacity=".25"/><rect x="10" y="30" width="10" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 28l14 18" stroke="currentColor" stroke-width="2"/>',
     () => import('./games/WindDownLanterns')),
+  g(77, 'fridgechef', 'Fridge Chef', 'Cook with what’s about to turn before it hits the bin.', 'SVG · GSAP', 190,
+    '<rect x="10" y="4" width="30" height="56" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 24h30" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="36" r="4" fill="currentColor"/><circle cx="30" cy="44" r="4" fill="currentColor" opacity=".6"/><ellipse cx="50" cy="48" rx="12" ry="5" fill="currentColor"/><path d="M50 36q2-6 0-10" stroke="currentColor" stroke-width="2" fill="none"/>',
+    () => import('./games/FridgeChef')),
 ]
