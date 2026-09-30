@@ -109,6 +109,17 @@ export function MoneyPage() {
     })
   const [tab, setTab] = useState('spend')
   const [txnQuery, setTxnQuery] = useState('')
+  // Hide amounts (e.g. on a shared screen); remembered.
+  const [blurAmounts, setBlurAmounts] = useState(() => localStorage.getItem('bloom-money-blur') === '1')
+  useEffect(() => {
+    document.documentElement.toggleAttribute('data-money-blur', blurAmounts)
+    try {
+      localStorage.setItem('bloom-money-blur', blurAmounts ? '1' : '0')
+    } catch {
+      /* this visit only */
+    }
+    return () => document.documentElement.removeAttribute('data-money-blur')
+  }, [blurAmounts])
   const [amount, setAmount] = useState('')
   const [place, setPlace] = useState('')
   const [category, setCategory] = useState('groceries')
@@ -448,14 +459,19 @@ export function MoneyPage() {
       onTab={setTab}
       scene={<StudioScene colors={['#6d5cf5', '#9ef04a', '#35d0a0']} line="pulse" />}
       aside={
-        on('currency') ? (
+        <>
+        <button type="button" className="mn-blur-btn" aria-pressed={blurAmounts} title="Hide amounts (hover to peek)" onClick={() => setBlurAmounts((v) => !v)}>
+          {blurAmounts ? '🙈' : '👁️'}
+        </button>
+        {on('currency') ? (
           <label className="mn-currency" data-hint="Currency">
             <Wallet size={15} aria-hidden="true" />
             <select aria-label="Currency" value={code} onChange={(e) => save((s) => ({ ...s, currency: e.target.value }))}>
               {currencies.map((c) => <option key={c}>{c}</option>)}
             </select>
           </label>
-        ) : undefined
+        ) : null}
+        </>
       }
       tabs={[
         { id: 'spend', label: 'Spend', icon: <Receipt size={15} />, render: spendTab },
