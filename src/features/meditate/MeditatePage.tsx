@@ -105,6 +105,15 @@ export function MeditatePage() {
     const i = setInterval(() => setT((x) => x + 1), 1000)
     return () => clearInterval(i)
   }, [running])
+  // Remember where an interrupted sit got to, so it can be resumed later.
+  const RESUME_KEY = 'bloom-meditate-resume'
+  const [resume, setResume] = useState(() => {
+    const r = readStore<{ id: string; t: number; total: number; at: number } | null>(RESUME_KEY, null)
+    return r && Date.now() - r.at < 12 * 3600e3 && r.t >= 20 && r.t < r.total - 10 && sessions.some((x) => x.id === r.id) ? r : null
+  })
+  useEffect(() => {
+    if (running && t > 0 && t % 5 === 0 && !unguided) writeStore(RESUME_KEY, { id: pick.id, t, total, at: Date.now() })
+  }, [t, running, unguided, pick.id, total])
   const spoken = useRef(-1)
   useEffect(() => {
     if (!running) return
@@ -117,6 +126,8 @@ export function MeditatePage() {
     if (t >= total) {
       setRunning(false)
       setFinished(true)
+      writeStore(RESUME_KEY, null)
+      setResume(null)
       bell(store.bellVolume)
       logActivity('meditation', { id: pick.id, minutes })
       setStore((s) => ({ ...s, logs: [...s.logs, { at: Date.now(), id: pick.id, minutes, before: on('moodCheck') ? before : undefined }].slice(-500) }))
@@ -189,6 +200,25 @@ export function MeditatePage() {
 
   const today = () => (
     <div className="iv-programs">
+      {resume && (
+        <div className="md-resume">
+          <span>
+            Pick up <strong>{sessionById(resume.id).title}</strong> where you left off ({Math.floor((resume.total - resume.t) / 60)}:{String((resume.total - resume.t) % 60).padStart(2, '0')} left)
+          </span>
+          <button
+            type="button"
+            className="studio-chip"
+            onClick={() => {
+              start(sessionById(resume.id))
+              setT(resume.t)
+              setResume(null)
+            }}
+          >
+            <Play size={14} /> Resume
+          </button>
+          <button type="button" className="studio-chip" aria-label="Dismiss" onClick={() => { writeStore(RESUME_KEY, null); setResume(null) }}>✕</button>
+        </div>
+      )}
       <MeditateQuick onStart={start} />
       {on('sos') && (
         <button type="button" className="md-sos" onClick={() => start(sessionById('sos'))}>
