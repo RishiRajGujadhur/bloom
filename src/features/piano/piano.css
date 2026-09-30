@@ -49,3 +49,4 @@
 .pn-kbd { font: 700 10px 'Fira Code', monospace; fill: #b8ad9d; pointer-events: none; text-transform: uppercase; }
 .pn-key.black .pn-kbd { fill: #8f8aa8; }
 .pn-midi { margin: 6px 0 0; font-size: 13px; color: var(--text-secondary); }
+.pn-page[data-labels='off'] .pn-name, .pn-page[data-labels='off'] .pn-kbd { display: none; }

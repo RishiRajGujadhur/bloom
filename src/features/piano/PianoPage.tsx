@@ -67,6 +67,8 @@ export function PianoPage() {
   const [store, setStore] = useState<Store>(() => readStore(KEY, { quest: 0, ear: 0, songs: [] }))
   const save = (f: (s: Store) => Store) => setStore((s) => { const n = f(s); writeStore(KEY, n); return n })
   const [mode, setMode] = useState<Mode>('play')
+  // Hide key labels to practise by ear and position.
+  const [labels, setLabels] = useState(() => localStorage.getItem('bloom-piano-labels') !== '0')
   const [lit, setLit] = useState<Record<string, number>>({})
   const [target, setTarget] = useState<string | null>(null)
   const [msg, setMsg] = useState('')
@@ -190,12 +192,15 @@ export function PianoPage() {
   const listen = () => ear && (ear.kind === 'chord' ? void play(ear.notes, '2n') : void playSeq(ear.notes, 0.6))
   const upcoming = song.notes.slice(step, step + 6)
   return (
-    <div className="pn-page">
+    <div className="pn-page" data-labels={labels ? 'on' : 'off'}>
       <header className="pn-head">
         <div>
           <p className="pn-eyebrow">Piano & ear trainer</p>
           <h2>{mode === 'play' ? 'Just play' : mode === 'quest' ? 'Note quest' : mode === 'ear' ? 'Ear training' : song.title}</h2>
         </div>
+        <button type="button" className="pn-mode" aria-pressed={labels} title="Show or hide note names and keyboard letters" onClick={() => setLabels((v) => { try { localStorage.setItem('bloom-piano-labels', v ? '0' : '1') } catch { /* optional */ } return !v })}>
+          {labels ? '🔤 Labels on' : '🔤 Labels off'}
+        </button>
         <div className="pn-modes" role="tablist" aria-label="Mode">
           {(['play', 'quest', 'ear', 'songs'] as Mode[]).map((m) => <button key={m} type="button" role="tab" aria-selected={mode === m} className={`pn-mode ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ play: '🎹 Play', quest: '🎯 Note quest', ear: '👂 Ear', songs: '🎵 Songs' }[m]}</button>)}
         </div>
