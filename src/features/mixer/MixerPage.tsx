@@ -107,7 +107,12 @@ export function MixerPage() {
   }
   const visible = layers.filter((l) => (l.noise ? on('noiseColours') : on('natureLayers')))
 
-  usePageActions([{ id: 'mx-toggle', label: playing ? 'Pause the mix' : 'Play the mix', icon: '🎚️', run: toggle }, { id: 'mx-mute', label: 'Mute every layer', icon: '🔇', run: () => visible.forEach((l) => setLayer(l.id, 0)) }])
+  // Surprise me: 2–4 random layers at gentle levels.
+  const randomise = () => {
+    const pick = [...visible].sort(() => Math.random() - 0.5).slice(0, 2 + Math.floor(Math.random() * 3))
+    setStore((s) => ({ ...s, mix: Object.fromEntries(visible.map((l) => [l.id, pick.includes(l) ? Math.round((0.25 + Math.random() * 0.5) * 20) / 20 : 0])) as Mix }))
+  }
+  usePageActions([{ id: 'mx-random', label: 'Surprise me with a mix', icon: '🎲', run: randomise }, { id: 'mx-toggle', label: playing ? 'Pause the mix' : 'Play the mix', icon: '🎚️', run: toggle }, { id: 'mx-mute', label: 'Mute every layer', icon: '🔇', run: () => visible.forEach((l) => setLayer(l.id, 0)) }])
   const mixTab = () => (
     <div className="studio-split mx-split">
       <div className="studio-card mx-layers">
@@ -152,6 +157,9 @@ export function MixerPage() {
             ))}
           </div>
         )}
+        <button type="button" className="studio-chip" onClick={randomise} title="Pick a random mix">
+          🎲 Surprise me
+        </button>
         <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={36} /> : <Play size={36} />}
         </button>
