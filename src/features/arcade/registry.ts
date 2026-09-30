@@ -193,4 +193,7 @@ export const GAMES: GameDef[] = [
   g(59, 'jetlag', 'Jet Lag Globe', 'Nap when it’s night where you’re going. Land fresh.', 'Three.js shader', 235,
     '<circle cx="30" cy="34" r="22" fill="none" stroke="currentColor" stroke-width="3"/><path d="M30 12a22 22 0 0 1 0 44z" fill="currentColor" opacity=".45"/><path d="M8 34h44M30 12c-8 8-8 36 0 44" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M44 8l14 4-4 4-6-2z" fill="currentColor"/>',
     () => import('./games/JetLagGlobe')),
+  g(60, 'compost', 'Compost Castle', 'Greens, browns, a splash and a stir. Cook up rich soil.', 'p5.js falling sand', 85,
+    '<path d="M12 22h40l-4 36H16z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="16" y="40" width="32" height="16" fill="currentColor"/><rect x="16" y="32" width="32" height="8" fill="currentColor" opacity=".6"/><path d="M24 16q2-8 0-12M34 16q2-8 0-12" stroke="currentColor" stroke-width="2" fill="none" opacity=".6"/>',
+    () => import('./games/CompostCastle')),
 ]
