@@ -91,4 +91,7 @@ export const GAMES: GameDef[] = [
   g(25, 'clocks', 'Clock Juggler', 'Bread, laundry, parking, tea: tap each timer just in time.', 'SVG · GSAP', 265,
     '<circle cx="20" cy="22" r="13" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 22V13M20 22l6 4" stroke="currentColor" stroke-width="2.5"/><circle cx="44" cy="42" r="15" fill="none" stroke="currentColor" stroke-width="3"/><path d="M44 42V31M44 42l-7 5" stroke="currentColor" stroke-width="2.5"/><path d="M44 27a15 15 0 0 1 12 8" stroke="currentColor" stroke-width="5" fill="none" opacity=".5"/>',
     () => import('./games/ClockJuggler')),
+  g(26, 'knife', 'Knife Rhythm', 'Slice on the beat for even, perfect pieces.', 'p5.js', 30,
+    '<rect x="6" y="36" width="44" height="14" rx="7" fill="currentColor" opacity=".7"/><path d="M40 6h6v26H34z" fill="currentColor"/><rect x="40" y="0" width="6" height="8" rx="2" fill="currentColor" opacity=".6"/><path d="M18 36v14M26 36v14" stroke="#fff" stroke-width="2" stroke-dasharray="2 2"/>',
+    () => import('./games/KnifeRhythm')),
 ]
