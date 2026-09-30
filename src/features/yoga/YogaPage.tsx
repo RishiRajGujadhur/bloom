@@ -18,7 +18,7 @@ import './yoga.css'
 
 const on = (id: string) => subOn('yogaFlow', id)
 const KEY = 'bloom-yoga-v1'
-type Store = { breath: number; saved: Flow[]; draft: Flow }
+type Store = { breath: number; saved: Flow[]; draft: Flow; favs?: string[] }
 const initial: Store = { breath: 5, saved: [], draft: { id: 'draft', name: 'My flow', emoji: '🪷', steps: presetFlows[0].steps.slice(0, 4) } }
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 const say = (t: string) => {
@@ -270,8 +270,17 @@ export function YogaPage() {
         <>
           <h3>Flows</h3>
           <Rail label="Preset flows">
-            {presetFlows.map((f) => (
-              <div key={f.id} role="listitem">
+            {[...presetFlows].sort((a, b) => Number((store.favs ?? []).includes(b.id)) - Number((store.favs ?? []).includes(a.id))).map((f) => (
+              <div key={f.id} role="listitem" className="yg-saved">
+                <button
+                  type="button"
+                  className="yg-remove yg-fav"
+                  aria-pressed={(store.favs ?? []).includes(f.id)}
+                  aria-label={(store.favs ?? []).includes(f.id) ? `Unfavourite ${f.name}` : `Favourite ${f.name}`}
+                  onClick={() => setStore((s) => ({ ...s, favs: (s.favs ?? []).includes(f.id) ? (s.favs ?? []).filter((x) => x !== f.id) : [...(s.favs ?? []), f.id] }))}
+                >
+                  {(store.favs ?? []).includes(f.id) ? '★' : '☆'}
+                </button>
                 <button type="button" className="iv-card" onClick={() => play(f)}>
                   <span aria-hidden="true">{f.emoji}</span>
                   <strong>{f.name}</strong>

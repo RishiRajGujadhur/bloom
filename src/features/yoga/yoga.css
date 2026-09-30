@@ -184,3 +184,5 @@
 .yg-timeline i {
   pointer-events: auto;
 }
+.yg-fav { z-index: 1; font-size: 15px; color: #d4a017; }
+.yg-fav[aria-pressed='false'] { opacity: 0.55; }
