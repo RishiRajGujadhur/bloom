@@ -19,13 +19,19 @@ Chart.register(CategoryScale, LineElement, LinearScale, PointElement, Filler, To
  * you took it in, and a chart tracks your effective speed.
  */
 const KEY = 'bloom-reader-v1'
-type Store = { wpm: number; runs: { at: number; wpm: number; score: number }[]; bookmark?: { textId: string; i: number; custom?: string; total: number } | null }
+type Store = { wpm: number; runs: { at: number; wpm: number; score: number }[]; bookmark?: { textId: string; i: number; custom?: string; total: number } | null; speeds?: Record<string, number> }
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 export function ReaderPage() {
   const [store, setStore] = useState<Store>(() => readStore(KEY, { wpm: 300, runs: [] }))
   const save = (f: (s: Store) => Store) => setStore((s) => { const n = f(s); writeStore(KEY, n); return n })
-  const [textId, setTextId] = useState(texts[0].id)
+  const [textId, setTextIdState] = useState(texts[0].id)
+  // Each text keeps the speed you last read it at.
+  const setTextId = (id: string) => {
+    setTextIdState(id)
+    const w = store.speeds?.[id]
+    if (w) save((s) => ({ ...s, wpm: w }))
+  }
   const [custom, setCustom] = useState('')
   const [clipErr, setClipErr] = useState('')
   const [i, setI] = useState(0)
@@ -179,7 +185,7 @@ export function ReaderPage() {
       <footer className="rd-foot">
         <label className="rd-speed">
           <span>{store.wpm} wpm</span>
-          <input type="range" min={150} max={900} step={25} value={store.wpm} onChange={(e) => save((s) => ({ ...s, wpm: Number(e.target.value) }))} aria-label="Words per minute" />
+          <input type="range" min={150} max={900} step={25} value={store.wpm} onChange={(e) => save((s) => ({ ...s, wpm: Number(e.target.value), speeds: { ...s.speeds, [textId]: Number(e.target.value) } }))} aria-label="Words per minute" />
         </label>
         <button type="button" className="rd-cta" disabled={textId === 'custom' && !custom.trim()} onClick={toggle}>{phase === 'reading' ? (playing ? '❚❚ Pause' : '▶ Resume') : phase === 'done' ? '↺ Read again' : '▶ Start reading'}</button>
         <span className="rd-progress">{Math.min(i, tokens.length)}/{tokens.length}</span>
