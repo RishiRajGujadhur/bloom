@@ -82,3 +82,15 @@ export function postureTick(clock: PostureClock, sample: PostureSample, rules: P
   }
   return { clock: next, events }
 }
+
+/** What a guard session adds up to, for the end-of-session card. */
+export type PostureSession = { startedAt: number; endedAt: number; samples: number; upright: number; scoreSum: number; warnings: number }
+export function summarizeSession(s: PostureSession) {
+  const minutes = Math.max(1, Math.round((s.endedAt - s.startedAt) / 60000))
+  return {
+    minutes,
+    uprightPct: s.samples ? Math.round((s.upright / s.samples) * 100) : 0,
+    avgScore: s.samples ? Math.round(s.scoreSum / s.samples) : 0,
+    warnings: s.warnings,
+  }
+}

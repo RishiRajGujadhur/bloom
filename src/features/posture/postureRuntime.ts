@@ -1,4 +1,4 @@
-import { defaultRules, idleClock, isSlouching, measure, postureTick, score, type Baseline, type Landmark, type PostureEvent, type PostureRules } from './postureModel'
+import { defaultRules, idleClock, isSlouching, measure, postureTick, score, summarizeSession, type Baseline, type Landmark, type PostureEvent, type PostureRules, type PostureSession } from './postureModel'
 
 /**
  * Camera + MediaPipe pose loop, as a small singleton store so it keeps running
@@ -23,6 +23,16 @@ export type PostureSnapshot = {
   slouchSince: number | null
   warnedAt: number | null
   stream: MediaStream | null
+  /** The last finished session (30+ scored seconds), for the summary card. */
+  lastSession: ReturnType<typeof summarizeSession> & { endedAt: number } | null
+}
+const LAST_KEY = 'bloom-posture-last-session'
+const readLast = () => {
+  try {
+    return JSON.parse(localStorage.getItem(LAST_KEY) ?? 'null') as PostureSnapshot['lastSession']
+  } catch {
+    return null
+  }
 }
 
 type Settings = { baseline: Baseline | null; sensitivity: number; rules: PostureRules }
@@ -56,6 +66,7 @@ let snapshot: PostureSnapshot = {
   slouchSince: null,
   warnedAt: null,
   stream: null,
+  lastSession: readLast(),
 }
 const listeners = new Set<() => void>()
 const eventListeners = new Set<(event: PostureEvent) => void>()
@@ -83,6 +94,7 @@ let video: HTMLVideoElement | null = null
 let timer: ReturnType<typeof setInterval> | null = null
 let clock = { ...idleClock }
 let latest: ReturnType<typeof measure> = null
+let session: PostureSession | null = null
 
 export async function startPosture() {
   if (snapshot.status === 'running' || snapshot.status === 'loading') return
@@ -107,6 +119,7 @@ export async function startPosture() {
     }
     set({ status: 'running', stream })
     clock = { ...idleClock }
+    session = { startedAt: Date.now(), endedAt: Date.now(), samples: 0, upright: 0, scoreSum: 0, warnings: 0 }
     // One sample per second is plenty for posture and light on the CPU.
     timer = setInterval(sample, 1000)
   } catch (error) {
@@ -139,6 +152,12 @@ function sample() {
   const tick = postureTick(clock, { at: now, score: value, slouching }, rules)
   clock = tick.clock
   tick.events.forEach((e) => eventListeners.forEach((l) => l(e)))
+  if (session) {
+    session.samples++
+    session.scoreSum += value
+    if (!slouching) session.upright++
+    session.warnings += tick.events.filter((e) => e.type === 'warn').length
+  }
   set({ landmarks: points, score: value, slouching, absent: false, slouchSince: clock.slouchSince, warnedAt: clock.warnedAt, baseline })
 }
 
@@ -158,6 +177,16 @@ export function acknowledgePosture() {
 }
 
 export function stopPosture() {
+  if (session && session.samples >= 30) {
+    const lastSession = { ...summarizeSession({ ...session, endedAt: Date.now() }), endedAt: Date.now() }
+    try {
+      localStorage.setItem(LAST_KEY, JSON.stringify(lastSession))
+    } catch {
+      /* shown for this visit */
+    }
+    set({ lastSession })
+  }
+  session = null
   if (timer) clearInterval(timer)
   timer = null
   snapshot.stream?.getTracks().forEach((t) => t.stop())

@@ -185,6 +185,15 @@ export function PosturePage({ data }: FeaturePageProps) {
             <Crosshair size={17} aria-hidden="true" /> {settings.baseline ? 'Recalibrate' : 'Calibrate sitting tall'}
           </button>
         </div>
+        {!running && posture.lastSession && (
+          <div className="posture-summary" aria-label="Last session">
+            <strong>Last session · {new Date(posture.lastSession.endedAt).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' })}</strong>
+            <span>{posture.lastSession.minutes} min watched</span>
+            <span>{posture.lastSession.uprightPct}% upright</span>
+            <span>avg score {posture.lastSession.avgScore}</span>
+            <span>{posture.lastSession.warnings} {posture.lastSession.warnings === 1 ? 'nudge' : 'nudges'}</span>
+          </div>
+        )}
         {running && !settings.baseline && <p className="posture-hint">Sit up comfortably, then press Calibrate.</p>}
         {running && posture.absent && <p className="posture-hint">I can’t see your shoulders — adjust the camera.</p>}
         {posture.slouching && slouchMinutes > 0 && <p className="posture-hint is-warn">Slouching for {slouchMinutes} min</p>}

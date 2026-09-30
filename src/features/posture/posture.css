@@ -167,3 +167,5 @@
     grid-template-columns: 1fr;
   }
 }
+.posture-summary { display: flex; flex-wrap: wrap; gap: 6px 12px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-surface); font-size: 13px; color: var(--text-secondary); }
+.posture-summary strong { flex-basis: 100%; color: var(--text-primary); }
