@@ -253,4 +253,7 @@ export const GAMES: GameDef[] = [
   g(79, 'notenest', 'Note Nest', 'Catch the bright ideas, skip the chatter, link what connects.', 'p5.js', 270,
     '<path d="M10 44a22 10 0 0 0 44 0z" fill="currentColor"/><circle cx="20" cy="14" r="3" fill="currentColor"/><circle cx="40" cy="22" r="3" fill="currentColor"/><path d="M20 14l-4-6M20 14l4-6M40 22l-4-6M40 22l4-6" stroke="currentColor" stroke-width="1.5"/><path d="M20 14q10 16 20 8" stroke="currentColor" stroke-dasharray="2 3" fill="none"/>',
     () => import('./games/NoteNest')),
+  g(80, 'maze', 'Decision Maze', 'Shiny now or better later? The maze remembers.', 'Three.js 3D', 120,
+    '<path d="M32 60V34M32 34L14 14M32 34l18-20" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="14" cy="12" r="6" fill="currentColor" opacity=".6"/><circle cx="50" cy="12" r="6" fill="currentColor"/>',
+    () => import('./games/DecisionMaze')),
 ]
