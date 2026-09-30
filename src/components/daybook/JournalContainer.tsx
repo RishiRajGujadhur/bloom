@@ -36,6 +36,13 @@ export function JournalContainer() {
   const [storageError, setStorageError] = useState('')
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [revealed, setRevealed] = useState<string | null>(null)
+  const [sort, setSort] = useState(() => {
+    try { return localStorage.getItem('bloom-daybook-sort') ?? 'edited' } catch { return 'edited' }
+  })
+  const changeSort = (v: string) => {
+    setSort(v)
+    try { localStorage.setItem('bloom-daybook-sort', v) } catch { /* optional */ }
+  }
   const [initial] = useState(() => {
     try {
       const value: unknown = JSON.parse(
@@ -215,9 +222,25 @@ export function JournalContainer() {
           <div className="journal-direction">
             <DaybookQuick modes={modes} onSelect={startPage} />
             {subOn('daybookModes', 'bookshelf') && <Bookshelf pages={recentPages} modes={modes} onEdit={openPage} language={language} />}
+            {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
+              <label className="daybook-sort">
+                Sort pages
+                <select value={sort} onChange={(e) => changeSort(e.target.value)}>
+                  <option value="edited">Last edited</option>
+                  <option value="created">Newest first</option>
+                  <option value="oldest">Oldest first</option>
+                  <option value="title">By page type</option>
+                </select>
+              </label>
+            )}
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
               <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
-                {recentPages.map((page) => {
+                {[...recentPages].sort((a, b) =>
+                  sort === 'created' ? b.createdAt.localeCompare(a.createdAt)
+                  : sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt)
+                  : sort === 'title' ? a.modeTitle.localeCompare(b.modeTitle)
+                  : 0,
+                ).map((page) => {
                   const text = journalText(page.content).trim()
                   const words = text ? text.split(/\s+/).length : 0
                   return (

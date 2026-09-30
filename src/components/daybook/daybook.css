@@ -407,3 +407,5 @@ html[data-mode='dark'] .thought-diff del {
 .daybook-page-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0.35; transition: opacity 150ms; }
 .daybook-page-wrap:hover .daybook-page-tools, .daybook-page-tools:focus-within { opacity: 1; }
 .daybook-page-tools button { border: 0; background: var(--bg-surface); border-radius: 8px; padding: 3px 6px; cursor: pointer; font-size: 13px; }
+.daybook-sort { display: flex; justify-content: flex-end; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: -18px; position: relative; z-index: 1; }
+.daybook-sort select { font-size: 12px; padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
