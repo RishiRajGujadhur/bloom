@@ -130,6 +130,28 @@ export function MixerPage() {
           </div>
         )}
         {on('orbit') && <MixOrbit playing={playing} layers={visible.map((l) => ({ id: l.id, emoji: l.emoji, label: l.label, volume: store.mix[l.id] ?? 0 }))} />}
+        {on('savedMixes') && store.saved.length > 0 && (
+          <div className="mx-favs" role="group" aria-label="Your mixes">
+            {store.saved.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                className="studio-chip"
+                aria-pressed={JSON.stringify(m.mix) === JSON.stringify(store.mix)}
+                title="Load and play"
+                onClick={() => {
+                  setStore((s) => ({ ...s, mix: m.mix }))
+                  if (!playing) {
+                    void mixer.play(on('sleepTimer') ? store.sleep : null)
+                    logActivity('soundscape')
+                  }
+                }}
+              >
+                ▶ {m.name}
+              </button>
+            ))}
+          </div>
+        )}
         <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={36} /> : <Play size={36} />}
         </button>

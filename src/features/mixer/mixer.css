@@ -75,3 +75,4 @@
 .mx-beats button.on { border-color: #3f6fb5; background: color-mix(in srgb, #3f6fb5 16%, var(--bg-surface)); }
 html[data-theme='matrix'] .mx-beats button[aria-checked='true'] { color: #d6ffe0; background: #0b3a1a; }
 html[data-theme='matrix'] .mx-beats button[aria-checked='true'] small { color: #9dffb8; }
+.mx-favs { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
