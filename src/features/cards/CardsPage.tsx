@@ -73,7 +73,12 @@ export function CardsPage() {
   const [newDeck, setNewDeck] = useState('')
   const [addDeck, setAddDeck] = useState(store.decks[0]?.id ?? '')
   const reviewedToday = store.log.find((l) => l.date === today)?.count ?? 0
-  const queue = dueCards(store.cards, today, on('dailyLimit') ? Math.max(0, store.dailyLimit - reviewedToday) : Infinity, deck || undefined)
+  // Shuffle: a stable random order for this visit, so a graded card doesn't jump back.
+  const [shuffle, setShuffle] = useState(() => localStorage.getItem('bloom-cards-shuffle') === '1')
+  const [seed] = useState(() => Math.random().toString(36).slice(2))
+  const mix = (id: string) => [...(id + seed)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7)
+  const due = dueCards(store.cards, today, on('dailyLimit') ? Math.max(0, store.dailyLimit - reviewedToday) : Infinity, deck || undefined)
+  const queue = shuffle ? [...due].sort((a, b) => mix(a.id) - mix(b.id)) : due
   const card = queue[0]
   const stage = useRef<HTMLDivElement>(null)
   // Bloom's chat can hint at the card being studied.
@@ -123,6 +128,9 @@ export function CardsPage() {
       {on('piles') && <CardPiles ref={piles} due={queue.length} learning={inDeck.filter((c) => c.reviews > 0 && c.interval < 21).length} known={inDeck.filter((c) => c.interval >= 21).length} />}
       {on('decks') && (
         <div className="studio-chip-row">
+          <button type="button" className="studio-chip" aria-pressed={shuffle} title="Study due cards in a random order" onClick={() => setShuffle((v) => { try { localStorage.setItem('bloom-cards-shuffle', v ? '0' : '1') } catch { /* optional */ } return !v })}>
+            🔀 Shuffle
+          </button>
           <button type="button" className="studio-chip" aria-pressed={!deck} onClick={() => setDeck('')}>
             All decks
           </button>
