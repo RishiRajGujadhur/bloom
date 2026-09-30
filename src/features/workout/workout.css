@@ -219,3 +219,4 @@
 .wo-warmup { margin: 0 0 8px; padding: 6px 10px; border-radius: 10px; background: color-mix(in oklab, #f2c14e 18%, var(--bg-surface)); font-size: 13px; color: var(--text-secondary); }
 .wo-del-set { margin-left: auto; border: 0; background: none; color: var(--text-muted); cursor: pointer; }
 .wo-note { width: 100%; resize: vertical; margin: 8px 0; }
+.wo-export { border: 0; background: none; color: var(--accent-color); text-decoration: underline; cursor: pointer; font-size: inherit; }

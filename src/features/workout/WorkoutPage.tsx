@@ -12,6 +12,7 @@ import { WORKOUT_KEY, e1rm, liftById, lifts, load, plates, progress, prsFor, tem
 import { WeekBars } from '../showcase/WeekBars'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './workout.css'
+import { download } from '../lab/exportSuite'
 import './formcoach.css'
 
 const FormCoach = lazy(() => import('./FormCoach').then((m) => ({ default: m.FormCoach })))
@@ -180,7 +181,21 @@ export function WorkoutPage() {
             Start a workout
           </button>
         )}
-        {on('history') && store.workouts.length > 0 && <p className="studio-empty">{store.workouts.length} workouts logged so far.</p>}
+        {on('history') && store.workouts.length > 0 && (
+          <p className="studio-empty">
+            {store.workouts.length} workouts logged so far.{' '}
+            <button
+              type="button"
+              className="wo-export"
+              onClick={() => {
+                const rows = store.workouts.flatMap((w) => w.sets.map((s) => [new Date(s.at).toISOString(), `"${w.name}"`, `"${liftById(s.liftId)?.name ?? s.liftId}"`, s.weight, s.reps, s.rpe ?? ''].join(',')))
+                download(new Blob([['time,workout,lift,weight_kg,reps,rpe', ...rows].join('\n') + '\n'], { type: 'text/csv' }), 'bloom-workouts.csv')
+              }}
+            >
+              ⬇ Export sets (CSV)
+            </button>
+          </p>
+        )}
         {on('weekBars') && store.workouts.length > 0 && (
           <WeekBars
             unit="kg lifted"
