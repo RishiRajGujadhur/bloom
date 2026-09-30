@@ -280,6 +280,16 @@ export function RunPage() {
   const week = toUnits(weekKm(store.runs), units)
   const goal = store.weeklyGoal
   const active = status === 'tracking' || status === 'paused' || status === 'demo'
+  // Tab title: live distance while tracking, weekly progress otherwise.
+  const runTitle = active ? `${toUnits(km, units).toFixed(2)} ${units} · ${fmtTime(seconds)}` : week > 0 ? `${week.toFixed(1)}/${goal} ${units} this week` : ''
+  useEffect(() => {
+    if (!runTitle) return
+    const before = document.title
+    document.title = `${runTitle} · Run`
+    return () => {
+      document.title = before
+    }
+  }, [runTitle])
 
   usePageActions(!active ? [{ id: 'run-go', label: `Start a ${kind}`, icon: kind === 'walk' ? '🚶' : '🏃', run: start }, { id: 'run-demo', label: 'Play a demo route', icon: '🗺️', run: demo }] : status !== 'demo' ? [{ id: 'run-pause', label: status === 'paused' ? 'Resume' : 'Pause', icon: '⏯️', run: pause }] : [])
   const track = () => (
