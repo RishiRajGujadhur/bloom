@@ -11,6 +11,7 @@ import { usePageActions } from '../../components/ui/PageMenu'
 import { onLaunchFiles, openFiles, saveFile } from '../../platform/fsa'
 import { demoHills, parseGpx, simplifyRoute, toGpx } from './terrainModel'
 import './run.css'
+import { download } from '../lab/exportSuite'
 import './terrain.css'
 
 const TerrainReplay = lazy(() => import('./TerrainReplay').then((m) => ({ default: m.TerrainReplay })))
@@ -465,6 +466,20 @@ export function RunPage() {
                 <small>
                   {new Date(r.at).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {fmtTime(r.seconds)} · {fmtPace(pace(r.km, r.seconds, units))}
                 </small>
+                {r.points.length > 1 && (
+                  <button
+                    type="button"
+                    className="studio-chip"
+                    title="Download as GPX (Strava, Komoot, Garmin…)"
+                    onClick={() => {
+                      const pts = r.points.map((p) => `<trkpt lat="${p.lat}" lon="${p.lng}">${p.ele != null ? `<ele>${p.ele}</ele>` : ''}<time>${new Date(p.t).toISOString()}</time></trkpt>`).join('')
+                      const gpx = `<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="Bloom" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>${r.kind} ${new Date(r.at).toISOString().slice(0, 10)}</name><trkseg>${pts}</trkseg></trk></gpx>`
+                      download(new Blob([gpx], { type: 'application/gpx+xml' }), `bloom-${r.kind}-${new Date(r.at).toISOString().slice(0, 10)}.gpx`)
+                    }}
+                  >
+                    GPX
+                  </button>
+                )}
                 <button type="button" className="studio-chip" aria-label="Delete this run" onClick={() => { if (window.confirm('Delete this run? This can’t be undone.')) setStore((s) => ({ ...s, runs: s.runs.filter((x) => x.id !== r.id) })) }}>
                   🗑
                 </button>
