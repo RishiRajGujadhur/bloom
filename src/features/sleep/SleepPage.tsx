@@ -59,6 +59,24 @@ export function SleepPage() {
         <Stat label="Sleep debt" value={stats.count ? `${stats.debt}h` : '—'} hint="Last 7 nights" />
       </div>
       </NightSky>
+      {(() => {
+        const last = [...entries].sort((a, b) => b.date.localeCompare(a.date))[0]
+        if (!last || entries.some((e) => e.date === dayKey())) return null
+        return (
+          <div className="sleep-onetap">
+            <span>
+              Slept like last time? {last.bedtime} → {last.wake} · {duration(last.bedtime, last.wake)}h
+            </span>
+            <button
+              type="button"
+              className="ov-primary"
+              onClick={() => setEntries((list) => [{ ...last, id: crypto.randomUUID(), date: dayKey(), factors: [] }, ...list])}
+            >
+              Log it
+            </button>
+          </div>
+        )
+      })()}
       <div className="filter-chips" role="tablist" aria-label="Sleep views">
         {(
           [
