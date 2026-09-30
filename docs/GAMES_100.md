@@ -138,3 +138,4 @@ Every game has:
 - Game 9: Breath Kite — SVG and GSAP kite on a 4-seconds-up, 6-seconds-down wind wave. Hold to rise, release to glide, and thread the rings for streaks.
 - Game 10: Traffic Light Crossing — PlayCanvas voxel street with four lanes of traffic that queues at a cycling crossing light. Hop across to run errands, with a bonus for crossing on the green man.
 - Game 11: Sleep Tide — an SVG bedroom where phones, the TV, a laptop, a lamp, a tablet and a late coffee keep waking up. Tap them off so the moon-tide of sleep fills before the alarm.
+- Game 12: Recycling Rush — a matter-js conveyor over Paper, Cans & plastic, Glass, Compost and General bins. Tap to drop each item at the right moment; the belt speeds up.

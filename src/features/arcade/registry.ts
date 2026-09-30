@@ -49,4 +49,7 @@ export const GAMES: GameDef[] = [
   g(11, 'sleep', 'Sleep Tide', 'Hush the glowing room and let the moon-tide of sleep rise.', 'SVG · GSAP', 240,
     '<rect x="8" y="8" width="30" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="18" r="5" fill="currentColor"/><path d="M8 30q8-4 15 0t15 0" stroke="currentColor" stroke-width="3" fill="none"/><rect x="10" y="44" width="46" height="10" rx="4" fill="currentColor" opacity=".7"/><text x="44" y="30" font-size="12" fill="currentColor">z</text>',
     () => import('./games/SleepTide')),
+  g(12, 'recycle', 'Recycling Rush', 'Drop each item off the conveyor into the right bin.', 'matter-js · SVG', 150,
+    '<rect x="4" y="12" width="56" height="8" rx="3" fill="currentColor" opacity=".5"/><circle cx="20" cy="8" r="5" fill="currentColor"/><circle cx="40" cy="8" r="5" fill="currentColor" opacity=".7"/><path d="M10 30h14l-2 26H12zM28 30h14l-2 26H30zM46 30h12l-2 26H48z" fill="currentColor" opacity=".85"/>',
+    () => import('./games/RecyclingRush')),
 ]
