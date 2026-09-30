@@ -76,4 +76,7 @@ export const GAMES: GameDef[] = [
   g(20, 'forge', 'Pomodoro Forge', 'Strike while the iron’s hot, then let it glow again.', 'SVG · GSAP', 28,
     '<path d="M10 40h36l6-6v8H40l-4 10h8v4H16v-4h8l-4-10H10z" fill="currentColor"/><rect x="30" y="8" width="8" height="24" rx="2" fill="currentColor" opacity=".6" transform="rotate(-35 34 20)"/><rect x="18" y="8" width="20" height="10" rx="2" fill="currentColor" transform="rotate(-35 34 20)"/><circle cx="46" cy="30" r="2" fill="currentColor"/><circle cx="52" cy="24" r="1.5" fill="currentColor"/>',
     () => import('./games/PomodoroForge')),
+  g(21, 'plate', 'Plate Painter', 'Paint the meal onto a spinning plate the way the chef likes it.', 'SVG · GSAP', 100,
+    '<circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="3"/><path d="M32 32V12a20 20 0 0 1 0 40z" fill="currentColor"/><path d="M32 32H12a20 20 0 0 1 20-20z" fill="currentColor" opacity=".6"/><path d="M32 32V52a20 20 0 0 1-20-20z" fill="currentColor" opacity=".35"/>',
+    () => import('./games/PlatePainter')),
 ]
