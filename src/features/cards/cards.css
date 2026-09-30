@@ -114,3 +114,4 @@
   border: 0;
   border-top: 1px dashed var(--border-color);
 }
+.yg-remove.fc-export { right: 38px; }

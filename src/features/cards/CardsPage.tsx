@@ -241,6 +241,25 @@ export function CardsPage() {
                   {list.length} cards · {dueCards(list, today).length} due
                 </small>
               </button>
+              {list.length > 0 && (
+                <button
+                  type="button"
+                  className="yg-remove fc-export"
+                  aria-label={`Export ${d.name} as CSV`}
+                  title="Export as CSV (front, back, tags)"
+                  onClick={() => {
+                    const q = (v: string) => `"${v.replace(/"/g, '""')}"`
+                    const csv = ['front,back,tags', ...list.map((c) => [q(c.front), q(c.back), q((c.tags ?? []).join(' '))].join(','))].join('\n') + '\n'
+                    const a = document.createElement('a')
+                    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
+                    a.download = `${d.name.replace(/[^\w-]+/g, '-')}.csv`
+                    a.click()
+                    setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+                  }}
+                >
+                  ⬇
+                </button>
+              )}
               {store.decks.length > 1 && (
                 <button type="button" className="yg-remove" aria-label={`Delete ${d.name}`} onClick={() => setStore((s) => ({ ...s, decks: s.decks.filter((x) => x.id !== d.id), cards: s.cards.filter((c) => c.deck !== d.id) }))}>
                   <Trash2 size={13} />
