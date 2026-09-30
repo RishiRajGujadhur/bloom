@@ -4,6 +4,9 @@ import { GAMES } from './registry'
 import { reducedMotion } from './shell'
 import './arcade.css'
 
+const RECENT_KEY = 'bloom-arcade-recent'
+const recentIds = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]') } catch { return [] } }
+
 /** The Arcade: a hub of short, click-driven games. `#arcade/<id>` opens one. */
 export function ArcadePage() {
   const fromHash = () => { const id = location.hash.split('/')[1]; return GAMES.some((g) => g.id === id) ? id : null }
@@ -17,7 +20,11 @@ export function ArcadePage() {
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
-  const go = (id: string | null) => { history.replaceState(null, '', id ? `#arcade/${id}` : '#arcade'); setOpen(id) }
+  const go = (id: string | null) => {
+    history.replaceState(null, '', id ? `#arcade/${id}` : '#arcade')
+    setOpen(id)
+    if (id) try { localStorage.setItem(RECENT_KEY, JSON.stringify([id, ...recentIds().filter((x) => x !== id)].slice(0, 6))) } catch { /* optional */ }
+  }
   useLayoutEffect(() => {
     if (open || !grid.current || reducedMotion()) return
     const t = gsap.fromTo(grid.current.children, { y: 24, opacity: 0, rotateX: -25 }, { y: 0, opacity: 1, rotateX: 0, stagger: 0.04, duration: 0.5, ease: 'power3.out' })
@@ -33,7 +40,15 @@ export function ArcadePage() {
   const best = (id: string) => { try { return Number(localStorage.getItem(`bloom-arcade-best-${id}`) ?? 0) } catch { return 0 } }
   return (
     <section className="arcade">
-      <header className="ar-head"><h2>Arcade</h2><p>{GAMES.length} games · one tap to play</p></header>
+      <header className="ar-head"><h2>Arcade</h2><p>{GAMES.length} games · one tap to play</p><button type="button" className="ar-random" onClick={() => go(GAMES[Math.floor(Math.random() * GAMES.length)].id)}>🎲 Random game</button></header>
+      {recentIds().length > 0 && (
+        <div className="ar-recent" aria-label="Recently played">
+          <span>Recently played</span>
+          {recentIds().map((id) => GAMES.find((g) => g.id === id)).filter((g) => !!g).map((g) => (
+            <button key={g!.id} type="button" onClick={() => go(g!.id)}>{g!.title}</button>
+          ))}
+        </div>
+      )}
       <div className="ar-filters">
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Find a game…" aria-label="Find a game" />
         <div role="radiogroup" aria-label="Filter by engine">
