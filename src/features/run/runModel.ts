@@ -2,7 +2,7 @@ import { along, length, lineString } from '@turf/turf'
 
 export type Pt = { lat: number; lng: number; t: number; ele?: number }
 export type Run = { id: string; at: number; kind: 'run' | 'walk'; km: number; seconds: number; points: Pt[]; manual?: boolean }
-export type RunStore = { runs: Run[]; units: 'km' | 'mi'; weeklyGoal: number; autoPause?: boolean }
+export type RunStore = { runs: Run[]; units: 'km' | 'mi'; weeklyGoal: number; autoPause?: boolean; /** Seconds per unit to hold; 0 = no alerts. */ targetPace?: number }
 export const RUN_KEY = 'bloom-runs-v1'
 export const MI = 1.609344
 

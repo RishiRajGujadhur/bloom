@@ -5,7 +5,7 @@ import { Download, Flag, FolderOpen, Footprints, Map as MapIcon, Medal, Mountain
 import { Rail, Segmented, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
-import { RUN_KEY, bests, demoRoute, distanceKm, fmtPace, fmtTime, isStationary, metresBetween, pace, pointAt, splits, toUnits, weekKm, type Pt, type Run, type RunStore } from './runModel'
+import { RUN_KEY, MI, bests, demoRoute, distanceKm, fmtPace, fmtTime, isStationary, metresBetween, pace, pointAt, splits, toUnits, weekKm, type Pt, type Run, type RunStore } from './runModel'
 import { Strider } from '../showcase/Strider'
 import { usePageActions } from '../../components/ui/PageMenu'
 import { onLaunchFiles, openFiles, saveFile } from '../../platform/fsa'
@@ -180,6 +180,24 @@ export function RunPage() {
     say(`${split.length} ${units === 'mi' ? 'mile' : 'kilometre'}${split.length > 1 ? 's' : ''}. Last split ${Math.floor(split[split.length - 1] / 60)} minutes ${Math.round(split[split.length - 1] % 60)} seconds.`)
   }, [split, units])
 
+  // Pace alerts: compare the last minute's pace to your target, at most once a minute.
+  const lastAlert = useRef(0)
+  useEffect(() => {
+    const target = store.targetPace ?? 0
+    if (!target || status !== 'tracking' || now - lastAlert.current < 60_000) return
+    const recent = points.filter((p) => now - p.t <= 60_000)
+    if (recent.length < 3 || now - startedAt < 90_000) return
+    const secs = (recent[recent.length - 1].t - recent[0].t) / 1000
+    const dist = distanceKm(recent)
+    if (dist < 0.02 || secs < 30) return
+    const current = secs / (units === 'mi' ? dist / MI : dist)
+    const spoken = (v: number) => `${Math.floor(v / 60)} ${String(Math.round(v % 60)).padStart(2, '0')}`
+    if (current > target + 20) say(`Pace ${spoken(current)}. A little faster to hit ${spoken(target)}.`)
+    else if (current < target - 25) say(`You're ahead of pace. Ease off a touch.`)
+    else return
+    lastAlert.current = now
+  }, [now, points, status, startedAt, store.targetPace, units])
+
   const start = () => {
     setError('')
     if (!on('gps') || !('geolocation' in navigator)) return setError('GPS isn’t available here. Try the demo route or log a run by hand.')
@@ -308,6 +326,19 @@ export function RunPage() {
             </>
           )}
         </div>
+        {!active && (
+          <div className="st-scale">
+            <Slider
+              label="Pace alert"
+              value={store.targetPace ?? 0}
+              min={0}
+              max={720}
+              step={15}
+              format={(v) => (v ? `${fmtPace(v)} /${units}` : 'off')}
+              onChange={(v) => setStore((s) => ({ ...s, targetPace: v }))}
+            />
+          </div>
+        )}
         {error && <p className="voice-error">{error}</p>}
         {viewing && !active && (
           <p className="studio-empty">
