@@ -145,3 +145,4 @@ Every game has:
 - Game 16: Germ Wash — scrub wiggly SVG germs off two hands with foaming GSAP bubbles before the 20-second song ends. Germs favour fingertips, thumbs, between fingers and wrists.
 - Game 17: Star Compass — a Three.js sky dome of real star positions (the Plough, Cassiopeia, Polaris and more), rotated and tilted to a new latitude each night. Drag to look around and click the Pole Star; north appears on the horizon.
 - Game 18: Pack the Suitcase — drag polyomino belongings into a 9×6 carry-on (right-click to turn). Gold-edged essentials matter most; zip it with a bouncing lid before the taxi arrives.
+- Game 19: Debt Dragon — a Babylon.js cave with a breathing dragon on its hoard that grows 7% each moon. Tap glowing crystals to mine (coins arc through the air), then feed the dragon or buy a better pick before it outgrows the cave.

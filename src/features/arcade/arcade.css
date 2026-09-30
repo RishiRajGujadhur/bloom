@@ -40,3 +40,6 @@
 .cf-tray button.on { background: var(--ar); color: #fff; }
 .cf-tray .cf-match { background: #ff7a2a; color: #fff; border-color: #ff7a2a; }
 .cf-tray .cf-match:disabled { opacity: 0.4; }
+.dd-meter { position: relative; min-width: 180px; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, #c0304a 15%, transparent); overflow: hidden; font-size: 0.85rem; }
+.dd-meter i { position: absolute; inset: 0 auto 0 0; background: color-mix(in srgb, #c0304a 45%, transparent); z-index: -1; transition: width .4s; }
+.cf-tray > span { align-self: center; }

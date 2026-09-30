@@ -30,6 +30,7 @@ export default function CompoundOrchard() {
     const cv = canvas.current
     if (!cv) return
     const engine = new Engine(cv, true, { preserveDrawingBuffer: true, stencil: true })
+    engine.resize()
     const scene = new Scene(engine)
     const dark = document.documentElement.dataset.theme === 'matrix'
     scene.clearColor = dark ? new Color4(0, 0.08, 0.03, 1) : new Color4(0.86, 0.93, 0.98, 1)

@@ -70,4 +70,7 @@ export const GAMES: GameDef[] = [
   g(18, 'suitcase', 'Pack the Suitcase', 'Everything you need, one carry-on, and the taxi’s coming.', 'SVG · GSAP', 215,
     '<rect x="8" y="18" width="48" height="36" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 18v-6h16v6" stroke="currentColor" stroke-width="3" fill="none"/><rect x="12" y="22" width="14" height="14" rx="2" fill="currentColor"/><rect x="28" y="22" width="10" height="28" rx="2" fill="currentColor" opacity=".6"/><rect x="40" y="36" width="12" height="14" rx="2" fill="currentColor" opacity=".8"/>',
     () => import('./games/PackSuitcase')),
+  g(19, 'dragon', 'Debt Dragon', 'Mine crystals and feed the dragon before it outgrows the cave.', 'Babylon.js 3D', 350,
+    '<path d="M10 44c4-14 18-20 30-16l8-10 2 12c6 4 8 10 6 16H10z" fill="currentColor"/><path d="M26 30l-8-14 14 8z" fill="currentColor" opacity=".7"/><circle cx="46" cy="36" r="2" fill="#fff"/><path d="M8 52h48" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/DebtDragon')),
 ]
