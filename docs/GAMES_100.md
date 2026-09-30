@@ -221,3 +221,4 @@ Every game has:
 - Game 92: Map Runner — a Babylon.js city grid. Tap intersections to plot a route to the pin around roadworks cones, using the red bus road (half cost, with a moving bus); it's scored against the true shortest path found by Dijkstra. Five errands.
 - Game 93: Tool Match — household jobs slide along a speeding SVG conveyor (wobbly hinge, dripping tap, blocked sink). Tap the right tool from the toolbelt, or press keys 1–6, before each job reaches the end.
 - Game 94: Stain Lab — eight stained garments (grass, pasta sauce, blood, red wine, grease, coffee…). Pick cold water, dish soap, vinegar, bicarb, blotting or hot water, then dab; the right treatment melts the SVG stain away, the wrong one spreads or sets it.
+- Game 95: Drawer Organiser — shelf-packed foam slots in a dark SVG drawer, each showing a faint silhouette. Drag every loose item into the slot matching its shape (wrong slots bounce back); three drawers, each fuller than the last.

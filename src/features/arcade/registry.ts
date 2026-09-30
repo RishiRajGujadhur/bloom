@@ -298,4 +298,7 @@ export const GAMES: GameDef[] = [
   g(94, 'stains', 'Stain Lab', 'Cold water, vinegar or blot? Pick the fix, save the shirt.', 'SVG · GSAP', 280,
     '<path d="M18 8l8-4q6 6 12 0l8 4 10 12-6 6-4-4v34H18V22l-4 4-6-6z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="34" r="7" fill="currentColor" opacity=".6"/><circle cx="38" cy="40" r="4" fill="currentColor" opacity=".4"/>',
     () => import('./games/StainLab')),
+  g(95, 'drawer', 'Drawer Organiser', 'A shaped slot for every thing, and every thing in its slot.', 'SVG · GSAP', 30,
+    '<rect x="4" y="12" width="56" height="40" rx="4" fill="currentColor" opacity=".35"/><rect x="10" y="18" width="10" height="28" rx="4" fill="currentColor"/><rect x="24" y="18" width="30" height="8" rx="4" fill="currentColor" opacity=".8"/><rect x="24" y="30" width="14" height="16" rx="4" fill="currentColor" opacity=".6"/><rect x="42" y="30" width="12" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>',
+    () => import('./games/DrawerOrganiser')),
 ]
