@@ -88,4 +88,7 @@ export const GAMES: GameDef[] = [
   g(24, 'bike', 'Bike Fix', 'Dunk the tyre, follow the bubbles, patch and pump.', 'Three.js 3D', 185,
     '<circle cx="32" cy="28" r="20" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="32" cy="28" r="3" fill="currentColor"/><path d="M32 28L32 10M32 28L48 36M32 28L16 36" stroke="currentColor" stroke-width="1.5"/><rect x="4" y="42" width="56" height="18" rx="3" fill="currentColor" opacity=".35"/><circle cx="40" cy="50" r="2" fill="currentColor"/><circle cx="43" cy="44" r="1.5" fill="currentColor"/>',
     () => import('./games/BikeFix')),
+  g(25, 'clocks', 'Clock Juggler', 'Bread, laundry, parking, tea: tap each timer just in time.', 'SVG · GSAP', 265,
+    '<circle cx="20" cy="22" r="13" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 22V13M20 22l6 4" stroke="currentColor" stroke-width="2.5"/><circle cx="44" cy="42" r="15" fill="none" stroke="currentColor" stroke-width="3"/><path d="M44 42V31M44 42l-7 5" stroke="currentColor" stroke-width="2.5"/><path d="M44 27a15 15 0 0 1 12 8" stroke="currentColor" stroke-width="5" fill="none" opacity=".5"/>',
+    () => import('./games/ClockJuggler')),
 ]

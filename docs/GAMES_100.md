@@ -151,3 +151,4 @@ Every game has:
 - Game 22: Posture Tower — matter-js vertebrae stacked on a chair that keeps slumping. Lean the pointer or arrow keys against the drift, with a live tilt gauge.
 - Game 23: Hydration Hose — canvas water-droplet arcs aimed by pointer. Five plants each have their own thirst and happy band (the cactus barely wants any), with passing joggers who'd love a splash.
 - Game 24: Bike Fix — a Three.js spoked wheel half-dunked in a water tub. Drag to spin it, watch for bubbles rising from hidden punctures, click to patch, then pump the tyre up across five wheels.
+- Game 25: Clock Juggler — SVG dials for bread, laundry, parking, tea, a call to Gran and seedlings, each sweeping down at its own pace. Tap in the green window; more timers join through the day.
