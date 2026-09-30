@@ -247,4 +247,7 @@ export const GAMES: GameDef[] = [
   g(77, 'fridgechef', 'Fridge Chef', 'Cook with what’s about to turn before it hits the bin.', 'SVG · GSAP', 190,
     '<rect x="10" y="4" width="30" height="56" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 24h30" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="36" r="4" fill="currentColor"/><circle cx="30" cy="44" r="4" fill="currentColor" opacity=".6"/><ellipse cx="50" cy="48" rx="12" ry="5" fill="currentColor"/><path d="M50 36q2-6 0-10" stroke="currentColor" stroke-width="2" fill="none"/>',
     () => import('./games/FridgeChef')),
+  g(78, 'dominoes', 'Deadline Dominoes', 'Line up the tasks so the chain reaches the deadline bell.', 'matter-js · canvas', 265,
+    '<path d="M4 54h56" stroke="currentColor" stroke-width="3"/><rect x="8" y="26" width="6" height="28" fill="currentColor" transform="rotate(20 11 54)"/><rect x="20" y="26" width="6" height="28" fill="currentColor" transform="rotate(8 23 54)"/><rect x="32" y="26" width="6" height="28" fill="currentColor"/><path d="M48 30q0-12 6-12t6 12z" fill="currentColor" opacity=".7"/>',
+    () => import('./games/DeadlineDominoes')),
 ]
