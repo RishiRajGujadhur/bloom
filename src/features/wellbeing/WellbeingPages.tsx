@@ -531,7 +531,16 @@ export function MoodPage() {
           {week.map((day) => {
             const mood = day.mood === null ? null : moods[Math.round(day.mood) - 1]
             return (
-              <li key={day.date.toISOString()} data-empty={mood === null}>
+              <li
+                key={day.date.toISOString()}
+                data-empty={mood === null}
+                title={
+                  entries
+                    .filter((e) => e.note && new Date(e.at).toDateString() === day.date.toDateString())
+                    .map((e) => `“${e.note}”`)
+                    .join('  ') || undefined
+                }
+              >
                 <span className="wb-week-bar" style={{ height: `${mood ? mood.value * 18 : 8}%` }} aria-hidden="true" />
                 <span aria-hidden="true">{mood?.emoji ?? '·'}</span>
                 <small>
