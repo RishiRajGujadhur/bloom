@@ -200,3 +200,8 @@ html[data-no-banner] .bloom-heading:not(.is-hero) {
 html[data-privacy-blur] body > #root { filter: blur(22px) saturate(0.6); pointer-events: none; user-select: none; }
 html[data-privacy-blur] body::after { content: 'Hidden · press Ctrl+Shift+L to show'; position: fixed; inset: 0; display: grid; place-items: center; z-index: 9999; font: 600 15px system-ui, sans-serif; color: var(--text-secondary); background: color-mix(in oklab, var(--bg-surface) 40%, transparent); }
 .settings-build { margin: 16px 0 0; text-align: center; font-size: 12px; color: var(--text-muted); }
+
+/* Touch screens: small icon buttons get a comfortable tap area. */
+@media (pointer: coarse) {
+  .icon-button, .studio-chip, .quiet-button { min-height: 40px; min-width: 40px; }
+}
