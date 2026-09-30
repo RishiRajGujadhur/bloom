@@ -26,9 +26,12 @@ const SIZE = 560
 
 export function GlobePage() {
   const [rot, setRot] = useState<[number, number]>([-10, -20])
-  const [mode, setMode] = useState<Mode>('find')
-  const [continent, setContinent] = useState('All')
-  const [q, setQ] = useState<Question>(() => question('find', 'All'))
+  const [mode, setModeState] = useState<Mode>(() => (localStorage.getItem('bloom-globe-mode') as Mode) || 'find')
+  const [continent, setContinentState] = useState(() => localStorage.getItem('bloom-globe-continent') || 'All')
+  const remember = (k: string, v: string) => { try { localStorage.setItem(k, v) } catch { /* optional */ } }
+  const setMode = (m: Mode) => { setModeState(m); remember('bloom-globe-mode', m) }
+  const setContinent = (c: string) => { setContinentState(c); remember('bloom-globe-continent', c) }
+  const [q, setQ] = useState<Question>(() => question(mode, continent))
   const [answer, setAnswer] = useState<'right' | 'wrong' | null>(null)
   const [clicked, setClicked] = useState<string | null>(null)
   const [typed, setTyped] = useState('')
