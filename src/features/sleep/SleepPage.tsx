@@ -59,6 +59,13 @@ export function SleepPage() {
         <Stat label="Sleep debt" value={stats.count ? `${stats.debt}h` : '—'} hint="Last 7 nights" />
       </div>
       </NightSky>
+      {stats.count >= 3 && (
+        <p className="sleep-debt-note">
+          {stats.debt <= 0.5
+            ? `You're on target — averaging ${stats.average}h against your ${settings.targetHours}h goal. 🌙`
+            : `You're about ${stats.debt}h short over the last ${stats.count} nights. Going to bed ${Math.min(60, Math.ceil((stats.debt * 60) / 7 / 5) * 5)} minutes earlier for a week would pay it back.`}
+        </p>
+      )}
       {(() => {
         const last = [...entries].sort((a, b) => b.date.localeCompare(a.date))[0]
         if (!last || entries.some((e) => e.date === dayKey())) return null
