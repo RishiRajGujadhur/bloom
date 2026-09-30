@@ -37,4 +37,7 @@ export const GAMES: GameDef[] = [
   g(7, 'scam', 'Scam Bubbles', 'Pop the sketchy messages before they reach your phone.', 'GSAP · SVG', 200,
     '<circle cx="22" cy="40" r="14" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="42" cy="22" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="48" r="7" fill="currentColor" opacity=".6"/><path d="M16 36h12M16 42h9" stroke="currentColor" stroke-width="2.5"/><path d="M38 18l8 8M46 18l-8 8" stroke="currentColor" stroke-width="2.5"/>',
     () => import('./games/ScamBubbles')),
+  g(8, 'lighthouse', 'Focus Lighthouse', 'Hold the beam steady and guide every ship past the rocks.', 'Three.js 3D', 230,
+    '<path d="M28 58l3-40h6l3 40z" fill="currentColor"/><rect x="27" y="10" width="14" height="8" rx="2" fill="currentColor" opacity=".7"/><path d="M41 12L62 4v18z" fill="currentColor" opacity=".35"/><path d="M4 58c8-4 16-4 24 0" stroke="currentColor" stroke-width="3" fill="none"/>',
+    () => import('./games/FocusLighthouse')),
 ]

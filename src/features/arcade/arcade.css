@@ -33,3 +33,4 @@
 .sb-card { display: grid; gap: 2px; height: 100%; place-content: center; text-align: center; font: 600 10.5px/1.25 system-ui, sans-serif; color: #10233a; }
 .sb-card b { font-size: 11px; color: #3a5070; }
 .sb-card span { font-weight: 500; }
+.fl-host canvas { display: block; width: 100%; touch-action: none; }
