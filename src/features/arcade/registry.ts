@@ -229,4 +229,7 @@ export const GAMES: GameDef[] = [
   g(71, 'storm', 'Storm Pack', 'Everything’s whirling past. Eight slots. Choose well.', 'SVG · GSAP', 215,
     '<path d="M10 22q10-14 22-6 8-10 20 0 10 2 6 12H10z" fill="currentColor" opacity=".45"/><path d="M34 30l-8 12h8l-6 12" stroke="currentColor" stroke-width="3" fill="none"/><rect x="40" y="40" width="18" height="18" rx="3" fill="currentColor"/><path d="M44 40q5-6 10 0" stroke="currentColor" stroke-width="2" fill="none"/>',
     () => import('./games/StormPack')),
+  g(72, 'calendar', 'Calendar Blocks', 'Drop the week’s blocks. Balanced days glow; overstuffed ones burn out.', 'SVG · GSAP', 230,
+    '<rect x="6" y="8" width="52" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><rect x="12" y="34" width="10" height="20" rx="2" fill="currentColor"/><rect x="27" y="26" width="10" height="28" rx="2" fill="currentColor" opacity=".7"/><rect x="42" y="40" width="10" height="14" rx="2" fill="currentColor" opacity=".5"/><path d="M6 20h52" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/CalendarBlocks')),
 ]
