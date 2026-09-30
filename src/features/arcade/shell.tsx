@@ -48,7 +48,7 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
         <button type="button" onClick={onRestart} title="Restart (R)">↻ Restart</button>
       </div>
       {hint && <p className="ar-hint">{hint}</p>}
-      <div className="ar-stage">
+      <div className="ar-stage" data-matrix-native>
         {children}
         {result && (
           <div className="ar-result" ref={card} role="dialog" aria-label="Result">

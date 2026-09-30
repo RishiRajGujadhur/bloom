@@ -28,4 +28,7 @@ export const GAMES: GameDef[] = [
   g(4, 'burners', 'Burner Juggle', 'Four burners, a stack of orders and ninety seconds of heat.', 'GSAP · SVG', 18,
     '<circle cx="20" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="44" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="44" r="11" fill="currentColor" opacity=".7"/><circle cx="44" cy="44" r="11" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 50q4-10 8 0M40 26q4-10 8 0" fill="none" stroke="currentColor" stroke-width="2"/>',
     () => import('./games/BurnerJuggle')),
+  g(5, 'laundry', 'Laundry Sorter', 'Grab and fling the pile into the right baskets before it topples.', 'matter-js · SVG', 210,
+    '<path d="M16 12l8-4h16l8 4-4 8-4-2v26H24V18l-4 2z" fill="currentColor" opacity=".8"/><path d="M8 50h48l-4 10H12z" fill="none" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/LaundrySorter')),
 ]
