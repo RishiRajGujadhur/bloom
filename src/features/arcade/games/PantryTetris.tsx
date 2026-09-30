@@ -13,7 +13,7 @@ const KINDS: Kind[] = [
   { name: 'Milk', w: 42, h: 76, fill: '#e8f1fb', days: 5, glyph: '🥛' },
   { name: 'Eggs', w: 84, h: 30, fill: '#f3d9a4', days: 14, glyph: '🥚' },
   { name: 'Apple', w: 36, h: 36, round: true, fill: '#e2574c', days: 20, glyph: '🍎' },
-  { name: 'Berries', w: 44, h: 28, fill: '#6b4bc8', days: 3, glyph: '🫐' },
+  { name: 'Berries', w: 44, h: 28, fill: '#6b4bc8', days: 3, glyph: '🍇' },
   { name: 'Cheese', w: 58, h: 34, fill: '#f6c945', days: 21, glyph: '🧀' },
   { name: 'Yoghurt', w: 36, h: 44, fill: '#f7f1e3', days: 7, glyph: '🥣' },
   { name: 'Juice', w: 30, h: 96, fill: '#f59f2a', days: 10, glyph: '🧃' },

@@ -52,4 +52,7 @@ export const GAMES: GameDef[] = [
   g(12, 'recycle', 'Recycling Rush', 'Drop each item off the conveyor into the right bin.', 'matter-js · SVG', 150,
     '<rect x="4" y="12" width="56" height="8" rx="3" fill="currentColor" opacity=".5"/><circle cx="20" cy="8" r="5" fill="currentColor"/><circle cx="40" cy="8" r="5" fill="currentColor" opacity=".7"/><path d="M10 30h14l-2 26H12zM28 30h14l-2 26H30zM46 30h12l-2 26H48z" fill="currentColor" opacity=".85"/>',
     () => import('./games/RecyclingRush')),
+  g(13, 'pond', 'Listening Pond', 'Koi only rise when the water is still. Wait for them.', 'p5.js generative', 175,
+    '<ellipse cx="32" cy="34" rx="28" ry="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 34q8-8 18 0q-10 8-18 0z" fill="currentColor"/><path d="M38 34l8-5v10z" fill="currentColor"/><circle cx="46" cy="22" r="6" fill="currentColor" opacity=".5"/>',
+    () => import('./games/ListeningPond')),
 ]
