@@ -12,6 +12,25 @@ import gsap from 'gsap'
  */
 export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
+  // Character counter near any length-limited field once you're past 80% of it.
+  const [counter, setCounter] = useState<{ x: number; y: number; text: string; full: boolean } | null>(null)
+  useEffect(() => {
+    const show = (e: Event) => {
+      const el = e.target
+      if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) || el.maxLength <= 0) return setCounter(null)
+      const n = el.value.length
+      if (n < el.maxLength * 0.8) return setCounter(null)
+      const r = el.getBoundingClientRect()
+      setCounter({ x: r.right, y: r.bottom, text: `${n}/${el.maxLength}`, full: n >= el.maxLength })
+    }
+    const hide = () => setCounter(null)
+    document.addEventListener('input', show, true)
+    document.addEventListener('focusout', hide, true)
+    return () => {
+      document.removeEventListener('input', show, true)
+      document.removeEventListener('focusout', hide, true)
+    }
+  }, [])
   const [offline, setOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
   useEffect(() => {
     const on = () => setOffline(false)
@@ -102,6 +121,7 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   return (
     <>
       <a href="#page-heading" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('page-heading')?.focus() }}>Skip to content</a>
+      {counter && <div className="char-counter" data-full={counter.full} style={{ left: counter.x, top: counter.y }} aria-live="polite">{counter.text}</div>}
       {offline && <div className="offline-pill" role="status">Offline · everything still saves on this device</div>}
       {showTop && <button type="button" className="to-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>}
     </>
