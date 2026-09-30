@@ -386,6 +386,8 @@ export function CalendarPage({ data, setData }: Props) {
         <div className="calendar-surface">
           <FullCalendar
             ref={calendar}
+            weekNumbers
+            weekText="W"
             plugins={[
               dayGridPlugin,
               timeGridPlugin,
