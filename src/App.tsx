@@ -29,6 +29,7 @@ import { Shortcuts } from './components/layout/Shortcuts'
 import { GlobalQoL } from './components/layout/GlobalQoL'
 import { WritingAssist } from './components/layout/WritingAssist'
 import { BedtimeNudge } from './features/sleep/BedtimeNudge'
+import { EpiphanyCapture } from './features/epiphany/EpiphanyCapture'
 import { TodayGlance } from './components/dashboard/TodayGlance'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
@@ -729,6 +730,7 @@ function App() {
         <TrashAndSync data={data} setData={setData} />
         <WritingAssist />
         {settings.features.sleepTracker && <BedtimeNudge />}
+        {settings.features.epiphanies && <EpiphanyCapture />}
         <GlobalQoL habitsLeft={data.habits.filter((h) => !h.dates.includes(today)).length} />
         <Shortcuts onNavigate={jump} onToggleTheme={() => setThemeSettings((t) => toggleThemeMode(t))} />
         {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}

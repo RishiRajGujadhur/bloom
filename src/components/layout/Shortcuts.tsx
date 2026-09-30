@@ -62,6 +62,8 @@ function CheatSheet({ onClose }: { onClose: () => void }) {
             {row('Alt ← / →', 'Back / forward')}
             {row('Esc', 'Close menus and drawers')}
             {row('Ctrl S', 'Save (boards, editors)')}
+            {row('Ctrl Shift E', 'Capture an epiphany')}
+            {row('Ctrl Shift D', 'Insert date (while writing)')}
           </ul></section>
           {currentPageActions().length > 0 && (
             <section><h4>On this page</h4><ul>{currentPageActions().slice(0, 10).map((a) => <li key={a.id}><span>{a.icon} {a.label}</span><kbd>Ctrl K</kbd></li>)}</ul></section>
