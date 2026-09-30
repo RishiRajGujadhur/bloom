@@ -276,6 +276,7 @@ export function AdaptiveEditor({
   // One id for the life of this page, so autosaves update rather than duplicate.
   const pageId = useRef(entry?.id ?? crypto.randomUUID())
   const createdAt = useRef(entry?.createdAt ?? new Date().toISOString())
+  const [goal, setGoal] = useState(() => Number(localStorage.getItem('bloom-daybook-word-goal')) || 0)
   const [mood, setMood] = useState(entry?.mood)
   const moodRef = useRef(mood)
   const pickMood = (m: string) => {
@@ -350,8 +351,29 @@ export function AdaptiveEditor({
                 { weekday: 'long', month: 'long', day: 'numeric' },
               )}
             </span>
-            <span>
-              {words} {words === 1 ? 'word' : 'words'}
+            <span className="daybook-goal">
+              {goal ? `${words}/${goal} words${words >= goal ? ' ✓' : ''}` : `${words} ${words === 1 ? 'word' : 'words'}`}
+              {goal > 0 && <i style={{ width: `${Math.min(100, (words / goal) * 100)}%` }} aria-hidden="true" />}
+              <select
+                aria-label="Word goal"
+                value={goal}
+                onChange={(e) => {
+                  const v = Number(e.target.value)
+                  setGoal(v)
+                  try {
+                    localStorage.setItem('bloom-daybook-word-goal', String(v))
+                  } catch {
+                    /* this visit only */
+                  }
+                }}
+              >
+                <option value={0}>no goal</option>
+                {[100, 250, 500, 750, 1000].map((g) => (
+                  <option key={g} value={g}>
+                    goal {g}
+                  </option>
+                ))}
+              </select>
             </span>
             <span className="daybook-mood" role="group" aria-label="Mood">
               {['😄', '🙂', '😐', '😔', '😣'].map((m) => (
