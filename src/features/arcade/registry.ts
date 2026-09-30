@@ -127,4 +127,7 @@ export const GAMES: GameDef[] = [
   g(37, 'inbox', 'Inbox River', 'Do it, plan it, hand it off — or let it go over the falls.', 'SVG · GSAP', 205,
     '<path d="M22 0c-6 20 6 40 0 64h20c6-24-6-44 0-64z" fill="currentColor" opacity=".3"/><rect x="18" y="16" width="28" height="20" rx="2" fill="currentColor"/><path d="M18 16l14 10 14-10" stroke="#fff" stroke-width="2" fill="none"/><rect x="2" y="44" width="16" height="10" rx="2" fill="currentColor" opacity=".6"/><rect x="46" y="44" width="16" height="10" rx="2" fill="currentColor" opacity=".6"/>',
     () => import('./games/InboxRiver')),
+  g(38, 'pinball', 'Procrastination Pinball', 'Hit START, dodge the “just one more video” gremlins.', 'matter-js · canvas', 250,
+    '<rect x="14" y="4" width="36" height="56" rx="10" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="20" r="5" fill="currentColor"/><circle cx="40" cy="28" r="5" fill="currentColor" opacity=".6"/><circle cx="34" cy="40" r="3" fill="currentColor"/><path d="M20 50l10 4M44 50l-10 4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+    () => import('./games/ProcrastinationPinball')),
 ]
