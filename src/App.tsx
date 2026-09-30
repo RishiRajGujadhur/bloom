@@ -27,6 +27,7 @@ import { flushSync } from 'react-dom'
 import { withViewTransition } from './platform/viewTransition'
 import { Shortcuts } from './components/layout/Shortcuts'
 import { GlobalQoL } from './components/layout/GlobalQoL'
+import { TodayGlance } from './components/dashboard/TodayGlance'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
 import gsap from 'gsap'
@@ -1312,6 +1313,7 @@ function App() {
                       onNavigate={jump}
                     />
                   )}
+                  {active === 'overview' && <TodayGlance data={data} today={today} onNavigate={jump} />}
                   {active === 'overview' && modules.stats && !simpleHome && (
                     <StatsRow data={data} today={today} onNavigate={jump} />
                   )}
