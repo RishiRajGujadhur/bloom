@@ -33,6 +33,8 @@ export function GlobePage() {
   const [clicked, setClicked] = useState<string | null>(null)
   const [typed, setTyped] = useState('')
   const [score, setScore] = useState({ right: 0, total: 0 })
+  // Countries you missed this session, to revisit.
+  const [missed, setMissed] = useState<typeof q.country[]>([])
   const svg = useRef<SVGSVGElement>(null)
   const tween = useRef<gsap.core.Tween | null>(null)
   const projection = useMemo(() => geoOrthographic().scale(SIZE / 2 - 8).translate([SIZE / 2, SIZE / 2]).clipAngle(90).rotate(rot), [rot])
@@ -86,6 +88,7 @@ export function GlobePage() {
   const judge = (ok: boolean) => {
     setAnswer(ok ? 'right' : 'wrong')
     setScore((s) => ({ right: s.right + (ok ? 1 : 0), total: s.total + 1 }))
+    if (!ok) setMissed((list) => [q.country, ...list.filter((c) => c.atlas !== q.country.atlas)].slice(0, 20))
     if (ok) burst(undefined, 'stars')
     spinTo(target)
     if (svg.current && !reduced()) gsap.fromTo(svg.current.querySelector('.gq-target'), { strokeWidth: 1 }, { strokeWidth: 5, duration: 0.4, yoyo: true, repeat: 3 })
@@ -153,6 +156,20 @@ export function GlobePage() {
             <span>{q.country.name} · {q.country.continent} · capital {q.country.capital}</span>
             <button type="button" className="gq-cta" onClick={() => next()}>Next →</button>
           </div>
+        )}
+        {missed.length > 0 && (
+          <details className="gq-missed">
+            <summary>Review {missed.length} missed</summary>
+            <ul>
+              {missed.map((c) => (
+                <li key={c.atlas}>
+                  <button type="button" onClick={() => spinTo(byAtlas.get(c.atlas))}>
+                    <strong>{c.name}</strong> <span>{c.continent} · {c.capital}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </details>
         )}
       </aside>
     </div>
