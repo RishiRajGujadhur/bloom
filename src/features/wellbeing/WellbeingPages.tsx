@@ -154,8 +154,11 @@ export function BreathePage() {
   // Cue each new phase with a soft tone and/or a short vibration.
   useEffect(() => {
     if (!running) return
-    if (cues.vibrate) navigator.vibrate?.(60)
-    if (cues.sound) playCue(pattern.phases[phase][0])
+    // Distinct buzzes so you can breathe eyes-closed: a tap to breathe in,
+    // a double tap to hold, a long hum to breathe out.
+    const kind = pattern.phases[phase][0]
+    if (cues.vibrate) navigator.vibrate?.(kind === 'In' ? 60 : kind === 'Hold' ? [40, 80, 40] : 300)
+    if (cues.sound) playCue(kind)
     // Only when the phase changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, running])
