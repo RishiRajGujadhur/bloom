@@ -128,3 +128,4 @@ Every game has:
 
 ## Build log
 - Game 1: Pantry Tetris — matter-js fridge packing drawn in SVG, with rotation, a door that has to shut and a bonus for short-dated food kept within reach. The Arcade hub and Games section launched with it.
+- Game 2: Coin Cascade — a Plinko month of pay into Home, Food, Fun and Later jars, with bills that fall due partway through and a Later jar that grows weekly.
