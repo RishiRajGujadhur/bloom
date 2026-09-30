@@ -187,6 +187,22 @@ export function EpiphaniesPage({ today }: { today: string }) {
           you’d forget it.
         </p>
       )}
+      {list.length > 0 && (
+        <button
+          type="button"
+          className="quiet-button"
+          onClick={() => {
+            const body = [...list].sort((a, b) => a.createdAt - b.createdAt).map((e) => `${e.starred ? '★ ' : ''}${e.text}\n   — ${e.source.title}, ${e.source.date}`).join('\n\n')
+            const a = document.createElement('a')
+            a.href = URL.createObjectURL(new Blob([`My epiphanies\n\n${body}\n`], { type: 'text/plain' }))
+            a.download = 'bloom-epiphanies.txt'
+            a.click()
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+          }}
+        >
+          ⬇ Export all
+        </button>
+      )}
       {list.some((e) => e.starred) && (
         <div className="filter-chips" role="group" aria-label="Filter">
           <button type="button" aria-pressed={!onlyStarred} onClick={() => setOnlyStarred(false)}>All · {list.length}</button>
