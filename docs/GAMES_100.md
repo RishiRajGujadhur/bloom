@@ -177,3 +177,4 @@ Every game has:
 - Game 48: Clock Tower — drag an SVG town clock's minute hand (the hour hand follows like real gearing) to times shouted in words ("quarter to nine") or 24-hour (19:15), then ring the swinging GSAP bell.
 - Game 49: Swim Float — p5.js sea with wave sets and a gentle rip. Hold to swim toward the pointer (tiring), let go to float on your back and recover breath, and don't panic-tap; reach the beach.
 - Game 50: Egg Timer Symphony — three SVG pots that tick a beat per second (lit dots, no clocks). Drop in eggs for soft, jammy or hard orders, lift them out by counting, then crack them open to see yolks from runny to chalky.
+- Game 51: Habit Hatchery — SVG eggs in nests that each need one warm tap a day. Seven-day streak dots hatch a creature with a GSAP pop, missed days cool eggs back to zero, and you can add eggs from the basket at your own risk.

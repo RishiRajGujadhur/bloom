@@ -166,4 +166,7 @@ export const GAMES: GameDef[] = [
   g(50, 'eggs', 'Egg Timer Symphony', 'Soft, jammy, hard — count the beats, no clocks allowed.', 'SVG · GSAP', 40,
     '<ellipse cx="22" cy="30" rx="10" ry="13" fill="currentColor" opacity=".8"/><ellipse cx="42" cy="34" rx="12" ry="9" fill="#fff" stroke="currentColor" stroke-width="2"/><circle cx="42" cy="34" r="5" fill="currentColor"/><path d="M8 52h48" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="10" r="2" fill="currentColor"/><circle cx="22" cy="8" r="2" fill="currentColor" opacity=".6"/><circle cx="30" cy="10" r="2" fill="currentColor" opacity=".3"/>',
     () => import('./games/EggTimer')),
+  g(51, 'hatchery', 'Habit Hatchery', 'One warm tap a day. Seven in a row and it hatches.', 'SVG · GSAP', 50,
+    '<ellipse cx="20" cy="30" rx="10" ry="13" fill="currentColor" opacity=".5"/><ellipse cx="44" cy="30" rx="10" ry="13" fill="currentColor"/><path d="M36 26l4 4 4-4 4 4" stroke="#fff" stroke-width="2" fill="none"/><ellipse cx="32" cy="50" rx="26" ry="7" fill="currentColor" opacity=".35"/>',
+    () => import('./games/HabitHatchery')),
 ]
