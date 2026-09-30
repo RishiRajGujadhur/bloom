@@ -22,4 +22,7 @@ export const GAMES: GameDef[] = [
   g(2, 'coins', 'Coin Cascade', 'A month of coins, a board of pegs and four hungry jars.', 'matter-js · SVG', 45,
     '<circle cx="20" cy="14" r="4" fill="currentColor"/><circle cx="36" cy="14" r="4" fill="currentColor"/><circle cx="28" cy="26" r="4" fill="currentColor"/><circle cx="44" cy="26" r="4" fill="currentColor"/><path d="M8 40h14v16H8zM26 40h14v16H26zM44 40h14v16H44z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="33" cy="48" r="5" fill="currentColor" opacity=".7"/>',
     () => import('./games/CoinCascade')),
+  g(3, 'knots', 'Knot Garden', 'Follow the firefly and tie the rope to light each lantern.', 'p5.js · verlet rope', 95,
+    '<path d="M10 8c20 6 30 14 22 24s-20 12-6 20 24 2 28-6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="22" cy="24" r="4" fill="currentColor"/><circle cx="42" cy="36" r="4" fill="currentColor"/><rect x="44" y="46" width="10" height="14" rx="3" fill="currentColor" opacity=".7"/>',
+    () => import('./games/KnotGarden')),
 ]

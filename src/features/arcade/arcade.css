@@ -28,3 +28,4 @@
 .ar-record { color: var(--ar); font-weight: 800; margin: 0 0 10px; }
 [data-theme='matrix'] .ar-result { background: #001a08; color: #00ff66; border: 1px solid #00ff66; }
 [data-theme='matrix'] .ar-stage { background: #001a08; }
+.kg-host canvas { display: block; width: min(100%, calc(72vh * 4 / 3)) !important; height: auto !important; margin: 0 auto; }
