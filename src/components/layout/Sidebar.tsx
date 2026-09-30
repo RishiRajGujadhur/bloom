@@ -1,4 +1,6 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { ConfirmDisable, NavContextMenu, type NavMenuState } from './NavContextMenu'
+import './navContext.css'
 import type { ReactNode } from 'react'
 import {
   ChevronDown,
@@ -234,7 +236,12 @@ const isDrawerWidth = () =>
  * CSS keys off `html[data-sidebar]`, which this component publishes in an
  * effect, so the layout shift costs no re-render of the page content.
  */
-export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { tools?: ReactNode }) {
+export function Sidebar({ active, onNavigate, flags, tools, onDisable }: SidebarProps & { tools?: ReactNode; onDisable?: (flag: keyof FeatureFlags, title: string, key: NavKey) => void }) {
+  // Right-click a page: open, pin to top, or disable (with a confirm prompt).
+  const [ctx, setCtx] = useState<NavMenuState | null>(null)
+  const [confirm, setConfirm] = useState<{ flag: keyof FeatureFlags; title: string; key: NavKey } | null>(null)
+  const [pins, setPins] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('bloom-nav-pins') ?? '[]') as string[] } catch { return [] } })
+  const togglePin = (key: string) => setPins((p) => { const n = p.includes(key) ? p.filter((k) => k !== key) : [key, ...p].slice(0, 8); try { localStorage.setItem('bloom-nav-pins', JSON.stringify(n)) } catch { /* optional */ } return n })
   const { t } = useTranslation(undefined, { i18n })
   const [isNarrow, setIsNarrow] = useState(isDrawerWidth)
   const [isOpen, setIsOpen] = useState(() => {
@@ -524,6 +531,8 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
     .filter((item) => !item.requires || flags[item.requires])
     .map((item, order) => ({ ...item, order, section: sectionOf(item.key) }))
     .sort((a, b) => a.section - b.section || a.order - b.order)
+  const requiresOf = (key: string) => items.find((i) => i.key === key)?.requires
+  const pinnedItems = pins.map((k) => visibleItems.find((v) => v.key === k)).filter((v): v is (typeof visibleItems)[number] => !!v)
 
   // Collapsible groups: remembered per device; the group holding the current page is always open.
   const [openGroups, setOpenGroups] = useState<Set<number>>(() => {
@@ -629,6 +638,16 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
           )}
         </button>
         <nav aria-label={t('navigation.main')}>
+          {pinnedItems.length > 0 && (
+            <div className="nav-pins" aria-label="Pinned pages">
+              {pinnedItems.map(({ key, title, Icon }) => (
+                <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} title={title} aria-label={`${title} (pinned)`} onClick={() => handleNavigate(key)} onContextMenu={(e) => { e.preventDefault(); setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!requiresOf(key) && !!onDisable, pinned: true }) }}>
+                  <Icon size={17} aria-hidden="true" />
+                  {isOpen && <span>{title}</span>}
+                </button>
+              ))}
+            </div>
+          )}
           {visibleItems.map(({ key, title, Icon, section }, index) => {
             const first = index === 0 || visibleItems[index - 1].section !== section
             const expanded = groupOpen(section)
@@ -662,7 +681,15 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
                     aria-current={active === key ? 'page' : undefined}
                     // Without the visible label the icon needs its own name.
                     {...(isOpen ? {} : { 'aria-label': title, title, 'data-hint': title, 'data-cursor-text': title })}
+                    data-title={title}
+                    data-pinned={pins.includes(key) || undefined}
                     onClick={() => handleNavigate(key)}
+                    onContextMenu={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      const req = requiresOf(key)
+                      setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!req && !!onDisable, pinned: pins.includes(key) })
+                    }}
                   >
                     <Icon size={19} aria-hidden="true" />
                     <span className={styles.navLabel}>{title}</span>
@@ -673,6 +700,18 @@ export function Sidebar({ active, onNavigate, flags, tools }: SidebarProps & { t
             )
           })}
         </nav>
+        {ctx && (
+          <NavContextMenu
+            menu={ctx}
+            onClose={() => setCtx(null)}
+            onOpen={() => handleNavigate(ctx.key as NavKey)}
+            onPin={() => togglePin(ctx.key)}
+            onAskDisable={() => { const req = requiresOf(ctx.key); if (req) setConfirm({ flag: req, title: ctx.title, key: ctx.key as NavKey }) }}
+          />
+        )}
+        {confirm && (
+          <ConfirmDisable title={confirm.title} onCancel={() => setConfirm(null)} onConfirm={() => { onDisable?.(confirm.flag, confirm.title, confirm.key); setConfirm(null) }} />
+        )}
         <div className="sidebar-encourage" aria-hidden={!isOpen}>
           <p>
             You’re doing better than you think.{' '}

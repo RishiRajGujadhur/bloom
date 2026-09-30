@@ -1,0 +1,22 @@
+
+.nav-ctx { position: fixed; z-index: 9500; min-width: 210px; padding: 6px; border-radius: 14px; background: var(--bg-surface); border: 1px solid var(--border-color); box-shadow: 0 18px 44px -16px #0007; display: grid; gap: 2px; transform-origin: top left; }
+.nav-ctx-title { margin: 2px 8px 6px; font: 800 0.72rem 'Manrope', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+.nav-ctx button { display: flex; align-items: center; gap: 8px; text-align: left; border: 0; border-radius: 9px; padding: 8px 10px; background: transparent; color: inherit; font: 700 0.9rem 'Manrope', sans-serif; cursor: pointer; }
+.nav-ctx button:hover, .nav-ctx button:focus-visible { background: color-mix(in srgb, var(--accent-color) 14%, transparent); outline: none; }
+.nav-ctx button.danger { color: #d64545; }
+.nav-ctx button:disabled { opacity: 0.45; cursor: default; }
+.nav-confirm-backdrop { position: fixed; inset: 0; z-index: 9600; display: grid; place-items: center; background: #0006; backdrop-filter: blur(3px); }
+.nav-confirm { width: min(420px, calc(100vw - 32px)); padding: 20px; border-radius: 20px; background: var(--bg-surface); border: 1px solid var(--border-color); box-shadow: 0 30px 70px -20px #000a; display: grid; gap: 10px; }
+.nav-confirm h3 { margin: 0; font: 900 1.2rem 'Manrope', sans-serif; }
+.nav-confirm p { margin: 0; color: var(--text-secondary); line-height: 1.45; }
+.nav-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.nav-confirm-actions button { border-radius: 12px; padding: 9px 16px; font: 800 0.92rem 'Manrope', sans-serif; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; }
+.nav-confirm-ok { background: #d64545 !important; border-color: #d64545 !important; color: #fff !important; }
+.nav-undo { position: fixed; z-index: 9400; left: 50%; bottom: 22px; translate: -50% 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; background: #1c1c28; color: #fff; box-shadow: 0 18px 40px -16px #0009; font-weight: 700; }
+.nav-undo button { border: 0; border-radius: 8px; padding: 5px 10px; background: #ffffff1f; color: #fff; font-weight: 800; cursor: pointer; }
+.nav-pins { display: grid; gap: 2px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border-color); }
+.nav-pin { display: flex; align-items: center; gap: 10px; border: 0; border-radius: 10px; padding: 7px 10px; background: transparent; color: inherit; font: 700 0.88rem 'Manrope', sans-serif; cursor: pointer; }
+.nav-pin:hover { background: color-mix(in srgb, var(--accent-color) 12%, transparent); }
+.nav-pin.active { background: color-mix(in srgb, var(--accent-color) 18%, transparent); }
+.nav-pin::after { content: '★'; margin-left: auto; font-size: 0.7rem; color: var(--accent-color); }
+html[data-theme='matrix'] .nav-undo { background: #0b3a1a; color: #d6ffe0; }

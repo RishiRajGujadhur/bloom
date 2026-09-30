@@ -486,10 +486,12 @@ function App() {
     return { names, features: features as FeatureFlags }
   }
   const [pageLabel, setPageLabel] = useState('')
+  const [undoDisable, setUndoDisable] = useState<{ flag: keyof FeatureFlags; title: string } | null>(null)
+  useEffect(() => { if (!undoDisable) return; const t = setTimeout(() => setUndoDisable(null), 8000); return () => clearTimeout(t) }, [undoDisable])
   useEffect(() => watchTitlebar(), [])
   // Window title follows the page you're on ("Money · Bloom").
   useEffect(() => {
-    const label = document.querySelector('.nav-item[aria-current="page"]')?.getAttribute('aria-label') ?? ''
+    const label = document.querySelector('.nav-item[aria-current="page"]')?.getAttribute('data-title') ?? ''
     setPageTitle(label && active !== 'overview' ? label : '', t('ui.documentTitle'))
     setPageLabel(label && active !== 'overview' ? label : '')
   }, [active, t])
@@ -693,7 +695,24 @@ function App() {
         >
           {t('ui.skipToDashboard')}
         </a>
-        <Sidebar active={active} onNavigate={jump} flags={settings.features} tools={topTools} />
+        <Sidebar
+          active={active}
+          onNavigate={jump}
+          flags={settings.features}
+          tools={topTools}
+          onDisable={(flag, title, key) => {
+            setSettings({ ...settings, features: { ...settings.features, [flag]: false } })
+            setUndoDisable({ flag, title })
+            if (key === active) jump('overview')
+          }}
+        />
+        {undoDisable && (
+          <div className="nav-undo" role="status">
+            <span>“{undoDisable.title}” is turned off.</span>
+            <button type="button" onClick={() => { setSettings({ ...settings, features: { ...settings.features, [undoDisable.flag]: true } }); setUndoDisable(null) }}>Undo</button>
+            <button type="button" aria-label="Dismiss" onClick={() => setUndoDisable(null)}>✕</button>
+          </div>
+        )}
         {settings.features.pointerFx && <PointerFx page={active} />}
 
         <MatrixRain />
