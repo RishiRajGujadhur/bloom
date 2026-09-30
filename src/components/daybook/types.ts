@@ -33,4 +33,6 @@ export interface JournalEntry {
   private?: boolean
   /** How the writer felt, picked in the editor header. */
   mood?: string
+  /** Shown first on the home screen. */
+  pinned?: boolean
 }

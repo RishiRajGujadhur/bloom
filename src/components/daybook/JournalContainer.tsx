@@ -117,6 +117,26 @@ export function JournalContainer() {
       setEntryId(null)
     } else setEntryId(next.id)
   }
+  // Delete with a short Undo window.
+  const [undoPage, setUndoPage] = useState<JournalEntry | null>(null)
+  const removePage = (page: JournalEntry) => {
+    if (initial.error) return
+    setEntries((current) => {
+      const updated = current.filter((item) => item.id !== page.id)
+      try {
+        localStorage.setItem(DAYBOOK_STORAGE_KEY, JSON.stringify(updated))
+      } catch {
+        return current
+      }
+      return updated
+    })
+    setUndoPage(page)
+  }
+  useEffect(() => {
+    if (!undoPage) return
+    const t = setTimeout(() => setUndoPage(null), 8000)
+    return () => clearTimeout(t)
+  }, [undoPage])
   const openPage = (page: JournalEntry) => {
     setSession((s) => s + 1)
     setEntryId(page.id)
@@ -196,6 +216,14 @@ export function JournalContainer() {
             ),
           )}
         </ol>
+        {undoPage && (
+          <p className="daybook-undo" role="status">
+            Deleted “{undoPage.modeTitle}”.{' '}
+            <button type="button" onClick={() => { persist(undoPage, false); setEntryId(null); setUndoPage(null) }}>
+              Undo
+            </button>
+          </p>
+        )}
         {(storageError || initial.error) && (
           <p role="alert">{storageError || initial.error}</p>
         )}
@@ -260,7 +288,7 @@ export function JournalContainer() {
                   : sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt)
                   : sort === 'title' ? a.modeTitle.localeCompare(b.modeTitle)
                   : 0,
-                ).map((page) => {
+                ).sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned))).map((page) => {
                   const text = journalText(page.content).trim()
                   const words = text ? text.split(/\s+/).length : 0
                   return (
@@ -278,7 +306,10 @@ export function JournalContainer() {
                           weekday: 'short',
                           month: 'short',
                           day: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit',
                         })}
+                        {page.pinned && ' · 📌'}
                       </span>
                       <strong>{page.mood && <span aria-label="Mood">{page.mood} </span>}{page.modeTitle}</strong>
                       <span className="daybook-page-preview">
@@ -300,6 +331,15 @@ export function JournalContainer() {
                       </button>
                       <button type="button" title={page.private ? 'Show on the home screen' : 'Blur on the home screen'} aria-pressed={Boolean(page.private)} onClick={() => persist({ ...page, private: !page.private }, false)}>
                         {page.private ? '🔒' : '🔓'}
+                      </button>
+                      <button type="button" title={page.pinned ? 'Unpin' : 'Pin to the front'} aria-pressed={Boolean(page.pinned)} onClick={() => persist({ ...page, pinned: !page.pinned }, false)}>
+                        📌
+                      </button>
+                      <button type="button" title="Copy the text" onClick={(e) => { void navigator.clipboard?.writeText(text); e.currentTarget.textContent = '✓' }}>
+                        📋
+                      </button>
+                      <button type="button" title="Delete this page" onClick={() => removePage(page)}>
+                        🗑
                       </button>
                     </div>
                     </div>

@@ -294,6 +294,7 @@ export function AdaptiveEditor({
     updatedAt: new Date().toISOString(),
     content,
     private: entry?.private,
+    pinned: entry?.pinned,
     mood: moodRef.current,
     flow:
       (flowOn && subOn('flowTopography', 'save') ? flow.snapshot() : null) ??
