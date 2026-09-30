@@ -168,3 +168,4 @@ Every game has:
 - Game 39: Shopping Cart Dash — a PlayCanvas supermarket where the cart follows your pointer. Collect the six-item list, fight the magnetic pull of treat displays that add themselves to the bill, and reach the till within £30.
 - Game 40: Kindness Chain — a Babylon.js town square of wandering people, a glowing orb with a particle trail and a reach ring. Pass the warm light person to person before it fades, until the whole square glows.
 - Game 41: Negotiation Tug — haggle by tug-of-war on a matter-js rope. Pull while the seller rests, ease off when they heave (or the rope snaps), and let go with the knot in the fair-price zone; lowballing makes them pack up.
+- Game 42: Tidy Sprint — drag scattered things to homes marked with faint outlines (bookshelf, hooks, laundry, drawer, toy box, bin), with a one-touch bonus for putting things straight away. Three rooms before the guests arrive.

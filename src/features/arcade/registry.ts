@@ -139,4 +139,7 @@ export const GAMES: GameDef[] = [
   g(41, 'haggle', 'Negotiation Tug', 'Haggle by tug-of-war: pull when they rest, ease off when they heave.', 'matter-js rope', 0,
     '<circle cx="10" cy="22" r="6" fill="currentColor"/><circle cx="54" cy="22" r="6" fill="currentColor"/><path d="M14 36q18 8 36 0" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="32" cy="40" r="4" fill="currentColor"/><rect x="18" y="50" width="28" height="6" rx="3" fill="currentColor" opacity=".4"/>',
     () => import('./games/NegotiationTug')),
+  g(42, 'tidy', 'Tidy Sprint', 'Guests are coming. Everything back to its home.', 'SVG · GSAP', 340,
+    '<rect x="6" y="8" width="24" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="36" y="8" width="22" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="6" y="40" width="24" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="46" r="7" fill="currentColor"/><path d="M40 40L30 30" stroke="currentColor" stroke-width="2" stroke-dasharray="2 3"/>',
+    () => import('./games/TidySprint')),
 ]
