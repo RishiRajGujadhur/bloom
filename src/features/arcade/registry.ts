@@ -205,4 +205,7 @@ export const GAMES: GameDef[] = [
   g(63, 'spice', 'Spice Mixer', 'A pinch at a time until the flavour shape matches.', 'SVG radar · GSAP', 15,
     '<polygon points="32,6 54,20 54,44 32,58 10,44 10,20" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="32,16 46,26 44,40 32,48 18,38 22,24" fill="currentColor" opacity=".6"/><circle cx="32" cy="32" r="2" fill="currentColor"/>',
     () => import('./games/SpiceMixer')),
+  g(64, 'rocks', 'Big Rocks Jar', 'Rocks, pebbles, sand — the order you pour decides what fits.', 'matter-js · canvas', 30,
+    '<path d="M14 10h36v44a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="46" r="8" fill="currentColor"/><circle cx="40" cy="44" r="7" fill="currentColor" opacity=".8"/><circle cx="33" cy="32" r="6" fill="currentColor" opacity=".6"/><path d="M18 54h28" stroke="currentColor" stroke-width="4" stroke-dasharray="1 2" opacity=".5"/>',
+    () => import('./games/BigRocks')),
 ]
