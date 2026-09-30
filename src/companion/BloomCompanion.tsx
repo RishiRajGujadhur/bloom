@@ -34,6 +34,34 @@ type Props = {
 }
 type Turn = { role: 'user' | 'assistant'; content: string }
 
+const WIDTH_KEY = 'bloom-companion-width'
+/** Sets (and remembers) the Bloom panel width; null goes back to the default. */
+function setPanelWidth(px: number | null) {
+  const root = document.documentElement
+  if (px === null) {
+    root.style.removeProperty('--bc-width')
+    try {
+      localStorage.removeItem(WIDTH_KEY)
+    } catch {
+      /* optional */
+    }
+    return
+  }
+  const w = Math.round(Math.min(Math.max(px, 300), Math.min(760, window.innerWidth * 0.7)))
+  root.style.setProperty('--bc-width', `${w}px`)
+  try {
+    localStorage.setItem(WIDTH_KEY, String(w))
+  } catch {
+    /* this visit only */
+  }
+}
+try {
+  const saved = Number(localStorage.getItem(WIDTH_KEY))
+  if (saved) document.documentElement.style.setProperty('--bc-width', `${saved}px`)
+} catch {
+  /* default width */
+}
+
 export function BloomStory({
   data,
   onTalk,
@@ -113,6 +141,28 @@ export function BloomCompanion({
     }
   }
   const panel = useRef<HTMLElement>(null)
+  // Drag the panel's edge to resize; the width lives on <html> so the docked layout follows it.
+  const startResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = panel.current
+    if (!el) return
+    e.preventDefault()
+    const left = el.getBoundingClientRect().left
+    const handle = e.currentTarget
+    handle.setPointerCapture(e.pointerId)
+    handle.dataset.dragging = ''
+    document.documentElement.dataset.bcResizing = ''
+    const move = (ev: PointerEvent) => setPanelWidth(ev.clientX - left)
+    const up = () => {
+      delete handle.dataset.dragging
+      delete document.documentElement.dataset.bcResizing
+      handle.removeEventListener('pointermove', move)
+      handle.removeEventListener('pointerup', up)
+      handle.removeEventListener('pointercancel', up)
+    }
+    handle.addEventListener('pointermove', move)
+    handle.addEventListener('pointerup', up)
+    handle.addEventListener('pointercancel', up)
+  }
   // "Ask Bloom" on a page opens the guide docked beside it.
   useEffect(() => {
     const ask = (e: Event) => {
@@ -301,6 +351,21 @@ export function BloomCompanion({
             }
           }}
         >
+          <div
+            className="bc-resize"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize Bloom panel (arrow keys; double-click to reset)"
+            tabIndex={0}
+            onPointerDown={startResize}
+            onDoubleClick={() => setPanelWidth(null)}
+            onKeyDown={(e) => {
+              if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+              e.preventDefault()
+              const w = panel.current?.getBoundingClientRect().width ?? 380
+              setPanelWidth(w + (e.key === 'ArrowRight' ? 24 : -24))
+            }}
+          />
           <header className="bc-head">
             <div className="bc-head-actions" role="tablist" aria-label="Bloom mode">
               <button type="button" role="tab" aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>

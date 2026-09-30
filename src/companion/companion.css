@@ -289,7 +289,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: min(400px, calc(100vw - 32px));
+  width: min(var(--bc-width, 400px), calc(100vw - 32px));
   max-height: calc(100dvh - 170px);
   overflow: hidden;
   overscroll-behavior: contain;
@@ -307,7 +307,7 @@
   right: auto;
   bottom: 0;
   left: var(--bc-left, 0px);
-  width: 380px;
+  width: var(--bc-width, 380px);
   max-height: none;
   border-radius: 0;
   border-width: 0 1px 0 0;
@@ -363,7 +363,7 @@ html:not([data-nav='hamburger'])[data-sidebar='collapsed'] {
 
 @media (min-width: 901px) {
   html[data-bloom-docked] main#overview {
-    margin-left: calc(var(--bc-left, 0px) + 380px);
+    margin-left: calc(var(--bc-left, 0px) + var(--bc-width, 380px));
     width: auto;
   }
 }
@@ -381,7 +381,37 @@ html:not([data-nav='hamburger'])[data-sidebar='collapsed'] {
 
 @media (min-width: 901px) {
   html[data-bloom-docked][data-nav='hamburger'] main#overview {
-    margin-left: 380px;
-    width: calc(100% - 380px);
+    margin-left: var(--bc-width, 380px);
+    width: calc(100% - var(--bc-width, 380px));
   }
 }
+
+/* Drag the panel's outer edge to resize it (width is remembered). */
+.bc-resize {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: 2;
+}
+.bc-resize::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 4px;
+  height: 44px;
+  margin-top: -22px;
+  border-radius: 4px;
+  background: var(--border-color);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.bc-panel:hover .bc-resize::after,
+.bc-resize:focus-visible::after,
+.bc-resize[data-dragging]::after { opacity: 1; background: var(--accent-color); }
+html[data-bc-resizing], html[data-bc-resizing] * { cursor: ew-resize !important; user-select: none !important; }
+@media (max-width: 900px) { .bc-resize { display: none; } }
