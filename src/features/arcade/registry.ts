@@ -94,4 +94,7 @@ export const GAMES: GameDef[] = [
   g(26, 'knife', 'Knife Rhythm', 'Slice on the beat for even, perfect pieces.', 'p5.js', 30,
     '<rect x="6" y="36" width="44" height="14" rx="7" fill="currentColor" opacity=".7"/><path d="M40 6h6v26H34z" fill="currentColor"/><rect x="40" y="0" width="6" height="8" rx="2" fill="currentColor" opacity=".6"/><path d="M18 36v14M26 36v14" stroke="#fff" stroke-width="2" stroke-dasharray="2 2"/>',
     () => import('./games/KnifeRhythm')),
+  g(27, 'labels', 'Label Detective', 'Sweep the magnifier and catch every sugar in disguise.', 'SVG clip-path lens', 48,
+    '<rect x="6" y="8" width="34" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 18h22M12 24h18M12 30h22M12 36h14" stroke="currentColor" stroke-width="2" opacity=".6"/><circle cx="40" cy="36" r="12" fill="none" stroke="currentColor" stroke-width="4"/><path d="M48 44l10 10" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>',
+    () => import('./games/LabelDetective')),
 ]

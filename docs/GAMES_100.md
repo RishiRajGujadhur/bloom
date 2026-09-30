@@ -153,3 +153,4 @@ Every game has:
 - Game 24: Bike Fix — a Three.js spoked wheel half-dunked in a water tub. Drag to spin it, watch for bubbles rising from hidden punctures, click to patch, then pump the tyre up across five wheels.
 - Game 25: Clock Juggler — SVG dials for bread, laundry, parking, tea, a call to Gran and seedlings, each sweeping down at its own pace. Tap in the green window; more timers join through the day.
 - Game 26: Knife Rhythm — p5.js chopping board where carrots, cucumbers, leeks and more glide under the blade on a speeding beat. Slice as each dotted line meets the knife for perfect, even pieces; a curled guiding hand flinches if you rush.
+- Game 27: Label Detective — an SVG clip-path magnifying glass (3× lens) over tiny ingredient lists. Click every disguised sugar (dextrose, maltodextrin, invert syrup…) on five packs before the shopper moves on.
