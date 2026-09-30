@@ -20,3 +20,8 @@
 .nav-pin.active { background: color-mix(in srgb, var(--accent-color) 18%, transparent); }
 .nav-pin::after { content: '★'; margin-left: auto; font-size: 0.7rem; color: var(--accent-color); }
 html[data-theme='matrix'] .nav-undo { background: #0b3a1a; color: #d6ffe0; }
+.nav-recent { opacity: 0.8; }
+.nav-recent::before { content: 'Recent'; flex-basis: 100%; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.nav-recent .nav-pin { font-weight: 600; font-size: 0.82rem; padding: 5px 10px; }
+.nav-recent .nav-pin::after { content: none; }
+.nav-recent::before { padding: 0 10px; }

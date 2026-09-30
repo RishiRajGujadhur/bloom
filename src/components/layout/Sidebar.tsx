@@ -541,6 +541,31 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
     .sort((a, b) => a.section - b.section || a.order - b.order)
   const requiresOf = (key: string) => items.find((i) => i.key === key)?.requires
   const pinnedItems = pins.map((k) => visibleItems.find((v) => v.key === k)).filter((v): v is (typeof visibleItems)[number] => !!v)
+  // Recently visited pages (not pinned, not the current one), newest first.
+  const [recent, setRecent] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('bloom-nav-recent') ?? '[]') as string[]
+    } catch {
+      return []
+    }
+  })
+  useEffect(() => {
+    if (active === 'overview') return
+    setRecent((list) => {
+      const next = [active, ...list.filter((k) => k !== active)].slice(0, 6)
+      try {
+        localStorage.setItem('bloom-nav-recent', JSON.stringify(next))
+      } catch {
+        /* optional */
+      }
+      return next
+    })
+  }, [active])
+  const recentItems = recent
+    .filter((k) => k !== active && !pins.includes(k as NavKey))
+    .map((k) => visibleItems.find((v) => v.key === k))
+    .filter((v): v is (typeof visibleItems)[number] => !!v)
+    .slice(0, 4)
 
   // Collapsible groups: remembered per device; the group holding the current page is always open.
   const [openGroups, setOpenGroups] = useState<Set<number>>(() => {
@@ -652,6 +677,16 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                 <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} title={title} aria-label={`${title} (pinned)`} onClick={() => handleNavigate(key)} onContextMenu={(e) => { e.preventDefault(); setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!requiresOf(key) && !!onDisable, pinned: true }) }}>
                   <Icon size={17} aria-hidden="true" />
                   {isOpen && <span>{title}</span>}
+                </button>
+              ))}
+            </div>
+          )}
+          {isOpen && recentItems.length > 1 && (
+            <div className="nav-pins nav-recent" aria-label="Recent pages">
+              {recentItems.map(({ key, title, Icon }) => (
+                <button key={key} type="button" className="nav-pin" title={`Recent: ${title}`} onClick={() => handleNavigate(key)}>
+                  <Icon size={15} aria-hidden="true" />
+                  <span>{title}</span>
                 </button>
               ))}
             </div>
