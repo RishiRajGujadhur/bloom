@@ -155,7 +155,29 @@ export function MixerPage() {
         <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={36} /> : <Play size={36} />}
         </button>
-        {on('sleepTimer') && <Slider label="Sleep timer" value={store.sleep} min={5} max={120} step={5} unit="min" onChange={(v) => setStore((s) => ({ ...s, sleep: v }))} />}
+        {on('sleepTimer') && (
+          <>
+            <Slider label="Sleep timer" value={store.sleep} min={5} max={120} step={5} unit="min" onChange={(v) => setStore((s) => ({ ...s, sleep: v }))} />
+            <div className="mx-favs" role="radiogroup" aria-label="Sleep timer presets">
+              {[15, 30, 45, 60, 90].map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  role="radio"
+                  className="studio-chip"
+                  aria-checked={store.sleep === m}
+                  onClick={() => {
+                    setStore((s) => ({ ...s, sleep: m }))
+                    // Restart the countdown if already playing.
+                    if (playing) void mixer.play(m)
+                  }}
+                >
+                  {m < 60 ? `${m}m` : `${m / 60}h`}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
         {on('savedMixes') && (
           <form
             className="sc-manual"
