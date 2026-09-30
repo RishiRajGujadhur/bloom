@@ -79,4 +79,7 @@ export const GAMES: GameDef[] = [
   g(21, 'plate', 'Plate Painter', 'Paint the meal onto a spinning plate the way the chef likes it.', 'SVG · GSAP', 100,
     '<circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="3"/><path d="M32 32V12a20 20 0 0 1 0 40z" fill="currentColor"/><path d="M32 32H12a20 20 0 0 1 20-20z" fill="currentColor" opacity=".6"/><path d="M32 32V52a20 20 0 0 1-20-20z" fill="currentColor" opacity=".35"/>',
     () => import('./games/PlatePainter')),
+  g(22, 'posture', 'Posture Tower', 'Stack a tall spine while the chair keeps slumping.', 'matter-js · SVG', 40,
+    '<rect x="22" y="8" width="20" height="7" rx="3" fill="currentColor"/><rect x="21" y="17" width="22" height="7" rx="3" fill="currentColor" opacity=".85"/><rect x="20" y="26" width="24" height="7" rx="3" fill="currentColor" opacity=".7"/><rect x="19" y="35" width="26" height="7" rx="3" fill="currentColor" opacity=".55"/><rect x="12" y="46" width="40" height="7" rx="3" fill="currentColor" transform="rotate(-6 32 50)"/>',
+    () => import('./games/PostureTower')),
 ]
