@@ -1,3 +1,4 @@
+import { download } from '../lab/exportSuite'
 import { NextStep } from '../dailyFlow/DailyFlow'
 import { PenLine, Sun, Wind } from 'lucide-react'
 import { subOn } from '../subFeatures'
@@ -858,6 +859,16 @@ export function GratitudePage() {
       </div>
       {entries.length > 5 && (
         <div className="wb-card wb-grat-search">
+          <button
+            type="button"
+            className="quiet-button wb-export"
+            onClick={() => {
+              const lines = [...entries].sort((a, b) => a.at - b.at).map((e) => `${new Date(e.at).toISOString().slice(0, 10)}  ${jars.find((j) => j.id === (e.jarId ?? 'moments'))?.name ?? ''}: ${e.text}`)
+              download(new Blob([`My gratitude\n\n${lines.join('\n')}\n`], { type: 'text/plain' }), 'bloom-gratitude.txt')
+            }}
+          >
+            ⬇ Export all
+          </button>
           <input type="search" aria-label="Search your gratitude" placeholder={`Search ${entries.length} notes…`} value={gratQuery} onChange={(e) => setGratQuery(e.target.value)} />
           {gratQuery.trim() && (
             <ul>

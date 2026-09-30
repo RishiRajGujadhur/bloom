@@ -685,3 +685,4 @@
 .wb-grat-search input { width: 100%; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
 .wb-grat-search ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
 .wb-grat-search li small { margin-left: 8px; color: var(--text-muted); }
+.wb-export { float: right; margin: 0 0 8px 8px; }
