@@ -469,6 +469,11 @@ export function BloomCompanion({
               aria-label="Conversation with Bloom"
               aria-live="polite"
             >
+              {turns.length > 0 && !busy && (
+                <button type="button" className="companion-clear" onClick={() => setTurns([])}>
+                  Clear conversation
+                </button>
+              )}
               {!turns.length && (
                 <p className="companion-welcome">
                   Welcome back. We can start with whatever feels manageable
@@ -477,7 +482,14 @@ export function BloomCompanion({
               )}
               {turns.map((turn, index) => (
                 <div key={index} className={`companion-message ${turn.role}`}>
-                  <small>{turn.role === 'user' ? 'You' : 'Bloom'}</small>
+                  <small>
+                    {turn.role === 'user' ? 'You' : 'Bloom'}
+                    {turn.role === 'assistant' && (
+                      <button type="button" className="companion-copy" aria-label="Copy reply" title="Copy" onClick={(e) => { void navigator.clipboard?.writeText(turn.content); e.currentTarget.textContent = '✓' }}>
+                        ⧉
+                      </button>
+                    )}
+                  </small>
                   <p>{turn.content}</p>
                 </div>
               ))}
