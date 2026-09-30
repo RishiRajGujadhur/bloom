@@ -172,8 +172,27 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
   }, [days.length, reduced, spin])
 
   const day = days[selected]
+  // Quick review: tour the last seven days, two seconds each.
+  const [touring, setTouring] = useState(false)
+  useEffect(() => {
+    if (!touring) return
+    let k = 0
+    goTo(todayIndex - 6)
+    const id = window.setInterval(() => {
+      k++
+      if (k > 6) {
+        setTouring(false)
+        return
+      }
+      goTo(todayIndex - 6 + k)
+    }, 2000)
+    return () => window.clearInterval(id)
+    // goTo is recreated each render; the tour only restarts when toggled.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [touring])
   usePageActions([
     { id: 'pl-today', label: 'Back to today', icon: '📍', run: () => goTo(todayIndex) },
+    { id: 'pl-tour', label: touring ? 'Stop the week review' : 'Review the last 7 days', icon: '▶️', run: () => setTouring((v) => !v) },
     { id: 'pl-prev', label: 'Previous day', icon: '⬅️', run: () => goTo(selected - 1) },
     { id: 'pl-next', label: 'Next day', icon: '➡️', run: () => goTo(selected + 1) },
     { id: 'pl-zoom', label: zoomed ? 'Zoom out' : 'Zoom in', icon: '🔍', run: () => setZoomed((z) => !z) },
@@ -229,6 +248,9 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
           </button>
           <button className="ov-secondary" onClick={() => goTo(todayIndex)}>
             Today
+          </button>
+          <button className="ov-secondary" aria-pressed={touring} onClick={() => setTouring((v) => !v)}>
+            {touring ? '■ Stop' : '▶ Last 7 days'}
           </button>
         </div>
       </div>
