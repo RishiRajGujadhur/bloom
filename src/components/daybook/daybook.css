@@ -398,3 +398,12 @@ html[data-mode='dark'] .thought-diff del {
     transform: translateY(4px);
   }
 }
+
+/* Saved page card extras: privacy blur and quick tools. */
+.daybook-page-wrap { position: relative; }
+.daybook-page-card { position: relative; }
+.daybook-page-card.is-private > :not(.daybook-page-date) { filter: blur(6px); user-select: none; }
+.daybook-page-card.is-private::after { content: 'Private · click to reveal'; position: absolute; inset: auto 0 44% 0; text-align: center; font-size: 12px; color: var(--text-muted); }
+.daybook-page-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0.35; transition: opacity 150ms; }
+.daybook-page-wrap:hover .daybook-page-tools, .daybook-page-tools:focus-within { opacity: 1; }
+.daybook-page-tools button { border: 0; background: var(--bg-surface); border-radius: 8px; padding: 3px 6px; cursor: pointer; font-size: 13px; }

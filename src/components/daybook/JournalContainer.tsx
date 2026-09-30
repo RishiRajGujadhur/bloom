@@ -35,6 +35,7 @@ export function JournalContainer() {
   const [selected, setSelected] = useState<JournalMode | null>(null)
   const [storageError, setStorageError] = useState('')
   const [libraryOpen, setLibraryOpen] = useState(false)
+  const [revealed, setRevealed] = useState<string | null>(null)
   const [initial] = useState(() => {
     try {
       const value: unknown = JSON.parse(
@@ -220,11 +221,14 @@ export function JournalContainer() {
                   const text = journalText(page.content).trim()
                   const words = text ? text.split(/\s+/).length : 0
                   return (
+                    <div key={page.id} className="daybook-page-wrap">
                     <button
-                      key={page.id}
                       type="button"
-                      className="daybook-page-card"
-                      onClick={() => openPage(page)}
+                      className={`daybook-page-card${page.private && revealed !== page.id ? ' is-private' : ''}`}
+                      onClick={() => {
+                        if (page.private && revealed !== page.id) setRevealed(page.id)
+                        else openPage(page)
+                      }}
                     >
                       <span className="daybook-page-date">
                         {new Date(page.updatedAt).toLocaleDateString(language, {
@@ -244,6 +248,12 @@ export function JournalContainer() {
                         {words} {words === 1 ? 'word' : 'words'}
                       </small>
                     </button>
+                    <div className="daybook-page-tools">
+                      <button type="button" title={page.private ? 'Show on the home screen' : 'Blur on the home screen'} aria-pressed={Boolean(page.private)} onClick={() => persist({ ...page, private: !page.private }, false)}>
+                        {page.private ? '🔒' : '🔓'}
+                      </button>
+                    </div>
+                    </div>
                   )
                 })}
               </Carousel>

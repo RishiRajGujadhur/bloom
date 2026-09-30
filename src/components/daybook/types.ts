@@ -29,4 +29,6 @@ export interface JournalEntry {
   content: Record<string, unknown>
   /** Keystroke-rhythm fingerprint of the last writing session (Flow topography). */
   flow?: FlowFingerprint
+  /** Blurred on the home screen until clicked. */
+  private?: boolean
 }
