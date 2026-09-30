@@ -160,3 +160,26 @@ export function usualFoods(meals: { name: string; kcal: number; protein: number;
     .slice(0, limit)
     .map(({ count, last }) => ({ name: last.name, kcal: last.kcal, protein: last.protein, carbs: last.carbs, fat: last.fat, count }))
 }
+
+/** Extra glasses of water for today's exercise: one per 30 active minutes, up to four. */
+export function exerciseWaterBonus(minutes: number) {
+  return Math.min(4, Math.floor(Math.max(0, minutes) / 30))
+}
+
+/** Minutes of exercise logged today across runs, workouts and interval sessions. */
+export function exerciseMinutesToday(now = new Date()) {
+  const same = (t: number) => new Date(t).toDateString() === now.toDateString()
+  const read = (key: string) => {
+    try {
+      return JSON.parse(localStorage.getItem(key) ?? 'null')
+    } catch {
+      return null
+    }
+  }
+  let secs = 0
+  for (const r of read('bloom-runs-v1')?.runs ?? []) if (same(r.at)) secs += r.seconds ?? 0
+  for (const w of read('bloom-workouts-v1')?.workouts ?? [])
+    if (w.finishedAt && same(w.startedAt) && w.templateId !== 'intervals') secs += (w.finishedAt - w.startedAt) / 1000
+  for (const h of read('bloom-intervals-v1')?.history ?? []) if (same(h.at)) secs += h.seconds ?? 0
+  return Math.round(secs / 60)
+}

@@ -19,6 +19,8 @@ import {
   type Meal,
   type MealKind,
   usualFoods,
+  exerciseMinutesToday,
+  exerciseWaterBonus,
 } from './dietModel'
 import { NutrientsPanel } from './NutrientsPanel'
 import { RecipeBuilder } from './RecipeBuilder'
@@ -181,6 +183,10 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
   const addBtn = useRef<HTMLButtonElement>(null)
   const totals = dayTotals(state.meals, today)
   const water = state.water[today] ?? 0
+  // Drink a little more on days you train.
+  const exerciseMin = useMemo(() => exerciseMinutesToday(), [])
+  const waterBonus = exerciseWaterBonus(exerciseMin)
+  const waterTarget = state.targets.water + waterBonus
   const todayMeals = state.meals.filter((m) => m.date === today).sort((a, b) => a.at - b.at)
   const mindful = subOn('dietTracker', 'mindful')
   const usuals = useMemo(() => usualFoods(state.meals.filter((m) => !foodLibrary.some((f) => f.name === m.name))), [state.meals])
@@ -235,7 +241,7 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
         <DietQuick
           kind={kind}
           water={water}
-          target={state.targets.water}
+          target={waterTarget}
           hasMeal={todayMeals.length > 0}
           onAdd={(f) => addMeal({ name: f.name, kcal: f.kcal, protein: f.protein, carbs: f.carbs, fat: f.fat, ...(f.ingredients ? { ingredients: f.ingredients } : {}) })}
           onWater={setWater}
@@ -264,9 +270,10 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           {subOn('dietTracker', 'water') && (
             <div className="diet-water-row">
               <span>
-                <Droplet size={16} aria-hidden="true" /> Water {water}/{state.targets.water}
+                <Droplet size={16} aria-hidden="true" /> Water {water}/{waterTarget}
+                {waterBonus > 0 && <small className="diet-water-bonus" title={`${exerciseMin} active minutes today`}> +{waterBonus} for today’s exercise</small>}
               </span>
-              <WaterGlasses count={water} target={state.targets.water} onSet={setWater} />
+              <WaterGlasses count={water} target={waterTarget} onSet={setWater} />
             </div>
           )}
         </div>
