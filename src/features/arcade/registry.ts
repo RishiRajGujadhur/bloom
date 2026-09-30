@@ -163,4 +163,7 @@ export const GAMES: GameDef[] = [
   g(49, 'swim', 'Swim Float', 'Swim hard, float calm, ride the waves back to the beach.', 'p5.js', 195,
     '<path d="M4 40q7-6 14 0t14 0 14 0 14 0" stroke="currentColor" stroke-width="3" fill="none"/><path d="M4 52q7-6 14 0t14 0 14 0 14 0" stroke="currentColor" stroke-width="3" fill="none" opacity=".5"/><ellipse cx="30" cy="32" rx="14" ry="5" fill="currentColor"/><circle cx="46" cy="28" r="5" fill="currentColor"/>',
     () => import('./games/SwimFloat')),
+  g(50, 'eggs', 'Egg Timer Symphony', 'Soft, jammy, hard — count the beats, no clocks allowed.', 'SVG · GSAP', 40,
+    '<ellipse cx="22" cy="30" rx="10" ry="13" fill="currentColor" opacity=".8"/><ellipse cx="42" cy="34" rx="12" ry="9" fill="#fff" stroke="currentColor" stroke-width="2"/><circle cx="42" cy="34" r="5" fill="currentColor"/><path d="M8 52h48" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="10" r="2" fill="currentColor"/><circle cx="22" cy="8" r="2" fill="currentColor" opacity=".6"/><circle cx="30" cy="10" r="2" fill="currentColor" opacity=".3"/>',
+    () => import('./games/EggTimer')),
 ]

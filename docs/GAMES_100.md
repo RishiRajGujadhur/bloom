@@ -176,3 +176,4 @@ Every game has:
 - Game 47: Shelf Level — tilt a shelf by hand (a slightly shaky one) while an SVG spirit-level bubble lags behind, and screw it in when it sits between the lines. Then GSAP ornaments drop on and slide off if it's wonky.
 - Game 48: Clock Tower — drag an SVG town clock's minute hand (the hour hand follows like real gearing) to times shouted in words ("quarter to nine") or 24-hour (19:15), then ring the swinging GSAP bell.
 - Game 49: Swim Float — p5.js sea with wave sets and a gentle rip. Hold to swim toward the pointer (tiring), let go to float on your back and recover breath, and don't panic-tap; reach the beach.
+- Game 50: Egg Timer Symphony — three SVG pots that tick a beat per second (lit dots, no clocks). Drop in eggs for soft, jammy or hard orders, lift them out by counting, then crack them open to see yolks from runny to chalky.
