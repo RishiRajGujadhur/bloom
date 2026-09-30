@@ -40,4 +40,7 @@ export const GAMES: GameDef[] = [
   g(8, 'lighthouse', 'Focus Lighthouse', 'Hold the beam steady and guide every ship past the rocks.', 'Three.js 3D', 230,
     '<path d="M28 58l3-40h6l3 40z" fill="currentColor"/><rect x="27" y="10" width="14" height="8" rx="2" fill="currentColor" opacity=".7"/><path d="M41 12L62 4v18z" fill="currentColor" opacity=".35"/><path d="M4 58c8-4 16-4 24 0" stroke="currentColor" stroke-width="3" fill="none"/>',
     () => import('./games/FocusLighthouse')),
+  g(9, 'kite', 'Breath Kite', 'Hold to climb, let go to glide, and thread the rings on the wind.', 'SVG · GSAP', 350,
+    '<path d="M32 6l14 18-14 22-14-22z" fill="currentColor" opacity=".85"/><path d="M32 46c-4 6 4 8 0 12" stroke="currentColor" stroke-width="2.5" fill="none"/><ellipse cx="52" cy="40" rx="4" ry="10" fill="none" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/BreathKite')),
 ]

@@ -135,3 +135,4 @@ Every game has:
 - Game 6: Compound Orchard — a Babylon.js floating island. Plant trees that grow by a fifth of their size each season and harvest at the right time before old trees wither; 20 seasons with soft shadows and coin bursts.
 - Game 7: Scam Bubbles — GSAP bubbles carry texts up to your phone. Pop the phishing, fake-delivery and gift-card scams, let real messages through; three cracks and it's over.
 - Game 8: Focus Lighthouse — Three.js night sea with wave-displaced water, a spotlight beam and cone, sailing ships with focus bars and fireworks pulling your eye away.
+- Game 9: Breath Kite — SVG and GSAP kite on a 4-seconds-up, 6-seconds-down wind wave. Hold to rise, release to glide, and thread the rings for streaks.
