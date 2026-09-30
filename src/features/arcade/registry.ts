@@ -25,4 +25,7 @@ export const GAMES: GameDef[] = [
   g(3, 'knots', 'Knot Garden', 'Follow the firefly and tie the rope to light each lantern.', 'p5.js · verlet rope', 95,
     '<path d="M10 8c20 6 30 14 22 24s-20 12-6 20 24 2 28-6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="22" cy="24" r="4" fill="currentColor"/><circle cx="42" cy="36" r="4" fill="currentColor"/><rect x="44" y="46" width="10" height="14" rx="3" fill="currentColor" opacity=".7"/>',
     () => import('./games/KnotGarden')),
+  g(4, 'burners', 'Burner Juggle', 'Four burners, a stack of orders and ninety seconds of heat.', 'GSAP · SVG', 18,
+    '<circle cx="20" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="44" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="44" r="11" fill="currentColor" opacity=".7"/><circle cx="44" cy="44" r="11" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 50q4-10 8 0M40 26q4-10 8 0" fill="none" stroke="currentColor" stroke-width="2"/>',
+    () => import('./games/BurnerJuggle')),
 ]

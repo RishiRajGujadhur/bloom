@@ -130,3 +130,4 @@ Every game has:
 - Game 1: Pantry Tetris — matter-js fridge packing drawn in SVG, with rotation, a door that has to shut and a bonus for short-dated food kept within reach. The Arcade hub and Games section launched with it.
 - Game 2: Coin Cascade — a Plinko month of pay into Home, Food, Fun and Later jars, with bills that fall due partway through and a Later jar that grows weekly.
 - Game 3: Knot Garden — p5.js verlet rope. Follow a firefly's path through the garden pegs to tie a clove hitch, figure eight, bowline, reef knot and sheet bend, each one lighting a lantern before dusk.
+- Game 4: Burner Juggle — GSAP and SVG stove with four burners, heat knobs, stirring, scorch meters and an order rail, in 90-second services.
