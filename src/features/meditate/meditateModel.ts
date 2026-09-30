@@ -56,7 +56,7 @@ export const currentLine = (lines: Line[], t: number) => [...lines].reverse().fi
 /** Seconds of the interval bells for unguided sits. */
 export const bells = (minutes: number, every: number) => (every <= 0 ? [] : Array.from({ length: Math.floor((minutes - 0.01) / every) }, (_, i) => (i + 1) * every * 60))
 
-export type MedLog = { at: number; id: string; minutes: number; before?: number; after?: number }
+export type MedLog = { at: number; id: string; minutes: number; before?: number; after?: number; note?: string }
 export const MED_KEY = 'bloom-meditate-v1'
 
 export function streakDays(logs: MedLog[], now = Date.now()) {

@@ -180,3 +180,6 @@
 }
 .md-resume { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 14px; margin-bottom: 12px; border-radius: 14px; background: color-mix(in oklab, #6b5bd6 12%, var(--bg-surface)); }
 .md-resume span { flex: 1; min-width: 200px; }
+.md-note { width: 100%; resize: vertical; }
+.md-notes { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+.md-notes small { color: var(--text-muted); margin-right: 6px; }

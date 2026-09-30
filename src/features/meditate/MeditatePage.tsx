@@ -143,7 +143,11 @@ export function MeditatePage() {
     setRunning(false)
     setTab('sit')
   }
-  const saveAfter = () => setStore((s) => ({ ...s, logs: s.logs.map((l, i) => (i === s.logs.length - 1 ? { ...l, after } : l)) }))
+  const [sitNote, setSitNote] = useState('')
+  const saveAfter = () => {
+    setStore((s) => ({ ...s, logs: s.logs.map((l, i) => (i === s.logs.length - 1 ? { ...l, after, ...(sitNote.trim() ? { note: sitNote.trim() } : {}) } : l)) }))
+    setSitNote('')
+  }
 
   const sit = () => (
     <div className="md-stage" ref={card} data-running={running}>
@@ -157,6 +161,7 @@ export function MeditatePage() {
             {on('moodCheck') && (
               <>
                 <Slider label="How calm do you feel now?" value={after} min={1} max={5} format={(v) => ['', '😣', '😕', '😐', '🙂', '😌'][v]} onChange={setAfter} />
+                <textarea className="studio-input md-note" rows={2} maxLength={300} placeholder="Anything you noticed? (optional)" aria-label="Session note" value={sitNote} onChange={(e) => setSitNote(e.target.value)} />
                 <button type="button" className="studio-go" onClick={saveAfter}>
                   Save
                 </button>
@@ -294,6 +299,19 @@ export function MeditatePage() {
         <Stat value={`${total_min} min`} label="total" />
         <Stat value={withMood.length ? `+${(withMood.reduce((a, l) => a + (l.after! - l.before!), 0) / withMood.length).toFixed(1)}` : '—'} label="avg. calm gained" />
       </div>
+      {store.logs.some((l) => l.note) && (
+        <ul className="md-notes">
+          {store.logs
+            .filter((l) => l.note)
+            .slice(-5)
+            .reverse()
+            .map((l) => (
+              <li key={l.at}>
+                <small>{new Date(l.at).toLocaleDateString([], { day: 'numeric', month: 'short' })}</small> {l.note}
+              </li>
+            ))}
+        </ul>
+      )}
     </div>
   )
 
