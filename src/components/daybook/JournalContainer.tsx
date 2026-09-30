@@ -260,7 +260,7 @@ export function JournalContainer() {
                           day: 'numeric',
                         })}
                       </span>
-                      <strong>{page.modeTitle}</strong>
+                      <strong>{page.mood && <span aria-label="Mood">{page.mood} </span>}{page.modeTitle}</strong>
                       <span className="daybook-page-preview">
                         {text.slice(0, 160) || 'Empty page'}
                       </span>

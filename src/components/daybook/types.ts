@@ -31,4 +31,6 @@ export interface JournalEntry {
   flow?: FlowFingerprint
   /** Blurred on the home screen until clicked. */
   private?: boolean
+  /** How the writer felt, picked in the editor header. */
+  mood?: string
 }

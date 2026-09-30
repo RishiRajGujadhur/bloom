@@ -275,6 +275,16 @@ export function AdaptiveEditor({
   // One id for the life of this page, so autosaves update rather than duplicate.
   const pageId = useRef(entry?.id ?? crypto.randomUUID())
   const createdAt = useRef(entry?.createdAt ?? new Date().toISOString())
+  const [mood, setMood] = useState(entry?.mood)
+  const moodRef = useRef(mood)
+  const pickMood = (m: string) => {
+    const next = m === mood ? undefined : m
+    moodRef.current = next
+    setMood(next)
+    setDirty(true)
+    setSaved(false)
+    setContent((c) => ({ ...c }))
+  }
   const snapshot = (): JournalEntry => ({
     id: pageId.current,
     modeId: mode.id,
@@ -282,6 +292,8 @@ export function AdaptiveEditor({
     createdAt: createdAt.current,
     updatedAt: new Date().toISOString(),
     content,
+    private: entry?.private,
+    mood: moodRef.current,
     flow:
       (flowOn && subOn('flowTopography', 'save') ? flow.snapshot() : null) ??
       entry?.flow,
@@ -338,6 +350,11 @@ export function AdaptiveEditor({
             </span>
             <span>
               {words} {words === 1 ? 'word' : 'words'}
+            </span>
+            <span className="daybook-mood" role="group" aria-label="Mood">
+              {['😄', '🙂', '😐', '😔', '😣'].map((m) => (
+                <button key={m} type="button" aria-pressed={mood === m} onClick={() => pickMood(m)}>{m}</button>
+              ))}
             </span>
             <span className={saved ? 'is-saved' : 'is-unsaved'}>
               {saved ? (
