@@ -7,3 +7,4 @@ body.wa-focus aside, body.wa-focus header, body.wa-focus nav { opacity: 0.15; tr
 body.wa-focus main *:not(:has(.wa-focus-target)):not(.wa-focus-target) { opacity: 0.25; }
 body.wa-focus .wa-focus-target { opacity: 1 !important; position: relative; z-index: 55; box-shadow: 0 0 0 9999px rgb(0 0 0 / 0.06); }
 [data-theme='matrix'] .wa-bar { background: #001a08; color: #00ff66; }
+.offline-pill { position: fixed; left: 50%; top: 10px; transform: translateX(-50%); z-index: 90; padding: 5px 14px; border-radius: 999px; font-size: 12px; background: var(--text-primary, #333); color: var(--bg-surface, #fff); box-shadow: 0 6px 18px rgb(0 0 0 / 0.2); }

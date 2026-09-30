@@ -12,6 +12,17 @@ import gsap from 'gsap'
  */
 export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
+  const [offline, setOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
+  useEffect(() => {
+    const on = () => setOffline(false)
+    const off = () => setOffline(true)
+    window.addEventListener('online', on)
+    window.addEventListener('offline', off)
+    return () => {
+      window.removeEventListener('online', on)
+      window.removeEventListener('offline', off)
+    }
+  }, [])
 
   useEffect(() => {
     const vis = () => (document.hidden ? gsap.globalTimeline.pause() : gsap.globalTimeline.resume())
@@ -91,6 +102,7 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   return (
     <>
       <a href="#page-heading" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('page-heading')?.focus() }}>Skip to content</a>
+      {offline && <div className="offline-pill" role="status">Offline · everything still saves on this device</div>}
       {showTop && <button type="button" className="to-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>}
     </>
   )
