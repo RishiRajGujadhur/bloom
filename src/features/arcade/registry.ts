@@ -172,4 +172,7 @@ export const GAMES: GameDef[] = [
   g(52, 'morning', 'Morning Flow', 'Kettle on, then shower. The tram leaves at 7:30.', 'SVG · GSAP', 45,
     '<circle cx="18" cy="18" r="12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 18V11M18 18l5 3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="34" width="32" height="18" rx="5" fill="currentColor"/><rect x="32" y="38" width="8" height="6" fill="#fff"/><rect x="44" y="38" width="8" height="6" fill="#fff"/><path d="M4 58h56" stroke="currentColor" stroke-width="3" stroke-dasharray="6 4"/>',
     () => import('./games/MorningFlow')),
+  g(53, 'river', 'Risk River', 'Steady stones, wobbly stones, shiny stones just out of reach.', 'p5.js', 140,
+    '<path d="M0 20q16 6 32 0t32 0M0 44q16 6 32 0t32 0" stroke="currentColor" stroke-width="2" fill="none" opacity=".4"/><ellipse cx="16" cy="48" rx="10" ry="7" fill="currentColor" opacity=".7"/><ellipse cx="40" cy="30" rx="8" ry="6" fill="currentColor" opacity=".5"/><ellipse cx="52" cy="12" rx="7" ry="5" fill="currentColor"/><circle cx="16" cy="42" r="5" fill="currentColor"/><path d="M18 40q10-14 20-10" stroke="currentColor" stroke-dasharray="2 3" fill="none"/>',
+    () => import('./games/RiskRiver')),
 ]

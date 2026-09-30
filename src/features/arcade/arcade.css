@@ -56,3 +56,4 @@
 .ar-filters [role='radiogroup'] { display: flex; flex-wrap: wrap; gap: 6px; }
 .ar-filters button { border: 1px solid color-mix(in srgb, currentColor 22%, transparent); background: transparent; color: inherit; padding: 5px 12px; border-radius: 999px; cursor: pointer; font-size: 0.82rem; }
 .ar-filters button.on { background: var(--accent, #e76f51); color: #fff; border-color: transparent; }
+.rr-host canvas { display: block; margin: 0 auto; height: min(72vh, 640px) !important; width: auto !important; aspect-ratio: 520 / 640; touch-action: none; }

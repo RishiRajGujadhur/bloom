@@ -179,3 +179,4 @@ Every game has:
 - Game 50: Egg Timer Symphony — three SVG pots that tick a beat per second (lit dots, no clocks). Drop in eggs for soft, jammy or hard orders, lift them out by counting, then crack them open to see yolks from runny to chalky.
 - Game 51: Habit Hatchery — SVG eggs in nests that each need one warm tap a day. Seven-day streak dots hatch a creature with a GSAP pop, missed days cool eggs back to zero, and you can add eggs from the basket at your own risk.
 - Game 52: Morning Flow — race a 7:30 tram with ten job cards. Hands-on jobs block you while kettle, toast and washing run in the background once started; must-dos, dependencies (dress after shower) and a live analogue clock.
+- Game 53: Risk River — a p5.js frog hops drifting stones upstream. Point, hold to charge (with an aim arc), release to leap; steady grey rocks, wobbly brown ones that sink if you linger, flimsy lily pads, and gold coin stones just out of reach.
