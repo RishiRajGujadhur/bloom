@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useKeepAwake } from '../../platform/presence'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { Armchair, BellRing, HeartPulse, Pause, Play, PersonStanding, SkipForward, Sparkles } from 'lucide-react'
 import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
@@ -108,6 +109,8 @@ export function StretchPage() {
   const [areas, setAreas] = useState<Area[]>([])
   const [i, setI] = useState(0)
   const [playing, setPlaying] = useState(false)
+  // Keep the screen on while the session runs (Screen Wake Lock).
+  useKeepAwake(playing)
   const [waitingSwitch, setWaitingSwitch] = useState(false)
   const [before, setBefore] = useState(5)
   const [after, setAfter] = useState<number | null>(null)

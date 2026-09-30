@@ -4,6 +4,7 @@ import uPlot from 'uplot'
 import 'uplot/dist/uPlot.min.css'
 import { mean, standardDeviation } from 'simple-statistics'
 import { CapsBadge } from '../../platform/CapsBadge'
+import { useKeepAwake } from '../../platform/presence'
 import { hasCap } from '../../platform/caps'
 import { getFft } from '../../platform/pffft'
 import { burst } from '../../components/ui/celebrate'
@@ -104,6 +105,7 @@ function useUplot(host: React.RefObject<HTMLDivElement | null>, opts: () => Omit
 export function ReadinessPage() {
   const [source, setSource] = useState<Source>(hasCap('bt') ? 'bluetooth' : 'simulated')
   const [phase, setPhase] = useState<Phase>('idle')
+  useKeepAwake(phase === 'scanning')
   const [left, setLeft] = useState(SCAN_S)
   const [bpm, setBpm] = useState(0)
   const [rr, setRr] = useState<number[]>([])

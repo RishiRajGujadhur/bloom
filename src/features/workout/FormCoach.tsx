@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { OneEuroFilter } from '1eurofilter'
 import { Camera, Play, Square } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
+import { useKeepAwake } from '../../platform/presence'
 import { burst } from '../../components/ui/celebrate'
 import { BONES, RULES, RepCounter, read, squatPose, type Exercise, type P, type Rep } from './formModel'
 
@@ -57,6 +58,7 @@ function RepRing({ count, score, target }: { count: number; score: number | null
 export function FormCoach({ onLog }: { onLog: (liftId: string, reps: number, seconds?: number) => void }) {
   const [ex, setEx] = useState<Exercise>('squat')
   const [mode, setMode] = useState<'idle' | 'loading' | 'camera' | 'demo'>('idle')
+  useKeepAwake(mode === 'camera' || mode === 'demo')
   const [reps, setReps] = useState<Rep[]>([])
   const [fault, setFault] = useState<string | null>(null)
   const [label, setLabel] = useState('')

@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../../utils/motion'
+import { useKeepAwake } from '../../platform/presence'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useDraggable, useDroppable, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
@@ -105,6 +106,8 @@ export function YogaPage() {
   const [current, setCurrent] = useState<Flow>(presetFlows[0])
   const [tab, setTab] = useState('practice')
   const [running, setRunning] = useState(false)
+  // Keep the screen on while the session runs (Screen Wake Lock).
+  useKeepAwake(running)
   const [elapsed, setElapsed] = useState(0)
   const [focus, setFocus] = useState(poses[0].id)
   const goRef = useRef<HTMLButtonElement>(null)

@@ -1,4 +1,6 @@
-import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
+import { idleGranted, idleSupported, requestIdle, useAway, useKeepAwake } from '../platform/presence'
+import { writeStore } from '../components/studio/Studio'
 import { Play, Square, Check, Timer } from 'lucide-react'
 import { toggleTodo } from './productivity'
 import type { AppData } from '../model'
@@ -14,6 +16,7 @@ import { FocusQuick, SCENE_KEY, focusOn } from './quick/FocusQuick'
 import { GrowScene, scenes, type SceneId } from './quick/GrowScene'
 import { FocusDiorama } from './showcase/FocusDiorama'
 import { usePageActions } from '../components/ui/PageMenu'
+import '../styles/presence.css'
 
 export function PixelPlant({ stage = 2 }: { stage?: number }) {
   return (
@@ -110,11 +113,31 @@ export function FocusPage({
     return () => clearInterval(timer)
   }, [])
   const quest = data.rpg.focusQuest
-  const active = focusQuestState(data.rpg, now) === 'active'
+  // Step away from the computer and the session pauses; come back and it resumes (Idle Detection).
+  const [awayOn, setAwayOn] = useState(() => readStore<boolean>('bloom-focus-away', true))
+  const [osIdle, setOsIdle] = useState(idleGranted)
+  const running = focusQuestState(data.rpg, now) === 'active'
+  const away = useAway(running && awayOn, 60_000)
+  const awayStart = useRef<number | null>(null)
+  const [awayNote, setAwayNote] = useState('')
+  useKeepAwake(running)
+  useEffect(() => {
+    if (!running) { awayStart.current = null; return }
+    if (away.away) { awayStart.current ??= away.since ?? Date.now(); return }
+    if (awayStart.current == null) return
+    const ms = Date.now() - awayStart.current
+    awayStart.current = null
+    if (ms < 20_000) return
+    setData((c) => ({ ...c, rpg: { ...c.rpg, focusQuest: { ...c.rpg.focusQuest, startedAt: (c.rpg.focusQuest.startedAt ?? Date.now()) + ms } } }))
+    setAwayNote(`Paused for ${Math.max(1, Math.round(ms / 60000))} min while you were away — picking up where you left off.`)
+  }, [away.away, away.since, running, setData])
+  // While away, the clock stands still.
+  const clock = away.away && awayStart.current ? awayStart.current : now
+  const active = focusQuestState(data.rpg, clock) === 'active'
   const total = quest.durationMinutes * 60000
-  const left = active ? Math.max(0, total - (now - quest.startedAt!)) : total
+  const left = active ? Math.max(0, total - (clock - quest.startedAt!)) : total
   const progress = active
-    ? Math.min(1, (now - quest.startedAt!) / total)
+    ? Math.min(1, (clock - quest.startedAt!) / total)
     : quest.completedAt
       ? 1
       : 0
@@ -204,6 +227,14 @@ export function FocusPage({
                 ))}
             </select>
             <label className="strict-option">
+              <input type="checkbox" checked={awayOn} onChange={(e) => { setAwayOn(e.target.checked); writeStore('bloom-focus-away', e.target.checked) }} />{' '}
+              Pause when I step away{' '}
+              <small>
+                {osIdle ? 'Uses your computer’s idle and screen-lock state.' : 'Watches this page for activity.'}{' '}
+                {idleSupported() && !osIdle && <button type="button" className="focus-idle-btn" onClick={() => void requestIdle().then(setOsIdle)}>Use system idle detection</button>}
+              </small>
+            </label>
+            <label className="strict-option">
               <input
                 type="checkbox"
                 checked={quest.strict}
@@ -221,6 +252,8 @@ export function FocusPage({
               value={total - left}
               aria-label="Focus progress"
             />
+            {away.away && <p className="focus-away" role="status">👣 Away{away.locked ? ' (screen locked)' : ''} — timer paused</p>}
+            {!away.away && awayNote && <p className="focus-away back" role="status">{awayNote}</p>}
             <p>
               {data.todos.find((task) => task.id === quest.taskId)?.title ??
                 'Keep your attention here.'}
