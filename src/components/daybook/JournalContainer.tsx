@@ -352,6 +352,20 @@ export function JournalContainer() {
                       <button type="button" title="Copy the text" onClick={(e) => { void navigator.clipboard?.writeText(text); e.currentTarget.textContent = '✓' }}>
                         📋
                       </button>
+                      <button
+                        type="button"
+                        title="Download as Markdown"
+                        onClick={() => {
+                          const md = `# ${page.modeTitle}\n\n_${new Date(page.createdAt).toLocaleDateString(language, { dateStyle: 'full' })}${page.mood ? ` · ${page.mood}` : ''}_\n\n${text}\n`
+                          const a = document.createElement('a')
+                          a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }))
+                          a.download = `${page.modeTitle.replace(/[^\w-]+/g, '-')}-${page.createdAt.slice(0, 10)}.md`
+                          a.click()
+                          setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+                        }}
+                      >
+                        ⬇
+                      </button>
                       <button type="button" title="Delete this page" onClick={() => removePage(page)}>
                         🗑
                       </button>
