@@ -188,6 +188,12 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
   const waterBonus = exerciseWaterBonus(exerciseMin)
   const waterTarget = state.targets.water + waterBonus
   const todayMeals = state.meals.filter((m) => m.date === today).sort((a, b) => a.at - b.at)
+  const yesterdayMeals = (() => {
+    const d = new Date(`${today}T12:00:00`)
+    d.setDate(d.getDate() - 1)
+    const y = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+    return state.meals.filter((m) => m.date === y).sort((a, b) => a.at - b.at)
+  })()
   const mindful = subOn('dietTracker', 'mindful')
   const usuals = useMemo(() => usualFoods(state.meals.filter((m) => !foodLibrary.some((f) => f.name === m.name))), [state.meals])
 
@@ -287,6 +293,15 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
             </button>
           ))}
         </div>
+        {todayMeals.length === 0 && yesterdayMeals.length > 0 && (
+          <button
+            type="button"
+            className="diet-copy-yesterday"
+            onClick={() => update((s) => ({ ...s, meals: [...s.meals, ...yesterdayMeals.map((m) => ({ ...m, id: crypto.randomUUID(), date: today, at: Date.now() - (yesterdayMeals.length - yesterdayMeals.indexOf(m)) * 1000, feeling: undefined }))] }))}
+          >
+            ↻ Same as yesterday ({yesterdayMeals.length} {yesterdayMeals.length === 1 ? 'meal' : 'meals'}, {yesterdayMeals.reduce((a, m) => a + m.kcal, 0)} kcal)
+          </button>
+        )}
         {usuals.length > 0 && (
           <div className="diet-library diet-usuals" aria-label="Your usuals">
             <span className="diet-usuals-label">Your usuals</span>
