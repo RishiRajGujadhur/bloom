@@ -17,6 +17,7 @@ import { PROFILE_KEY, modeCopy, modeFor, seedFor, weekStory, whatNow, type Actio
 import { addMoment } from './discoveries'
 import { showMoment } from './MomentReveal'
 import './core.css'
+import { AffirmTicker } from '../affirm/AffirmTicker'
 
 const readProfile = (): Profile => {
   try {
@@ -136,6 +137,7 @@ export function NowCard({ data, setData, today, flags, onNavigate, onPlan }: Pro
             </button>
           )}
         </div>
+        {flags.affirmations && <AffirmTicker onOpen={() => onNavigate('affirm')} />}
       </div>
       {subOn('bloomCore', 'progress') && (
         <ul className="now-chips" aria-label="Progress today">
