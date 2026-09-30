@@ -1,5 +1,6 @@
 import { Disclosure } from './components/BloomExperience'
-import { useState } from 'react'
+import { ComfortCard, SettingsSearch } from './components/settings/ComfortCard'
+import { useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -779,6 +780,7 @@ export function SettingsPage({
   theme,
   setTheme,
 }: SettingsPageProps) {
+  const settingsRoot = useRef<HTMLDivElement>(null)
   const { t } = useTranslation(undefined, { i18n })
   const [importValue, setImportValue] = useState('')
   const [importError, setImportError] = useState('')
@@ -845,8 +847,10 @@ export function SettingsPage({
 
   return (
     <div
+      ref={settingsRoot}
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
+      <SettingsSearch root={settingsRoot} />
 
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>
@@ -1017,6 +1021,7 @@ export function SettingsPage({
           {t('settings.appearanceHeading')}
         </h2>
         <ThemePicker settings={theme} onChange={setTheme} />
+        <ComfortCard />
         <AvatarPicker />
       </section>
 

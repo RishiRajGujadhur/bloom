@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { keepAwakeAllowed } from '../settings/comfort'
 
 /**
  * Physical presence. `useAway` uses the Idle Detection API (OS-wide keyboard,
@@ -58,7 +59,7 @@ export function useKeepAwake(active: boolean) {
   const [held, setHeld] = useState(false)
   const lock = useRef<Sentinel | null>(null)
   useEffect(() => {
-    if (!active || !wakeLockSupported()) return
+    if (!active || !wakeLockSupported() || !keepAwakeAllowed()) return
     let off = false
     const acquire = async () => {
       try {

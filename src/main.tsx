@@ -1,4 +1,8 @@
 import { StrictMode } from 'react'
+import { applyComfort } from './settings/comfort'
+
+// Sizes and motion preferences apply before the first paint.
+applyComfort()
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './i18n'

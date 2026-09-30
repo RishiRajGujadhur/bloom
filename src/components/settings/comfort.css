@@ -1,0 +1,26 @@
+
+.cf { display: grid; gap: 10px; margin-top: 16px; padding: 14px; border-radius: 16px; border: 1px solid var(--border-color); }
+.cf-head { display: flex; justify-content: space-between; align-items: center; }
+.cf-head h3 { margin: 0; font-size: 1rem; }
+.cf-saved { color: #22a06b; font-weight: 800; font-size: 0.85rem; opacity: 0; }
+.cf-row { display: grid; grid-template-columns: 170px 1fr auto; align-items: center; gap: 10px; font-weight: 700; font-size: 0.9rem; }
+.cf-row input[type='range'] { accent-color: var(--accent-color); }
+.cf-seg { display: inline-flex; border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; justify-self: start; }
+.cf-seg button { border: 0; padding: 6px 12px; background: transparent; color: inherit; font-weight: 700; cursor: pointer; }
+.cf-seg button.on { background: var(--accent-color); color: #fff; }
+.cf-toggle { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.cf-toggle input { margin-top: 3px; accent-color: var(--accent-color); width: 16px; height: 16px; }
+.cf-toggle span { display: grid; }
+.cf-toggle small { color: var(--text-secondary); }
+.cf-search { position: sticky; top: 8px; z-index: 5; }
+.cf-search input { width: 100%; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; font: 600 0.95rem 'Manrope', sans-serif; box-shadow: 0 8px 22px -16px #0005; }
+[data-search-empty='true']::after { content: 'No settings match that search.'; color: var(--text-secondary); text-align: center; padding: 20px; }
+/* Applied comfort preferences. */
+html[data-density='compact'] .card, html[data-density='compact'] .studio-card { padding: 12px !important; }
+html[data-density='compact'] .page-content { gap: 12px; }
+html[data-page-width='narrow'] .page-content { max-width: 1080px !important; }
+html[data-page-width='wide'] .page-content { max-width: 1920px !important; }
+.ProseMirror, .journal-body, .rd-text, .reader-text { line-height: var(--reading-line-height, 1.55); }
+html[data-scenes='off'] .bloom-heading.feature-heading::before, html[data-scenes='off'] .ss-glyph { display: none !important; }
+html[data-scenes='off'] .studio-scene { opacity: 0.35; }
+html[data-theme='matrix'] .cf-seg button[aria-checked='true'] { color: #031008; }
