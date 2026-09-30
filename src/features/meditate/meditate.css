@@ -183,3 +183,4 @@
 .md-note { width: 100%; resize: vertical; }
 .md-notes { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
 .md-notes small { color: var(--text-muted); margin-right: 6px; }
+.md-ends { display: block; text-align: center; opacity: 0.7; font-size: 12px; margin-top: 4px; }

@@ -178,6 +178,7 @@ export function MeditatePage() {
               </svg>
               <span>{`${Math.floor((total - t) / 60)}:${String((total - t) % 60).padStart(2, '0')}`}</span>
             </div>
+            {running && <small className="md-ends">ends at {new Date(Date.now() + (total - t) * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</small>}
             <div className="iv-buttons">
               <button type="button" className="md-btn" onClick={() => setRunning(!running)} aria-label={running ? 'Pause' : 'Play'}>
                 {running ? <Pause size={24} /> : <Play size={24} />}
