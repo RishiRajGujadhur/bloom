@@ -274,4 +274,7 @@ export const GAMES: GameDef[] = [
   g(86, 'meds', 'Medicine Cabinet', 'Out of date, up high or on the shelf? Read the label.', 'SVG · GSAP', 170,
     '<rect x="8" y="8" width="48" height="48" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 30h48" stroke="currentColor" stroke-width="3"/><rect x="14" y="14" width="10" height="12" rx="2" fill="currentColor"/><rect x="28" y="14" width="10" height="12" rx="2" fill="currentColor" opacity=".6"/><path d="M32 38v12M26 44h12" stroke="currentColor" stroke-width="4"/>',
     () => import('./games/MedicineCabinet')),
+  g(87, 'queue', 'Queue Hop', 'Pick the quickest till by reading the trolleys.', 'SVG · GSAP', 200,
+    '<rect x="6" y="8" width="14" height="8" rx="2" fill="currentColor"/><rect x="26" y="8" width="14" height="8" rx="2" fill="currentColor" opacity=".6"/><rect x="46" y="8" width="14" height="8" rx="2" fill="currentColor" opacity=".4"/><circle cx="13" cy="28" r="4" fill="currentColor"/><circle cx="33" cy="28" r="4" fill="currentColor"/><circle cx="33" cy="42" r="4" fill="currentColor"/><circle cx="53" cy="28" r="4" fill="currentColor"/><circle cx="53" cy="42" r="4" fill="currentColor"/><circle cx="53" cy="56" r="4" fill="currentColor"/>',
+    () => import('./games/QueueHop')),
 ]
