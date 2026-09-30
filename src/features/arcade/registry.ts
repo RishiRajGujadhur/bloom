@@ -55,4 +55,7 @@ export const GAMES: GameDef[] = [
   g(13, 'pond', 'Listening Pond', 'Koi only rise when the water is still. Wait for them.', 'p5.js generative', 175,
     '<ellipse cx="32" cy="34" rx="28" ry="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 34q8-8 18 0q-10 8-18 0z" fill="currentColor"/><path d="M38 34l8-5v10z" fill="currentColor"/><circle cx="46" cy="22" r="6" fill="currentColor" opacity=".5"/>',
     () => import('./games/ListeningPond')),
+  g(14, 'dessert', 'Delay Dessert', 'Wait for a taller cake… if the cat lets you.', 'SVG · GSAP', 330,
+    '<rect x="16" y="40" width="32" height="10" rx="3" fill="currentColor"/><rect x="18" y="30" width="28" height="10" rx="3" fill="currentColor" opacity=".75"/><rect x="20" y="20" width="24" height="10" rx="3" fill="currentColor" opacity=".55"/><circle cx="32" cy="15" r="4" fill="currentColor"/><path d="M4 56h56" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/DelayDessert')),
 ]
