@@ -330,6 +330,18 @@ export function TodoPage({ data, setData }: Props) {
             </div>
           )}
         <small className="quick-hint">Tip: type “tomorrow p1 #home every week”, or paste a list to add many.</small>
+        {data.todos.filter((t) => t.done).length > 2 && (
+          <button
+            type="button"
+            className="clear-done"
+            onClick={() => {
+              const n = data.todos.filter((t) => t.done).length
+              if (window.confirm(`Remove ${n} completed tasks? This can't be undone.`)) setData((d) => ({ ...d, todos: d.todos.filter((t) => !t.done) }))
+            }}
+          >
+            Clear completed ({data.todos.filter((t) => t.done).length})
+          </button>
+        )}
         {overdue.length > 0 && (
           <div className="overdue-bar">
             <span>{overdue.length} overdue — shown first</span>

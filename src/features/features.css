@@ -706,3 +706,4 @@
 .due-chips { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-left: 6px; }
 .due-chips button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); border-radius: 999px; padding: 2px 9px; font-size: 12px; cursor: pointer; }
 .due-chips button[aria-pressed='true'] { background: var(--accent-color); color: var(--bg-surface); border-color: transparent; }
+.clear-done { margin-left: 8px; border: 0; background: none; color: var(--text-muted); font-size: 12px; text-decoration: underline; cursor: pointer; }
