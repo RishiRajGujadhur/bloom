@@ -280,4 +280,7 @@ export const GAMES: GameDef[] = [
   g(88, 'receipts', 'Receipt Rain', 'Catch the charged-twice and cancelled-but-billed receipts.', 'p5.js', 15,
     '<path d="M16 6h32v50l-4-3-4 3-4-3-4 3-4-3-4 3-4-3-4 3z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 18h20M22 26h14M22 34h20" stroke="currentColor" stroke-width="2"/><circle cx="48" cy="44" r="9" fill="currentColor"/><path d="M48 39v6M48 48v1" stroke="#fff" stroke-width="2.5"/>',
     () => import('./games/ReceiptRain')),
+  g(89, 'moodweather', 'Mood Weather', 'Name the feeling in each cloud and watch the sky clear.', 'SVG · GSAP', 205,
+    '<ellipse cx="30" cy="30" rx="20" ry="11" fill="currentColor" opacity=".5"/><ellipse cx="22" cy="24" rx="10" ry="9" fill="currentColor" opacity=".5"/><circle cx="48" cy="16" r="8" fill="currentColor"/><rect x="6" y="46" width="14" height="10" rx="3" fill="currentColor"/><rect x="25" y="46" width="14" height="10" rx="3" fill="currentColor" opacity=".7"/><rect x="44" y="46" width="14" height="10" rx="3" fill="currentColor" opacity=".4"/>',
+    () => import('./games/MoodWeather')),
 ]
