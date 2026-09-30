@@ -235,4 +235,7 @@ export const GAMES: GameDef[] = [
   g(73, 'heartbeat', 'Heartbeat Hero', 'Keep the monitor alive with a strong, steady rhythm.', 'SVG', 350,
     '<path d="M4 34h12l6-14 8 28 6-20 4 6h20" stroke="currentColor" stroke-width="4" fill="none" stroke-linejoin="round"/><path d="M46 12c3-5 11-4 11 3 0 6-11 12-11 12s-11-6-11-12c0-7 8-8 11-3z" fill="currentColor" opacity=".7"/>',
     () => import('./games/HeartbeatHero')),
+  g(74, 'bandage', 'Bandage Wrap', 'Trace the spiral for a snug, even wrap.', 'p5.js', 20,
+    '<rect x="4" y="22" width="56" height="22" rx="11" fill="currentColor" opacity=".35"/><path d="M14 20l8 26M24 20l8 26M34 20l8 26M44 20l8 26" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>',
+    () => import('./games/BandageWrap')),
 ]
