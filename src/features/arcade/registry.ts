@@ -217,4 +217,7 @@ export const GAMES: GameDef[] = [
   g(67, 'paint', 'Paint the Room', 'Dip, roll, let it dry, roll again. No drips.', 'PlayCanvas · canvas texture', 150,
     '<rect x="6" y="8" width="52" height="30" rx="3" fill="currentColor" opacity=".35"/><rect x="6" y="8" width="30" height="30" rx="3" fill="currentColor"/><rect x="34" y="16" width="20" height="10" rx="4" fill="currentColor"/><path d="M44 26v10H28v18" stroke="currentColor" stroke-width="4" fill="none"/>',
     () => import('./games/PaintRoom')),
+  g(68, 'unitprice', 'Unit Price Duel', 'Two products, one better deal. Grab it before they swing away.', 'SVG · GSAP', 130,
+    '<rect x="4" y="18" width="24" height="34" rx="4" fill="currentColor" opacity=".6"/><rect x="36" y="10" width="24" height="42" rx="4" fill="currentColor"/><path d="M16 4v14M48 2v8" stroke="currentColor" stroke-width="2"/><text x="10" y="40" font-size="12" fill="#fff" font-weight="800">£</text><text x="42" y="36" font-size="12" fill="#fff" font-weight="800">£</text>',
+    () => import('./games/UnitPriceDuel')),
 ]
