@@ -212,6 +212,7 @@ export function IntervalPage() {
         <div className="studio-stats">
           <Stat value={fmt(elapsed)} label="elapsed" />
           <Stat value={fmt(Math.max(0, length - elapsed))} label="left" />
+          {running && <Stat value={new Date(Date.now() + Math.max(0, length - elapsed) * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} label="finishes at" />}
           {on('calories') && <Stat value={calories(segs, elapsed, store.weight)} label="kcal (estimate)" />}
         </div>
         {on('calories') && <Slider label="Your weight" value={store.weight} min={40} max={150} unit="kg" compact onChange={(v) => setStore((s) => ({ ...s, weight: v }))} />}
