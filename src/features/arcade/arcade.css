@@ -29,3 +29,4 @@
 [data-theme='matrix'] .ar-result { background: #001a08; color: #00ff66; border: 1px solid #00ff66; }
 [data-theme='matrix'] .ar-stage { background: #001a08; }
 .kg-host canvas { display: block; width: min(100%, calc(72vh * 4 / 3)) !important; height: auto !important; margin: 0 auto; }
+.co-canvas { display: block; width: 100%; height: min(68vh, 560px); touch-action: none; outline: none; }

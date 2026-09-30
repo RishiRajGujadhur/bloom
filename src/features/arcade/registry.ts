@@ -31,4 +31,7 @@ export const GAMES: GameDef[] = [
   g(5, 'laundry', 'Laundry Sorter', 'Grab and fling the pile into the right baskets before it topples.', 'matter-js · SVG', 210,
     '<path d="M16 12l8-4h16l8 4-4 8-4-2v26H24V18l-4 2z" fill="currentColor" opacity=".8"/><path d="M8 50h48l-4 10H12z" fill="none" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/LaundrySorter')),
+  g(6, 'orchard', 'Compound Orchard', 'Plant, wait, harvest. Trees grow on what they’ve already grown.', 'Babylon.js 3D', 130,
+    '<ellipse cx="32" cy="52" rx="26" ry="7" fill="currentColor" opacity=".3"/><rect x="18" y="30" width="4" height="18" fill="currentColor"/><circle cx="20" cy="26" r="8" fill="currentColor" opacity=".8"/><rect x="40" y="22" width="5" height="26" fill="currentColor"/><circle cx="42" cy="16" r="13" fill="currentColor"/><circle cx="36" cy="18" r="2.5" fill="#fff"/><circle cx="47" cy="12" r="2.5" fill="#fff"/>',
+    () => import('./games/CompoundOrchard')),
 ]
