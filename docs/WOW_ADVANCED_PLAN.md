@@ -178,7 +178,7 @@ New capabilities, each applied to features that already exist:
 | P1 ✅ | **Your own desktop fonts** as the app font, with live preview and search | Settings, every page | Local Font Access (`queryLocalFonts`) |
 | P2 ✅ | **Away detection**: timers pause when you step away from the computer, and screen time excludes idle time | Focus, Focus room, Screen time | Idle Detection API |
 | P3 ✅ | **Screen stays on** during guided sessions | Meditate, Breathwork, Yoga, Stretch, Diet cook-along, Readiness scan, Form coach, Intervals | Screen Wake Lock API |
-| P4 | **Themed title bar**: the installed app draws its own title bar with search, streak and page title, in every theme | App shell, all themes | Window Controls Overlay + `theme-color` per theme |
+| P4 ✅ | **Themed title bar**: the installed app draws its own title bar with search, streak and page title, in every theme | App shell, all themes | Window Controls Overlay + `theme-color` per theme |
 | P5 | **Houdini backgrounds**: generative paint-worklet patterns unique to each section of the app | Page backgrounds | CSS Paint API (Houdini) |
 | P6 | **Morphing navigation**: page changes cross-fade and the page title morphs into place | Sidebar navigation, tabs | View Transitions API |
 

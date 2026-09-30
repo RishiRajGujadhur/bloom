@@ -5,6 +5,8 @@ import { PersonalInsights } from './features/PersonalInsights'
 import { BloomHeading, Disclosure } from './components/BloomExperience'
 import { BloomCompanion } from './companion/BloomCompanion'
 import { PlaceWatcher } from './features/places/PlaceWatcher'
+import { setPageTitle, watchTitlebar } from './platform/titlebar'
+import './styles/titlebar.css'
 import {
   CustomizeMenu,
   FocusCard,
@@ -476,9 +478,16 @@ function App() {
     const names = featureKeys.filter((k) => features[k]).map((k) => t(`settings.feature.${k}.title`))
     return { names, features: features as FeatureFlags }
   }
+  const [pageLabel, setPageLabel] = useState('')
+  useEffect(() => watchTitlebar(), [])
+  // Window title follows the page you're on ("Money · Bloom").
+  useEffect(() => {
+    const label = document.querySelector('.nav-item[aria-current="page"]')?.getAttribute('aria-label') ?? ''
+    setPageTitle(label && active !== 'overview' ? label : '', t('ui.documentTitle'))
+    setPageLabel(label && active !== 'overview' ? label : '')
+  }, [active, t])
   useEffect(() => {
     document.documentElement.lang = i18n.resolvedLanguage ?? 'en'
-    document.title = t('ui.documentTitle')
     const description = document.querySelector('meta[name="description"]')
     if (description)
       description.setAttribute('content', t('ui.metaDescription'))
@@ -687,6 +696,7 @@ function App() {
         <PageMenu page={active} common={menuCommon}>
         <main id="overview" className="min-w-0 flex-1">
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
+            <span className="wco-title" aria-hidden="true">Bloom{pageLabel ? <b>{pageLabel}</b> : null}</span>
             <SearchTrigger onOpen={() => setPaletteOpen(true)} />
             <div className="topbar-actions flex flex-wrap items-center gap-3">
               <QuickAdd

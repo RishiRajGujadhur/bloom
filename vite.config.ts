@@ -29,6 +29,8 @@ export default defineConfig({
         theme_color: '#7044ac',
         background_color: '#fbf6f1',
         display: 'standalone',
+        // Installed on desktop, Bloom draws its own title bar in every theme (Window Controls Overlay).
+        display_override: ['window-controls-overlay', 'standalone'],
         start_url: '/',
         icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }],
         // The installed app can be the OS handler for these files (see src/platform/fileHandlers.ts).

@@ -1,0 +1,32 @@
+
+/* Window Controls Overlay: the installed app's title bar is Bloom's own top bar. */
+.wco-title { display: none; }
+@media (display-mode: window-controls-overlay) {
+  .topbar {
+    position: fixed;
+    z-index: 1000;
+    left: env(titlebar-area-x, 0);
+    top: env(titlebar-area-y, 0);
+    width: env(titlebar-area-width, 100%);
+    height: env(titlebar-area-height, 40px) !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    flex-wrap: nowrap !important;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+  .topbar button, .topbar input, .topbar a, .topbar [role='button'], .topbar select { -webkit-app-region: no-drag; app-region: no-drag; }
+  .topbar .wco-title { display: inline-flex; align-items: center; gap: 6px; margin-right: 8px; font: 900 0.85rem 'Manrope', sans-serif; letter-spacing: 0.04em; color: var(--accent-color); }
+  .topbar .wco-title::before { content: '✿'; }
+  .topbar .wco-title b { font-weight: 800; color: var(--text-secondary); letter-spacing: 0; }
+  .topbar .wco-title b::before { content: '·'; margin: 0 6px; color: var(--text-muted, var(--text-secondary)); }
+  /* Everything shrinks to fit a native-height title bar. */
+  .topbar :is(button, [role='button'], .search-trigger, input) { height: 30px !important; min-height: 0 !important; min-width: 30px; padding-block: 0 !important; font-size: 0.82rem; }
+  .topbar :is(button, [role='button']) svg { width: 16px; height: 16px; }
+  .topbar .topbar-actions { gap: 8px !important; flex-wrap: nowrap !important; }
+  main#overview { padding-top: calc(env(titlebar-area-height, 40px) + 12px); }
+  html[data-theme='matrix'] .topbar { background: #030a05; border-bottom-color: #1a4a26; }
+}
