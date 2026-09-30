@@ -259,4 +259,7 @@ export const GAMES: GameDef[] = [
   g(81, 'tipsplit', 'Tip Split Café', 'Everyone pays for what they had, plus their share of the tip.', 'SVG · GSAP', 30,
     '<ellipse cx="32" cy="36" rx="28" ry="14" fill="currentColor" opacity=".3"/><circle cx="16" cy="34" r="7" fill="currentColor"/><circle cx="32" cy="38" r="7" fill="currentColor" opacity=".7"/><circle cx="48" cy="34" r="7" fill="currentColor" opacity=".5"/><path d="M26 8h12v14H26z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 12h8M28 16h6" stroke="currentColor" stroke-width="1.5"/>',
     () => import('./games/TipSplit')),
+  g(82, 'seasonal', 'Seasonal Market', 'Spin through the year and pick what’s in season.', 'Three.js 3D', 110,
+    '<path d="M8 30L32 12l24 18z" fill="currentColor" opacity=".7"/><path d="M12 30v22h40V30" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="22" cy="42" r="5" fill="currentColor"/><circle cx="42" cy="42" r="5" fill="currentColor" opacity=".6"/><circle cx="32" cy="46" r="4" fill="currentColor" opacity=".8"/>',
+    () => import('./games/SeasonalMarket')),
 ]
