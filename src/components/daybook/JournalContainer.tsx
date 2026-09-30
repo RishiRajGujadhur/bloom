@@ -249,6 +249,12 @@ export function JournalContainer() {
                       </small>
                     </button>
                     <div className="daybook-page-tools">
+                      <button type="button" title="Duplicate this page" onClick={() => {
+                        const now = new Date().toISOString()
+                        persist({ ...page, id: crypto.randomUUID(), modeTitle: `${page.modeTitle} (copy)`, createdAt: now, updatedAt: now, flow: undefined }, false)
+                      }}>
+                        ⧉
+                      </button>
                       <button type="button" title={page.private ? 'Show on the home screen' : 'Blur on the home screen'} aria-pressed={Boolean(page.private)} onClick={() => persist({ ...page, private: !page.private }, false)}>
                         {page.private ? '🔒' : '🔓'}
                       </button>
