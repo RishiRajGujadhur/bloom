@@ -283,4 +283,7 @@ export const GAMES: GameDef[] = [
   g(89, 'moodweather', 'Mood Weather', 'Name the feeling in each cloud and watch the sky clear.', 'SVG · GSAP', 205,
     '<ellipse cx="30" cy="30" rx="20" ry="11" fill="currentColor" opacity=".5"/><ellipse cx="22" cy="24" rx="10" ry="9" fill="currentColor" opacity=".5"/><circle cx="48" cy="16" r="8" fill="currentColor"/><rect x="6" y="46" width="14" height="10" rx="3" fill="currentColor"/><rect x="25" y="46" width="14" height="10" rx="3" fill="currentColor" opacity=".7"/><rect x="44" y="46" width="14" height="10" rx="3" fill="currentColor" opacity=".4"/>',
     () => import('./games/MoodWeather')),
+  g(90, 'echo', 'Echo Talk', 'Reply like you’re really listening and watch them glow.', 'SVG · GSAP', 45,
+    '<circle cx="22" cy="30" r="16" fill="currentColor" opacity=".3"/><circle cx="22" cy="30" r="8" fill="currentColor"/><path d="M36 14h22v14H44l-6 6v-6h-2z" fill="currentColor" opacity=".8"/><path d="M36 38c6 2 6 12 0 14M42 34c10 4 10 20 0 24" stroke="currentColor" stroke-width="2.5" fill="none"/>',
+    () => import('./games/EchoTalk')),
 ]

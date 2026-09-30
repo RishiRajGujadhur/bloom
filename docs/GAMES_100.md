@@ -216,3 +216,4 @@ Every game has:
 - Game 87: Queue Hop — five supermarket tills with queues, trolleys filled item by item, and chatty or speedy cashiers. Pick the till that will really be quickest, then watch GSAP timing bars reveal the answer. Eight trips.
 - Game 88: Receipt Rain — p5.js receipts flutter down. Steer the dispute folder under the ones with mistakes (charged twice, cancelled gym, shelf-price mismatch) and let the honest receipts fall.
 - Game 89: Mood Weather — clouds carrying everyday moments drift across the sky. Drag each to the feeling that names it (happy, sad, frustrated, worried, proud, lonely); unnamed clouds gather into a storm that darkens the sky.
+- Game 90: Echo Talk — friends share their news in speech bubbles. Pick replies that reflect and ask with curiosity rather than one-upping, quick-fixing or changing the subject; their GSAP glow warms and the "how heard they feel" meter fills.
