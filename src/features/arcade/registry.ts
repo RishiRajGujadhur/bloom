@@ -232,4 +232,7 @@ export const GAMES: GameDef[] = [
   g(72, 'calendar', 'Calendar Blocks', 'Drop the week’s blocks. Balanced days glow; overstuffed ones burn out.', 'SVG · GSAP', 230,
     '<rect x="6" y="8" width="52" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><rect x="12" y="34" width="10" height="20" rx="2" fill="currentColor"/><rect x="27" y="26" width="10" height="28" rx="2" fill="currentColor" opacity=".7"/><rect x="42" y="40" width="10" height="14" rx="2" fill="currentColor" opacity=".5"/><path d="M6 20h52" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/CalendarBlocks')),
+  g(73, 'heartbeat', 'Heartbeat Hero', 'Keep the monitor alive with a strong, steady rhythm.', 'SVG', 350,
+    '<path d="M4 34h12l6-14 8 28 6-20 4 6h20" stroke="currentColor" stroke-width="4" fill="none" stroke-linejoin="round"/><path d="M46 12c3-5 11-4 11 3 0 6-11 12-11 12s-11-6-11-12c0-7 8-8 11-3z" fill="currentColor" opacity=".7"/>',
+    () => import('./games/HeartbeatHero')),
 ]
