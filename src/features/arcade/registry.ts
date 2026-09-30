@@ -175,4 +175,7 @@ export const GAMES: GameDef[] = [
   g(53, 'river', 'Risk River', 'Steady stones, wobbly stones, shiny stones just out of reach.', 'p5.js', 140,
     '<path d="M0 20q16 6 32 0t32 0M0 44q16 6 32 0t32 0" stroke="currentColor" stroke-width="2" fill="none" opacity=".4"/><ellipse cx="16" cy="48" rx="10" ry="7" fill="currentColor" opacity=".7"/><ellipse cx="40" cy="30" rx="8" ry="6" fill="currentColor" opacity=".5"/><ellipse cx="52" cy="12" rx="7" ry="5" fill="currentColor"/><circle cx="16" cy="42" r="5" fill="currentColor"/><path d="M18 40q10-14 20-10" stroke="currentColor" stroke-dasharray="2 3" fill="none"/>',
     () => import('./games/RiskRiver')),
+  g(54, 'allergy', 'Allergy Chef', 'Read the badges, read the dish, feed everyone safely.', 'SVG · GSAP', 320,
+    '<circle cx="20" cy="22" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 12l20 20" stroke="currentColor" stroke-width="3"/><circle cx="44" cy="40" r="14" fill="currentColor" opacity=".8"/><path d="M36 40h16M44 32v16" stroke="#fff" stroke-width="2"/>',
+    () => import('./games/AllergyChef')),
 ]
