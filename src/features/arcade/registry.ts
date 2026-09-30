@@ -178,4 +178,7 @@ export const GAMES: GameDef[] = [
   g(54, 'allergy', 'Allergy Chef', 'Read the badges, read the dish, feed everyone safely.', 'SVG · GSAP', 320,
     '<circle cx="20" cy="22" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 12l20 20" stroke="currentColor" stroke-width="3"/><circle cx="44" cy="40" r="14" fill="currentColor" opacity=".8"/><path d="M36 40h16M44 32v16" stroke="#fff" stroke-width="2"/>',
     () => import('./games/AllergyChef')),
+  g(55, 'passforge', 'Password Forge', 'Forge a rune lock the imps can’t crack.', 'Babylon.js 3D', 280,
+    '<circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="4"/><rect x="24" y="14" width="16" height="6" rx="2" fill="currentColor"/><rect x="42" y="30" width="12" height="6" rx="2" fill="currentColor" opacity=".7"/><rect x="10" y="30" width="12" height="6" rx="2" fill="currentColor" opacity=".5"/><circle cx="32" cy="34" r="5" fill="currentColor"/>',
+    () => import('./games/PasswordForge')),
 ]
