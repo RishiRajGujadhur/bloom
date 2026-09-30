@@ -192,3 +192,4 @@ Every game has:
 - Game 63: Spice Mixer — a GSAP-morphing six-axis flavour radar (sweet, salty, sour, bitter, heat, umami). Shake pinches from jars with falling-particle bursts to match each dish's dashed target shape; there's no taking a pinch back.
 - Game 64: Big Rocks Jar — matter-js big rocks (friends, sleep, exercise, learning, art), pebbles and hundreds of sand grains poured into a jar with a lid line. Pour the big things first or they won't fit.
 - Game 65: Toothbrush Tempo — an SVG dental arch of 28 teeth with plaque overlays on outer and inner faces. Eight zones glow in turn to the beat; press and scrub back-and-forth strokes (direction changes counted) with foam bubbles, and a report names the zone you missed most.
+- Game 66: Step Garden — a p5.js parallax walk. Tap left and right feet in turn; steady cadence (measured from your step intervals) plants bright flowers that grow with your streak, while tripping or rushing sprouts weeds.

@@ -211,4 +211,7 @@ export const GAMES: GameDef[] = [
   g(65, 'teeth', 'Toothbrush Tempo', 'Follow the song zone by zone and scrub the plaque away.', 'SVG · GSAP', 190,
     '<path d="M16 14c-8 0-10 10-6 22 3 10 5 20 9 20s4-12 7-12 3 12 7 12 6-10 9-20c4-12 2-22-6-22-5 0-7 3-10 3s-5-3-10-3z" fill="currentColor" opacity=".85"/><path d="M44 8l12-4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
     () => import('./games/ToothbrushTempo')),
+  g(66, 'steps', 'Step Garden', 'Left, right, left, right — a steady walk grows flowers.', 'p5.js', 110,
+    '<path d="M4 50h56" stroke="currentColor" stroke-width="3"/><path d="M14 50V36M30 50V30M46 50V38" stroke="currentColor" stroke-width="2.5"/><circle cx="14" cy="32" r="5" fill="currentColor"/><circle cx="30" cy="26" r="6" fill="currentColor" opacity=".8"/><circle cx="46" cy="34" r="5" fill="currentColor" opacity=".6"/><ellipse cx="20" cy="58" rx="4" ry="2.5" fill="currentColor"/><ellipse cx="34" cy="58" rx="4" ry="2.5" fill="currentColor"/>',
+    () => import('./games/StepGarden')),
 ]
