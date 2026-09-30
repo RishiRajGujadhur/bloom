@@ -416,6 +416,24 @@ function TextForm({
     </form>
   )
 }
+/** Speaks the page's headings, paragraphs and list items; a second call stops. */
+function readPageAloud() {
+  try {
+    if (speechSynthesis.speaking) return speechSynthesis.cancel()
+    const main = document.querySelector('main')
+    if (!main) return
+    const text = [...main.querySelectorAll('h1, h2, h3, h4, p, li, blockquote')]
+      .filter((el) => (el as HTMLElement).offsetParent !== null && !el.closest('nav, button, [aria-hidden="true"]'))
+      .map((el) => el.textContent?.trim() ?? '')
+      .filter(Boolean)
+      .join('. ')
+      .slice(0, 6000)
+    if (text) speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+  } catch {
+    /* speech not available */
+  }
+}
+
 function App() {
   useEffect(pauseGsapWhenHidden, [])
   const { t } = useTranslation(undefined, { i18n })
@@ -656,6 +674,7 @@ function App() {
     { id: 'c-search', label: 'Search everything', icon: '🔎', hint: 'Ctrl K', run: () => setPaletteOpen(true) },
     { id: 'c-theme', label: isDark ? 'Light mode' : 'Dark mode', icon: isDark ? '☀️' : '🌙', run: () => setThemeSettings(toggleThemeMode) },
     { id: 'c-link', label: 'Copy link to this page', icon: '🔗', run: () => void navigator.clipboard?.writeText(window.location.href) },
+    { id: 'c-read', label: 'Read this page aloud (again to stop)', icon: '🔊', run: readPageAloud },
     ...(settings.features.pointerFx ? [{ id: 'c-pointer', label: 'Change my pointer', icon: '🖱️', run: () => jump('pointer' as NavKey) }] : []),
     { id: 'c-settings', label: 'Settings', icon: '⚙️', run: () => jump('settings') },
     { id: 'c-welcome', label: 'Set up Bloom again', icon: '🌸', run: () => setWelcome(true) },
