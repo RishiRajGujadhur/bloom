@@ -1,0 +1,21 @@
+
+/* CSS Houdini: each page header paints its own generative scene (sceneWorklet.ts). */
+@keyframes bloom-scene-t { to { --scene-t: 1; } }
+@supports (background: paint(bloom-scene)) {
+  html[data-houdini='on'] .bloom-heading.feature-heading::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    --scene-ink: var(--accent-color);
+    background-image: paint(bloom-scene);
+    animation: bloom-scene-t 60s linear infinite;
+    opacity: 0.95;
+  }
+  html[data-houdini='on'] .bloom-heading.feature-heading .bloom-contours { display: none; }
+  html[data-theme='matrix'][data-houdini='on'] .bloom-heading.feature-heading::before { --scene-ink: #39ff6a; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-houdini='on'] .bloom-heading.feature-heading::before { animation: none; }
+}

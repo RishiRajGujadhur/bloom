@@ -7,6 +7,10 @@ import { BloomCompanion } from './companion/BloomCompanion'
 import { PlaceWatcher } from './features/places/PlaceWatcher'
 import { setPageTitle, watchTitlebar } from './platform/titlebar'
 import './styles/titlebar.css'
+import { initHoudini } from './styles/houdini'
+import './styles/houdini.css'
+
+initHoudini()
 import {
   CustomizeMenu,
   FocusCard,

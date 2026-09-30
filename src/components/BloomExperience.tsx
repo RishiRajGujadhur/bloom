@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../utils/motion'
+import { sceneFor } from '../styles/houdini'
 import {
   Children,
   useEffect,
@@ -257,8 +258,11 @@ export function BloomHeading({
   }, [paused])
   const slot = useHeadSlot()
   const inSlot = !hero && !!slot && compactTitles()
+  // Every page gets its own generative scene (Houdini paint worklet), with a seeded SVG fallback.
+  const sc = sceneFor(page)
+  const rs = (k: number) => ((sc.seed * (k + 3) * 7919) % 1000) / 1000
   const bar = (
-    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}${lead ? ' has-lead' : ''}${inSlot ? ' in-slot' : ''}`}>
+    <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}${lead ? ' has-lead' : ''}${inSlot ? ' in-slot' : ''}`} data-scene={sc.kind} style={{ '--scene-kind': sc.kind, '--scene-seed': String(sc.seed) } as CSSProperties}>
       {lead && <div className="bloom-heading-lead">{lead}</div>}
       {hero && (
         <img className="bloom-hero-art" src={heroLandscape} alt="" aria-hidden="true" />
@@ -272,7 +276,7 @@ export function BloomHeading({
         {[0, 1, 2, 3, 4].map((i) => (
           <path
             key={i}
-            d={`M 240 ${165 + i * 16} C 400 ${-120 + i * 20}, 560 ${260 + i * 16}, 820 ${-40 + i * 18}`}
+            d={`M ${200 + rs(0) * 120} ${150 + i * 16 + rs(1) * 30} C ${340 + rs(2) * 140} ${-140 + i * 20 + rs(3) * 80}, ${520 + rs(4) * 120} ${220 + i * 16 + rs(5) * 80}, 820 ${-60 + i * 18 + rs(6) * 60}`}
           />
         ))}
       </svg>
