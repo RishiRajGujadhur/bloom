@@ -110,7 +110,7 @@ import {
 import { Menu } from 'lucide-react'
 import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
-import { ShowMore, compactTitles, pageBanner, setCompactTitles, setPageBanner } from './components/ui/Flow'
+import { ShowMore, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
 import { DataReset } from './settings/DataReset'
 import { InstallApp } from './settings/InstallApp'
@@ -633,6 +633,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
   const [hamburger, setHamburger] = useState(hamburgerNav)
   const [compact, setCompact] = useState(compactTitles)
   const [banner, setBanner] = useState(pageBanner)
+  const [followSys, setFollowSys] = useState(followSystemTheme)
   const [pixel, setPixel] = useState(pixelIconsOn)
   return (
     <section className={styles.card} aria-labelledby="navigation-heading">
@@ -682,6 +683,24 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
               setCompactTitles(e.target.checked)
             }}
             aria-label="Icon page headings"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Follow system light/dark</strong>
+          <small>Switch between light and dark whenever your device does.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={followSys}
+            onChange={(e) => {
+              setFollowSys(e.target.checked)
+              setFollowSystemTheme(e.target.checked)
+            }}
+            aria-label="Follow system light/dark"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>

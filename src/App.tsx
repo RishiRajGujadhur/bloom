@@ -128,7 +128,7 @@ import { PageMenu, type PageAction } from './components/ui/PageMenu'
 import { Menu as MenuIcon } from 'lucide-react'
 import { pageRequires } from './components/layout/Sidebar'
 import { PointerFx } from './components/ui/PointerFx'
-import { HoverHints, LinkRail } from './components/ui/Flow'
+import { HoverHints, LinkRail, followSystemTheme } from './components/ui/Flow'
 import { GsapControls } from './components/ui/GsapControls'
 import { MatrixRain } from './components/ui/MatrixRain'
 import { WelcomeFlow } from './features/welcome/WelcomeFlow'
@@ -499,6 +499,24 @@ function App() {
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
+  // Settings -> Follow system light/dark: match the OS appearance, now and when it changes.
+  const [followSys, setFollowSys] = useState(followSystemTheme)
+  useEffect(() => {
+    const on = () => setFollowSys(followSystemTheme())
+    window.addEventListener('bloom:follow-system-theme', on)
+    return () => window.removeEventListener('bloom:follow-system-theme', on)
+  }, [])
+  useEffect(() => {
+    if (!followSys) return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const sync = () => {
+      // Idempotent: only switch when the stored theme doesn't already match.
+      setThemeSettings((t) => ((getThemeMode(t.themeId) === 'dark') === mq.matches ? t : toggleThemeMode(t)))
+    }
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [isDark, followSys])
   const [welcome, setWelcome] = useState(() => !welcomeDone())
   useEffect(() => {
     const open = () => setWelcome(true)

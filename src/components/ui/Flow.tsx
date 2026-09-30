@@ -195,6 +195,24 @@ export function setCompactTitles(on: boolean) {
   applyCompactTitles()
 }
 
+/** Settings → "Follow system light/dark" (off by default). */
+const SYSTEM_THEME_KEY = 'bloom-follow-system-theme'
+export const followSystemTheme = () => {
+  try {
+    return localStorage.getItem(SYSTEM_THEME_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+export function setFollowSystemTheme(on: boolean) {
+  try {
+    localStorage.setItem(SYSTEM_THEME_KEY, on ? '1' : '0')
+  } catch {
+    /* optional */
+  }
+  window.dispatchEvent(new Event('bloom:follow-system-theme'))
+}
+
 /** Settings → "Page banner" (on by default): the title bar with the page's icon. */
 const BANNER_KEY = 'bloom-page-banner'
 export const pageBanner = () => {
