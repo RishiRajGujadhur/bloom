@@ -250,4 +250,7 @@ export const GAMES: GameDef[] = [
   g(78, 'dominoes', 'Deadline Dominoes', 'Line up the tasks so the chain reaches the deadline bell.', 'matter-js · canvas', 265,
     '<path d="M4 54h56" stroke="currentColor" stroke-width="3"/><rect x="8" y="26" width="6" height="28" fill="currentColor" transform="rotate(20 11 54)"/><rect x="20" y="26" width="6" height="28" fill="currentColor" transform="rotate(8 23 54)"/><rect x="32" y="26" width="6" height="28" fill="currentColor"/><path d="M48 30q0-12 6-12t6 12z" fill="currentColor" opacity=".7"/>',
     () => import('./games/DeadlineDominoes')),
+  g(79, 'notenest', 'Note Nest', 'Catch the bright ideas, skip the chatter, link what connects.', 'p5.js', 270,
+    '<path d="M10 44a22 10 0 0 0 44 0z" fill="currentColor"/><circle cx="20" cy="14" r="3" fill="currentColor"/><circle cx="40" cy="22" r="3" fill="currentColor"/><path d="M20 14l-4-6M20 14l4-6M40 22l-4-6M40 22l4-6" stroke="currentColor" stroke-width="1.5"/><path d="M20 14q10 16 20 8" stroke="currentColor" stroke-dasharray="2 3" fill="none"/>',
+    () => import('./games/NoteNest')),
 ]
