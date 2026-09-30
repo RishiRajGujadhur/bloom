@@ -2,7 +2,7 @@ import { along, length, lineString } from '@turf/turf'
 
 export type Pt = { lat: number; lng: number; t: number; ele?: number }
 export type Run = { id: string; at: number; kind: 'run' | 'walk'; km: number; seconds: number; points: Pt[]; manual?: boolean }
-export type RunStore = { runs: Run[]; units: 'km' | 'mi'; weeklyGoal: number }
+export type RunStore = { runs: Run[]; units: 'km' | 'mi'; weeklyGoal: number; autoPause?: boolean }
 export const RUN_KEY = 'bloom-runs-v1'
 export const MI = 1.609344
 
@@ -80,4 +80,23 @@ export function demoRoute(center = { lat: 51.5074, lng: -0.1657 }, km = 3, start
     pts.push({ lat: center.lat + r * wobble * Math.sin(a), lng: center.lng + (r * wobble * Math.cos(a)) / Math.cos((center.lat * Math.PI) / 180), t: start + i * ((km * 330 * 1000) / n) })
   }
   return pts
+}
+
+/** Metres between two points (equirectangular; fine for a few hundred metres). */
+export function metresBetween(a: Pt, b: Pt) {
+  const R = 6371000
+  const x = ((b.lng - a.lng) * Math.PI) / 180 * Math.cos((((a.lat + b.lat) / 2) * Math.PI) / 180)
+  const y = ((b.lat - a.lat) * Math.PI) / 180
+  return Math.sqrt(x * x + y * y) * R
+}
+
+/** Auto-pause: true when every fix in the last `windowSec` stayed within `radius` metres of the latest one. */
+export function isStationary(points: Pt[], now: number, windowSec = 20, radius = 10) {
+  if (points.length < 2) return false
+  const last = points[points.length - 1]
+  if (now - points[0].t < windowSec * 1000) return false
+  const recent = points.filter((p) => now - p.t <= windowSec * 1000)
+  // No fresh fixes at all also counts as standing still (GPS only reports on movement on some phones).
+  if (!recent.length) return now - last.t >= windowSec * 1000
+  return recent.every((p) => metresBetween(p, last) <= radius)
 }

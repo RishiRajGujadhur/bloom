@@ -5,7 +5,7 @@ import { Download, Flag, FolderOpen, Footprints, Map as MapIcon, Medal, Mountain
 import { Rail, Segmented, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
-import { RUN_KEY, bests, demoRoute, distanceKm, fmtPace, fmtTime, pace, pointAt, splits, toUnits, weekKm, type Pt, type Run, type RunStore } from './runModel'
+import { RUN_KEY, bests, demoRoute, distanceKm, fmtPace, fmtTime, isStationary, metresBetween, pace, pointAt, splits, toUnits, weekKm, type Pt, type Run, type RunStore } from './runModel'
 import { Strider } from '../showcase/Strider'
 import { usePageActions } from '../../components/ui/PageMenu'
 import { onLaunchFiles, openFiles, saveFile } from '../../platform/fsa'
@@ -117,6 +117,12 @@ export function RunPage() {
   const pauseStart = useRef(0)
   const spoken = useRef(0)
   const finishBtn = useRef<HTMLButtonElement>(null)
+  // Auto-pause: fixes still arrive while paused, but only count while tracking.
+  const statusRef = useRef(status)
+  statusRef.current = status
+  const autoPaused = useRef<Pt | null>(null)
+  const lastFix = useRef<Pt | null>(null)
+  const autoPauseOn = store.autoPause !== false
 
   const [terrainId, setTerrainId] = useState<string | null>(null)
   const routed = store.runs.filter((r) => r.points.length > 10)
@@ -149,10 +155,25 @@ export function RunPage() {
   const split = splits(points, units)
 
   useEffect(() => {
-    if (status !== 'tracking') return
+    if (status !== 'tracking' && status !== 'paused') return
     const t = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(t)
   }, [status])
+  useEffect(() => {
+    if (!autoPauseOn) return
+    if (status === 'tracking' && isStationary(points, now)) {
+      autoPaused.current = lastFix.current ?? points[points.length - 1]
+      pauseStart.current = Date.now()
+      setStatus('paused')
+    } else if (status === 'paused' && autoPaused.current && lastFix.current && metresBetween(autoPaused.current, lastFix.current) > 15) {
+      const fix = lastFix.current
+      autoPaused.current = null
+      setPausedFor((p) => p + Date.now() - pauseStart.current)
+      // Start counting again from where you are now.
+      setPoints((list) => [...list, fix])
+      setStatus('tracking')
+    }
+  }, [now, points, status, autoPauseOn])
   useEffect(() => {
     if (!on('voiceSplits') || split.length <= spoken.current) return
     spoken.current = split.length
@@ -170,7 +191,10 @@ export function RunPage() {
     watch.current = navigator.geolocation.watchPosition(
       (p) => {
         if (p.coords.accuracy > 40) return
-        setPoints((list) => [...list, { lat: p.coords.latitude, lng: p.coords.longitude, t: p.timestamp, ele: p.coords.altitude ?? undefined }])
+        const fix = { lat: p.coords.latitude, lng: p.coords.longitude, t: p.timestamp, ele: p.coords.altitude ?? undefined }
+        lastFix.current = fix
+        if (statusRef.current !== 'tracking') return
+        setPoints((list) => [...list, fix])
       },
       () => setError('Location permission was not granted.'),
       { enableHighAccuracy: true, maximumAge: 2000 },
@@ -179,8 +203,10 @@ export function RunPage() {
   const pause = () => {
     if (status === 'tracking') {
       pauseStart.current = Date.now()
+      autoPaused.current = null
       setStatus('paused')
     } else if (status === 'paused') {
+      autoPaused.current = null
       setPausedFor((p) => p + Date.now() - pauseStart.current)
       setStatus('tracking')
     }
@@ -268,7 +294,12 @@ export function RunPage() {
             <>
               {status !== 'demo' && (
                 <button type="button" className="studio-go" data-variant="quiet" onClick={pause}>
-                  {status === 'paused' ? <Play size={16} /> : <Pause size={16} />} {status === 'paused' ? 'Resume' : 'Pause'}
+                  {status === 'paused' ? <Play size={16} /> : <Pause size={16} />} {status === 'paused' ? (autoPaused.current ? 'Auto-paused · resume' : 'Resume') : 'Pause'}
+                </button>
+              )}
+              {status !== 'demo' && (
+                <button type="button" className="studio-chip" aria-pressed={autoPauseOn} title="Pause automatically when you stop for 20 seconds, resume when you move" onClick={() => setStore((s) => ({ ...s, autoPause: !autoPauseOn }))}>
+                  Auto-pause {autoPauseOn ? 'on' : 'off'}
                 </button>
               )}
               <button ref={finishBtn} type="button" className="studio-go" onClick={finish}>
