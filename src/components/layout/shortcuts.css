@@ -21,3 +21,17 @@ html[data-theme='matrix'] .kb-go { background: #0b3a1a; color: #d6ffe0; }
 /* Focus mode (Ctrl+.): just the page. */
 html[data-focus-mode='on'] .sidebar, html[data-focus-mode='on'] .topbar { display: none !important; }
 html[data-focus-mode='on'] main#overview { margin-left: 0 !important; padding-left: 0 !important; }
+
+.trash-toast { position: fixed; z-index: 9400; left: 50%; bottom: 22px; translate: -50% 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; background: #1c1c28; color: #fff; box-shadow: 0 18px 40px -16px #0009; font-weight: 700; max-width: calc(100vw - 32px); animation: to-top-in 0.3s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.trash-toast button { border: 0; border-radius: 8px; padding: 5px 10px; background: #ffffff22; color: #fff; font-weight: 800; cursor: pointer; }
+.storage-warn { position: fixed; z-index: 9300; top: 70px; left: 50%; translate: -50% 0; display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 12px; background: #fff4d6; color: #5a3b00; border: 1px solid #f0c95c; font-weight: 700; }
+.storage-warn button { border: 0; background: transparent; cursor: pointer; }
+.copied-toast { position: fixed; z-index: 9400; right: 22px; bottom: 150px; padding: 6px 12px; border-radius: 999px; background: #22a06b; color: #fff; font-weight: 800; font-size: 0.85rem; animation: to-top-in 0.25s ease-out; }
+.trash-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.trash-list li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
+.trash-list li span { display: grid; }
+.trash-list small { color: var(--text-secondary); }
+.trash-list button { border: 1px solid var(--border-color); border-radius: 10px; padding: 5px 12px; background: var(--bg-surface); color: inherit; font-weight: 800; cursor: pointer; }
+.trash-list .trash-actions { border: 0; justify-content: flex-end; }
+.trash-empty { margin: 0; color: var(--text-secondary); }
+html[data-theme='matrix'] .trash-toast { background: #0b3a1a; color: #d6ffe0; }

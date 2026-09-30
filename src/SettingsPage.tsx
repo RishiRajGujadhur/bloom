@@ -2,6 +2,7 @@ import { Disclosure } from './components/BloomExperience'
 import { ComfortCard, SettingsSearch } from './components/settings/ComfortCard'
 import { useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
+import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
 import { ThemePicker } from './components/settings/ThemePicker'
@@ -611,6 +612,8 @@ interface SettingsPageProps {
   /** Palette + font live outside AppSettings so the engine can own the DOM. */
   theme: ThemeSettings
   setTheme: Dispatch<SetStateAction<ThemeSettings>>
+  /** Recently deleted items with restore (rendered by the app, which owns the data). */
+  trash?: React.ReactNode
 }
 
 const matches = (text: string, query: string) => text.toLowerCase().includes(query.trim().toLowerCase())
@@ -779,6 +782,7 @@ export function SettingsPage({
   setSettings,
   theme,
   setTheme,
+  trash,
 }: SettingsPageProps) {
   const settingsRoot = useRef<HTMLDivElement>(null)
   const { t } = useTranslation(undefined, { i18n })
@@ -1028,6 +1032,12 @@ export function SettingsPage({
       <section className={styles.card}>
         <InstallApp />
       </section>
+      {trash && (
+        <section className={styles.card} aria-labelledby="trash-heading">
+          <h2 id="trash-heading" className={styles.sectionTitle}>🗑 Trash</h2>
+          {trash}
+        </section>
+      )}
       <section className={styles.card}>
         <DataReset />
       </section>

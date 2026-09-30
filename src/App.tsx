@@ -27,6 +27,7 @@ import { flushSync } from 'react-dom'
 import { withViewTransition } from './platform/viewTransition'
 import { Shortcuts } from './components/layout/Shortcuts'
 import { GlobalQoL } from './components/layout/GlobalQoL'
+import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
 import gsap from 'gsap'
 import { useTranslation } from 'react-i18next'
@@ -719,6 +720,7 @@ function App() {
         {settings.features.pointerFx && <PointerFx page={active} />}
 
         <MatrixRain />
+        <TrashAndSync data={data} setData={setData} />
         <GlobalQoL habitsLeft={data.habits.filter((h) => !h.dates.includes(today)).length} />
         <Shortcuts onNavigate={jump} onToggleTheme={() => setThemeSettings((t) => toggleThemeMode(t))} />
         {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}
@@ -1253,6 +1255,7 @@ function App() {
                 setSettings={setSettings}
                 theme={themeSettings}
                 setTheme={setThemeSettings}
+                trash={<TrashList setData={setData} />}
               />
             ) : active === 'daybook' &&
               settings.features.daybookModes ? null : active === 'journal' &&

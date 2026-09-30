@@ -385,7 +385,8 @@ export function HabitsPage({
                         className="icon-button"
                         title="Delete habit"
                         aria-label={`Delete ${h.title}`}
-                        onClick={() => setDeleting({ id: h.id, kind: 'habit' })}
+                        // Deleted habits go to the Trash with an Undo toast, so no confirm step.
+                        onClick={() => setData((d) => ({ ...d, habits: d.habits.filter((x) => x.id !== h.id) }))}
                       >
                         <Trash2 size={16} />
                       </button>
