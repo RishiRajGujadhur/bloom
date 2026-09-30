@@ -8,7 +8,7 @@ import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeS
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { muscleNames, type Muscle } from '../exercise/exercises'
-import { WORKOUT_KEY, e1rm, liftById, lifts, load, plates, progress, prsFor, templates, volume, weeklyMuscleSets, type WSet, type WorkoutStore } from './workoutModel'
+import { WORKOUT_KEY, e1rm, liftById, lifts, load, plates, progress, prsFor, templates, volume, warmups, weeklyMuscleSets, type WSet, type WorkoutStore } from './workoutModel'
 import { WeekBars } from '../showcase/WeekBars'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './workout.css'
@@ -223,6 +223,11 @@ export function WorkoutPage() {
               </p>
             )
           })()}
+          {lift && BARBELL.has(lift.id) && !active.sets.some((x) => x.liftId === lift.id) && warmups(weight).length > 0 && (
+            <p className="wo-warmup">
+              <strong>Warm up first:</strong> {warmups(weight).map((w) => `${w.weight}×${w.reps}`).join(' → ')}
+            </p>
+          )}
           <Slider label={lift?.id === 'plank' ? 'Seconds' : 'Reps'} value={reps} min={1} max={lift?.id === 'plank' ? 300 : 30} step={lift?.id === 'plank' ? 5 : 1} onChange={setReps} />
           {on('rpe') && <Slider label="Effort (RPE)" value={rpe} min={5} max={10} step={0.5} format={(v) => `${v}`} onChange={setRpe} />}
           <button ref={logBtn} type="button" className="studio-go" onClick={logSet}>

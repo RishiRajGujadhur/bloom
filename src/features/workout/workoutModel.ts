@@ -92,3 +92,16 @@ export function plates(target: number, bar = 20, available = [25, 20, 15, 10, 5,
     }
   return { perSide: out, leftover: Math.round(side * 2 * 100) / 100 }
 }
+
+/** Warm-up ramp to a working weight: empty bar, then ~50/70/85%, rounded to 2.5 kg. */
+export function warmups(work: number, bar = 20) {
+  if (work < bar + 20) return []
+  const r = (x: number) => Math.max(bar, Math.round(x / 2.5) * 2.5)
+  const steps = [
+    { weight: bar, reps: 10 },
+    { weight: r(work * 0.5), reps: 5 },
+    { weight: r(work * 0.7), reps: 3 },
+    { weight: r(work * 0.85), reps: 1 },
+  ]
+  return steps.filter((s, i) => s.weight < work && (i === 0 || s.weight > steps[i - 1].weight))
+}
