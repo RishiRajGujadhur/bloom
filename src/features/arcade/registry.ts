@@ -184,4 +184,7 @@ export const GAMES: GameDef[] = [
   g(56, 'knots2', 'Conflict Knots', 'Tease two tangled ropes apart. Gently.', 'p5.js verlet', 10,
     '<path d="M6 20c14 0 18 24 28 24s16-20 24-20" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M6 44c14 0 18-24 28-24s16 20 24 20" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" opacity=".5"/>',
     () => import('./games/ConflictKnots')),
+  g(57, 'origami', 'Apology Origami', 'Fold a little note, crease by careful crease.', 'SVG polygon folding', 300,
+    '<path d="M8 40L32 8l24 32z" fill="currentColor" opacity=".35"/><path d="M8 40l24 16 24-16-24 8z" fill="currentColor"/><path d="M32 8v40" stroke="#fff" stroke-width="2" stroke-dasharray="3 3"/>',
+    () => import('./games/ApologyOrigami')),
 ]
