@@ -205,3 +205,7 @@ html[data-privacy-blur] body::after { content: 'Hidden · press Ctrl+Shift+L to 
 @media (pointer: coarse) {
   .icon-button, .studio-chip, .quiet-button { min-height: 40px; min-width: 40px; }
 }
+
+/* Notched phones (viewport-fit=cover): keep content clear of the notch and home bar. */
+.app-shell { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+.app-shell main { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
