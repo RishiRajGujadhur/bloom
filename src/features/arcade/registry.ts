@@ -262,4 +262,7 @@ export const GAMES: GameDef[] = [
   g(82, 'seasonal', 'Seasonal Market', 'Spin through the year and pick what’s in season.', 'Three.js 3D', 110,
     '<path d="M8 30L32 12l24 18z" fill="currentColor" opacity=".7"/><path d="M12 30v22h40V30" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="22" cy="42" r="5" fill="currentColor"/><circle cx="42" cy="42" r="5" fill="currentColor" opacity=".6"/><circle cx="32" cy="46" r="4" fill="currentColor" opacity=".8"/>',
     () => import('./games/SeasonalMarket')),
+  g(83, 'salary', 'Salary Slide', 'Set the gates so payday flows where it needs to go.', 'SVG · GSAP', 260,
+    '<path d="M26 4h12l-4 8h-4z" fill="currentColor"/><path d="M30 12L6 40h52L34 12z" fill="currentColor" opacity=".25"/><path d="M6 44h12l-2 14H8zM20 44h12l-2 14h-8zM34 44h12l-2 14h-8zM48 44h10l-2 14h-6z" fill="currentColor" opacity=".8"/>',
+    () => import('./games/SalarySlide')),
 ]
