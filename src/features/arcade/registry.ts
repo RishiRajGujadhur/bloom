@@ -103,4 +103,7 @@ export const GAMES: GameDef[] = [
   g(29, 'wardrobe', 'Weather Wardrobe', 'Dress Pip for six days of wild weather.', 'SVG · GSAP', 290,
     '<circle cx="46" cy="16" r="9" fill="currentColor" opacity=".6"/><path d="M8 26q6-10 16-6 6-8 14 0 10 0 8 10H8z" fill="currentColor" opacity=".35"/><path d="M22 34l6-4h8l6 4-4 6-2-2v18H28V38l-2 2z" fill="currentColor"/>',
     () => import('./games/WeatherWardrobe')),
+  g(30, 'mountain', 'Goal Mountain', 'The summit’s far. Camp by camp, you’ll get there.', 'Babylon.js 3D', 160,
+    '<path d="M4 56L26 16l10 16 6-8 18 32z" fill="currentColor" opacity=".8"/><path d="M26 16l-5 9h10z" fill="#fff"/><path d="M40 6v12" stroke="currentColor" stroke-width="2"/><path d="M40 6l8 3-8 3z" fill="currentColor"/><circle cx="14" cy="48" r="2" fill="#fff"/><circle cx="22" cy="40" r="2" fill="#fff"/><circle cx="30" cy="34" r="2" fill="#fff"/>',
+    () => import('./games/GoalMountain')),
 ]
