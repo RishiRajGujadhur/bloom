@@ -160,4 +160,7 @@ export const GAMES: GameDef[] = [
   g(48, 'clocktower', 'Clock Tower', 'Wind the town clock to the time they’re shouting up.', 'SVG · GSAP', 30,
     '<path d="M16 60V18L32 4l16 14v42z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="3"/><path d="M32 32V24M32 32l6 3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
     () => import('./games/ClockTower')),
+  g(49, 'swim', 'Swim Float', 'Swim hard, float calm, ride the waves back to the beach.', 'p5.js', 195,
+    '<path d="M4 40q7-6 14 0t14 0 14 0 14 0" stroke="currentColor" stroke-width="3" fill="none"/><path d="M4 52q7-6 14 0t14 0 14 0 14 0" stroke="currentColor" stroke-width="3" fill="none" opacity=".5"/><ellipse cx="30" cy="32" rx="14" ry="5" fill="currentColor"/><circle cx="46" cy="28" r="5" fill="currentColor"/>',
+    () => import('./games/SwimFloat')),
 ]
