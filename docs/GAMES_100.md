@@ -133,3 +133,4 @@ Every game has:
 - Game 4: Burner Juggle — GSAP and SVG stove with four burners, heat knobs, stirring, scorch meters and an order rail, in 90-second services.
 - Game 5: Laundry Sorter — matter-js drag and fling. Clothes tumble onto a folding table and go into Whites, Colours, Darks or Hand wash by colour and care tag (a red sock turns the whites pink). Arcade games now keep their own colours in the Matrix theme.
 - Game 6: Compound Orchard — a Babylon.js floating island. Plant trees that grow by a fifth of their size each season and harvest at the right time before old trees wither; 20 seasons with soft shadows and coin bursts.
+- Game 7: Scam Bubbles — GSAP bubbles carry texts up to your phone. Pop the phishing, fake-delivery and gift-card scams, let real messages through; three cracks and it's over.

@@ -30,3 +30,6 @@
 [data-theme='matrix'] .ar-stage { background: #001a08; }
 .kg-host canvas { display: block; width: min(100%, calc(72vh * 4 / 3)) !important; height: auto !important; margin: 0 auto; }
 .co-canvas { display: block; width: 100%; height: min(68vh, 560px); touch-action: none; outline: none; }
+.sb-card { display: grid; gap: 2px; height: 100%; place-content: center; text-align: center; font: 600 10.5px/1.25 system-ui, sans-serif; color: #10233a; }
+.sb-card b { font-size: 11px; color: #3a5070; }
+.sb-card span { font-weight: 500; }

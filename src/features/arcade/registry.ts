@@ -34,4 +34,7 @@ export const GAMES: GameDef[] = [
   g(6, 'orchard', 'Compound Orchard', 'Plant, wait, harvest. Trees grow on what they’ve already grown.', 'Babylon.js 3D', 130,
     '<ellipse cx="32" cy="52" rx="26" ry="7" fill="currentColor" opacity=".3"/><rect x="18" y="30" width="4" height="18" fill="currentColor"/><circle cx="20" cy="26" r="8" fill="currentColor" opacity=".8"/><rect x="40" y="22" width="5" height="26" fill="currentColor"/><circle cx="42" cy="16" r="13" fill="currentColor"/><circle cx="36" cy="18" r="2.5" fill="#fff"/><circle cx="47" cy="12" r="2.5" fill="#fff"/>',
     () => import('./games/CompoundOrchard')),
+  g(7, 'scam', 'Scam Bubbles', 'Pop the sketchy messages before they reach your phone.', 'GSAP · SVG', 200,
+    '<circle cx="22" cy="40" r="14" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="42" cy="22" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="48" r="7" fill="currentColor" opacity=".6"/><path d="M16 36h12M16 42h9" stroke="currentColor" stroke-width="2.5"/><path d="M38 18l8 8M46 18l-8 8" stroke="currentColor" stroke-width="2.5"/>',
+    () => import('./games/ScamBubbles')),
 ]
