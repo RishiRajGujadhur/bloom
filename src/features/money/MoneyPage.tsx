@@ -272,7 +272,16 @@ export function MoneyPage() {
         <ShowMore as="ul" className="mn-txns" initial={6} label="more">
           {store.txns.filter((x) => { const q = txnQuery.trim().toLowerCase(); return !q || `${x.place} ${categoryOf(x.category).name} ${(x.amount / 100).toFixed(2)} ${x.date}`.toLowerCase().includes(q) }).map((x) => (
             <li key={x.id}>
-              <span className="mn-emoji">{x.income ? '💰' : categoryOf(x.category).emoji}</span>
+              {x.income ? (
+                <span className="mn-emoji">💰</span>
+              ) : (
+                <label className="mn-emoji mn-cat-pick" title="Change category">
+                  {categoryOf(x.category).emoji}
+                  <select aria-label="Category" value={x.category} onChange={(e) => save((s) => ({ ...s, txns: s.txns.map((y) => (y.id === x.id ? { ...y, category: e.target.value } : y)) }))}>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>)}
+                  </select>
+                </label>
+              )}
               <span className="mn-txn-main">
                 <strong>{x.place || categoryOf(x.category).name}</strong>
                 <small>{x.date}</small>
