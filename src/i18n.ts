@@ -517,6 +517,10 @@ const common = {
         title: "Code city & burnout radar",
         description: "Your git repositories as a 3D city (height = changes, colour = late-night work) and a radar that sets your commit rhythm against sleep, mood and readiness.",
       },
+      arcade: {
+        title: "Arcade",
+        description: "Short, tactile games built on physics, 3D and animated SVG. One tap to play.",
+      },
       bloomCore: {
         title: 'Bloom Core',
         description: 'What to do now, one meaningful growth path, discoveries and moments that matter.',
@@ -1686,6 +1690,10 @@ export const resources = {
           codeCity: {
             title: "Ville du code",
             description: "Vos dépôts git en ville 3D et un radar d’épuisement.",
+          },
+          arcade: {
+            title: "Arcade",
+            description: "Des jeux courts et tactiles en physique, 3D et SVG animé. Un geste pour jouer.",
           },
           bloomCore: {
             title: 'Cœur de Bloom',

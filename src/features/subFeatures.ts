@@ -1102,6 +1102,18 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: "hottest", title: "Hottest files", description: "The files you change most." },
     { id: "sample", title: "Sample city", description: "Explore without a repository." },
   ],
+  arcade: [
+    { id: "hub", title: "Game hub", description: "Every game as an animated card." },
+    { id: "best", title: "Best scores", description: "Your best score per game, kept on this device." },
+    { id: "restart", title: "Instant restart", description: "R restarts any game." },
+    { id: "results", title: "Result cards", description: "An animated card at the end of each round." },
+    { id: "deeplink", title: "Deep links", description: "Open a game straight from its address." },
+    { id: "physics", title: "Physics games", description: "matter-js worlds drawn as SVG." },
+    { id: "three", title: "3D games", description: "Three.js and Babylon.js scenes." },
+    { id: "sketch", title: "Sketch games", description: "p5.js generative play." },
+    { id: "motion", title: "Reduced motion", description: "Calmer animation when your system asks for it." },
+    { id: "themes", title: "Theme aware", description: "Games follow your Bloom theme." },
+  ],
   bloomCore: [
     { id: 'nowCard', title: 'What to do now', description: 'One obvious next action that changes with the time of day.' },
     { id: 'simpleHome', title: 'Simple home', description: 'Fewer choices on the dashboard; the rest is one tap away.' },

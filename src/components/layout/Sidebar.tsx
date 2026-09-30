@@ -40,6 +40,7 @@ import {
   X,
 } from 'lucide-react'
 import { Waves as WavesNav } from 'lucide-react'
+import { Gamepad2 as Gamepad2F_arcade } from 'lucide-react'
 import { Building2 as Building2F_codeCity } from 'lucide-react'
 import { Radio as RadioF_morningBriefing } from 'lucide-react'
 import { Activity as ActivityF_readinessScan } from 'lucide-react'
@@ -132,6 +133,7 @@ export type NavKey =
   | 'energy'
   | 'lab'
   | 'taichi'
+  | 'arcade'
   | 'code-city'
   | 'briefing'
   | 'readiness'
@@ -199,6 +201,7 @@ export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Learn', keys: ['english', 'code', 'cards', 'games', 'palace', 'mindmaps', 'chess', 'typing', 'piano', 'tuner', 'sign', 'globe', 'cpr', 'reader'] },
   { label: 'Mind', keys: ['journal', 'daybook', 'breathe', 'mood', 'gratitude', 'sleep', 'release', 'posture', 'epiphanies', 'monk', 'voice', 'taichi', 'sounds', 'mixer', 'meditate', 'breathwork', 'mala', 'ink', 'mirror', 'screen', 'affirm'] },
   { label: 'Body', keys: ['exercises', 'workouts', 'intervals', 'yoga', 'stretch', 'run', 'body', 'eyes', 'daylight', 'dojo', 'readiness'] },
+  { label: 'Games', keys: ['arcade'] },
   { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street', 'weeks', 'sky', 'decide', 'code-city'] },
 ]
 
@@ -472,6 +475,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
     { key: 'energy', title: 'Energy flow', Icon: ZapNav, requires: 'energySankey' },
     { key: 'lab', title: 'Correlations', Icon: FlaskConicalNav, requires: 'insightsLab' },
     { key: 'taichi', title: 'Tai Chi', Icon: WavesNav, requires: 'wuXing' },
+    { key: 'arcade', title: "Arcade", Icon: Gamepad2F_arcade, requires: 'arcade' },
     { key: 'code-city', title: "Code city", Icon: Building2F_codeCity, requires: 'codeCity' },
     { key: 'briefing', title: "Morning briefing", Icon: RadioF_morningBriefing, requires: 'morningBriefing' },
     { key: 'readiness', title: "Morning readiness", Icon: ActivityF_readinessScan, requires: 'readinessScan' },

@@ -301,6 +301,9 @@ const BriefingPage = lazy(() =>
 const CodeCityPage = lazy(() =>
   import('./features/codecity/CodeCityPage').then((m) => ({ default: m.CodeCityPage })),
 )
+const ArcadePage = lazy(() =>
+  import('./features/arcade/ArcadePage').then((m) => ({ default: m.ArcadePage })),
+)
 const TaiChiPage = lazy(() =>
   import('./features/taichi/TaiChiPage').then((m) => ({ default: m.TaiChiPage })),
 )
@@ -868,6 +871,7 @@ function App() {
             (active === 'energy' && !settings.features.energySankey) ||
             (active === 'lab' && !settings.features.insightsLab) ||
             (active === 'taichi' && !settings.features.wuXing) ||
+            (active === 'arcade' && !settings.features.arcade) ||
             (active === 'code-city' && !settings.features.codeCity) ||
             (active === 'briefing' && !settings.features.morningBriefing) ||
             (active === 'readiness' && !settings.features.readinessScan) ||
@@ -1177,6 +1181,10 @@ function App() {
             ) : active === 'code-city' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
                 <CodeCityPage />
+              </Suspense>
+            ) : active === 'arcade' ? (
+              <Suspense fallback={<p role="status">Loading…</p>}>
+                <ArcadePage />
               </Suspense>
             ) : active === 'taichi' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

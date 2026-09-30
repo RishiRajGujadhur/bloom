@@ -65,6 +65,7 @@ export const pageDetails: Record<
   energy: { title: 'Energy flow', description: 'Debug your week.' },
   lab: { title: 'Correlations', description: 'What moves together.' },
   taichi: { title: 'Tai Chi', description: 'Root down. Breathe low.' },
+  'arcade': { title: "Arcade", description: "Pick a game. Play a minute." },
   'code-city': { title: "Code city", description: "Ship code, not yourself." },
   'briefing': { title: "Morning briefing", description: "Your day, on air." },
   'readiness': { title: "Morning readiness", description: "Know when to push and when to rest." },
@@ -132,7 +133,7 @@ export const pageDetails: Record<
   },
 }
 export function readPage(): NavKey {
-  const key = window.location.hash.slice(1)
+  const key = window.location.hash.slice(1).split("/")[0]
   return Object.prototype.hasOwnProperty.call(pageDetails, key)
     ? (key as NavKey)
     : 'overview'
@@ -332,6 +333,10 @@ const guides: Record<NavKey, DriveStep[]> = {
   'code-city': [
     step(".cc-scene", "City", "Drag to orbit, hover a tower to read it."),
     step(".cc-radar", "Radar", "Your burnout risk over four weeks."),
+  ],
+  'arcade': [
+    step(".ar-grid", "Games", "Click any card to play."),
+    step(".ar-card", "Best score", "Your best shows on each card."),
   ],
   taichi: [
     step('.tc-elements', 'Five Elements', 'Each element has its own scale and timbre.'),

@@ -12,6 +12,7 @@ import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
 import { applyPreset, categories, featureCategory, matchPreset, presets } from './settings/featureCatalog'
 import { Sprout as SproutCore } from 'lucide-react'
+import { Gamepad2 as Gamepad2F_arcade } from 'lucide-react'
 import { Building2 as Building2F_codeCity } from 'lucide-react'
 import { Radio as RadioF_morningBriefing } from 'lucide-react'
 import { Activity as ActivityF_readinessScan } from 'lucide-react'
@@ -163,6 +164,7 @@ const featureIcons: Record<keyof FeatureFlags, LucideIcon> = {
   breathSilk: WavesRound11,
   wuXing: MountainRound11,
   bloomCore: SproutCore,
+  arcade: Gamepad2F_arcade,
   codeCity: Building2F_codeCity,
   morningBriefing: RadioF_morningBriefing,
   readinessScan: ActivityF_readinessScan,
@@ -268,6 +270,7 @@ export interface FeatureFlags {
   breathSilk: boolean
   wuXing: boolean
   bloomCore: boolean
+  arcade: boolean
   codeCity: boolean
   morningBriefing: boolean
   readinessScan: boolean
@@ -384,6 +387,7 @@ export const defaultSettings: AppSettings = {
     breathSilk: true,
     wuXing: true,
     bloomCore: true,
+    arcade: true,
     codeCity: true,
     morningBriefing: true,
     readinessScan: true,
@@ -490,6 +494,7 @@ export const featureKeys = [
   'breathSilk',
   'wuXing',
   'bloomCore',
+  'arcade',
   'codeCity',
   'morningBriefing',
   'readinessScan',
