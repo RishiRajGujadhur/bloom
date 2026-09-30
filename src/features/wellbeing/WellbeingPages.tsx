@@ -267,6 +267,22 @@ export function BreathePage() {
             {n} rounds
           </button>
         ))}
+        {[1, 3, 5, 10].map((min) => {
+          const cycle = pattern.phases.reduce((sum, [, sec]) => sum + sec, 0) || 1
+          const n = Math.max(1, Math.round((min * 60) / cycle))
+          return (
+            <button
+              key={`m${min}`}
+              role="radio"
+              aria-checked={rounds === n && !roundOptions.includes(n as 4)}
+              disabled={running}
+              title={`${n} rounds of ${pattern.name}`}
+              onClick={() => setRounds(n)}
+            >
+              {min} min
+            </button>
+          )
+        })}
       </div>
       <div className="wb-orb-stage">
         <motion.div
