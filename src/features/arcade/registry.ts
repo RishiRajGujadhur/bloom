@@ -64,4 +64,7 @@ export const GAMES: GameDef[] = [
   g(16, 'germs', 'Germ Wash', 'Scrub the wiggly germs off before the song ends.', 'SVG · GSAP', 195,
     '<path d="M20 58V30l-4-14a3 3 0 0 1 6-1l4 12V10a3 3 0 0 1 6 0v16V8a3 3 0 0 1 6 0v18V12a3 3 0 0 1 6 0v30c0 8-6 16-14 16z" fill="currentColor" opacity=".8"/><circle cx="48" cy="46" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="42" r="4" fill="none" stroke="currentColor" stroke-width="2"/>',
     () => import('./games/GermWash')),
+  g(17, 'stars', 'Star Compass', 'No phone, no map. Find north in a turning night sky.', 'Three.js 3D', 250,
+    '<circle cx="12" cy="40" r="2.5" fill="currentColor"/><circle cx="20" cy="46" r="2.5" fill="currentColor"/><circle cx="28" cy="42" r="2.5" fill="currentColor"/><circle cx="34" cy="34" r="2.5" fill="currentColor"/><circle cx="38" cy="26" r="2.5" fill="currentColor"/><path d="M38 26L48 10" stroke="currentColor" stroke-dasharray="2 3" stroke-width="2"/><path d="M48 4l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z" fill="currentColor"/>',
+    () => import('./games/StarCompass')),
 ]
