@@ -202,4 +202,7 @@ export const GAMES: GameDef[] = [
   g(62, 'sunsnake', 'Sunscreen Snake', 'Shells, shade and sunscreen from sunrise to sunset.', 'p5.js', 38,
     '<circle cx="50" cy="12" r="7" fill="currentColor" opacity=".7"/><path d="M8 50h12v-10h12v10h12V30" stroke="currentColor" stroke-width="8" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="44" cy="28" r="2" fill="#fff"/>',
     () => import('./games/SunscreenSnake')),
+  g(63, 'spice', 'Spice Mixer', 'A pinch at a time until the flavour shape matches.', 'SVG radar · GSAP', 15,
+    '<polygon points="32,6 54,20 54,44 32,58 10,44 10,20" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="32,16 46,26 44,40 32,48 18,38 22,24" fill="currentColor" opacity=".6"/><circle cx="32" cy="32" r="2" fill="currentColor"/>',
+    () => import('./games/SpiceMixer')),
 ]
