@@ -413,3 +413,6 @@ html[data-mode='dark'] .thought-diff del {
 .daybook-mood button { border: 0; background: transparent; cursor: pointer; font-size: 15px; padding: 0 2px; opacity: 0.4; filter: grayscale(0.7); transition: opacity 120ms, transform 120ms; }
 .daybook-mood button:hover { opacity: 0.8; }
 .daybook-mood button[aria-pressed='true'] { opacity: 1; filter: none; transform: scale(1.2); }
+.daybook-favs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 18px; font-size: 13px; color: var(--text-muted); }
+.daybook-favs button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
+.daybook-favs button:hover { border-color: var(--accent-color); }

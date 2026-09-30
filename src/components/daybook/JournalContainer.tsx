@@ -80,6 +80,16 @@ export function JournalContainer() {
   )
   const language = i18n.resolvedLanguage ?? 'en'
   const modes = useMemo(() => localizedJournalModes(language), [language])
+  // The page types you write most, for one-tap fresh pages.
+  const favouriteModes = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const e of entries) counts.set(e.modeId, (counts.get(e.modeId) ?? 0) + 1)
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([id]) => modes.find((m) => m.id === id))
+      .filter((m): m is JournalMode => Boolean(m))
+      .slice(0, 4)
+  }, [entries, modes])
   // Each page is its own entry: choosing a mode starts a fresh page, while
   // "Your pages" (and search) reopen a specific saved one.
   const [entryId, setEntryId] = useState<string | null>(null)
@@ -221,6 +231,16 @@ export function JournalContainer() {
         ) : (
           <div className="journal-direction">
             <DaybookQuick modes={modes} onSelect={startPage} />
+            {favouriteModes.length > 0 && (
+              <div className="daybook-favs" role="group" aria-label="Your usual page types">
+                <span>Start a fresh</span>
+                {favouriteModes.map((m) => (
+                  <button key={m.id} type="button" onClick={() => startPage(m)}>
+                    {m.icon} {m.title}
+                  </button>
+                ))}
+              </div>
+            )}
             {subOn('daybookModes', 'bookshelf') && <Bookshelf pages={recentPages} modes={modes} onEdit={openPage} language={language} />}
             {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
               <label className="daybook-sort">
