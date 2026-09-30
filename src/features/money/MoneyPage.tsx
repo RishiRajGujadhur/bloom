@@ -123,7 +123,16 @@ export function MoneyPage() {
   }, [blurAmounts])
   const [amount, setAmount] = useState('')
   const [place, setPlace] = useState('')
-  const [category, setCategory] = useState('groceries')
+  // The last category you used is picked again next time.
+  const [category, setCategoryState] = useState(() => localStorage.getItem('bloom-money-last-cat') || 'groceries')
+  const setCategory = (c: string) => {
+    setCategoryState(c)
+    try {
+      localStorage.setItem('bloom-money-last-cat', c)
+    } catch {
+      /* this visit only */
+    }
+  }
   const [income, setIncome] = useState(false)
   const addBtn = useRef<HTMLButtonElement>(null)
   const today = dayKey()
