@@ -1,0 +1,9 @@
+.quick-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; font-size: 0.82rem; }
+.quick-chips span { opacity: 0.75; }
+.quick-chips b { padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--accent, #6b8f71) 16%, transparent); font-weight: 600; }
+.quick-hint { display: block; margin-top: 6px; opacity: 0.6; font-size: 0.75rem; }
+.overdue-bar { display: flex; gap: 10px; align-items: center; margin-top: 8px; padding: 6px 10px; border-radius: 10px; background: color-mix(in srgb, #d9534f 12%, transparent); font-size: 0.82rem; }
+.overdue-bar button, .task-snooze button { border: 1px solid currentColor; background: transparent; color: inherit; border-radius: 999px; padding: 2px 9px; font-size: 0.75rem; cursor: pointer; opacity: 0.8; }
+.overdue-bar button:hover, .task-snooze button:hover { opacity: 1; }
+.task-snooze { display: inline-flex; gap: 4px; }
+.task-overdue { color: #d9534f; font-weight: 600; }

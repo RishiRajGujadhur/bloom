@@ -15,6 +15,7 @@ import { CardRail } from '../components/BloomExperience'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import gsap from 'gsap'
 import './waterdo.css'
+import './todos/quickTask.css'
 import {
   ArrowRight,
   Check,
@@ -166,6 +167,8 @@ export function ChallengesPage({
     </div>
   )
 }
+import { addDays, parseQuickTask, splitLines } from './todos/quickTask'
+
 export function TodoPage({ data, setData }: Props) {
   const [waterDo, setWaterDo] = useState(() => localStorage.getItem('bloom-waterdo') === 'true')
   const [planning, setPlanning] = useState({ ...emptyPlanning })
@@ -222,39 +225,54 @@ export function TodoPage({ data, setData }: Props) {
     })
     .sort(
       (a, b) =>
+        Number(!a.done && b.due < dayKey()) -
+          Number(!b.done && a.due < dayKey()) ||
         priorityOrder[a.priority] - priorityOrder[b.priority] ||
         a.due.localeCompare(b.due),
     )
-  const add = (event: React.FormEvent) => {
-    event.preventDefault()
-    if (!title.trim()) return
-    setData((current) => ({
-      ...current,
-      todos: [
-        ...current.todos,
-        {
+  const quick = parseQuickTask(title, dayKey())
+  const addMany = (lines: string[]) => {
+    const made = lines.map((line) => {
+      const q = parseQuickTask(line, dayKey())
+      const rec = q.recurrence !== 'none' ? q.recurrence : recurrence
+      return {
           id: id(),
-          title: title.trim(),
-          due,
+          title: q.title,
+          due: q.due ?? due,
           done: false,
           challengeId: null,
           rewarded: false,
-          priority,
-          tags: parseTags(tags),
-          recurrence,
-          seriesId: recurrence === 'none' ? null : id(),
+          priority: q.priority ?? priority,
+          tags: [...new Set([...parseTags(tags), ...q.tags])].slice(0, 6),
+          recurrence: rec,
+          seriesId: rec === 'none' ? null : id(),
           subtasks: [],
           planning: {
             ...planning,
             context: planning.context.trim(),
             order: Date.now(),
           },
-        },
-      ],
-    }))
+        }
+    })
+    setData((current) => ({ ...current, todos: [...current.todos, ...made] }))
     setTitle('')
     setTags('')
   }
+  const add = (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!title.trim()) return
+    addMany([title])
+  }
+  const shiftDue = (taskId: string, days: number) =>
+    setData((current) => ({
+      ...current,
+      todos: current.todos.map((t) =>
+        t.id === taskId
+          ? { ...t, due: addDays(t.due < dayKey() ? dayKey() : t.due, days) }
+          : t,
+      ),
+    }))
+  const overdue = tasks.filter((t) => !t.done && t.due < dayKey())
   return (
     <section id="todo-page" className="task-workspace planning-workspace">
       <TodosQuick data={data} setData={setData} />
@@ -281,6 +299,12 @@ export function TodoPage({ data, setData }: Props) {
             maxLength={150}
             value={title}
             onChange={(event) => setTitle(event.target.value)}
+            onPaste={(event) => {
+              const lines = splitLines(event.clipboardData.getData('text'))
+              if (lines.length < 2) return
+              event.preventDefault()
+              addMany(lines)
+            }}
             required
           />
           <button
@@ -295,6 +319,23 @@ export function TodoPage({ data, setData }: Props) {
             <Plus size={17} /> Add
           </button>
         </div>
+        {title.trim() &&
+          (quick.due || quick.priority || quick.tags.length > 0 || quick.recurrence !== 'none') && (
+            <div className="quick-chips" aria-live="polite">
+              <span>Will add “{quick.title}”</span>
+              {quick.due && <b>📅 {quick.due}</b>}
+              {quick.priority && <b>⚑ {quick.priority}</b>}
+              {quick.recurrence !== 'none' && <b>↻ {quick.recurrence}</b>}
+              {quick.tags.map((t) => <b key={t}>#{t}</b>)}
+            </div>
+          )}
+        <small className="quick-hint">Tip: type “tomorrow p1 #home every week”, or paste a list to add many.</small>
+        {overdue.length > 0 && (
+          <div className="overdue-bar">
+            <span>{overdue.length} overdue — shown first</span>
+            <button type="button" onClick={() => overdue.forEach((t) => shiftDue(t.id, 0))}>Move all to today</button>
+          </div>
+        )}
         {showOptions && (
           <>
             <div className="task-options">
@@ -579,7 +620,7 @@ export function TodoPage({ data, setData }: Props) {
                       <strong>{task.title}</strong>
                     </div>
                     <div className="task-meta">
-                      <small>{task.due}</small>
+                      <small className={!task.done && task.due < dayKey() ? 'task-overdue' : undefined}>{task.due}</small>
                       {task.planning && (
                         <>
                           <span>
@@ -632,6 +673,12 @@ export function TodoPage({ data, setData }: Props) {
                       ) : null}
                     </div>
                   </div>
+                )}
+                {editing !== task.id && !task.done && (
+                  <span className="task-snooze">
+                    <button type="button" title="Move to tomorrow" aria-label={`Move ${task.title} to tomorrow`} onClick={() => shiftDue(task.id, 1)}>→ Tmrw</button>
+                    <button type="button" title="Snooze a week" aria-label={`Snooze ${task.title} a week`} onClick={() => shiftDue(task.id, 7)}>+1w</button>
+                  </span>
                 )}
                 {editing !== task.id && (
                   <button
