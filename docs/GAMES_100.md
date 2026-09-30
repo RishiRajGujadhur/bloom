@@ -136,3 +136,4 @@ Every game has:
 - Game 7: Scam Bubbles — GSAP bubbles carry texts up to your phone. Pop the phishing, fake-delivery and gift-card scams, let real messages through; three cracks and it's over.
 - Game 8: Focus Lighthouse — Three.js night sea with wave-displaced water, a spotlight beam and cone, sailing ships with focus bars and fireworks pulling your eye away.
 - Game 9: Breath Kite — SVG and GSAP kite on a 4-seconds-up, 6-seconds-down wind wave. Hold to rise, release to glide, and thread the rings for streaks.
+- Game 10: Traffic Light Crossing — PlayCanvas voxel street with four lanes of traffic that queues at a cycling crossing light. Hop across to run errands, with a bonus for crossing on the green man.

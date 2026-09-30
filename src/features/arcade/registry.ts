@@ -43,4 +43,7 @@ export const GAMES: GameDef[] = [
   g(9, 'kite', 'Breath Kite', 'Hold to climb, let go to glide, and thread the rings on the wind.', 'SVG · GSAP', 350,
     '<path d="M32 6l14 18-14 22-14-22z" fill="currentColor" opacity=".85"/><path d="M32 46c-4 6 4 8 0 12" stroke="currentColor" stroke-width="2.5" fill="none"/><ellipse cx="52" cy="40" rx="4" ry="10" fill="none" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/BreathKite')),
+  g(10, 'crossing', 'Traffic Light Crossing', 'Hop across four busy lanes to run the day’s errands.', 'PlayCanvas 3D', 10,
+    '<rect x="4" y="22" width="56" height="26" fill="currentColor" opacity=".25"/><path d="M28 22v26M36 22v26" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3"/><rect x="50" y="4" width="8" height="18" rx="2" fill="currentColor"/><circle cx="54" cy="9" r="2.5" fill="#fff"/><rect x="8" y="28" width="14" height="7" rx="2" fill="currentColor"/>',
+    () => import('./games/TrafficCrossing')),
 ]
