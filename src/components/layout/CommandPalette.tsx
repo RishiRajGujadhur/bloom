@@ -35,6 +35,15 @@ import type { NavKey } from './Sidebar'
 import '../ui/ui.css'
 
 const RECENT_KEY = 'bloom-recent-pages'
+const SEARCHES_KEY = 'bloom-recent-searches'
+const readSearches = (): string[] => {
+  try {
+    const v: unknown = JSON.parse(localStorage.getItem(SEARCHES_KEY) ?? '[]')
+    return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []
+  } catch {
+    return []
+  }
+}
 
 /** Pages that disappear when their feature is switched off. */
 export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
@@ -268,6 +277,14 @@ export function CommandPalette({
     return null
   })()
   const go = (action: () => void) => {
+    // Remember what you searched for (not commands), newest first.
+    if (query.length >= 2 && !commandMode) {
+      try {
+        localStorage.setItem(SEARCHES_KEY, JSON.stringify([query, ...readSearches().filter((q) => q !== query)].slice(0, 5)))
+      } catch {
+        /* optional */
+      }
+    }
     onOpenChange(false)
     action()
   }
@@ -346,6 +363,30 @@ export function CommandPalette({
                 <span className="cmdk-item-text">{pageDetails[key].title}</span>
               </Command.Item>
             ))}
+          </Command.Group>
+        )}
+
+        {!query && readSearches().length > 0 && (
+          <Command.Group heading="Recent searches">
+            {readSearches().map((s) => (
+              <Command.Item key={`search-${s}`} value={`recent search ${s}`} onSelect={() => setSearch(s)}>
+                <Search size={17} aria-hidden="true" />
+                <span className="cmdk-item-text">{s}</span>
+              </Command.Item>
+            ))}
+            <Command.Item
+              value="clear recent searches"
+              onSelect={() => {
+                try {
+                  localStorage.removeItem(SEARCHES_KEY)
+                } catch {
+                  /* optional */
+                }
+                onOpenChange(false)
+              }}
+            >
+              <span className="cmdk-item-text"><small>Clear recent searches</small></span>
+            </Command.Item>
           </Command.Group>
         )}
 
