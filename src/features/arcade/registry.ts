@@ -142,4 +142,7 @@ export const GAMES: GameDef[] = [
   g(42, 'tidy', 'Tidy Sprint', 'Guests are coming. Everything back to its home.', 'SVG · GSAP', 340,
     '<rect x="6" y="8" width="24" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="36" y="8" width="22" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="6" y="40" width="24" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="46" r="7" fill="currentColor"/><path d="M40 40L30 30" stroke="currentColor" stroke-width="2" stroke-dasharray="2 3"/>',
     () => import('./games/TidySprint')),
+  g(43, 'bridge', 'Bridge Builder', 'Plank by plank, get the cart across. Triangles hold.', 'matter-js · SVG', 90,
+    '<rect x="2" y="34" width="12" height="26" fill="currentColor" opacity=".6"/><rect x="50" y="34" width="12" height="26" fill="currentColor" opacity=".6"/><path d="M14 34h36M14 34l9-14 9 14 9-14 9 14M23 20h18" stroke="currentColor" stroke-width="3" fill="none" stroke-linejoin="round"/>',
+    () => import('./games/BridgeBuilder')),
 ]
