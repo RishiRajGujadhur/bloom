@@ -188,6 +188,16 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
   const waterBonus = exerciseWaterBonus(exerciseMin)
   const waterTarget = state.targets.water + waterBonus
   const todayMeals = state.meals.filter((m) => m.date === today).sort((a, b) => a.at - b.at)
+  // Tab title shows what's left today once you've logged something.
+  const kcalLeft = state.targets.kcal - totals.kcal
+  useEffect(() => {
+    if (!totals.meals) return
+    const before = document.title
+    document.title = `${kcalLeft >= 0 ? `${kcalLeft} kcal left` : `${-kcalLeft} kcal over`} · Nourish`
+    return () => {
+      document.title = before
+    }
+  }, [kcalLeft, totals.meals])
   const yesterdayMeals = (() => {
     const d = new Date(`${today}T12:00:00`)
     d.setDate(d.getDate() - 1)
