@@ -163,3 +163,4 @@ Every game has:
 - Game 34: Button Sewer — sew two- and four-hole buttons in across-and-back, parallel, cross and square patterns. Front stitches draw on with GSAP and back stitches show dashed; wrap the shank and knot it off.
 - Game 35: Thank-You Planes — Three.js paper planes with a slingshot drag and dashed arc preview, thrown to the neighbour in the right window of a 3D building. Each note names the kindness, and they wave when it arrives.
 - Game 36: Stretch Snap — an SVG figure with two-bone IK arms and legs. Drag hands and feet into glowing stretch outlines (star, side bends, lunge, airplane…) and hold still while the breath ring fills.
+- Game 37: Inbox River — SVG letters drift toward a waterfall. Drag each to Do it now (two minutes or less), Schedule (big jobs), Hand off (not yours) or Let it go (promos); anything important swept away costs you.

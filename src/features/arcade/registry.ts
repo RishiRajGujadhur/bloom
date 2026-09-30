@@ -124,4 +124,7 @@ export const GAMES: GameDef[] = [
   g(36, 'stretch', 'Stretch Snap', 'Drag the figure into each glowing stretch and hold.', 'SVG · 2-bone IK', 20,
     '<circle cx="32" cy="10" r="6" fill="currentColor"/><path d="M32 18v20M32 22L12 8M32 22l20-14M32 38l-12 20M32 38l12 20" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>',
     () => import('./games/StretchSnap')),
+  g(37, 'inbox', 'Inbox River', 'Do it, plan it, hand it off — or let it go over the falls.', 'SVG · GSAP', 205,
+    '<path d="M22 0c-6 20 6 40 0 64h20c6-24-6-44 0-64z" fill="currentColor" opacity=".3"/><rect x="18" y="16" width="28" height="20" rx="2" fill="currentColor"/><path d="M18 16l14 10 14-10" stroke="#fff" stroke-width="2" fill="none"/><rect x="2" y="44" width="16" height="10" rx="2" fill="currentColor" opacity=".6"/><rect x="46" y="44" width="16" height="10" rx="2" fill="currentColor" opacity=".6"/>',
+    () => import('./games/InboxRiver')),
 ]
