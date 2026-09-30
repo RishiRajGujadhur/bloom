@@ -12,3 +12,12 @@
 .kb-go { position: fixed; z-index: 9600; left: 50%; bottom: 20px; translate: -50% 0; padding: 8px 14px; border-radius: 12px; background: #1c1c28; color: #fff; font: 800 0.85rem 'Manrope', sans-serif; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kb-go span { font-weight: 600; opacity: 0.8; }
 html[data-theme='matrix'] .kb-go { background: #0b3a1a; color: #d6ffe0; }
+
+.skip-link { position: fixed; left: 12px; top: -60px; z-index: 9999; padding: 8px 14px; border-radius: 10px; background: var(--accent-color); color: #fff; font-weight: 800; text-decoration: none; transition: top 0.2s; }
+.skip-link:focus { top: 12px; }
+.to-top { position: fixed; right: 22px; bottom: 96px; z-index: 900; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--accent-color); font: 900 1.2rem 'Manrope', sans-serif; box-shadow: 0 10px 26px -12px #0006; cursor: pointer; animation: to-top-in 0.3s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes to-top-in { from { transform: scale(0.4); opacity: 0; } }
+#page-heading { cursor: n-resize; }
+/* Focus mode (Ctrl+.): just the page. */
+html[data-focus-mode='on'] .sidebar, html[data-focus-mode='on'] .topbar { display: none !important; }
+html[data-focus-mode='on'] main#overview { margin-left: 0 !important; padding-left: 0 !important; }

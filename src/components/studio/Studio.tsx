@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../../utils/motion'
+import { StudioNameContext } from './StudioScene'
 import { Children, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import gsap from 'gsap'
@@ -96,7 +97,7 @@ export function Studio({
     <div className="studio" style={{ ['--studio' as string]: accent } as CSSProperties} data-studio={name}>
       {scene && (
         <div className="studio-scene" aria-hidden="true">
-          {scene}
+          <StudioNameContext.Provider value={name}>{scene}</StudioNameContext.Provider>
         </div>
       )}
       <div className="studio-bar">
