@@ -159,7 +159,10 @@ export function EpiphanyGate({ today, children, enabled = true }: { today: strin
 export function EpiphaniesPage({ today }: { today: string }) {
   const [list, update] = useEpiphanies()
   const [text, setText] = useState('')
-  const sorted = [...list].sort((a, b) => a.due.localeCompare(b.due))
+  const [onlyStarred, setOnlyStarred] = useState(false)
+  const sorted = [...list]
+    .filter((e) => !onlyStarred || e.starred)
+    .sort((a, b) => Number(Boolean(b.starred)) - Number(Boolean(a.starred)) || a.due.localeCompare(b.due))
   return (
     <section className="epiphanies-page" aria-label="Epiphanies">
       <EpiphaniesQuick today={today} />
@@ -184,6 +187,12 @@ export function EpiphaniesPage({ today }: { today: string }) {
           you’d forget it.
         </p>
       )}
+      {list.some((e) => e.starred) && (
+        <div className="filter-chips" role="group" aria-label="Filter">
+          <button type="button" aria-pressed={!onlyStarred} onClick={() => setOnlyStarred(false)}>All · {list.length}</button>
+          <button type="button" aria-pressed={onlyStarred} onClick={() => setOnlyStarred(true)}>★ Starred · {list.filter((e) => e.starred).length}</button>
+        </div>
+      )}
       <ShowMore as="ul" className="epiphany-list" initial={5} label="insights">
         {sorted.map((item) => (
           <li key={item.id} data-due={item.due <= today}>
@@ -194,6 +203,14 @@ export function EpiphaniesPage({ today }: { today: string }) {
               <span>Ease {item.efactor.toFixed(2)}</span>
             </div>
             {subOn('epiphanies', 'curve') && <ForgettingCurve item={item} width={300} height={60} />}
+            <button
+              className="icon-button epiphany-star"
+              aria-label={item.starred ? 'Unstar' : 'Star as a favourite'}
+              aria-pressed={Boolean(item.starred)}
+              onClick={() => update(list.map((e) => (e.id === item.id ? { ...e, starred: !e.starred } : e)))}
+            >
+              {item.starred ? '★' : '☆'}
+            </button>
             <button className="icon-button" aria-label="Delete epiphany" onClick={() => update(list.filter((e) => e.id !== item.id))}>
               <Trash2 size={15} />
             </button>

@@ -276,6 +276,22 @@ function WindDown({
             />
             h
           </label>
+          <label>
+            Remind me
+            <select
+              value={settings.remindBefore ?? 0}
+              onChange={(e) => {
+                const v = Number(e.target.value)
+                setSettings((s) => ({ ...s, remindBefore: v }))
+                if (v && typeof Notification !== 'undefined' && Notification.permission === 'default') void Notification.requestPermission()
+              }}
+            >
+              <option value={0}>Off</option>
+              <option value={15}>15 min before</option>
+              <option value={30}>30 min before</option>
+              <option value={60}>1 hour before</option>
+            </select>
+          </label>
         </div>
         <ol className="sleep-steps">
           {windDownSteps.map((step) => {

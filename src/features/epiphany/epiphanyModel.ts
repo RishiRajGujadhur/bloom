@@ -16,6 +16,8 @@ export type Epiphany = {
   /** YYYY-MM-DD of the next review. */
   due: string
   reviews: { at: number; grade: number }[]
+  /** Favourite: listed first and filterable. */
+  starred?: boolean
 }
 export const EPIPHANY_KEY = 'bloom-epiphanies-v1'
 export const EPIPHANY_EVENT = 'bloom:epiphanies-changed'

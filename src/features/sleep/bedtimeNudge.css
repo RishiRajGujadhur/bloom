@@ -1,0 +1,3 @@
+.bedtime-nudge { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; gap: 10px; align-items: center; padding: 10px 16px; border-radius: 999px; background: #1d2144; color: #e8e9ff; box-shadow: 0 10px 30px rgb(0 0 0 / 0.3); font-size: 14px; }
+.bedtime-nudge a { color: #ffe9b0; font-weight: 700; }
+.bedtime-nudge button { border: 0; background: transparent; color: inherit; cursor: pointer; }

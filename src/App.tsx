@@ -28,6 +28,7 @@ import { withViewTransition } from './platform/viewTransition'
 import { Shortcuts } from './components/layout/Shortcuts'
 import { GlobalQoL } from './components/layout/GlobalQoL'
 import { WritingAssist } from './components/layout/WritingAssist'
+import { BedtimeNudge } from './features/sleep/BedtimeNudge'
 import { TodayGlance } from './components/dashboard/TodayGlance'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
@@ -727,6 +728,7 @@ function App() {
         <MatrixRain />
         <TrashAndSync data={data} setData={setData} />
         <WritingAssist />
+        {settings.features.sleepTracker && <BedtimeNudge />}
         <GlobalQoL habitsLeft={data.habits.filter((h) => !h.dates.includes(today)).length} />
         <Shortcuts onNavigate={jump} onToggleTheme={() => setThemeSettings((t) => toggleThemeMode(t))} />
         {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}

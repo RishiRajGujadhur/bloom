@@ -11,7 +11,7 @@ export type SleepEntry = {
   quality: 1 | 2 | 3 | 4 | 5
   factors: string[]
 }
-export type SleepSettings = { targetHours: number; bedtime: string }
+export type SleepSettings = { targetHours: number; bedtime: string; /** Minutes before bedtime to nudge; 0 or missing = off. */ remindBefore?: number }
 export const SLEEP_KEY = 'bloom-sleep-v1'
 export const SLEEP_SETTINGS_KEY = 'bloom-sleep-settings-v1'
 export const defaultSleepSettings: SleepSettings = { targetHours: 8, bedtime: '22:30' }
