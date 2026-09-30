@@ -97,4 +97,7 @@ export const GAMES: GameDef[] = [
   g(27, 'labels', 'Label Detective', 'Sweep the magnifier and catch every sugar in disguise.', 'SVG clip-path lens', 48,
     '<rect x="6" y="8" width="34" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 18h22M12 24h18M12 30h22M12 36h14" stroke="currentColor" stroke-width="2" opacity=".6"/><circle cx="40" cy="36" r="12" fill="none" stroke="currentColor" stroke-width="4"/><path d="M48 44l10 10" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>',
     () => import('./games/LabelDetective')),
+  g(28, 'raft', 'Team Raft', 'You can’t paddle — only decide who paddles where.', 'canvas', 205,
+    '<path d="M6 14q14 10 26 0t26 0v40q-14-10-26 0t-26 0z" fill="currentColor" opacity=".25"/><rect x="20" y="20" width="24" height="28" rx="10" fill="currentColor"/><circle cx="26" cy="28" r="3" fill="#fff"/><circle cx="38" cy="28" r="3" fill="#fff"/><circle cx="26" cy="40" r="3" fill="#fff"/><circle cx="38" cy="40" r="3" fill="#fff"/><path d="M20 30l-10 4M44 38l10 4" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/TeamRaft')),
 ]
