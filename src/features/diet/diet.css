@@ -766,3 +766,4 @@
     animation: none;
   }
 }
+.diet-usuals-label { align-self: center; font-size: 12px; color: var(--text-muted); margin-right: 4px; }

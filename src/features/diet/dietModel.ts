@@ -144,3 +144,19 @@ export function plantDiversity(meals: Meal[], today: string) {
   const groups = new Set([...plants.keys()].map((id) => foods.find((f) => f.id === id)!.group))
   return { count: plants.size, ids: [...plants.keys()], groups: [...groups], score: Math.min(100, Math.round((plants.size / PLANT_GOAL) * 100)) }
 }
+
+/** Your most-logged foods (by name, latest macros), for one-tap re-logging. */
+export function usualFoods(meals: { name: string; kcal: number; protein: number; carbs: number; fat: number; at: number }[], now = Date.now(), limit = 6) {
+  const byName = new Map<string, { count: number; last: (typeof meals)[number] }>()
+  for (const m of meals) {
+    if (now - m.at > 60 * 864e5) continue
+    const key = m.name.trim().toLowerCase()
+    const cur = byName.get(key)
+    byName.set(key, { count: (cur?.count ?? 0) + 1, last: !cur || m.at > cur.last.at ? m : cur.last })
+  }
+  return [...byName.values()]
+    .filter((x) => x.count >= 2)
+    .sort((a, b) => b.count - a.count || b.last.at - a.last.at)
+    .slice(0, limit)
+    .map(({ count, last }) => ({ name: last.name, kcal: last.kcal, protein: last.protein, carbs: last.carbs, fat: last.fat, count }))
+}

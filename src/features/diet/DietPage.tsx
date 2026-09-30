@@ -1,5 +1,5 @@
 import { prefersReducedMotion } from '../../utils/motion'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Droplet, Plus, Trash2, Utensils } from 'lucide-react'
 import { subOn } from '../subFeatures'
@@ -18,6 +18,7 @@ import {
   type Food,
   type Meal,
   type MealKind,
+  usualFoods,
 } from './dietModel'
 import { NutrientsPanel } from './NutrientsPanel'
 import { RecipeBuilder } from './RecipeBuilder'
@@ -182,6 +183,7 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
   const water = state.water[today] ?? 0
   const todayMeals = state.meals.filter((m) => m.date === today).sort((a, b) => a.at - b.at)
   const mindful = subOn('dietTracker', 'mindful')
+  const usuals = useMemo(() => usualFoods(state.meals.filter((m) => !foodLibrary.some((f) => f.name === m.name))), [state.meals])
 
   const addMeal = (food: Omit<Food, 'emoji'>) => {
     const meal: Meal = {
@@ -278,6 +280,17 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
             </button>
           ))}
         </div>
+        {usuals.length > 0 && (
+          <div className="diet-library diet-usuals" aria-label="Your usuals">
+            <span className="diet-usuals-label">Your usuals</span>
+            {usuals.map((f) => (
+              <button key={f.name} type="button" onClick={() => addMeal({ name: f.name, kcal: f.kcal, protein: f.protein, carbs: f.carbs, fat: f.fat })} title={`Logged ${f.count}× · ${f.kcal} kcal`}>
+                ↻ {f.name}
+                <small>{f.kcal}</small>
+              </button>
+            ))}
+          </div>
+        )}
         {subOn('dietTracker', 'library') && (
           <div className="diet-library" aria-label="Quick add">
             {foodLibrary.map((f) => (
