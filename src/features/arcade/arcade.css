@@ -50,3 +50,4 @@
 .tr-card.right { border-right: 5px solid #f97316 !important; }
 .tr-card.resting { opacity: 0.7; }
 .pb-canvas { display: block; margin: 0 auto; height: min(72vh, 700px); aspect-ratio: 520 / 700; touch-action: none; }
+.ct-bubble { background: #fff; border: 2px solid #94a3b8; border-radius: 14px; padding: 10px 12px; font: 800 15px/1.3 system-ui, sans-serif; color: #1e293b; text-align: center; }

@@ -174,3 +174,4 @@ Every game has:
 - Game 45: Insurance Umbrella — p5.js storms drift toward six little houses. Each umbrella costs a coin a season against an income of six; uncovered houses hit by lightning need nine-coin repairs. Twelve seasons of risk pooling.
 - Game 46: Water Filter — layer cloth, charcoal, sand, gravel (or grass) into a cut-down bottle, pour murky stream water, and watch GSAP drops clear as they pass each layer. Order matters, and without charcoal it never runs fully clear.
 - Game 47: Shelf Level — tilt a shelf by hand (a slightly shaky one) while an SVG spirit-level bubble lags behind, and screw it in when it sits between the lines. Then GSAP ornaments drop on and slide off if it's wonky.
+- Game 48: Clock Tower — drag an SVG town clock's minute hand (the hour hand follows like real gearing) to times shouted in words ("quarter to nine") or 24-hour (19:15), then ring the swinging GSAP bell.

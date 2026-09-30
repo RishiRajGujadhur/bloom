@@ -157,4 +157,7 @@ export const GAMES: GameDef[] = [
   g(47, 'shelf', 'Shelf Level', 'Watch the bubble, drive the screw, trust the ornaments to it.', 'SVG · GSAP', 45,
     '<rect x="6" y="34" width="52" height="8" rx="2" fill="currentColor"/><rect x="14" y="20" width="36" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="32" cy="25" rx="5" ry="3" fill="currentColor"/><path d="M28 20v10M36 20v10" stroke="currentColor" stroke-width="1.5"/>',
     () => import('./games/ShelfLevel')),
+  g(48, 'clocktower', 'Clock Tower', 'Wind the town clock to the time they’re shouting up.', 'SVG · GSAP', 30,
+    '<path d="M16 60V18L32 4l16 14v42z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="3"/><path d="M32 32V24M32 32l6 3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
+    () => import('./games/ClockTower')),
 ]
