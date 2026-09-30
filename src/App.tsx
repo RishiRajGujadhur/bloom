@@ -450,7 +450,15 @@ function App() {
   const [editPlan, setEditPlan] = useState<string | null>(null)
   const [viewSession, setViewSession] = useState<Session | null>(null)
   const [active, setActive] = useState<NavKey>(readPage)
-  const [companionOpen, setCompanionOpen] = useState(false)
+  // Bloom's panel reopens if you left it open.
+  const [companionOpen, setCompanionOpen] = useState(() => localStorage.getItem('bloom-companion-open') === '1')
+  useEffect(() => {
+    try {
+      localStorage.setItem('bloom-companion-open', companionOpen ? '1' : '0')
+    } catch {
+      /* optional */
+    }
+  }, [companionOpen])
   const [paletteOpen, setPaletteOpen] = useState(false)
   // The posture runtime only loads once the Posture page has been opened.
   const [postureTouched, setPostureTouched] = useState(active === 'posture')
