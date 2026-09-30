@@ -151,4 +151,7 @@ export const GAMES: GameDef[] = [
   g(45, 'umbrella', 'Insurance Umbrella', 'A coin a season keeps the storm off. Worth it?', 'p5.js', 330,
     '<path d="M6 30a26 20 0 0 1 52 0z" fill="currentColor"/><path d="M32 30v20q0 6-6 6" stroke="currentColor" stroke-width="3" fill="none"/><path d="M14 10l-4 8M24 6l-4 8" stroke="currentColor" stroke-width="2"/>',
     () => import('./games/InsuranceUmbrella')),
+  g(46, 'filter', 'Water Filter', 'Layer a bottle filter and watch murky water run clear.', 'SVG · GSAP', 190,
+    '<path d="M20 6h24v44q-12 8-24 0z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="22" y="36" width="20" height="10" fill="currentColor"/><rect x="22" y="26" width="20" height="10" fill="currentColor" opacity=".6"/><rect x="22" y="16" width="20" height="10" fill="currentColor" opacity=".35"/><circle cx="32" cy="58" r="3" fill="currentColor"/>',
+    () => import('./games/WaterFilter')),
 ]
