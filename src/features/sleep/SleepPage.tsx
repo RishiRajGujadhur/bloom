@@ -13,6 +13,7 @@ import {
   SLEEP_KEY,
   SLEEP_SETTINGS_KEY,
   defaultSleepSettings,
+  averageBedtime,
   duration,
   factorImpact,
   minutesUntilBedtime,
@@ -59,6 +60,12 @@ export function SleepPage() {
         <Stat label="Sleep debt" value={stats.count ? `${stats.debt}h` : '—'} hint="Last 7 nights" />
       </div>
       </NightSky>
+      {stats.count >= 3 && averageBedtime(entries) && (
+        <p className="sleep-debt-note">
+          You usually go to bed around <strong>{averageBedtime(entries)}</strong>
+          {settings.bedtime ? ` (target ${settings.bedtime})` : ''}.
+        </p>
+      )}
       {stats.count >= 3 && (
         <p className="sleep-debt-note">
           {stats.debt <= 0.5

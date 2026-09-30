@@ -102,3 +102,12 @@ export const windDownSteps = [
   { id: 'breathe', label: '4-7-8 breathing', emoji: '🌙', minutes: 3 },
   { id: 'read', label: 'Read something calm', emoji: '📖', minutes: 15 },
 ] as const
+
+/** Typical bedtime over the last 7 nights as HH:MM (handles times either side of midnight). */
+export function averageBedtime(entries: SleepEntry[]) {
+  const recent = [...entries].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7)
+  if (!recent.length) return null
+  const mean = recent.reduce((a, e) => a + bedOffset(e.bedtime), 0) / recent.length
+  const m = Math.round((mean + 24 * 60) % (24 * 60))
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+}
