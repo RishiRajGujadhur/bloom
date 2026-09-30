@@ -106,4 +106,7 @@ export const GAMES: GameDef[] = [
   g(30, 'mountain', 'Goal Mountain', 'The summit’s far. Camp by camp, you’ll get there.', 'Babylon.js 3D', 160,
     '<path d="M4 56L26 16l10 16 6-8 18 32z" fill="currentColor" opacity=".8"/><path d="M26 16l-5 9h10z" fill="#fff"/><path d="M40 6v12" stroke="currentColor" stroke-width="2"/><path d="M40 6l8 3-8 3z" fill="currentColor"/><circle cx="14" cy="48" r="2" fill="#fff"/><circle cx="22" cy="40" r="2" fill="#fff"/><circle cx="30" cy="34" r="2" fill="#fff"/>',
     () => import('./games/GoalMountain')),
+  g(31, 'market', 'Memory Market', 'The list blows away. What was on it again?', 'SVG · GSAP', 20,
+    '<path d="M6 10h52v10q-6 8-13 0-6 8-13 0-7 8-13 0-6 8-13 0z" fill="currentColor" opacity=".7"/><rect x="10" y="26" width="44" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="22" cy="40" r="5" fill="currentColor"/><circle cx="36" cy="40" r="5" fill="currentColor" opacity=".6"/><text x="44" y="46" font-size="12" fill="currentColor">?</text>',
+    () => import('./games/MemoryMarket')),
 ]

@@ -157,3 +157,4 @@ Every game has:
 - Game 28: Team Raft — canvas rapids where you can't paddle, only assign six crew with different strength and stamina to left, right or rest, steering by the balance of effort. Tired paddlers fade until they rest.
 - Game 29: Weather Wardrobe — dress Pip for six random days of temperature, rain, snow, strong sun and gusts. Warmth has to match the thermometer, and umbrellas flip in the wind; animated SVG weather.
 - Game 30: Goal Mountain — a Babylon.js displaced-terrain mountain with snowcap, spiralling ledges and a reach ring. Camp ledge to ledge: big leaps cost energy and shrink tomorrow's reach, storms cut it, and the summit must fall within 16 days.
+- Game 31: Memory Market — a friend calls out a shopping list one item at a time (GSAP speech bubbles), then it blows away. Tap the list items across market stalls full of decoys; lists grow from 3 to 8.
