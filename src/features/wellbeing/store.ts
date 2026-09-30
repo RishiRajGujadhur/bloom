@@ -23,6 +23,28 @@ export function useStoredList<T>(key: string) {
   return [items, setItems] as const
 }
 
+/** A single remembered value (last-used settings), same storage rules as useStoredList. */
+export function useStoredValue<T>(key: string, initial: T) {
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const raw = localStorage.getItem(key)
+      if (raw === null) return initial
+      const parsed: unknown = JSON.parse(raw)
+      return typeof parsed === typeof initial ? (parsed as T) : initial
+    } catch {
+      return initial
+    }
+  })
+  useEffect(() => {
+    try {
+      localStorage.setItem(key, JSON.stringify(value))
+    } catch {
+      /* Storage full or blocked: remembered for this visit only. */
+    }
+  }, [key, value])
+  return [value, setValue] as const
+}
+
 export type MoodEntry = {
   id: string
   at: number

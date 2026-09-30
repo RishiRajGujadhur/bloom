@@ -22,6 +22,7 @@ import {
   type GratitudeEntry,
   type MoodEntry,
   moodByWeekday,
+  useStoredValue,
 } from './store'
 import './wellbeing.css'
 import { MoodQuick } from '../quick/MoodQuick'
@@ -83,11 +84,13 @@ function playCue(label: string) {
 
 export function BreathePage() {
   const reduced = useReducedMotion()
-  const [patternId, setPatternId] = useState<string>('box')
-  const [rounds, setRounds] = useState<number>(8)
+  // Pattern, rounds, custom rhythm and cues are remembered for next time.
+  const [savedPattern, setPatternId] = useStoredValue<string>('bloom-breathe-pattern', 'box')
+  const patternId = savedPattern === 'custom' || patterns.some((p) => p.id === savedPattern) ? savedPattern : 'box'
+  const [rounds, setRounds] = useStoredValue<number>('bloom-breathe-rounds', 8)
   // Advanced mode: build your own pattern, with optional sound and vibration cues.
-  const [custom, setCustom] = useState({ in: 4, hold: 2, out: 6, rest: 0 })
-  const [cues, setCues] = useState({ sound: false, vibrate: false })
+  const [custom, setCustom] = useStoredValue('bloom-breathe-custom', { in: 4, hold: 2, out: 6, rest: 0 })
+  const [cues, setCues] = useStoredValue('bloom-breathe-cues', { sound: false, vibrate: false })
   const customPattern = useMemo(
     () => ({
       id: 'custom',
