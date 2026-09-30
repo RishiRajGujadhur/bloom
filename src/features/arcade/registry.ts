@@ -238,4 +238,7 @@ export const GAMES: GameDef[] = [
   g(74, 'bandage', 'Bandage Wrap', 'Trace the spiral for a snug, even wrap.', 'p5.js', 20,
     '<rect x="4" y="22" width="56" height="22" rx="11" fill="currentColor" opacity=".35"/><path d="M14 20l8 26M24 20l8 26M34 20l8 26M44 20l8 26" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>',
     () => import('./games/BandageWrap')),
+  g(75, 'energy', 'Energy Meter', 'Follow the family round the house switching things off.', 'SVG · GSAP', 50,
+    '<path d="M8 30L32 10l24 20v26H8z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="14" y="34" width="14" height="10" fill="currentColor" opacity=".7"/><rect x="36" y="34" width="14" height="10" fill="currentColor" opacity=".25"/><path d="M34 14l-6 10h6l-4 8" stroke="currentColor" stroke-width="2" fill="none"/>',
+    () => import('./games/EnergyMeter')),
 ]
