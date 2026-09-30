@@ -136,4 +136,7 @@ export const GAMES: GameDef[] = [
   g(40, 'kindness', 'Kindness Chain', 'Pass a small warm light around the square until it all glows.', 'Babylon.js 3D', 38,
     '<circle cx="14" cy="40" r="7" fill="currentColor"/><circle cx="32" cy="30" r="7" fill="currentColor" opacity=".8"/><circle cx="50" cy="40" r="7" fill="currentColor" opacity=".4"/><path d="M14 30q9-14 18-10M32 20q9-4 18 10" stroke="currentColor" stroke-width="2" stroke-dasharray="2 3" fill="none"/><circle cx="32" cy="12" r="4" fill="currentColor"/>',
     () => import('./games/KindnessChain')),
+  g(41, 'haggle', 'Negotiation Tug', 'Haggle by tug-of-war: pull when they rest, ease off when they heave.', 'matter-js rope', 0,
+    '<circle cx="10" cy="22" r="6" fill="currentColor"/><circle cx="54" cy="22" r="6" fill="currentColor"/><path d="M14 36q18 8 36 0" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="32" cy="40" r="4" fill="currentColor"/><rect x="18" y="50" width="28" height="6" rx="3" fill="currentColor" opacity=".4"/>',
+    () => import('./games/NegotiationTug')),
 ]
