@@ -24,6 +24,7 @@ import {
   type SleepSettings,
 } from './sleepModel'
 import './sleep.css'
+import { download } from '../lab/exportSuite'
 import { SleepQuick } from '../quick/SleepQuick'
 import { NightSky } from './NightSky'
 
@@ -60,6 +61,18 @@ export function SleepPage() {
         <Stat label="Sleep debt" value={stats.count ? `${stats.debt}h` : '—'} hint="Last 7 nights" />
       </div>
       </NightSky>
+      {entries.length > 0 && (
+        <button
+          type="button"
+          className="sleep-export"
+          onClick={() => {
+            const rows = [...entries].sort((a, b) => a.date.localeCompare(b.date)).map((e) => [e.date, e.bedtime, e.wake, duration(e.bedtime, e.wake), e.quality, e.factors.join('; ')].join(','))
+            download(new Blob([['date,bedtime,wake,hours,quality,factors', ...rows].join('\n') + '\n'], { type: 'text/csv' }), 'bloom-sleep.csv')
+          }}
+        >
+          ⬇ Export nights (CSV)
+        </button>
+      )}
       {stats.count >= 3 && averageBedtime(entries) && (
         <p className="sleep-debt-note">
           You usually go to bed around <strong>{averageBedtime(entries)}</strong>
