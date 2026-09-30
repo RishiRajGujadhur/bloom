@@ -14,7 +14,7 @@ import { MeditateQuick } from '../quick/MeditateQuick'
 import './meditate.css'
 
 const on = (id: string) => subOn('meditation', id)
-type Store = { logs: MedLog[]; minutes: Record<string, number>; bellEvery: number; unguided: number; voice: boolean }
+type Store = { logs: MedLog[]; minutes: Record<string, number>; bellEvery: number; unguided: number; voice: boolean; bellVolume?: number }
 
 const sceneOptions: Record<SceneId, ISourceOptions> = {
   stars: { background: { color: { value: 'transparent' } }, fpsLimit: 40, particles: { number: { value: 90 }, color: { value: ['#ffffff', '#cfd8ff', '#ffe9b0'] }, size: { value: { min: 0.5, max: 2.2 } }, opacity: { value: { min: 0.2, max: 0.9 }, animation: { enable: true, speed: 0.6 } }, move: { enable: true, speed: 0.12 } } },
@@ -32,7 +32,8 @@ function speak(text: string) {
     /* optional */
   }
 }
-function bell() {
+function bell(volume = 60) {
+  if (volume <= 0) return
   try {
     const ac = new AudioContext()
     ;[392, 588, 784].forEach((f, i) => {
@@ -40,7 +41,7 @@ function bell() {
       const g = ac.createGain()
       o.frequency.value = f
       g.gain.setValueAtTime(0.0001, ac.currentTime)
-      g.gain.exponentialRampToValueAtTime(0.1 / (i + 1), ac.currentTime + 0.02)
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002, (0.17 * (volume / 100)) / (i + 1)), ac.currentTime + 0.02)
       g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 6)
       o.connect(g).connect(ac.destination)
       o.start()
@@ -97,6 +98,7 @@ export function MeditatePage() {
   const line = currentLine(lines, t)
   const total = minutes * 60
   const card = useRef<HTMLDivElement>(null)
+  const bellPreview = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     if (!running) return
@@ -111,16 +113,16 @@ export function MeditatePage() {
       spoken.current = idx
       if (on('voice') && store.voice) speak(line.text)
     }
-    if (on('bells') && bells(minutes, store.bellEvery).includes(t)) bell()
+    if (on('bells') && bells(minutes, store.bellEvery).includes(t)) bell(store.bellVolume)
     if (t >= total) {
       setRunning(false)
       setFinished(true)
-      bell()
+      bell(store.bellVolume)
       logActivity('meditation', { id: pick.id, minutes })
       setStore((s) => ({ ...s, logs: [...s.logs, { at: Date.now(), id: pick.id, minutes, before: on('moodCheck') ? before : undefined }].slice(-500) }))
       burst(card.current, 'stars')
     }
-  }, [t, running, line, lines, minutes, store.bellEvery, store.voice, total, pick.id, before])
+  }, [t, running, line, lines, minutes, store.bellEvery, store.bellVolume, store.voice, total, pick.id, before])
 
   const start = (x: Session) => {
     setPick(x)
@@ -244,6 +246,7 @@ export function MeditatePage() {
       <div className="st-scale">
         <Slider label="Length" value={store.unguided} min={1} max={60} unit="min" onChange={(v) => setStore((s) => ({ ...s, unguided: v }))} />
         {on('bells') && <Slider label="Interval bell every" value={store.bellEvery} min={0} max={15} unit="min" format={(v) => (v ? String(v) : 'off')} onChange={(v) => setStore((s) => ({ ...s, bellEvery: v }))} />}
+        {on('bells') && <Slider label="Bell volume" value={store.bellVolume ?? 60} min={0} max={100} unit="%" format={(v) => (v ? String(v) : 'muted')} onChange={(v) => { setStore((s) => ({ ...s, bellVolume: v })); clearTimeout(bellPreview.current); bellPreview.current = window.setTimeout(() => bell(v), 350) }} />}
       </div>
       <button type="button" className="studio-go" onClick={() => start({ id: 'unguided', title: 'Unguided', kind: 'breath', minutes: store.unguided, scene: 'stars', script: [] })}>
         <Bell size={16} /> Begin
