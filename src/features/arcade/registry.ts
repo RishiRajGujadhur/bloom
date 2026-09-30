@@ -304,4 +304,7 @@ export const GAMES: GameDef[] = [
   g(96, 'pitch', 'Pitch Balloon', 'Clear words lift the balloon; “um” and “like” sink it.', 'SVG · GSAP', 345,
     '<ellipse cx="32" cy="24" rx="16" ry="20" fill="currentColor"/><path d="M32 44q6 8-2 16" stroke="currentColor" stroke-width="2" fill="none"/><rect x="4" y="50" width="16" height="8" rx="4" fill="currentColor" opacity=".4"/><rect x="44" y="8" width="16" height="8" rx="4" fill="currentColor" opacity=".7"/>',
     () => import('./games/PitchBalloon')),
+  g(97, 'waterwheel', 'Water Wheel', 'A sip at a time keeps the mill wheel turning all day.', 'SVG', 200,
+    '<circle cx="36" cy="36" r="20" fill="none" stroke="currentColor" stroke-width="4"/><path d="M36 16v40M16 36h40M22 22l28 28M50 22L22 50" stroke="currentColor" stroke-width="2"/><rect x="4" y="8" width="26" height="8" rx="2" fill="currentColor" opacity=".6"/><path d="M30 12q8 4 8 14" stroke="currentColor" stroke-width="3" fill="none"/>',
+    () => import('./games/WaterWheel')),
 ]

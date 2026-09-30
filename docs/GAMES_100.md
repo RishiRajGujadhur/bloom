@@ -223,3 +223,4 @@ Every game has:
 - Game 94: Stain Lab — eight stained garments (grass, pasta sauce, blood, red wine, grease, coffee…). Pick cold water, dish soap, vinegar, bicarb, blotting or hot water, then dab; the right treatment melts the SVG stain away, the wrong one spreads or sets it.
 - Game 95: Drawer Organiser — shelf-packed foam slots in a dark SVG drawer, each showing a faint silhouette. Drag every loose item into the slot matching its shape (wrong slots bounce back); three drawers, each fuller than the last.
 - Game 96: Pitch Balloon — an attention balloon sinks during a lift pitch. Tap clear, strong words to puff it up and avoid filler ("um", "basically") that weighs it down; reach the top floor for three pitches.
+- Game 97: Water Wheel — an SVG mill wheel turns only while its trough has water; evaporation peaks at midday. Tap the pump little and often: an empty trough stalls the wheel, too much overflows and wastes. Flour sacks pile up by the bakery.
