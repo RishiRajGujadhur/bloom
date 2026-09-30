@@ -33,6 +33,7 @@ import {
   type Txn,
 } from './moneyModel'
 import './money.css'
+import { download } from '../lab/exportSuite'
 
 import './receipts.css'
 import { capturePlace } from '../places/placesStore'
@@ -249,7 +250,22 @@ export function MoneyPage() {
         )}
       </section>
       <section className="studio-card mn-list">
-        <h3>Recent</h3>
+        <h3>
+          Recent
+          <button
+            type="button"
+            className="mn-csv"
+            title="Download this month's transactions as CSV"
+            onClick={() => {
+              const rows = store.txns.filter((x) => x.date.startsWith(month))
+              const esc = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v)
+              const csv = ['date,place,category,amount,type,note', ...rows.map((x) => [x.date, esc(x.place), esc(categoryOf(x.category).name), (x.amount / 100).toFixed(2), x.income ? 'income' : 'expense', esc(x.note ?? '')].join(','))].join('\n')
+              download(new Blob([csv + '\n'], { type: 'text/csv' }), `bloom-money-${month}.csv`)
+            }}
+          >
+            ⬇ CSV
+          </button>
+        </h3>
         {store.txns.length > 5 && (
           <input type="search" className="studio-input mn-search" aria-label="Search transactions" placeholder="Search place, category or amount…" value={txnQuery} onChange={(e) => setTxnQuery(e.target.value)} />
         )}
