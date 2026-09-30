@@ -169,4 +169,7 @@ export const GAMES: GameDef[] = [
   g(51, 'hatchery', 'Habit Hatchery', 'One warm tap a day. Seven in a row and it hatches.', 'SVG · GSAP', 50,
     '<ellipse cx="20" cy="30" rx="10" ry="13" fill="currentColor" opacity=".5"/><ellipse cx="44" cy="30" rx="10" ry="13" fill="currentColor"/><path d="M36 26l4 4 4-4 4 4" stroke="#fff" stroke-width="2" fill="none"/><ellipse cx="32" cy="50" rx="26" ry="7" fill="currentColor" opacity=".35"/>',
     () => import('./games/HabitHatchery')),
+  g(52, 'morning', 'Morning Flow', 'Kettle on, then shower. The tram leaves at 7:30.', 'SVG · GSAP', 45,
+    '<circle cx="18" cy="18" r="12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 18V11M18 18l5 3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="34" width="32" height="18" rx="5" fill="currentColor"/><rect x="32" y="38" width="8" height="6" fill="#fff"/><rect x="44" y="38" width="8" height="6" fill="#fff"/><path d="M4 58h56" stroke="currentColor" stroke-width="3" stroke-dasharray="6 4"/>',
+    () => import('./games/MorningFlow')),
 ]
