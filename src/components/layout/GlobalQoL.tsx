@@ -42,6 +42,12 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
         history.back()
         return
       }
+      // Privacy panic key: blur everything instantly (again to reveal).
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+        e.preventDefault()
+        document.documentElement.toggleAttribute('data-privacy-blur')
+        return
+      }
       if ((e.ctrlKey || e.metaKey) && e.key === '.') {
         e.preventDefault()
         const root = document.documentElement

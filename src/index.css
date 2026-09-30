@@ -195,3 +195,7 @@ html[data-no-banner] .bloom-heading:not(.is-hero) {
   clip-path: inset(50%) !important;
   border: 0 !important;
 }
+
+/* Ctrl+Shift+L privacy blur. */
+html[data-privacy-blur] body > #root { filter: blur(22px) saturate(0.6); pointer-events: none; user-select: none; }
+html[data-privacy-blur] body::after { content: 'Hidden · press Ctrl+Shift+L to show'; position: fixed; inset: 0; display: grid; place-items: center; z-index: 9999; font: 600 15px system-ui, sans-serif; color: #555; background: rgb(255 255 255 / 0.35); }

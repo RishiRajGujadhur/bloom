@@ -63,6 +63,7 @@ function CheatSheet({ onClose }: { onClose: () => void }) {
             {row('Esc', 'Close menus and drawers')}
             {row('Ctrl S', 'Save (boards, editors)')}
             {row('Ctrl Shift E', 'Capture an epiphany')}
+            {row('Ctrl Shift L', 'Hide / show everything (privacy)')}
             {row('Ctrl Shift D', 'Insert date (while writing)')}
           </ul></section>
           {currentPageActions().length > 0 && (
