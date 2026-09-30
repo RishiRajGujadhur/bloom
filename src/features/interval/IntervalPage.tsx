@@ -14,7 +14,7 @@ import './interval.css'
 
 const on = (id: string) => subOn('intervalCoach', id)
 const KEY = 'bloom-intervals-v1'
-type Store = { custom: Program; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number }[] }
+type Store = { custom: Program; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number }[] }
 const initial: Store = {
   custom: { id: 'custom', name: 'My intervals', emoji: '🎛️', work: 30, rest: 15, rounds: 8, warmup: 60, cooldown: 60 },
   c25kDone: 0,
@@ -88,9 +88,13 @@ export function IntervalPage() {
       if (on('voice')) say(`${pos.segment.label}${pos.segment.round && on('rounds') ? `, round ${pos.segment.round}` : ''}`)
       if (stage.current && !prefersReducedMotion())
         gsap.fromTo(stage.current, { scale: 0.96 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.5)' })
-    } else if (pos.left <= 3 && on('beeps')) beep(880)
+    } else if (pos.left <= 3 && pos.left >= 1) {
+      // Spoken "3, 2, 1" into the next segment (with voice on), plus the beeps.
+      if (on('voice') && store.countdown !== false) say(String(Math.ceil(pos.left)))
+      if (on('beeps')) beep(880)
+    }
     if (pos.segment.kind === 'work' && Math.round(pos.into) === Math.round(pos.segment.seconds / 2) && pos.segment.seconds >= 60 && on('voice')) say('Halfway')
-  }, [elapsed, running, pos])
+  }, [elapsed, running, pos, store.countdown])
 
   useEffect(() => {
     if (!done || !running) return
@@ -264,6 +268,11 @@ export function IntervalPage() {
           <Slider label="Rest" value={c.rest} min={0} max={180} step={5} unit="s" onChange={(v) => set({ rest: v })} />
           <Slider label="Rounds" value={c.rounds} min={1} max={30} onChange={(v) => set({ rounds: v })} />
           {on('warmCool') && <Slider label="Warm up" value={c.warmup} min={0} max={600} step={30} unit="s" onChange={(v) => set({ warmup: v })} />}
+          {on('voice') && (
+            <label className="iv-check">
+              <input type="checkbox" checked={store.countdown !== false} onChange={(e) => setStore((st) => ({ ...st, countdown: e.target.checked }))} /> Say “3, 2, 1” before each change
+            </label>
+          )}
           {on('warmCool') && <Slider label="Cool down" value={c.cooldown} min={0} max={600} step={30} unit="s" onChange={(v) => set({ cooldown: v })} />}
         </div>
         <div className="studio-card studio-center">
