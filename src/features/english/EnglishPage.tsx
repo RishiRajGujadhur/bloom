@@ -161,7 +161,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
             })}
           </section>
         )}
-        {on('placement') && !store.placed && totalXp(store) === 0 && (
+        {on('placement') && (
           <section className="studio-card en-callout">
             <h3>Already know some English?</h3>
             <p>Take a 2-minute placement test and skip what you know.</p>
