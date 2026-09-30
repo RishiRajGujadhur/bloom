@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Flame,
   GitCompare,
+  Printer,
   Maximize2,
   Minimize2,
   Sparkles,
@@ -376,6 +377,24 @@ export function AdaptiveEditor({
               fallbackText={() => journalText(content)}
             />
           )}
+          <button
+            type="button"
+            className="quiet-button"
+            title="Open a clean copy to print or save as PDF"
+            onClick={() => {
+              const esc = (v: string) => v.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]!)
+              const body = [...(editorRoot.current?.querySelectorAll('.ProseMirror') ?? [])].map((n) => n.innerHTML).join('<hr>')
+              const date = new Date(entry?.createdAt ?? Date.now()).toLocaleDateString(i18n.resolvedLanguage ?? 'en', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+              const w = window.open('', '_blank', 'width=800,height=900')
+              if (!w) return
+              w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(mode.title)} · ${esc(date)}</title><style>body{font:16px/1.6 Georgia,serif;max-width:680px;margin:40px auto;padding:0 24px;color:#222}h1{font-size:26px;margin:0}p.m{color:#777;margin:4px 0 28px}hr{border:0;border-top:1px solid #ddd;margin:28px 0}</style><h1>${esc(mode.title)}</h1><p class="m">${esc(date)}${mood ? ' · ' + mood : ''}</p>${body}`)
+              w.document.close()
+              w.focus()
+              w.print()
+            }}
+          >
+            <Printer size={16} aria-hidden="true" /> PDF
+          </button>
           {canCompare && (
             <button
               type="button"
