@@ -61,4 +61,7 @@ export const GAMES: GameDef[] = [
   g(15, 'campfire', 'Camp Fire', 'Stack tinder, kindling and logs and keep the night warm.', 'matter-js · canvas', 25,
     '<path d="M32 10c6 10 12 14 12 24a12 12 0 0 1-24 0c0-6 4-8 6-14 2 6 6 6 6-10z" fill="currentColor"/><path d="M10 54l44-10M10 44l44 10" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".7"/>',
     () => import('./games/CampFire')),
+  g(16, 'germs', 'Germ Wash', 'Scrub the wiggly germs off before the song ends.', 'SVG · GSAP', 195,
+    '<path d="M20 58V30l-4-14a3 3 0 0 1 6-1l4 12V10a3 3 0 0 1 6 0v16V8a3 3 0 0 1 6 0v18V12a3 3 0 0 1 6 0v30c0 8-6 16-14 16z" fill="currentColor" opacity=".8"/><circle cx="48" cy="46" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="42" r="4" fill="none" stroke="currentColor" stroke-width="2"/>',
+    () => import('./games/GermWash')),
 ]

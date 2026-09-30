@@ -142,3 +142,4 @@ Every game has:
 - Game 13: Listening Pond — a p5.js generative koi pond. Fish rise only as stillness builds; tap a koi as it surfaces, and a splash anywhere else sends them all deep.
 - Game 14: Delay Dessert — an SVG cake that keeps stacking layers worth more and more, while a cat creeps along the counter in fits and starts. Serve early or push your luck.
 - Game 15: Camp Fire — matter-js stacking of tinder, kindling and logs in a stone ring, with canvas flames and sparks. Fire spreads by contact and smothers if packed too tight; three matches to warm the night.
+- Game 16: Germ Wash — scrub wiggly SVG germs off two hands with foaming GSAP bubbles before the 20-second song ends. Germs favour fingertips, thumbs, between fingers and wrists.
