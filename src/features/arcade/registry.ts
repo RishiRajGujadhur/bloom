@@ -181,4 +181,7 @@ export const GAMES: GameDef[] = [
   g(55, 'passforge', 'Password Forge', 'Forge a rune lock the imps can’t crack.', 'Babylon.js 3D', 280,
     '<circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="4"/><rect x="24" y="14" width="16" height="6" rx="2" fill="currentColor"/><rect x="42" y="30" width="12" height="6" rx="2" fill="currentColor" opacity=".7"/><rect x="10" y="30" width="12" height="6" rx="2" fill="currentColor" opacity=".5"/><circle cx="32" cy="34" r="5" fill="currentColor"/>',
     () => import('./games/PasswordForge')),
+  g(56, 'knots2', 'Conflict Knots', 'Tease two tangled ropes apart. Gently.', 'p5.js verlet', 10,
+    '<path d="M6 20c14 0 18 24 28 24s16-20 24-20" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M6 44c14 0 18-24 28-24s16 20 24 20" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" opacity=".5"/>',
+    () => import('./games/ConflictKnots')),
 ]
