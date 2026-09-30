@@ -13,6 +13,8 @@ export interface ThemeSettings {
   themeId: string
   fontId: string
   customAccent?: string
+  /** A font family installed on this computer (Local Font Access); used when fontId is 'local'. */
+  localFont?: string
 }
 
 export interface ThemeDefinition {
@@ -209,7 +211,10 @@ const isKnownTheme = (id: unknown): id is string =>
   typeof id === 'string' && THEMES.some((theme) => theme.id === id)
 
 const isKnownFont = (id: unknown): id is string =>
-  typeof id === 'string' && FONTS.some((font) => font.id === id)
+  typeof id === 'string' && (id === 'local' || FONTS.some((font) => font.id === id))
+
+/** A plausible font family name (letters, digits, spaces, a few symbols) — never injected raw. */
+const isFamily = (v: unknown): v is string => typeof v === 'string' && /^[\p{L}\p{N} ._'&+-]{1,80}$/u.test(v)
 
 /** Accepts #rgb / #rrggbb only — anything else is ignored, never injected. */
 const isHexColor = (value: unknown): value is string =>
@@ -244,6 +249,7 @@ export function getStoredTheme(): ThemeSettings {
         ...(isHexColor(parsed.customAccent)
           ? { customAccent: parsed.customAccent }
           : {}),
+        ...(isFamily(parsed.localFont) ? { localFont: parsed.localFont } : {}),
       }
     } catch {
       // fall through to legacy migration / defaults
@@ -283,7 +289,10 @@ export function applyTheme(settings: ThemeSettings): void {
   const mode = getThemeMode(themeId)
 
   root.setAttribute('data-theme', themeId)
-  root.setAttribute('data-font', fontId)
+  const local = fontId === 'local' && isFamily(settings.localFont) ? settings.localFont : null
+  root.setAttribute('data-font', local ? 'local' : fontId === 'local' ? DEFAULT_FONT_ID : fontId)
+  if (local) root.style.setProperty('--font-local', `"${local.replace(/"/g, '')}"`)
+  else root.style.removeProperty('--font-local')
   root.setAttribute('data-mode', mode)
   root.style.colorScheme = mode
 
@@ -296,9 +305,10 @@ export function applyTheme(settings: ThemeSettings): void {
   }
 
   try {
-    const persisted: ThemeSettings = isHexColor(settings.customAccent)
+    const base: ThemeSettings = isHexColor(settings.customAccent)
       ? { themeId, fontId, customAccent: settings.customAccent.trim() }
       : { themeId, fontId }
+    const persisted: ThemeSettings = local ? { ...base, localFont: local } : base
     localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(persisted))
   } catch {
     /* storage unavailable — theme still applied for this session */

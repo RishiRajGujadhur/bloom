@@ -2,6 +2,8 @@ import { Carousel } from '../ui/Carousel'
 import { Check, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FONTS, THEMES } from '../../utils/themeEngine'
+import { LocalFontPicker } from './LocalFontPicker'
+import './localFonts.css'
 import type { ThemeSettings } from '../../utils/themeEngine'
 import styles from './ThemePicker.module.css'
 
@@ -153,6 +155,7 @@ export function ThemePicker({ settings, onChange }: ThemePickerProps) {
               )
             })}
           </Carousel>
+          <LocalFontPicker settings={settings} onChange={onChange} />
         </section>
       </>
     </div>
