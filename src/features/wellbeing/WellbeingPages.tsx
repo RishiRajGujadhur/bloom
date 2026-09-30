@@ -115,7 +115,8 @@ export function BreathePage() {
   // phase. Cycles are counted each time the pattern wraps back to "In".
   const [tick, setTick] = useState({ phase: 0, left: pattern.phases[0][1] as number, cycles: 0 })
   const { phase, left, cycles } = tick
-  const [, setSessions] = useStoredList<BreathSession>(BREATH_KEY)
+  const [sessions, setSessions] = useStoredList<BreathSession>(BREATH_KEY)
+  const todayCount = sessions.filter((s) => new Date(s.at).toDateString() === new Date().toDateString()).length
 
   useEffect(() => {
     if (!running) return
@@ -314,7 +315,7 @@ export function BreathePage() {
         </button>
       </div>
       <p className="wb-muted">
-        {cycles} / {rounds} rounds
+        {cycles} / {rounds} rounds{todayCount > 0 ? ` · ${todayCount} ${todayCount === 1 ? 'session' : 'sessions'} today` : ''}
       </p>
     </section>
   )
