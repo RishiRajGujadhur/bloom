@@ -207,3 +207,4 @@ Every game has:
 - Game 78: Deadline Dominoes — stand short and tall matter-js dominoes along a shelf, tip the first, and the chain carries to the deadline bell only if every gap is shorter than the domino before it. Fewer dominoes score more; three shelves.
 - Game 79: Note Nest — p5.js lecture where ideas drift down like dandelion seeds. Steer a nest to catch the bright key terms and skip the faint chatter, then tap pairs of notes in the notebook to link them for bonus quiz points.
 - Game 80: Decision Maze — a Three.js hedge maze walked in first person. Each fork offers a shiny-now orange gate or a later blue gate; the camera walks you through, and at the next fork you learn what that choice really cost or earned.
+- Game 81: Tip Split Café — friends' plates show what they ordered. Drag £1/£2/£5/£10 coins onto each plate so everyone pays their own share plus the tip (10–15%, rounded); tap a plate to clear it, and settle up for a fairness score.

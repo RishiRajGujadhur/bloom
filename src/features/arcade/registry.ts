@@ -256,4 +256,7 @@ export const GAMES: GameDef[] = [
   g(80, 'maze', 'Decision Maze', 'Shiny now or better later? The maze remembers.', 'Three.js 3D', 120,
     '<path d="M32 60V34M32 34L14 14M32 34l18-20" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="14" cy="12" r="6" fill="currentColor" opacity=".6"/><circle cx="50" cy="12" r="6" fill="currentColor"/>',
     () => import('./games/DecisionMaze')),
+  g(81, 'tipsplit', 'Tip Split Café', 'Everyone pays for what they had, plus their share of the tip.', 'SVG · GSAP', 30,
+    '<ellipse cx="32" cy="36" rx="28" ry="14" fill="currentColor" opacity=".3"/><circle cx="16" cy="34" r="7" fill="currentColor"/><circle cx="32" cy="38" r="7" fill="currentColor" opacity=".7"/><circle cx="48" cy="34" r="7" fill="currentColor" opacity=".5"/><path d="M26 8h12v14H26z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 12h8M28 16h6" stroke="currentColor" stroke-width="1.5"/>',
+    () => import('./games/TipSplit')),
 ]
