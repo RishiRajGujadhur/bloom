@@ -146,3 +146,12 @@ export function ppgBeats(signal: number[], fs: number): number[] {
 }
 
 export const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+/** Every scan as CSV (for spreadsheets or another HRV app). */
+export function scansToCsv(scans: Scan[]) {
+  const head = ['date', 'time', 'source', 'heart_rate_bpm', 'rmssd_ms', 'sdnn_ms', 'ln_rmssd', 'lf_hf', 'beats', 'readiness']
+  const rows = [...scans]
+    .sort((a, b) => a.at - b.at)
+    .map((s) => [s.date, new Date(s.at).toTimeString().slice(0, 5), s.source, s.hr, s.rmssd, s.sdnn, s.lnRmssd.toFixed(3), s.lfhf ?? '', s.beats, s.score ?? ''].join(','))
+  return [head.join(','), ...rows].join('\n') + '\n'
+}

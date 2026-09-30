@@ -8,7 +8,8 @@ import { useKeepAwake } from '../../platform/presence'
 import { hasCap } from '../../platform/caps'
 import { getFft } from '../../platform/pffft'
 import { burst } from '../../components/ui/celebrate'
-import { cleanRR, dayKey, heartRate, lfhf, readiness, rmssd, sdnn, TACHO_N, type Scan, type Verdict } from './readinessModel'
+import { cleanRR, dayKey, heartRate, lfhf, readiness, rmssd, scansToCsv, sdnn, TACHO_N, type Scan, type Verdict } from './readinessModel'
+import { download } from '../lab/exportSuite'
 import { cameraPpg, connectBluetooth, loadScans, saveScan, simulate, type Session, type Source } from './sources'
 import './readiness.css'
 
@@ -295,6 +296,15 @@ export function ReadinessPage() {
           <h3>Your baseline <small>ln(RMSSD), last 30 scans</small></h3>
           {hist.length > 1 ? <div ref={trendHost} data-matrix-native /> : <p className="rd-small">Your trend appears after two scans.</p>}
           <p className="rd-small">{hist.length} scan{hist.length === 1 ? '' : 's'} stored privately on this device.</p>
+          {history.length > 0 && (
+            <button
+              type="button"
+              className="quiet-button"
+              onClick={() => download(new Blob([scansToCsv(history)], { type: 'text/csv' }), `bloom-hrv-${new Date().toISOString().slice(0, 10)}.csv`)}
+            >
+              ⬇ Export all scans (CSV)
+            </button>
+          )}
         </div>
       </aside>
     </div>
