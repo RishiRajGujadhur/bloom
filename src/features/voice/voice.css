@@ -247,3 +247,5 @@
     animation: none;
   }
 }
+.voice-rate { min-width: 44px; border: 1px solid var(--border-color); border-radius: 999px; background: var(--bg-surface); color: var(--text-secondary); font-size: 12px; font-weight: 700; padding: 4px 8px; cursor: pointer; }
+.voice-rate:hover { color: var(--accent-color); border-color: var(--accent-color); }

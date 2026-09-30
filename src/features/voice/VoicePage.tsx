@@ -37,6 +37,8 @@ async function toMono16k(blob: Blob) {
   return (await off.startRendering()).getChannelData(0)
 }
 
+const RATES = [1, 1.25, 1.5, 2, 0.75]
+
 /** One worker for the page; transcriptions queue through it. */
 function useWhisper() {
   const worker = useRef<Worker | null>(null)
@@ -159,6 +161,21 @@ function MemoCard({
     }
   }, [url])
 
+  // Playback speed, shared by every memo and remembered between visits.
+  const [rate, setRate] = useState(() => Number(localStorage.getItem('bloom-voice-rate')) || 1)
+  useEffect(() => {
+    ws.current?.setPlaybackRate(rate)
+    if (audio.current) audio.current.playbackRate = rate
+  }, [rate, playing])
+  const cycleRate = () => {
+    const next = RATES[(RATES.indexOf(rate) + 1) % RATES.length]
+    setRate(next)
+    try {
+      localStorage.setItem('bloom-voice-rate', String(next))
+    } catch {
+      /* this visit only */
+    }
+  }
   const toggle = () => {
     if (ws.current) void ws.current.playPause()
     else if (audio.current) void (audio.current.paused ? audio.current.play() : audio.current.pause())
@@ -219,6 +236,9 @@ function MemoCard({
       <div className="voice-memo-head">
         <button className="voice-play" type="button" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={18} /> : <Play size={18} />}
+        </button>
+        <button className="voice-rate" type="button" onClick={cycleRate} title="Playback speed" aria-label={`Playback speed ${rate}×`}>
+          {rate}×
         </button>
         <input
           className="voice-title"
