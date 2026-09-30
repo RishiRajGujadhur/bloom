@@ -14,7 +14,7 @@ import './interval.css'
 
 const on = (id: string) => subOn('intervalCoach', id)
 const KEY = 'bloom-intervals-v1'
-type Store = { custom: Program; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number }[] }
+type Store = { custom: Program; saved?: Program[]; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number }[] }
 const initial: Store = {
   custom: { id: 'custom', name: 'My intervals', emoji: '🎛️', work: 30, rest: 15, rounds: 8, warmup: 60, cooldown: 60 },
   c25kDone: 0,
@@ -59,6 +59,7 @@ export function IntervalPage() {
     })
   const [program, setProgram] = useState<Program>(presets[0])
   const [tab, setTab] = useState('run')
+  const [saveName, setSaveName] = useState('')
   const [elapsed, setElapsed] = useState(0)
   const [running, setRunning] = useState(false)
   // Keep the screen on while the session runs (Screen Wake Lock).
@@ -238,6 +239,27 @@ export function IntervalPage() {
           </Rail>
         </>
       )}
+      {(store.saved ?? []).length > 0 && (
+        <>
+          <h3>Your timers</h3>
+          <Rail label="Your timers">
+            {(store.saved ?? []).map((p) => (
+              <div key={p.id} role="listitem" className="yg-saved">
+                <button type="button" className="iv-card" data-on={program.id === p.id} onClick={() => choose(p)}>
+                  <span aria-hidden="true">{p.emoji}</span>
+                  <strong>{p.name}</strong>
+                  <small>
+                    {p.rounds} × {p.work}s / {p.rest}s · {fmt(total(segments(p, on('warmCool'))))}
+                  </small>
+                </button>
+                <button type="button" className="yg-remove" aria-label={`Delete ${p.name}`} onClick={() => setStore((s) => ({ ...s, saved: (s.saved ?? []).filter((x) => x.id !== p.id) }))}>
+                  ✕
+                </button>
+              </div>
+            ))}
+          </Rail>
+        </>
+      )}
       {on('c25k') && (
         <div className="iv-c25k">
           <h3>
@@ -285,6 +307,19 @@ export function IntervalPage() {
           <button type="button" className="studio-go" onClick={() => choose(c)}>
             <Play size={16} /> Use these intervals
           </button>
+          <form
+            className="sc-manual"
+            onSubmit={(e) => {
+              e.preventDefault()
+              const name = saveName.trim()
+              if (!name) return
+              setStore((s) => ({ ...s, saved: [...(s.saved ?? []), { ...s.custom, id: `saved-${crypto.randomUUID()}`, name, emoji: '⭐' }] }))
+              setSaveName('')
+            }}
+          >
+            <input className="studio-input" aria-label="Timer name" placeholder="Save as… (e.g. Tabata bike)" value={saveName} maxLength={40} onChange={(e) => setSaveName(e.target.value)} />
+            <button type="submit" className="studio-go" data-variant="quiet">Save</button>
+          </form>
         </div>
       </div>
     )
