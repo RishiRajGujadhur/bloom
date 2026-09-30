@@ -414,6 +414,9 @@ export function VoicePage(props: FeaturePageProps) {
     recorder.current = null
     setStream(null)
   }
+  const [query, setQuery] = useState('')
+  const q = query.trim().toLowerCase()
+  const shown = q ? memos.filter((m) => `${m.title} ${m.transcript ?? ''}`.toLowerCase().includes(q)) : memos
   const update = (m: VoiceMemo) => {
     setMemos((list) => list.map((x) => (x.id === m.id ? m : x)))
     void db.voice_memos.put(m)
@@ -440,11 +443,23 @@ export function VoicePage(props: FeaturePageProps) {
           )}
         </div>
       </section>
+      {memos.length > 2 && (
+        <input
+          type="search"
+          className="voice-search"
+          aria-label="Search memos"
+          placeholder={`Search ${memos.length} memos and transcripts…`}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      )}
       {memos.length === 0 ? (
         <p className="voice-empty">No memos yet. Your first one is a tap away.</p>
+      ) : shown.length === 0 ? (
+        <p className="voice-empty">No memo mentions “{query}”.</p>
       ) : (
         <ul className="voice-list">
-          {memos.map((m) => (
+          {shown.map((m) => (
             <MemoCard
               key={m.id}
               memo={m}
