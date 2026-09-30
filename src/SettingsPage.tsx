@@ -1084,7 +1084,13 @@ export function SettingsPage({
       <section className={styles.card}>
         <DataReset />
         <p className="settings-build">
-          Bloom build {__COMMIT__} · {new Date(__BUILD_TIME__).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+          {(() => {
+            const last = Number(localStorage.getItem('bloom-last-backup'))
+            if (!last) return 'No backup exported yet · '
+            const days = Math.floor((Date.now() - last) / 864e5)
+            return `Last backup ${days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`} · `
+          })()}
+          Bloom build {__COMMIT__} ·{new Date(__BUILD_TIME__).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
         </p>
       </section>
 

@@ -637,6 +637,11 @@ function App() {
     anchor.download = `mindfulness-${original ? 'original-' : ''}${today}.json`
     anchor.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
+    try {
+      localStorage.setItem('bloom-last-backup', String(Date.now()))
+    } catch {
+      /* optional */
+    }
   }
   const jump = (target: NavKey) => {
     rememberPage(target)
