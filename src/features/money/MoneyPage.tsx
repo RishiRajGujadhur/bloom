@@ -109,6 +109,7 @@ export function MoneyPage() {
     })
   const [tab, setTab] = useState('spend')
   const [txnQuery, setTxnQuery] = useState('')
+  const [budgetNote, setBudgetNote] = useState('')
   // Hide amounts (e.g. on a shared screen); remembered.
   const [blurAmounts, setBlurAmounts] = useState(() => localStorage.getItem('bloom-money-blur') === '1')
   useEffect(() => {
@@ -137,6 +138,14 @@ export function MoneyPage() {
     const txn: Txn = { id: crypto.randomUUID(), date: today, amount: toMinor(n), category: income ? 'other' : category, place: place.trim(), income }
     save((s) => ({ ...s, txns: [txn, ...s.txns] }))
     pinSpend(txn)
+    // Budget alert: say so when this purchase takes a budget past 80% or over.
+    const b = store.budgets.find((x) => x.category === txn.category)
+    if (b && !txn.income && b.limit) {
+      const before = budgetUse(store, month).find((x) => x.category === txn.category)?.spent ?? 0
+      const after = before + txn.amount
+      if (after > b.limit && before <= b.limit) setBudgetNote(`You're now ${fmt(after - b.limit)} over your ${categoryOf(b.category).name} budget.`)
+      else if (after >= b.limit * 0.8 && before < b.limit * 0.8) setBudgetNote(`Heads up: ${Math.round((after / b.limit) * 100)}% of your ${categoryOf(b.category).name} budget used.`)
+    }
     setAmount('')
     setPlace('')
     burst(addBtn.current, 'coins')
@@ -150,6 +159,11 @@ export function MoneyPage() {
 
   const spendTab = () => (
     <div className="mn-grid">
+      {budgetNote && (
+        <p className="mn-budget-note" role="status">
+          ⚠️ {budgetNote} <button type="button" aria-label="Dismiss" onClick={() => setBudgetNote('')}>✕</button>
+        </p>
+      )}
       <section className="studio-card mn-report">
         <div className="mn-stats">
           <div>
