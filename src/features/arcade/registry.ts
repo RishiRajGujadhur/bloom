@@ -289,4 +289,7 @@ export const GAMES: GameDef[] = [
   g(91, 'boundary', 'Boundary Garden', 'Open the gates to helpers, close them to takers.', 'SVG', 120,
     '<path d="M4 34h56" stroke="currentColor" stroke-width="3"/><path d="M8 20v28M16 20v28M44 20v28M52 20v28" stroke="currentColor" stroke-width="4"/><path d="M24 22v26M24 22l12 4v22" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="32" cy="12" r="4" fill="currentColor"/><circle cx="20" cy="56" r="3" fill="currentColor"/><circle cx="40" cy="56" r="3" fill="currentColor"/>',
     () => import('./games/BoundaryGarden')),
+  g(92, 'maprun', 'Map Runner', 'Plot the quickest route round roadworks and bus lanes.', 'Babylon.js 3D', 0,
+    '<path d="M6 10h52M6 32h52M6 54h52M10 6v52M32 6v52M54 6v52" stroke="currentColor" stroke-width="2" opacity=".35"/><path d="M10 54V32h22V10h22" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="54" cy="10" r="5" fill="currentColor"/>',
+    () => import('./games/MapRunner')),
 ]
