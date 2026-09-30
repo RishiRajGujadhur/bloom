@@ -220,4 +220,7 @@ export const GAMES: GameDef[] = [
   g(68, 'unitprice', 'Unit Price Duel', 'Two products, one better deal. Grab it before they swing away.', 'SVG · GSAP', 130,
     '<rect x="4" y="18" width="24" height="34" rx="4" fill="currentColor" opacity=".6"/><rect x="36" y="10" width="24" height="42" rx="4" fill="currentColor"/><path d="M16 4v14M48 2v8" stroke="currentColor" stroke-width="2"/><text x="10" y="40" font-size="12" fill="#fff" font-weight="800">£</text><text x="42" y="36" font-size="12" fill="#fff" font-weight="800">£</text>',
     () => import('./games/UnitPriceDuel')),
+  g(69, 'spotlight', 'Interview Spotlight', 'Stay in the light while nerves make it wander. Breathe.', 'SVG', 265,
+    '<path d="M26 4h12l10 22H16z" fill="currentColor" opacity=".35"/><ellipse cx="32" cy="46" rx="22" ry="10" fill="currentColor" opacity=".5"/><circle cx="32" cy="40" r="6" fill="currentColor"/><rect x="26" y="0" width="12" height="8" rx="2" fill="currentColor"/>',
+    () => import('./games/InterviewSpotlight')),
 ]
