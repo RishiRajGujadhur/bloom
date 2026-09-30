@@ -165,3 +165,4 @@ Every game has:
 - Game 36: Stretch Snap — an SVG figure with two-bone IK arms and legs. Drag hands and feet into glowing stretch outlines (star, side bends, lunge, airplane…) and hold still while the breath ring fills.
 - Game 37: Inbox River — SVG letters drift toward a waterfall. Drag each to Do it now (two minutes or less), Schedule (big jobs), Hand off (not yours) or Let it go (promos); anything important swept away costs you.
 - Game 38: Procrastination Pinball — a matter-js pinball table with hinged flippers, five glowing START targets to light and bouncy gremlins ("one more video", "snack?") that drain your focus bar.
+- Game 39: Shopping Cart Dash — a PlayCanvas supermarket where the cart follows your pointer. Collect the six-item list, fight the magnetic pull of treat displays that add themselves to the bill, and reach the till within £30.

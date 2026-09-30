@@ -130,4 +130,7 @@ export const GAMES: GameDef[] = [
   g(38, 'pinball', 'Procrastination Pinball', 'Hit START, dodge the “just one more video” gremlins.', 'matter-js · canvas', 250,
     '<rect x="14" y="4" width="36" height="56" rx="10" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="20" r="5" fill="currentColor"/><circle cx="40" cy="28" r="5" fill="currentColor" opacity=".6"/><circle cx="34" cy="40" r="3" fill="currentColor"/><path d="M20 50l10 4M44 50l-10 4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
     () => import('./games/ProcrastinationPinball')),
+  g(39, 'cart', 'Shopping Cart Dash', 'Get the list, dodge the treat magnets, hit the till on budget.', 'PlayCanvas 3D', 215,
+    '<path d="M4 10h8l6 30h32l6-20H16" stroke="currentColor" stroke-width="4" fill="none" stroke-linejoin="round"/><circle cx="22" cy="50" r="5" fill="currentColor"/><circle cx="46" cy="50" r="5" fill="currentColor"/><rect x="22" y="24" width="10" height="10" fill="currentColor" opacity=".6"/><rect x="36" y="24" width="10" height="10" fill="currentColor" opacity=".8"/>',
+    () => import('./games/CartDash')),
 ]
