@@ -268,4 +268,7 @@ export const GAMES: GameDef[] = [
   g(84, 'resume', 'Resume Tower', 'Stack solid achievements; buzzword balloons just float away.', 'matter-js · canvas', 225,
     '<rect x="16" y="46" width="32" height="10" rx="2" fill="currentColor"/><rect x="18" y="34" width="28" height="10" rx="2" fill="currentColor" opacity=".85"/><rect x="20" y="22" width="24" height="10" rx="2" fill="currentColor" opacity=".7"/><circle cx="50" cy="12" r="8" fill="currentColor" opacity=".35"/><path d="M50 20v10" stroke="currentColor" stroke-width="1.5" opacity=".4"/>',
     () => import('./games/ResumeTower')),
+  g(85, 'parrot', 'Phrasebook Parrot', 'Feed your travelling parrot the right words for every hello.', 'SVG · GSAP', 140,
+    '<ellipse cx="26" cy="38" rx="14" ry="18" fill="currentColor"/><circle cx="24" cy="18" r="10" fill="currentColor" opacity=".7"/><path d="M16 20l-8 4 8 3z" fill="currentColor"/><path d="M38 12h20v14H44l-6 6v-6z" fill="none" stroke="currentColor" stroke-width="2.5"/>',
+    () => import('./games/PhrasebookParrot')),
 ]
