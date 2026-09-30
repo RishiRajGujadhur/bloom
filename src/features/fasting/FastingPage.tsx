@@ -86,6 +86,8 @@ export function FastingPage() {
     setStore((s) => ({ ...s, current: { start: startAt, goal: protocol.fast } }))
     setNow(Date.now())
     setEnded(null)
+    // So Bloom can tell you when the fast is done, even in another tab.
+    if (typeof Notification !== 'undefined' && Notification.permission === 'default') void Notification.requestPermission()
     if (on('hydration') && store.hydration) setNudge({ id: 'fast-water', title: 'Sip some water', body: 'Hydration makes fasting kinder.', page: 'fasting', every: 90, enabled: true, quietStart: 22, quietEnd: 7 })
   }
   const end = () => {
