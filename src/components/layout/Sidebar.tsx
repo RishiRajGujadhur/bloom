@@ -286,10 +286,14 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
     window.addEventListener('keydown', onKey)
     // The top bar's menu button toggles the drawer.
     const toggle = () => setIsOpen((open) => !open)
+    // Esc closes the drawer on narrow screens (QoL #27).
+    const close = () => { if (isDrawerWidth()) setIsOpen(false) }
     window.addEventListener('bloom:toggle-nav', toggle)
+    window.addEventListener('bloom:close-nav', close)
     return () => {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('bloom:toggle-nav', toggle)
+      window.removeEventListener('bloom:close-nav', close)
     }
   }, [])
 

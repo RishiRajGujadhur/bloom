@@ -38,12 +38,33 @@ export function Studio({
   onTab?: (id: string) => void
 }) {
   const visible = tabs.filter(Boolean)
-  const [inner, setInner] = useState(initial && visible.some((t) => t.id === initial) ? initial : visible[0]?.id)
+  // Each page remembers its last tab (QoL #20).
+  const tabKey = `bloom-tab-${name}`
+  const remembered = (() => { try { return localStorage.getItem(tabKey) } catch { return null } })()
+  const start = initial && visible.some((t) => t.id === initial) ? initial : remembered && visible.some((t) => t.id === remembered) ? remembered : visible[0]?.id
+  const [inner, setInner] = useState(start)
   const active = controlled && visible.some((t) => t.id === controlled) ? controlled : inner
   const setActive = (id: string) => {
     setInner(id)
     onTab?.(id)
+    try { localStorage.setItem(tabKey, id) } catch { /* optional */ }
   }
+  // Controlled pages: restore the remembered tab once on mount.
+  useEffect(() => {
+    if (onTab && !initial && remembered && remembered !== controlled && visible.some((t) => t.id === remembered)) onTab(remembered)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Number keys 1–9 switch tabs when you're not typing (QoL #57).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+      const t = e.target as HTMLElement | null
+      if (t?.closest('input, textarea, select, [contenteditable="true"]')) return
+      const n = Number(e.key)
+      if (n >= 1 && n <= 9 && visible[n - 1]) { e.preventDefault(); setActive(visible[n - 1].id) }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
   const panel = useRef<HTMLDivElement>(null)
   const tabStrip = useRef<HTMLDivElement>(null)
   const dir = useRef(1)

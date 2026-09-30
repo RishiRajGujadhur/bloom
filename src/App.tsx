@@ -25,6 +25,8 @@ import {
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { withViewTransition } from './platform/viewTransition'
+import { Shortcuts } from './components/layout/Shortcuts'
+import './components/layout/shortcuts.css'
 import gsap from 'gsap'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -716,6 +718,7 @@ function App() {
         {settings.features.pointerFx && <PointerFx page={active} />}
 
         <MatrixRain />
+        <Shortcuts onNavigate={jump} onToggleTheme={() => setThemeSettings((t) => toggleThemeMode(t))} />
         {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}
         <HoverHints />
         {!settings.reducedMotion && <GsapControls />}
