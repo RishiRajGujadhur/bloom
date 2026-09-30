@@ -82,4 +82,7 @@ export const GAMES: GameDef[] = [
   g(22, 'posture', 'Posture Tower', 'Stack a tall spine while the chair keeps slumping.', 'matter-js · SVG', 40,
     '<rect x="22" y="8" width="20" height="7" rx="3" fill="currentColor"/><rect x="21" y="17" width="22" height="7" rx="3" fill="currentColor" opacity=".85"/><rect x="20" y="26" width="24" height="7" rx="3" fill="currentColor" opacity=".7"/><rect x="19" y="35" width="26" height="7" rx="3" fill="currentColor" opacity=".55"/><rect x="12" y="46" width="40" height="7" rx="3" fill="currentColor" transform="rotate(-6 32 50)"/>',
     () => import('./games/PostureTower')),
+  g(23, 'hose', 'Hydration Hose', 'Keep every pot happy and every jogger refreshed.', 'canvas particles', 205,
+    '<path d="M6 56q10-2 14-14" stroke="currentColor" stroke-width="5" fill="none"/><rect x="18" y="36" width="12" height="7" rx="2" fill="currentColor" transform="rotate(-40 24 40)"/><path d="M30 30q10-14 20-8" stroke="currentColor" stroke-dasharray="2 4" stroke-width="3" fill="none"/><path d="M44 44h14l-2 12H46z" fill="currentColor" opacity=".7"/><path d="M51 44v-8" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/HydrationHose')),
 ]

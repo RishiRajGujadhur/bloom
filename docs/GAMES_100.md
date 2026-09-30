@@ -149,3 +149,4 @@ Every game has:
 - Game 20: Pomodoro Forge — an SVG smithy with a glowing, cooling bar, a GSAP hammer and sparks. Strike hot metal to shape it, reheat in the forge, and cold strikes crack it.
 - Game 21: Plate Painter — paint veg, protein and grains onto a spinning SVG plate. Coverage and proportions are sampled against the chef's sketch pie for each of five plates.
 - Game 22: Posture Tower — matter-js vertebrae stacked on a chair that keeps slumping. Lean the pointer or arrow keys against the drift, with a live tilt gauge.
+- Game 23: Hydration Hose — canvas water-droplet arcs aimed by pointer. Five plants each have their own thirst and happy band (the cactus barely wants any), with passing joggers who'd love a splash.
