@@ -67,4 +67,7 @@ export const GAMES: GameDef[] = [
   g(17, 'stars', 'Star Compass', 'No phone, no map. Find north in a turning night sky.', 'Three.js 3D', 250,
     '<circle cx="12" cy="40" r="2.5" fill="currentColor"/><circle cx="20" cy="46" r="2.5" fill="currentColor"/><circle cx="28" cy="42" r="2.5" fill="currentColor"/><circle cx="34" cy="34" r="2.5" fill="currentColor"/><circle cx="38" cy="26" r="2.5" fill="currentColor"/><path d="M38 26L48 10" stroke="currentColor" stroke-dasharray="2 3" stroke-width="2"/><path d="M48 4l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z" fill="currentColor"/>',
     () => import('./games/StarCompass')),
+  g(18, 'suitcase', 'Pack the Suitcase', 'Everything you need, one carry-on, and the taxi’s coming.', 'SVG · GSAP', 215,
+    '<rect x="8" y="18" width="48" height="36" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 18v-6h16v6" stroke="currentColor" stroke-width="3" fill="none"/><rect x="12" y="22" width="14" height="14" rx="2" fill="currentColor"/><rect x="28" y="22" width="10" height="28" rx="2" fill="currentColor" opacity=".6"/><rect x="40" y="36" width="12" height="14" rx="2" fill="currentColor" opacity=".8"/>',
+    () => import('./games/PackSuitcase')),
 ]
