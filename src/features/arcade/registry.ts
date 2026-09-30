@@ -265,4 +265,7 @@ export const GAMES: GameDef[] = [
   g(83, 'salary', 'Salary Slide', 'Set the gates so payday flows where it needs to go.', 'SVG · GSAP', 260,
     '<path d="M26 4h12l-4 8h-4z" fill="currentColor"/><path d="M30 12L6 40h52L34 12z" fill="currentColor" opacity=".25"/><path d="M6 44h12l-2 14H8zM20 44h12l-2 14h-8zM34 44h12l-2 14h-8zM48 44h10l-2 14h-6z" fill="currentColor" opacity=".8"/>',
     () => import('./games/SalarySlide')),
+  g(84, 'resume', 'Resume Tower', 'Stack solid achievements; buzzword balloons just float away.', 'matter-js · canvas', 225,
+    '<rect x="16" y="46" width="32" height="10" rx="2" fill="currentColor"/><rect x="18" y="34" width="28" height="10" rx="2" fill="currentColor" opacity=".85"/><rect x="20" y="22" width="24" height="10" rx="2" fill="currentColor" opacity=".7"/><circle cx="50" cy="12" r="8" fill="currentColor" opacity=".35"/><path d="M50 20v10" stroke="currentColor" stroke-width="1.5" opacity=".4"/>',
+    () => import('./games/ResumeTower')),
 ]
