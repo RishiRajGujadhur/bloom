@@ -147,6 +147,19 @@ export function WorkoutPage() {
   const train = () =>
     !active ? (
       <div className="wo-start">
+        {(() => {
+          const last = [...store.workouts].reverse().find((w) => w.finishedAt && templates.some((t) => t.id === w.templateId))
+          if (!last) return null
+          const days = Math.round((Date.now() - last.startedAt) / 864e5)
+          return (
+            <button type="button" className="wo-repeat" onClick={() => start(last.templateId)}>
+              <History size={16} aria-hidden="true" /> Repeat <strong>{last.name}</strong>
+              <small>
+                {days === 0 ? 'earlier today' : days === 1 ? 'yesterday' : `${days} days ago`} · {last.sets.length} {last.sets.length === 1 ? 'set' : 'sets'} — starts from last time’s weights
+              </small>
+            </button>
+          )
+        })()}
         <h3>Pick today’s session</h3>
         {on('templates') ? (
           <Rail label="Templates">
