@@ -195,6 +195,27 @@ export function setCompactTitles(on: boolean) {
   applyCompactTitles()
 }
 
+/** Settings → "Page banner" (on by default): the title bar with the page's icon. */
+const BANNER_KEY = 'bloom-page-banner'
+export const pageBanner = () => {
+  try {
+    return localStorage.getItem(BANNER_KEY) !== '0'
+  } catch {
+    return true
+  }
+}
+export function applyPageBanner() {
+  document.documentElement.toggleAttribute('data-no-banner', !pageBanner())
+}
+export function setPageBanner(on: boolean) {
+  try {
+    localStorage.setItem(BANNER_KEY, on ? '1' : '0')
+  } catch {
+    /* optional */
+  }
+  applyPageBanner()
+}
+
 /**
  * Show a few at a time: the first `initial` items, then "Show N more" steps
  * and a "Show all". New items slide in with GSAP. Cuts scrolling on long

@@ -110,7 +110,7 @@ import {
 import { Menu } from 'lucide-react'
 import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
-import { ShowMore, compactTitles, setCompactTitles } from './components/ui/Flow'
+import { ShowMore, compactTitles, pageBanner, setCompactTitles, setPageBanner } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
 import { DataReset } from './settings/DataReset'
 import { InstallApp } from './settings/InstallApp'
@@ -632,6 +632,7 @@ const matches = (text: string, query: string) => text.toLowerCase().includes(que
 function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: boolean; setReducedMotion: (enabled: boolean) => void }) {
   const [hamburger, setHamburger] = useState(hamburgerNav)
   const [compact, setCompact] = useState(compactTitles)
+  const [banner, setBanner] = useState(pageBanner)
   const [pixel, setPixel] = useState(pixelIconsOn)
   return (
     <section className={styles.card} aria-labelledby="navigation-heading">
@@ -681,6 +682,24 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
               setCompactTitles(e.target.checked)
             }}
             aria-label="Icon page headings"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Page banner</strong>
+          <small>The title bar with the page’s icon and related links at the top of each page. Turn off for more room.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={banner}
+            onChange={(e) => {
+              setBanner(e.target.checked)
+              setPageBanner(e.target.checked)
+            }}
+            aria-label="Page banner"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>
