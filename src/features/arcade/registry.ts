@@ -148,4 +148,7 @@ export const GAMES: GameDef[] = [
   g(44, 'leaks', 'Leak Hunter', 'Shut the right valve, patch the pipe, turn the water back on.', 'SVG · GSAP', 205,
     '<path d="M4 44h24V20h32" stroke="currentColor" stroke-width="8" fill="none" stroke-linejoin="round"/><circle cx="28" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 32h12" stroke="currentColor" stroke-width="3"/><path d="M48 26q2 6 0 10" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="48" cy="44" r="3" fill="currentColor"/><circle cx="48" cy="54" r="2" fill="currentColor"/>',
     () => import('./games/LeakHunter')),
+  g(45, 'umbrella', 'Insurance Umbrella', 'A coin a season keeps the storm off. Worth it?', 'p5.js', 330,
+    '<path d="M6 30a26 20 0 0 1 52 0z" fill="currentColor"/><path d="M32 30v20q0 6-6 6" stroke="currentColor" stroke-width="3" fill="none"/><path d="M14 10l-4 8M24 6l-4 8" stroke="currentColor" stroke-width="2"/>',
+    () => import('./games/InsuranceUmbrella')),
 ]
