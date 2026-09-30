@@ -277,4 +277,7 @@ export const GAMES: GameDef[] = [
   g(87, 'queue', 'Queue Hop', 'Pick the quickest till by reading the trolleys.', 'SVG · GSAP', 200,
     '<rect x="6" y="8" width="14" height="8" rx="2" fill="currentColor"/><rect x="26" y="8" width="14" height="8" rx="2" fill="currentColor" opacity=".6"/><rect x="46" y="8" width="14" height="8" rx="2" fill="currentColor" opacity=".4"/><circle cx="13" cy="28" r="4" fill="currentColor"/><circle cx="33" cy="28" r="4" fill="currentColor"/><circle cx="33" cy="42" r="4" fill="currentColor"/><circle cx="53" cy="28" r="4" fill="currentColor"/><circle cx="53" cy="42" r="4" fill="currentColor"/><circle cx="53" cy="56" r="4" fill="currentColor"/>',
     () => import('./games/QueueHop')),
+  g(88, 'receipts', 'Receipt Rain', 'Catch the charged-twice and cancelled-but-billed receipts.', 'p5.js', 15,
+    '<path d="M16 6h32v50l-4-3-4 3-4-3-4 3-4-3-4 3-4-3-4 3z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 18h20M22 26h14M22 34h20" stroke="currentColor" stroke-width="2"/><circle cx="48" cy="44" r="9" fill="currentColor"/><path d="M48 39v6M48 48v1" stroke="#fff" stroke-width="2.5"/>',
+    () => import('./games/ReceiptRain')),
 ]

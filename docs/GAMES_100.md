@@ -214,3 +214,4 @@ Every game has:
 - Game 85: Phrasebook Parrot — a bobbing GSAP parrot travels through Spain, France, Japan and Italy. Locals greet you in their language and you feed the parrot the right reply card (hello, thank you, how much?, goodbye, sorry); cards you've used glow and reveal the word.
 - Game 86: Medicine Cabinet — drag labelled medicine boxes (expiry date and who they're for) into the cabinet, the locked high shelf for adults-only medicines, or the pharmacy return bag if they're out of date.
 - Game 87: Queue Hop — five supermarket tills with queues, trolleys filled item by item, and chatty or speedy cashiers. Pick the till that will really be quickest, then watch GSAP timing bars reveal the answer. Eight trips.
+- Game 88: Receipt Rain — p5.js receipts flutter down. Steer the dispute folder under the ones with mistakes (charged twice, cancelled gym, shelf-price mismatch) and let the honest receipts fall.
