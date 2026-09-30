@@ -21,6 +21,7 @@ import {
   type BreathSession,
   type GratitudeEntry,
   type MoodEntry,
+  moodByWeekday,
 } from './store'
 import './wellbeing.css'
 import { MoodQuick } from '../quick/MoodQuick'
@@ -300,6 +301,7 @@ export function BreathePage() {
 /* ------------------------------------------------------------------ */
 /* Mood check-in — two taps, weekly strip                              */
 /* ------------------------------------------------------------------ */
+const FULL_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 export function MoodPage() {
   const [entries, setEntries] = useStoredList<MoodEntry>(MOOD_KEY)
   const [note, setNote] = useState('')
@@ -510,6 +512,30 @@ export function MoodPage() {
           })}
         </ol>
       </div>
+      {entries.length >= 5 && (() => {
+        const pattern = moodByWeekday(entries)
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        const filled = pattern.map((p, i) => ({ p, i })).filter((x) => x.p)
+        const best = filled.reduce((a, b) => (b.p!.avg > a.p!.avg ? b : a), filled[0])
+        const worst = filled.reduce((a, b) => (b.p!.avg < a.p!.avg ? b : a), filled[0])
+        return (
+          <div className="wb-card">
+            <h2>Your weekday pattern</h2>
+            <ol className="wb-week">
+              {pattern.map((p, i) => (
+                <li key={days[i]} data-empty={!p} title={p ? `${p.avg.toFixed(1)} / 5 from ${p.count} check-ins` : 'No check-ins yet'}>
+                  <span className="wb-week-bar" style={{ height: `${p ? p.avg * 18 : 8}%` }} aria-hidden="true" />
+                  <span aria-hidden="true">{p ? moods[Math.round(p.avg) - 1]?.emoji : '·'}</span>
+                  <small>{days[i]}<span className="sr-only">: {p ? `${p.avg.toFixed(1)} out of 5` : 'no check-ins'}</span></small>
+                </li>
+              ))}
+            </ol>
+            {best && worst && best.i !== worst.i && (
+              <p className="wb-muted">{FULL_DAYS[best.i]}s tend to feel best; {FULL_DAYS[worst.i]}s are usually hardest.</p>
+            )}
+          </div>
+        )
+      })()}
       {topEmotions.length > 0 && subOn('moodCheckin', 'wordCloud') && (
         <div className="wb-card">
           <h2>Words you use most</h2>

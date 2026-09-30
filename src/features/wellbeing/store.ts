@@ -94,3 +94,14 @@ export function moodWeek(entries: MoodEntry[], days = 7, now = new Date()) {
     }
   })
 }
+
+/** Average mood for each weekday (Mon first) across every check-in; null where there's none. */
+export function moodByWeekday(entries: MoodEntry[]) {
+  const sum = Array(7).fill(0), n = Array(7).fill(0)
+  for (const e of entries) {
+    const d = (new Date(e.at).getDay() + 6) % 7
+    sum[d] += e.mood
+    n[d]++
+  }
+  return sum.map((s, i) => (n[i] ? { avg: s / n[i], count: n[i] as number } : null))
+}
