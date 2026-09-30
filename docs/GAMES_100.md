@@ -166,3 +166,4 @@ Every game has:
 - Game 37: Inbox River — SVG letters drift toward a waterfall. Drag each to Do it now (two minutes or less), Schedule (big jobs), Hand off (not yours) or Let it go (promos); anything important swept away costs you.
 - Game 38: Procrastination Pinball — a matter-js pinball table with hinged flippers, five glowing START targets to light and bouncy gremlins ("one more video", "snack?") that drain your focus bar.
 - Game 39: Shopping Cart Dash — a PlayCanvas supermarket where the cart follows your pointer. Collect the six-item list, fight the magnetic pull of treat displays that add themselves to the bill, and reach the till within £30.
+- Game 40: Kindness Chain — a Babylon.js town square of wandering people, a glowing orb with a particle trail and a reach ring. Pass the warm light person to person before it fades, until the whole square glows.

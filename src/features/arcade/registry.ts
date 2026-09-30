@@ -133,4 +133,7 @@ export const GAMES: GameDef[] = [
   g(39, 'cart', 'Shopping Cart Dash', 'Get the list, dodge the treat magnets, hit the till on budget.', 'PlayCanvas 3D', 215,
     '<path d="M4 10h8l6 30h32l6-20H16" stroke="currentColor" stroke-width="4" fill="none" stroke-linejoin="round"/><circle cx="22" cy="50" r="5" fill="currentColor"/><circle cx="46" cy="50" r="5" fill="currentColor"/><rect x="22" y="24" width="10" height="10" fill="currentColor" opacity=".6"/><rect x="36" y="24" width="10" height="10" fill="currentColor" opacity=".8"/>',
     () => import('./games/CartDash')),
+  g(40, 'kindness', 'Kindness Chain', 'Pass a small warm light around the square until it all glows.', 'Babylon.js 3D', 38,
+    '<circle cx="14" cy="40" r="7" fill="currentColor"/><circle cx="32" cy="30" r="7" fill="currentColor" opacity=".8"/><circle cx="50" cy="40" r="7" fill="currentColor" opacity=".4"/><path d="M14 30q9-14 18-10M32 20q9-4 18 10" stroke="currentColor" stroke-width="2" stroke-dasharray="2 3" fill="none"/><circle cx="32" cy="12" r="4" fill="currentColor"/>',
+    () => import('./games/KindnessChain')),
 ]
