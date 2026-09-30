@@ -154,4 +154,7 @@ export const GAMES: GameDef[] = [
   g(46, 'filter', 'Water Filter', 'Layer a bottle filter and watch murky water run clear.', 'SVG · GSAP', 190,
     '<path d="M20 6h24v44q-12 8-24 0z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="22" y="36" width="20" height="10" fill="currentColor"/><rect x="22" y="26" width="20" height="10" fill="currentColor" opacity=".6"/><rect x="22" y="16" width="20" height="10" fill="currentColor" opacity=".35"/><circle cx="32" cy="58" r="3" fill="currentColor"/>',
     () => import('./games/WaterFilter')),
+  g(47, 'shelf', 'Shelf Level', 'Watch the bubble, drive the screw, trust the ornaments to it.', 'SVG · GSAP', 45,
+    '<rect x="6" y="34" width="52" height="8" rx="2" fill="currentColor"/><rect x="14" y="20" width="36" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="32" cy="25" rx="5" ry="3" fill="currentColor"/><path d="M28 20v10M36 20v10" stroke="currentColor" stroke-width="1.5"/>',
+    () => import('./games/ShelfLevel')),
 ]
