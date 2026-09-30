@@ -146,3 +146,4 @@ Every game has:
 - Game 17: Star Compass — a Three.js sky dome of real star positions (the Plough, Cassiopeia, Polaris and more), rotated and tilted to a new latitude each night. Drag to look around and click the Pole Star; north appears on the horizon.
 - Game 18: Pack the Suitcase — drag polyomino belongings into a 9×6 carry-on (right-click to turn). Gold-edged essentials matter most; zip it with a bouncing lid before the taxi arrives.
 - Game 19: Debt Dragon — a Babylon.js cave with a breathing dragon on its hoard that grows 7% each moon. Tap glowing crystals to mine (coins arc through the air), then feed the dragon or buy a better pick before it outgrows the cave.
+- Game 20: Pomodoro Forge — an SVG smithy with a glowing, cooling bar, a GSAP hammer and sparks. Strike hot metal to shape it, reheat in the forge, and cold strikes crack it.

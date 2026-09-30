@@ -73,4 +73,7 @@ export const GAMES: GameDef[] = [
   g(19, 'dragon', 'Debt Dragon', 'Mine crystals and feed the dragon before it outgrows the cave.', 'Babylon.js 3D', 350,
     '<path d="M10 44c4-14 18-20 30-16l8-10 2 12c6 4 8 10 6 16H10z" fill="currentColor"/><path d="M26 30l-8-14 14 8z" fill="currentColor" opacity=".7"/><circle cx="46" cy="36" r="2" fill="#fff"/><path d="M8 52h48" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/DebtDragon')),
+  g(20, 'forge', 'Pomodoro Forge', 'Strike while the iron’s hot, then let it glow again.', 'SVG · GSAP', 28,
+    '<path d="M10 40h36l6-6v8H40l-4 10h8v4H16v-4h8l-4-10H10z" fill="currentColor"/><rect x="30" y="8" width="8" height="24" rx="2" fill="currentColor" opacity=".6" transform="rotate(-35 34 20)"/><rect x="18" y="8" width="20" height="10" rx="2" fill="currentColor" transform="rotate(-35 34 20)"/><circle cx="46" cy="30" r="2" fill="currentColor"/><circle cx="52" cy="24" r="1.5" fill="currentColor"/>',
+    () => import('./games/PomodoroForge')),
 ]
