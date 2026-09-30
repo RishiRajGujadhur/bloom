@@ -32,6 +32,10 @@ import './habits.css'
 import { HabitsQuick } from './quick/HabitsQuick'
 import { StickerBook } from './showcase/StickerBook'
 
+import { Archive, ArchiveRestore, ChevronLeft, ChevronRight } from 'lucide-react'
+import { move, ordered, strength, useHabitExtras } from './habits/habitExtras'
+import './habits/habitExtras.css'
+
 type Habit = AppData['habits'][number]
 type Routine = NonNullable<AppData['routines']>[number]
 const colors = ['#16866b', '#cb5476', '#3788bd', '#bd791b', '#855abe']
@@ -67,6 +71,15 @@ export function HabitsPage({
   const [run, setRun] = useState<Run | null>(null)
   const [message, setMessage] = useState('')
   const [library, setLibrary] = useState(false)
+  const [extras, setExtras] = useHabitExtras()
+  const [habitView, setHabitView] = useState<'all' | 'left' | 'done' | 'archived'>('all')
+  const [noting, setNoting] = useState<string | null>(null)
+  const yesterday = (() => { const d = new Date(`${today}T12:00:00`); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10) })()
+  const active = ordered(data.habits.filter((h) => !extras.archived.includes(h.id)), extras.order)
+  const missedYesterday = active.filter((h) => !h.dates.includes(yesterday))
+  const shown = habitView === 'archived'
+    ? data.habits.filter((h) => extras.archived.includes(h.id))
+    : active.filter((h) => habitView === 'all' || (habitView === 'done') === h.dates.includes(today))
   const adoptedHabits = new Set(data.habits.map((h) => h.title.toLowerCase()))
   const adoptedRoutines = new Set(
     (data.routines ?? []).map((r) => r.title.toLowerCase()),
@@ -352,9 +365,23 @@ export function HabitsPage({
           {!data.habits.length && (
             <p>No habits yet. Start with one small daily commitment.</p>
           )}
+          <div className="hx-bar">
+            <div className="hx-seg" role="radiogroup" aria-label="Show habits">
+              {([['all', 'All'], ['left', 'Left today'], ['done', 'Done'], ['archived', `Archived (${extras.archived.filter((id) => data.habits.some((h) => h.id === id)).length})`]] as const).map(([v, label]) => (
+                <button key={v} type="button" role="radio" aria-checked={habitView === v} className={habitView === v ? 'on' : ''} onClick={() => setHabitView(v)}>{label}</button>
+              ))}
+            </div>
+            {missedYesterday.length > 0 && habitView !== 'archived' && (
+              <button type="button" className="hx-yday" onClick={() => setData((d) => ({ ...d, habits: d.habits.map((h) => missedYesterday.some((m) => m.id === h.id) ? { ...h, dates: [...h.dates, yesterday].sort() } : h) }))}>
+                ✓ Mark yesterday done for {missedYesterday.length === 1 ? `“${missedYesterday[0].title}”` : `all ${missedYesterday.length}`}
+              </button>
+            )}
+          </div>
           <CardRail label="Your habits">
-            {data.habits.map((h, index) => {
+            {shown.map((h, index) => {
               const stats = habitStats(h.dates, today)
+              const note = extras.notes[h.id]?.[today] ?? ''
+              const ids = active.map((x) => x.id)
               const done = h.dates.includes(today)
               return (
                 <article
@@ -373,6 +400,11 @@ export function HabitsPage({
                     </div>
                     <div className="habit-actions">
                       {reminders && subOn('reminders', 'habits') && <ReminderButton id={h.id} title={h.title} />}
+                      {habitView !== 'archived' && <>
+                        <button className="icon-button hx-mini" title="Move earlier" aria-label={`Move ${h.title} earlier`} disabled={ids[0] === h.id} onClick={() => setExtras((x) => ({ ...x, order: move(ids, h.id, -1) }))}><ChevronLeft size={16} /></button>
+                        <button className="icon-button hx-mini" title="Move later" aria-label={`Move ${h.title} later`} disabled={ids.at(-1) === h.id} onClick={() => setExtras((x) => ({ ...x, order: move(ids, h.id, 1) }))}><ChevronRight size={16} /></button>
+                      </>}
+                      <button className="icon-button hx-mini" title={habitView === 'archived' ? 'Unarchive' : 'Archive'} aria-label={`${habitView === 'archived' ? 'Unarchive' : 'Archive'} ${h.title}`} onClick={() => setExtras((x) => ({ ...x, archived: x.archived.includes(h.id) ? x.archived.filter((i) => i !== h.id) : [...x.archived, h.id] }))}>{habitView === 'archived' ? <ArchiveRestore size={16} /> : <Archive size={16} />}</button>
                       <button
                         className="icon-button"
                         title="Edit habit"
@@ -416,7 +448,7 @@ export function HabitsPage({
                         key={day}
                         className={`${h.dates.includes(day) ? 'filled' : ''} ${day === today ? 'today' : ''}`}
                         disabled={day > today}
-                        title={`${day}: ${h.dates.includes(day) ? 'Completed' : 'Not completed'}`}
+                        title={`${day}: ${h.dates.includes(day) ? 'Completed' : 'Not completed'}${extras.notes[h.id]?.[day] ? ` — ${extras.notes[h.id][day]}` : ''}`}
                         aria-label={`${h.title}, ${day}`}
                         aria-pressed={h.dates.includes(day)}
                         onClick={() =>
@@ -438,6 +470,16 @@ export function HabitsPage({
                     <span>
                       {h.dates.length} {h.dates.length === 1 ? 'day' : 'days'} kept · best {stats.best}
                     </span>
+                    <span className="hx-strength" title="Habit strength: weighted over the last 60 days">
+                      <i style={{ width: `${strength(h.dates, today)}%` }} />strength {strength(h.dates, today)}%
+                    </span>
+                    {noting === h.id ? (
+                      <input className="hx-note" autoFocus maxLength={120} placeholder="A note for today…" defaultValue={note} aria-label={`Note for ${h.title} today`}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === 'Escape') e.currentTarget.blur() }}
+                        onBlur={(e) => { const v = e.currentTarget.value.trim(); setExtras((x) => ({ ...x, notes: { ...x.notes, [h.id]: { ...(x.notes[h.id] ?? {}), [today]: v } } })); setNoting(null) }} />
+                    ) : (
+                      <button type="button" className="hx-note-btn" onClick={() => setNoting(h.id)}>{note ? `📝 ${note}` : '＋ note'}</button>
+                    )}
                     <button
                       className={done ? 'quiet-button' : 'primary'}
                       aria-label={`Check in: ${h.title}`}

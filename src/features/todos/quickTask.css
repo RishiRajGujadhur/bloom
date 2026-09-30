@@ -7,3 +7,5 @@
 .overdue-bar button:hover, .task-snooze button:hover { opacity: 1; }
 .task-snooze { display: inline-flex; gap: 4px; }
 .task-overdue { color: #d9534f; font-weight: 600; }
+.step-bar { display: inline-block; width: 48px; height: 4px; border-radius: 2px; background: color-mix(in srgb, currentColor 18%, transparent); overflow: hidden; margin-left: 6px; vertical-align: middle; }
+.step-bar i { display: block; height: 100%; background: var(--accent, #16866b); }

@@ -1,0 +1,13 @@
+.hx-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 4px 0 10px; }
+.hx-seg { display: inline-flex; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: 999px; padding: 2px; }
+.hx-seg button { border: 0; background: transparent; color: inherit; padding: 4px 12px; border-radius: 999px; cursor: pointer; font-size: 0.82rem; }
+.hx-seg button.on { background: var(--accent, #16866b); color: var(--accent-contrast, #fff); }
+.hx-yday { border: 1px dashed currentColor; background: transparent; color: inherit; border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 0.82rem; }
+.hx-mini { font-size: 1rem; line-height: 1; }
+.hx-strength { position: relative; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; opacity: 0.85; }
+.hx-strength i { display: inline-block; height: 5px; max-width: 60px; border-radius: 3px; background: var(--habit-color, currentColor); }
+.hx-note-btn { border: 0; background: transparent; color: inherit; opacity: 0.7; cursor: pointer; font-size: 0.78rem; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hx-note { font-size: 0.8rem; padding: 3px 8px; border-radius: 8px; border: 1px solid currentColor; background: transparent; color: inherit; }
+[data-theme='matrix'] .hx-seg button.on { background: #00ff66; color: #001a08; }
+[data-theme='matrix'] .hx-strength { white-space: nowrap; }
+.hx-strength { white-space: nowrap; }

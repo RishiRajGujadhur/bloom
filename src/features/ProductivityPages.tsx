@@ -334,6 +334,7 @@ export function TodoPage({ data, setData }: Props) {
           <div className="overdue-bar">
             <span>{overdue.length} overdue — shown first</span>
             <button type="button" onClick={() => overdue.forEach((t) => shiftDue(t.id, 0))}>Move all to today</button>
+            <button type="button" onClick={() => setData((current) => overdue.reduce((d, t) => toggleTodo(d, t.id), current))}>Complete all</button>
           </div>
         )}
         {showOptions && (
@@ -710,6 +711,9 @@ export function TodoPage({ data, setData }: Props) {
                 {task.subtasks.length
                   ? `${completedSteps}/${task.subtasks.length} steps`
                   : 'Add steps'}
+                {task.subtasks.length > 0 && (
+                  <span className="step-bar" aria-hidden="true"><i style={{ width: `${(completedSteps / task.subtasks.length) * 100}%` }} /></span>
+                )}
                 <ChevronDown size={14} className={open ? 'turned' : ''} />
               </button>
               {open && (
