@@ -151,6 +151,17 @@ export function FocusPage({
       },
     }))
   const since = new Date().setHours(0, 0, 0, 0)
+  // Tab title: live countdown while focusing, today's count otherwise.
+  const todayDone = history.filter((h) => h.completedAt >= since).length
+  const titleText = active ? `⏱ ${Math.floor(left / 60000)}:${String(Math.floor((left % 60000) / 1000)).padStart(2, '0')} · Focus` : todayDone ? `🍅 ${todayDone} today · Focus` : ''
+  useEffect(() => {
+    if (!titleText) return
+    const before = document.title
+    document.title = titleText
+    return () => {
+      document.title = before
+    }
+  }, [titleText])
   usePageActions(
     active
       ? []
