@@ -249,6 +249,11 @@ function MemoCard({
         <span className="voice-meta">
           {new Date(memo.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })} · {fmt(memo.duration)}
         </span>
+        {url && (
+          <a className="icon-button" href={url} download={`${memo.title.replace(/[^\w-]+/g, '-') || 'memo'}.${memo.mimeType.includes('wav') ? 'wav' : memo.mimeType.includes('ogg') ? 'ogg' : memo.mimeType.includes('mp4') ? 'm4a' : 'webm'}`} aria-label="Download audio" title="Download audio">
+            ⬇
+          </a>
+        )}
         <button className="icon-button" type="button" aria-label="Delete memo" onClick={onDelete}>
           <Trash2 size={15} />
         </button>
