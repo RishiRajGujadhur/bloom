@@ -214,4 +214,7 @@ export const GAMES: GameDef[] = [
   g(66, 'steps', 'Step Garden', 'Left, right, left, right — a steady walk grows flowers.', 'p5.js', 110,
     '<path d="M4 50h56" stroke="currentColor" stroke-width="3"/><path d="M14 50V36M30 50V30M46 50V38" stroke="currentColor" stroke-width="2.5"/><circle cx="14" cy="32" r="5" fill="currentColor"/><circle cx="30" cy="26" r="6" fill="currentColor" opacity=".8"/><circle cx="46" cy="34" r="5" fill="currentColor" opacity=".6"/><ellipse cx="20" cy="58" rx="4" ry="2.5" fill="currentColor"/><ellipse cx="34" cy="58" rx="4" ry="2.5" fill="currentColor"/>',
     () => import('./games/StepGarden')),
+  g(67, 'paint', 'Paint the Room', 'Dip, roll, let it dry, roll again. No drips.', 'PlayCanvas · canvas texture', 150,
+    '<rect x="6" y="8" width="52" height="30" rx="3" fill="currentColor" opacity=".35"/><rect x="6" y="8" width="30" height="30" rx="3" fill="currentColor"/><rect x="34" y="16" width="20" height="10" rx="4" fill="currentColor"/><path d="M44 26v10H28v18" stroke="currentColor" stroke-width="4" fill="none"/>',
+    () => import('./games/PaintRoom')),
 ]
