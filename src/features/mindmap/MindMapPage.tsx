@@ -2,7 +2,7 @@ import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Transformer } from 'markmap-lib'
 import { Markmap } from 'markmap-view'
-import { BookOpen, Download, Expand, Maximize, Network, Plus, Shrink, Trash2 } from 'lucide-react'
+import { BookOpen, Download, Expand, ImageDown, Maximize, Network, Plus, Shrink, Trash2 } from 'lucide-react'
 import { Rail, Slider, Studio, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { journalText } from '../../search/db'
@@ -61,7 +61,10 @@ export function MindMapPage() {
     revealed.current = map.id
     const nodes = wrap.current?.querySelectorAll('g.markmap-node')
     if (!nodes?.length || !subOn('mindMaps', 'grow') || prefersReducedMotion()) return
-    gsap.from(nodes, { opacity: 0, scale: 0.4, transformOrigin: '0% 50%', stagger: 0.04, duration: 0.45, ease: 'back.out(2)' })
+    // Only fade the node groups: markmap positions them with their own transform,
+    // and tweening scale there would overwrite it. The pop comes from the children.
+    gsap.from(nodes, { opacity: 0, stagger: 0.04, duration: 0.45, ease: 'power1.out' })
+    nodes.forEach((n, i) => gsap.from(n.children, { scale: 0.4, transformOrigin: '0% 50%', delay: i * 0.04, duration: 0.45, ease: 'back.out(2)', clearProps: 'transform,scale' }))
   }
   const view = useRef<Markmap | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
@@ -89,6 +92,79 @@ export function MindMapPage() {
     a.href = URL.createObjectURL(blob)
     a.download = `${map.title.replace(/\W+/g, '-')}.svg`
     a.click()
+  }
+  // PNG: the whole map (not just the visible part), at print-friendly resolution.
+  const [pngBusy, setPngBusy] = useState(false)
+  const exportPng = async () => {
+    const el = wrap.current?.querySelector('svg')
+    const g = el?.querySelector('g')
+    if (!el || !g) return
+    setPngBusy(true)
+    try {
+      const box = g.getBBox()
+      const pad = 24
+      const w = box.width + pad * 2
+      const h = box.height + pad * 2
+      const clone = el.cloneNode(true) as SVGSVGElement
+      clone.querySelector('g')?.removeAttribute('transform')
+      // Export the finished map even if the grow-in animation is still running.
+      clone.querySelectorAll<SVGElement>('g.markmap-node, g.markmap-node *').forEach((n) => {
+        n.style.opacity = '1'
+        n.style.removeProperty('scale')
+      })
+      // Swap HTML labels for plain SVG text so they rasterise with the right font everywhere.
+      const live = [...el.querySelectorAll('foreignObject')]
+      const font = getComputedStyle(live[0]?.firstElementChild ?? el)
+      ;[...clone.querySelectorAll('foreignObject')].forEach((fo, i) => {
+        const src = live[i]
+        const label = src?.textContent?.trim()
+        if (!src || !label) return fo.remove()
+        const cs = getComputedStyle(src.firstElementChild ?? src)
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+        const x = Number(fo.getAttribute('x') ?? 0)
+        const y = Number(fo.getAttribute('y') ?? 0)
+        const fh = Number(fo.getAttribute('height') ?? 20)
+        text.setAttribute('x', String(x))
+        text.setAttribute('y', String(y + fh * 0.72))
+        text.setAttribute('font-family', font.fontFamily)
+        text.setAttribute('font-size', cs.fontSize)
+        text.setAttribute('font-weight', cs.fontWeight)
+        text.setAttribute('fill', cs.color.replace(/rgba\((\d+), (\d+), (\d+), [\d.]+\)/, 'rgb($1, $2, $3)'))
+        text.textContent = label
+        fo.replaceWith(text)
+      })
+      clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+      clone.setAttribute('viewBox', `${box.x - pad} ${box.y - pad} ${w} ${h}`)
+      clone.setAttribute('width', String(w))
+      clone.setAttribute('height', String(h))
+      const img = new Image()
+      await new Promise((ok, fail) => {
+        img.onload = ok
+        img.onerror = fail
+        img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(clone))}`
+      })
+      const scale = Math.min(4, Math.max(2, 1600 / w))
+      const canvas = document.createElement('canvas')
+      canvas.width = Math.round(w * scale)
+      canvas.height = Math.round(h * scale)
+      const ctx = canvas.getContext('2d')!
+      ctx.fillStyle = getComputedStyle(wrap.current!).backgroundColor || '#fff'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.scale(scale, scale)
+      ctx.drawImage(img, 0, 0, w, h)
+      const blob = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, 'image/png'))
+      if (!blob) throw new Error('empty')
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(blob)
+      a.download = `${map.title.replace(/\W+/g, '-')}.png`
+      a.click()
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+    } catch {
+      // Some browsers refuse to rasterise HTML labels; SVG export still works there.
+      exportSvg()
+    } finally {
+      setPngBusy(false)
+    }
   }
   const toggleAll = (expand: boolean) => {
     const m = view.current
@@ -148,8 +224,13 @@ export function MindMapPage() {
             </button>
           )}
           {on('export') && (
-            <button type="button" aria-label="Export SVG" onClick={exportSvg}>
+            <button type="button" aria-label="Export SVG" title="Download as SVG" onClick={exportSvg}>
               <Download size={16} />
+            </button>
+          )}
+          {on('export') && (
+            <button type="button" aria-label="Export PNG" title="Download the whole map as a PNG image" disabled={pngBusy} onClick={() => void exportPng()}>
+              <ImageDown size={16} />
             </button>
           )}
         </div>
