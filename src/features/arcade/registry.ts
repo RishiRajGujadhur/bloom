@@ -295,4 +295,7 @@ export const GAMES: GameDef[] = [
   g(93, 'tools', 'Tool Match', 'Grab the right tool before each job slides off the belt.', 'SVG · GSAP', 30,
     '<path d="M14 50l24-24" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M36 14a10 10 0 0 0 14 14l-6 6-8-8z" fill="currentColor"/><rect x="6" y="54" width="52" height="6" rx="3" fill="currentColor" opacity=".4"/>',
     () => import('./games/ToolMatch')),
+  g(94, 'stains', 'Stain Lab', 'Cold water, vinegar or blot? Pick the fix, save the shirt.', 'SVG · GSAP', 280,
+    '<path d="M18 8l8-4q6 6 12 0l8 4 10 12-6 6-4-4v34H18V22l-4 4-6-6z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="34" r="7" fill="currentColor" opacity=".6"/><circle cx="38" cy="40" r="4" fill="currentColor" opacity=".4"/>',
+    () => import('./games/StainLab')),
 ]
