@@ -9,6 +9,9 @@ export function ArcadePage() {
   const fromHash = () => { const id = location.hash.split('/')[1]; return GAMES.some((g) => g.id === id) ? id : null }
   const [open, setOpen] = useState<string | null>(fromHash)
   const grid = useRef<HTMLDivElement>(null)
+  const [q, setQ] = useState('')
+  const [tech, setTech] = useState('all')
+  const techs = ['all', 'Three.js', 'Babylon.js', 'PlayCanvas', 'p5.js', 'matter-js', 'SVG']
   useEffect(() => {
     const on = () => setOpen(fromHash())
     window.addEventListener('hashchange', on)
@@ -19,7 +22,7 @@ export function ArcadePage() {
     if (open || !grid.current || reducedMotion()) return
     const t = gsap.fromTo(grid.current.children, { y: 24, opacity: 0, rotateX: -25 }, { y: 0, opacity: 1, rotateX: 0, stagger: 0.04, duration: 0.5, ease: 'power3.out' })
     return () => { t.kill() }
-  }, [open])
+  }, [open, tech])
   const game = GAMES.find((g) => g.id === open)
   if (game) return (
     <section className="arcade" style={{ '--ar-hue': game.hue } as React.CSSProperties}>
@@ -31,8 +34,14 @@ export function ArcadePage() {
   return (
     <section className="arcade">
       <header className="ar-head"><h2>Arcade</h2><p>{GAMES.length} games · one tap to play</p></header>
+      <div className="ar-filters">
+        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Find a game…" aria-label="Find a game" />
+        <div role="radiogroup" aria-label="Filter by engine">
+          {techs.map((t) => <button key={t} type="button" role="radio" aria-checked={tech === t} className={tech === t ? 'on' : ''} onClick={() => setTech(t)}>{t === 'all' ? 'All' : t}</button>)}
+        </div>
+      </div>
       <div className="ar-grid" ref={grid}>
-        {GAMES.map((g) => (
+        {GAMES.filter((g) => (tech === 'all' || g.tech.includes(tech)) && (!q.trim() || `${g.title} ${g.blurb}`.toLowerCase().includes(q.trim().toLowerCase()))).map((g) => (
           <button key={g.id} type="button" className="ar-card" style={{ '--ar-hue': g.hue } as React.CSSProperties} onClick={() => go(g.id)}>
             <svg viewBox="0 0 64 64" aria-hidden="true" dangerouslySetInnerHTML={{ __html: g.art }} />
             <span className="ar-n">#{g.n}</span>
