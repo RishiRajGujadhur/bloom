@@ -1,23 +1,26 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { BookOpen, Dumbbell, Flame, Gem, Heart, Languages, Mic, PenLine, Swords, Trophy, Zap } from 'lucide-react'
-import { Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
+import { Studio, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { burst } from '../../components/ui/celebrate'
 import type { AppData } from '../../model'
 import { subOn } from '../subFeatures'
 import { leagueColors, leagues, units } from './englishCourse'
 import {
   ENGLISH_KEY, LESSONS_PER_UNIT, MAX_HEARTS, applyFreezes, badgeDefs, earn, emptyEnglish, goals, heartsNow, leagueTable,
-  loseHeart, newBadges, questsFor, reviewWord, rollLeague, streak, totalXp, unitProgress, unitUnlocked, weekXp,
+  loseHeart, newBadges, questsFor, reviewWord, rollLeague, streak, totalXp, unitProgress, weekXp,
   wordOfDay, xpToday, type EnglishStore,
 } from './englishModel'
 import { speak } from './englishNlp'
 import { makeLesson, makeMistakes, makePlacement, makeReview, type Exercise } from './lessonGen'
 import { LessonPlayer, type LessonResult } from './LessonPlayer'
 import { sfx } from './sfx'
-import { BloomFace } from '../../components/ui/BloomFace'
-import { UnitScene, unitThemes } from './UnitScene'
+import { unitThemes } from './UnitScene'
+import { LearningMap } from './LearningMap'
+import { prefersReducedMotion } from '../../utils/motion'
+
 import './english.css'
+import './learningMap.css'
 
 const EnglishPractice = lazy(() => import('./EnglishPractice').then((m) => ({ default: m.EnglishPractice })))
 const EnglishLab = lazy(() => import('./EnglishLab').then((m) => ({ default: m.EnglishLab })))
@@ -34,7 +37,9 @@ function GoalRing({ value, goal }: { value: number; goal: number }) {
   const arc = useRef<SVGCircleElement>(null)
   const pct = Math.min(1, value / goal)
   useLayoutEffect(() => {
-    if (arc.current) gsap.to(arc.current, { strokeDashoffset: 176 * (1 - pct), duration: 1, ease: 'power3.out' })
+    if (!arc.current) return
+    const animation = gsap.to(arc.current, { strokeDashoffset: 176 * (1 - pct), duration: prefersReducedMotion() ? 0 : 1, ease: 'power3.out' })
+    return () => { animation.kill() }
   }, [pct])
   return (
     <svg className="en-ring" viewBox="0 0 64 64" role="img" aria-label={`${value} of ${goal} XP today`}>
@@ -42,70 +47,6 @@ function GoalRing({ value, goal }: { value: number; goal: number }) {
       <circle ref={arc} cx="32" cy="32" r="28" className="arc" strokeDasharray="176" strokeDashoffset="176" />
       <text x="32" y="36" textAnchor="middle">{value}</text>
     </svg>
-  )
-}
-
-/** The winding learning path: units are sections, lessons are round nodes. */
-function PathMap({ store, onStart }: { store: EnglishStore; onStart: (unitIndex: number) => void }) {
-  const host = useRef<HTMLDivElement>(null)
-  useLayoutEffect(() => {
-    if (!host.current) return
-    const ctx = gsap.context(() => {
-      gsap.from('.en-node', { scale: 0, opacity: 0, duration: 0.45, stagger: 0.03, ease: 'back.out(2)' })
-      gsap.to('.en-node.is-current', { y: -6, duration: 1.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
-      gsap.fromTo('.en-trail', { strokeDashoffset: 1200 }, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.out' })
-    }, host)
-    return () => ctx.revert()
-  }, [])
-  let currentFound = false
-  return (
-    <div ref={host} className="en-path">
-      {units.map((u, ui) => {
-        const done = unitProgress(store, u.id)
-        const open = unitUnlocked(store, ui)
-        return (
-          <section key={u.id} className="en-unit" style={{ ['--u' as string]: u.color }}>
-            <header className="en-unit-head">
-              {unitThemes[u.id] && <UnitScene theme={unitThemes[u.id]} className="en-unit-fx" />}
-              <span className="en-unit-emoji">{u.emoji}</span>
-              <div className="en-unit-text">
-                <small>Unit {ui + 1} · {u.level}{unitThemes[u.id] ? ` · ${unitThemes[u.id].place}` : ''}</small>
-                <strong>{u.title}</strong>
-                {unitThemes[u.id] && <p className="en-unit-story">{unitThemes[u.id].story}</p>}
-              </div>
-              <span className="en-unit-cast">
-                {unitThemes[u.id]?.cast.map((c) => <BloomFace key={c.name} variant={c.face} size={52} follow={false} waveOnMount={false} label={c.name} />)}
-              </span>
-              <span className="en-unit-count">{done}/{LESSONS_PER_UNIT}</span>
-            </header>
-            <div className="en-nodes">
-              <svg className="en-trail-svg" viewBox="0 0 200 330" preserveAspectRatio="none" aria-hidden="true">
-                <path className="en-trail" d="M100 20 C 160 60, 160 90, 100 120 C 40 150, 40 180, 100 210 C 160 240, 160 270, 100 310" strokeDasharray="1200" />
-              </svg>
-              {Array.from({ length: LESSONS_PER_UNIT }, (_, li) => {
-                const state = li < done ? 'done' : open && li === done && !currentFound ? 'current' : 'locked'
-                if (state === 'current') currentFound = true
-                return (
-                  <button
-                    key={li}
-                    type="button"
-                    className={`en-node is-${state}`}
-                    style={{ ['--x' as string]: `${[0, 34, 0, -34][li % 4]}px` }}
-                    disabled={state === 'locked'}
-                    aria-label={`${u.title} lesson ${li + 1}${state === 'done' ? ' (done — practise again)' : state === 'locked' ? ' (locked)' : ''}`}
-                    onClick={() => onStart(ui)}
-                  >
-                    {state === 'done' ? '★' : state === 'current' ? '▶' : '🔒'}
-                    {state === 'current' && <span className="en-start">Start</span>}
-                  </button>
-                )
-              })}
-              {done >= LESSONS_PER_UNIT && <span className="en-chest" aria-label="Unit complete">🏆</span>}
-            </div>
-          </section>
-        )
-      })}
-    </div>
   )
 }
 
@@ -227,7 +168,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
             <button type="button" className="en-check" onClick={() => start({ title: 'Placement test', kind: 'placement', exercises: makePlacement() })}>Find my level</button>
           </section>
         )}
-        <PathMap store={store} onStart={startUnit} />
+        <LearningMap store={store} onStart={startUnit} onPractice={on('review') ? () => setTab('practice') : undefined} onSpeak={on('pronunciation') ? () => setTab('speak') : undefined} />
       </div>
       <aside className="en-side">
         <section className="studio-card en-goal">
@@ -349,10 +290,9 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
   return (
     <Studio
       name="english"
-      accent="#58cc02"
+      accent="var(--accent-color)"
       tab={tab}
       onTab={setTab}
-      scene={<StudioScene colors={['#58cc02', '#1cb0f6', '#ffc800']} line="pulse" />}
       aside={header}
       tabs={[
         { id: 'learn', label: 'Learn', icon: <Languages size={15} />, render: learnTab },
