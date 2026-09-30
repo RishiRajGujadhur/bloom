@@ -32,3 +32,6 @@
 .cp-card.flip .front { transform: rotateY(180deg); }
 .cp-card.flip .back { transform: rotateY(360deg); }
 html[data-theme='matrix'] .cp-cta { background: #39ff6a; color: #021006; box-shadow: 0 4px 0 #1f7a3a; }
+.cp-emergency { margin: 8px 0 12px; padding: 10px 14px; border-radius: 14px; border: 2px solid #e0303f; background: color-mix(in oklab, #e0303f 8%, var(--bg-surface)); }
+.cp-emergency summary { cursor: pointer; font-weight: 800; color: #c0202f; }
+.cp-emergency ol { margin: 8px 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14px; }

@@ -151,6 +151,17 @@ export function CprPage() {
       <aside className="cp-side">
         <p className="cp-eyebrow">CPR & first-aid coach · training aid, not medical advice</p>
         <h2>Hands that can save a life</h2>
+        <details className="cp-emergency">
+          <summary>🚨 Someone collapsed? Quick card</summary>
+          <ol>
+            <li><strong>Safe?</strong> Check the area is safe for you.</li>
+            <li><strong>Responsive?</strong> Shout and tap their shoulders.</li>
+            <li><strong>Call</strong> 112 / 911 / 999 on speaker; send someone for an AED.</li>
+            <li><strong>Not breathing normally?</strong> Start compressions: centre of chest, 5–6 cm deep, 100–120 a minute.</li>
+            <li><strong>Don’t stop</strong> until help or an AED takes over — follow the AED’s voice.</li>
+          </ol>
+          <button type="button" className="cp-cta" onClick={() => void start()} disabled={running}>▶ Start the 110 bpm beat</button>
+        </details>
         <div className="cp-row">
           <button type="button" className={`cp-chip ${store.mode === 'hands' ? 'on' : ''}`} onClick={() => save((s) => ({ ...s, mode: 'hands' }))}>Hands-only</button>
           <button type="button" className={`cp-chip ${store.mode === 'breaths' ? 'on' : ''}`} onClick={() => save((s) => ({ ...s, mode: 'breaths' }))}>30 : 2 (trained)</button>
