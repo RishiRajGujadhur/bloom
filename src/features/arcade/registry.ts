@@ -145,4 +145,7 @@ export const GAMES: GameDef[] = [
   g(43, 'bridge', 'Bridge Builder', 'Plank by plank, get the cart across. Triangles hold.', 'matter-js · SVG', 90,
     '<rect x="2" y="34" width="12" height="26" fill="currentColor" opacity=".6"/><rect x="50" y="34" width="12" height="26" fill="currentColor" opacity=".6"/><path d="M14 34h36M14 34l9-14 9 14 9-14 9 14M23 20h18" stroke="currentColor" stroke-width="3" fill="none" stroke-linejoin="round"/>',
     () => import('./games/BridgeBuilder')),
+  g(44, 'leaks', 'Leak Hunter', 'Shut the right valve, patch the pipe, turn the water back on.', 'SVG · GSAP', 205,
+    '<path d="M4 44h24V20h32" stroke="currentColor" stroke-width="8" fill="none" stroke-linejoin="round"/><circle cx="28" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 32h12" stroke="currentColor" stroke-width="3"/><path d="M48 26q2 6 0 10" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="48" cy="44" r="3" fill="currentColor"/><circle cx="48" cy="54" r="2" fill="currentColor"/>',
+    () => import('./games/LeakHunter')),
 ]
