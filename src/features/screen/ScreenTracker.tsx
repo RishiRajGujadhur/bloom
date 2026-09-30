@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import { readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
-import { SCREEN_EVENT, SCREEN_KEY, addActive, defaultScreen, inWindDown, type ScreenStore } from './screenModel'
+import { SCREEN_EVENT, SCREEN_KEY, addActive, dayOf, defaultScreen, inWindDown, minutesOn, type ScreenStore } from './screenModel'
 import './screen.css'
 
 /**
@@ -13,6 +13,8 @@ import './screen.css'
 export function ScreenTracker() {
   const [settings, setSettings] = useState(() => readStore<ScreenStore>(SCREEN_KEY, defaultScreen).settings)
   const [breakDue, setBreakDue] = useState(false)
+  // Daily limit: one gentle alert the first time today's time passes the limit.
+  const [limitHit, setLimitHit] = useState<number | null>(null)
   const [gate, setGate] = useState(() => settings.pauseGate && subOn('digitalWellbeing', 'pauseGate'))
   const streakStart = useRef(Date.now())
   const { isIdle } = useIdleTimer({ timeout: 60_000, throttle: 1000, onActive: () => (streakStart.current = Date.now()) })
@@ -31,7 +33,18 @@ export function ScreenTracker() {
         return
       }
       const s = readStore<ScreenStore>(SCREEN_KEY, defaultScreen)
-      writeStore(SCREEN_KEY, { ...s, usage: addActive(s.usage, Date.now(), 15) })
+      const usage = addActive(s.usage, Date.now(), 15)
+      writeStore(SCREEN_KEY, { ...s, usage })
+      const today = dayOf(Date.now())
+      const used = minutesOn(usage, today)
+      if (subOn('digitalWellbeing', 'limit') && used >= s.settings.dailyLimit && localStorage.getItem('bloom-screen-limit-alert') !== today) {
+        try {
+          localStorage.setItem('bloom-screen-limit-alert', today)
+        } catch {
+          /* may repeat next visit */
+        }
+        setLimitHit(used)
+      }
       if (subOn('digitalWellbeing', 'breaks') && Date.now() - streakStart.current >= s.settings.breakEvery * 60_000) setBreakDue(true)
     }, 15_000)
     return () => clearInterval(t)
@@ -62,6 +75,17 @@ export function ScreenTracker() {
             }}
           >
             I’m back
+          </button>
+        </div>
+      )}
+      {limitHit !== null && (
+        <div className="sw-limit" role="status">
+          <span aria-hidden="true">⏳</span>
+          <span>
+            You’ve reached today’s {settings.dailyLimit >= 60 ? `${Math.round((settings.dailyLimit / 60) * 10) / 10}h` : `${settings.dailyLimit} min`} limit in Bloom. Maybe wrap up what you’re doing?
+          </span>
+          <button type="button" onClick={() => setLimitHit(null)}>
+            OK
           </button>
         </div>
       )}

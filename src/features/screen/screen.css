@@ -101,3 +101,5 @@ html.bloom-focus-only .sidebar nav [data-section]:not([data-section='0']):not(.a
     animation: none;
   }
 }
+.sw-limit { position: fixed; z-index: 70; top: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center; max-width: calc(100vw - 32px); padding: 10px 16px; border-radius: 16px; background: #3b2a1a; color: #fff3e0; box-shadow: 0 12px 30px rgb(0 0 0 / 0.3); font-size: 14px; }
+.sw-limit button { border: 0; border-radius: 999px; padding: 4px 12px; background: #ffe0b2; color: #3b2a1a; font-weight: 700; cursor: pointer; }
