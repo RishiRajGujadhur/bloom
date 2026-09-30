@@ -121,4 +121,7 @@ export const GAMES: GameDef[] = [
   g(35, 'planes', 'Thank-You Planes', 'Throw paper-plane notes to the neighbours who helped.', 'Three.js 3D', 195,
     '<path d="M6 30L58 8 40 56 30 38z" fill="currentColor" opacity=".85"/><path d="M30 38L58 8" stroke="#fff" stroke-width="2"/><path d="M6 44q10 4 18-2" stroke="currentColor" stroke-dasharray="2 3" stroke-width="2" fill="none"/>',
     () => import('./games/PaperPlanes')),
+  g(36, 'stretch', 'Stretch Snap', 'Drag the figure into each glowing stretch and hold.', 'SVG · 2-bone IK', 20,
+    '<circle cx="32" cy="10" r="6" fill="currentColor"/><path d="M32 18v20M32 22L12 8M32 22l20-14M32 38l-12 20M32 38l12 20" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>',
+    () => import('./games/StretchSnap')),
 ]
