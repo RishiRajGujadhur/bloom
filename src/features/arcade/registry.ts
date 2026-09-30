@@ -118,4 +118,7 @@ export const GAMES: GameDef[] = [
   g(34, 'buttons', 'Button Sewer', 'Up, down, across, wrap and knot. Sew them all back on.', 'SVG · GSAP', 175,
     '<circle cx="30" cy="34" r="22" fill="currentColor" opacity=".8"/><circle cx="23" cy="27" r="3.5" fill="#fff"/><circle cx="37" cy="27" r="3.5" fill="#fff"/><circle cx="23" cy="41" r="3.5" fill="#fff"/><circle cx="37" cy="41" r="3.5" fill="#fff"/><path d="M23 27l14 14M37 27L23 41" stroke="#fff" stroke-width="2"/><path d="M46 6l12 12" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/ButtonSewer')),
+  g(35, 'planes', 'Thank-You Planes', 'Throw paper-plane notes to the neighbours who helped.', 'Three.js 3D', 195,
+    '<path d="M6 30L58 8 40 56 30 38z" fill="currentColor" opacity=".85"/><path d="M30 38L58 8" stroke="#fff" stroke-width="2"/><path d="M6 44q10 4 18-2" stroke="currentColor" stroke-dasharray="2 3" stroke-width="2" fill="none"/>',
+    () => import('./games/PaperPlanes')),
 ]
