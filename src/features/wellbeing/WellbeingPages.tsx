@@ -528,7 +528,22 @@ export function MoodPage() {
         </AnimatePresence>
       </div>
       <div className="wb-card">
-        <h2>Your week</h2>
+        <h2>
+          Your week
+          {entries.length > 0 && (
+            <button
+              type="button"
+              className="quiet-button wb-export"
+              onClick={() => {
+                const q = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v)
+                const rows = [...entries].sort((a, b) => a.at - b.at).map((e) => [new Date(e.at).toISOString(), e.mood, moods[e.mood - 1]?.label ?? '', q((e.emotions ?? []).join('; ')), e.energy ?? '', q(e.note)].join(','))
+                download(new Blob([['time,mood,label,feelings,energy,note', ...rows].join('\n') + '\n'], { type: 'text/csv' }), 'bloom-mood.csv')
+              }}
+            >
+              ⬇ CSV
+            </button>
+          )}
+        </h2>
         <ol className="wb-week">
           {week.map((day) => {
             const mood = day.mood === null ? null : moods[Math.round(day.mood) - 1]
