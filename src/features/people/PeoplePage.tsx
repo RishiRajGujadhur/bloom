@@ -230,7 +230,7 @@ export function PeoplePage() {
         {birthdays.length > 0 && (
           <div className="pg-card">
             <h3>Birthdays</h3>
-            {birthdays.map(({ p, d }) => <p key={p.id} className="pg-bday">{p.emoji} {p.name} <small>{format(d!, 'd MMM')} · {differenceInCalendarDays(d!, new Date())} days</small></p>)}
+            {birthdays.map(({ p, d }) => <p key={p.id} className="pg-bday">{p.emoji} {p.name} <small>{format(d!, 'd MMM')} · {((n) => (n <= 0 ? 'today 🎂' : n === 1 ? 'tomorrow' : `in ${n} days`))(differenceInCalendarDays(d!, new Date()))}</small></p>)}
             <button type="button" className="pg-ghost" onClick={() => void exportBirthdays()}>📅 Add to my calendar (.ics)</button>
           </div>
         )}
