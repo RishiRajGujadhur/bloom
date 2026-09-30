@@ -223,4 +223,7 @@ export const GAMES: GameDef[] = [
   g(69, 'spotlight', 'Interview Spotlight', 'Stay in the light while nerves make it wander. Breathe.', 'SVG', 265,
     '<path d="M26 4h12l10 22H16z" fill="currentColor" opacity=".35"/><ellipse cx="32" cy="46" rx="22" ry="10" fill="currentColor" opacity=".5"/><circle cx="32" cy="40" r="6" fill="currentColor"/><rect x="26" y="0" width="12" height="8" rx="2" fill="currentColor"/>',
     () => import('./games/InterviewSpotlight')),
+  g(70, 'meeting', 'Meeting Meteor', 'Land the agenda, nudge the tangents past the planet.', 'Three.js 3D', 225,
+    '<circle cx="32" cy="34" r="12" fill="currentColor"/><ellipse cx="32" cy="34" rx="22" ry="6" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-20 32 34)"/><circle cx="8" cy="10" r="4" fill="currentColor" opacity=".5"/><path d="M12 13l8 8" stroke="currentColor" stroke-width="2" opacity=".5"/><circle cx="56" cy="56" r="4" fill="currentColor" opacity=".8"/>',
+    () => import('./games/MeetingMeteor')),
 ]
