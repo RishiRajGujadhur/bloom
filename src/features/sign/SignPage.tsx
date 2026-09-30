@@ -20,12 +20,17 @@ const bones = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [
 const fingerX = [0, 78, 104, 130, 156]
 
 /** A stylised SVG hand whose fingers extend or curl for a letter. */
-function Hand({ letter }: { letter: string }) {
+function Hand({ letter, slow = false, replay = 0 }: { letter: string; slow?: boolean; replay?: number }) {
   const svg = useRef<SVGSVGElement>(null)
   const pose = letters[letter]
   useLayoutEffect(() => {
     if (!svg.current) return
-    const dur = reduced() ? 0 : 0.55
+    const dur = reduced() ? 0 : slow ? 1.6 : 0.55
+    // Replay starts from a relaxed fist so the whole movement is visible again.
+    if (replay && !reduced()) {
+      gsap.set(svg.current.querySelector('.hd-thumb'), { rotation: 58, svgOrigin: '72 240' })
+      ;[1, 2, 3, 4].forEach((i) => gsap.set(svg.current!.querySelector(`.hd-f${i}`), { attr: { height: 34, y: 156 }, rotation: 0, svgOrigin: `${fingerX[i] + 11} 190` }))
+    }
     pose.fingers.forEach((up, i) => {
       if (i === 0) {
         // Extended: thumb swings out; folded: it tucks across the palm.
@@ -34,10 +39,10 @@ function Hand({ letter }: { letter: string }) {
       }
       const el = svg.current!.querySelector(`.hd-f${i}`)
       const spreadRot = pose.spread && (i === 1 || i === 2) ? (i === 1 ? -9 : 9) : letter === 'W' && i !== 2 ? (i === 1 ? -8 : 8) : 0
-      gsap.to(el, { attr: { height: up ? (i === 2 ? 110 : i === 4 ? 78 : 98) : 34, y: up ? 190 - (i === 2 ? 110 : i === 4 ? 78 : 98) : 156 }, rotation: spreadRot, svgOrigin: `${fingerX[i] + 11} 190`, duration: dur, ease: 'back.out(1.6)', delay: i * 0.03 })
+      gsap.to(el, { attr: { height: up ? (i === 2 ? 110 : i === 4 ? 78 : 98) : 34, y: up ? 190 - (i === 2 ? 110 : i === 4 ? 78 : 98) : 156 }, rotation: spreadRot, svgOrigin: `${fingerX[i] + 11} 190`, duration: dur, ease: 'back.out(1.6)', delay: i * (slow ? 0.25 : 0.03) })
     })
     gsap.fromTo(svg.current.querySelector('.hd-letter'), { scale: 0.4, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, opacity: 1, duration: dur, ease: 'back.out(2)' })
-  }, [letter, pose])
+  }, [letter, pose, slow, replay])
   return (
     <svg ref={svg} className="sg-hand" viewBox="0 0 240 300" role="img" aria-label={`Hand shape for ${letter}: ${pose.tip}`} data-matrix-native>
       <defs>
@@ -54,6 +59,8 @@ function Hand({ letter }: { letter: string }) {
 export function SignPage() {
   const [mode, setMode] = useState<'learn' | 'quiz' | 'camera'>('learn')
   const [letter, setLetter] = useState('A')
+  const [slow, setSlow] = useState(false)
+  const [replay, setReplay] = useState(0)
   const [quizQ, setQuizQ] = useState<{ answer: string; options: string[] } | null>(null)
   const [picked, setPicked] = useState<string | null>(null)
   const [streak, setStreak] = useState(0)
@@ -196,7 +203,17 @@ export function SignPage() {
               </svg>
             </div>
           ) : (
-            <Hand letter={letter} />
+            <div className="sg-hand-wrap">
+              <Hand letter={letter} slow={slow} replay={replay} />
+              <div className="sg-hand-controls">
+                <button type="button" className={`sg-letter ${slow ? 'on' : ''}`} aria-pressed={slow} onClick={() => setSlow((v) => !v)} title="Show the hand shape slowly, one finger at a time">
+                  🐢 Slow
+                </button>
+                <button type="button" className="sg-letter" onClick={() => setReplay((n) => n + 1)} title="Replay the hand shape">
+                  ↻ Replay
+                </button>
+              </div>
+            </div>
           )}
         </section>
         <aside className="sg-side">

@@ -34,3 +34,6 @@
 .sg-spell span.bad { border-color: #ff4b4b; color: #ff4b4b; }
 .sg-spell span.cur { border-color: var(--accent-color); color: var(--text-primary); animation: sg-pulse 1s ease-in-out infinite; }
 @keyframes sg-pulse { 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-color) 25%, transparent); } }
+.sg-hand-wrap { display: grid; justify-items: center; gap: 8px; }
+.sg-hand-controls { display: flex; gap: 6px; }
+.sg-hand-controls .sg-letter { width: auto; padding: 4px 12px; }
