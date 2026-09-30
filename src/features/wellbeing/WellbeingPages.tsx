@@ -647,6 +647,7 @@ export function GratitudePage() {
     const others = entries.filter((e) => e.id !== recall?.id)
     setRecall(pickFrom(others.length ? others : entries))
   }
+  const [gratQuery, setGratQuery] = useState('')
   // Three good things: fill three lines and add them together.
   const [three, setThree] = useState<string[] | null>(null)
   const addThree = () => {
@@ -854,6 +855,24 @@ export function GratitudePage() {
           </AnimatePresence>
         </div>
       </div>
+      {entries.length > 5 && (
+        <div className="wb-card wb-grat-search">
+          <input type="search" aria-label="Search your gratitude" placeholder={`Search ${entries.length} notes…`} value={gratQuery} onChange={(e) => setGratQuery(e.target.value)} />
+          {gratQuery.trim() && (
+            <ul>
+              {entries
+                .filter((e) => e.text.toLowerCase().includes(gratQuery.trim().toLowerCase()))
+                .slice(0, 30)
+                .map((e) => (
+                  <li key={e.id}>
+                    <span aria-hidden="true">{jars.find((j) => j.id === (e.jarId ?? 'moments'))?.emoji}</span> {e.text}
+                    <small>{new Date(e.at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</small>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </div>
+      )}
       {subOn('gratitude', 'compare') && (
       <div className="wb-card">
         <h3 className="wb-jar-title">
