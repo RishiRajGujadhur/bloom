@@ -185,6 +185,16 @@ export function TypingPage() {
         <div className="ty-done" role="status">
           <strong>{done.wpm} WPM · {done.accuracy}% accurate</strong>
           <span>{done.accuracy >= 95 ? 'Clean and steady — great form.' : 'Slow down a touch; accuracy first, speed follows.'}{closeness !== null ? ` Keystroke efficiency ${closeness}%.` : ''}</span>
+          {wrongAt.size > 0 && (
+            <span>
+              Trickiest keys:{' '}
+              {Object.entries([...wrongAt].reduce<Record<string, number>>((acc, i) => ({ ...acc, [text[i]]: (acc[text[i]] ?? 0) + 1 }), {}))
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 4)
+                .map(([k, n]) => `${k === ' ' ? 'space' : k} (${n})`)
+                .join(', ')}
+            </span>
+          )}
           <button type="button" className="ty-cta" onClick={() => (usingOwn ? startOwn() : void newDrill())}>Again</button>
           {li + 1 < lessons.length && <button type="button" className="ty-cta ghost" onClick={() => setLi(li + 1)}>Next lesson →</button>}
         </div>
