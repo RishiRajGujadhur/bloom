@@ -85,4 +85,7 @@ export const GAMES: GameDef[] = [
   g(23, 'hose', 'Hydration Hose', 'Keep every pot happy and every jogger refreshed.', 'canvas particles', 205,
     '<path d="M6 56q10-2 14-14" stroke="currentColor" stroke-width="5" fill="none"/><rect x="18" y="36" width="12" height="7" rx="2" fill="currentColor" transform="rotate(-40 24 40)"/><path d="M30 30q10-14 20-8" stroke="currentColor" stroke-dasharray="2 4" stroke-width="3" fill="none"/><path d="M44 44h14l-2 12H46z" fill="currentColor" opacity=".7"/><path d="M51 44v-8" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/HydrationHose')),
+  g(24, 'bike', 'Bike Fix', 'Dunk the tyre, follow the bubbles, patch and pump.', 'Three.js 3D', 185,
+    '<circle cx="32" cy="28" r="20" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="32" cy="28" r="3" fill="currentColor"/><path d="M32 28L32 10M32 28L48 36M32 28L16 36" stroke="currentColor" stroke-width="1.5"/><rect x="4" y="42" width="56" height="18" rx="3" fill="currentColor" opacity=".35"/><circle cx="40" cy="50" r="2" fill="currentColor"/><circle cx="43" cy="44" r="1.5" fill="currentColor"/>',
+    () => import('./games/BikeFix')),
 ]
