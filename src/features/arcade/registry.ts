@@ -301,4 +301,7 @@ export const GAMES: GameDef[] = [
   g(95, 'drawer', 'Drawer Organiser', 'A shaped slot for every thing, and every thing in its slot.', 'SVG · GSAP', 30,
     '<rect x="4" y="12" width="56" height="40" rx="4" fill="currentColor" opacity=".35"/><rect x="10" y="18" width="10" height="28" rx="4" fill="currentColor"/><rect x="24" y="18" width="30" height="8" rx="4" fill="currentColor" opacity=".8"/><rect x="24" y="30" width="14" height="16" rx="4" fill="currentColor" opacity=".6"/><rect x="42" y="30" width="12" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>',
     () => import('./games/DrawerOrganiser')),
+  g(96, 'pitch', 'Pitch Balloon', 'Clear words lift the balloon; “um” and “like” sink it.', 'SVG · GSAP', 345,
+    '<ellipse cx="32" cy="24" rx="16" ry="20" fill="currentColor"/><path d="M32 44q6 8-2 16" stroke="currentColor" stroke-width="2" fill="none"/><rect x="4" y="50" width="16" height="8" rx="4" fill="currentColor" opacity=".4"/><rect x="44" y="8" width="16" height="8" rx="4" fill="currentColor" opacity=".7"/>',
+    () => import('./games/PitchBalloon')),
 ]
