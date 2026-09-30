@@ -605,6 +605,17 @@ export function GratitudePage() {
       setMemory(inJar[Math.floor(Math.random() * inJar.length)])
     }, 650)
   }
+  // A random past gratitude, favouring ones more than a week old.
+  const pickFrom = (list: GratitudeEntry[]) => {
+    const old = list.filter((e) => Date.now() - e.at > 7 * 864e5)
+    const pool = old.length ? old : list
+    return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null
+  }
+  const [recall, setRecall] = useState<GratitudeEntry | null>(() => pickFrom(entries))
+  const pickRecall = () => {
+    const others = entries.filter((e) => e.id !== recall?.id)
+    setRecall(pickFrom(others.length ? others : entries))
+  }
   // Three good things: fill three lines and add them together.
   const [three, setThree] = useState<string[] | null>(null)
   const addThree = () => {
@@ -643,6 +654,22 @@ export function GratitudePage() {
     <section className="wb-page" aria-labelledby="gratitude-title">
       <GratitudeQuick setEntries={setEntries} jarIds={jars.map((j) => j.id)} />
       <LetterWall entries={entries} jars={jars} />
+      {entries.length >= 3 && recall && (
+        <div className="wb-card wb-recall">
+          <span aria-hidden="true">{jars.find((j) => j.id === (recall.jarId ?? 'moments'))?.emoji ?? '✨'}</span>
+          <div>
+            <small>
+              {(() => {
+                const days = Math.floor((Date.now() - recall.at) / 864e5)
+                return days < 1 ? 'Earlier today' : days < 14 ? `${days} day${days === 1 ? '' : 's'} ago` : `${Math.round(days / 7)} weeks ago`
+              })()}
+              , you were grateful for
+            </small>
+            <p>“{recall.text}”</p>
+          </div>
+          <button type="button" className="quiet-button" onClick={pickRecall} aria-label="Show another">↻</button>
+        </div>
+      )}
       <h2 id="gratitude-title" className="sr-only">
         Gratitude jars
       </h2>
