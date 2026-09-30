@@ -187,4 +187,7 @@ export const GAMES: GameDef[] = [
   g(57, 'origami', 'Apology Origami', 'Fold a little note, crease by careful crease.', 'SVG polygon folding', 300,
     '<path d="M8 40L32 8l24 32z" fill="currentColor" opacity=".35"/><path d="M8 40l24 16 24-16-24 8z" fill="currentColor"/><path d="M32 8v40" stroke="#fff" stroke-width="2" stroke-dasharray="3 3"/>',
     () => import('./games/ApologyOrigami')),
+  g(58, 'garage', 'Car Care Garage', 'Walk round the car: tyres, oil, lights, wipers.', 'Babylon.js 3D', 355,
+    '<path d="M6 40l6-14h32l10 14z" fill="currentColor" opacity=".8"/><rect x="4" y="38" width="56" height="10" rx="4" fill="currentColor"/><circle cx="18" cy="50" r="6" fill="#fff" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="50" r="6" fill="#fff" stroke="currentColor" stroke-width="3"/><path d="M50 10l6 6-12 12-6-6z" fill="currentColor" opacity=".6"/>',
+    () => import('./games/CarCare')),
 ]
