@@ -199,4 +199,7 @@ export const GAMES: GameDef[] = [
   g(61, 'gifts', 'Gift Radar', 'Listen all week, then find the gift that shows it.', 'SVG · GSAP', 20,
     '<rect x="10" y="26" width="44" height="30" rx="3" fill="currentColor" opacity=".8"/><rect x="6" y="18" width="52" height="10" rx="3" fill="currentColor"/><path d="M32 18v38" stroke="#fff" stroke-width="4"/><path d="M32 18c-8-10-18-6-12 0M32 18c8-10 18-6 12 0" stroke="currentColor" stroke-width="3" fill="none"/>',
     () => import('./games/GiftRadar')),
+  g(62, 'sunsnake', 'Sunscreen Snake', 'Shells, shade and sunscreen from sunrise to sunset.', 'p5.js', 38,
+    '<circle cx="50" cy="12" r="7" fill="currentColor" opacity=".7"/><path d="M8 50h12v-10h12v10h12V30" stroke="currentColor" stroke-width="8" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="44" cy="28" r="2" fill="#fff"/>',
+    () => import('./games/SunscreenSnake')),
 ]

@@ -188,3 +188,4 @@ Every game has:
 - Game 59: Jet Lag Globe — a Three.js globe with a day/night shader and twinkling city lights. Plan an in-flight nap on a dial coloured by the destination's night, then fly a great-circle arc as the terminator sweeps across; land fresh across five trips.
 - Game 60: Compost Castle — a p5.js falling-sand bin. Pour greens, browns and water, and turn the pile with a fork; heat rises with the right mix, moisture and air (steam wisps), converting cells to dark finished compost, while too many greens gets whiffy.
 - Game 61: Gift Radar — a friend's offhand remarks float up in GSAP bubbles during the week. Jot the real hints in a handwritten notebook, then choose up to two gifts in the shop; thoughtful beats pricey. Three friends.
+- Game 62: Sunscreen Snake — a p5.js beach snake collecting shells from sunrise to sunset. A sun arc drives UV, sunscreen wears off, umbrellas give shade, bottles top you up, and the snake reddens as it burns.
