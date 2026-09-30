@@ -46,4 +46,7 @@ export const GAMES: GameDef[] = [
   g(10, 'crossing', 'Traffic Light Crossing', 'Hop across four busy lanes to run the day’s errands.', 'PlayCanvas 3D', 10,
     '<rect x="4" y="22" width="56" height="26" fill="currentColor" opacity=".25"/><path d="M28 22v26M36 22v26" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3"/><rect x="50" y="4" width="8" height="18" rx="2" fill="currentColor"/><circle cx="54" cy="9" r="2.5" fill="#fff"/><rect x="8" y="28" width="14" height="7" rx="2" fill="currentColor"/>',
     () => import('./games/TrafficCrossing')),
+  g(11, 'sleep', 'Sleep Tide', 'Hush the glowing room and let the moon-tide of sleep rise.', 'SVG · GSAP', 240,
+    '<rect x="8" y="8" width="30" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="18" r="5" fill="currentColor"/><path d="M8 30q8-4 15 0t15 0" stroke="currentColor" stroke-width="3" fill="none"/><rect x="10" y="44" width="46" height="10" rx="4" fill="currentColor" opacity=".7"/><text x="44" y="30" font-size="12" fill="currentColor">z</text>',
+    () => import('./games/SleepTide')),
 ]
