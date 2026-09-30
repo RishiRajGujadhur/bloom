@@ -27,6 +27,7 @@ export function ReaderPage() {
   const save = (f: (s: Store) => Store) => setStore((s) => { const n = f(s); writeStore(KEY, n); return n })
   const [textId, setTextId] = useState(texts[0].id)
   const [custom, setCustom] = useState('')
+  const [clipErr, setClipErr] = useState('')
   const [i, setI] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [phase, setPhase] = useState<'ready' | 'reading' | 'quiz' | 'done'>('ready')
@@ -109,7 +110,28 @@ export function ReaderPage() {
             {phase === 'done' && <p className="rd-result">{score}/{qs.length} correct · effective speed <strong>{Math.round(store.wpm * (score / qs.length))} wpm</strong></p>}
           </div>
         ) : textId === 'custom' && phase === 'ready' ? (
-          <textarea className="studio-input rd-paste" rows={6} value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Paste an article, email or chapter here…" aria-label="Your text" />
+          <div className="rd-paste-wrap">
+            <textarea className="studio-input rd-paste" rows={6} value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Paste an article, email or chapter here…" aria-label="Your text" />
+            {'clipboard' in navigator && 'readText' in navigator.clipboard && (
+              <button
+                type="button"
+                className="rd-chip"
+                onClick={() => {
+                  navigator.clipboard.readText().then(
+                    (t) => {
+                      setClipErr('')
+                      if (t.trim()) setCustom(t)
+                      else setClipErr('Your clipboard is empty.')
+                    },
+                    () => setClipErr('Clipboard access was blocked — paste with Ctrl+V instead.'),
+                  )
+                }}
+              >
+                📋 Paste from clipboard
+              </button>
+            )}
+            {clipErr && <small className="rd-clip-err">{clipErr}</small>}
+          </div>
         ) : (
           <div className="rd-window" aria-live="off">
             <span className="rd-guide top" /><span className="rd-guide bottom" />
