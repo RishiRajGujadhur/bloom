@@ -196,4 +196,7 @@ export const GAMES: GameDef[] = [
   g(60, 'compost', 'Compost Castle', 'Greens, browns, a splash and a stir. Cook up rich soil.', 'p5.js falling sand', 85,
     '<path d="M12 22h40l-4 36H16z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="16" y="40" width="32" height="16" fill="currentColor"/><rect x="16" y="32" width="32" height="8" fill="currentColor" opacity=".6"/><path d="M24 16q2-8 0-12M34 16q2-8 0-12" stroke="currentColor" stroke-width="2" fill="none" opacity=".6"/>',
     () => import('./games/CompostCastle')),
+  g(61, 'gifts', 'Gift Radar', 'Listen all week, then find the gift that shows it.', 'SVG · GSAP', 20,
+    '<rect x="10" y="26" width="44" height="30" rx="3" fill="currentColor" opacity=".8"/><rect x="6" y="18" width="52" height="10" rx="3" fill="currentColor"/><path d="M32 18v38" stroke="#fff" stroke-width="4"/><path d="M32 18c-8-10-18-6-12 0M32 18c8-10 18-6 12 0" stroke="currentColor" stroke-width="3" fill="none"/>',
+    () => import('./games/GiftRadar')),
 ]
