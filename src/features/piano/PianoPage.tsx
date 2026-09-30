@@ -116,6 +116,48 @@ export function PianoPage() {
     }
   }, [flash, mode, questNote, song, step, newQuest])
 
+  // MIDI keyboards (Web MIDI): note-on messages play through the same path as clicks.
+  const [midi, setMidi] = useState<{ status: 'off' | 'on' | 'none' | 'error'; name?: string }>({ status: 'off' })
+  const pressRef = useRef(press)
+  useEffect(() => {
+    pressRef.current = press
+  }, [press])
+  const midiAccess = useRef<MIDIAccess | null>(null)
+  const connectMidi = async () => {
+    if (!navigator.requestMIDIAccess) return setMidi({ status: 'error' })
+    try {
+      const access = await navigator.requestMIDIAccess()
+      midiAccess.current = access
+      const hook = () => {
+        const inputs = [...access.inputs.values()]
+        for (const input of inputs)
+          input.onmidimessage = (e) => {
+            const [cmd, noteNo, vel] = e.data ?? []
+            if ((cmd & 0xf0) !== 0x90 || !vel) return
+            // Fold into the on-screen two octaves so the key lights up.
+            let m = noteNo
+            while (m < 48) m += 12
+            while (m > 71) m -= 12
+            pressRef.current(Note.fromMidi(m))
+          }
+        setMidi(inputs.length ? { status: 'on', name: inputs.map((i) => i.name).join(', ') } : { status: 'none' })
+      }
+      hook()
+      access.onstatechange = hook
+    } catch {
+      setMidi({ status: 'error' })
+    }
+  }
+  useEffect(
+    () => () => {
+      const a = midiAccess.current
+      if (!a) return
+      a.onstatechange = null
+      for (const input of a.inputs.values()) input.onmidimessage = null
+    },
+    [],
+  )
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.metaKey || (e.target as HTMLElement)?.closest?.('input, textarea, select')) return
@@ -160,6 +202,17 @@ export function PianoPage() {
       </header>
       <section className="pn-stage">
         {mode === 'play' && <p className="pn-big">Play with your mouse, touch or keyboard — <kbd>Z</kbd>–<kbd>M</kbd> for the low octave, <kbd>Q</kbd>–<kbd>U</kbd> for the high one.</p>}
+        {'requestMIDIAccess' in navigator && (
+          <p className="pn-midi">
+            {midi.status === 'on' ? (
+              <>🎹 MIDI: {midi.name}</>
+            ) : (
+              <button type="button" className="pn-mode" onClick={() => void connectMidi()}>
+                🎹 {midi.status === 'none' ? 'No MIDI keyboard found — plug one in' : midi.status === 'error' ? 'MIDI blocked — try again' : 'Connect a MIDI keyboard'}
+              </button>
+            )}
+          </p>
+        )}
         {mode === 'quest' && <p className="pn-big">{msg} <small>· {store.quest} found</small></p>}
         {mode === 'ear' && ear && (
           <div className="pn-ear">
