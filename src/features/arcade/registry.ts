@@ -271,4 +271,7 @@ export const GAMES: GameDef[] = [
   g(85, 'parrot', 'Phrasebook Parrot', 'Feed your travelling parrot the right words for every hello.', 'SVG · GSAP', 140,
     '<ellipse cx="26" cy="38" rx="14" ry="18" fill="currentColor"/><circle cx="24" cy="18" r="10" fill="currentColor" opacity=".7"/><path d="M16 20l-8 4 8 3z" fill="currentColor"/><path d="M38 12h20v14H44l-6 6v-6z" fill="none" stroke="currentColor" stroke-width="2.5"/>',
     () => import('./games/PhrasebookParrot')),
+  g(86, 'meds', 'Medicine Cabinet', 'Out of date, up high or on the shelf? Read the label.', 'SVG · GSAP', 170,
+    '<rect x="8" y="8" width="48" height="48" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 30h48" stroke="currentColor" stroke-width="3"/><rect x="14" y="14" width="10" height="12" rx="2" fill="currentColor"/><rect x="28" y="14" width="10" height="12" rx="2" fill="currentColor" opacity=".6"/><path d="M32 38v12M26 44h12" stroke="currentColor" stroke-width="4"/>',
+    () => import('./games/MedicineCabinet')),
 ]
