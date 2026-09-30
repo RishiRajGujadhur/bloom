@@ -208,6 +208,7 @@ export function FocusPage({
           {String(Math.floor(left / 60000)).padStart(2, '0')}:
           {String(Math.floor(left / 1000) % 60).padStart(2, '0')}
         </div>
+        {active && <p className="focus-ends">Finishes at {new Date(Date.now() + left).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</p>}
         {!active && (
           <div className="focus-setup">
             <div className="segmented" aria-label="Session length">
