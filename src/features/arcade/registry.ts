@@ -58,4 +58,7 @@ export const GAMES: GameDef[] = [
   g(14, 'dessert', 'Delay Dessert', 'Wait for a taller cake… if the cat lets you.', 'SVG · GSAP', 330,
     '<rect x="16" y="40" width="32" height="10" rx="3" fill="currentColor"/><rect x="18" y="30" width="28" height="10" rx="3" fill="currentColor" opacity=".75"/><rect x="20" y="20" width="24" height="10" rx="3" fill="currentColor" opacity=".55"/><circle cx="32" cy="15" r="4" fill="currentColor"/><path d="M4 56h56" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/DelayDessert')),
+  g(15, 'campfire', 'Camp Fire', 'Stack tinder, kindling and logs and keep the night warm.', 'matter-js · canvas', 25,
+    '<path d="M32 10c6 10 12 14 12 24a12 12 0 0 1-24 0c0-6 4-8 6-14 2 6 6 6 6-10z" fill="currentColor"/><path d="M10 54l44-10M10 44l44 10" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".7"/>',
+    () => import('./games/CampFire')),
 ]
