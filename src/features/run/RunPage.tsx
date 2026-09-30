@@ -455,6 +455,9 @@ export function RunPage() {
                 <small>
                   {new Date(r.at).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {fmtTime(r.seconds)} · {fmtPace(pace(r.km, r.seconds, units))}
                 </small>
+                <button type="button" className="studio-chip" aria-label="Delete this run" onClick={() => { if (window.confirm('Delete this run? This can’t be undone.')) setStore((s) => ({ ...s, runs: s.runs.filter((x) => x.id !== r.id) })) }}>
+                  🗑
+                </button>
                 {on('replay') && r.points.length > 1 && (
                   <button type="button" className="studio-chip" onClick={() => playReplay(r)}>
                     <MapIcon size={13} /> Replay
