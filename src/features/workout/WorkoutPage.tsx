@@ -19,6 +19,8 @@ const FormCoach = lazy(() => import('./FormCoach').then((m) => ({ default: m.For
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, BarElement, Tooltip, Filler)
 
 const on = (id: string) => subOn('workoutLog', id)
+/** Lifts done with a 20 kg barbell, for the per-side plate breakdown. */
+const BARBELL = new Set(['bench', 'squat', 'deadlift', 'press', 'row', 'rdl', 'hipthrust'])
 const ACCENT = '#d9653b'
 const css = (name: string, fallback: string) => (typeof window === 'undefined' ? fallback : getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback)
 const day = (t: number) => new Date(t).toLocaleDateString([], { month: 'short', day: 'numeric' })
@@ -212,6 +214,15 @@ export function WorkoutPage() {
             ))}
           </div>
           <Slider label={lift?.bodyweight ? 'Added weight' : 'Weight'} value={weight} min={0} max={lift?.bodyweight ? 60 : 250} step={lift?.step ?? 2.5} unit="kg" onChange={setWeight} />
+          {lift && BARBELL.has(lift.id) && weight >= 20 && (() => {
+            const { perSide, leftover } = plates(weight)
+            return (
+              <p className="wo-plates-inline" aria-label="Plates per side">
+                {perSide.length ? <>Per side: {perSide.map((p, i) => <span key={i} className="wo-plate-chip" data-kg={p}>{p}</span>)}</> : 'Just the bar'}
+                <small> on a 20 kg bar{leftover ? ` · ${leftover} kg can't be made` : ''}</small>
+              </p>
+            )
+          })()}
           <Slider label={lift?.id === 'plank' ? 'Seconds' : 'Reps'} value={reps} min={1} max={lift?.id === 'plank' ? 300 : 30} step={lift?.id === 'plank' ? 5 : 1} onChange={setReps} />
           {on('rpe') && <Slider label="Effort (RPE)" value={rpe} min={5} max={10} step={0.5} format={(v) => `${v}`} onChange={setRpe} />}
           <button ref={logBtn} type="button" className="studio-go" onClick={logSet}>
