@@ -1064,6 +1064,9 @@ export function SettingsPage({
       )}
       <section className={styles.card}>
         <DataReset />
+        <p className="settings-build">
+          Bloom build {__COMMIT__} · {new Date(__BUILD_TIME__).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+        </p>
       </section>
 
       <Disclosure title={t('settings.configurationHeading')}>

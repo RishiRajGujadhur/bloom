@@ -3,6 +3,15 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { execSync } from 'node:child_process'
+
+const commit = (() => {
+  try {
+    return execSync('git rev-parse --short HEAD').toString().trim()
+  } catch {
+    return 'dev'
+  }
+})()
 
 // Cross-origin isolation unlocks SharedArrayBuffer + Atomics (multi-core
 // workers, threaded Wasm). `credentialless` keeps cross-origin CDN/model
@@ -11,6 +20,7 @@ const isolation = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-E
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()), __COMMIT__: JSON.stringify(commit) },
   server: { headers: isolation },
   preview: { headers: isolation },
   plugins: [
