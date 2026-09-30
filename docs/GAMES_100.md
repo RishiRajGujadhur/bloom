@@ -158,3 +158,4 @@ Every game has:
 - Game 29: Weather Wardrobe — dress Pip for six random days of temperature, rain, snow, strong sun and gusts. Warmth has to match the thermometer, and umbrellas flip in the wind; animated SVG weather.
 - Game 30: Goal Mountain — a Babylon.js displaced-terrain mountain with snowcap, spiralling ledges and a reach ring. Camp ledge to ledge: big leaps cost energy and shrink tomorrow's reach, storms cut it, and the summit must fall within 16 days.
 - Game 31: Memory Market — a friend calls out a shopping list one item at a time (GSAP speech bubbles), then it blows away. Tap the list items across market stalls full of decoys; lists grow from 3 to 8.
+- Game 32: Fuse Box — an evening of appliances (kettle, oven, hairdryer, iron…) waiting for power. Plug each into one of three 3 kW circuits, with a live load preview; overloads trip the fuse and knock everything off.
