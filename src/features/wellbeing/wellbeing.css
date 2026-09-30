@@ -674,3 +674,6 @@
 }
 .wb-inline-form { flex-wrap: wrap; }
 .wb-inline-form .wb-quick-tags { flex-basis: 100%; margin: 0; }
+.wb-three { display: grid; gap: 8px; margin-top: 10px; }
+.wb-three input { min-height: 40px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
+.wb-three div { display: flex; gap: 8px; }

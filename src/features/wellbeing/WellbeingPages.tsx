@@ -605,6 +605,16 @@ export function GratitudePage() {
       setMemory(inJar[Math.floor(Math.random() * inJar.length)])
     }, 650)
   }
+  // Three good things: fill three lines and add them together.
+  const [three, setThree] = useState<string[] | null>(null)
+  const addThree = () => {
+    const values = (three ?? []).map((v) => v.trim()).filter(Boolean)
+    if (!values.length) return
+    const now = Date.now()
+    setEntries((list) => [...values.map((v, i) => ({ id: crypto.randomUUID(), at: now - i, text: v, jarId: jar.id })), ...list])
+    setThree(null)
+    setAdded((n) => n + values.length)
+  }
   const add = () => {
     const value = text.trim()
     if (!value) return
@@ -724,6 +734,35 @@ export function GratitudePage() {
               <LottieIcon name="heart" size={17} /> Add
             </button>
           </form>
+          {three ? (
+            <form
+              className="wb-three"
+              onSubmit={(e) => {
+                e.preventDefault()
+                addThree()
+              }}
+            >
+              {three.map((v, i) => (
+                <input
+                  key={i}
+                  autoFocus={i === 0}
+                  aria-label={`Good thing ${i + 1}`}
+                  placeholder={['Something that went well…', 'Someone you appreciate…', 'A small pleasure…'][i]}
+                  value={v}
+                  maxLength={200}
+                  onChange={(e) => setThree((t) => t!.map((x, j) => (j === i ? e.target.value : x)))}
+                />
+              ))}
+              <div>
+                <button className="ov-primary" type="submit">Add all</button>
+                <button className="ov-secondary" type="button" onClick={() => setThree(null)}>Cancel</button>
+              </div>
+            </form>
+          ) : (
+            <button type="button" className="quiet-button" onClick={() => setThree(['', '', ''])}>
+              ✍️ Three good things
+            </button>
+          )}
           <p className="wb-muted">
             <Heart size={14} aria-hidden="true" /> {inJar.length} / {JAR_CAPACITY}
           </p>
