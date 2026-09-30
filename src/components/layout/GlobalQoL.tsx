@@ -31,6 +31,18 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
       document.removeEventListener('focusout', hide, true)
     }
   }, [])
+  // Click an image that's shown smaller than it really is to see it full size.
+  const [zoomImg, setZoomImg] = useState<string | null>(null)
+  useEffect(() => {
+    const onImg = (e: MouseEvent) => {
+      const img = e.target
+      if (!(img instanceof HTMLImageElement) || !img.closest('main') || img.closest('a, button, [role="button"], label')) return
+      if (img.naturalWidth < img.clientWidth * 1.4 || img.naturalWidth < 200) return
+      setZoomImg(img.currentSrc || img.src)
+    }
+    document.addEventListener('click', onImg)
+    return () => document.removeEventListener('click', onImg)
+  }, [])
   const [offline, setOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
   useEffect(() => {
     const on = () => setOffline(false)
@@ -122,6 +134,11 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     <>
       <a href="#page-heading" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('page-heading')?.focus() }}>Skip to content</a>
       {counter && <div className="char-counter" data-full={counter.full} style={{ left: counter.x, top: counter.y }} aria-live="polite">{counter.text}</div>}
+      {zoomImg && (
+        <div className="img-lightbox" role="dialog" aria-label="Image, full size" onClick={() => setZoomImg(null)} onKeyDown={(e) => e.key === 'Escape' && setZoomImg(null)} tabIndex={-1} ref={(el) => el?.focus()}>
+          <img src={zoomImg} alt="" />
+        </div>
+      )}
       {offline && <div className="offline-pill" role="status">Offline · everything still saves on this device</div>}
       {showTop && <button type="button" className="to-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>}
     </>
