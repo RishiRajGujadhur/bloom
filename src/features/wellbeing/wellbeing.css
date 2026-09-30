@@ -672,3 +672,5 @@
     animation: none;
   }
 }
+.wb-inline-form { flex-wrap: wrap; }
+.wb-inline-form .wb-quick-tags { flex-basis: 100%; margin: 0; }

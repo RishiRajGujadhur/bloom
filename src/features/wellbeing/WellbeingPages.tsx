@@ -326,7 +326,7 @@ export function MoodPage() {
         at: Date.now(),
         mood: picked,
         note: note.trim(),
-        ...(detailed ? { emotions, energy } : {}),
+        ...(detailed ? { emotions, energy } : emotions.length ? { emotions } : {}),
       },
       ...list,
     ])
@@ -479,6 +479,15 @@ export function MoodPage() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
             >
+              {!detailed && (
+                <div className="filter-chips wb-quick-tags" role="group" aria-label="Quick feelings">
+                  {(picked <= 2 ? ['tired', 'anxious', 'lonely', 'overwhelmed', 'frustrated', 'sad'] : picked >= 4 ? ['grateful', 'calm', 'proud', 'excited', 'loved', 'hopeful'] : ['fine', 'bored', 'restless', 'distracted', 'content', 'unsure']).map((word) => (
+                    <button key={word} type="button" aria-pressed={emotions.includes(word)} onClick={() => setEmotions((list) => (list.includes(word) ? list.filter((w) => w !== word) : [...list, word]))}>
+                      {word}
+                    </button>
+                  ))}
+                </div>
+              )}
               <input
                 aria-label="Add a note (optional)"
                 placeholder="A word about why (optional)"
