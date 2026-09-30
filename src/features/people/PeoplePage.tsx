@@ -179,6 +179,13 @@ export function PeoplePage() {
               return <p className={`pg-local ${w.good ? 'good' : ''}`}>{w.awake ? '☀️' : '🌙'} {localTime(person.city.tz).label} in {person.city.name}{w.good ? ' · good time to call' : w.awake ? '' : ' · probably asleep'}</p>
             })()}
             <label>Birthday <input type="date" className="studio-input" value={person.birthday ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, birthday: e.target.value || undefined } : p)))} /></label>
+            <div className="pg-contact">
+              <input type="tel" className="studio-input" placeholder="Phone" aria-label="Phone" value={person.phone ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, phone: e.target.value } : p)))} />
+              <input type="email" className="studio-input" placeholder="Email" aria-label="Email" value={person.email ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, email: e.target.value } : p)))} />
+              {person.phone && <a className="pg-link" href={`tel:${person.phone}`}>📞 Call</a>}
+              {person.phone && <a className="pg-link" href={`sms:${person.phone}`}>💬 Text</a>}
+              {person.email && <a className="pg-link" href={`mailto:${person.email}`}>✉️ Email</a>}
+            </div>
             <textarea className="studio-input" rows={3} placeholder="Things to remember: kids’ names, what they’re excited about…" value={person.notes ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, notes: e.target.value } : p)))} />
             <button type="button" className="pg-ghost" onClick={() => { save((ps) => ps.filter((p) => p.id !== person.id)); setSel(null) }}>Remove from garden</button>
           </div>
