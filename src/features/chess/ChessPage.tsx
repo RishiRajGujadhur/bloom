@@ -171,6 +171,14 @@ const cloneGame = (g: Chess) => {
 
 /* ---------- Play Bloom ---------- */
 function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
+  const [flipped, setFlipped] = useState(false)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === 'f' && !e.ctrlKey && !e.metaKey && !(e.target as HTMLElement)?.closest('input, textarea, [contenteditable="true"]')) setFlipped((v) => !v)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const [game, setGame] = useState(() => new Chess())
   const [selected, setSelected] = useState<string | null>(null)
   const [last, setLast] = useState<{ from: string; to: string } | null>(null)
@@ -210,7 +218,7 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
   const history = game.history()
   return (
     <div className="ch-layout">
-      <ChessBoard position={positionOf(game)} targets={targets} selected={selected} onSelect={(s) => setSelected(s && game.get(s as Square)?.color === 'w' ? s : null)} onMove={move} lastMove={last} check={kingInCheck} disabled={bloomTurn || over} />
+      <ChessBoard position={positionOf(game)} targets={targets} selected={selected} onSelect={(s) => setSelected(s && game.get(s as Square)?.color === 'w' ? s : null)} onMove={move} lastMove={last} check={kingInCheck} disabled={bloomTurn || over} flipped={flipped} />
       <aside className="ch-side">
         <h3>Play Bloom</h3>
         <div className="ch-lessons">
@@ -226,6 +234,7 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
         </ol>
         <div className="ch-row">
           <button type="button" className="studio-btn" disabled={thinking || history.length < 2} onClick={() => { const g = new Chess(); for (const m of history.slice(0, -2)) g.move(m); setGame(g); setLast(null) }}>Undo</button>
+          <button type="button" className="studio-btn" aria-pressed={flipped} title="View the board from Bloom's side (F)" onClick={() => setFlipped((f) => !f)}>⇅ Flip</button>
           <button type="button" className="ch-cta" onClick={() => { setGame(new Chess()); setLast(null); setSelected(null) }}>New game</button>
         </div>
       </aside>
