@@ -9,6 +9,7 @@ import { setPageTitle, watchTitlebar } from './platform/titlebar'
 import './styles/titlebar.css'
 import { initHoudini } from './styles/houdini'
 import './styles/houdini.css'
+import './styles/viewTransitions.css'
 
 initHoudini()
 import {
@@ -22,6 +23,8 @@ import {
   StatsRow,
 } from './components/dashboard/Overview'
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
+import { withViewTransition } from './platform/viewTransition'
 import gsap from 'gsap'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
@@ -429,7 +432,7 @@ function App() {
   const [justChecked, setJustChecked] = useState<Set<string>>(() => new Set())
   const [modules, setModules] = useOverviewModules()
   useEffect(() => {
-    const sync = () => setActive(readPage())
+    const sync = () => { const next = readPage(); withViewTransition(() => flushSync(() => setActive(next))) }
     window.addEventListener('hashchange', sync)
     return () => window.removeEventListener('hashchange', sync)
   }, [])
@@ -579,7 +582,8 @@ function App() {
   }
   const jump = (target: NavKey) => {
     rememberPage(target)
-    setActive(target)
+    // Pages cross-fade and the title morphs into place (View Transitions API).
+    withViewTransition(() => flushSync(() => setActive(target)))
     window.location.hash = target
     window.scrollTo?.({ top: 0, behavior: 'instant' })
   }

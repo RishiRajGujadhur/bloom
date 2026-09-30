@@ -180,7 +180,7 @@ New capabilities, each applied to features that already exist:
 | P3 ✅ | **Screen stays on** during guided sessions | Meditate, Breathwork, Yoga, Stretch, Diet cook-along, Readiness scan, Form coach, Intervals | Screen Wake Lock API |
 | P4 ✅ | **Themed title bar**: the installed app draws its own title bar with search, streak and page title, in every theme | App shell, all themes | Window Controls Overlay + `theme-color` per theme |
 | P5 ✅ | **Houdini backgrounds**: generative paint-worklet patterns unique to each section of the app | Page backgrounds | CSS Paint API (Houdini) |
-| P6 | **Morphing navigation**: page changes cross-fade and the page title morphs into place | Sidebar navigation, tabs | View Transitions API |
+| P6 ✅ | **Morphing navigation**: page changes cross-fade and the page title morphs into place | Sidebar navigation, tabs | View Transitions API |
 
 After Phase 3:
 

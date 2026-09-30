@@ -1,0 +1,14 @@
+
+/* View Transitions between pages: see platform/viewTransition.ts. */
+.sidebar { view-transition-name: bloom-sidebar; }
+.topbar { view-transition-name: bloom-topbar; }
+#page-heading { view-transition-name: bloom-page-title; }
+.nav-item[aria-current='page'] { view-transition-name: bloom-nav-active; }
+::view-transition-old(root) { animation: 160ms cubic-bezier(0.4, 0, 1, 1) both bloom-vt-out; }
+::view-transition-new(root) { animation: 340ms cubic-bezier(0.2, 0.8, 0.2, 1) both bloom-vt-in; }
+::view-transition-group(bloom-page-title) { animation-duration: 420ms; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+::view-transition-group(bloom-nav-active) { animation-duration: 360ms; animation-timing-function: cubic-bezier(0.3, 1.4, 0.5, 1); }
+::view-transition-old(bloom-sidebar), ::view-transition-new(bloom-sidebar), ::view-transition-old(bloom-topbar), ::view-transition-new(bloom-topbar) { animation: none; }
+@keyframes bloom-vt-out { to { opacity: 0; transform: translateY(-8px) scale(0.99); filter: blur(3px); } }
+@keyframes bloom-vt-in { from { opacity: 0; transform: translateY(14px) scale(1.01); filter: blur(4px); } }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
