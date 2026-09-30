@@ -115,4 +115,7 @@ export const GAMES: GameDef[] = [
   g(33, 'smoke', 'Smoke Escape', 'Stay low, feel every door, find the way out.', 'Three.js 3D', 12,
     '<rect x="6" y="30" width="52" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 18q8-8 16 0t16 0 16 0" stroke="currentColor" stroke-width="4" fill="none" opacity=".5"/><path d="M8 26q8-8 16 0t16 0 16 0" stroke="currentColor" stroke-width="4" fill="none" opacity=".3"/><rect x="44" y="36" width="10" height="20" fill="currentColor"/><ellipse cx="22" cy="50" rx="9" ry="4" fill="currentColor"/>',
     () => import('./games/SmokeEscape')),
+  g(34, 'buttons', 'Button Sewer', 'Up, down, across, wrap and knot. Sew them all back on.', 'SVG · GSAP', 175,
+    '<circle cx="30" cy="34" r="22" fill="currentColor" opacity=".8"/><circle cx="23" cy="27" r="3.5" fill="#fff"/><circle cx="37" cy="27" r="3.5" fill="#fff"/><circle cx="23" cy="41" r="3.5" fill="#fff"/><circle cx="37" cy="41" r="3.5" fill="#fff"/><path d="M23 27l14 14M37 27L23 41" stroke="#fff" stroke-width="2"/><path d="M46 6l12 12" stroke="currentColor" stroke-width="3"/>',
+    () => import('./games/ButtonSewer')),
 ]

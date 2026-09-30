@@ -160,3 +160,4 @@ Every game has:
 - Game 31: Memory Market — a friend calls out a shopping list one item at a time (GSAP speech bubbles), then it blows away. Tap the list items across market stalls full of decoys; lists grow from 3 to 8.
 - Game 32: Fuse Box — an evening of appliances (kettle, oven, hairdryer, iron…) waiting for power. Plug each into one of three 3 kW circuits, with a live load preview; overloads trip the fuse and knock everything off.
 - Game 33: Smoke Escape — a Three.js procedural-maze flat under rising layered smoke. Crawl to stay under it, click doors to feel them first (hot doors glow behind), and reach the green exit across three flats.
+- Game 34: Button Sewer — sew two- and four-hole buttons in across-and-back, parallel, cross and square patterns. Front stitches draw on with GSAP and back stitches show dashed; wrap the shank and knot it off.
