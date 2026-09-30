@@ -100,4 +100,7 @@ export const GAMES: GameDef[] = [
   g(28, 'raft', 'Team Raft', 'You can’t paddle — only decide who paddles where.', 'canvas', 205,
     '<path d="M6 14q14 10 26 0t26 0v40q-14-10-26 0t-26 0z" fill="currentColor" opacity=".25"/><rect x="20" y="20" width="24" height="28" rx="10" fill="currentColor"/><circle cx="26" cy="28" r="3" fill="#fff"/><circle cx="38" cy="28" r="3" fill="#fff"/><circle cx="26" cy="40" r="3" fill="#fff"/><circle cx="38" cy="40" r="3" fill="#fff"/><path d="M20 30l-10 4M44 38l10 4" stroke="currentColor" stroke-width="3"/>',
     () => import('./games/TeamRaft')),
+  g(29, 'wardrobe', 'Weather Wardrobe', 'Dress Pip for six days of wild weather.', 'SVG · GSAP', 290,
+    '<circle cx="46" cy="16" r="9" fill="currentColor" opacity=".6"/><path d="M8 26q6-10 16-6 6-8 14 0 10 0 8 10H8z" fill="currentColor" opacity=".35"/><path d="M22 34l6-4h8l6 4-4 6-2-2v18H28V38l-2 2z" fill="currentColor"/>',
+    () => import('./games/WeatherWardrobe')),
 ]
