@@ -108,6 +108,7 @@ export function MoneyPage() {
       return n
     })
   const [tab, setTab] = useState('spend')
+  const [txnQuery, setTxnQuery] = useState('')
   const [amount, setAmount] = useState('')
   const [place, setPlace] = useState('')
   const [category, setCategory] = useState('groceries')
@@ -215,8 +216,11 @@ export function MoneyPage() {
       </section>
       <section className="studio-card mn-list">
         <h3>Recent</h3>
+        {store.txns.length > 5 && (
+          <input type="search" className="studio-input mn-search" aria-label="Search transactions" placeholder="Search place, category or amount…" value={txnQuery} onChange={(e) => setTxnQuery(e.target.value)} />
+        )}
         <ShowMore as="ul" className="mn-txns" initial={6} label="more">
-          {store.txns.map((x) => (
+          {store.txns.filter((x) => { const q = txnQuery.trim().toLowerCase(); return !q || `${x.place} ${categoryOf(x.category).name} ${(x.amount / 100).toFixed(2)} ${x.date}`.toLowerCase().includes(q) }).map((x) => (
             <li key={x.id}>
               <span className="mn-emoji">{x.income ? '💰' : categoryOf(x.category).emoji}</span>
               <span className="mn-txn-main">
