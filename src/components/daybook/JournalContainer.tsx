@@ -117,6 +117,12 @@ export function JournalContainer() {
       setEntryId(null)
     } else setEntryId(next.id)
   }
+  // A page from at least a week ago (not private), picked once per visit.
+  const [memoryId] = useState(() => {
+    const old = initial.entries.filter((e) => !e.private && Date.now() - new Date(e.updatedAt).getTime() > 7 * 864e5 && journalText(e.content).trim().length > 20)
+    return old.length ? old[Math.floor(Math.random() * old.length)].id : null
+  })
+  const memory = entries.find((e) => e.id === memoryId) ?? null
   // Delete with a short Undo window.
   const [undoPage, setUndoPage] = useState<JournalEntry | null>(null)
   const removePage = (page: JournalEntry) => {
@@ -280,6 +286,14 @@ export function JournalContainer() {
                   <option value="title">By page type</option>
                 </select>
               </label>
+            )}
+            {memory && (
+              <button type="button" className="daybook-memory" onClick={() => openPage(memory)}>
+                <small>
+                  ✦ From {Math.round((Date.now() - new Date(memory.updatedAt).getTime()) / 864e5)} days ago · {memory.modeTitle}
+                </small>
+                <span>{journalText(memory.content).trim().slice(0, 200)}</span>
+              </button>
             )}
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
               <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
