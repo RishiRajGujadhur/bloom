@@ -681,6 +681,22 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
               ))}
             </div>
           )}
+          {isOpen && openGroups.size > 1 && (
+            <button
+              type="button"
+              className="nav-collapse-all"
+              onClick={() => {
+                setOpenGroups(new Set())
+                try {
+                  localStorage.setItem('bloom-nav-groups', '[]')
+                } catch {
+                  /* optional */
+                }
+              }}
+            >
+              Collapse all sections
+            </button>
+          )}
           {isOpen && recentItems.length > 1 && (
             <div className="nav-pins nav-recent" aria-label="Recent pages">
               {recentItems.map(({ key, title, Icon }) => (

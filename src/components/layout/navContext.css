@@ -25,3 +25,4 @@ html[data-theme='matrix'] .nav-undo { background: #0b3a1a; color: #d6ffe0; }
 .nav-recent .nav-pin { font-weight: 600; font-size: 0.82rem; padding: 5px 10px; }
 .nav-recent .nav-pin::after { content: none; }
 .nav-recent::before { padding: 0 10px; }
+.nav-collapse-all { display: block; margin: 0 0 6px auto; border: 0; background: none; color: var(--text-muted); font-size: 11px; cursor: pointer; text-decoration: underline; }
