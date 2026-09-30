@@ -292,4 +292,7 @@ export const GAMES: GameDef[] = [
   g(92, 'maprun', 'Map Runner', 'Plot the quickest route round roadworks and bus lanes.', 'Babylon.js 3D', 0,
     '<path d="M6 10h52M6 32h52M6 54h52M10 6v52M32 6v52M54 6v52" stroke="currentColor" stroke-width="2" opacity=".35"/><path d="M10 54V32h22V10h22" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="54" cy="10" r="5" fill="currentColor"/>',
     () => import('./games/MapRunner')),
+  g(93, 'tools', 'Tool Match', 'Grab the right tool before each job slides off the belt.', 'SVG · GSAP', 30,
+    '<path d="M14 50l24-24" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M36 14a10 10 0 0 0 14 14l-6 6-8-8z" fill="currentColor"/><rect x="6" y="54" width="52" height="6" rx="3" fill="currentColor" opacity=".4"/>',
+    () => import('./games/ToolMatch')),
 ]

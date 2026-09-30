@@ -219,3 +219,4 @@ Every game has:
 - Game 90: Echo Talk — friends share their news in speech bubbles. Pick replies that reflect and ask with curiosity rather than one-upping, quick-fixing or changing the subject; their GSAP glow warms and the "how heard they feel" meter fills.
 - Game 91: Boundary Garden — four SVG fence gates you open and close as visitors approach. Bees, robins and friends help the garden bloom; slugs, a hungry goat and the tool-borrowing neighbour drain it; shutting everything out slowly wilts it.
 - Game 92: Map Runner — a Babylon.js city grid. Tap intersections to plot a route to the pin around roadworks cones, using the red bus road (half cost, with a moving bus); it's scored against the true shortest path found by Dijkstra. Five errands.
+- Game 93: Tool Match — household jobs slide along a speeding SVG conveyor (wobbly hinge, dripping tap, blocked sink). Tap the right tool from the toolbelt, or press keys 1–6, before each job reaches the end.
