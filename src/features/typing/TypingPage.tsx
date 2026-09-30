@@ -6,7 +6,7 @@ import { CategoryScale, Chart, LineElement, LinearScale, PointElement, Filler, T
 import { readStore, writeStore } from '../../components/studio/Studio'
 import { burst } from '../../components/ui/celebrate'
 import { useChartColors } from '../../components/ui/chartTheme'
-import { finger, fingerColors, fingerNames, lessons, loadWords, makeDrill, rowOffset, rows, stats } from './typingModel'
+import { customDrill, finger, fingerColors, fingerNames, lessons, loadWords, makeDrill, rowOffset, rows, stats } from './typingModel'
 import './typing.css'
 
 Chart.register(CategoryScale, LineElement, LinearScale, PointElement, Filler, Tooltip)
@@ -95,8 +95,26 @@ export function TypingPage() {
   }, [lesson])
   useEffect(() => void newDrill(), [newDrill])
 
+  // Practise on your own text (pasted or typed into the box).
+  const [ownOpen, setOwnOpen] = useState(false)
+  const [own, setOwn] = useState('')
+  const [usingOwn, setUsingOwn] = useState(false)
+  const startOwn = () => {
+    const drill = customDrill(own)
+    if (!drill) return
+    setText(drill)
+    setPos(0)
+    setErrors(0)
+    setWrongAt(new Set())
+    setStart(null)
+    setDone(null)
+    raw.current = ''
+    setUsingOwn(true)
+    setOwnOpen(false)
+  }
   const onKey = useCallback((e: KeyboardEvent) => {
     if (done || !text || e.metaKey || e.ctrlKey || e.altKey) return
+    if ((e.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]')) return
     if (e.key.length !== 1) return
     e.preventDefault()
     const want = text[pos]
@@ -117,9 +135,10 @@ export function TypingPage() {
       const s = stats(text.length, errors, Date.now() - t0)
       setDone(s)
       burst(undefined, 'stars')
-      save((st) => ({ best: { ...st.best, [lesson.id]: Math.max(st.best[lesson.id] ?? 0, s.wpm) }, sessions: [...st.sessions, { at: Date.now(), ...s, lesson: lesson.id }].slice(-40) }))
+      const id = usingOwn ? 'own' : lesson.id
+      save((st) => ({ best: { ...st.best, [id]: Math.max(st.best[id] ?? 0, s.wpm) }, sessions: [...st.sessions, { at: Date.now(), ...s, lesson: id }].slice(-40) }))
     }
-  }, [done, text, pos, start, errors, lesson.id])
+  }, [done, text, pos, start, errors, lesson.id, usingOwn])
   useEffect(() => {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -145,14 +164,14 @@ export function TypingPage() {
     <div className="ty-page">
       <header className="ty-head">
         <div>
-          <p className="ty-eyebrow">Typing Dojo · lesson {li + 1}/{lessons.length}</p>
-          <h2>{lesson.title}</h2>
-          <p className="ty-tip">{lesson.tip}</p>
+          <p className="ty-eyebrow">Typing Dojo · {usingOwn ? 'your own text' : `lesson ${li + 1}/${lessons.length}`}</p>
+          <h2>{usingOwn ? 'Your text' : lesson.title}</h2>
+          <p className="ty-tip">{usingOwn ? 'Lower-case and unshifted keys only, so you can focus on rhythm.' : lesson.tip}</p>
         </div>
         <div className="ty-stats">
           <div><strong>{done?.wpm ?? live.wpm}</strong><small>WPM</small></div>
           <div><strong>{done?.accuracy ?? live.accuracy}%</strong><small>accuracy</small></div>
-          <div><strong>{store.best[lesson.id] ?? '—'}</strong><small>best</small></div>
+          <div><strong>{store.best[usingOwn ? 'own' : lesson.id] ?? '—'}</strong><small>best</small></div>
         </div>
       </header>
       <div className="ty-stage" aria-live="off">
@@ -166,7 +185,7 @@ export function TypingPage() {
         <div className="ty-done" role="status">
           <strong>{done.wpm} WPM · {done.accuracy}% accurate</strong>
           <span>{done.accuracy >= 95 ? 'Clean and steady — great form.' : 'Slow down a touch; accuracy first, speed follows.'}{closeness !== null ? ` Keystroke efficiency ${closeness}%.` : ''}</span>
-          <button type="button" className="ty-cta" onClick={() => void newDrill()}>Again</button>
+          <button type="button" className="ty-cta" onClick={() => (usingOwn ? startOwn() : void newDrill())}>Again</button>
           {li + 1 < lessons.length && <button type="button" className="ty-cta ghost" onClick={() => setLi(li + 1)}>Next lesson →</button>}
         </div>
       ) : (
@@ -176,8 +195,15 @@ export function TypingPage() {
         <Keyboard next={next} flash={flash} />
         <aside className="ty-side">
           <div className="ty-lessons">
-            {lessons.map((l, i) => <button key={l.id} type="button" className={`ty-pill ${i === li ? 'on' : ''} ${store.best[l.id] ? 'done' : ''}`} onClick={() => setLi(i)} title={l.title}>{i + 1}</button>)}
+            {lessons.map((l, i) => <button key={l.id} type="button" className={`ty-pill ${i === li && !usingOwn ? 'on' : ''} ${store.best[l.id] ? 'done' : ''}`} onClick={() => { setUsingOwn(false); if (i === li) void newDrill(); else setLi(i) }} title={l.title}>{i + 1}</button>)}
           </div>
+          <button type="button" className="ty-cta ghost ty-own-btn" aria-expanded={ownOpen} onClick={() => setOwnOpen((v) => !v)}>✍️ Practise your own text</button>
+          {ownOpen && (
+            <form className="ty-own" onSubmit={(e) => { e.preventDefault(); startOwn() }}>
+              <textarea rows={4} aria-label="Text to practise" placeholder="Paste a paragraph, a poem, some code comments…" value={own} onChange={(e) => setOwn(e.target.value)} />
+              <button type="submit" className="ty-cta" disabled={!customDrill(own)}>Type this</button>
+            </form>
+          )}
           {recent.length > 1 ? (
             <div className="ty-chart" data-matrix-native>
               <Line data={{ labels: recent.map((_, i) => String(i + 1)), datasets: [{ data: recent.map((s) => s.wpm), borderColor: colors[0], backgroundColor: `${colors[0]}33`, fill: true, tension: 0.35, pointRadius: 2 }] }} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { beginAtZero: true, ticks: { precision: 0 } } } }} />

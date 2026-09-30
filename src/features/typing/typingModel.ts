@@ -59,3 +59,20 @@ export function stats(typed: number, errors: number, ms: number) {
   const minutes = Math.max(ms, 1) / 60000
   return { wpm: Math.round(typed / 5 / minutes), accuracy: typed ? Math.round(((typed - errors) / typed) * 100) : 100 }
 }
+
+/** Turns pasted text into a drill: lower-case, unshifted keys only, single spaces, at most `max` characters. */
+export function customDrill(input: string, max = 400) {
+  const allowed = new Set(rows.flat())
+  const cleaned = input
+    .toLowerCase()
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '')
+    .split('')
+    .map((c) => (allowed.has(c) ? c : /\s/.test(c) ? ' ' : ''))
+    .join('')
+    .replace(/ +/g, ' ')
+    .trim()
+  if (cleaned.length <= max) return cleaned
+  const cut = cleaned.slice(0, max)
+  return cut.slice(0, cut.lastIndexOf(' ') > max * 0.6 ? cut.lastIndexOf(' ') : max)
+}

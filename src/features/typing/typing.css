@@ -50,3 +50,6 @@
 .ty-pill.on { border-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 18%, var(--bg-surface)); }
 .ty-pill.done { color: #3f8a02; }
 .ty-chart { min-height: 140px; }
+.ty-own-btn { margin-top: 8px; width: 100%; }
+.ty-own { display: grid; gap: 8px; margin-top: 8px; }
+.ty-own textarea { width: 100%; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font: inherit; resize: vertical; }
