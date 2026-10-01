@@ -278,7 +278,7 @@ export function MindMapPage() {
                 <button type="button" className="iv-card" data-on={m.id === map.id} title="Double-click to rename" onDoubleClick={() => rename(m)} onClick={() => (setStore((s) => ({ ...s, current: m.id })), setTab('map'))}>
                   <span aria-hidden="true">🗺️</span>
                   <strong>{m.title}</strong>
-                  <small>{new Date(m.updatedAt).toLocaleDateString()}</small>
+                  <small><time dateTime={new Date(m.updatedAt).toISOString()}>{new Date(m.updatedAt).toLocaleDateString()}</time></small>
                 </button>
                 <button
                   type="button"

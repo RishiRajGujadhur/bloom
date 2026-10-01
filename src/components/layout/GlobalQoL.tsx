@@ -63,6 +63,17 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Hovering any <time datetime> shows the exact date and time.
+  useEffect(() => {
+    const onOver = (e: MouseEvent) => {
+      const t = (e.target as HTMLElement | null)?.closest?.('time[datetime]')
+      if (!t || t.hasAttribute('title')) return
+      const d = new Date(t.getAttribute('datetime') ?? '')
+      if (!Number.isNaN(d.getTime())) t.setAttribute('title', d.toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'short' }))
+    }
+    document.addEventListener('mouseover', onOver)
+    return () => document.removeEventListener('mouseover', onOver)
+  }, [])
   // Esc inside an inline form presses its own Cancel button, if it has one.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
