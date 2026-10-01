@@ -602,6 +602,20 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
       return next
     })
 
+  // Filter pages by name; Ctrl+Shift+F opens the sidebar and focuses the box.
+  const [navFilter, setNavFilter] = useState('')
+  const filterRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'f') {
+        e.preventDefault()
+        setIsOpen(true)
+        setTimeout(() => filterRef.current?.focus(), 50)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [setIsOpen])
   // Keep the sidebar's scroll position across reloads.
   useEffect(() => {
     const el = sidebarRef.current
@@ -739,6 +753,37 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                   {isOpen && <span>{title}</span>}
                 </button>
               ))}
+            </div>
+          )}
+          {isOpen && (
+            <input
+              ref={filterRef}
+              type="search"
+              className="nav-filter"
+              placeholder="Filter pages… (Ctrl+Shift+F)"
+              aria-label="Filter pages"
+              value={navFilter}
+              onChange={(e) => setNavFilter(e.target.value)}
+              onKeyDown={(e) => {
+                const first = visibleItems.find((v) => v.title.toLowerCase().includes(navFilter.trim().toLowerCase()))
+                if (e.key === 'Enter' && navFilter.trim() && first) {
+                  handleNavigate(first.key)
+                  setNavFilter('')
+                }
+                if (e.key === 'Escape') setNavFilter('')
+              }}
+            />
+          )}
+          {navFilter.trim() && (
+            <div className="nav-pins nav-filtered" aria-label="Matching pages">
+              {visibleItems
+                .filter((v) => v.title.toLowerCase().includes(navFilter.trim().toLowerCase()))
+                .map(({ key, title, Icon }) => (
+                  <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} onClick={() => { handleNavigate(key); setNavFilter('') }}>
+                    <Icon size={15} aria-hidden="true" />
+                    <span>{title}</span>
+                  </button>
+                ))}
             </div>
           )}
           {isOpen && openGroups.size > 1 && (

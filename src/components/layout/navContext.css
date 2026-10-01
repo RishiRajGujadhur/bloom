@@ -28,3 +28,5 @@ html[data-theme='matrix'] .nav-undo { background: #0b3a1a; color: #d6ffe0; }
 .nav-collapse-all { display: block; margin: 0 0 6px auto; border: 0; background: none; color: var(--text-muted); font-size: 11px; cursor: pointer; text-decoration: underline; }
 .sidebar-resize { position: absolute; top: 0; right: -4px; bottom: 0; width: 8px; cursor: ew-resize; z-index: 5; touch-action: none; }
 .sidebar-resize:hover { background: color-mix(in srgb, var(--accent-color) 30%, transparent); }
+.nav-filter { width: 100%; margin: 0 0 8px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 13px; }
+.nav-filtered .nav-pin::after { content: none; }
