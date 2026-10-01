@@ -120,3 +120,6 @@ html[data-theme='galaxy'] .studio[data-studio='english'] { --galaxy-light: #b8ff
 
 /* mindmap: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='mindmap'] { --galaxy-light: #dec4ff; --galaxy-blue: #afffe0; --galaxy-violet: #b5d4ff; --galaxy-x: 75%; --galaxy-y: 19%; --galaxy-ring-x: 81%; --galaxy-ring-y: 78%; --galaxy-ring-size: 98px; --galaxy-shape: 22px 48px 17px 42px; }
+
+/* meditate: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='meditate'] { --galaxy-light: #c3b6ff; --galaxy-blue: #adf6df; --galaxy-violet: #a9d4ff; --galaxy-x: 70%; --galaxy-y: 37%; --galaxy-ring-x: 18%; --galaxy-ring-y: 79%; --galaxy-ring-size: 160px; --galaxy-shape: 48px 19px 39px 21px; }
