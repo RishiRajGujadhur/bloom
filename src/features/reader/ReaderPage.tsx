@@ -19,7 +19,7 @@ Chart.register(CategoryScale, LineElement, LinearScale, PointElement, Filler, To
  * you took it in, and a chart tracks your effective speed.
  */
 const KEY = 'bloom-reader-v1'
-type Store = { wpm: number; runs: { at: number; wpm: number; score: number }[]; bookmark?: { textId: string; i: number; custom?: string; total: number } | null; speeds?: Record<string, number> }
+type Store = { wpm: number; runs: { at: number; wpm: number; score: number }[]; bookmark?: { textId: string; i: number; custom?: string; total: number } | null; speeds?: Record<string, number>; words?: Record<string, number> }
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 export function ReaderPage() {
@@ -53,7 +53,10 @@ export function ReaderPage() {
     save((s) => ({ ...s, bookmark: { textId, i, total: tokens.length, ...(textId === 'custom' ? { custom } : {}) } }))
   }, [i, playing, phase]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (phase === 'quiz' && store.bookmark) save((s) => ({ ...s, bookmark: null }))
+    if (phase === 'quiz') {
+      const day = new Date().toISOString().slice(0, 10)
+      save((s) => ({ ...s, bookmark: null, words: { ...s.words, [day]: (s.words?.[day] ?? 0) + tokens.length } }))
+    }
   }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
   const bm = store.bookmark
   const resumeBookmark = () => {
@@ -113,7 +116,7 @@ export function ReaderPage() {
     <div className="rd-page">
       <header className="rd-head">
         <div>
-          <p className="rd-eyebrow">Speed reader · {est.words} words · {Math.round(est.minutes * 60)} s at normal pace</p>
+          <p className="rd-eyebrow">Speed reader{store.words?.[new Date().toISOString().slice(0, 10)] ? ` · ${store.words[new Date().toISOString().slice(0, 10)]} words read today` : ''} · {est.words} words · {Math.round(est.minutes * 60)} s at normal pace</p>
           <h2>{textId === 'custom' ? 'Your text' : texts.find((t) => t.id === textId)!.title}</h2>
         </div>
         <div className="rd-row">
