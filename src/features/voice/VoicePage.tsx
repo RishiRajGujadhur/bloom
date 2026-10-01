@@ -281,6 +281,9 @@ function MemoCard({
       {error && <p className="voice-error">{error}</p>}
       {memo.transcript && (
         <div className="voice-transcript">
+          <button type="button" className="voice-copy" title="Copy transcript" onClick={(e) => { void navigator.clipboard?.writeText(memo.transcript ?? ''); e.currentTarget.textContent = '✓ Copied' }}>
+            📋 Copy
+          </button>
           {memo.chunks?.length ? (
             <p>
               {memo.chunks.map((c, i) => (
