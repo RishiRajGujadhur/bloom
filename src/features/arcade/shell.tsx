@@ -35,7 +35,14 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
     return () => { t.kill() }
   }, [result])
   useEffect(() => {
-    const k = (e: KeyboardEvent) => { if (e.key.toLowerCase() === 'r' && !(e.target instanceof HTMLInputElement)) onRestart() }
+    const k = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.ctrlKey || e.metaKey) return
+      if (e.key.toLowerCase() === 'r') onRestart()
+      if (e.key.toLowerCase() === 'f' && document.fullscreenEnabled) {
+        if (document.fullscreenElement) void document.exitFullscreen()
+        else void document.querySelector('.ar-shell')?.requestFullscreen?.()
+      }
+    }
     window.addEventListener('keydown', k)
     return () => window.removeEventListener('keydown', k)
   }, [onRestart])
@@ -46,6 +53,19 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
         <span className="ar-score" aria-live="polite">{score}</span>
         <span className="ar-best">Best {best}</span>
         <button type="button" onClick={onRestart} title="Restart (R)">↻ Restart</button>
+        {document.fullscreenEnabled && (
+          <button
+            type="button"
+            title="Full screen (F)"
+            onClick={(e) => {
+              const shell = e.currentTarget.closest('.ar-shell')
+              if (document.fullscreenElement) void document.exitFullscreen()
+              else void shell?.requestFullscreen?.()
+            }}
+          >
+            ⛶
+          </button>
+        )}
       </div>
       {hint && <p className="ar-hint">{hint}</p>}
       <div className="ar-stage" data-matrix-native>

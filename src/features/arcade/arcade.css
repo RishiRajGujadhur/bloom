@@ -74,3 +74,5 @@
 .ar-fav { position: absolute; top: 8px; right: 10px; border: 0; background: none; cursor: pointer; font-size: 16px; color: #d4a017; opacity: 0.5; }
 .ar-fav[aria-pressed='true'], .ar-wrap:hover .ar-fav { opacity: 1; }
 .ar-recent .ar-recent-clear { border: 0; background: none; color: var(--text-muted); }
+.ar-shell:fullscreen { background: var(--bg-primary); padding: 16px; overflow: auto; display: flex; flex-direction: column; }
+.ar-shell:fullscreen .ar-stage { flex: 1; }
