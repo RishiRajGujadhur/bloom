@@ -123,10 +123,25 @@ export function ExplorePage({ data }: FeaturePageProps) {
     ],
     [modes, data.habits],
   )
-  const [query, setQuery] = useState<RuleGroupType>({
-    combinator: 'and',
-    rules: [{ field: 'mood', operator: '>=', value: 4 }],
+  const [query, setQueryState] = useState<RuleGroupType>(() => {
+    try {
+      const last = JSON.parse(localStorage.getItem('bloom-explore-last') ?? 'null') as RuleGroupType | null
+      if (last?.rules) return last
+    } catch { /* optional */ }
+    return { combinator: 'and', rules: [{ field: 'mood', operator: '>=', value: 4 }] }
   })
+  const setQuery = (q: RuleGroupType) => {
+    setQueryState(q)
+    try { localStorage.setItem('bloom-explore-last', JSON.stringify(q)) } catch { /* optional */ }
+  }
+  // Your own saved questions, shown next to the presets.
+  const [saved, setSaved] = useState<{ label: string; query: RuleGroupType }[]>(() => {
+    try { return JSON.parse(localStorage.getItem('bloom-explore-saved') ?? '[]') as { label: string; query: RuleGroupType }[] } catch { return [] }
+  })
+  const storeSaved = (list: typeof saved) => {
+    setSaved(list)
+    try { localStorage.setItem('bloom-explore-saved', JSON.stringify(list)) } catch { /* optional */ }
+  }
   const results = records.filter((r) => evaluateGroup(r, query as unknown as RuleGroup))
   const avgMood = (() => {
     const moods = results.map((r) => r.mood).filter((m): m is number => m !== null)
@@ -141,6 +156,20 @@ export function ExplorePage({ data }: FeaturePageProps) {
             {p.label}
           </button>
         ))}
+        {saved.map((p) => (
+          <button key={`saved-${p.label}`} onClick={() => setQuery(p.query)} onContextMenu={(e) => { e.preventDefault(); if (window.confirm(`Remove “${p.label}”?`)) storeSaved(saved.filter((s) => s !== p)) }} title="Right-click to remove">
+            ★ {p.label}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => {
+            const label = window.prompt('Name this question')?.trim()
+            if (label) storeSaved([...saved.filter((s) => s.label !== label), { label, query }])
+          }}
+        >
+          + Save this question
+        </button>
       </div>
       <div className="explore-builder">
         <QueryBuilder
