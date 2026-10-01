@@ -77,7 +77,21 @@ export function DecidePage() {
           {d.criteria.map((c) => (
             <div key={c.id} className="dc-row" role="row">
               <span role="rowheader" className="dc-crit">
-                <input value={c.name} onChange={(e) => save((x) => ({ ...x, criteria: x.criteria.map((y) => (y.id === c.id ? { ...y, name: e.target.value || '?' } : y)) }))} aria-label="What matters" />
+                <input
+                  value={c.name}
+                  onChange={(e) => save((x) => ({ ...x, criteria: x.criteria.map((y) => (y.id === c.id ? { ...y, name: e.target.value || '?' } : y)) }))}
+                  // Enter on the last row adds another, like a list.
+                  onKeyDown={(e) => {
+                    if (e.key !== 'Enter' || d.criteria[d.criteria.length - 1]?.id !== c.id) return
+                    e.preventDefault()
+                    save((x) => ({ ...x, criteria: [...x.criteria, { id: crypto.randomUUID(), name: 'Something else', weight: 3 }] }))
+                    requestAnimationFrame(() => {
+                      const inputs = document.querySelectorAll<HTMLInputElement>('.dc-crit input')
+                      inputs[inputs.length - 1]?.select()
+                    })
+                  }}
+                  aria-label="What matters"
+                />
                 {d.criteria.length > 1 && <button type="button" className="dc-crit-x" onClick={() => save((x) => ({ ...x, criteria: x.criteria.filter((y) => y.id !== c.id) }))} aria-label={`Remove ${c.name}`} title="Remove">×</button>}
                 <span className="dc-weight" aria-label={`Weight ${c.weight}`}>
                   {[1, 2, 3, 4, 5].map((w) => <button key={w} type="button" className={w <= c.weight ? 'on' : ''} onClick={() => save((x) => ({ ...x, criteria: x.criteria.map((y) => (y.id === c.id ? { ...y, weight: w } : y)) }))} aria-label={`Weight ${w}`} />)}
