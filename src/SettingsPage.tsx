@@ -691,6 +691,33 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Your name</strong>
+          <small>Bloom uses it to greet you on the home page.</small>
+        </span>
+        <input
+          type="text"
+          className="settings-name"
+          maxLength={30}
+          placeholder="e.g. Sam"
+          aria-label="Your name"
+          defaultValue={(() => {
+            try {
+              return localStorage.getItem('bloom-name') ?? ''
+            } catch {
+              return ''
+            }
+          })()}
+          onBlur={(e) => {
+            try {
+              localStorage.setItem('bloom-name', e.currentTarget.value.trim())
+            } catch {
+              /* optional */
+            }
+          }}
+        />
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>High contrast</strong>
           <small>Stronger text and borders on every theme.</small>
         </span>

@@ -123,6 +123,14 @@ export function NowCard({ data, setData, today, flags, onNavigate, onPlan }: Pro
         </span>
         <p className="now-greeting">
           {modeCopy[mode].greeting}
+          {(() => {
+            try {
+              const name = localStorage.getItem('bloom-name')?.trim()
+              return name ? `, ${name}` : ''
+            } catch {
+              return ''
+            }
+          })()}
           {profile.goal ? ` · ${goalCopy[profile.goal].short}` : ''}
         </p>
         <h2 id="now-title">{now.title}</h2>
