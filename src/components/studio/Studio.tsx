@@ -194,6 +194,9 @@ export function Slider({
 }
 
 /** Big number tile. */
+/** 12345.6 -> "12,345.6" in the reader's locale. */
+const fmtNum = (v: number, dec: number) => v.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec })
+
 export function Stat({ value, label, hint }: { value: ReactNode; label: string; hint?: string }) {
   const el = useRef<HTMLElement>(null)
   const last = useRef<number | null>(null)
@@ -205,11 +208,11 @@ export function Stat({ value, label, hint }: { value: ReactNode; label: string; 
     last.current = n
     const dec = String(n).includes('.') ? 1 : 0
     if (reduced() || from === n) {
-      el.current.textContent = n.toFixed(dec)
+      el.current.textContent = fmtNum(n, dec)
       return
     }
     const o = { v: from }
-    const tw = gsap.to(o, { v: n, duration: 0.9, ease: 'power3.out', onUpdate: () => { if (el.current) el.current.textContent = o.v.toFixed(dec) } })
+    const tw = gsap.to(o, { v: n, duration: 0.9, ease: 'power3.out', onUpdate: () => { if (el.current) el.current.textContent = fmtNum(o.v, dec) } })
     gsap.fromTo(el.current, { scale: 1.18 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' })
     return () => void tw.progress(1).kill()
   }, [n])
