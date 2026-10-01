@@ -761,3 +761,8 @@ html[data-mode='dark'] .ov-focus-body img {
   font-style: italic;
   line-height: 1.55;
 }
+
+.ov-habit-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 4px; font-size: .85rem; }
+.ov-habit-chips > span { opacity: .7; }
+.ov-habit-chips button { border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.ov-habit-chips button:hover { border-color: var(--accent-color); }

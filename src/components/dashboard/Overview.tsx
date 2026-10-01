@@ -16,7 +16,7 @@ import {
   Timer,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import type { AppData } from '../../model'
+import { toggleHabit, type AppData } from '../../model'
 import { dayKey } from '../../dates'
 import { memories } from '../../features/insights'
 import { startFocusQuest } from '../../rpg/engine'
@@ -202,6 +202,22 @@ export function StatsRow({
             </span>
           )}
           <ChevronRight className="ov-chevron" size={18} aria-hidden="true" />
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/** Habits still open today, one tap to check each in without leaving Home. */
+export function HabitChips({ data, setData, today }: { data: AppData; setData: Dispatch<SetStateAction<AppData>>; today: string }) {
+  const open = data.habits.filter((h) => !h.dates.includes(today)).slice(0, 6)
+  if (!open.length) return null
+  return (
+    <div className="ov-habit-chips" role="group" aria-label="Open habits">
+      <span>Still to do:</span>
+      {open.map((h) => (
+        <button key={h.id} type="button" onClick={() => setData((d) => toggleHabit(d, h.id, today))} title="Check in">
+          ○ {h.title}
         </button>
       ))}
     </div>

@@ -20,6 +20,7 @@ import {
   WorldTeaser,
   RecentMemories,
   SoundscapeCard,
+  HabitChips,
   StatsRow,
 } from './components/dashboard/Overview'
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -1490,7 +1491,10 @@ function App() {
                   )}
                   {active === 'overview' && <TodayGlance data={data} today={today} onNavigate={jump} />}
                   {active === 'overview' && modules.stats && !simpleHome && (
-                    <StatsRow data={data} today={today} onNavigate={jump} />
+                    <>
+                      <StatsRow data={data} today={today} onNavigate={jump} />
+                      <HabitChips data={data} setData={setData} today={today} />
+                    </>
                   )}
                   <div
                     className={
