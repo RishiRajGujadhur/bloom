@@ -20,7 +20,13 @@ const readArray = <T,>(key: string): T[] => {
 
 export function EnergyPage({ data, today }: FeaturePageProps) {
   const [store, setStore] = useStoredValue<{ logs: TimeLog[] }>(ENERGY_KEY, { logs: [] })
-  const [days, setDays] = useState(7)
+  const [days, setDaysState] = useState(() => {
+    try { return localStorage.getItem('bloom-energy-days') === '30' ? 30 : 7 } catch { return 7 }
+  })
+  const setDays = (d: number) => {
+    setDaysState(d)
+    try { localStorage.setItem('bloom-energy-days', String(d)) } catch { /* optional */ }
+  }
   const [category, setCategory] = useState(categories[0].id)
   const [hours, setHours] = useState('1')
   const flow = useMemo(
@@ -104,7 +110,10 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
       <div className="energy-grid">
         {subOn('energySankey', 'manualLog') && (
           <section className="energy-card">
-            <h3>Log today’s hours</h3>
+            <h3>
+              Log today’s hours
+              {todayLogs.length > 0 && <small className="energy-note"> · {todayLogs.reduce((a, l) => a + l.hours, 0)} h logged</small>}
+            </h3>
             <form
               className="energy-form"
               onSubmit={(e) => {
