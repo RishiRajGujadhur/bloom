@@ -873,6 +873,7 @@ export function GratitudePage() {
               }
               return n > 1 ? ` · 🔥 ${n}-day gratitude streak` : ''
             })()}
+            {` · ${entries.filter((e) => new Date(e.at).getMonth() === new Date().getMonth() && new Date(e.at).getFullYear() === new Date().getFullYear()).length} this month`}
           </p>
           {added > 0 && (
             <NextStep
