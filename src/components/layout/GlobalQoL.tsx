@@ -470,7 +470,11 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
           <button type="button" onClick={snoozeBackup}>Later</button>
         </div>
       )}
-      {toast && <div className="offline-pill quick-toast" role="status">{toast}</div>}
+      {toast && (
+        <div className="offline-pill quick-toast" role="status" title="Click to dismiss" style={{ cursor: 'pointer' }} onClick={() => setToast(null)}>
+          {toast}
+        </div>
+      )}
       {offline && <div className="offline-pill" role="status">Offline · everything still saves on this device</div>}
       {showTop && <button type="button" className="to-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>}
     </>
