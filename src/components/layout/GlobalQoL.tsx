@@ -161,6 +161,12 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('scroll', onScroll, { passive: true })
     const onClick = (e: MouseEvent) => {
       const t = e.target as HTMLElement | null
+      // Links to other sites open in a new tab so Bloom (and any timer) stays put.
+      const a = t?.closest?.('a[href]') as HTMLAnchorElement | null
+      if (a && !a.target && !a.hasAttribute('download') && a.origin !== location.origin && /^https?:/.test(a.href)) {
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
+      }
       if (t?.closest('#page-heading')) window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     document.addEventListener('click', onClick)
