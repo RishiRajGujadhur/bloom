@@ -22,7 +22,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 - [x] Pointer
 - [x] Eyes
 - [x] Exercises
-- [ ] Mixer
+- [x] Mixer
 - [ ] Mirror
 - [ ] English
 - [ ] Mindmap

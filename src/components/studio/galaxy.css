@@ -108,3 +108,6 @@ html[data-theme='galaxy'] .studio[data-studio='eyes'] { --galaxy-light: #c2ffdd;
 
 /* exercises: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='exercises'] { --galaxy-light: #ffc9ad; --galaxy-blue: #b3d7ff; --galaxy-violet: #e2c6ff; --galaxy-x: 68%; --galaxy-y: 30%; --galaxy-ring-x: 88%; --galaxy-ring-y: 69%; --galaxy-ring-size: 165px; --galaxy-shape: 21px 43px 19px 42px; }
+
+/* mixer: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='mixer'] { --galaxy-light: #b4d8ff; --galaxy-blue: #a8ffde; --galaxy-violet: #d7c0ff; --galaxy-x: 89%; --galaxy-y: 14%; --galaxy-ring-x: 9%; --galaxy-ring-y: 82%; --galaxy-ring-size: 120px; --galaxy-shape: 45px 23px 37px 15px; }
