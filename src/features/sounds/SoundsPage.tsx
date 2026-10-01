@@ -17,6 +17,7 @@ const modeHints: Record<Mode, string> = {
   meditate: 'Theta rhythm (~6 Hz) for deep, inward rest',
   sleep: 'Delta rhythm (~2 Hz) to help you drift off',
 }
+import { useTabTitle } from '../../utils/useTabTitle'
 import './sounds.css'
 
 const on = (id: string) => subOn('focusSounds', id)
@@ -120,6 +121,7 @@ export function SoundsPage({ setData }: FeaturePageProps) {
 
   const toggle = () => (playing ? engine.stop() : void engine.play(on('timer') ? prefs.minutes : null))
   const left = engine.endsAt ? Math.max(0, Math.round((engine.endsAt - now) / 1000)) : null
+  useTabTitle(playing ? (left !== null ? `🎧 ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}` : `🎧 ${mode.label}`) : '', 'Focus sounds', 'sounds')
 
   const halo = useRef<SVGSVGElement>(null)
   useEffect(() => {
