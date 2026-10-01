@@ -154,6 +154,22 @@ export function MoneyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const addBtn = useRef<HTMLButtonElement>(null)
+  // The transaction you just added, so a slip of the finger can be undone.
+  const [lastAdded, setLastAdded] = useState<Txn | null>(null)
+  useEffect(() => {
+    if (!lastAdded) return
+    const t = window.setTimeout(() => setLastAdded(null), 8000)
+    return () => window.clearTimeout(t)
+  }, [lastAdded])
+  // B hides or shows amounts.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'b' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select')) return
+      setBlurAmounts((v) => !v)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const today = dayKey()
   const month = today.slice(0, 7)
   const code = store.currency
@@ -177,6 +193,7 @@ export function MoneyPage() {
     }
     setAmount('')
     setPlace('')
+    setLastAdded(txn)
     burst(addBtn.current, 'coins')
     logActivity('money', { amount: n })
   }
@@ -188,6 +205,14 @@ export function MoneyPage() {
 
   const spendTab = () => (
     <div className="mn-grid">
+      {lastAdded && (
+        <p className="mn-budget-note" role="status">
+          Added {fmt(lastAdded.amount)}{lastAdded.place ? ` at ${lastAdded.place}` : ''}.{' '}
+          <button type="button" onClick={() => { save((s) => ({ ...s, txns: s.txns.filter((x) => x.id !== lastAdded.id) })); setLastAdded(null) }}>
+            Undo
+          </button>
+        </p>
+      )}
       {budgetNote && (
         <p className="mn-budget-note" role="status">
           ⚠️ {budgetNote} <button type="button" aria-label="Dismiss" onClick={() => setBudgetNote('')}>✕</button>
