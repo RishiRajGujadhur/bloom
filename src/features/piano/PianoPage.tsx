@@ -66,7 +66,18 @@ function Piano({ onPress, lit, target }: { onPress: (n: string) => void; lit: Re
 export function PianoPage() {
   const [store, setStore] = useState<Store>(() => readStore(KEY, { quest: 0, ear: 0, songs: [] }))
   const save = (f: (s: Store) => Store) => setStore((s) => { const n = f(s); writeStore(KEY, n); return n })
-  const [mode, setMode] = useState<Mode>('play')
+  const [mode, setModeState] = useState<Mode>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-piano-mode') as Mode | null
+      return saved && ['play', 'quest', 'ear', 'songs'].includes(saved) ? saved : 'play'
+    } catch {
+      return 'play'
+    }
+  })
+  const setMode = (m: Mode) => {
+    setModeState(m)
+    try { localStorage.setItem('bloom-piano-mode', m) } catch { /* optional */ }
+  }
   // Hide key labels to practise by ear and position.
   const [labels, setLabels] = useState(() => localStorage.getItem('bloom-piano-labels') !== '0')
   const [lit, setLit] = useState<Record<string, number>>({})
@@ -75,7 +86,18 @@ export function PianoPage() {
   const [ear, setEar] = useState<EarQ | null>(null)
   const [earKind, setEarKind] = useState<'interval' | 'chord'>('interval')
   const [picked, setPicked] = useState<string | null>(null)
-  const [songId, setSongId] = useState(songs[0].id)
+  const [songId, setSongIdState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bloom-piano-song')
+      return songs.some((s) => s.id === saved) ? (saved as string) : songs[0].id
+    } catch {
+      return songs[0].id
+    }
+  })
+  const setSongId = (id: string) => {
+    setSongIdState(id)
+    try { localStorage.setItem('bloom-piano-song', id) } catch { /* optional */ }
+  }
   const [step, setStep] = useState(0)
   const lane = useRef<HTMLDivElement>(null)
   const song = songs.find((s) => s.id === songId)!
