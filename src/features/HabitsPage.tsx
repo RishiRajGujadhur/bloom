@@ -20,6 +20,9 @@ import {
   Timer,
   ArrowUp,
   ArrowDown,
+  Leaf,
+  MessageCircle,
+  Waves,
 } from 'lucide-react'
 import { dayKey, id, toggleHabit } from '../model'
 import type { AppData } from '../model'
@@ -32,6 +35,7 @@ import { gridDays, habitStats } from './habits'
 import './habits.css'
 import { HabitsQuick } from './quick/HabitsQuick'
 import { StickerBook } from './showcase/StickerBook'
+import { HabitCalendar } from './habits/HabitCalendar'
 
 import { Archive, ArchiveRestore, ChevronLeft, ChevronRight } from 'lucide-react'
 import { move, ordered, strength, useHabitExtras } from './habits/habitExtras'
@@ -163,9 +167,7 @@ export function HabitsPage({
           </div>
         </div>
       )}
-      {tab === 'habits' && <HabitsQuick data={data} setData={setData} today={today} />}
-      {tab === 'habits' && <StickerBook data={data} setData={setData} today={today} />}
-      <div className="habits-toolbar">
+      <div className="habits-toolbar habits-page-toolbar">
         <div className="segmented" role="tablist" aria-label="Habit views">
           <button
             role="tab"
@@ -173,7 +175,7 @@ export function HabitsPage({
             className={tab === 'habits' ? 'active' : ''}
             onClick={() => setTab('habits')}
           >
-            Habits
+            <Leaf size={15} aria-hidden="true" /> Growth
           </button>
           {subOn('habitTracker', 'routines') && (
           <button
@@ -185,8 +187,10 @@ export function HabitsPage({
             Routines
           </button>
           )}
+          <button role="tab" aria-selected={false} disabled title="Urge tracking is coming soon"><Waves size={15} aria-hidden="true" /> Urges <small>soon</small></button>
         </div>
         <div className="habits-actions">
+        <button className="quiet-button" onClick={() => window.dispatchEvent(new CustomEvent('bloom:guide', { detail: { dock: true } }))}><MessageCircle size={16} aria-hidden="true" /> Ask Bloom</button>
         {subOn('habitTracker', 'library') && (
         <button className="quiet-button" onClick={() => setLibrary(true)}>
           <LibraryBig size={16} aria-hidden="true" /> Browse library
@@ -272,6 +276,7 @@ export function HabitsPage({
       <p role="status" className="habit-message">
         {message}
       </p>
+      {tab === 'habits' && <HabitCalendar data={data} setData={setData} today={today} />}
       {run && (
         <section className="routine-player" aria-label="Active routine">
           <div>
@@ -376,6 +381,8 @@ export function HabitsPage({
               <span>Total check-ins</span>
             </div>
           </div>
+          <HabitsQuick data={data} setData={setData} today={today} />
+          <StickerBook data={data} setData={setData} today={today} />
           {!data.habits.length && (
             <p>No habits yet. Start with one small daily commitment.</p>
           )}
