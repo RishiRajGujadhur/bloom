@@ -18,6 +18,18 @@ import styles from './search.module.css'
 
 type Result = Scored
 const smart = (id: string) => loadSettings().features.smartSearch && subOn('smartSearch', id)
+/** A ~200-character snippet around the first match, with every query word marked. */
+function highlight(text: string, query: string) {
+  const words = query.trim().toLowerCase().split(/\s+/).filter((w) => w.length > 1)
+  if (!words.length) return text.slice(0, 200) + (text.length > 200 ? '…' : '')
+  const lower = text.toLowerCase()
+  const first = Math.min(...words.map((w) => lower.indexOf(w)).filter((i) => i >= 0), Infinity)
+  const start = Number.isFinite(first) ? Math.max(0, first - 60) : 0
+  const snippet = (start > 0 ? '…' : '') + text.slice(start, start + 200) + (start + 200 < text.length ? '…' : '')
+  const re = new RegExp(`(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi')
+  return snippet.split(re).map((part, i) => (i % 2 ? <mark key={i}>{part}</mark> : part))
+}
+
 export function SemanticSearch({
   entries,
   onOpen,
@@ -143,7 +155,7 @@ export function SemanticSearch({
                 <button type="button" className={styles.result} onClick={() => onOpen(r.id)}>
                   <span>{r.title}</span>
                   <time dateTime={new Date(r.timestamp).toISOString()}>{new Date(r.timestamp).toLocaleDateString()}</time>
-                  <p>{r.text.slice(0, 200)}{r.text.length > 200 ? '…' : ''}</p>
+                  <p>{highlight(r.text, query)}</p>
                 </button>
               </li>
             ))}
