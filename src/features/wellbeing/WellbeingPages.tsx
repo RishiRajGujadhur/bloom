@@ -767,6 +767,7 @@ export function GratitudePage() {
             </small>
             <p>“{recall.text}”</p>
           </div>
+          <button type="button" className="quiet-button" aria-label="Copy this memory" title="Copy" onClick={(e) => { void navigator.clipboard?.writeText(recall.text); e.currentTarget.textContent = '✓' }}>📋</button>
           <button type="button" className="quiet-button" onClick={pickRecall} aria-label="Show another">↻</button>
         </div>
       )}
