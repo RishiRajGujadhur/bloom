@@ -350,6 +350,22 @@ export function MoneyPage() {
               >
                 {x.income ? '+' : '−'}{fmt(x.amount)}
               </button>
+              {!x.income && (
+                <button
+                  type="button"
+                  className="mn-del"
+                  aria-label="Split"
+                  title="Split off part of this into another category"
+                  onClick={() => {
+                    const v = window.prompt(`Split how much off ${fmt(x.amount)}? (then pick its category)`, '')
+                    const part = v === null ? NaN : toMinor(Number(v.replace(',', '.')))
+                    if (!Number.isFinite(part) || part <= 0 || part >= x.amount) return
+                    save((s) => ({ ...s, txns: s.txns.flatMap((y) => (y.id === x.id ? [{ ...y, amount: y.amount - part }, { ...y, id: crypto.randomUUID(), amount: part, repeat: undefined, series: undefined, note: 'Split' }] : [y])) }))
+                  }}
+                >
+                  ✂
+                </button>
+              )}
               <button type="button" className="mn-del" aria-label="Delete" onClick={() => save((s) => ({ ...s, txns: s.txns.filter((y) => y.id !== x.id) }))}>
                 <Trash2 size={14} />
               </button>
