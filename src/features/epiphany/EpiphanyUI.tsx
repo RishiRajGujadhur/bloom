@@ -1,3 +1,4 @@
+import { useTabTitle } from '../../utils/useTabTitle'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
@@ -160,6 +161,8 @@ export function EpiphaniesPage({ today }: { today: string }) {
   const [list, update] = useEpiphanies()
   const [text, setText] = useState('')
   const [onlyStarred, setOnlyStarred] = useState(false)
+  const dueCount = list.filter((e) => e.due <= today).length
+  useTabTitle(dueCount ? `${dueCount} to review` : '', 'Epiphanies')
   const sorted = [...list]
     .filter((e) => !onlyStarred || e.starred)
     .sort((a, b) => Number(Boolean(b.starred)) - Number(Boolean(a.starred)) || a.due.localeCompare(b.due))
