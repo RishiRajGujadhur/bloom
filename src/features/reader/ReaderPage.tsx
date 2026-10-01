@@ -88,6 +88,11 @@ export function ReaderPage() {
     const k = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement).closest('input, textarea')) return
       if (e.code === 'Space' && phase !== 'quiz') { e.preventDefault(); toggle() }
+      // Paused: step back or forward one word at a time.
+      if (phase === 'reading' && !playing && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+        e.preventDefault()
+        setI((n) => Math.max(0, Math.min(tokens.length - 1, n + (e.key === 'ArrowRight' ? 1 : -1))))
+      }
     }
     window.addEventListener('keydown', k)
     return () => window.removeEventListener('keydown', k)
