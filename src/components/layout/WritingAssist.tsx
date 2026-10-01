@@ -59,7 +59,15 @@ export function WritingAssist() {
   useEffect(() => {
     if (!el) { setFocus(false); return }
     const place = () => { const r = el.getBoundingClientRect(); setPos({ x: r.left, y: Math.max(8, r.top - 44) }) }
+    const draftKey = `bloom-draft:${location.hash.split('/')[0]}:${el.getAttribute('aria-label') ?? el.placeholder ?? el.name}`
     const onInput = () => {
+      // Keep unsent text for this tab session, so a reload doesn't lose it.
+      try {
+        if (el.value.trim()) sessionStorage.setItem(draftKey, el.value)
+        else sessionStorage.removeItem(draftKey)
+      } catch {
+        /* optional */
+      }
       const n = count(el.value); setWords(n)
       const added = Math.max(0, n - (base.current.get(el) ?? n))
       if (added) { const d = readDays(); d[today()] = Math.max(d[today()] ?? 0, added); try { localStorage.setItem(STREAK_KEY, JSON.stringify(d)) } catch { /* optional */ } setStreak(streakOf(d)) }
@@ -81,10 +89,19 @@ export function WritingAssist() {
         setValue(el, el.value.slice(0, a) + m + el.value.slice(a, b) + m + el.value.slice(b), b + m.length * 2)
       } else if (e.key === 'Escape' && focus) setFocus(false)
     }
+    // Sent: the draft is no longer needed.
+    const clearDraft = () => {
+      try {
+        sessionStorage.removeItem(draftKey)
+      } catch {
+        /* optional */
+      }
+    }
+    el.form?.addEventListener('submit', clearDraft)
     onInput(); place()
     el.addEventListener('input', onInput); el.addEventListener('keydown', onKey)
     window.addEventListener('scroll', place, true); window.addEventListener('resize', place)
-    return () => { el.removeEventListener('input', onInput); el.removeEventListener('keydown', onKey); window.removeEventListener('scroll', place, true); window.removeEventListener('resize', place) }
+    return () => { el.form?.removeEventListener('submit', clearDraft); el.removeEventListener('input', onInput); el.removeEventListener('keydown', onKey); window.removeEventListener('scroll', place, true); window.removeEventListener('resize', place) }
   }, [el, focus])
 
   useEffect(() => {
@@ -104,9 +121,21 @@ export function WritingAssist() {
     rec.current = r; r.start(); setListening(true); el.focus()
   }
   if (!el) return null
+  const draft = (() => {
+    try {
+      return el.value ? null : sessionStorage.getItem(`bloom-draft:${location.hash.split('/')[0]}:${el.getAttribute('aria-label') ?? el.placeholder ?? el.name}`)
+    } catch {
+      return null
+    }
+  })()
   const canDictate = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window
   return (
     <div className="wa-bar" style={{ left: pos.x, top: pos.y }} onMouseDown={(e) => e.preventDefault()}>
+      {draft && (
+        <button type="button" title={draft.slice(0, 200)} onClick={() => setValue(el, draft, draft.length)}>
+          ↩ Restore unsent text
+        </button>
+      )}
       <span title="Words and reading time">{words} words · {Math.max(1, Math.round(words / 200))} min read</span>
       {streak > 0 && <span title="Days in a row with 50+ words">✍️ {streak}-day streak</span>}
       <button type="button" title="Insert a writing prompt" onClick={() => insert(el, (el.value && !el.value.endsWith('\n') ? '\n\n' : '') + PROMPTS[Math.floor(Math.random() * PROMPTS.length)] + '\n')}>🎲 Prompt</button>
