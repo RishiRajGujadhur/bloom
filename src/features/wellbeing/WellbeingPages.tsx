@@ -118,6 +118,7 @@ export function BreathePage() {
   const { phase, left, cycles } = tick
   const [sessions, setSessions] = useStoredList<BreathSession>(BREATH_KEY)
   const todayCount = sessions.filter((s) => new Date(s.at).toDateString() === new Date().toDateString()).length
+  const weekCount = sessions.filter((s) => Date.now() - s.at < 7 * 864e5).length
 
   useEffect(() => {
     if (!running) return
@@ -316,7 +317,7 @@ export function BreathePage() {
         </button>
       </div>
       <p className="wb-muted">
-        {cycles} / {rounds} rounds{todayCount > 0 ? ` · ${todayCount} ${todayCount === 1 ? 'session' : 'sessions'} today` : ''}
+        {cycles} / {rounds} rounds{todayCount > 0 ? ` · ${todayCount} ${todayCount === 1 ? 'session' : 'sessions'} today` : ''}{weekCount > todayCount ? ` · ${weekCount} this week` : ''}
       </p>
     </section>
   )
