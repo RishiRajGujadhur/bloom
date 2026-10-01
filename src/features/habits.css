@@ -248,3 +248,6 @@
 }
 .hx-rate { display: block; margin: 4px 0 8px; color: var(--text-muted); }
 .hx-copy { border: 0; background: none; color: var(--accent-color); cursor: pointer; font-size: inherit; text-decoration: underline; }
+/* Keep the habit name readable: the action buttons wrap below it instead of squeezing it. */
+.habit-grid-card header > div:first-child { min-width: min(100%, 150px); }
+.habit-grid-card header .habit-actions { gap: 2px; }
