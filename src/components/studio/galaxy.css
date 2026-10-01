@@ -135,3 +135,6 @@ html[data-theme='galaxy'] .studio[data-studio='joys'] { --galaxy-light: #b7e7ff;
 
 /* dojo: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='dojo'] { --galaxy-light: #ffcabf; --galaxy-blue: #fee4a9; --galaxy-violet: #bed3ff; --galaxy-x: 69%; --galaxy-y: 27%; --galaxy-ring-x: 84%; --galaxy-ring-y: 70%; --galaxy-ring-size: 171px; --galaxy-shape: 40px 17px 22px 46px; }
+
+/* stretch: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='stretch'] { --galaxy-light: #c5eaff; --galaxy-blue: #dbbeff; --galaxy-violet: #b5ffde; --galaxy-x: 77%; --galaxy-y: 14%; --galaxy-ring-x: 21%; --galaxy-ring-y: 89%; --galaxy-ring-size: 121px; --galaxy-shape: 19px 45px 19px 40px; }
