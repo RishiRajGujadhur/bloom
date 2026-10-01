@@ -307,6 +307,7 @@ export function MeditatePage() {
       <div className="studio-stats">
         <Stat value={streakDays(store.logs)} label="day streak" />
         <Stat value={store.logs.length} label="sessions" />
+        <Stat value={store.logs.filter((l) => Date.now() - l.at < 7 * 864e5).length} label="this week" />
         <Stat value={`${total_min} min`} label="total" />
         <Stat value={store.logs.length ? `${Math.max(...store.logs.map((l) => l.minutes))} min` : '—'} label="longest sit" />
         <Stat value={`${store.logs.filter((l) => new Date(l.at).getMonth() === new Date().getMonth() && new Date(l.at).getFullYear() === new Date().getFullYear()).reduce((a, l) => a + l.minutes, 0)} min`} label="this month" />
