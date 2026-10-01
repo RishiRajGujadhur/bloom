@@ -1,3 +1,4 @@
+import { useTabTitle } from '../utils/useTabTitle'
 import { PixelSprite } from './juice/PixelJuice'
 import { pickSprite } from './juice/sprites'
 import { loadSettings } from '../SettingsPage'
@@ -77,6 +78,8 @@ export function HabitsPage({
   const yesterday = (() => { const d = new Date(`${today}T12:00:00`); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10) })()
   const active = ordered(data.habits.filter((h) => !extras.archived.includes(h.id)), extras.order)
   const missedYesterday = active.filter((h) => !h.dates.includes(yesterday))
+  const leftToday = active.filter((h) => !h.dates.includes(today)).length
+  useTabTitle(active.length ? (leftToday ? `${leftToday} habits left` : 'All habits done ✓') : '', 'Habits')
   const shown = habitView === 'archived'
     ? data.habits.filter((h) => extras.archived.includes(h.id))
     : active.filter((h) => habitView === 'all' || (habitView === 'done') === h.dates.includes(today))
