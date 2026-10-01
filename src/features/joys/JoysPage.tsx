@@ -50,6 +50,18 @@ function Hydration({ store, save, today }: { store: JoysStore; save: (f: (s: Joy
     if (d > 0 && glasses + 1 === store.goal) burst(el, 'stars')
     if (d > 0) logActivity('water', { glasses: glasses + 1 })
   }
+  // + and − log a glass.
+  const addRef = useRef(add)
+  addRef.current = add
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select')) return
+      if (e.key === '+' || e.key === '=') addRef.current(1)
+      else if (e.key === '-' || e.key === '_') addRef.current(-1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const week = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(`${today}T12:00:00`)
     d.setDate(d.getDate() - 6 + i)
@@ -90,7 +102,8 @@ function Hydration({ store, save, today }: { store: JoysStore; save: (f: (s: Joy
             </div>
           ))}
         </div>
-        <p className="quick-note">Tip: drink a glass after each Focus session and with every meal.</p>
+        <p className="quick-note">Average {(week.reduce((a, d) => a + d.v, 0) / 7).toFixed(1)} glasses a day · goal met {week.filter((d) => d.v >= store.goal).length}/7 days.</p>
+        <p className="quick-note">Tip: drink a glass after each Focus session and with every meal. Press + or − to log.</p>
       </section>
     </div>
   )
