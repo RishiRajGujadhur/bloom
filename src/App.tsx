@@ -501,6 +501,24 @@ function App() {
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
+  // Settings -> Theme schedule: dark between the chosen hours, light otherwise.
+  useEffect(() => {
+    const sync = () => {
+      const raw = localStorage.getItem('bloom-theme-schedule')
+      if (!raw) return
+      const [from, to] = raw.split('-').map(Number)
+      const h = new Date().getHours()
+      const wantDark = from > to ? h >= from || h < to : h >= from && h < to
+      setThemeSettings((t) => ((getThemeMode(t.themeId) === 'dark') === wantDark ? t : toggleThemeMode(t)))
+    }
+    sync()
+    const id = setInterval(sync, 5 * 60000)
+    window.addEventListener('bloom:theme-schedule', sync)
+    return () => {
+      clearInterval(id)
+      window.removeEventListener('bloom:theme-schedule', sync)
+    }
+  }, [])
   // Anywhere: press m, then 1–5, to log how you feel right now.
   useEffect(() => {
     let armedAt = 0

@@ -641,6 +641,7 @@ const PREF_KEYS = [
   'bloom-name',
   'bloom-sidebar-width',
   'bloom-companion-width',
+  'bloom-theme-schedule',
 ]
 
 /** Navigation style and a way back into onboarding. */
@@ -845,6 +846,38 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Theme schedule</strong>
+          <small>Switch to dark in the evening and back to light in the morning.</small>
+        </span>
+        <select
+          className="settings-name"
+          aria-label="Theme schedule"
+          defaultValue={(() => {
+            try {
+              return localStorage.getItem('bloom-theme-schedule') ?? ''
+            } catch {
+              return ''
+            }
+          })()}
+          onChange={(e) => {
+            try {
+              if (e.target.value) localStorage.setItem('bloom-theme-schedule', e.target.value)
+              else localStorage.removeItem('bloom-theme-schedule')
+            } catch {
+              /* optional */
+            }
+            window.dispatchEvent(new Event('bloom:theme-schedule'))
+          }}
+        >
+          <option value="">Off</option>
+          <option value="19-7">Dark 19:00–07:00</option>
+          <option value="20-7">Dark 20:00–07:00</option>
+          <option value="21-6">Dark 21:00–06:00</option>
+          <option value="18-8">Dark 18:00–08:00</option>
+        </select>
       </label>
       <label className={styles.subOption}>
         <span>
