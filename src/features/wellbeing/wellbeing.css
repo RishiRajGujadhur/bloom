@@ -686,3 +686,6 @@
 .wb-grat-search ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
 .wb-grat-search li small { margin-left: 8px; color: var(--text-muted); }
 .wb-export { float: right; margin: 0 0 8px 8px; }
+.wb-note { position: relative; }
+.wb-note-del { position: absolute; top: 4px; right: 6px; border: 0; background: none; color: var(--text-muted); cursor: pointer; opacity: 0; font-size: 16px; }
+.wb-note:hover .wb-note-del, .wb-note-del:focus-visible { opacity: 1; }

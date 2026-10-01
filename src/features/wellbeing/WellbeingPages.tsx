@@ -641,6 +641,9 @@ export function MoodPage() {
         <Carousel label="Recent check-ins" title="Recent" perView={4}>
           {entries.slice(0, 20).map((entry) => (
             <article key={entry.id} className="wb-note">
+              <button type="button" className="wb-note-del" aria-label="Delete this check-in" onClick={() => setEntries((list) => list.filter((e) => e.id !== entry.id))}>
+                ×
+              </button>
               <span aria-hidden="true">{moods[entry.mood - 1]?.emoji}</span>
               <strong>{moods[entry.mood - 1]?.label}</strong>
               {entry.emotions?.length ? <p className="wb-note-tags">{entry.emotions.join(' · ')}</p> : null}
