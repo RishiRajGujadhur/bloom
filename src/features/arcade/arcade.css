@@ -76,3 +76,4 @@
 .ar-recent .ar-recent-clear { border: 0; background: none; color: var(--text-muted); }
 .ar-shell:fullscreen { background: var(--bg-primary); padding: 16px; overflow: auto; display: flex; flex-direction: column; }
 .ar-shell:fullscreen .ar-stage { flex: 1; }
+.ar-hint-x { background: none; border: 0; color: inherit; opacity: .6; cursor: pointer; font-size: 1rem; }

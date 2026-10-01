@@ -27,6 +27,13 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
   children: ReactNode
 }) {
   const card = useRef<HTMLDivElement>(null)
+  const hintKey = `bloom-arcade-hint-${title}`
+  const [hideHint, setHideHint] = useState(() => { try { return localStorage.getItem(hintKey) === '1' } catch { return false } })
+  useEffect(() => {
+    const prev = document.title
+    document.title = `${title} · Arcade`
+    return () => { if (document.title === `${title} · Arcade`) document.title = prev }
+  }, [title])
   useEffect(() => {
     if (!result || !card.current || reducedMotion()) return
     const t = gsap.timeline()
@@ -56,7 +63,7 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
         {document.fullscreenEnabled && (
           <button
             type="button"
-            title="Full screen (F)"
+            title="Full screen (F · Esc to leave)"
             onClick={(e) => {
               const shell = e.currentTarget.closest('.ar-shell')
               if (document.fullscreenElement) void document.exitFullscreen()
@@ -67,7 +74,12 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
           </button>
         )}
       </div>
-      {hint && <p className="ar-hint">{hint}</p>}
+      {hint && !hideHint && (
+        <p className="ar-hint">
+          {hint}{' '}
+          <button type="button" className="ar-hint-x" aria-label="Hide hint" onClick={() => { setHideHint(true); try { localStorage.setItem(hintKey, '1') } catch { /* optional */ } }}>×</button>
+        </p>
+      )}
       <div className="ar-stage" data-matrix-native>
         {children}
         {result && (
