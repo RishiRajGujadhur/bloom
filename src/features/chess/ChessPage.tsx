@@ -236,6 +236,21 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
           <button type="button" className="studio-btn" disabled={thinking || history.length < 2} onClick={() => { const g = new Chess(); for (const m of history.slice(0, -2)) g.move(m); setGame(g); setLast(null) }}>Undo</button>
           <button type="button" className="studio-btn" disabled={!history.length} title="Copy the game as PGN (for Lichess or other chess apps)" onClick={(e) => { void navigator.clipboard?.writeText(game.pgn()); e.currentTarget.textContent = '✓ Copied' }}>PGN</button>
           <button type="button" className="studio-btn" aria-pressed={flipped} title="View the board from Bloom's side (F)" onClick={() => setFlipped((f) => !f)}>⇅ Flip</button>
+          <button
+            type="button"
+            className="studio-btn"
+            disabled={history.length < 2 || game.isGameOver()}
+            title="Concede this game and start a fresh one"
+            onClick={() => {
+              if (!window.confirm('Resign this game?')) return
+              save((s) => ({ ...s, games: s.games + 1 }))
+              setGame(new Chess())
+              setLast(null)
+              setSelected(null)
+            }}
+          >
+            🏳 Resign
+          </button>
           <button type="button" className="ch-cta" onClick={() => { setGame(new Chess()); setLast(null); setSelected(null) }}>New game</button>
         </div>
       </aside>
