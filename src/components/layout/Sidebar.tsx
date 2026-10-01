@@ -793,7 +793,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
           {pinnedItems.length > 0 && (
             <div className="nav-pins" aria-label="Pinned pages">
               {pinnedItems.map(({ key, title, Icon }) => (
-                <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} title={title} aria-label={`${title} (pinned)`} onClick={() => handleNavigate(key)} onContextMenu={(e) => { e.preventDefault(); setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!requiresOf(key) && !!onDisable, pinned: true }) }}>
+                <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} title={pins.indexOf(key) < 9 ? `${title} (Alt+${pins.indexOf(key) + 1})` : title} aria-label={`${title} (pinned)`} onClick={() => handleNavigate(key)} onContextMenu={(e) => { e.preventDefault(); setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!requiresOf(key) && !!onDisable, pinned: true }) }}>
                   <Icon size={17} aria-hidden="true" />
                   {isOpen && <span>{title}</span>}
                 </button>
