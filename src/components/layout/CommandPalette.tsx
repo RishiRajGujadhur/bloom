@@ -322,6 +322,14 @@ export function CommandPalette({
             setSearch(value)
             setMeaning(null)
           }}
+          onKeyDown={(e) => {
+            // First Esc clears what you typed; a second one closes.
+            if (e.key === 'Escape' && search) {
+              e.preventDefault()
+              e.stopPropagation()
+              setSearch('')
+            }
+          }}
           placeholder={flags.omnibox ? 'Search, or type > for commands…' : 'Search pages, journal entries, habits, tasks…'}
         />
         <kbd>Esc</kbd>
