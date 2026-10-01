@@ -250,6 +250,25 @@ export function FocusPage({
             <input aria-label="Note a distraction" placeholder="Distracted? Park it here and carry on…" value={distraction} maxLength={120} onChange={(e) => setDistraction(e.target.value)} />
           </form>
         )}
+        {!active && quest.completedAt && history.length > 0 && Date.now() - history[history.length - 1].completedAt < 30 * 60000 && (
+          <textarea
+            className="focus-note"
+            rows={2}
+            maxLength={300}
+            placeholder="What did you get done? (optional note on this session)"
+            aria-label="Session note"
+            defaultValue={history[history.length - 1].note ?? ''}
+            onBlur={(e) => {
+              const note = e.currentTarget.value.trim()
+              setData((c) => {
+                const list = [...(c.rpg.focusHistory ?? [])]
+                if (!list.length) return c
+                list[list.length - 1] = { ...list[list.length - 1], note: note || undefined }
+                return { ...c, rpg: { ...c.rpg, focusHistory: list } }
+              })
+            }}
+          />
+        )}
         {!active && distractions.some((d) => d.at >= since) && (
           <details className="focus-distract-log">
             <summary>{distractions.filter((d) => d.at >= since).length} distractions parked today</summary>

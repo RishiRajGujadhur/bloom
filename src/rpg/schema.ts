@@ -63,7 +63,7 @@ export const rpgSchema = z.object({
   weeklyRaid: weeklyRaidSchema.nullable().default(null),
   badges: z.array(z.string()).default([]),
   momentum: momentumSchema.default({ startedAt: null, resetAt: null, shatteredAt: null }),
-  focusHistory: z.array(z.object({ id: z.string(), completedAt: stamp, minutes: z.number(), taskTitle: z.string() })).default([]),
+  focusHistory: z.array(z.object({ id: z.string(), completedAt: stamp, minutes: z.number(), taskTitle: z.string(), note: z.string().optional() })).default([]),
   focusQuest: focusQuestSchema.default({ durationMinutes: 25, taskId: null, strict: false, startedAt: null, completedAt: null, failedAt: null, damage: 0, soundscape: 'rain' }),
   contracts: z.array(contractSchema).default([]),
   /** Posture guard effects: poison (−HP) for ignored slouching, stamina (+HP) for good posture. */
