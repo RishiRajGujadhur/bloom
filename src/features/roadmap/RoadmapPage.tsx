@@ -124,6 +124,17 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
             </button>
           )}
           {on('confidence') && <Slider label="Confidence" value={goal.confidence} min={1} max={10} format={(v) => `${v}/10`} onChange={(v) => updateGoal(goal.id, (g) => ({ ...g, confidence: v }))} />}
+          <button
+            type="button"
+            className="studio-chip"
+            onClick={() => {
+              if (!window.confirm(`Delete the goal “${goal.title}” and its milestones?`)) return
+              setStore((s) => ({ ...s, goals: s.goals.filter((g) => g.id !== goal.id) }))
+              setSel('')
+            }}
+          >
+            <Trash2 size={13} /> Delete goal
+          </button>
         </div>
         <div className="studio-card rm-side">
           <h3>
@@ -157,7 +168,16 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
               </li>
             ))}
           </ul>
-          <input className="studio-input" aria-label="Milestone" placeholder="Next milestone" value={msTitle} onChange={(e) => setMsTitle(e.target.value)} />
+          <input
+            className="studio-input"
+            aria-label="Milestone"
+            placeholder="Next milestone (Enter to add)"
+            value={msTitle}
+            onChange={(e) => setMsTitle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && msTitle.trim()) (e.currentTarget.parentElement?.querySelector('.studio-go') as HTMLButtonElement | null)?.click()
+            }}
+          />
           <Slider label="Takes" value={msWeeks} min={1} max={26} unit="weeks" compact onChange={setMsWeeks} />
           <button
             type="button"
