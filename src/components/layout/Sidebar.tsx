@@ -591,6 +591,17 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
       return next
     })
 
+  // Keep the sidebar's scroll position across reloads.
+  useEffect(() => {
+    const el = sidebarRef.current
+    if (!el) return
+    const scroller = [el, ...el.querySelectorAll<HTMLElement>('nav')].find((x) => x.scrollHeight > x.clientHeight) ?? el
+    const saved = Number(sessionStorage.getItem('bloom-nav-scroll'))
+    if (saved) scroller.scrollTop = saved
+    const save = () => sessionStorage.setItem('bloom-nav-scroll', String(scroller.scrollTop))
+    scroller.addEventListener('scroll', save, { passive: true })
+    return () => scroller.removeEventListener('scroll', save)
+  }, [isOpen])
   const toggleLabel = isOpen ? t('sidebar.collapse') : t('sidebar.expand')
 
   const handleNavigate = (key: NavKey) => {
