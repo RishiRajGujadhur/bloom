@@ -142,6 +142,11 @@ export function GlobePage() {
           {continents.map((c) => <button key={c} type="button" className={`gq-chip small ${continent === c ? 'on' : ''}`} onClick={() => setContinent(c)}>{c}</button>)}
         </div>
         {q.mode === 'find' && !answer && <p className="gq-hint">Drag to spin the globe, then click the country.</p>}
+        {!answer && (
+          <button type="button" className="gq-chip small" onClick={() => next()}>
+            Skip →
+          </button>
+        )}
         {q.mode === 'name' && !answer && (
           <form className="gq-row" onSubmit={(e) => { e.preventDefault(); submitName() }}>
             <input className="studio-input" value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type the country…" aria-label="Country name" autoFocus />
