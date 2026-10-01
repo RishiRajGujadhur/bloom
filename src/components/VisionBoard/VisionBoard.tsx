@@ -173,6 +173,25 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
   }
   // "Open with Bloom" from the OS (manifest file handler for .bloomboard).
   useEffect(() => onLaunchFiles((fs) => { if (fs[0]) void openFile(fs[0].file, fs[0].handle as SaveHandle | null) }), []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Ctrl/Cmd+D duplicates the selected cards, nudged down and right.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'd') return
+      if ((e.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]')) return
+      const picked = nodes.filter((n) => n.selected)
+      if (!picked.length) return
+      e.preventDefault()
+      const copies = picked.map((n) => {
+        const w = (n.style?.width as number | undefined) ?? undefined
+        const h = (n.style?.height as number | undefined) ?? undefined
+        return { id: crypto.randomUUID(), type: n.type, position: { x: n.position.x + 32, y: n.position.y + 32 }, data: { ...n.data }, ...(w ? { width: w, height: h } : {}) }
+      })
+      setNodes((current) => [...current.map((n) => ({ ...n, selected: false })), ...copies.map((row) => ({ ...row, selected: true, style: row.width ? { width: row.width, height: row.height } : undefined }))] as typeof current)
+      for (const row of copies) save(() => db.vision_board_nodes.add(row as never))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
   // Ctrl/Cmd+S saves the board to its file.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); void saveToDisk(e.shiftKey) } }
