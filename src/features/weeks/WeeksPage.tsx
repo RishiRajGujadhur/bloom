@@ -99,6 +99,17 @@ export function WeeksPage() {
   const moons = Math.round((left * 7) / 29.53)
   const hoverInfo = hover !== null && valid ? { from: addWeeks(birth, hover), age: Math.floor(hover / COLS), chapter: chapterAt.get(hover), milestone: milestoneAt.get(hover) } : null
   const headline = `${sundays.toLocaleString()} Sundays left`
+  // Click a week to start a milestone on that date.
+  const addForm = useRef<HTMLDetailsElement>(null)
+  const pickWeek = (w: number) => {
+    if (!valid || !addForm.current) return
+    addForm.current.open = true
+    const from = addForm.current.querySelector<HTMLInputElement>('input[name="from"]')
+    const kind = addForm.current.querySelector<HTMLSelectElement>('select[name="kind"]')
+    if (from) from.value = format(addWeeks(birth, w), 'yyyy-MM-dd')
+    if (kind) kind.value = 'milestone'
+    addForm.current.querySelector<HTMLInputElement>('input[name="name"]')?.focus()
+  }
 
   return (
     <div className="lw-page">
@@ -107,7 +118,7 @@ export function WeeksPage() {
         <h2 ref={title} className="lw-title" aria-label={headline}>
           {headline.split(' ').map((w, i) => <span key={i} className="lw-mask"><span className="lw-w">{w}</span></span>)}
         </h2>
-        <p className="lw-sub">Each square is one week. Not to worry you — to remind you which weeks are yours to shape.</p>
+        <p className="lw-sub">Each square is one week. Not to worry you — to remind you which weeks are yours to shape.{total > 0 && ` You’re ${((lived / total) * 100).toFixed(1)}% of the way through your plan.`}</p>
         <div className="lw-stats">
           <Counter value={lived} label="weeks lived" />
           <Counter value={Math.round(summers)} label="summers ahead" />
@@ -117,7 +128,7 @@ export function WeeksPage() {
           <label>Born <input type="date" className="studio-input" value={store.birth} max={format(today, 'yyyy-MM-dd')} onChange={(e) => e.target.value && save((s) => ({ ...s, birth: e.target.value }))} /></label>
           <label>Plan for <input type="number" className="studio-input" min={40} max={110} value={store.years} onChange={(e) => save((s) => ({ ...s, years: Math.min(110, Math.max(40, Number(e.target.value) || 85)) }))} /> years</label>
         </form>
-        <details className="lw-add">
+        <details className="lw-add" ref={addForm}>
           <summary>Chapters & milestones</summary>
           <form className="lw-form" onSubmit={(e) => {
             e.preventDefault()
@@ -153,7 +164,7 @@ export function WeeksPage() {
             const ms = milestoneAt.get(w)
             const past = w < lived
             const fill = ms ? '#ffc800' : ch ? (past ? ch.color : chroma(ch.color).alpha(0.35).css()) : past ? 'var(--lw-past)' : 'var(--lw-future)'
-            return <rect key={w} className={`lw-cell ${w === lived ? 'lw-now' : ''}`} x={x} y={y} width={CELL} height={CELL} rx={ms ? 4.5 : 2} fill={w === lived ? '#ff4b4b' : fill} onMouseEnter={() => setHover(w)} />
+            return <rect key={w} className={`lw-cell ${w === lived ? 'lw-now' : ''}`} x={x} y={y} width={CELL} height={CELL} rx={ms ? 4.5 : 2} fill={w === lived ? '#ff4b4b' : fill} onMouseEnter={() => setHover(w)} onClick={() => pickWeek(w)} style={{ cursor: 'pointer' }} />
           })}
         </svg>
         <p className="lw-tip" aria-live="polite">
