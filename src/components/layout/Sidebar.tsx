@@ -744,7 +744,19 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
             }}
           />
         )}
-        <nav aria-label={t('navigation.main')}>
+        <nav
+          aria-label={t('navigation.main')}
+          onKeyDown={(e) => {
+            // Up/Down move between pages; Home/End jump to the first/last.
+            if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return
+            const items = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('button.nav-item, button.nav-pin')].filter((b) => b.offsetParent !== null)
+            const i = items.indexOf(document.activeElement as HTMLButtonElement)
+            if (i < 0) return
+            e.preventDefault()
+            const next = e.key === 'Home' ? 0 : e.key === 'End' ? items.length - 1 : Math.max(0, Math.min(items.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)))
+            items[next]?.focus()
+          }}
+        >
           {pinnedItems.length > 0 && (
             <div className="nav-pins" aria-label="Pinned pages">
               {pinnedItems.map(({ key, title, Icon }) => (
