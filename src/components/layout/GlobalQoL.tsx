@@ -63,6 +63,15 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Scrolling the page over a focused number field shouldn't silently change its value.
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      const t = e.target
+      if (t instanceof HTMLInputElement && t.type === 'number' && document.activeElement === t) t.blur()
+    }
+    document.addEventListener('wheel', onWheel, { passive: true })
+    return () => document.removeEventListener('wheel', onWheel)
+  }, [])
   // Performance: images load lazily unless a page says otherwise, and CSS animations pause while the tab is hidden.
   useEffect(() => {
     const lazy = (root: ParentNode) => root.querySelectorAll?.('img:not([loading])').forEach((img) => img.setAttribute('loading', 'lazy'))
