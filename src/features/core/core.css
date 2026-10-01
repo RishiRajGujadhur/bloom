@@ -618,3 +618,6 @@
 .today-ring svg { width: 40px; height: 40px; }
 .tr-track { fill: none; stroke: var(--border-color); stroke-width: 4; }
 .tr-arc { fill: none; stroke: var(--accent-color); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 600ms ease; }
+.home-continue { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0 10px; font-size: 13px; color: var(--text-muted); }
+.home-continue button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
+.home-continue button:hover { border-color: var(--accent-color); }

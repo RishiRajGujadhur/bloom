@@ -1430,6 +1430,19 @@ function App() {
                         />
                         <QuickLogRow mood={settings.features.moodCheckin} water={settings.features.dietTracker} />
                       </div>
+                      {readRecentPages().filter((p) => p !== 'overview' && pageEnabled(p)).length > 0 && (
+                        <div className="home-continue" aria-label="Continue where you left off">
+                          <span>Continue</span>
+                          {readRecentPages()
+                            .filter((p) => p !== 'overview' && pageEnabled(p))
+                            .slice(0, 3)
+                            .map((p) => (
+                              <button key={p} type="button" onClick={() => jump(p)}>
+                                {pageDetails[p].title} →
+                              </button>
+                            ))}
+                        </div>
+                      )}
                       {subOn('bloomCore', 'growth') && <GrowthGarden data={data} today={today} />}
                     </>
                   )}
