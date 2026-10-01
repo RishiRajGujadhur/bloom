@@ -117,7 +117,16 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   useEffect(() => {
     const vis = () => (document.hidden ? gsap.globalTimeline.pause() : gsap.globalTimeline.resume())
     document.addEventListener('visibilitychange', vis)
-    const onScroll = () => setShowTop(window.scrollY > window.innerHeight * 2)
+    // Top bar: tucks away while you scroll down, slides back when you scroll up.
+    let lastY = window.scrollY
+    const onScroll = () => {
+      setShowTop(window.scrollY > window.innerHeight * 2)
+      const y = window.scrollY
+      if (Math.abs(y - lastY) > 8) {
+        document.documentElement.toggleAttribute('data-topbar-hidden', y > lastY && y > 140)
+        lastY = y
+      }
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     const onClick = (e: MouseEvent) => {
       const t = e.target as HTMLElement | null
