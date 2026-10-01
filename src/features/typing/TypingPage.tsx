@@ -70,7 +70,13 @@ function Keyboard({ next, flash }: { next: string; flash: { key: string; ok: boo
 export function TypingPage() {
   const [store, setStore] = useState<Store>(() => ({ ...empty, ...readStore(KEY, empty) }))
   const save = (f: (s: Store) => Store) => setStore((s) => { const n = f(s); writeStore(KEY, n); return n })
-  const [li, setLi] = useState(0)
+  const [li, setLiState] = useState(() => {
+    try { return Math.min(lessons.length - 1, Math.max(0, Number(localStorage.getItem('bloom-typing-lesson')) || 0)) } catch { return 0 }
+  })
+  const setLi = (i: number) => {
+    setLiState(i)
+    try { localStorage.setItem('bloom-typing-lesson', String(i)) } catch { /* optional */ }
+  }
   const lesson = lessons[li]
   const [text, setText] = useState('')
   const [pos, setPos] = useState(0)
@@ -113,6 +119,12 @@ export function TypingPage() {
     setOwnOpen(false)
   }
   const onKey = useCallback((e: KeyboardEvent) => {
+    if (done && e.key === 'Enter' && !(e.target as HTMLElement | null)?.closest?.('input, textarea, button')) {
+      e.preventDefault()
+      if (usingOwn) startOwn()
+      else void newDrill()
+      return
+    }
     if (done || !text || e.metaKey || e.ctrlKey || e.altKey) return
     if ((e.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]')) return
     if (e.key === 'Escape' && pos > 0) {
@@ -147,7 +159,7 @@ export function TypingPage() {
       const id = usingOwn ? 'own' : lesson.id
       save((st) => ({ best: { ...st.best, [id]: Math.max(st.best[id] ?? 0, s.wpm) }, sessions: [...st.sessions, { at: Date.now(), ...s, lesson: id }].slice(-40) }))
     }
-  }, [done, text, pos, start, errors, lesson.id, usingOwn])
+  }, [done, text, pos, start, errors, lesson.id, usingOwn]) // eslint-disable-line react-hooks/exhaustive-deps -- startOwn/newDrill read current state
   useEffect(() => {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -185,6 +197,11 @@ export function TypingPage() {
           {store.sessions.length >= 2 && <div><strong>{Math.round(store.sessions.slice(-5).reduce((a, s) => a + s.accuracy, 0) / Math.min(5, store.sessions.length))}%</strong><small>accuracy, last 5</small></div>}
         </div>
       </header>
+      {text && !done && pos > 0 && (
+        <div className="ty-progress" aria-hidden="true" style={{ height: 3, borderRadius: 2, background: 'var(--bg-surface)', overflow: 'hidden', marginBottom: 6 }}>
+          <span style={{ display: 'block', height: '100%', width: `${(pos / text.length) * 100}%`, background: 'var(--accent-color)', transition: 'width .15s' }} />
+        </div>
+      )}
       <div className="ty-stage" aria-live="off">
         <div ref={line} className="ty-line">
           {[...text].map((c, i) => (
@@ -206,7 +223,7 @@ export function TypingPage() {
                 .join(', ')}
             </span>
           )}
-          <button type="button" className="ty-cta" onClick={() => (usingOwn ? startOwn() : void newDrill())}>Again</button>
+          <button type="button" className="ty-cta" title="Again (Enter)" onClick={() => (usingOwn ? startOwn() : void newDrill())}>Again</button>
           {li + 1 < lessons.length && <button type="button" className="ty-cta ghost" onClick={() => setLi(li + 1)}>Next lesson →</button>}
         </div>
       ) : (
