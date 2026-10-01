@@ -235,3 +235,5 @@ html { scrollbar-color: color-mix(in oklab, var(--accent-color) 45%, transparent
 /* Settings -> High contrast. */
 html[data-high-contrast] { --text-secondary: var(--text-primary); --text-muted: color-mix(in oklab, var(--text-primary) 82%, transparent); --border-color: color-mix(in oklab, var(--text-primary) 45%, transparent); }
 html[data-high-contrast] :focus-visible { outline: 3px solid var(--accent-color) !important; outline-offset: 2px; }
+.overview-date-link { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+.overview-date-link:hover { color: var(--accent-color); text-decoration: underline; }

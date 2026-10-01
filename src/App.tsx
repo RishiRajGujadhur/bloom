@@ -858,10 +858,12 @@ function App() {
                   ))}
                 </nav>
                 <span className="overview-date">
-                  {new Date(`${today}T12:00:00`).toLocaleDateString(
-                    i18n.resolvedLanguage ?? 'en',
-                    { dateStyle: 'full' },
-                  )}
+                  <button type="button" className="overview-date-link" title="Open your calendar" onClick={() => jump('calendar')}>
+                    {new Date(`${today}T12:00:00`).toLocaleDateString(
+                      i18n.resolvedLanguage ?? 'en',
+                      { dateStyle: 'full' },
+                    )}
+                  </button>
                   <CustomizeMenu modules={modules} setModules={setModules} />
                 </span>
               </div>
