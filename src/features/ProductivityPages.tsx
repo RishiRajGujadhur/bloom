@@ -667,9 +667,15 @@ export function TodoPage({ data, setData }: Props) {
                       </span>
                       <strong
                         tabIndex={0}
-                        title="Enter or double-click to edit"
+                        title="Enter or double-click to edit · 1–4 set priority"
                         onDoubleClick={(e) => e.currentTarget.closest('li')?.querySelector<HTMLButtonElement>('button[aria-label^="Edit "]')?.click()}
                         onKeyDown={(e) => {
+                          if (/^[1-4]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                            e.preventDefault()
+                            const p = `P${e.key}` as typeof task.priority
+                            setData((d) => ({ ...d, todos: d.todos.map((x) => (x.id === task.id ? { ...x, priority: p } : x)) }))
+                            return
+                          }
                           if (e.key !== 'Enter') return
                           e.preventDefault()
                           e.currentTarget.closest('li')?.querySelector<HTMLButtonElement>('button[aria-label^="Edit "]')?.click()
