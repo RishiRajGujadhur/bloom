@@ -196,6 +196,11 @@ export function WorkoutPage() {
             </button>
           </p>
         )}
+        {store.workouts.length > 0 &&
+          (() => {
+            const days = Math.floor((Date.now() - Math.max(...store.workouts.map((w) => w.startedAt))) / 864e5)
+            return days >= 2 ? <p className="studio-empty">{days} days since your last workout — a short one counts.</p> : null
+          })()}
         {store.workouts.some((w) => Date.now() - w.startedAt < 7 * 864e5) && (
           <p className="studio-empty">
             This week: {store.workouts.filter((w) => Date.now() - w.startedAt < 7 * 864e5).length} sessions ·{' '}
