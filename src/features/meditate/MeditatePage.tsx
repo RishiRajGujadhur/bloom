@@ -14,7 +14,7 @@ import { MeditateQuick } from '../quick/MeditateQuick'
 import './meditate.css'
 
 const on = (id: string) => subOn('meditation', id)
-type Store = { logs: MedLog[]; minutes: Record<string, number>; bellEvery: number; unguided: number; voice: boolean; bellVolume?: number }
+type Store = { logs: MedLog[]; minutes: Record<string, number>; bellEvery: number; unguided: number; voice: boolean; bellVolume?: number; favs?: string[] }
 
 const sceneOptions: Record<SceneId, ISourceOptions> = {
   stars: { background: { color: { value: 'transparent' } }, fpsLimit: 40, particles: { number: { value: 90 }, color: { value: ['#ffffff', '#cfd8ff', '#ffe9b0'] }, size: { value: { min: 0.5, max: 2.2 } }, opacity: { value: { min: 0.2, max: 0.9 }, animation: { enable: true, speed: 0.6 } }, move: { enable: true, speed: 0.12 } } },
@@ -235,8 +235,18 @@ export function MeditatePage() {
       <Rail label="Sessions">
         {sessions
           .filter((x) => x.id !== 'sos' && (x.kind !== 'body' || on('bodyScan')) && (x.kind !== 'kindness' || on('kindness')))
+          .sort((a, b) => Number((store.favs ?? []).includes(b.id)) - Number((store.favs ?? []).includes(a.id)))
           .map((x) => (
-            <div key={x.id} role="listitem">
+            <div key={x.id} role="listitem" className="md-card-wrap">
+              <button
+                type="button"
+                className="md-fav"
+                aria-pressed={(store.favs ?? []).includes(x.id)}
+                aria-label={(store.favs ?? []).includes(x.id) ? `Unfavourite ${x.title}` : `Favourite ${x.title}`}
+                onClick={() => setStore((s) => ({ ...s, favs: (s.favs ?? []).includes(x.id) ? (s.favs ?? []).filter((f) => f !== x.id) : [...(s.favs ?? []), x.id] }))}
+              >
+                {(store.favs ?? []).includes(x.id) ? '★' : '☆'}
+              </button>
               <button type="button" className="iv-card md-card" style={{ ['--scene' as string]: sceneColors[x.scene] }} onClick={() => start(x)}>
                 <strong>{x.title}</strong>
                 <small>
