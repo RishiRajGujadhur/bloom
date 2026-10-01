@@ -337,6 +337,7 @@ export function IntervalPage() {
         store.history.length ? (
           <span className="ex-aside">
             <Flame size={15} /> {store.history.length} sessions
+            {store.history.some((h) => Date.now() - h.at < 7 * 864e5) && ` · ${store.history.filter((h) => Date.now() - h.at < 7 * 864e5).length} this week`}
           </span>
         ) : undefined
       }
