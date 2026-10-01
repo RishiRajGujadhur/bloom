@@ -62,8 +62,8 @@ export function CalendarPage({ data, setData }: Props) {
       if (event.key === 'Escape' && !document.fullscreenElement)
         setFullscreen(false)
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [fullscreen])
   useEffect(() => {
     // Let FullCalendar re-measure after the layout changes.
@@ -147,16 +147,12 @@ export function CalendarPage({ data, setData }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"], [role="dialog"]')) return
-      // ← / → page through dates, T jumps to today.
+      // ← / → page through dates (t stays the app-wide theme key).
       const api = calendar.current?.getApi()
       if (api && (e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !(e.target as HTMLElement | null)?.closest?.('.fc-event')) {
         e.preventDefault()
         if (e.key === 'ArrowLeft') api.prev()
         else api.next()
-        return
-      }
-      if (api && e.key.toLowerCase() === 't') {
-        api.today()
         return
       }
       if (e.key.toLowerCase() !== 'n') return
@@ -167,8 +163,8 @@ export function CalendarPage({ data, setData }: Props) {
       while (start.getHours() < 23 && blocksRef.current.some((b) => Date.parse(b.start) < +start + 3600000 && Date.parse(b.end) > +start)) start.setHours(start.getHours() + 1)
       newBlockRef.current(start)
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   const save = (block: CalendarBlock) => {
     const error = blockError(data, block)

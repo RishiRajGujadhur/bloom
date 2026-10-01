@@ -146,8 +146,8 @@ export function BreathworkPage() {
       if (!k.s || k.s.phase === 'done') k.begin()
       else if (k.s.phase === 'retention') setS(step(k.s, k.cfg, Date.now(), true))
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
 
   const el = s ? Math.floor((now - s.phaseStart) / 1000) : 0

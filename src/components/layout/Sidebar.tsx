@@ -288,6 +288,8 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
       const target = event.target as HTMLElement | null
       if (
         event.key !== '[' ||
+        // A page that uses "[" itself (e.g. Ink's thickness) claims it first.
+        event.defaultPrevented ||
         event.metaKey ||
         event.ctrlKey ||
         event.altKey ||

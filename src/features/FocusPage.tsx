@@ -184,8 +184,8 @@ export function FocusPage({
       setNow(Date.now())
       setData((current) => startFocusQuest(current, current.rpg.focusQuest.soundscape))
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [setData])
   const doneToday = history.filter((h) => h.completedAt >= since).length
   const [dailyGoal, setDailyGoalState] = useState(() => readStore<number>('bloom-focus-daily-goal', 4))

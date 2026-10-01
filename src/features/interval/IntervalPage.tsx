@@ -169,10 +169,13 @@ export function IntervalPage() {
       if (e.code === 'Space') {
         e.preventDefault()
         keysRef.current.toggle()
-      } else if (e.key.toLowerCase() === 'n') keysRef.current.skip()
+      } else if (e.key.toLowerCase() === 'n') {
+        e.preventDefault()
+        keysRef.current.skip()
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
 
   // Flash the stage when a new segment starts, so the change is felt, not just read.

@@ -189,8 +189,8 @@ export function BriefingPage({ data, today }: FeaturePageProps) {
       e.preventDefault()
       toggleRef.current()
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   // Follow the HD voice through the transcript using each sentence's start time.
   useEffect(() => {

@@ -135,8 +135,8 @@ export function EyesPage() {
       e.preventDefault()
       spaceRef.current()
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   const visible = exercises.filter((e) => (e.id === 'rule20' ? on('rule20') : e.id === 'nearfar' ? on('nearFar') : e.id === 'blink' ? on('blink') : e.id === 'palming' ? on('palming') : on('followDot')))
 

@@ -181,10 +181,13 @@ export function StretchPage() {
       if (e.code === 'Space') {
         e.preventDefault()
         k.setPlaying(!k.playing)
-      } else if (e.key.toLowerCase() === 'n') k.next()
+      } else if (e.key.toLowerCase() === 'n') {
+        e.preventDefault()
+        k.next()
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   const saveCheckIn = (a: number) => {
     setAfter(a)

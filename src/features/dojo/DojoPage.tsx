@@ -338,8 +338,8 @@ function Caller({ s, save, onReps }: { s: Store; save: (p: Partial<Store>) => vo
       if (!runRef.current) bell(1)
       setRunning((r) => !r)
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   return (
     <div className="studio-card dojo-caller">

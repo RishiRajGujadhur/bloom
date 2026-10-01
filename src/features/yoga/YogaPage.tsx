@@ -155,8 +155,8 @@ export function YogaPage() {
       e.preventDefault()
       setRunning((r) => !r)
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   const play = (f: Flow) => {
     try {

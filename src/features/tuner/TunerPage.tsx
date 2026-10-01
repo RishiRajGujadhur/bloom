@@ -125,10 +125,13 @@ export function TunerPage() {
         e.preventDefault()
         if (k.listening) k.stop()
         else void k.start()
-      } else if (/^[1-6]$/.test(e.key) && k.strings[Number(e.key) - 1]) void k.reference(k.strings[Number(e.key) - 1])
+      } else if (/^[1-6]$/.test(e.key) && k.strings[Number(e.key) - 1]) {
+        e.preventDefault()
+        void k.reference(k.strings[Number(e.key) - 1])
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   const closest = reading ? strings.reduce((a, b) => (Math.abs((Note.midi(b) ?? 0) - (Note.midi(reading.note) ?? 0)) < Math.abs((Note.midi(a) ?? 0) - (Note.midi(reading.note) ?? 0)) ? b : a)) : null
   const ticks = useMemo(() => Array.from({ length: 21 }, (_, i) => i * 5 - 50), [])

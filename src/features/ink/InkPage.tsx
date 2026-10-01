@@ -105,11 +105,17 @@ export function InkPage() {
       const typing = (e.target as HTMLElement | null)?.closest?.('input, textarea, select')
       if (!typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
         const key = e.key.toLowerCase()
-        if (key === 'p') setTool('pen')
-        else if (key === 'h' && on('highlighter')) setTool('marker')
-        else if (key === 'e' && on('eraser')) setTool('eraser')
-        else if (key === '[') setStore((s) => ({ ...s, size: Math.max(2, s.size - 2) }))
-        else if (key === ']') setStore((s) => ({ ...s, size: Math.min(24, s.size + 2) }))
+        // Claimed with preventDefault so the sidebar's "[" collapse doesn't also fire.
+        const act = key === 'p' ? () => setTool('pen')
+          : key === 'h' && on('highlighter') ? () => setTool('marker')
+          : key === 'e' && on('eraser') ? () => setTool('eraser')
+          : key === '[' ? () => setStore((s) => ({ ...s, size: Math.max(2, s.size - 2) }))
+          : key === ']' ? () => setStore((s) => ({ ...s, size: Math.min(24, s.size + 2) }))
+          : null
+        if (act) {
+          e.preventDefault()
+          act()
+        }
         return
       }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
@@ -122,8 +128,8 @@ export function InkPage() {
       if (e.shiftKey) doRedo()
       else doUndo()
     }
-    window.addEventListener('keydown', k)
-    return () => window.removeEventListener('keydown', k)
+    window.addEventListener('keydown', k, true)
+    return () => window.removeEventListener('keydown', k, true)
   })
 
   // Replay: reveal strokes one by one, each drawn point by point.

@@ -62,7 +62,8 @@ export function Studio({
   // Number keys 1–9 switch tabs when you're not typing (QoL #57).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey) return
+      // A page that claimed the key (e.g. a quiz answering with 1–4) takes priority.
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return
       const t = e.target as HTMLElement | null
       if (t?.closest('input, textarea, select, [contenteditable="true"]')) return
       const n = Number(e.key)

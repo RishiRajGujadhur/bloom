@@ -132,10 +132,13 @@ export function MixerPage() {
       if (e.code === 'Space') {
         e.preventDefault()
         keysRef.current.toggle()
-      } else if (e.key.toLowerCase() === 'm') keysRef.current.mute()
+      } else if (e.key.toLowerCase() === 'm') {
+        e.preventDefault()
+        keysRef.current.mute()
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   usePageActions([{ id: 'mx-random', label: 'Surprise me with a mix', icon: '🎲', run: randomise }, { id: 'mx-toggle', label: playing ? 'Pause the mix' : 'Play the mix', icon: '🎚️', run: toggle }, { id: 'mx-mute', label: 'Mute every layer', icon: '🔇', run: () => visible.forEach((l) => setLayer(l.id, 0)) }])
   const mixTab = () => (

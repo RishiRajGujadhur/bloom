@@ -151,10 +151,13 @@ function Stroop({ level, finish, sound }: { level: number; finish: Finish; sound
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const o = /^[1-9]$/.test(e.key) ? pickRef.current.options[Number(e.key) - 1] : undefined
-      if (o) pickRef.current.pick(o)
+      if (!o) return
+      // Claim the key so the Studio's 1–9 tab switch doesn't also fire.
+      e.preventDefault()
+      pickRef.current.pick(o)
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   return (
     <div className="bg-play bg-stroop">
@@ -216,8 +219,8 @@ function Reaction({ finish, sound }: { finish: Finish; sound: boolean }) {
       e.preventDefault()
       tapRef.current()
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   return (
     <div className="bg-play">
