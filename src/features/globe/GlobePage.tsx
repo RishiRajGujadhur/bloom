@@ -106,6 +106,23 @@ export function GlobePage() {
     judge(!!hit && hit.atlas === q.country.atlas)
   }
 
+  // Keyboard: 1–4 pick a capital, Enter moves on after an answer.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      if (answer && e.key === 'Enter') {
+        e.preventDefault()
+        next()
+        return
+      }
+      if (q.mode === 'capital' && !answer && q.options && /^[1-4]$/.test(e.key)) {
+        const pick = q.options[Number(e.key) - 1]
+        if (pick) judge(pick === q.country.capital)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
   const showTarget = q.mode !== 'find' || answer !== null
   return (
     <div className="gq-page">
