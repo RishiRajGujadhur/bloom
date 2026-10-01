@@ -472,6 +472,26 @@ export function CommandPalette({
           </Command.Item>
         </Command.Group>
 
+        {query && (
+          <Command.Group heading="Settings">
+            {[
+              ['features', 'Features', 'turn pages on off enable disable'],
+              ['navigation', 'Navigation', 'sidebar pins banner compact start page week start quiet hours name'],
+              ['appearance', 'Appearance', 'theme colours fonts dark light contrast corners custom css'],
+              ['trash', 'Trash', 'deleted restore'],
+              ['json', 'Data', 'backup export import storage reset'],
+            ].map(([id, label, words]) => (
+              <Command.Item key={`settings-${id}`} value={`settings ${label}`} keywords={[words]} onSelect={() => go(() => { window.location.hash = `settings/${id}` })}>
+                <ArrowRight size={17} aria-hidden="true" />
+                <span className="cmdk-item-text">
+                  Settings › {label}
+                  <small>{words}</small>
+                </span>
+              </Command.Item>
+            ))}
+          </Command.Group>
+        )}
+
         <Command.Group heading="Go to">
           {pages.map((key) => (
             <Command.Item
