@@ -179,13 +179,25 @@ export function TodoPage({ data, setData }: Props) {
   })
   const [title, setTitle] = useState('')
   const [due, setDue] = useState(dayKey)
-  const [priority, setPriority] = useState<'P1' | 'P2' | 'P3' | 'P4'>('P3')
+  // The add form keeps the priority you last used.
+  const [priority, setPriorityState] = useState<'P1' | 'P2' | 'P3' | 'P4'>(() => {
+    const saved = localStorage.getItem('bloom-todo-priority')
+    return saved === 'P1' || saved === 'P2' || saved === 'P4' ? saved : 'P3'
+  })
+  const setPriority = (p: 'P1' | 'P2' | 'P3' | 'P4') => {
+    setPriorityState(p)
+    try { localStorage.setItem('bloom-todo-priority', p) } catch { /* optional */ }
+  }
   const [tags, setTags] = useState('')
   const [recurrence, setRecurrence] = useState<
     'none' | 'daily' | 'weekly' | 'monthly'
   >('none')
   const [showOptions, setShowOptions] = useState(false)
-  const [filter, setFilter] = useState('open')
+  const [filter, setFilterState] = useState(() => localStorage.getItem('bloom-todo-filter') || 'open')
+  const setFilter = (f: string) => {
+    setFilterState(f)
+    try { localStorage.setItem('bloom-todo-filter', f) } catch { /* optional */ }
+  }
   const [tagFilter, setTagFilter] = useState('all')
   const [editing, setEditing] = useState<string | null>(null)
   const [editTitle, setEditTitle] = useState('')
