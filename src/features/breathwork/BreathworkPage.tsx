@@ -6,6 +6,7 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { BREATHWORK_KEY, best, defaultSettings, initial, lung, step, type Session, type Settings, type State } from './breathworkModel'
 import { BreathQuick } from '../quick/BreathQuick'
+import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import './breathwork.css'
 
 const on = (id: string) => subOn('breathwork', id)
@@ -132,6 +133,22 @@ export function BreathworkPage() {
     setS(null)
   }
   useEffect(() => () => noSleep.current?.disable(), [])
+  useLeaveGuard(!!s && s.phase !== 'done')
+  // Space begins a session, or ends the breath hold.
+  const keyRef = useRef({ s, begin, cfg, safe: !on('safety') || store.safetyOk })
+  keyRef.current = { s, begin, cfg, safe: !on('safety') || store.safetyOk }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      const k = keyRef.current
+      if (!k.safe) return
+      e.preventDefault()
+      if (!k.s || k.s.phase === 'done') k.begin()
+      else if (k.s.phase === 'retention') setS(step(k.s, k.cfg, Date.now(), true))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const el = s ? Math.floor((now - s.phaseStart) / 1000) : 0
   const fill = s ? lung(s, cfg, now) : 0.4
@@ -179,6 +196,7 @@ export function BreathworkPage() {
               <button type="button" className="studio-go" onClick={begin}>
                 <Play size={18} /> Begin
               </button>
+              <small className="studio-empty">or press Space</small>
             </>
           ) : (
             <>
