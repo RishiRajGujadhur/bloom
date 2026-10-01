@@ -2,7 +2,7 @@
 
 This is the active, audited delivery tracker for the current request. Items are drawn from the existing unfinished Bloom quality plan. An item counts only after its behavior is implemented, checked, and pushed. The source number points to `QOL_500.md`.
 Items are drawn from the existing unfinished Bloom quality plan and audited against the app. Only newly implemented, verified, and pushed behavior counts. An item already present is excluded and gets a replacement row, so the target remains 250 new improvements. Source numbers point to `QOL_500.md`.
-**Verified and pushed: 7 / 250**
+**Verified and pushed: 5 / 250**
 
 | # | Source | Improvement | Status | Evidence |
 |---:|---:|---|---|---|
@@ -336,4 +336,4 @@ Items are drawn from the existing unfinished Bloom quality plan and audited agai
 ## Verification and push log
 
 - Baseline: `d2abe2b`. No items counted from earlier work.
-- Batch 1 (`918edc1`): fuzzy palette search, shortcut hints, pinned-page drag ordering, separate Focus/Breathe window, disabled-feature dates, and palette recovery. TypeScript check passed; browser checks covered fuzzy results, shortcut display, disabled history, and pin ordering.
+- Batch 1 (`918edc1`): fuzzy palette search, pinned-page drag ordering, disabled-feature dates, and palette recovery. Shortcut hints and separate Focus/Breathe windows were improved but excluded from the count because earlier plans record them as shipped. TypeScript check passed; browser checks covered fuzzy results, shortcut display, disabled history, and pin ordering.
