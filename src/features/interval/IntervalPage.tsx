@@ -1,4 +1,5 @@
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useKeepAwake } from '../../platform/presence'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -158,6 +159,21 @@ export function IntervalPage() {
     setTab('run')
   }
   const kind = done ? 'cooldown' : (pos?.segment.kind ?? 'warmup')
+  useTabTitle(running && pos ? `${pos.segment.label} ${Math.floor(pos.left / 60)}:${String(Math.ceil(pos.left) % 60).padStart(2, '0')}` : '', 'Intervals', 'intervals')
+  // Space starts or pauses; N skips to the next segment.
+  const keysRef = useRef({ toggle, skip })
+  keysRef.current = { toggle, skip }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      if (e.code === 'Space') {
+        e.preventDefault()
+        keysRef.current.toggle()
+      } else if (e.key.toLowerCase() === 'n') keysRef.current.skip()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   // Flash the stage when a new segment starts, so the change is felt, not just read.
   const segIndex = pos?.index ?? -1
