@@ -399,7 +399,19 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
                   <span>
                     <strong>{m.name}</strong>
                     <small>
-                      {new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · {m.kcal} kcal
+                      {new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ·{' '}
+                      <button
+                        type="button"
+                        className="diet-kcal-edit"
+                        title="Change calories"
+                        onClick={() => {
+                          const v = window.prompt(`Calories for ${m.name}`, String(m.kcal))
+                          const n = v === null ? NaN : Math.round(Number(v))
+                          if (Number.isFinite(n) && n >= 0) update((s) => ({ ...s, meals: s.meals.map((x) => (x.id === m.id ? { ...x, kcal: n } : x)) }))
+                        }}
+                      >
+                        {m.kcal} kcal ✎
+                      </button>
                       {m.protein ? ` · P${m.protein} C${m.carbs} F${m.fat}` : ''}
                       {m.feeling ? ` · ${m.feeling}` : ''}
                     </small>
