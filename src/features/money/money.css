@@ -324,13 +324,19 @@ html[data-money-blur] .mn-amount-edit:hover { filter: none; }
 
 /* Galaxy is an alternate Money composition; all other palettes keep their layout. */
 .mn-galaxy-orbit { display: none; }
+.mn-galaxy-cat-icon { display: none; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-original-cat-icon { display: none; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-galaxy-cat-icon { display: inline-block; vertical-align: middle; }
 html[data-theme='galaxy'] .studio[data-studio='money'] {
-  height: max(740px, calc(100dvh - 180px));
+  height: auto;
+  min-height: max(740px, calc(100dvh - 180px));
+  grid-template-rows: auto auto;
   background: radial-gradient(circle at 70% 23%, #202e58 0, transparent 30%), #070b13;
   border-color: #9bb8dc45;
 }
 html[data-theme='galaxy'] .studio[data-studio='money'] .studio-scene { opacity: 0; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .studio-bar { z-index: 2; }
+html[data-theme='galaxy'] .studio[data-studio='money'] :is(.studio-bar, .studio-panel) { min-width: 0; width: 100%; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tabs {
   background: #121b27d9;
   border-color: #d6e8ff24;
@@ -341,8 +347,9 @@ html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tab-ink {
   box-shadow: 0 0 24px #90ffce62;
 }
 html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tabs button[aria-selected='true'] { color: #07121a; }
-html[data-theme='galaxy'] .studio[data-studio='money'] .studio-panel { overflow: auto; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-panel { overflow: visible; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-grid:has(> .mn-report) {
+  width: 100%;
   grid-template-columns: minmax(0, 1.85fr) minmax(280px, .95fr);
   grid-template-areas: 'report add' 'report split' 'recent split';
   gap: 14px;
@@ -408,4 +415,9 @@ html[data-theme='galaxy'] .studio[data-studio='money'] .mn-month-head button { f
 @media (max-width: 900px) {
   html[data-theme='galaxy'] .studio[data-studio='money'] .mn-grid:has(> .mn-report) { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'report' 'add' 'split' 'recent'; }
   html[data-theme='galaxy'] .studio[data-studio='money'] .mn-report { min-height: 360px; }
+  html[data-theme='galaxy'] .studio[data-studio='money'] .mn-galaxy-orbit { width: 82%; right: -11%; top: 29%; }
+}
+@media (max-width: 720px) {
+  html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tab-ink { display: none; }
+  html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tabs button[aria-selected='true'] { background: linear-gradient(110deg, #b7ffc1, #94cbff 65%, #b28aff); }
 }

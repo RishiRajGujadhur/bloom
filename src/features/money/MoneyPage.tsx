@@ -34,6 +34,7 @@ import {
   type Txn,
 } from './moneyModel'
 import './money.css'
+import { GalaxyCategoryIcon } from './GalaxyCategoryIcon'
 import { download } from '../lab/exportSuite'
 
 import './receipts.css'
@@ -285,8 +286,8 @@ export function MoneyPage() {
         {!income && (
           <div className="mn-cats" role="radiogroup" aria-label="Category">
             {categories.map((c) => (
-              <button key={c.id} type="button" role="radio" aria-checked={category === c.id} className="mn-cat" style={{ ['--c' as string]: c.color }} onClick={() => setCategory(c.id)} data-hint={c.name}>
-                {c.emoji}
+              <button key={c.id} type="button" role="radio" aria-label={c.name} aria-checked={category === c.id} className="mn-cat" style={{ ['--c' as string]: c.color }} onClick={() => setCategory(c.id)} data-hint={c.name}>
+                <span className="mn-original-cat-icon">{c.emoji}</span><GalaxyCategoryIcon category={c.id} />
               </button>
             ))}
           </div>
@@ -474,8 +475,8 @@ export function MoneyPage() {
           <h3>Set a budget</h3>
           <div className="mn-cats" role="radiogroup" aria-label="Budget category">
             {categories.map((c) => (
-              <button key={c.id} type="button" role="radio" aria-checked={category === c.id} className="mn-cat" style={{ ['--c' as string]: c.color }} onClick={() => setCategory(c.id)} data-hint={c.name}>
-                {c.emoji}
+              <button key={c.id} type="button" role="radio" aria-label={c.name} aria-checked={category === c.id} className="mn-cat" style={{ ['--c' as string]: c.color }} onClick={() => setCategory(c.id)} data-hint={c.name}>
+                <span className="mn-original-cat-icon">{c.emoji}</span><GalaxyCategoryIcon category={c.id} />
               </button>
             ))}
           </div>

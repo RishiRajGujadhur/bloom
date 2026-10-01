@@ -4,7 +4,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 
 ## Completed and pushed
 
-- [x] Money: new SVG orbit, spending layout, input and control styling.
+- [x] Money: new SVG orbit, spending layout, input and control styling, Galaxy SVG category icons, and a scrollable mobile layout.
 - [x] Shared Studio shell: dark surfaces, asymmetric cards, orbit accents, luminous controls.
 - [x] Shared Studio navigation: Galaxy-only semantic SVG glyphs, with tab text and keyboard access retained.
 - [x] Galaxy typography: DM Sans body and Manrope headings, while an explicitly chosen local font still wins.
@@ -38,7 +38,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 
 ## Remaining checks
 
-- [ ] Review the Money layout on mobile and desktop.
+- [x] Review the Money layout on mobile and desktop.
 - [ ] Spot-check Studio pages, including controls and narrow layouts.
 - [ ] Run the production build and relevant tests after the page treatments.
 
