@@ -941,6 +941,9 @@ export function GratitudePage() {
                   <li key={e.id}>
                     <span aria-hidden="true">{jars.find((j) => j.id === (e.jarId ?? 'moments'))?.emoji}</span> {e.text}
                     <small>{new Date(e.at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</small>
+                    <button type="button" className="wb-note-del" style={{ position: 'static', opacity: 1 }} aria-label="Delete this note" onClick={() => setEntries((list) => list.filter((x) => x.id !== e.id))}>
+                      ×
+                    </button>
                   </li>
                 ))}
             </ul>
