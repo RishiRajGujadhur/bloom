@@ -50,6 +50,9 @@ export function PointerPage() {
             {colours.map((c) => (
               <button key={c} type="button" className="pt-colour" aria-label={`Colour ${c}`} aria-pressed={p.color === c} style={{ background: c }} onClick={() => set({ color: c })} />
             ))}
+            <label className="pt-colour" title="Any colour" style={{ background: colours.includes(p.color) ? 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)' : p.color, overflow: 'hidden', position: 'relative' }}>
+              <input type="color" aria-label="Custom colour" value={p.color} onChange={(e) => set({ color: e.target.value })} style={{ opacity: 0, position: 'absolute', inset: 0, cursor: 'pointer' }} />
+            </label>
           </div>
         </section>
       )}
