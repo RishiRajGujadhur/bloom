@@ -67,6 +67,14 @@ export const THEMES: ThemeDefinition[] = [
     accent: '#ec8a62',
   },
   {
+    id: 'galaxy',
+    name: 'Galaxy',
+    mode: 'dark',
+    bg: '#05070d',
+    surface: '#101722',
+    accent: '#a6f8cf',
+  },
+  {
     id: 'github-dark',
     name: 'GitHub Dark',
     mode: 'dark',

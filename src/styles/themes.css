@@ -122,6 +122,14 @@
   --accent-color: #ec8a62;
 }
 
+[data-theme='galaxy'] {
+  --mode: dark;
+  --bg-primary: #05070d;
+  --bg-surface: #101722;
+  --bg-sidebar: #0a1019;
+  --accent-color: #a6f8cf;
+}
+
 /* ==========================================================================
    2. DERIVED TOKENS — one structural layer per mode
    Tests after the anchors on purpose: same element, equal specificity,

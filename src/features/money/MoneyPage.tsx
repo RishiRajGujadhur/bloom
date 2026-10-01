@@ -48,6 +48,25 @@ const ReceiptLens = lazy(() => import('./ReceiptLens').then((m) => ({ default: m
 const MoneyCharts = lazy(() => import('./MoneyCharts').then((m) => ({ default: m.MoneyCharts })))
 const on = (id: string) => subOn('moneyTracker', id)
 
+function GalaxyOrbit() {
+  return (
+    <svg className="mn-galaxy-orbit" viewBox="0 0 520 420" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="mn-orbit" x1="75" y1="116" x2="427" y2="330" gradientUnits="userSpaceOnUse"><stop stopColor="#b9ffd2"/><stop offset=".48" stopColor="#99e9ff"/><stop offset="1" stopColor="#b59bff"/></linearGradient>
+        <radialGradient id="mn-core"><stop stopColor="#a3f6d0" stopOpacity=".28"/><stop offset="1" stopColor="#7d8aff" stopOpacity="0"/></radialGradient>
+        <filter id="mn-glow"><feGaussianBlur stdDeviation="9"/></filter>
+      </defs>
+      <circle cx="265" cy="205" r="165" fill="url(#mn-core)"/>
+      <ellipse cx="264" cy="206" rx="213" ry="87" transform="rotate(-22 264 206)" stroke="url(#mn-orbit)" strokeOpacity=".42"/>
+      <ellipse cx="264" cy="206" rx="115" ry="145" transform="rotate(26 264 206)" stroke="url(#mn-orbit)" strokeWidth="22" strokeOpacity=".35" filter="url(#mn-glow)"/>
+      <ellipse cx="264" cy="206" rx="115" ry="145" transform="rotate(26 264 206)" stroke="url(#mn-orbit)" strokeWidth="8" strokeOpacity=".78"/>
+      <ellipse cx="264" cy="206" rx="103" ry="138" transform="rotate(-39 264 206)" stroke="url(#mn-orbit)" strokeWidth="2" strokeOpacity=".64"/>
+      <circle cx="67" cy="266" r="12" fill="#9cf6e5" fillOpacity=".7"/><circle cx="432" cy="95" r="9" fill="#a694fa" fillOpacity=".7"/>
+      <g fill="#d9fdfa"><circle cx="43" cy="101" r="1"/><circle cx="138" cy="41" r="1.5"/><circle cx="460" cy="201" r="1"/><circle cx="351" cy="370" r="1"/><circle cx="124" cy="343" r="1"/></g>
+    </svg>
+  )
+}
+
 /** A big number that counts up with GSAP. */
 function Count({ minor, code }: { minor: number; code: string }) {
   const el = useRef<HTMLSpanElement>(null)
@@ -219,6 +238,7 @@ export function MoneyPage() {
         </p>
       )}
       <section className="studio-card mn-report">
+        <GalaxyOrbit />
         <div className="mn-stats">
           <div>
             <span className="mn-label">✦ This month</span>

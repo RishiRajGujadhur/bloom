@@ -321,3 +321,91 @@ html[data-money-blur] .mn-amount-edit:hover { filter: none; }
 .mn-month-head { display: flex; align-items: center; gap: 6px; }
 .mn-month-head button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 999px; width: 26px; height: 26px; cursor: pointer; }
 .mn-month-head button:disabled { opacity: 0.35; cursor: default; }
+
+/* Galaxy is an alternate Money composition; all other palettes keep their layout. */
+.mn-galaxy-orbit { display: none; }
+html[data-theme='galaxy'] .studio[data-studio='money'] {
+  height: max(740px, calc(100dvh - 180px));
+  background: radial-gradient(circle at 70% 23%, #202e58 0, transparent 30%), #070b13;
+  border-color: #9bb8dc45;
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-scene { opacity: 0; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-bar { z-index: 2; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tabs {
+  background: #121b27d9;
+  border-color: #d6e8ff24;
+  padding: 5px;
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tab-ink {
+  background: linear-gradient(110deg, #b7ffc1, #94cbff 65%, #b28aff);
+  box-shadow: 0 0 24px #90ffce62;
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tabs button[aria-selected='true'] { color: #07121a; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-panel { overflow: auto; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-grid:has(> .mn-report) {
+  grid-template-columns: minmax(0, 1.85fr) minmax(280px, .95fr);
+  grid-template-areas: 'report add' 'report split' 'recent split';
+  gap: 14px;
+  align-items: stretch;
+  min-height: 100%;
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-report { grid-area: report; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-add { grid-area: add; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-split { grid-area: split; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-list { grid-area: recent; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-card {
+  border: 1px solid #b1c9e840;
+  border-radius: 25px 25px 36px 25px;
+  color: #f8fbff;
+  background: linear-gradient(145deg, #131c2bde, #0b101bdc 62%, #121b2dce);
+  box-shadow: inset 0 1px #ffffff16, 0 20px 45px #0005;
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-report {
+  position: relative;
+  min-height: 440px;
+  isolation: isolate;
+  overflow: hidden;
+  background: radial-gradient(circle at 68% 48%, #1640476b, transparent 38%), linear-gradient(145deg, #0c1720, #090d18 70%);
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-report::after {
+  content: '';
+  position: absolute;
+  inset: auto -10% -32% 27%;
+  height: 65%;
+  border: 1px solid #b1c9ff30;
+  border-radius: 50%;
+  transform: rotate(-28deg);
+  pointer-events: none;
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-galaxy-orbit {
+  display: block;
+  position: absolute;
+  width: min(68%, 550px);
+  right: -4%;
+  top: 11%;
+  z-index: -1;
+  filter: drop-shadow(0 0 32px #89caff44);
+}
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-stats { display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-stats > div:first-child .mn-big { font-size: clamp(2.9rem, 5vw, 5.5rem); letter-spacing: -.065em; line-height: 1.05; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-stats > div:nth-child(2) { padding: 14px 22px; border: 1px solid #b5dcf126; border-radius: 22px; background: #101724b0; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-label { color: #b8ffcb; font-size: 1rem; margin-bottom: 6px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-big { font-family: var(--font-family); }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-change { color: #a3b2c7; font-weight: 400; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-places { position: relative; max-width: 36%; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-add { gap: 11px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-input { background: #090f1aab; border-color: #c0d6f132; border-radius: 15px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-input:focus-visible { outline: 2px solid #9ef9ff; outline-offset: 2px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-cat { background: #131d2a; border-color: #c8d8ef20; color: #fff; border-radius: 14px 14px 21px 14px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-cat[aria-checked='true'] { border-color: #adffd4; background: #a6f8cf35; box-shadow: 0 0 18px #a6f8cf5a; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-btn.primary,
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-seg button[aria-checked='true'],
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-chip[aria-pressed='true'] { background: linear-gradient(100deg, #bbffa7, #9cefff 58%, #91a9ff); color: #08131b; border-color: transparent; box-shadow: 0 0 23px #94d8ff50; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-split { position: relative; min-height: 180px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-split::after { content: ''; position: absolute; left: -7%; bottom: -80px; width: 120%; height: 145px; border-radius: 50%; border-top: 1px solid #a8bdff52; background: linear-gradient(180deg, #8a90ff20, transparent); pointer-events: none; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-list { min-height: 110px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-month-head button { flex: none; width: 34px; height: 34px; }
+@media (max-width: 900px) {
+  html[data-theme='galaxy'] .studio[data-studio='money'] .mn-grid:has(> .mn-report) { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'report' 'add' 'split' 'recent'; }
+  html[data-theme='galaxy'] .studio[data-studio='money'] .mn-report { min-height: 360px; }
+}
