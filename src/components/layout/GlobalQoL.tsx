@@ -67,7 +67,8 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   useEffect(() => {
     const onToggle = (e: Event) => {
       const d = e.target
-      if (!(d instanceof HTMLDetailsElement) || !d.open) return
+      // Skip on touch screens, where focusing would pop up the keyboard.
+      if (!(d instanceof HTMLDetailsElement) || !d.open || window.matchMedia?.('(pointer: coarse)').matches) return
       // Don't pull you out of a field you're already typing in elsewhere.
       const active = document.activeElement
       if (active?.closest('input, textarea, [contenteditable="true"]') && !d.contains(active)) return
