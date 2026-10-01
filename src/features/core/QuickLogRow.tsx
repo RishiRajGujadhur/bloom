@@ -5,6 +5,26 @@ import { dayKey } from '../../dates'
 
 const moods = ['😣', '😕', '😐', '🙂', '😄']
 
+/** Home: one ring for today — habits checked plus to-dos due today that are done. */
+export function TodayRing({ habitsDone, habitsTotal, todosDone, todosTotal }: { habitsDone: number; habitsTotal: number; todosDone: number; todosTotal: number }) {
+  const total = habitsTotal + todosTotal
+  if (!total) return null
+  const done = habitsDone + todosDone
+  const frac = done / total
+  const C = 2 * Math.PI * 16
+  return (
+    <span className="today-ring" title={`${habitsDone}/${habitsTotal} habits · ${todosDone}/${todosTotal} to-dos due today`}>
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="16" className="tr-track" />
+        <circle cx="20" cy="20" r="16" className="tr-arc" strokeDasharray={C} strokeDashoffset={C * (1 - frac)} transform="rotate(-90 20 20)" />
+      </svg>
+      <span>
+        <strong>{Math.round(frac * 100)}%</strong> of today done
+      </span>
+    </span>
+  )
+}
+
 /** Home: one-tap mood and water logging without leaving the dashboard. */
 export function QuickLogRow({ water: showWater, mood: showMood }: { water: boolean; mood: boolean }) {
   const today = dayKey()

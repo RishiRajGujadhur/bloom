@@ -612,3 +612,9 @@
 .ql-group button { border: 1px solid transparent; background: transparent; border-radius: 10px; padding: 3px 7px; cursor: pointer; font-size: 17px; color: inherit; }
 .ql-group button:hover, .ql-group button[aria-pressed='true'] { border-color: var(--accent-color); }
 .ql-group button:disabled { opacity: 0.4; }
+.home-today-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.home-today-row .quick-log-row { flex: 1; }
+.today-ring { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-secondary); }
+.today-ring svg { width: 40px; height: 40px; }
+.tr-track { fill: none; stroke: var(--border-color); stroke-width: 4; }
+.tr-arc { fill: none; stroke: var(--accent-color); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 600ms ease; }

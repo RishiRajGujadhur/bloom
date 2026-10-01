@@ -31,7 +31,7 @@ import { WritingAssist } from './components/layout/WritingAssist'
 import { BedtimeNudge } from './features/sleep/BedtimeNudge'
 import { EpiphanyCapture } from './features/epiphany/EpiphanyCapture'
 import { FastGoalNudge } from './features/fasting/FastGoalNudge'
-import { QuickLogRow } from './features/core/QuickLogRow'
+import { QuickLogRow, TodayRing } from './features/core/QuickLogRow'
 import { TodayGlance } from './components/dashboard/TodayGlance'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
@@ -1384,7 +1384,15 @@ function App() {
                       {subOn('bloomCore', 'nowCard') && (
                         <NowCard data={data} setData={setData} today={today} flags={settings.features} onNavigate={jump} onPlan={() => setModal('plan')} />
                       )}
-                      <QuickLogRow mood={settings.features.moodCheckin} water={settings.features.dietTracker} />
+                      <div className="home-today-row">
+                        <TodayRing
+                          habitsDone={data.habits.filter((h) => h.dates.includes(today)).length}
+                          habitsTotal={data.habits.length}
+                          todosDone={data.todos.filter((x) => x.due === today && x.done).length}
+                          todosTotal={data.todos.filter((x) => x.due === today).length}
+                        />
+                        <QuickLogRow mood={settings.features.moodCheckin} water={settings.features.dietTracker} />
+                      </div>
                       {subOn('bloomCore', 'growth') && <GrowthGarden data={data} today={today} />}
                     </>
                   )}
