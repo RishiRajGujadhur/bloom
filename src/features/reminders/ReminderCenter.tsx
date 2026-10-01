@@ -199,6 +199,16 @@ export function ReminderCenter({
                 Start
               </button>
             )}
+            <button
+              className="quiet-button"
+              title="Remind me again in 10 minutes"
+              onClick={() => {
+                dismiss(toast.id)
+                window.setTimeout(() => setToasts((list) => (list.some((t) => t.id === toast.id) ? list : [...list, { ...toast, at: Date.now() }])), 10 * 60000)
+              }}
+            >
+              10 min
+            </button>
             <button className="icon-button" aria-label="Dismiss reminder" onClick={() => dismiss(toast.id)}>
               <X size={15} />
             </button>
