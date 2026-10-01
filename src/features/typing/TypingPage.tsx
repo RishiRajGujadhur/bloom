@@ -182,6 +182,7 @@ export function TypingPage() {
           <div><strong>{done?.accuracy ?? live.accuracy}%</strong><small>accuracy</small></div>
           <div><strong>{store.best[usingOwn ? 'own' : lesson.id] ?? '—'}</strong><small>best</small></div>
           {store.sessions.length >= 2 && <div><strong>{Math.round(store.sessions.slice(-5).reduce((a, s) => a + s.wpm, 0) / Math.min(5, store.sessions.length))}</strong><small>avg last 5</small></div>}
+          {store.sessions.length >= 2 && <div><strong>{Math.round(store.sessions.slice(-5).reduce((a, s) => a + s.accuracy, 0) / Math.min(5, store.sessions.length))}%</strong><small>accuracy, last 5</small></div>}
         </div>
       </header>
       <div className="ty-stage" aria-live="off">
