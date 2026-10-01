@@ -225,7 +225,17 @@ export function FocusPage({
         </div>
         {active && <p className="focus-ends">Finishes at {new Date(Date.now() + left).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</p>}
         <p className="focus-goal">
-          {doneToday}/{dailyGoal} sessions today{doneToday >= dailyGoal ? ' 🎉' : ''} · {history.filter((h) => Date.now() - h.completedAt < 7 * 864e5).reduce((a, h) => a + h.minutes, 0)} min this week ·{' '}
+          {doneToday}/{dailyGoal} sessions today{doneToday >= dailyGoal ? ' 🎉' : ''} · {history.filter((h) => Date.now() - h.completedAt < 7 * 864e5).reduce((a, h) => a + h.minutes, 0)} min this week
+          {(() => {
+            const byDay = history
+              .filter((h) => Date.now() - h.completedAt < 7 * 864e5)
+              .reduce<Record<string, number>>((a, h) => {
+                const k = new Date(h.completedAt).toLocaleDateString([], { weekday: 'short' })
+                return { ...a, [k]: (a[k] ?? 0) + h.minutes }
+              }, {})
+            const best = Object.entries(byDay).sort((a, b) => b[1] - a[1])[0]
+            return best && Object.keys(byDay).length > 1 ? ` (best: ${best[0]}, ${best[1]} min)` : ''
+          })()} ·{' '}
           <label>
             goal{' '}
             <select aria-label="Daily focus goal" value={dailyGoal} onChange={(e) => setDailyGoal(Number(e.target.value))}>
