@@ -75,7 +75,8 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
           >
             <Flame size={18} className="streak-flame" aria-hidden="true" />
             <span>{streak ? `${streak} day streak` : 'Welcome back'}</span>
-            <span className="streak-petals" aria-label={`${balance} petals`}>
+            <span className="streak-petals" aria-label={`${balance} petals`} title="Petals: earned by visiting each day, checking in habits and finishing sessions. Spend them in the Petal shop.">
+
               🌸 {balance}
             </span>
           </button>
