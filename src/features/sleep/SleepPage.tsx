@@ -70,7 +70,7 @@ export function SleepPage() {
             download(new Blob([['date,bedtime,wake,hours,quality,factors', ...rows].join('\n') + '\n'], { type: 'text/csv' }), 'bloom-sleep.csv')
           }}
         >
-          ⬇ Export nights (CSV)
+          {entries.filter((e) => e.date.startsWith(dayKey().slice(0, 7))).length} nights logged this month · ⬇ Export nights (CSV)
         </button>
       )}
       {stats.count >= 3 &&
