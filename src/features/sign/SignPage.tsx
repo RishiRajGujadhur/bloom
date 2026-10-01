@@ -91,6 +91,22 @@ export function SignPage() {
     return () => setQuiz(null)
   }, [mode, quizQ])
 
+  // Keys: in Learn, a letter key shows it and arrows step through; in Quiz, 1–4 answer.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      if (mode === 'learn') {
+        const k = e.key.toUpperCase()
+        if (alphabet.includes(k)) setLetter(k)
+        else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft')
+          setLetter((l) => alphabet[(alphabet.indexOf(l) + (e.key === 'ArrowRight' ? 1 : alphabet.length - 1)) % alphabet.length])
+      } else if (mode === 'quiz' && /^[1-4]$/.test(e.key)) {
+        document.querySelectorAll<HTMLButtonElement>('.sg-letter.big')[Number(e.key) - 1]?.click()
+      } else if (mode === 'quiz' && e.key === 'Enter' && picked) newQuiz()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [mode, picked, newQuiz])
   const startCamera = async () => {
     setCamState('loading')
     try {
