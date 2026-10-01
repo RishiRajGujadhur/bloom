@@ -115,6 +115,15 @@ export function TypingPage() {
   const onKey = useCallback((e: KeyboardEvent) => {
     if (done || !text || e.metaKey || e.ctrlKey || e.altKey) return
     if ((e.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]')) return
+    if (e.key === 'Escape' && pos > 0) {
+      // Restart the same drill from the beginning.
+      setPos(0)
+      setErrors(0)
+      setWrongAt(new Set())
+      setStart(null)
+      raw.current = ''
+      return
+    }
     if (e.key.length !== 1) return
     e.preventDefault()
     const want = text[pos]
