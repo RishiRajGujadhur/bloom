@@ -160,7 +160,22 @@ export function CardsPage() {
               </button>
             )}
           </div>
-          <p className="studio-empty">{queue.length} left today</p>
+          <p className="studio-empty">
+            {queue.length} left today ·{' '}
+            <button
+              type="button"
+              className="fc-edit"
+              onClick={() => {
+                const front = window.prompt('Front of the card', card.front)
+                if (front === null) return
+                const back = window.prompt('Back of the card', card.back)
+                if (back === null) return
+                setStore((s) => ({ ...s, cards: s.cards.map((c) => (c.id === card.id ? { ...c, front: front.trim() || c.front, back: back.trim() } : c)) }))
+              }}
+            >
+              ✎ fix this card
+            </button>
+          </p>
         </>
       ) : (
         <div className="studio-center">

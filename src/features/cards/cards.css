@@ -115,3 +115,4 @@
   border-top: 1px dashed var(--border-color);
 }
 .yg-remove.fc-export { right: 38px; }
+.fc-edit { border: 0; background: none; color: var(--accent-color); cursor: pointer; font: inherit; text-decoration: underline; }
