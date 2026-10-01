@@ -417,3 +417,6 @@ html[data-bc-resizing], html[data-bc-resizing] * { cursor: ew-resize !important;
 @media (max-width: 900px) { .bc-resize { display: none; } }.companion-copy { margin-left: 6px; border: 0; background: none; color: var(--text-muted); cursor: pointer; font-size: 12px; padding: 0 2px; }
 .companion-copy:hover { color: var(--accent-color); }
 .companion-clear { align-self: flex-end; border: 0; background: none; color: var(--text-muted); font-size: 12px; cursor: pointer; text-decoration: underline; }
+/* Settings -> Bloom chat on the right. */
+html[data-bloom-right] .bc-panel:not(.is-docked) { left: auto; right: max(20px, env(safe-area-inset-right)); }
+html[data-bloom-right] .bc-panel:not(.is-docked) .bc-resize { right: auto; left: -4px; }

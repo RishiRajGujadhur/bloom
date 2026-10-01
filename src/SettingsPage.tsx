@@ -850,6 +850,28 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Bloom chat on the right</strong>
+          <small>Open the floating Bloom chat on the right side of the screen instead of the left.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            defaultChecked={document.documentElement.hasAttribute('data-bloom-right')}
+            onChange={(e) => {
+              try {
+                localStorage.setItem('bloom-chat-right', e.target.checked ? '1' : '0')
+              } catch {
+                /* optional */
+              }
+              document.documentElement.toggleAttribute('data-bloom-right', e.target.checked)
+            }}
+            aria-label="Bloom chat on the right"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>Week starts on</strong>
           <small>Used by the calendar.</small>
         </span>

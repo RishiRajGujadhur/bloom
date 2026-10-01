@@ -154,12 +154,14 @@ export function BloomCompanion({
     const el = panel.current
     if (!el) return
     e.preventDefault()
-    const left = el.getBoundingClientRect().left
+    const rect = el.getBoundingClientRect()
+    // On the right-hand side the handle sits on the left edge, so dragging left widens.
+    const fromRight = document.documentElement.hasAttribute('data-bloom-right') && !el.classList.contains('is-docked')
     const handle = e.currentTarget
     handle.setPointerCapture(e.pointerId)
     handle.dataset.dragging = ''
     document.documentElement.dataset.bcResizing = ''
-    const move = (ev: PointerEvent) => setPanelWidth(ev.clientX - left)
+    const move = (ev: PointerEvent) => setPanelWidth(fromRight ? rect.right - ev.clientX : ev.clientX - rect.left)
     const up = () => {
       delete handle.dataset.dragging
       delete document.documentElement.dataset.bcResizing
