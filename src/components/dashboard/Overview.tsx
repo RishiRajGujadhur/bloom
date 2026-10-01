@@ -211,12 +211,26 @@ export function StatsRow({
 /** Habits still open today, one tap to check each in without leaving Home. */
 export function HabitChips({ data, setData, today }: { data: AppData; setData: Dispatch<SetStateAction<AppData>>; today: string }) {
   const open = data.habits.filter((h) => !h.dates.includes(today)).slice(0, 6)
+  // 1–6 check in the habit at that position while Home is showing.
+  const ids = open.map((h) => h.id).join(',')
+  useEffect(() => {
+    const list = ids ? ids.split(',') : []
+    const onKey = (e: KeyboardEvent) => {
+      const route = location.hash.slice(1).split('/')[0]
+      if ((route && route !== 'overview') || !/^[1-6]$/.test(e.key) || e.ctrlKey || e.metaKey || e.altKey) return
+      if ((e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"]')) return
+      const id = list[Number(e.key) - 1]
+      if (id) setData((d) => toggleHabit(d, id, today))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [ids, setData, today])
   if (!open.length) return null
   return (
     <div className="ov-habit-chips" role="group" aria-label="Open habits">
       <span>Still to do:</span>
-      {open.map((h) => (
-        <button key={h.id} type="button" onClick={() => setData((d) => toggleHabit(d, h.id, today))} title="Check in">
+      {open.map((h, i) => (
+        <button key={h.id} type="button" onClick={() => setData((d) => toggleHabit(d, h.id, today))} title={`Check in (${i + 1})`}>
           ○ {h.title}
         </button>
       ))}
