@@ -103,6 +103,14 @@ export function ReaderPage() {
         e.preventDefault()
         setI((n) => Math.max(0, Math.min(tokens.length - 1, n + (e.key === 'ArrowRight' ? 1 : -1))))
       }
+      // Up/Down change the speed by 25 wpm.
+      if (phase !== 'quiz' && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+        e.preventDefault()
+        save((s) => {
+          const wpm = Math.max(150, Math.min(900, s.wpm + (e.key === 'ArrowUp' ? 25 : -25)))
+          return { ...s, wpm, speeds: { ...s.speeds, [textId]: wpm } }
+        })
+      }
     }
     window.addEventListener('keydown', k)
     return () => window.removeEventListener('keydown', k)
