@@ -90,12 +90,24 @@ export function AvatarPreview({ equipped, size = 120 }: { equipped: ShopState['e
 
 export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
   const { shop, balance, update } = useShop()
-  const [kind, setKind] = useState<(typeof kinds)[number]['id']>('all')
+  const [kind, setKindState] = useState<(typeof kinds)[number]['id']>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-shop-kind')
+      return (kinds.find((k) => k.id === saved)?.id ?? 'all') as (typeof kinds)[number]['id']
+    } catch {
+      return 'all'
+    }
+  })
+  const setKind = (k: (typeof kinds)[number]['id']) => {
+    setKindState(k)
+    try { localStorage.setItem('bloom-shop-kind', k) } catch { /* optional */ }
+  }
+  const [canBuy, setCanBuy] = useState(false)
   const [flash, setFlash] = useState<ShopItem | null>(null)
   const allowed = (item: ShopItem) =>
     (item.kind === 'garage' && subOn('petalShop', 'garageItems')) ||
     (item.kind === 'decor' ? subOn('petalShop', 'decor') : subOn('petalShop', 'wearables'))
-  const shown = shopItems.filter((i) => allowed(i) && (kind === 'all' || i.kind === kind))
+  const shown = shopItems.filter((i) => allowed(i) && (kind === 'all' || i.kind === kind) && (!canBuy || (!shop.owned.includes(i.id) && i.price <= balance)))
   const purchase = (item: ShopItem) => {
     const next = buy(shop, shop.spent + balance, item.id)
     if (!next) return
@@ -129,7 +141,11 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
             {k.label}
           </button>
         ))}
+        <button type="button" aria-pressed={canBuy} onClick={() => setCanBuy((v) => !v)} title="Only items you can buy now">
+          🌸 Affordable
+        </button>
       </div>
+      {canBuy && shown.length === 0 && <p className="wb-muted">Nothing new within {balance} petals yet — keep going!</p>}
       <ul className="shop-grid">
         {shown.map((item) => {
           const owned = shop.owned.includes(item.id)
