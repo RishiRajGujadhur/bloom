@@ -3,7 +3,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import chroma from 'chroma-js'
 import Fuse from 'fuse.js'
-import { differenceInCalendarDays, format } from 'date-fns'
+import { differenceInCalendarDays, format, parseISO } from 'date-fns'
 import { readStore, writeStore } from '../../components/studio/Studio'
 import { burst } from '../../components/ui/celebrate'
 import { daysSince, health, nextBirthday, rhythms, suggestions, type Person } from './peopleModel'
@@ -245,6 +245,20 @@ export function PeoplePage() {
             <h3>Birthdays</h3>
             {birthdays.map(({ p, d }) => <p key={p.id} className="pg-bday">{p.emoji} {p.name} <small>{format(d!, 'd MMM')} · {((n) => (n <= 0 ? 'today 🎂' : n === 1 ? 'tomorrow' : `in ${n} days`))(differenceInCalendarDays(d!, new Date()))}</small></p>)}
             <button type="button" className="pg-ghost" onClick={() => void exportBirthdays()}>📅 Add to my calendar (.ics)</button>
+            <button
+              type="button"
+              className="pg-ghost"
+              onClick={(e) => {
+                const text = people
+                  .filter((p) => p.birthday)
+                  .map((p) => `${p.name}: ${format(parseISO(p.birthday!), 'd MMMM')}`)
+                  .join('\n')
+                void navigator.clipboard?.writeText(text)
+                e.currentTarget.textContent = '✓ Copied'
+              }}
+            >
+              📋 Copy birthdays
+            </button>
           </div>
         )}
       </aside>
