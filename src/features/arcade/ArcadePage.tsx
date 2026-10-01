@@ -37,6 +37,17 @@ export function ArcadePage() {
     const t = gsap.fromTo(grid.current.children, { y: 24, opacity: 0, rotateX: -25 }, { y: 0, opacity: 1, rotateX: 0, stagger: 0.04, duration: 0.5, ease: 'power3.out' })
     return () => { t.kill() }
   }, [open, tech])
+  // Esc leaves a game for the hub (in full screen, the browser uses Esc to exit full screen first).
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || document.fullscreenElement || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      history.replaceState(null, '', '#arcade')
+      setOpen(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
   const game = GAMES.find((g) => g.id === open)
   if (game) return (
     <section className="arcade" style={{ '--ar-hue': game.hue } as React.CSSProperties}>
@@ -58,7 +69,18 @@ export function ArcadePage() {
         </div>
       )}
       <div className="ar-filters">
-        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Find a game…" aria-label="Find a game" />
+        <input
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key !== 'Enter' || !q.trim()) return
+            const hit = GAMES.find((g) => (tech === 'all' || g.tech.includes(tech)) && `${g.title} ${g.blurb}`.toLowerCase().includes(q.trim().toLowerCase()))
+            if (hit) go(hit.id)
+          }}
+          placeholder="Find a game… (Enter to play)"
+          aria-label="Find a game"
+        />
         <div role="radiogroup" aria-label="Filter by engine">
           {techs.map((t) => <button key={t} type="button" role="radio" aria-checked={tech === t} className={tech === t ? 'on' : ''} onClick={() => setTech(t)}>{t === 'all' ? 'All' : t}</button>)}
         </div>
