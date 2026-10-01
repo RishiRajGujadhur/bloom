@@ -218,7 +218,15 @@ export function EpiphaniesPage({ today }: { today: string }) {
       <ShowMore as="ul" className="epiphany-list" initial={5} label="insights">
         {sorted.map((item) => (
           <li key={item.id} data-due={item.due <= today}>
-            <blockquote>{item.text}</blockquote>
+            <blockquote
+              title="Double-click to edit"
+              onDoubleClick={() => {
+                const v = window.prompt('Edit this epiphany', item.text)?.trim()
+                if (v && v !== item.text) update(list.map((e) => (e.id === item.id ? { ...e, text: v.slice(0, 600) } : e)))
+              }}
+            >
+              {item.text}
+            </blockquote>
             <div className="epiphany-meta">
               <span>{item.due <= today ? 'Due today' : `Next: ${new Date(`${item.due}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`}</span>
               <span>Reviewed {item.reviews.length}×</span>
