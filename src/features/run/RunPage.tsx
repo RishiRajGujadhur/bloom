@@ -480,6 +480,50 @@ export function RunPage() {
                     GPX
                   </button>
                 )}
+                {r.points.length > 1 && (
+                  <button
+                    type="button"
+                    className="studio-chip"
+                    title="Save the route as a picture to share"
+                    onClick={() => {
+                      const W = 1080
+                      const H = 1080
+                      const pad = 120
+                      const lats = r.points.map((p) => p.lat)
+                      const lngs = r.points.map((p) => p.lng)
+                      const [minLat, maxLat, minLng, maxLng] = [Math.min(...lats), Math.max(...lats), Math.min(...lngs), Math.max(...lngs)]
+                      const k = Math.cos(((minLat + maxLat) / 2) * (Math.PI / 180))
+                      const span = Math.max((maxLng - minLng) * k, maxLat - minLat) || 1e-6
+                      const scale = (W - pad * 2) / span
+                      const x = (lng: number) => W / 2 + ((lng - (minLng + maxLng) / 2) * k) * scale
+                      const y = (lat: number) => H / 2 - (lat - (minLat + maxLat) / 2) * scale
+                      const c = document.createElement('canvas')
+                      c.width = W
+                      c.height = H
+                      const g = c.getContext('2d')!
+                      const grad = g.createLinearGradient(0, 0, W, H)
+                      grad.addColorStop(0, '#1d2144')
+                      grad.addColorStop(1, '#3f6fb5')
+                      g.fillStyle = grad
+                      g.fillRect(0, 0, W, H)
+                      g.strokeStyle = '#ffd36e'
+                      g.lineWidth = 12
+                      g.lineCap = 'round'
+                      g.lineJoin = 'round'
+                      g.beginPath()
+                      r.points.forEach((p, i) => (i ? g.lineTo(x(p.lng), y(p.lat)) : g.moveTo(x(p.lng), y(p.lat))))
+                      g.stroke()
+                      g.fillStyle = '#ffffff'
+                      g.font = '600 44px system-ui, sans-serif'
+                      g.fillText(`${toUnits(r.km, units).toFixed(2)} ${units} · ${fmtTime(r.seconds)}`, 60, H - 60)
+                      g.font = '28px system-ui, sans-serif'
+                      g.fillText(`${new Date(r.at).toLocaleDateString([], { dateStyle: 'medium' })} · Bloom`, 60, 80)
+                      c.toBlob((b) => b && download(b, `bloom-route-${new Date(r.at).toISOString().slice(0, 10)}.png`), 'image/png')
+                    }}
+                  >
+                    🖼
+                  </button>
+                )}
                 <button type="button" className="studio-chip" aria-label="Delete this run" onClick={() => { if (window.confirm('Delete this run? This can’t be undone.')) setStore((s) => ({ ...s, runs: s.runs.filter((x) => x.id !== r.id) })) }}>
                   🗑
                 </button>
