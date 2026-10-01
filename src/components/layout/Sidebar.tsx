@@ -818,6 +818,23 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                 ))}
             </div>
           )}
+          {isOpen && openGroups.size <= 1 && (
+            <button
+              type="button"
+              className="nav-collapse-all"
+              onClick={() => {
+                const all = new Set(navSections.map((_, i) => i))
+                setOpenGroups(all)
+                try {
+                  localStorage.setItem('bloom-nav-groups', JSON.stringify([...all]))
+                } catch {
+                  /* optional */
+                }
+              }}
+            >
+              Expand all sections
+            </button>
+          )}
           {isOpen && openGroups.size > 1 && (
             <button
               type="button"
