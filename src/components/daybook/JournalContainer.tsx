@@ -123,6 +123,13 @@ export function JournalContainer() {
     return old.length ? old[Math.floor(Math.random() * old.length)].id : null
   })
   const memory = entries.find((e) => e.id === memoryId) ?? null
+  const monthWords = useMemo(() => {
+    const month = new Date().toISOString().slice(0, 7)
+    return entries.filter((e) => e.createdAt.startsWith(month)).reduce((n, e) => {
+      const text = journalText(e.content).trim()
+      return n + (text ? text.split(/\s+/).length : 0)
+    }, 0)
+  }, [entries])
   // Delete with a short Undo window.
   const [undoPage, setUndoPage] = useState<JournalEntry | null>(null)
   const removePage = (page: JournalEntry) => {
@@ -296,7 +303,7 @@ export function JournalContainer() {
               </button>
             )}
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
-              <Carousel label="Your pages" title={`Your pages · ${recentPages.length}`}>
+              <Carousel label="Your pages" title={`Your pages · ${recentPages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}`}>
                 {[...recentPages].sort((a, b) =>
                   sort === 'created' ? b.createdAt.localeCompare(a.createdAt)
                   : sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt)
