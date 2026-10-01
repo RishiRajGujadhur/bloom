@@ -168,6 +168,7 @@ export function ScanPage() {
     saveDiet({ ...diet, meals: [...diet.meals, { id: crypto.randomUUID(), at: Date.now(), date: dayKey(), name: `${product.name}${product.brand ? ` (${product.brand})` : ''}`, kind: kindFor(new Date().getHours()), kcal: p.kcal, protein: p.protein, carbs: p.carbs, fat: p.fat }] })
     logActivity('meal')
     burst(addBtn.current, 'stars')
+    window.dispatchEvent(new CustomEvent('bloom:toast', { detail: `Added ${grams} g · ${Math.round(p.kcal)} kcal to today` }))
   }
 
   const scan = () => (
@@ -218,6 +219,13 @@ export function ScanPage() {
           <>
             <ProductCard p={product} mine={store.allergens} grams={grams} />
             <Slider label="Portion" value={grams} min={5} max={500} step={5} unit="g" onChange={setGrams} />
+            <div className="studio-chip-row" role="group" aria-label="Quick portions">
+              {[30, 50, 100, 250].map((g) => (
+                <button key={g} type="button" className="studio-chip" aria-pressed={grams === g} onClick={() => setGrams(g)}>
+                  {g} g
+                </button>
+              ))}
+            </div>
             {on('sugarCubes') && (
               <div className="sc-sugar">
                 <strong>{sugarCubes(product.per100.sugars, grams)}</strong> sugar cubes
