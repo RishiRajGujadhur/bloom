@@ -376,7 +376,14 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
       ),
     [flags],
   )
-  const [at, setAt] = useState(0)
+  // Where you were on the street last time.
+  const [at, setAt] = useState(() => {
+    try { return Math.max(0, Math.min(list.length - 1, Number(localStorage.getItem('bloom-street-at')) || 0)) } catch { return 0 }
+  })
+  const startAt = useRef(at)
+  useEffect(() => {
+    try { localStorage.setItem('bloom-street-at', String(at)) } catch { /* optional */ }
+  }, [at])
   const [lit] = useState(visitedRecently)
   const viewport = useRef<HTMLDivElement>(null)
   const track = useRef<SVGGElement>(null)
@@ -452,8 +459,11 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
   )
 
   useLayoutEffect(() => {
-    if (buddy.current) gsap.set(buddy.current, { x: 150, y: 380 })
-    scrollTo(0)
+    if (buddy.current) {
+      gsap.set(buddy.current, { x: startAt.current * W + 150, y: 380 })
+      buddy.current.dataset.at = String(startAt.current)
+    }
+    scrollTo(startAt.current)
     const ctx = gsap.context(() => {
       if (!reduced() && clouds.current && subOn('bloomStreet', 'sky'))
         gsap.utils
@@ -491,6 +501,8 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
       if ((e.target as HTMLElement).closest('input, textarea')) return
       if (e.key === 'ArrowRight') go(at + 1)
       if (e.key === 'ArrowLeft') go(at - 1)
+      if (e.key === 'Home') go(0)
+      if (e.key === 'End') go(list.length - 1)
       if (e.key === 'Enter') window.location.hash = list[at].page
     }
     window.addEventListener('keydown', key)
