@@ -25,6 +25,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@echogarden/pffft-wasm": "^0.4.2",
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
     "@fontsource/caveat": "^5.3.0",
     "@fontsource/dm-sans": "^5.3.0",
     "@fontsource/fira-code": "^5.3.0",

@@ -1290,8 +1290,8 @@ export function SettingsPage({
           ['trash-heading', 'Trash'],
           ['json-heading', 'Data'],
         ].map(([id, label]) => (
-          <button key={id} type="button" onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-            {label}
+          <button key={id} type="button" aria-label={`Jump to ${label}`} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+            ↓ {label}
           </button>
         ))}
       </nav>

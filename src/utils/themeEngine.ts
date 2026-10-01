@@ -202,6 +202,7 @@ export const FONTS: FontDefinition[] = [
   { id: 'serif', name: 'Serif', sample: 'Reflection reads deeply' },
   { id: 'handwritten', name: 'Handwritten', sample: 'Today I showed up' },
   { id: 'pixel', name: 'Pixel', sample: 'LEVEL UP! +50 XP' },
+  { id: 'readable', name: 'Easy to read', sample: 'bd pq Il1 — clear letters' },
 ]
 
 export const DEFAULT_THEME_ID = 'bloom-light'

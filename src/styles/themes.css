@@ -471,3 +471,11 @@ html[data-theme='matrix'] :is(.sg-mode, .pn-mode)[aria-selected='true'] {
 }
 /* A font you picked from your own computer wins over any theme's default face. */
 html[data-font='local'] body, html[data-font='local'] h1, html[data-font='local'] h2, html[data-font='local'] h3, html[data-font='local'] button:not([data-own-font]), html[data-font='local'] input, html[data-font='local'] textarea { font-family: var(--font-family) !important; }
+
+/* Atkinson Hyperlegible: distinct letter shapes (b/d, I/l/1) for easier reading, incl. dyslexia and low vision. */
+[data-font='readable'] {
+  --font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-display: var(--font-family);
+  --letter-spacing-body: 0.2px;
+  --line-height-body: 1.6;
+}
