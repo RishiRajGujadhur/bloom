@@ -1,6 +1,6 @@
 import { subOn } from '../subFeatures'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { MapContainer, Circle, CircleMarker, Polygon, Tooltip, useMap } from 'react-leaflet'
+import { MapContainer, Circle, CircleMarker, Polygon, Tooltip, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { BookOpen, Crosshair, MapPin, ShieldCheck, Trash2 } from 'lucide-react'
@@ -61,6 +61,17 @@ function CachedTiles() {
       layer.remove()
     }
   }, [map])
+  return null
+}
+
+/** Right-click the map to copy that spot's coordinates. */
+function CopyCoords() {
+  useMapEvents({
+    contextmenu: (e) => {
+      const text = `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`
+      void navigator.clipboard?.writeText(text).then(() => window.dispatchEvent(new CustomEvent('bloom:toast', { detail: `Copied ${text}` })))
+    },
+  })
   return null
 }
 
@@ -232,6 +243,7 @@ export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProp
               <Tooltip permanent direction="top">🎯 {h.label}</Tooltip>
             </Circle>
           ))}
+          <CopyCoords />
           {here && (
             <CircleMarker center={[here.lat, here.lng]} radius={9} pathOptions={{ color: '#fff', weight: 3, fillColor: '#0ea5e9', fillOpacity: 1 }}>
               <Tooltip>You are here</Tooltip>
