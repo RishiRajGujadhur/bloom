@@ -158,6 +158,11 @@ export function FastingPage() {
             <button ref={btn} type="button" className="studio-go" onClick={end}>
               <Square size={16} /> {h >= cur.goal ? 'End fast' : 'End now'}
             </button>
+            {h < 1 && (
+              <button type="button" className="studio-chip" title="Started by mistake? Remove it without logging" onClick={() => setStore((s) => ({ ...s, current: null }))}>
+                Cancel (don’t log)
+              </button>
+            )}
             {on('endEarly') && h < cur.goal && <p className="studio-empty">Ending early is fine. Every hour counts.</p>}
           </>
         )}
