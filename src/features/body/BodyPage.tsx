@@ -79,7 +79,19 @@ export function BodyPage() {
   const today = dayKey()
   const [tab, setTab] = useState('checkin')
   const [draft, setDraft] = useState<Partial<Record<Measure, number>>>(() => Object.fromEntries(measures.map((m) => [m.id, latest(store.entries, m.id) ?? (m.min + m.max) / 3])))
-  const [include, setInclude] = useState<Measure[]>(['weight', 'waist'])
+  const [include, setIncludeState] = useState<Measure[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('bloom-body-include') ?? 'null') as Measure[] | null
+      if (Array.isArray(saved) && saved.length) return saved.filter((m) => measures.some((x) => x.id === m))
+    } catch { /* optional */ }
+    return ['weight', 'waist']
+  })
+  const setInclude = (f: (x: Measure[]) => Measure[]) =>
+    setIncludeState((x) => {
+      const n = f(x)
+      try { localStorage.setItem('bloom-body-include', JSON.stringify(n)) } catch { /* optional */ }
+      return n
+    })
   const [metric, setMetric] = useState<Measure>('weight')
   const [photos, setPhotos] = useState<ProgressPhoto[]>([])
   const [pick, setPick] = useState<[string | null, string | null]>([null, null])
@@ -144,6 +156,13 @@ export function BodyPage() {
         })()}
         <div className="studio-stats">
           <Stat value={fmt(weight, 'kg')} label="weight" />
+          {(() => {
+            const w = store.entries.filter((e) => typeof e.weight === 'number')
+            if (w.length < 2) return null
+            const diff = w[w.length - 1].weight! - w[w.length - 2].weight!
+            const d = display(Math.abs(diff), 'kg', units)
+            return <Stat value={`${diff > 0 ? '+' : diff < 0 ? '−' : ''}${d.value.toFixed(1)} ${d.unit}`} label="since last check-in" />
+          })()}
           {on('ratios') && <Stat value={weight ? bmi(weight, store.heightCm).toFixed(1) : '—'} label={weight ? `BMI · ${bmiBand(bmi(weight, store.heightCm))}` : 'BMI'} />}
           {on('ratios') && <Stat value={waist ? whtr(waist, store.heightCm).toFixed(2) : '—'} label={waist ? `waist-to-height · ${whtrBand(whtr(waist, store.heightCm))}` : 'waist-to-height'} />}
         </div>
