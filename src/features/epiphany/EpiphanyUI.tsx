@@ -161,10 +161,12 @@ export function EpiphaniesPage({ today }: { today: string }) {
   const [list, update] = useEpiphanies()
   const [text, setText] = useState('')
   const [onlyStarred, setOnlyStarred] = useState(false)
+  const [epQuery, setEpQuery] = useState('')
   const dueCount = list.filter((e) => e.due <= today).length
   useTabTitle(dueCount ? `${dueCount} to review` : '', 'Epiphanies', 'epiphanies')
   const sorted = [...list]
     .filter((e) => !onlyStarred || e.starred)
+    .filter((e) => !epQuery.trim() || e.text.toLowerCase().includes(epQuery.trim().toLowerCase()))
     .sort((a, b) => Number(Boolean(b.starred)) - Number(Boolean(a.starred)) || a.due.localeCompare(b.due))
   return (
     <section className="epiphanies-page" aria-label="Epiphanies">
@@ -208,6 +210,9 @@ export function EpiphaniesPage({ today }: { today: string }) {
       )}
       {list.some((e) => e.reviews.some((r) => Date.now() - r.at < 7 * 864e5)) && (
         <p className="wb-muted">{list.reduce((a, e) => a + e.reviews.filter((r) => Date.now() - r.at < 7 * 864e5).length, 0)} reviews this week · {list.filter((e) => e.due <= today).length} due now</p>
+      )}
+      {list.length > 4 && (
+        <input type="search" className="epiphany-search" aria-label="Search epiphanies" placeholder={`Search ${list.length} insights…`} value={epQuery} onChange={(e) => setEpQuery(e.target.value)} />
       )}
       {list.some((e) => e.starred) && (
         <div className="filter-chips" role="group" aria-label="Filter">
