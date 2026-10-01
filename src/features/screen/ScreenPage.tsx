@@ -11,7 +11,13 @@ const fmt = (m: number) => (m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m
 export function ScreenPage() {
   const [store, setStoreState] = useState<ScreenStore>(() => readStore(SCREEN_KEY, defaultScreen))
   const [now, setNow] = useState(Date.now())
-  const [goal, setGoal] = useState(60)
+  const [goal, setGoalState] = useState(() => {
+    try { return Number(localStorage.getItem('bloom-phonefree-goal')) || 60 } catch { return 60 }
+  })
+  const setGoal = (v: number) => {
+    setGoalState(v)
+    try { localStorage.setItem('bloom-phonefree-goal', String(v)) } catch { /* optional */ }
+  }
   useEffect(() => {
     const t = setInterval(() => {
       setStoreState(readStore(SCREEN_KEY, defaultScreen))
@@ -47,6 +53,7 @@ export function ScreenPage() {
             </text>
           </svg>
         )}
+        {on('limit') && <p className="studio-empty">{used < s.dailyLimit ? `${fmt(s.dailyLimit - used)} left today` : `${fmt(used - s.dailyLimit)} over today’s limit`}</p>}
         {on('hourly') && (
           <div className="sw-hours" aria-label="Active minutes by hour">
             {hours.map((sec, h) => (
