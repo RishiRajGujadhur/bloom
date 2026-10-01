@@ -63,6 +63,18 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Ctrl+S: Bloom saves as you go, so skip the browser's "save page" dialog (pages with their own save still handle it).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || e.shiftKey || e.key.toLowerCase() !== 's') return
+      e.preventDefault()
+      const route = location.hash.slice(1).split('/')[0]
+      if (route === 'vision-board' || route === 'daybook' || (document.activeElement as HTMLElement | null)?.isContentEditable) return
+      window.dispatchEvent(new CustomEvent('bloom:toast', { detail: '✓ Everything is saved automatically' }))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   // Hovering any <time datetime> shows the exact date and time.
   useEffect(() => {
     const onOver = (e: MouseEvent) => {
