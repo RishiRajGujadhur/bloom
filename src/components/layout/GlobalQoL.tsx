@@ -18,6 +18,18 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
   // Character counter near any length-limited field once you're past 80% of it.
   const [counter, setCounter] = useState<{ x: number; y: number; text: string; full: boolean } | null>(null)
+  // Shift+Arrow in number fields steps ten at a time.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target
+      if (!e.shiftKey || !(t instanceof HTMLInputElement) || t.type !== 'number' || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return
+      e.preventDefault()
+      try { if (e.key === 'ArrowUp') t.stepUp(10); else t.stepDown(10) } catch { return }
+      t.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   // Home/End jump to the first/last button of the list holding focus.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
