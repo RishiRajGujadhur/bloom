@@ -185,6 +185,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
           <section className="studio-card en-wod">
             <small>Word of the day</small>
             <button type="button" className="en-wod-word" onClick={() => speak(wod.en)}><span>{wod.emoji}</span> {wod.en}</button>
+            <button type="button" className="en-wod-copy" aria-label="Copy the word" title="Copy" onClick={(e) => { void navigator.clipboard?.writeText(wod.en); e.currentTarget.textContent = '✓' }}>📋</button>
             <p>{wod.meaning}</p>
             <em>“{wod.example}”</em>
           </section>
