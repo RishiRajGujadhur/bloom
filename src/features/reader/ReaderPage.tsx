@@ -198,6 +198,7 @@ export function ReaderPage() {
         <button type="button" className="rd-cta" disabled={textId === 'custom' && !custom.trim()} onClick={toggle}>{phase === 'reading' ? (playing ? '❚❚ Pause' : '▶ Resume') : phase === 'done' ? '↺ Read again' : '▶ Start reading'}</button>
         <span className="rd-progress">
           {Math.min(i, tokens.length)}/{tokens.length}
+          {store.words && ` · ${Object.values(store.words).reduce((a, b) => a + b, 0).toLocaleString()} words read in all`}
           {store.runs.length > 1 && ` · avg comprehension ${Math.round((store.runs.reduce((a, r) => a + r.score, 0) / store.runs.length) * 100)}%`}
         </span>
         <div className="rd-chart" data-matrix-native>
