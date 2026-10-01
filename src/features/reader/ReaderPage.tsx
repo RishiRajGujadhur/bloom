@@ -191,7 +191,10 @@ export function ReaderPage() {
           <input type="range" min={150} max={900} step={25} value={store.wpm} onChange={(e) => save((s) => ({ ...s, wpm: Number(e.target.value), speeds: { ...s.speeds, [textId]: Number(e.target.value) } }))} aria-label="Words per minute" />
         </label>
         <button type="button" className="rd-cta" disabled={textId === 'custom' && !custom.trim()} onClick={toggle}>{phase === 'reading' ? (playing ? '❚❚ Pause' : '▶ Resume') : phase === 'done' ? '↺ Read again' : '▶ Start reading'}</button>
-        <span className="rd-progress">{Math.min(i, tokens.length)}/{tokens.length}</span>
+        <span className="rd-progress">
+          {Math.min(i, tokens.length)}/{tokens.length}
+          {store.runs.length > 1 && ` · avg comprehension ${Math.round((store.runs.reduce((a, r) => a + r.score, 0) / store.runs.length) * 100)}%`}
+        </span>
         <div className="rd-chart" data-matrix-native>
           {store.runs.length > 1 ? (
             <Line data={{ labels: store.runs.map((_, k) => String(k + 1)), datasets: [{ data: store.runs.map((r) => r.wpm), borderColor: colors[0], backgroundColor: `${colors[0]}33`, fill: true, tension: 0.35, pointRadius: 2 }] }} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { beginAtZero: true } } }} />
