@@ -172,6 +172,20 @@ export function FocusPage({
         ],
   )
   const doneToday = history.filter((h) => h.completedAt >= since).length
+  const [dailyGoal, setDailyGoalState] = useState(() => readStore<number>('bloom-focus-daily-goal', 4))
+  const setDailyGoal = (n: number) => {
+    setDailyGoalState(n)
+    writeStore('bloom-focus-daily-goal', n)
+  }
+  // Distraction log: jot it down mid-session instead of acting on it.
+  const [distractions, setDistractionsState] = useState(() => readStore<{ at: number; text: string }[]>('bloom-focus-distractions', []))
+  const setDistractions = (f: (l: { at: number; text: string }[]) => { at: number; text: string }[]) =>
+    setDistractionsState((l) => {
+      const n = f(l)
+      writeStore('bloom-focus-distractions', n)
+      return n
+    })
+  const [distraction, setDistraction] = useState('')
   return (
     <div id="focus-page" className="focus-layout grid grid-cols-1 gap-5 xl:grid-cols-2">
       {/* Timer and set-up side by side, diorama and garden below: no empty gaps. */}
@@ -209,6 +223,47 @@ export function FocusPage({
           {String(Math.floor(left / 1000) % 60).padStart(2, '0')}
         </div>
         {active && <p className="focus-ends">Finishes at {new Date(Date.now() + left).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</p>}
+        <p className="focus-goal">
+          {doneToday}/{dailyGoal} sessions today{doneToday >= dailyGoal ? ' 🎉' : ''} ·{' '}
+          <label>
+            goal{' '}
+            <select aria-label="Daily focus goal" value={dailyGoal} onChange={(e) => setDailyGoal(Number(e.target.value))}>
+              {[1, 2, 3, 4, 5, 6, 8].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </label>
+        </p>
+        {active && (
+          <form
+            className="focus-distract"
+            onSubmit={(e) => {
+              e.preventDefault()
+              const v = distraction.trim()
+              if (!v) return
+              setDistractions((list) => [{ at: Date.now(), text: v }, ...list].slice(0, 200))
+              setDistraction('')
+            }}
+          >
+            <input aria-label="Note a distraction" placeholder="Distracted? Park it here and carry on…" value={distraction} maxLength={120} onChange={(e) => setDistraction(e.target.value)} />
+          </form>
+        )}
+        {!active && distractions.some((d) => d.at >= since) && (
+          <details className="focus-distract-log">
+            <summary>{distractions.filter((d) => d.at >= since).length} distractions parked today</summary>
+            <ul>
+              {distractions
+                .filter((d) => d.at >= since)
+                .map((d) => (
+                  <li key={d.at}>
+                    <small>{new Date(d.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</small> {d.text}
+                  </li>
+                ))}
+            </ul>
+          </details>
+        )}
         {!active && (
           <div className="focus-setup">
             <div className="segmented" aria-label="Session length">
