@@ -298,6 +298,7 @@ export function MeditatePage() {
         <Stat value={streakDays(store.logs)} label="day streak" />
         <Stat value={store.logs.length} label="sessions" />
         <Stat value={`${total_min} min`} label="total" />
+        <Stat value={store.logs.length ? `${Math.max(...store.logs.map((l) => l.minutes))} min` : '—'} label="longest sit" />
         <Stat value={`${store.logs.filter((l) => new Date(l.at).getMonth() === new Date().getMonth() && new Date(l.at).getFullYear() === new Date().getFullYear()).reduce((a, l) => a + l.minutes, 0)} min`} label="this month" />
         <Stat value={withMood.length ? `+${(withMood.reduce((a, l) => a + (l.after! - l.before!), 0) / withMood.length).toFixed(1)}` : '—'} label="avg. calm gained" />
       </div>
