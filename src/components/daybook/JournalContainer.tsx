@@ -130,6 +130,21 @@ export function JournalContainer() {
       return n + (text ? text.split(/\s+/).length : 0)
     }, 0)
   }, [entries])
+  // Longest run of consecutive days with a page.
+  const bestStreak = useMemo(() => {
+    const days = [...new Set(entries.map((e) => e.createdAt.slice(0, 10)))].sort()
+    let best = 0
+    let run = 0
+    let prev = ''
+    for (const d of days) {
+      const p = new Date(`${d}T12:00:00`)
+      p.setDate(p.getDate() - 1)
+      run = prev === p.toISOString().slice(0, 10) ? run + 1 : 1
+      best = Math.max(best, run)
+      prev = d
+    }
+    return best
+  }, [entries])
   // Delete with a short Undo window.
   const [undoPage, setUndoPage] = useState<JournalEntry | null>(null)
   const removePage = (page: JournalEntry) => {
@@ -303,7 +318,7 @@ export function JournalContainer() {
               </button>
             )}
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
-              <Carousel label="Your pages" title={`Your pages · ${recentPages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}`}>
+              <Carousel label="Your pages" title={`Your pages · ${recentPages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}>
                 {[...recentPages].sort((a, b) =>
                   sort === 'created' ? b.createdAt.localeCompare(a.createdAt)
                   : sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt)
