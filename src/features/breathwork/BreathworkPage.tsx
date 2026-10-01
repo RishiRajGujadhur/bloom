@@ -7,6 +7,7 @@ import { burst } from '../../components/ui/celebrate'
 import { BREATHWORK_KEY, best, defaultSettings, initial, lung, step, type Session, type Settings, type State } from './breathworkModel'
 import { BreathQuick } from '../quick/BreathQuick'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './breathwork.css'
 
 const on = (id: string) => subOn('breathwork', id)
@@ -134,6 +135,7 @@ export function BreathworkPage() {
   }
   useEffect(() => () => noSleep.current?.disable(), [])
   useLeaveGuard(!!s && s.phase !== 'done')
+  useTabTitle(s && s.phase !== 'done' ? `🌬️ ${s.phase === 'breathe' ? `${s.breath} breaths` : s.phase === 'retention' ? 'Hold (empty)' : s.phase === 'recovery' ? 'Hold (full)' : 'Let go'} · R${s.round}` : '', 'Breathwork', 'breathwork')
   // Space begins a session, or ends the breath hold.
   const keyRef = useRef({ s, begin, cfg, safe: !on('safety') || store.safetyOk })
   keyRef.current = { s, begin, cfg, safe: !on('safety') || store.safetyOk }

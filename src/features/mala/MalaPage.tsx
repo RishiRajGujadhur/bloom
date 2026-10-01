@@ -9,6 +9,7 @@ import { BEADS, MALA_KEY, beadOf, isQuarter, mantras, roundsOf, themes, type Mal
 import { ripple } from '../showcase/ripple'
 import '../showcase/showcase.css'
 import { usePageActions } from '../../components/ui/PageMenu'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './mala.css'
 
 const on = (id: string) => subOn('mala', id)
@@ -154,6 +155,7 @@ export function MalaPage() {
     return () => clearInterval(i)
   })  
 
+  useTabTitle(count > 0 ? `📿 ${beadOf(count)}/${BEADS}${roundsOf(count) ? ` · ${roundsOf(count)} rounds` : ''}` : '', 'Mala', 'mala')
   usePageActions([
     { id: 'ml-bead', label: 'Count a bead', icon: '📿', run: tap },
     { id: 'ml-reset', label: 'Start a new round', icon: '↺', run: () => setCount(0) },
