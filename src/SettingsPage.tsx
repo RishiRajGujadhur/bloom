@@ -689,6 +689,28 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
+      <div className={styles.subOption}>
+        <span>
+          <strong>Reset layout</strong>
+          <small>Sidebar width, Bloom panel width, collapsed sections and recent pages go back to the defaults.</small>
+        </span>
+        <button
+          type="button"
+          className="quiet-button"
+          onClick={() => {
+            for (const k of ['bloom-sidebar-width', 'bloom-companion-width', 'bloom-nav-groups', 'bloom-nav-recent', 'bloom-guide-docked'])
+              try {
+                localStorage.removeItem(k)
+              } catch {
+                /* optional */
+              }
+            for (const v of ['--sidebar-width', '--sidebar-width-compact', '--bc-width']) document.documentElement.style.removeProperty(v)
+            window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'Layout reset' }))
+          }}
+        >
+          Reset
+        </button>
+      </div>
       <label className={styles.subOption}>
         <span>
           <strong>Your name</strong>
