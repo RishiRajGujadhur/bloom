@@ -18,6 +18,23 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
   // Character counter near any length-limited field once you're past 80% of it.
   const [counter, setCounter] = useState<{ x: number; y: number; text: string; full: boolean } | null>(null)
+  // Range sliders show their value in a bubble while you move them.
+  const [slider, setSlider] = useState<{ x: number; y: number; text: string } | null>(null)
+  useEffect(() => {
+    let hide = 0
+    const onInput = (e: Event) => {
+      const t = e.target
+      if (!(t instanceof HTMLInputElement) || t.type !== 'range') return
+      const r = t.getBoundingClientRect()
+      const min = Number(t.min || 0), max = Number(t.max || 100)
+      const f = max > min ? (Number(t.value) - min) / (max - min) : 0
+      setSlider({ x: r.left + 8 + f * (r.width - 16), y: r.top - 6, text: t.getAttribute('aria-valuetext') || t.value })
+      window.clearTimeout(hide)
+      hide = window.setTimeout(() => setSlider(null), 900)
+    }
+    document.addEventListener('input', onInput, true)
+    return () => { window.clearTimeout(hide); document.removeEventListener('input', onInput, true) }
+  }, [])
   // Shift+Arrow in number fields steps ten at a time.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -325,6 +342,7 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     <>
       <a href="#page-heading" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('page-heading')?.focus() }}>Skip to content</a>
       {counter && <div className="char-counter" data-full={counter.full} style={{ left: counter.x, top: counter.y }} aria-live="polite">{counter.text}</div>}
+      {slider && <div className="slider-bubble" style={{ left: slider.x, top: slider.y }} aria-hidden="true">{slider.text}</div>}
       {zoomImg && (
         <div className="img-lightbox" role="dialog" aria-label="Image, full size" onClick={() => setZoomImg(null)} onKeyDown={(e) => e.key === 'Escape' && setZoomImg(null)} tabIndex={-1} ref={(el) => el?.focus()}>
           <img src={zoomImg} alt="" />
