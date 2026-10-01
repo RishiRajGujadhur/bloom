@@ -847,7 +847,14 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                     {...(isOpen ? {} : { 'aria-label': title, title, 'data-hint': title, 'data-cursor-text': title })}
                     data-title={title}
                     data-pinned={pins.includes(key) || undefined}
-                    onClick={() => handleNavigate(key)}
+                    onClick={(e) => (e.ctrlKey || e.metaKey ? window.open(`#${key}`, '_blank') : handleNavigate(key))}
+                    // Middle-click (or Ctrl/Cmd+click) opens the page in a new tab.
+                    onAuxClick={(e) => {
+                      if (e.button === 1) {
+                        e.preventDefault()
+                        window.open(`#${key}`, '_blank')
+                      }
+                    }}
                     onContextMenu={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
