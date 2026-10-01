@@ -97,3 +97,4 @@
   background: var(--accent-color, #e0703f);
   transform: scale(1.5);
 }
+.st-jump { display: block; margin: 10px auto 0; max-width: 260px; }

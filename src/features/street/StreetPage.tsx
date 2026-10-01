@@ -650,6 +650,18 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
           <ChevronRight size={18} />
         </button>
       </div>
+      <select
+        className="studio-input st-jump"
+        aria-label="Jump to a building"
+        value={at}
+        onChange={(e) => go(Number(e.target.value))}
+      >
+        {list.map((b, i) => (
+          <option key={b.page} value={i}>
+            {b.name}
+          </option>
+        ))}
+      </select>
       {subOn('bloomStreet', 'dots') && (
         <div className="st-dots" role="tablist" aria-label="Buildings">
           {list.map((b, i) => (
