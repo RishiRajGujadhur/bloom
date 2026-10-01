@@ -906,7 +906,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                     data-section={section}
                     aria-current={active === key ? 'page' : undefined}
                     // Without the visible label the icon needs its own name.
-                    {...(isOpen ? {} : { 'aria-label': title, title, 'data-hint': title, 'data-cursor-text': title })}
+                    {...(isOpen ? {} : { 'aria-label': title, title: pins.indexOf(key) >= 0 && pins.indexOf(key) < 9 ? `${title} (Alt+${pins.indexOf(key) + 1})` : title, 'data-hint': title, 'data-cursor-text': title })}
                     data-title={title}
                     data-pinned={pins.includes(key) || undefined}
                     onClick={(e) => (e.ctrlKey || e.metaKey ? window.open(`#${key}`, '_blank') : handleNavigate(key))}
