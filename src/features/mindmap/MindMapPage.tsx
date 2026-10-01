@@ -200,7 +200,25 @@ export function MindMapPage() {
       )}
       {!full && editing && (
         <div className="studio-card mm-editor">
-          <textarea className="mm-text" aria-label="Outline" value={map.md} spellCheck={false} onChange={(e) => edit(e.target.value)} />
+          <textarea
+            className="mm-text"
+            aria-label="Outline (Tab indents, Shift+Tab outdents)"
+            value={map.md}
+            spellCheck={false}
+            onChange={(e) => edit(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key !== 'Tab') return
+              e.preventDefault()
+              const ta = e.currentTarget
+              const { selectionStart: a, selectionEnd: b, value } = ta
+              const lineStart = value.lastIndexOf('\n', a - 1) + 1
+              const block = value.slice(lineStart, b)
+              const next = e.shiftKey ? block.replace(/^ {1,2}/gm, '') : block.replace(/^/gm, '  ')
+              edit(value.slice(0, lineStart) + next + value.slice(b))
+              const delta = next.length - block.length
+              requestAnimationFrame(() => ta.setSelectionRange(Math.max(lineStart, a + (e.shiftKey ? Math.min(0, delta) : 2)), b + delta))
+            }}
+          />
           <p className="studio-empty">Use # for the centre, ## for branches, - for leaves. {branches(map.md)} branches.</p>
         </div>
       )}
