@@ -81,3 +81,6 @@ html[data-theme='galaxy'] .studio[data-studio='breathwork'] { --galaxy-light: #b
 
 /* body: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='body'] { --galaxy-light: #ffd1e0; --galaxy-blue: #b4d8ff; --galaxy-violet: #d7baff; --galaxy-x: 70%; --galaxy-y: 16%; --galaxy-ring-x: 23%; --galaxy-ring-y: 82%; --galaxy-ring-size: 155px; --galaxy-shape: 18px 43px 18px 39px; }
+
+/* cards: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='cards'] { --galaxy-light: #d8c5ff; --galaxy-blue: #a9f4e9; --galaxy-violet: #ffe2ad; --galaxy-x: 85%; --galaxy-y: 42%; --galaxy-ring-x: 12%; --galaxy-ring-y: 71%; --galaxy-ring-size: 100px; --galaxy-shape: 40px 16px 35px 16px; }
