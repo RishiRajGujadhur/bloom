@@ -177,6 +177,18 @@ export function BillsInbox({ code, bills, onBills, onPaid }: { code: string; bil
           <small>{reply.semantic ? 'Found by on-device semantic search (MiniLM + Orama).' : 'Found by keyword match.'}</small>
         </div>
       )}
+      {upcoming.filter((b) => b.amount != null).length > 1 && (
+        <button
+          type="button"
+          className="rl-ghost"
+          onClick={() => {
+            const due = upcoming.filter((b) => b.amount != null)
+            if (window.confirm(`Mark all ${due.length} bills as paid and log them as spending?`)) due.forEach(pay)
+          }}
+        >
+          ✓ Mark all paid
+        </button>
+      )}
       {upcoming.length > 0 ? (
         <ul className="bi-list">
           {upcoming.map((b) => {
