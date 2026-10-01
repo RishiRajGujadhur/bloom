@@ -21,6 +21,7 @@ import {
   type Style,
   type Technique,
 } from './dojoMoves'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './dojo.css'
 
 const on = (id: string) => subOn('dojo', id)
@@ -326,6 +327,20 @@ function Caller({ s, save, onReps }: { s: Store; save: (p: Partial<Store>) => vo
     return () => clearInterval(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [running, resting, length])
+  useTabTitle(running ? `🥋 ${resting ? 'Rest' : `R${round}`} ${Math.floor(Math.max(0, left) / 60)}:${String(Math.max(0, left) % 60).padStart(2, '0')}` : '', 'Dojo', 'dojo')
+  // Space starts or pauses the rounds.
+  const runRef = useRef(running)
+  runRef.current = running
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      e.preventDefault()
+      if (!runRef.current) bell(1)
+      setRunning((r) => !r)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   return (
     <div className="studio-card dojo-caller">
       <div className={`dojo-clock ${resting ? 'rest' : ''}`} role="timer">
