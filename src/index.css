@@ -285,3 +285,5 @@ html[data-static-topbar] .app-shell .topbar { position: static; transform: none 
 html[data-thin-scroll], html[data-thin-scroll] * { scrollbar-width: thin; }
 html[data-tab-hidden] *, html[data-tab-hidden] *::before, html[data-tab-hidden] *::after { animation-play-state: paused !important; }
 .cmdk-kbd { margin-left: auto; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border-color); font: 600 11px/1.5 ui-monospace, monospace; opacity: .75; white-space: nowrap; }
+.pre-copy { position: absolute; top: 6px; right: 6px; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; font: 600 11px/1.5 system-ui, sans-serif; opacity: 0; transition: opacity .15s; cursor: pointer; }
+pre:hover > .pre-copy, .pre-copy:focus-visible { opacity: 1; }

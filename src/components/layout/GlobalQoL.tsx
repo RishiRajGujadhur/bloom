@@ -63,6 +63,27 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Code blocks get a Copy button when you hover them.
+  useEffect(() => {
+    const onOver = (e: MouseEvent) => {
+      const pre = (e.target as HTMLElement | null)?.closest?.('pre')
+      if (!pre || pre.dataset.copyable || pre.closest('[contenteditable="true"]') || (pre.textContent ?? '').trim().length < 12) return
+      pre.dataset.copyable = '1'
+      if (getComputedStyle(pre).position === 'static') pre.style.position = 'relative'
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'pre-copy'
+      btn.textContent = 'Copy'
+      btn.setAttribute('aria-label', 'Copy code')
+      btn.addEventListener('click', () => {
+        const text = [...pre.childNodes].filter((n) => n !== btn).map((n) => n.textContent ?? '').join('')
+        void navigator.clipboard?.writeText(text).then(() => { btn.textContent = '✓ Copied'; setTimeout(() => (btn.textContent = 'Copy'), 1500) })
+      })
+      pre.append(btn)
+    }
+    document.addEventListener('mouseover', onOver)
+    return () => document.removeEventListener('mouseover', onOver)
+  }, [])
   // Opening a collapsible section (<details>) puts the cursor in its first field.
   useEffect(() => {
     const onToggle = (e: Event) => {
