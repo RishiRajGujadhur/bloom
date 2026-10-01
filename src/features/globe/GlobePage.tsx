@@ -36,6 +36,7 @@ export function GlobePage() {
   const [clicked, setClicked] = useState<string | null>(null)
   const [typed, setTyped] = useState('')
   const [score, setScore] = useState({ right: 0, total: 0 })
+  const [streak, setStreak] = useState(0)
   // Countries you missed this session, to revisit.
   const [missed, setMissed] = useState<typeof q.country[]>([])
   const svg = useRef<SVGSVGElement>(null)
@@ -91,6 +92,7 @@ export function GlobePage() {
   const judge = (ok: boolean) => {
     setAnswer(ok ? 'right' : 'wrong')
     setScore((s) => ({ right: s.right + (ok ? 1 : 0), total: s.total + 1 }))
+    setStreak((n) => (ok ? n + 1 : 0))
     if (!ok) setMissed((list) => [q.country, ...list.filter((c) => c.atlas !== q.country.atlas)].slice(0, 20))
     if (ok) burst(undefined, 'stars')
     spinTo(target)
@@ -112,6 +114,10 @@ export function GlobePage() {
       if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
       if (answer && e.key === 'Enter') {
         e.preventDefault()
+        next()
+        return
+      }
+      if (!answer && e.key.toLowerCase() === 's') {
         next()
         return
       }
@@ -150,7 +156,13 @@ export function GlobePage() {
         </svg>
       </section>
       <aside className="gq-side">
-        <p className="gq-eyebrow">Globe quiz · {score.right}/{score.total}{score.total >= 3 ? ` · ${Math.round((score.right / score.total) * 100)}%` : ''}</p>
+        <p className="gq-eyebrow">Globe quiz · {score.right}/{score.total}{score.total >= 3 ? ` · ${Math.round((score.right / score.total) * 100)}%` : ''}{streak >= 2 ? ` · 🔥 ${streak}` : ''}
+          {score.total > 0 && (
+            <button type="button" className="gq-chip small" style={{ marginLeft: 8 }} onClick={() => { setScore({ right: 0, total: 0 }); setStreak(0) }}>
+              Reset
+            </button>
+          )}
+        </p>
         <h2>{q.mode === 'find' ? <>Find <em>{q.country.name}</em></> : q.mode === 'name' ? 'Which country is glowing?' : <>Capital of <em>{q.country.name}</em>?</>}</h2>
         <div className="gq-row">
           {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
@@ -160,7 +172,7 @@ export function GlobePage() {
         </div>
         {q.mode === 'find' && !answer && <p className="gq-hint">Drag to spin the globe, then click the country.</p>}
         {!answer && (
-          <button type="button" className="gq-chip small" onClick={() => next()}>
+          <button type="button" className="gq-chip small" title="Skip (S)" onClick={() => next()}>
             Skip →
           </button>
         )}
