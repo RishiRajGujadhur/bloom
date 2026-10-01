@@ -263,3 +263,6 @@ html[data-round='round'] .card, html[data-round='round'] .studio-card, html[data
   button:not(:disabled) { transition: scale 90ms ease; }
   button:not(:disabled):active { scale: 0.97; }
 }
+
+/* Battery saver (below 20% and unplugged): decorative CSS loops pause. */
+html[data-low-battery] *, html[data-low-battery] *::before, html[data-low-battery] *::after { animation-play-state: paused !important; }

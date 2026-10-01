@@ -47,6 +47,27 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     document.addEventListener('click', onImg)
     return () => document.removeEventListener('click', onImg)
   }, [])
+  // Battery saver: below 20% and unplugged, decorative motion pauses (html[data-low-battery]).
+  useEffect(() => {
+    const nav = navigator as Navigator & { getBattery?: () => Promise<{ level: number; charging: boolean; addEventListener: (t: string, f: () => void) => void; removeEventListener: (t: string, f: () => void) => void }> }
+    if (!nav.getBattery) return
+    let battery: Awaited<ReturnType<NonNullable<typeof nav.getBattery>>> | null = null
+    const sync = () => {
+      if (!battery) return
+      const low = !battery.charging && battery.level <= 0.2
+      document.documentElement.toggleAttribute('data-low-battery', low)
+    }
+    void nav.getBattery().then((b) => {
+      battery = b
+      sync()
+      b.addEventListener('levelchange', sync)
+      b.addEventListener('chargingchange', sync)
+    })
+    return () => {
+      battery?.removeEventListener('levelchange', sync)
+      battery?.removeEventListener('chargingchange', sync)
+    }
+  }, [])
   // Weekly nudge to export a backup (everything lives in this browser).
   const [backupDue, setBackupDue] = useState(() => {
     try {
