@@ -99,3 +99,6 @@ html[data-theme='galaxy'] .studio[data-studio='games'] { --galaxy-light: #cbbaff
 
 /* fasting: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='fasting'] { --galaxy-light: #ffdbac; --galaxy-blue: #c1eeff; --galaxy-violet: #f4bfe8; --galaxy-x: 87%; --galaxy-y: 20%; --galaxy-ring-x: 8%; --galaxy-ring-y: 75%; --galaxy-ring-size: 108px; --galaxy-shape: 44px 17px 35px 23px; }
+
+/* pointer: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='pointer'] { --galaxy-light: #ffe0bb; --galaxy-blue: #b4d7ff; --galaxy-violet: #e7bbf5; --galaxy-x: 71%; --galaxy-y: 43%; --galaxy-ring-x: 85%; --galaxy-ring-y: 72%; --galaxy-ring-size: 145px; --galaxy-shape: 21px 39px 45px 17px; }
