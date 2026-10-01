@@ -14,7 +14,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 - [x] Breathwork
 - [x] Body
 - [x] Cards
-- [ ] Yoga
+- [x] Yoga
 - [ ] Ink
 - [ ] Workouts
 - [ ] Games
