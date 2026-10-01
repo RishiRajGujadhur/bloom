@@ -100,7 +100,27 @@ export function WorkoutPage() {
   useEffect(() => {
     if (restLeft <= 0) return
     const t = setTimeout(() => setRestLeft((s) => s - 1), 1000)
-    if (restLeft === 1) navigator.vibrate?.([80, 60, 80])
+    if (restLeft === 1) {
+      navigator.vibrate?.([80, 60, 80])
+      // A soft two-note chime: rest is over.
+      try {
+        const ac = new AudioContext()
+        ;[660, 880].forEach((f, i) => {
+          const o = ac.createOscillator()
+          const g = ac.createGain()
+          o.frequency.value = f
+          g.gain.setValueAtTime(0.0001, ac.currentTime + i * 0.18)
+          g.gain.exponentialRampToValueAtTime(0.12, ac.currentTime + i * 0.18 + 0.02)
+          g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + i * 0.18 + 0.5)
+          o.connect(g).connect(ac.destination)
+          o.start(ac.currentTime + i * 0.18)
+          o.stop(ac.currentTime + i * 0.18 + 0.55)
+        })
+        setTimeout(() => void ac.close(), 1200)
+      } catch {
+        /* sound optional */
+      }
+    }
     return () => clearTimeout(t)
   }, [restLeft])
 
@@ -276,6 +296,13 @@ export function WorkoutPage() {
           {on('restTimer') && (
             <div className="wo-rest-box">
               <RestRing total={store.rest} left={restLeft} />
+              {restLeft > 0 && (
+                <span className="wo-rest-adjust">
+                  <button type="button" className="studio-chip" onClick={() => setRestLeft((s) => Math.max(1, s - 15))}>−15 s</button>
+                  <button type="button" className="studio-chip" onClick={() => setRestLeft((s) => s + 30)}>+30 s</button>
+                  <button type="button" className="studio-chip" onClick={() => setRestLeft(0)}>Skip</button>
+                </span>
+              )}
               <Slider label="Rest" value={store.rest} min={30} max={300} step={15} unit="s" compact onChange={(v) => setStore((s) => ({ ...s, rest: v }))} />
             </div>
           )}
