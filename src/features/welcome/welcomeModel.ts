@@ -85,6 +85,7 @@ export const questions: Question[] = [
     options: [
       { id: 'bloom-light', label: 'Bloom light', emoji: '🌸' },
       { id: 'bloom-dark', label: 'Bloom dark', emoji: '🌙' },
+      { id: 'galaxy', label: 'Galaxy', emoji: '✦' },
       { id: 'emerald-forest', label: 'Forest', emoji: '🌲' },
       { id: 'rose-pine', label: 'Rosé', emoji: '🍷' },
       { id: 'nord', label: 'Nordic', emoji: '❄️' },
@@ -99,6 +100,7 @@ export const questions: Question[] = [
 export const themeSwatches: Record<string, [string, string, string, string]> = {
   'bloom-light': ['#fbf6f1', '#ffffff', '#e0703f', '#2b2b2b'],
   'bloom-dark': ['#1c1a1f', '#26232a', '#f08a5d', '#f3ede7'],
+  galaxy: ['#05070d', '#101722', '#a6f8cf', '#ffffff'],
   'emerald-forest': ['#0f1f17', '#16291f', '#3fbf7f', '#e3f2ea'],
   'rose-pine': ['#191724', '#1f1d2e', '#ebbcba', '#e0def4'],
   nord: ['#2e3440', '#3b4252', '#88c0d0', '#eceff4'],

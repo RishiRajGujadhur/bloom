@@ -1,14 +1,23 @@
 /* Galaxy's Studio shell is shared; individual studios set their own coordinates and accents below. */
+.studio-galaxy-icon { display: none; }
+.studio-original-icon { display: inline-flex; align-items: center; }
+html[data-theme='galaxy'] .studio .studio-galaxy-icon { display: inline-flex; align-items: center; }
+html[data-theme='galaxy'] .studio .studio-original-icon { display: none; }
+html[data-theme='galaxy'] .studio .studio-tabs button[aria-selected='true'] .studio-galaxy-icon svg { filter: brightness(.35) saturate(1.1); }
 html[data-theme='galaxy'] .studio:not([data-studio='money']) {
   --galaxy-light: #a6f8cf;
   --galaxy-blue: #9bc6ff;
   --galaxy-violet: #c3a9ff;
   --galaxy-x: 72%;
   --galaxy-y: 20%;
+  --galaxy-ring-x: 79%;
+  --galaxy-ring-y: 75%;
+  --galaxy-ring-size: 130px;
   --galaxy-shape: 24px 24px 42px 24px;
   border: 1px solid #bdcce244;
   border-radius: 30px 30px 50px 30px;
   background:
+    radial-gradient(circle var(--galaxy-ring-size) at var(--galaxy-ring-x) var(--galaxy-ring-y), transparent 84%, color-mix(in srgb, var(--galaxy-blue) 24%, transparent) 85%, transparent 87%),
     radial-gradient(circle at var(--galaxy-x) var(--galaxy-y), color-mix(in srgb, var(--galaxy-light) 18%, transparent), transparent 26%),
     radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--galaxy-violet) 13%, transparent), transparent 36%),
     #080d16;

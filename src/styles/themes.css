@@ -487,3 +487,10 @@ html[data-font='local'] body, html[data-font='local'] h1, html[data-font='local'
   --letter-spacing-body: 0.2px;
   --line-height-body: 1.6;
 }
+
+/* Galaxy has its own type voice; a personally selected local font still wins. */
+html[data-theme='galaxy']:not([data-font='local']) {
+  --font-family: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Manrope', 'DM Sans', system-ui, sans-serif;
+  --letter-spacing-body: .005em;
+}

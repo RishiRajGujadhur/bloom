@@ -7,6 +7,7 @@ import './studio.css'
 import { setHeadSlot } from '../ui/headSlot'
 import './shared.css'
 import './galaxy.css'
+import { GalaxyGlyph } from './GalaxyGlyph'
 
 /**
  * The shared page shell for Bloom's studios (exercise, sounds, meditation…):
@@ -130,7 +131,8 @@ export function Studio({
                   if (e.key === 'ArrowLeft') go(i - 1)
                 }}
               >
-                {t.icon}
+                <span className="studio-original-icon">{t.icon}</span>
+                <span className="studio-galaxy-icon"><GalaxyGlyph label={t.label} id={t.id} /></span>
                 <span>{t.label}</span>
               </button>
             ))}
