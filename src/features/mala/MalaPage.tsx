@@ -89,7 +89,13 @@ export function MalaPage() {
       return n
     })
   const [tab, setTab] = useState('count')
-  const [count, setCount] = useState(0)
+  // The round in progress survives leaving the page.
+  const [count, setCount] = useState(() => {
+    try { return Number(localStorage.getItem('bloom-mala-count')) || 0 } catch { return 0 }
+  })
+  useEffect(() => {
+    try { localStorage.setItem('bloom-mala-count', String(count)) } catch { /* optional */ }
+  }, [count])
   const [auto, setAuto] = useState(false)
   const [custom, setCustom] = useState('')
   const stage = useRef<HTMLDivElement>(null)
@@ -123,6 +129,11 @@ export function MalaPage() {
       if (!typing && (e.code === 'Space' || e.key === 'Enter')) {
         e.preventDefault()
         tap()
+      }
+      // Backspace takes back a miscounted bead.
+      if (!typing && e.key === 'Backspace') {
+        e.preventDefault()
+        setCount((c) => Math.max(0, c - 1))
       }
     }
     window.addEventListener('keydown', k)
