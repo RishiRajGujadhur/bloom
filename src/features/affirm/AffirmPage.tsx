@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCards, Keyboard } from 'swiper/modules'
 import 'swiper/css'
@@ -30,7 +30,17 @@ export function AffirmPage() {
       return n
     })
   const [tab, setTab] = useState('swipe')
-  const [deck, setDeck] = useState(on('daily') ? 'daily' : decks[0].id)
+  const [deck, setDeckState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bloom-affirm-deck')
+      if (saved) return saved
+    } catch { /* optional */ }
+    return on('daily') ? 'daily' : decks[0].id
+  })
+  const setDeck = (d: string) => {
+    setDeckState(d)
+    try { localStorage.setItem('bloom-affirm-deck', d) } catch { /* optional */ }
+  }
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [draft, setDraft] = useState('')
@@ -38,6 +48,17 @@ export function AffirmPage() {
   const base = deck === 'daily' ? [dailyCard(), ...cardsFor('mix', store).filter((c) => c !== dailyCard())] : cardsFor(deck, store)
   const cards = shuffled && deck !== 'daily' ? shuffle(base, shuffled) : base
   const current = cards[Math.min(index, cards.length - 1)]
+  // F saves the card in view.
+  const favRef = useRef(() => {})
+  favRef.current = () => { if (current && on('favourites')) fav(current) }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'f' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      favRef.current()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const theme = on('themes') ? store.theme : 'gradient'
 
   const repeat = (card: string, e: React.MouseEvent<HTMLElement>) => {
@@ -104,7 +125,7 @@ export function AffirmPage() {
       {current && (
         <div className="af-actions">
           {on('favourites') && (
-            <button type="button" className="af-btn" aria-pressed={store.favourites.includes(current)} aria-label="Save to favourites" onClick={() => fav(current)}>
+            <button type="button" className="af-btn" aria-pressed={store.favourites.includes(current)} aria-label="Save to favourites" title="Save (F)" onClick={() => fav(current)}>
               <Heart size={20} />
             </button>
           )}
