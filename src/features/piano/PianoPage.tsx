@@ -195,7 +195,7 @@ export function PianoPage() {
     <div className="pn-page" data-labels={labels ? 'on' : 'off'}>
       <header className="pn-head">
         <div>
-          <p className="pn-eyebrow">Piano & ear trainer</p>
+          <p className="pn-eyebrow">Piano & ear trainer{store.songs.length ? ` · ${store.songs.length}/${songs.length} songs learned` : ''}{store.quest ? ` · ${store.quest} notes found` : ''}</p>
           <h2>{mode === 'play' ? 'Just play' : mode === 'quest' ? 'Note quest' : mode === 'ear' ? 'Ear training' : song.title}</h2>
         </div>
         <button type="button" className="pn-mode" aria-pressed={labels} title="Show or hide note names and keyboard letters" onClick={() => setLabels((v) => { try { localStorage.setItem('bloom-piano-labels', v ? '0' : '1') } catch { /* optional */ } return !v })}>
