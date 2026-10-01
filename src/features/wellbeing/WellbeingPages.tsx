@@ -321,6 +321,11 @@ export function BreathePage() {
       </div>
       <p className="wb-muted">
         {cycles} / {rounds} rounds{todayCount > 0 ? ` · ${todayCount} ${todayCount === 1 ? 'session' : 'sessions'} today` : ''}{weekCount > todayCount ? ` · ${weekCount} this week` : ''}
+        {(() => {
+          const counts = sessions.reduce<Record<string, number>>((a, s) => ({ ...a, [s.pattern]: (a[s.pattern] ?? 0) + 1 }), {})
+          const fav = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]
+          return fav && fav[1] > 2 ? ` · favourite: ${fav[0]}` : ''
+        })()}
       </p>
     </section>
   )
