@@ -146,7 +146,20 @@ export function CalendarPage({ data, setData }: Props) {
   dayRef.current = selectedDay
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() !== 'n' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"], [role="dialog"]')) return
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"], [role="dialog"]')) return
+      // ← / → page through dates, T jumps to today.
+      const api = calendar.current?.getApi()
+      if (api && (e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !(e.target as HTMLElement | null)?.closest?.('.fc-event')) {
+        e.preventDefault()
+        if (e.key === 'ArrowLeft') api.prev()
+        else api.next()
+        return
+      }
+      if (api && e.key.toLowerCase() === 't') {
+        api.today()
+        return
+      }
+      if (e.key.toLowerCase() !== 'n') return
       e.preventDefault()
       const start = new Date(`${dayRef.current}T00:00:00`)
       const now = new Date()
