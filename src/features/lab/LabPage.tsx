@@ -122,7 +122,13 @@ function Scatter({ rows, a, b }: { rows: ReturnType<typeof dailyRows>; a: Metric
 }
 
 export function LabPage({ data, today }: FeaturePageProps) {
-  const [days, setDays] = useState(30)
+  const [days, setDaysState] = useState(() => {
+    try { return [14, 30, 90].includes(Number(localStorage.getItem('bloom-lab-days'))) ? Number(localStorage.getItem('bloom-lab-days')) : 30 } catch { return 30 }
+  })
+  const setDays = (d: number) => {
+    setDaysState(d)
+    try { localStorage.setItem('bloom-lab-days', String(d)) } catch { /* optional */ }
+  }
   const [pick, setPick] = useState<[MetricId, MetricId]>(['sleepHours', 'mood'])
   const [busy, setBusy] = useState<'' | 'pdf' | 'zip'>('')
   const rows = useMemo(
@@ -195,7 +201,13 @@ export function LabPage({ data, today }: FeaturePageProps) {
           {subOn('insightsLab', 'scatter') && (
             <div className="lab-scatter-card">
               <p className="lab-pick">
-                {metrics[pi].label} × {metrics[pj].label}
+                <select aria-label="First metric" value={pick[0]} onChange={(e) => setPick([e.target.value as MetricId, pick[1]])}>
+                  {metrics.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+                </select>
+                {' × '}
+                <select aria-label="Second metric" value={pick[1]} onChange={(e) => setPick([pick[0], e.target.value as MetricId])}>
+                  {metrics.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+                </select>
                 {sel && pi !== pj && (
                   <strong>
                     {' '}
