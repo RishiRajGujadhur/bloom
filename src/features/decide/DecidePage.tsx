@@ -78,6 +78,7 @@ export function DecidePage() {
             <div key={c.id} className="dc-row" role="row">
               <span role="rowheader" className="dc-crit">
                 <input value={c.name} onChange={(e) => save((x) => ({ ...x, criteria: x.criteria.map((y) => (y.id === c.id ? { ...y, name: e.target.value || '?' } : y)) }))} aria-label="What matters" />
+                {d.criteria.length > 1 && <button type="button" className="dc-crit-x" onClick={() => save((x) => ({ ...x, criteria: x.criteria.filter((y) => y.id !== c.id) }))} aria-label={`Remove ${c.name}`} title="Remove">×</button>}
                 <span className="dc-weight" aria-label={`Weight ${c.weight}`}>
                   {[1, 2, 3, 4, 5].map((w) => <button key={w} type="button" className={w <= c.weight ? 'on' : ''} onClick={() => save((x) => ({ ...x, criteria: x.criteria.map((y) => (y.id === c.id ? { ...y, weight: w } : y)) }))} aria-label={`Weight ${w}`} />)}
                 </span>
@@ -98,6 +99,16 @@ export function DecidePage() {
           <button type="button" className="dc-ghost" onClick={() => save((x) => ({ ...x, criteria: [...x.criteria, { id: crypto.randomUUID(), name: 'Something else', weight: 3 }] }))}>+ What matters</button>
           {d.options.length < 4 && <button type="button" className="dc-ghost" onClick={() => save((x) => ({ ...x, options: [...x.options, { id: crypto.randomUUID(), name: `Option ${String.fromCharCode(65 + x.options.length)}` }] }))}>+ Option</button>}
           <button type="button" className="dc-ghost" onClick={() => saveDecision(d, top?.name ?? '')}>💾 Save decision</button>
+          <button
+            type="button"
+            className="dc-ghost"
+            onClick={() => {
+              const text = `${d.question}\n${res.map((r, i) => `${i + 1}. ${r.name} — ${r.pct}%`).join('\n')}`
+              void navigator.clipboard?.writeText(text).then(() => window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'Result copied' })))
+            }}
+          >
+            📋 Copy result
+          </button>
           <button type="button" className="dc-ghost" onClick={() => save(() => decisionSchema.parse({ question: 'What should I decide?' }))}>＋ New</button>
         </div>
         {saved.length > 0 && (

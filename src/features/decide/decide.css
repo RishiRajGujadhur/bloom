@@ -48,3 +48,6 @@
 .dc-saved li button { border: 0; background: none; color: inherit; cursor: pointer; text-align: left; }
 .dc-saved li button:first-child { flex: 1; }
 .dc-saved small { color: var(--text-muted); }
+
+.dc-crit-x { background: none; border: 0; color: inherit; opacity: .5; cursor: pointer; }
+.dc-crit-x:hover { opacity: 1; }
