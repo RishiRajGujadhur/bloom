@@ -1,3 +1,4 @@
+import { useLeaveGuard } from '../utils/useLeaveGuard'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { idleGranted, idleSupported, requestIdle, useAway, useKeepAwake } from '../platform/presence'
 import { writeStore } from '../components/studio/Studio'
@@ -121,6 +122,7 @@ export function FocusPage({
   const awayStart = useRef<number | null>(null)
   const [awayNote, setAwayNote] = useState('')
   useKeepAwake(running)
+  useLeaveGuard(running)
   useEffect(() => {
     if (!running) { awayStart.current = null; return }
     if (away.away) { awayStart.current ??= away.since ?? Date.now(); return }

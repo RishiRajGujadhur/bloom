@@ -1,3 +1,4 @@
+import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -106,6 +107,7 @@ export function RunPage() {
   const [kind, setKind] = useState<'run' | 'walk'>('run')
   const [points, setPoints] = useState<Pt[]>([])
   const [status, setStatus] = useState<'idle' | 'tracking' | 'paused' | 'demo'>('idle')
+  useLeaveGuard(status === 'tracking' || status === 'paused')
   const [error, setError] = useState('')
   const [now, setNow] = useState(Date.now())
   const [startedAt, setStartedAt] = useState(0)

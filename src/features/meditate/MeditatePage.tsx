@@ -1,3 +1,4 @@
+import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useKeepAwake } from '../../platform/presence'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -88,6 +89,7 @@ export function MeditatePage() {
   const [running, setRunning] = useState(false)
   // Keep the screen on while the session runs (Screen Wake Lock).
   useKeepAwake(running)
+  useLeaveGuard(running)
   const [t, setT] = useState(0)
   const [before, setBefore] = useState(3)
   const [after, setAfter] = useState(3)
