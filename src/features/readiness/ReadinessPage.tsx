@@ -5,6 +5,7 @@ import 'uplot/dist/uPlot.min.css'
 import { mean, standardDeviation } from 'simple-statistics'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { hasCap } from '../../platform/caps'
 import { getFft } from '../../platform/pffft'
 import { burst } from '../../components/ui/celebrate'
@@ -104,10 +105,21 @@ function useUplot(host: React.RefObject<HTMLDivElement | null>, opts: () => Omit
 }
 
 export function ReadinessPage() {
-  const [source, setSource] = useState<Source>(hasCap('bt') ? 'bluetooth' : 'simulated')
+  const [source, setSourceState] = useState<Source>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-readiness-source') as Source | null
+      if (saved && (saved !== 'bluetooth' || hasCap('bt'))) return saved
+    } catch { /* optional */ }
+    return hasCap('bt') ? 'bluetooth' : 'simulated'
+  })
+  const setSource = (s: Source) => {
+    setSourceState(s)
+    try { localStorage.setItem('bloom-readiness-source', s) } catch { /* optional */ }
+  }
   const [phase, setPhase] = useState<Phase>('idle')
   useKeepAwake(phase === 'scanning')
   const [left, setLeft] = useState(SCAN_S)
+  useTabTitle(phase === 'scanning' ? `💓 ${left}s` : '', 'Readiness', 'readiness')
   const [bpm, setBpm] = useState(0)
   const [rr, setRr] = useState<number[]>([])
   const [pulse, setPulse] = useState(0)
