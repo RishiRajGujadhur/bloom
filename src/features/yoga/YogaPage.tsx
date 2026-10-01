@@ -141,6 +141,11 @@ export function YogaPage() {
   }, [elapsed, length, running, current.name])
 
   const play = (f: Flow) => {
+    try {
+      localStorage.setItem('bloom-yoga-last', JSON.stringify(f))
+    } catch {
+      /* optional */
+    }
     setCurrent(f)
     setElapsed(0)
     lastIndex.current = -1
@@ -266,6 +271,18 @@ export function YogaPage() {
 
   const flows = () => (
     <div className="iv-programs">
+      {(() => {
+        try {
+          const last = JSON.parse(localStorage.getItem('bloom-yoga-last') ?? 'null') as Flow | null
+          return last?.steps?.length ? (
+            <button type="button" className="studio-chip yg-again" onClick={() => play(last)}>
+              ↻ Again: {last.emoji} {last.name}
+            </button>
+          ) : null
+        } catch {
+          return null
+        }
+      })()}
       {on('presets') && (
         <>
           <h3>Flows</h3>
