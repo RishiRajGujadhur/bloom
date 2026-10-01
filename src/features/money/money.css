@@ -399,6 +399,7 @@ html[data-theme='galaxy'] .studio[data-studio='money'] .mn-stats > div:nth-child
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-label { color: #b8ffcb; font-size: 1rem; margin-bottom: 6px; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-big { font-family: var(--font-family); }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-change { color: #a3b2c7; font-weight: 400; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .studio-empty { color: #adbed2; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-places { position: relative; max-width: 36%; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-add { gap: 11px; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .studio-input { background: #090f1aab; border-color: #c0d6f132; border-radius: 15px; }

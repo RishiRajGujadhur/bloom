@@ -12,7 +12,7 @@ export function GalaxyCategoryIcon({ category }: { category: string }) {
     fun: ['M4 7h16v4a2 2 0 0 0 0 4v2H4v-2a2 2 0 0 0 0-4V7Z', 'M12 7v10'],
     shopping: ['M5 9h14l-1 11H6L5 9Z', 'M9 9V7a3 3 0 0 1 6 0v2'],
     gifts: ['M4 10h16v10H4V10ZM3 7h18v3H3V7Z', 'M12 7v13M12 7C7 7 7 3 10 3c2 0 2 3 2 4Zm0 0c5 0 5-4 2-4-2 0-2 3-2 4Z'],
-    other: ['M5 12h.01M12 12h.01M19 12h.01'],
+    other: ['M5 12h.2M11.9 12h.2M18.8 12h.2'],
   }
   return <svg className="mn-galaxy-cat-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" focusable="false">
     <defs><linearGradient id={id} x1="3" y1="3" x2="21" y2="21"><stop stopColor="#b8ffce"/><stop offset=".58" stopColor="#a6e2ff"/><stop offset="1" stopColor="#c4aaff"/></linearGradient></defs>
