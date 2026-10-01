@@ -143,3 +143,29 @@
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
+.widget-preview {
+  display: grid;
+  gap: 5px;
+  margin: 9px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color, #aaa6);
+  font-size: 0.9em;
+}
+.widget-preview label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.widget-preview input {
+  accent-color: var(--accent-color);
+}
+.widget-preview span,
+.widget-preview label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.widget-preview small {
+  font-weight: 600;
+}

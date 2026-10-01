@@ -1493,7 +1493,7 @@ function App() {
                     />
                   )}
                   {active === 'overview' && <TodayGlance data={data} today={today} onNavigate={jump} />}
-                  {active === 'overview' && <WidgetBoard onNavigate={jump} enabled={pageEnabled} />}
+                  {active === 'overview' && <WidgetBoard onNavigate={jump} enabled={pageEnabled} data={data} today={today} setData={setData} />}
                   {active === 'overview' && modules.stats && !simpleHome && (
                     <>
                       <StatsRow data={data} today={today} onNavigate={jump} />

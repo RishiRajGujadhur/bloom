@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { pageDetails } from '../layout/FeatureGuide'
 import type { NavKey } from '../layout/Sidebar'
+import type { AppData } from '../../model'
+import type { Dispatch, SetStateAction } from 'react'
+import { WidgetPreview } from './WidgetPreview'
 import './widgetBoard.css'
 
 export type Widget = { page: NavKey; size: 1 | 2 }
@@ -51,9 +54,15 @@ function read(): Widget[] {
 export function WidgetBoard({
   onNavigate,
   enabled,
+  data,
+  today,
+  setData,
 }: {
   onNavigate: (page: NavKey) => void
   enabled: (page: NavKey) => boolean
+  data: AppData
+  today: string
+  setData: Dispatch<SetStateAction<AppData>>
 }) {
   const [widgets, setWidgets] = useState(read)
   const [editing, setEditing] = useState(false)
@@ -193,6 +202,7 @@ export function WidgetBoard({
               <span>{pageDetails[widget.page].description}</span>
               <small>Open feature →</small>
             </button>
+            <WidgetPreview page={widget.page} data={data} today={today} setData={setData} />
             {editing && (
               <div className="widget-actions">
                 <button
