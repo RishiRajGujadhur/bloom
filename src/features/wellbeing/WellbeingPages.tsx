@@ -787,7 +787,13 @@ export function GratitudePage() {
             >
               <MiniJarSvg fill={fill(count) / 100} color={j.color} emoji={j.emoji} />
               <strong>{j.name}</strong>
-              <small>{count}</small>
+              <small title="All time (this month)">
+                {count}
+                {(() => {
+                  const m = entries.filter((e) => (e.jarId ?? 'moments') === j.id && new Date(e.at).getMonth() === new Date().getMonth() && new Date(e.at).getFullYear() === new Date().getFullYear()).length
+                  return m && m !== count ? ` (+${m})` : ''
+                })()}
+              </small>
             </button>
           )
         })}
