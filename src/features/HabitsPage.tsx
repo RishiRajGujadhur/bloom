@@ -491,7 +491,7 @@ export function HabitsPage({
                       {stats.current
                         ? `${stats.current} day streak`
                         : h.dates.length
-                          ? 'Ready to pick up again'
+                          ? `Last done ${Math.round((new Date(`${today}T12:00:00`).getTime() - new Date(`${[...h.dates].sort().at(-1)}T12:00:00`).getTime()) / 864e5)} days ago`
                           : 'Your first day awaits'}
                     </span>
                     <span>
