@@ -62,7 +62,11 @@ export function ChallengesPage({
 }: Props & { onTasks: () => void }) {
   const [selected, setSelected] = useState<string | null>(null)
   const [notice, setNotice] = useState('')
-  const [category, setCategory] = useState<string>('all')
+  const [category, setCategoryState] = useState<string>(() => localStorage.getItem('bloom-challenge-cat') || 'all')
+  const setCategory = (c: string) => {
+    setCategoryState(c)
+    try { localStorage.setItem('bloom-challenge-cat', c) } catch { /* optional */ }
+  }
   const shown = challenges.filter(
     (c) => category === 'all' || c.category === category,
   )
@@ -125,6 +129,15 @@ export function ChallengesPage({
                     {done}/{challenge.tasks.length} complete
                     {accepted.rewarded ? ' · Reward earned' : ''}
                   </span>
+                  {(() => {
+                    const next = tasks.find((t) => !t.done)
+                    return next ? (
+                      <small className="quest-next">
+                        Next: <strong>{next.title}</strong>
+                        {challenge.tasks.length - done === 1 ? ' — last one!' : ''}
+                      </small>
+                    ) : null
+                  })()}
                   <button className="quiet-button" onClick={onTasks}>
                     View tasks <ArrowRight size={16} />
                   </button>
