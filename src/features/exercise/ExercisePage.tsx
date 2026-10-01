@@ -142,9 +142,18 @@ export function ExercisePage() {
     { area: on('areaFilter') ? area : 'all', position: on('positionFilter') && !prefs.wheelchair ? position : 'all' },
   )
   const [tab, setTab] = useState('library')
-  const [pick, setPick] = useState<Exercise>(
-    prefs.wheelchair ? seatedExercises[0] : exercises[0],
-  )
+  const [pick, setPickState] = useState<Exercise>(() => {
+    try {
+      const id = localStorage.getItem('bloom-exercise-pick')
+      const found = everything.find((e) => e.id === id)
+      if (found && (!prefs.wheelchair || found.wheelchair)) return found
+    } catch { /* optional */ }
+    return prefs.wheelchair ? seatedExercises[0] : exercises[0]
+  })
+  const setPick = (e: Exercise) => {
+    setPickState(e)
+    try { localStorage.setItem('bloom-exercise-pick', e.id) } catch { /* optional */ }
+  }
   const [muscle, setMuscle] = useState<Muscle | 'all'>('all')
   const [equipment, setEquipment] = useState<Exercise['equipment'] | 'all'>(
     'all',
@@ -217,6 +226,18 @@ export function ExercisePage() {
         : [...prefs.favourites, id],
     })
   const muscles = Object.keys(muscleNames) as Muscle[]
+  // Space starts or stops the coach.
+  const tabRef = useRef(tab)
+  tabRef.current = tab
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || tabRef.current !== 'coach' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      e.preventDefault()
+      setPlaying((p) => !p)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const library = () => (
     <div className="ex-library">
