@@ -354,7 +354,21 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           </div>
         )}
         <form className="diet-form" onSubmit={submit}>
-          <input aria-label="What did you eat?" placeholder="What did you eat?" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <input
+            aria-label="What did you eat?"
+            placeholder="What did you eat?"
+            list="diet-known-foods"
+            value={form.name}
+            onChange={(e) => {
+              const name = e.target.value
+              // Picking a known food fills in its numbers.
+              const known = [...usuals, ...foodLibrary].find((f) => f.name.toLowerCase() === name.trim().toLowerCase())
+              setForm(known && !form.kcal ? { name, kcal: String(known.kcal), protein: String(known.protein), carbs: String(known.carbs), fat: String(known.fat) } : { ...form, name })
+            }}
+          />
+          <datalist id="diet-known-foods">
+            {[...new Set([...usuals.map((f) => f.name), ...foodLibrary.map((f) => f.name)])].map((n) => <option key={n} value={n} />)}
+          </datalist>
           {(['kcal', 'protein', 'carbs', 'fat'] as const)
             .filter((k) => k === 'kcal' || subOn('dietTracker', 'macros'))
             .map((k) => (
