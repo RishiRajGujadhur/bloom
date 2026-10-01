@@ -201,6 +201,7 @@ export const DISPLAY_TOGGLES = [
   { key: 'bloom-hide-quicklog', attr: 'data-hide-quicklog', label: 'Hide the Home quick-log row', hint: 'The mood and water buttons under the Now card.' },
   { key: 'bloom-hide-affirm', attr: 'data-hide-affirm', label: 'Hide the rotating affirmation', hint: 'The line of encouragement on the Home card.' },
   { key: 'bloom-static-topbar', attr: 'data-static-topbar', label: 'Keep the top bar in place', hint: 'Don’t pin or auto-hide it while scrolling.' },
+  { key: 'bloom-thin-scroll', attr: 'data-thin-scroll', label: 'Thin scrollbars', hint: 'Slimmer scrollbars everywhere.' },
 ] as const
 export function applyDisplayToggles() {
   for (const t of DISPLAY_TOGGLES) {
