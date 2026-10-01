@@ -805,7 +805,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
           {isOpen && recentItems.length > 1 && (
             <div className="nav-pins nav-recent" aria-label="Recent pages">
               {recentItems.map(({ key, title, Icon }) => (
-                <button key={key} type="button" className="nav-pin" title={`Recent: ${title}`} onClick={() => handleNavigate(key)}>
+                <button key={key} type="button" className="nav-pin" title={`Recent: ${title}`} aria-label={`Recent: ${title}`} onClick={() => handleNavigate(key)}>
                   <Icon size={15} aria-hidden="true" />
                   <span>{title}</span>
                 </button>
