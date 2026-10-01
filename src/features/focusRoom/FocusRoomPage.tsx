@@ -7,6 +7,7 @@ import { useOptionalAudioMixer } from '../../contexts/AudioMixerContext'
 import { AvatarPreview } from '../rewards/ShopPage'
 import { useShop } from '../rewards/shop'
 import { LottieIcon } from '../../components/ui/LottieIcon'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './focusRoom.css'
 
 const soundtracks = [
@@ -28,7 +29,18 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const mixer = subOn('focusRoom', 'soundtrack') ? audio : null
   const { shop } = useShop()
   const [now, setNow] = useState(() => Date.now())
-  const [track, setTrack] = useState<(typeof soundtracks)[number]['id']>('classical')
+  const [track, setTrackState] = useState<(typeof soundtracks)[number]['id']>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-room-track')
+      return soundtracks.find((s) => s.id === saved)?.id ?? 'classical'
+    } catch {
+      return 'classical'
+    }
+  })
+  const setTrack = (id: (typeof soundtracks)[number]['id']) => {
+    setTrackState(id)
+    try { localStorage.setItem('bloom-room-track', id) } catch { /* optional */ }
+  }
   useEffect(() => {
     if (!running) return
     const timer = setInterval(() => setNow(Date.now()), 1000)
@@ -37,6 +49,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const total = quest.durationMinutes * 60000
   const left = running ? Math.max(0, total - (now - quest.startedAt!)) : total
   const progress = running ? 1 - left / total : 0
+  useTabTitle(running ? `⏱ ${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}` : '', 'Focus room', 'focus-room')
   const hour = new Date().getHours()
   const night = subOn('focusRoom', 'nightSky') && (hour < 7 || hour >= 19)
 
