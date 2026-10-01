@@ -242,9 +242,25 @@ export function setPageBanner(on: boolean) {
 export function ShowMore({ children, initial = 6, step, className, label = 'more', as = 'div' }: { children: ReactNode; initial?: number; step?: number; className?: string; label?: string; as?: 'div' | 'ul' | 'ol' }) {
   const Tag = as
   const items = Children.toArray(children)
-  const [count, setCount] = useState(initial)
+  // Remember how far you expanded this list (per page and list) for this visit.
+  const memoKey = `bloom-showmore:${typeof location !== 'undefined' ? location.hash.split('/')[0] : ''}:${className ?? ''}:${label}`
+  const [count, setCountState] = useState(() => {
+    try {
+      return Math.max(initial, Number(sessionStorage.getItem(memoKey)) || 0)
+    } catch {
+      return initial
+    }
+  })
+  const setCount = (n: number) => {
+    setCountState(n)
+    try {
+      sessionStorage.setItem(memoKey, String(n))
+    } catch {
+      /* optional */
+    }
+  }
   const box = useRef<HTMLDivElement>(null)
-  const prev = useRef(initial)
+  const prev = useRef(count)
   useLayoutEffect(() => {
     const el = box.current
     if (!el || count <= prev.current || reduced()) {
