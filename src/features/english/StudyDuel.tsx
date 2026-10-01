@@ -197,6 +197,11 @@ export function StudyDuel({ onXp }: { onXp: (n: number) => void }) {
           {room.phase === 'lobby' || allDone ? (
             <div className="du-waiting">
               {qr && <img src={qr} alt={`QR code to join room ${code}`} className="du-qr" />}
+            {link && (
+              <button type="button" className="du-cta" onClick={(e) => { void navigator.clipboard?.writeText(link); e.currentTarget.textContent = '✓ Link copied' }}>
+                🔗 Copy invite link
+              </button>
+            )}
               <div>
                 <p>Scan to join, or enter code <b className="du-code">{code}</b> in Bloom → English → Duel.</p>
                 <ul className="du-roster">{players.map(([id, p]) => <li key={id}>{p.emoji} {id === me ? `${p.name} (you)` : p.name}{allDone ? ` — ${p.score}` : ''}</li>)}</ul>
