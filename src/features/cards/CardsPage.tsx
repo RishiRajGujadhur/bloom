@@ -1,3 +1,4 @@
+import { useTabTitle } from '../../utils/useTabTitle'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -80,6 +81,7 @@ export function CardsPage() {
   const due = dueCards(store.cards, today, on('dailyLimit') ? Math.max(0, store.dailyLimit - reviewedToday) : Infinity, deck || undefined)
   const queue = shuffle ? [...due].sort((a, b) => mix(a.id) - mix(b.id)) : due
   const card = queue[0]
+  useTabTitle(queue.length ? `${queue.length} cards due` : '', 'Flashcards')
   const stage = useRef<HTMLDivElement>(null)
   // Bloom's chat can hint at the card being studied.
   useEffect(() => {
