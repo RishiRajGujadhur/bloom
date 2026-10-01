@@ -424,7 +424,8 @@ export function VoicePage(props: FeaturePageProps) {
   }
   const [query, setQuery] = useState('')
   const q = query.trim().toLowerCase()
-  const shown = q ? memos.filter((m) => `${m.title} ${m.transcript ?? ''}`.toLowerCase().includes(q)) : memos
+  const [oldestFirst, setOldestFirst] = useState(false)
+  const shown = (q ? memos.filter((m) => `${m.title} ${m.transcript ?? ''}`.toLowerCase().includes(q)) : memos).slice().sort((a, b) => (oldestFirst ? a.createdAt - b.createdAt : b.createdAt - a.createdAt))
   const update = (m: VoiceMemo) => {
     setMemos((list) => list.map((x) => (x.id === m.id ? m : x)))
     void db.voice_memos.put(m)
@@ -461,6 +462,11 @@ export function VoicePage(props: FeaturePageProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
+      )}
+      {memos.length > 2 && (
+        <button type="button" className="voice-copy" onClick={() => setOldestFirst((v) => !v)}>
+          {oldestFirst ? '↑ Oldest first' : '↓ Newest first'}
+        </button>
       )}
       {memos.length === 0 ? (
         <p className="voice-empty">No memos yet. Your first one is a tap away.</p>
