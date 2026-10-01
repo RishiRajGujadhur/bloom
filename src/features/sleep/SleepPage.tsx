@@ -189,18 +189,30 @@ function SleepLog({
 }) {
   const [night, setNight] = useState(dayKey())
   const [bedtime, setBedtime] = useState(settings.bedtime)
-  const [wake, setWake] = useState('06:30')
+  const [wake, setWake] = useState(() => {
+    try { return localStorage.getItem('bloom-sleep-wake') || '06:30' } catch { return '06:30' }
+  })
   const [quality, setQuality] = useState<SleepEntry['quality']>(4)
   const [factors, setFactors] = useState<string[]>([])
   const [saved, setSaved] = useState(false)
   const [lastQuality, setLastQuality] = useState<number | null>(null)
   const hours = duration(bedtime, wake)
+  // 1–5 set how rested you feel.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || !/^[1-5]$/.test(e.key) || (e.target as HTMLElement | null)?.closest?.('input, textarea, select')) return
+      setQuality(Number(e.key) as SleepEntry['quality'])
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   return (
     <form
       className="sleep-card sleep-log"
       onSubmit={(e) => {
         e.preventDefault()
         onSave({ id: crypto.randomUUID(), date: night, bedtime, wake, quality, factors })
+        try { localStorage.setItem('bloom-sleep-wake', wake) } catch { /* optional */ }
         setSaved(true)
         setLastQuality(quality)
         setFactors([])
@@ -225,7 +237,7 @@ function SleepLog({
         </label>
       </div>
       <fieldset className="sleep-quality">
-        <legend>How rested do you feel?</legend>
+        <legend>How rested do you feel? <small>(1–5)</small></legend>
         {qualities.map((emoji, i) => (
           <button
             key={emoji}
