@@ -47,6 +47,25 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     document.addEventListener('click', onImg)
     return () => document.removeEventListener('click', onImg)
   }, [])
+  // Weekly nudge to export a backup (everything lives in this browser).
+  const [backupDue, setBackupDue] = useState(() => {
+    try {
+      const last = Number(localStorage.getItem('bloom-last-backup')) || Number(localStorage.getItem('bloom-first-seen'))
+      if (!last) localStorage.setItem('bloom-first-seen', String(Date.now()))
+      const snoozed = Number(localStorage.getItem('bloom-backup-snooze'))
+      return !!last && Date.now() - last > 7 * 864e5 && Date.now() > snoozed
+    } catch {
+      return false
+    }
+  })
+  const snoozeBackup = () => {
+    setBackupDue(false)
+    try {
+      localStorage.setItem('bloom-backup-snooze', String(Date.now() + 7 * 864e5))
+    } catch {
+      /* optional */
+    }
+  }
   // A tiny shared toast: window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'text' })).
   const [toast, setToast] = useState<string | null>(null)
   useEffect(() => {
@@ -182,6 +201,13 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
       {zoomImg && (
         <div className="img-lightbox" role="dialog" aria-label="Image, full size" onClick={() => setZoomImg(null)} onKeyDown={(e) => e.key === 'Escape' && setZoomImg(null)} tabIndex={-1} ref={(el) => el?.focus()}>
           <img src={zoomImg} alt="" />
+        </div>
+      )}
+      {backupDue && (
+        <div className="backup-nudge" role="status">
+          <span>💾 It’s been over a week since your last backup.</span>
+          <button type="button" onClick={() => { snoozeBackup(); location.hash = 'settings'; setTimeout(() => document.getElementById('json-heading')?.scrollIntoView({ behavior: 'smooth' }), 600) }}>Back up</button>
+          <button type="button" onClick={snoozeBackup}>Later</button>
         </div>
       )}
       {toast && <div className="offline-pill quick-toast" role="status">{toast}</div>}

@@ -14,3 +14,5 @@ body.wa-focus .wa-focus-target { opacity: 1 !important; position: relative; z-in
 .img-lightbox img { max-width: 94vw; max-height: 92vh; border-radius: 10px; box-shadow: 0 20px 60px rgb(0 0 0 / 0.5); }
 main img { cursor: auto; }
 .quick-toast { top: auto; bottom: 24px; font-size: 13px; padding: 7px 16px; }
+.backup-nudge { position: fixed; right: 16px; bottom: 90px; z-index: 70; display: flex; gap: 8px; align-items: center; max-width: calc(100vw - 32px); padding: 10px 14px; border-radius: 14px; background: var(--bg-surface, #fff); color: var(--text-primary, #222); border: 1px solid var(--border-color, #ddd); box-shadow: 0 10px 30px rgb(0 0 0 / 0.18); font-size: 13px; }
+.backup-nudge button { border: 0; border-radius: 999px; padding: 4px 10px; cursor: pointer; background: color-mix(in oklab, var(--accent-color, #e76f51) 18%, transparent); color: inherit; }
