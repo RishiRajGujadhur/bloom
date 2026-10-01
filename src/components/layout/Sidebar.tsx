@@ -239,6 +239,17 @@ const isDrawerWidth = () =>
  * CSS keys off `html[data-sidebar]`, which this component publishes in an
  * effect, so the layout shift costs no re-render of the page content.
  */
+// Restore a dragged sidebar width before first paint.
+try {
+  const w = Number(localStorage.getItem('bloom-sidebar-width'))
+  if (w) {
+    document.documentElement.style.setProperty('--sidebar-width', `${w}px`)
+    document.documentElement.style.setProperty('--sidebar-width-compact', `${w}px`)
+  }
+} catch {
+  /* default width */
+}
+
 export function Sidebar({ active, onNavigate, flags, tools, onDisable }: SidebarProps & { tools?: ReactNode; onDisable?: (flag: keyof FeatureFlags, title: string, key: NavKey) => void }) {
   // Right-click a page: open, pin to top, or disable (with a confirm prompt).
   const [ctx, setCtx] = useState<NavMenuState | null>(null)
@@ -681,6 +692,44 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
             <PanelLeftOpen size={19} aria-hidden="true" />
           )}
         </button>
+        {isOpen && !isNarrow && (
+          <div
+            className="sidebar-resize"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize sidebar (double-click to reset)"
+            onDoubleClick={() => {
+              document.documentElement.style.removeProperty('--sidebar-width')
+              document.documentElement.style.removeProperty('--sidebar-width-compact')
+              try {
+                localStorage.removeItem('bloom-sidebar-width')
+              } catch {
+                /* optional */
+              }
+            }}
+            onPointerDown={(e) => {
+              e.preventDefault()
+              const handle = e.currentTarget
+              handle.setPointerCapture(e.pointerId)
+              const move = (ev: PointerEvent) => {
+                const w = Math.round(Math.min(420, Math.max(200, ev.clientX)))
+                document.documentElement.style.setProperty('--sidebar-width', `${w}px`)
+                document.documentElement.style.setProperty('--sidebar-width-compact', `${w}px`)
+                try {
+                  localStorage.setItem('bloom-sidebar-width', String(w))
+                } catch {
+                  /* optional */
+                }
+              }
+              const up = () => {
+                handle.removeEventListener('pointermove', move)
+                handle.removeEventListener('pointerup', up)
+              }
+              handle.addEventListener('pointermove', move)
+              handle.addEventListener('pointerup', up)
+            }}
+          />
+        )}
         <nav aria-label={t('navigation.main')}>
           {pinnedItems.length > 0 && (
             <div className="nav-pins" aria-label="Pinned pages">
