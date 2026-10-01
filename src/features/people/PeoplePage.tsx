@@ -70,7 +70,15 @@ function Plant({ p, x, y, selected, onPick }: { p: Person; x: number; y: number;
 export function PeoplePage() {
   const [people, setPeople] = useState<Person[]>(() => readStore<Person[]>(KEY, []))
   const save = (f: (p: Person[]) => Person[]) => setPeople((x) => { const n = f(x); writeStore(KEY, n); return n })
-  const [sel, setSel] = useState<string | null>(null)
+  // Deep links: #people/<id> opens that person, and the URL follows your selection.
+  const [sel, setSelState] = useState<string | null>(() => {
+    const id = location.hash.match(/^#people\/(.+)$/)?.[1]
+    return id && people.some((p) => p.id === decodeURIComponent(id)) ? decodeURIComponent(id) : null
+  })
+  const setSel = (id: string | null) => {
+    setSelState(id)
+    history.replaceState(null, '', id ? `#people/${encodeURIComponent(id)}` : '#people')
+  }
   const [query, setQuery] = useState('')
   const [view, setViewState] = useState<'garden' | 'globe'>(() => (localStorage.getItem('bloom-people-view') === 'globe' ? 'globe' : 'garden'))
   const setView = (v: 'garden' | 'globe') => {
