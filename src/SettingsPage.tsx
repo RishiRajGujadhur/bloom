@@ -9,6 +9,7 @@ import { ThemePicker } from './components/settings/ThemePicker'
 import type { ThemeSettings } from './utils/themeEngine'
 import { ThemeMarketplace } from './components/ThemeMarketplace'
 import { ConfigMarketplace } from './components/ConfigMarketplace'
+import { readDisabledHistory, rememberFeatureChanges } from './settings/disabledHistory'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
@@ -604,6 +605,7 @@ export function useAppSettings(): [
   const persistSettings: Dispatch<SetStateAction<AppSettings>> = (update) => {
     setSettings((current) => {
       const resolved = typeof update === 'function' ? update(current) : update
+      rememberFeatureChanges(current.features, resolved.features)
       window.localStorage.setItem(
         SETTINGS_STORAGE_KEY,
         JSON.stringify(resolved),
@@ -1316,6 +1318,7 @@ export function SettingsPage({
   }
 
   const formattedSettings = JSON.stringify(settings, null, 2)
+  const disabledHistory = readDisabledHistory()
   const [query, setQuery] = useState('')
   const current = matchPreset(settings.features, featureKeys, defaultSettings.features)
   const titleOf = (key: (typeof featureKeys)[number]) =>
@@ -1376,6 +1379,20 @@ export function SettingsPage({
             {t('settings.savedLocally')}
           </span>
         </div>
+        {featureKeys.some((key) => !settings.features[key]) && (
+          <details className={styles.category}>
+            <summary>Turned off features</summary>
+            <ul>
+              {featureKeys.filter((key) => !settings.features[key]).sort((a, b) => (disabledHistory[b] ?? 0) - (disabledHistory[a] ?? 0)).map((key) => (
+                <li key={key}>
+                  <strong>{titleOf(key)}</strong>
+                  <small> · {disabledHistory[key] ? `turned off ${new Date(disabledHistory[key]!).toLocaleDateString()}` : 'date unavailable'}</small>{' '}
+                  <button type="button" onClick={() => setSettings((current) => ({ ...current, features: { ...current.features, [key]: true } }))}>Turn on</button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
         <div className={styles.presetBar}>
           <label className={styles.presetPick}>
             <span>Configuration</span>

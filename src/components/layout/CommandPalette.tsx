@@ -29,12 +29,30 @@ import {
 import { DAYBOOK_STORAGE_KEY } from '../daybook/storage'
 import type { JournalEntry } from '../daybook/types'
 import { pageDetails } from './FeatureGuide'
+import { subFeatures } from '../../features/subFeatures'
+import { GO } from './Shortcuts'
+import { readDisabledHistory } from '../../settings/disabledHistory'
 import { commandGroup, isCommand, parseCommand, type OmniAction } from './omnibox'
 import { subOn } from '../../features/subFeatures'
 import type { NavKey } from './Sidebar'
 import '../ui/ui.css'
 
 import { quickCalc, quickConvert } from './quickMath'
+/** Match abbreviations and misspaced names while keeping exact matches first. */
+export function paletteMatch(value: string, search: string, keywords: string[] = []): number {
+  const query = search.trim().toLowerCase()
+  if (!query) return 1
+  const haystack = [value, ...keywords].join(' ').toLowerCase()
+  if (haystack === query) return 1
+  if (haystack.startsWith(query)) return 0.95
+  if (haystack.includes(query)) return 0.8
+  const words = haystack.split(/[^\p{L}\p{N}]+/u).filter(Boolean)
+  if (words.some((word) => word.startsWith(query))) return 0.72
+  if (words.map((word) => word[0]).join('').includes(query)) return 0.65
+  let at = 0
+  for (const character of haystack) if (character === query[at]) at++
+  return at === query.length ? 0.4 : 0
+}
 const RECENT_KEY = 'bloom-recent-pages'
 const SEARCHES_KEY = 'bloom-recent-searches'
 const readSearches = (): string[] => {
@@ -185,6 +203,7 @@ export function CommandPalette({
   onAddIntention,
   onToggleTheme,
   onTalk,
+  onEnableFeature,
   onCommand,
   today = new Date().toISOString().slice(0, 10),
 }: {
@@ -198,6 +217,7 @@ export function CommandPalette({
   onAddIntention: () => void
   onToggleTheme: () => void
   onTalk: () => void
+  onEnableFeature?: (key: keyof FeatureFlags) => void
   /** Runs an Omnibox command (">" prefix). */
   onCommand?: (action: OmniAction) => void
   today?: string
@@ -243,6 +263,10 @@ export function CommandPalette({
     return !need || flags[need]
   })
   const recent = open ? readRecentPages().filter((key) => pages.includes(key)) : []
+  const disabledHistory = open ? readDisabledHistory() : {}
+  const disabledPages = (Object.keys(pageDetails) as NavKey[])
+    .filter((key) => pageFlags[key] && !flags[pageFlags[key]!])
+    .sort((a, b) => (disabledHistory[pageFlags[b]!] ?? 0) - (disabledHistory[pageFlags[a]!] ?? 0))
   // Pinned pages have Alt+1–9 shortcuts in the sidebar; show them here too.
   const pins: string[] = (() => {
     if (!open) return []
@@ -316,6 +340,7 @@ export function CommandPalette({
       contentClassName={`cmdk-panel${preview ? ' has-preview' : ''}`}
       loop
       shouldFilter={!commandMode}
+      filter={paletteMatch}
       value={selected}
       onValueChange={setSelected}
     >
@@ -426,15 +451,18 @@ export function CommandPalette({
             <Command.Item value="add new habit" onSelect={() => go(onAddHabit)}>
               <ListChecks size={17} aria-hidden="true" />
               <span className="cmdk-item-text">Add a small habit</span>
+              <kbd className="cmdk-kbd">n on Habits</kbd>
             </Command.Item>
           )}
           <Command.Item value="add intention plan today" onSelect={() => go(onAddIntention)}>
             <Sun size={17} aria-hidden="true" />
             <span className="cmdk-item-text">Set an intention for today</span>
+            <kbd className="cmdk-kbd">n on Today</kbd>
           </Command.Item>
           <Command.Item value="start focus timer session" onSelect={() => go(() => onNavigate('focus'))}>
             <Timer size={17} aria-hidden="true" />
             <span className="cmdk-item-text">Start a focus session</span>
+            <kbd className="cmdk-kbd">g f</kbd>
           </Command.Item>
           {flags.daybookModes && (
             <Command.Item value="write journal daybook page" onSelect={() => go(() => onNavigate('daybook'))}>
@@ -497,7 +525,7 @@ export function CommandPalette({
             <Command.Item
               key={key}
               value={`${pageDetails[key].title} ${key}`}
-              keywords={[pageDetails[key].description]}
+              keywords={[pageDetails[key].description, ...(pageFlags[key] ? (subFeatures[pageFlags[key]!]?.flatMap((feature) => [feature.title, feature.description]) ?? []) : [])]}
               onSelect={() => go(() => onNavigate(key))}
             >
               <ArrowRight size={17} aria-hidden="true" />
@@ -505,10 +533,21 @@ export function CommandPalette({
                 {pageDetails[key].title}
                 <small>{pageDetails[key].description}</small>
               </span>
-              {pins.indexOf(key) >= 0 && pins.indexOf(key) < 9 && <kbd className="cmdk-kbd">Alt {pins.indexOf(key) + 1}</kbd>}
+              {pins.indexOf(key) >= 0 && pins.indexOf(key) < 9 ? <kbd className="cmdk-kbd">Alt {pins.indexOf(key) + 1}</kbd> : Object.entries(GO).find(([, destination]) => destination.key === key) && <kbd className="cmdk-kbd">g {Object.entries(GO).find(([, destination]) => destination.key === key)?.[0]}</kbd>}
             </Command.Item>
           ))}
         </Command.Group>
+
+        {onEnableFeature && disabledPages.length > 0 && (
+          <Command.Group heading="Turn a feature back on">
+            {disabledPages.filter((key) => query || !!disabledHistory[pageFlags[key]!]).slice(0, query ? 30 : 5).map((key) => (
+              <Command.Item key={`enable-${key}`} value={`enable turn on ${pageDetails[key].title} ${key}`} onSelect={() => go(() => onEnableFeature(pageFlags[key]!))}>
+                <Plus size={17} aria-hidden="true" />
+                <span className="cmdk-item-text">Turn on {pageDetails[key].title}<small>{disabledHistory[pageFlags[key]!] ? `Turned off ${new Date(disabledHistory[pageFlags[key]!]!).toLocaleDateString()}` : 'Open this feature again'}</small></span>
+              </Command.Item>
+            ))}
+          </Command.Group>
+        )}
 
         {query && flags.daybookModes && daybook.length > 0 && (
           <Command.Group heading="Daybook pages">

@@ -257,7 +257,17 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
   const [ctx, setCtx] = useState<NavMenuState | null>(null)
   const [confirm, setConfirm] = useState<{ flag: keyof FeatureFlags; title: string; key: NavKey } | null>(null)
   const [pins, setPins] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('bloom-nav-pins') ?? '[]') as string[] } catch { return [] } })
+  const [dragPin, setDragPin] = useState<string | null>(null)
   const togglePin = (key: string) => setPins((p) => { const n = p.includes(key) ? p.filter((k) => k !== key) : [key, ...p].slice(0, 8); try { localStorage.setItem('bloom-nav-pins', JSON.stringify(n)) } catch { /* optional */ } return n })
+  const movePin = (source: string, target: string) => setPins((current) => {
+    const next = [...current]
+    const from = next.indexOf(source)
+    const to = next.indexOf(target)
+    if (from < 0 || to < 0 || from === to) return current
+    next.splice(to, 0, next.splice(from, 1)[0])
+    try { localStorage.setItem('bloom-nav-pins', JSON.stringify(next)) } catch { /* optional */ }
+    return next
+  })
   const { t } = useTranslation(undefined, { i18n })
   const [isNarrow, setIsNarrow] = useState(isDrawerWidth)
   const [isOpen, setIsOpen] = useState(() => {
@@ -797,7 +807,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
           {pinnedItems.length > 0 && (
             <div className="nav-pins" aria-label="Pinned pages">
               {pinnedItems.map(({ key, title, Icon }) => (
-                <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} title={pins.indexOf(key) < 9 ? `${title} (Alt+${pins.indexOf(key) + 1})` : title} aria-label={`${title} (pinned)`} onClick={() => handleNavigate(key)} onContextMenu={(e) => { e.preventDefault(); setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!requiresOf(key) && !!onDisable, pinned: true }) }}>
+                <button key={key} type="button" className={`nav-pin ${active === key ? 'active' : ''}`} draggable title={pins.indexOf(key) < 9 ? `${title} (Alt+${pins.indexOf(key) + 1}); drag to reorder` : `${title}; drag to reorder`} aria-label={`${title} (pinned)`} onClick={() => handleNavigate(key)} onDragStart={(e) => { setDragPin(key); e.dataTransfer.effectAllowed = 'move' }} onDragOver={(e) => { if (dragPin) e.preventDefault() }} onDrop={(e) => { e.preventDefault(); if (dragPin) movePin(dragPin, key); setDragPin(null) }} onDragEnd={() => setDragPin(null)} onContextMenu={(e) => { e.preventDefault(); setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!requiresOf(key) && !!onDisable, pinned: true }) }}>
                   <Icon size={17} aria-hidden="true" />
                   {isOpen && <span>{title}</span>}
                 </button>

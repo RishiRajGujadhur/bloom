@@ -912,7 +912,7 @@ function App() {
             <BloomHeading
               title={pageDetails[active].title}
               page={active}
-              lead={active !== 'overview' ? <LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} /> : undefined}
+              lead={active !== 'overview' ? <><LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} />{(active === 'focus' || active === 'breathe') && <button type="button" className="quiet-button" onClick={() => window.open(`${window.location.origin}${window.location.pathname}#${active}`, '_blank', 'noopener')}>Open {pageDetails[active].title} in a new window ↗</button>}</> : undefined}
               actions={
                 active === 'overview' ? (
                   <>
@@ -1891,6 +1891,7 @@ function App() {
           onAddIntention={() => setModal('plan')}
           onToggleTheme={() => setThemeSettings(toggleThemeMode)}
           onTalk={() => setCompanionOpen(true)}
+          onEnableFeature={(key) => setSettings((current) => ({ ...current, features: { ...current.features, [key]: true } }))}
           today={today}
           onCommand={runCommand}
         />
