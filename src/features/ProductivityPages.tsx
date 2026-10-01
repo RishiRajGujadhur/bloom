@@ -653,7 +653,18 @@ export function TodoPage({ data, setData }: Props) {
                       >
                         {task.priority}
                       </span>
-                      <strong>{task.title}</strong>
+                      <strong
+                        tabIndex={0}
+                        title="Enter or double-click to edit"
+                        onDoubleClick={(e) => e.currentTarget.closest('li')?.querySelector<HTMLButtonElement>('button[aria-label^="Edit "]')?.click()}
+                        onKeyDown={(e) => {
+                          if (e.key !== 'Enter') return
+                          e.preventDefault()
+                          e.currentTarget.closest('li')?.querySelector<HTMLButtonElement>('button[aria-label^="Edit "]')?.click()
+                        }}
+                      >
+                        {task.title}
+                      </strong>
                     </div>
                     <div className="task-meta">
                       <small className={!task.done && task.due < dayKey() ? 'task-overdue' : undefined}>{task.due}</small>
