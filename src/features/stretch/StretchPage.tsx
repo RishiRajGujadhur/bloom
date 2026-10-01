@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useKeepAwake } from '../../platform/presence'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { Armchair, BellRing, HeartPulse, Pause, Play, PersonStanding, SkipForward, Sparkles } from 'lucide-react'
 import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
@@ -170,6 +171,7 @@ export function StretchPage() {
     setTab('session')
   }
   useLeaveGuard(playing && !finished)
+  useTabTitle(playing && !finished ? `🤸 ${step.stretch.name} · ${i + 1}/${list.length}` : '', 'Stretch', 'stretch')
   // Space plays or pauses; N moves to the next stretch.
   const keysRef = useRef({ playing, finished, next, setPlaying })
   keysRef.current = { playing, finished, next, setPlaying }

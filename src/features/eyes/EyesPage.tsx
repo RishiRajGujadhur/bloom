@@ -8,6 +8,7 @@ import { burst } from '../../components/ui/celebrate'
 import { EYES_KEY, blinkClosed, exerciseById, exercises, nearFar, routine, streakDays, type EyesStore, type Exercise } from './eyesModel'
 import { WatchEye } from '../showcase/WatchEye'
 import { usePageActions } from '../../components/ui/PageMenu'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './eyes.css'
 import { pathLength } from '../../utils/svgLength'
 
@@ -126,6 +127,7 @@ export function EyesPage() {
     setRunning(true)
     setTab('practice')
   }
+  useTabTitle(running ? `👁️ ${current.name} ${Math.max(0, Math.ceil(current.seconds - t))}s` : '', 'Eye care', 'eyes')
   // Space starts, pauses and resumes.
   const spaceRef = useRef(() => {})
   spaceRef.current = () => (queue.length ? setRunning(!running) : start(routine))
