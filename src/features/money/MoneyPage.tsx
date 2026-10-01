@@ -271,7 +271,7 @@ export function MoneyPage() {
             <>
             {pace !== null && (
               <p className="studio-empty">
-                By day {Number(dayN)} you’ve spent {fmt(now)} — {Math.abs(pace) < 3 ? 'about the same as' : `${Math.abs(pace)}% ${pace > 0 ? 'more' : 'less'} than`} last month.
+                By day {Number(dayN)} you’ve spent {fmt(now)} (about {fmt(Math.round(now / Math.max(1, Number(dayN))))} a day) —{Math.abs(pace) < 3 ? 'about the same as' : `${Math.abs(pace)}% ${pace > 0 ? 'more' : 'less'} than`} last month.
               </p>
             )}
             <p className="studio-empty">
