@@ -179,10 +179,30 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
-  const [game, setGame] = useState(() => new Chess())
+  // The game in progress is kept, so leaving the page doesn't lose it.
+  const [game, setGame] = useState(() => {
+    const g = new Chess()
+    try {
+      const pgn = localStorage.getItem('bloom-chess-game')
+      if (pgn) g.loadPgn(pgn)
+    } catch { /* start fresh */ }
+    return g
+  })
+  useEffect(() => {
+    try {
+      if (game.history().length && !game.isGameOver()) localStorage.setItem('bloom-chess-game', game.pgn())
+      else localStorage.removeItem('bloom-chess-game')
+    } catch { /* optional */ }
+  }, [game])
   const [selected, setSelected] = useState<string | null>(null)
   const [last, setLast] = useState<{ from: string; to: string } | null>(null)
-  const [level, setLevel] = useState<1 | 2 | 3>(2)
+  const [level, setLevelState] = useState<1 | 2 | 3>(() => {
+    try { return (Number(localStorage.getItem('bloom-chess-level')) || 2) as 1 | 2 | 3 } catch { return 2 }
+  })
+  const setLevel = (l: 1 | 2 | 3) => {
+    setLevelState(l)
+    try { localStorage.setItem('bloom-chess-level', String(l)) } catch { /* optional */ }
+  }
   const [thinking, setThinking] = useState(false)
   const over = game.isGameOver()
   const bloomTurn = game.turn() === 'b' && !over
