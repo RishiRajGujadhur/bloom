@@ -46,6 +46,15 @@ export function CprPage() {
   const [taps, setTaps] = useState<number[]>([])
   const [flipped, setFlipped] = useState<number | null>(null)
   const [step, setStep] = useState(0)
+  // Elapsed time while the beat runs; rescuers should swap about every 2 minutes.
+  const [elapsed, setElapsed] = useState(0)
+  useEffect(() => {
+    if (!running) return
+    const t0 = Date.now()
+    setElapsed(0)
+    const t = setInterval(() => setElapsed(Math.floor((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(t)
+  }, [running])
   const hands = useRef<SVGGElement>(null)
   const heart = useRef<SVGPathElement>(null)
   const chest = useRef<SVGPathElement>(null)
@@ -146,6 +155,12 @@ export function CprPage() {
         <div className="cp-count" aria-live="polite">
           {running ? (phase === 'push' ? <strong>{count}</strong> : <strong className="breathe">2 breaths</strong>) : <strong>110</strong>}
           <span>{running ? (phase === 'push' ? 'push hard & fast — let the chest rise' : 'tilt head, lift chin, two rescue breaths') : 'compressions per minute'}</span>
+          {running && (
+            <small className="cp-elapsed">
+              {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, '0')}
+              {elapsed > 0 && elapsed % 120 >= 110 ? ' · swap rescuers soon' : ''}
+            </small>
+          )}
         </div>
       </section>
       <aside className="cp-side">
