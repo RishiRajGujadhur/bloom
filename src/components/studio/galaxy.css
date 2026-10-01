@@ -87,3 +87,6 @@ html[data-theme='galaxy'] .studio[data-studio='cards'] { --galaxy-light: #d8c5ff
 
 /* yoga: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='yoga'] { --galaxy-light: #c9b8ff; --galaxy-blue: #b3f5dc; --galaxy-violet: #ffd2e8; --galaxy-x: 69%; --galaxy-y: 23%; --galaxy-ring-x: 86%; --galaxy-ring-y: 84%; --galaxy-ring-size: 170px; --galaxy-shape: 22px 46px 22px 36px; }
+
+/* ink: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='ink'] { --galaxy-light: #9ccfff; --galaxy-blue: #bdf6ec; --galaxy-violet: #cbb8ff; --galaxy-x: 83%; --galaxy-y: 18%; --galaxy-ring-x: 9%; --galaxy-ring-y: 73%; --galaxy-ring-size: 90px; --galaxy-shape: 16px 39px 16px 48px; }
