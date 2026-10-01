@@ -628,6 +628,21 @@ const matches = (text: string, query: string) => text.toLowerCase().includes(que
  * the same bulk actions, and options that keep working when the feature is off
  * are labelled instead of greyed out.
  */
+/** Preference keys included in a settings file (never user data). */
+const PREF_KEYS = [
+  SETTINGS_STORAGE_KEY,
+  'mindfulness-dashboard-theme-settings',
+  'bloom-compact-titles',
+  'bloom-page-banner',
+  'bloom-follow-system-theme',
+  'bloom-nav-dense',
+  'bloom-high-contrast',
+  'bloom-nav-hamburger',
+  'bloom-name',
+  'bloom-sidebar-width',
+  'bloom-companion-width',
+]
+
 /** Navigation style and a way back into onboarding. */
 function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: boolean; setReducedMotion: (enabled: boolean) => void }) {
   const [hamburger, setHamburger] = useState(hamburgerNav)
@@ -689,6 +704,53 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
+      <div className={styles.subOption}>
+        <span>
+          <strong>Settings file</strong>
+          <small>Save your settings (features, theme, layout) to a file, or load them on another device. Your data isn’t included.</small>
+        </span>
+        <span style={{ display: 'flex', gap: 6 }}>
+          <button
+            type="button"
+            className="quiet-button"
+            onClick={() => {
+              const out: Record<string, string> = {}
+              for (const k of PREF_KEYS) {
+                const v = localStorage.getItem(k)
+                if (v !== null) out[k] = v
+              }
+              const a = document.createElement('a')
+              a.href = URL.createObjectURL(new Blob([JSON.stringify({ bloomSettings: 1, prefs: out }, null, 2)], { type: 'application/json' }))
+              a.download = 'bloom-settings.json'
+              a.click()
+              setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+            }}
+          >
+            Export
+          </button>
+          <label className="quiet-button">
+            Import
+            <input
+              type="file"
+              accept="application/json,.json"
+              hidden
+              onChange={async (e) => {
+                const file = e.target.files?.[0]
+                e.target.value = ''
+                if (!file) return
+                try {
+                  const parsed = JSON.parse(await file.text()) as { bloomSettings?: number; prefs?: Record<string, unknown> }
+                  if (parsed.bloomSettings !== 1 || !parsed.prefs) throw new Error('not a settings file')
+                  for (const [k, v] of Object.entries(parsed.prefs)) if (PREF_KEYS.includes(k) && typeof v === 'string') localStorage.setItem(k, v)
+                  location.reload()
+                } catch {
+                  window.alert('That file isn’t a Bloom settings file.')
+                }
+              }}
+            />
+          </label>
+        </span>
+      </div>
       <div className={styles.subOption}>
         <span>
           <strong>Reset layout</strong>
