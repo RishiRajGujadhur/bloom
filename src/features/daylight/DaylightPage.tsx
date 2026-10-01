@@ -159,6 +159,10 @@ export function DaylightPage() {
           <Stat value={hm(t.sunset)} label="sunset" />
           {on('golden') && <Stat value={hm(t.goldenEvening)} label="golden hour" />}
           <Stat value={`${t.dayLength.toFixed(1)} h`} label="daylight" />
+          {now > t.sunrise && now < t.sunset && (() => {
+            const m = Math.round((+t.sunset - +now) / 60000)
+            return <Stat value={m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}m`} label="daylight left" />
+          })()}
         </div>
       </div>
       <div className="studio-card rm-side">
@@ -195,6 +199,11 @@ export function DaylightPage() {
                   +{m} min outside
                 </button>
               ))}
+              {lightToday > 0 && (
+                <button type="button" className="studio-chip" title="Logged too much? Take 5 minutes off" onClick={() => setStore((s) => ({ ...s, log: s.log.map((l) => (l.date === today ? { ...l, minutes: Math.max(0, l.minutes - 5) } : l)) }))}>
+                  −5
+                </button>
+              )}
             </div>
           </div>
         )}
