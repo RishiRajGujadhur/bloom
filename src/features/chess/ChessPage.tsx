@@ -1,3 +1,4 @@
+import { useTabTitle } from '../../utils/useTabTitle'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Chess, type Square } from 'chess.js'
@@ -236,6 +237,7 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
   const targets = selected ? game.moves({ square: selected as Square, verbose: true }).map((m) => m.to) : []
   const kingInCheck = game.isCheck() ? Object.entries(positionOf(game)).find(([, v]) => v === `${game.turn()}K`)?.[0] : null
   const history = game.history()
+  useTabTitle(history.length && !over ? (thinking ? '♟ Bloom is thinking…' : game.isCheck() ? '♚ Check! Your move' : '♙ Your move') : '', 'Chess', 'chess')
   return (
     <div className="ch-layout">
       <ChessBoard position={positionOf(game)} targets={targets} selected={selected} onSelect={(s) => setSelected(s && game.get(s as Square)?.color === 'w' ? s : null)} onMove={move} lastMove={last} check={kingInCheck} disabled={bloomTurn || over} flipped={flipped} />
