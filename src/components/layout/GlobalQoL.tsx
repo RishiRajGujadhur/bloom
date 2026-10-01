@@ -63,6 +63,20 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Esc inside an inline form presses its own Cancel button, if it has one.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || e.defaultPrevented) return
+      const form = (e.target as HTMLElement | null)?.closest?.('form')
+      if (!form) return
+      const cancel = [...form.querySelectorAll<HTMLButtonElement>('button[type="button"]')].find((b) => /^(cancel|close|discard)/i.test(b.getAttribute('aria-label') || b.textContent?.trim() || ''))
+      if (!cancel) return
+      e.preventDefault()
+      cancel.click()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   // Home/End jump to the first/last button of the list holding focus.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
