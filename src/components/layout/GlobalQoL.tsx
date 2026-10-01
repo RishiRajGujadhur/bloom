@@ -47,6 +47,37 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     document.addEventListener('click', onImg)
     return () => document.removeEventListener('click', onImg)
   }, [])
+  // Coming back to a page restores where you'd scrolled to (this visit only).
+  useEffect(() => {
+    const positions = new Map<string, number>()
+    const route = (url: string) => (url.split('#')[1] ?? '').split('/')[0] || 'overview'
+    let current = route(location.href)
+    let lastY = window.scrollY
+    const track = () => {
+      lastY = window.scrollY
+      positions.set(current, lastY)
+    }
+    // Scroll events can lag behind a quick click; sample too.
+    const sampler = window.setInterval(() => {
+      if (route(location.href) === current) track()
+    }, 700)
+    const onHash = (e: HashChangeEvent) => {
+      const from = route(e.oldURL)
+      const to = route(e.newURL)
+      if (from === to) return
+      positions.set(from, lastY)
+      current = to
+      const y = positions.get(to)
+      if (y) setTimeout(() => window.scrollTo({ top: y, behavior: 'instant' }), 350)
+    }
+    window.addEventListener('scroll', track, { passive: true })
+    window.addEventListener('hashchange', onHash)
+    return () => {
+      window.clearInterval(sampler)
+      window.removeEventListener('scroll', track)
+      window.removeEventListener('hashchange', onHash)
+    }
+  }, [])
   // Battery saver: below 20% and unplugged, decorative motion pauses (html[data-low-battery]).
   useEffect(() => {
     const nav = navigator as Navigator & { getBattery?: () => Promise<{ level: number; charging: boolean; addEventListener: (t: string, f: () => void) => void; removeEventListener: (t: string, f: () => void) => void }> }
