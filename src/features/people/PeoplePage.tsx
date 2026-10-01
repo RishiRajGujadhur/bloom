@@ -1,5 +1,5 @@
 import { useTabTitle } from '../../utils/useTabTitle'
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import chroma from 'chroma-js'
 import Fuse from 'fuse.js'
@@ -72,12 +72,27 @@ export function PeoplePage() {
   const save = (f: (p: Person[]) => Person[]) => setPeople((x) => { const n = f(x); writeStore(KEY, n); return n })
   const [sel, setSel] = useState<string | null>(null)
   const [query, setQuery] = useState('')
-  const [view, setView] = useState<'garden' | 'globe'>('garden')
+  const [view, setViewState] = useState<'garden' | 'globe'>(() => (localStorage.getItem('bloom-people-view') === 'globe' ? 'globe' : 'garden'))
+  const setView = (v: 'garden' | 'globe') => {
+    setViewState(v)
+    try { localStorage.setItem('bloom-people-view', v) } catch { /* optional */ }
+  }
+  // Esc closes the selected person.
+  useEffect(() => {
+    if (!sel) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !(e.target as HTMLElement | null)?.closest?.('input, textarea')) setSel(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [sel])
   const [cityQ, setCityQ] = useState('')
   const [cityMsg, setCityMsg] = useState('')
   const svg = useRef<SVGSVGElement>(null)
   const fuse = useMemo(() => new Fuse(people, { keys: ['name', 'notes'], threshold: 0.35 }), [people])
-  const [group, setGroup] = useState('All')
+  const [group, setGroupState] = useState(() => localStorage.getItem('bloom-people-group') ?? 'All')
+  const setGroup = (g: string) => {
+    setGroupState(g)
+    try { localStorage.setItem('bloom-people-group', g) } catch { /* optional */ }
+  }
   const [sortBy, setSortBy] = useState(() => localStorage.getItem('bloom-people-sort') ?? 'added')
   const groups = ['Family', 'Friends', 'Work', 'Other']
   const shown = (query ? fuse.search(query).map((r) => r.item) : people).filter((p) => group === 'All' || (p.group ?? 'Other') === group)
