@@ -73,6 +73,16 @@ export function SleepPage() {
           ⬇ Export nights (CSV)
         </button>
       )}
+      {stats.count >= 3 &&
+        (() => {
+          const week = [...entries].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7)
+          const best = week.reduce((a, e) => (e.quality * 10 + duration(e.bedtime, e.wake) > a.quality * 10 + duration(a.bedtime, a.wake) ? e : a), week[0])
+          return (
+            <p className="sleep-debt-note">
+              Best night this week: <strong>{new Date(`${best.date}T12:00:00`).toLocaleDateString([], { weekday: 'long' })}</strong> · {duration(best.bedtime, best.wake)}h, quality {best.quality}/5 (bed {best.bedtime})
+            </p>
+          )
+        })()}
       {stats.count >= 3 && averageBedtime(entries) && (
         <p className="sleep-debt-note">
           You usually go to bed around <strong>{averageBedtime(entries)}</strong>
