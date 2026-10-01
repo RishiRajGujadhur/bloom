@@ -1,4 +1,5 @@
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useKeepAwake } from '../../platform/presence'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -145,6 +146,20 @@ export function MeditatePage() {
     setRunning(false)
     setTab('sit')
   }
+  useTabTitle(running ? `🧘 ${Math.floor((total - t) / 60)}:${String((total - t) % 60).padStart(2, '0')}` : '', 'Meditate', 'meditate')
+  // Space starts or pauses the sit.
+  const spaceRef = useRef({ tab, finished })
+  spaceRef.current = { tab, finished }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      if (spaceRef.current.tab !== 'sit' || spaceRef.current.finished) return
+      e.preventDefault()
+      setRunning((r) => !r)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const [sitNote, setSitNote] = useState('')
   const saveAfter = () => {
     setStore((s) => ({ ...s, logs: s.logs.map((l, i) => (i === s.logs.length - 1 ? { ...l, after, ...(sitNote.trim() ? { note: sitNote.trim() } : {}) } : l)) }))
