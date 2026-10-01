@@ -275,6 +275,14 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           <p className="diet-sub">
             {totals.meals} {totals.meals === 1 ? 'meal' : 'meals'} ·{' '}
             {totals.kcal <= state.targets.kcal ? `${state.targets.kcal - totals.kcal} kcal left` : `${totals.kcal - state.targets.kcal} kcal over, and that’s okay`}
+            {(() => {
+              const days = Array.from({ length: 7 }, (_, i) => {
+                const d = new Date(`${today}T12:00:00`)
+                d.setDate(d.getDate() - i - 1)
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+              }).map((d) => state.meals.filter((m) => m.date === d).reduce((a, m) => a + m.kcal, 0)).filter((k) => k > 0)
+              return days.length >= 3 ? ` · last week avg ${Math.round(days.reduce((a, b) => a + b, 0) / days.length)} kcal/day` : ''
+            })()}
             {state.targets.protein > totals.protein ? ` · ${state.targets.protein - totals.protein} g protein to go` : state.targets.protein ? ' · protein goal met 💪' : ''}
           </p>
           {subOn('dietTracker', 'macros') && (
