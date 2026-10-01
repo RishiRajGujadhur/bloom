@@ -120,8 +120,28 @@ function ShopReceipts({ shop, money }: { shop: Shop; money: MoneyStore }) {
 export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProps) {
   const [state, setState] = useState<PlacesState>(readPlaces)
   const [status, setStatus] = useState('')
-  const [layers, setLayers] = useState<Set<Layer>>(() => new Set<Layer>(['hexes', 'money', 'memories', 'habits']))
-  const [range, setRange] = useState<7 | 30 | 365 | 0>(0)
+  // Layers and range are remembered between visits.
+  const [layers, setLayersState] = useState<Set<Layer>>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('bloom-places-layers') ?? 'null') as Layer[] | null
+      if (Array.isArray(saved)) return new Set<Layer>(saved)
+    } catch { /* defaults */ }
+    return new Set<Layer>(['hexes', 'money', 'memories', 'habits'])
+  })
+  const setLayers = (f: Set<Layer> | ((s: Set<Layer>) => Set<Layer>)) =>
+    setLayersState((s) => {
+      const n = typeof f === 'function' ? f(s) : f
+      try { localStorage.setItem('bloom-places-layers', JSON.stringify([...n])) } catch { /* optional */ }
+      return n
+    })
+  const [range, setRangeState] = useState<7 | 30 | 365 | 0>(() => {
+    const v = Number(localStorage.getItem('bloom-places-range'))
+    return v === 7 || v === 30 || v === 365 ? v : 0
+  })
+  const setRange = (r: 7 | 30 | 365 | 0) => {
+    setRangeState(r)
+    try { localStorage.setItem('bloom-places-range', String(r)) } catch { /* optional */ }
+  }
   const [here, setHere] = useState<{ lat: number; lng: number } | null>(null)
   const [shop, setShop] = useState<Shop | null>(null)
   const [habitPick, setHabitPick] = useState('')
