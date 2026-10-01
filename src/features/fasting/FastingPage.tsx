@@ -193,6 +193,10 @@ export function FastingPage() {
           <Stat value={fmtH(store.history.filter((f) => f.end && Date.now() - f.end < 7 * 864e5).reduce((a, f) => a + (f.end! - f.start) / 3_600_000, 0))} label="fasted this week" />
           <Stat value={st.avg ? fmtH(st.avg) : '—'} label="average this week" />
           <Stat value={st.longest ? fmtH(st.longest) : '—'} label="longest" />
+          {(() => {
+            const month = store.history.filter((f) => f.end && new Date(f.end).getMonth() === new Date().getMonth() && new Date(f.end).getFullYear() === new Date().getFullYear())
+            return month.length ? <Stat value={fmtH(month.reduce((a, f) => a + (f.end! - f.start) / 3_600_000, 0) / month.length)} label="average this month" /> : null
+          })()}
           <Stat value={`${Math.round(st.rate * 100)}%`} label="reached goal" />
         </div>
       )}
