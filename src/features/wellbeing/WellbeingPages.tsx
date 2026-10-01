@@ -696,8 +696,26 @@ export function GratitudePage() {
   const [entries, setEntries] = useStoredList<GratitudeEntry>(GRATITUDE_KEY)
   const [custom, setCustom] = useStoredList<GratitudeJar>(GRATITUDE_JARS_KEY)
   const jars = [...defaultJars, ...custom]
-  const [jarId, setJarId] = useState(jars[0].id)
+  const [jarId, setJarIdState] = useState(() => {
+    const saved = localStorage.getItem('bloom-gratitude-jar')
+    return saved && jars.some((j) => j.id === saved) ? saved : jars[0].id
+  })
+  const setJarId = (id: string) => {
+    setJarIdState(id)
+    try { localStorage.setItem('bloom-gratitude-jar', id) } catch { /* optional */ }
+  }
   const [text, setText] = useState('')
+  // Today's count and the run of days with at least one entry.
+  const dayOf = (at: number) => new Date(at).toDateString()
+  const todayCount = entries.filter((e) => dayOf(e.at) === dayOf(Date.now())).length
+  const gratStreak = (() => {
+    const days = new Set(entries.map((e) => dayOf(e.at)))
+    const d = new Date()
+    if (!days.has(d.toDateString())) d.setDate(d.getDate() - 1)
+    let n = 0
+    while (days.has(d.toDateString()) && n < 3650) { n++; d.setDate(d.getDate() - 1) }
+    return n
+  })()
   const [creating, setCreating] = useState(false)
   const [added, setAdded] = useState(0)
   const [newJar, setNewJar] = useState({ name: '', emoji: '🫙' })
@@ -788,6 +806,12 @@ export function GratitudePage() {
       <h2 id="gratitude-title" className="sr-only">
         Gratitude jars
       </h2>
+      {(todayCount > 0 || gratStreak > 1) && (
+        <p className="wb-muted">
+          {todayCount > 0 ? `${todayCount} good thing${todayCount === 1 ? '' : 's'} today` : 'Nothing yet today'}
+          {gratStreak > 1 ? ` · 🔥 ${gratStreak}-day streak` : ''}
+        </p>
+      )}
       <div className="wb-jar-shelf" role="tablist" aria-label="Your jars">
         {jars.map((j) => {
           const count = entries.filter((e) => (e.jarId ?? 'moments') === j.id).length
