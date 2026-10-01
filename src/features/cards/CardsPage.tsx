@@ -317,6 +317,10 @@ export function CardsPage() {
       <div className="studio-card">
         <div className="studio-stats">
           <Stat value={st.total} label="cards" />
+        <Stat
+          value={store.cards.filter((c) => c.created && (new Date(`${today}T12:00:00`).getTime() - new Date(`${c.created}T12:00:00`).getTime()) / 864e5 < 7).length}
+          label="added this week"
+        />
           <Stat value={st.fresh} label="new" />
           <Stat value={st.young} label="learning" />
           <Stat value={st.mature} label="mature (21+ days)" />

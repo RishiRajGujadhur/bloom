@@ -2,7 +2,7 @@ import { supermemo, type SuperMemoGrade } from 'supermemo'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 
-export type Card = { id: string; deck: string; front: string; back: string; tags: string[]; interval: number; repetition: number; efactor: number; due: string; reviews: number; lapses: number }
+export type Card = { id: string; deck: string; front: string; back: string; tags: string[]; interval: number; repetition: number; efactor: number; due: string; reviews: number; lapses: number; /** YYYY-MM-DD the card was added (newer cards only). */ created?: string }
 export type Deck = { id: string; name: string; emoji: string }
 export type CardStore = { decks: Deck[]; cards: Card[]; dailyLimit: number; log: { date: string; count: number; correct: number }[] }
 export const CARDS_KEY = 'bloom-cards-v1'
@@ -14,7 +14,7 @@ const addDays = (d: string, n: number) => {
 }
 
 export function newCard(deck: string, front: string, back: string, today: string, tags: string[] = []): Card {
-  return { id: crypto.randomUUID(), deck, front: front.trim(), back: back.trim(), tags, interval: 0, repetition: 0, efactor: 2.5, due: today, reviews: 0, lapses: 0 }
+  return { id: crypto.randomUUID(), deck, front: front.trim(), back: back.trim(), tags, interval: 0, repetition: 0, efactor: 2.5, due: today, reviews: 0, lapses: 0, created: today }
 }
 
 export const grades: { label: string; grade: SuperMemoGrade; key: string }[] = [
