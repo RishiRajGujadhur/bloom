@@ -180,6 +180,18 @@ export function BriefingPage({ data, today }: FeaturePageProps) {
     setSpeaking(true)
     next()
   }
+  // Space plays or stops the briefing.
+  const toggleRef = useRef(() => {})
+  toggleRef.current = () => (playing || speaking ? stop() : void play())
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select, [contenteditable="true"]')) return
+      e.preventDefault()
+      toggleRef.current()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   // Follow the HD voice through the transcript using each sentence's start time.
   useEffect(() => {
     if (!playing) return
@@ -253,6 +265,7 @@ export function BriefingPage({ data, today }: FeaturePageProps) {
               </button>
               {rewritten && <button type="button" className="br-ghost" onClick={() => setRewritten(null)}><RefreshCw size={15} /> Back to the template</button>}
               {!weather && <button type="button" className="br-ghost" onClick={useMyLocation}>🌤️ Add local weather</button>}
+              <button type="button" className="br-ghost" onClick={() => void navigator.clipboard?.writeText(text).then(() => window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'Briefing copied' })))}>📋 Copy text</button>
             </div>
             {err && <p className="voice-error">{err}</p>}
           </div>
