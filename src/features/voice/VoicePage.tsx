@@ -2,6 +2,8 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { AudioLines, BookOpen, FolderOpen, Loader2, Mic, Pause, Play, Plus, Sparkles, Square, Trash2 } from 'lucide-react'
 import type WaveSurfer from 'wavesurfer.js'
 import type { FeaturePageProps } from '../shared/pageProps'
+import { useLeaveGuard } from '../../utils/useLeaveGuard'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { subOn } from '../subFeatures'
 import { db, type VoiceMemo } from '../../search/db'
 import { inferStat } from '../../rpg/schema'
@@ -422,6 +424,21 @@ export function VoicePage(props: FeaturePageProps) {
     recorder.current = null
     setStream(null)
   }
+  useLeaveGuard(!!stream)
+  useTabTitle(stream ? `● REC ${fmt(elapsed)}` : '', 'Voice memos', 'voice')
+  // R starts and stops recording.
+  const recRef = useRef({ stream, start, stop })
+  recRef.current = { stream, start, stop }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'r' || e.ctrlKey || e.metaKey || e.altKey || e.repeat || (e.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]')) return
+      const k = recRef.current
+      if (k.stream) k.stop()
+      else void k.start()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const [query, setQuery] = useState('')
   const q = query.trim().toLowerCase()
   const [oldestFirst, setOldestFirst] = useState(false)
@@ -434,7 +451,7 @@ export function VoicePage(props: FeaturePageProps) {
   return (
     <div className="voice-page">
       <section className="voice-recorder" data-recording={!!stream}>
-        <button className="voice-rec" type="button" onClick={stream ? stop : start} aria-label={stream ? 'Stop recording' : 'Start recording'}>
+        <button className="voice-rec" type="button" onClick={stream ? stop : start} aria-label={stream ? 'Stop recording' : 'Start recording'} title={stream ? 'Stop (R)' : 'Record (R)'}>
           {stream ? <Square size={26} /> : <Mic size={30} />}
         </button>
         <div className="voice-rec-side">
