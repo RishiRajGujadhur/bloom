@@ -23,7 +23,18 @@ const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').ma
 const colorFor = chroma.scale(['#ff4b4b', '#ffc800', '#58cc02', '#ffc800', '#ff4b4b']).domain([-50, -20, 0, 20, 50])
 
 export function TunerPage() {
-  const [preset, setPreset] = useState('guitar')
+  const [preset, setPresetState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bloom-tuner-preset') ?? ''
+      return saved in presets ? saved : 'guitar'
+    } catch {
+      return 'guitar'
+    }
+  })
+  const setPreset = (id: string) => {
+    setPresetState(id)
+    try { localStorage.setItem('bloom-tuner-preset', id) } catch { /* optional */ }
+  }
   const [listening, setListening] = useState(false)
   const [error, setError] = useState('')
   const [reading, setReading] = useState<{ note: string; cents: number; freq: number } | null>(null)
@@ -103,6 +114,22 @@ export function TunerPage() {
   }
 
   const strings = presets[preset].strings
+  // Keys: Space starts/stops listening, 1–6 play a string's reference tone.
+  const keysRef = useRef({ listening, strings, start, stop, reference })
+  keysRef.current = { listening, strings, start, stop, reference }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, button')) return
+      const k = keysRef.current
+      if (e.key === ' ') {
+        e.preventDefault()
+        if (k.listening) k.stop()
+        else void k.start()
+      } else if (/^[1-6]$/.test(e.key) && k.strings[Number(e.key) - 1]) void k.reference(k.strings[Number(e.key) - 1])
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const closest = reading ? strings.reduce((a, b) => (Math.abs((Note.midi(b) ?? 0) - (Note.midi(reading.note) ?? 0)) < Math.abs((Note.midi(a) ?? 0) - (Note.midi(reading.note) ?? 0)) ? b : a)) : null
   const ticks = useMemo(() => Array.from({ length: 21 }, (_, i) => i * 5 - 50), [])
   const band = arc()({ innerRadius: 150, outerRadius: 170, startAngle: -Math.PI / 3, endAngle: Math.PI / 3 }) ?? ''
@@ -154,7 +181,7 @@ export function TunerPage() {
             </button>
           ))}
         </div>
-        <p className="tu-hint">Tap a string to hear its reference note.</p>
+        <p className="tu-hint">Tap a string (or press 1–{strings.length}) to hear its reference note. Space starts the tuner.</p>
         <button type="button" className="tu-cta" onClick={listening ? stop : () => void start()}>{listening ? '■ Stop listening' : '🎙 Start tuner'}</button>
         {error && <p className="tu-error">{error}</p>}
         <p className="tu-hint">Clarity {Math.round(clarity * 100)}% · sound stays on this device.</p>
