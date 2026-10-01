@@ -137,6 +137,26 @@ export function CalendarPage({ data, setData }: Props) {
       deepWork: task ? planningOf(task).deepWork : false,
     })
   }
+  // N: new block at the next free hour on the selected day.
+  const newBlockRef = useRef(newBlock)
+  newBlockRef.current = newBlock
+  const blocksRef = useRef(dailyBlocks)
+  blocksRef.current = dailyBlocks
+  const dayRef = useRef(selectedDay)
+  dayRef.current = selectedDay
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'n' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"], [role="dialog"]')) return
+      e.preventDefault()
+      const start = new Date(`${dayRef.current}T00:00:00`)
+      const now = new Date()
+      start.setHours(dayRef.current === dayKey() ? now.getHours() + 1 : 9, 0, 0, 0)
+      while (start.getHours() < 23 && blocksRef.current.some((b) => Date.parse(b.start) < +start + 3600000 && Date.parse(b.end) > +start)) start.setHours(start.getHours() + 1)
+      newBlockRef.current(start)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const save = (block: CalendarBlock) => {
     const error = blockError(data, block)
     if (error) {
