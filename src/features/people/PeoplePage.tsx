@@ -127,7 +127,10 @@ export function PeoplePage() {
       <section className="pg-garden-wrap">
         <header className="pg-head">
           <div>
-            <p className="pg-eyebrow">People garden · {people.length} {people.length === 1 ? 'person' : 'people'}</p>
+            <p className="pg-eyebrow">
+              People garden · {people.length} {people.length === 1 ? 'person' : 'people'}
+              {people.filter((p) => daysSince(p) < 7).length > 0 && ` · ${people.filter((p) => daysSince(p) < 7).length} reached this week`}
+            </p>
             <h2>Tend the people who matter</h2>
           </div>
           <div className="pg-headtools">
