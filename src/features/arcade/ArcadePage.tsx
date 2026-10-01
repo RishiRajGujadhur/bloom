@@ -5,6 +5,7 @@ import { reducedMotion } from './shell'
 import './arcade.css'
 
 const RECENT_KEY = 'bloom-arcade-recent'
+const plays = () => { try { return Number(localStorage.getItem('bloom-arcade-plays')) || 0 } catch { return 0 } }
 const recentIds = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]') } catch { return [] } }
 
 /** The Arcade: a hub of short, click-driven games. `#arcade/<id>` opens one. */
@@ -23,7 +24,7 @@ export function ArcadePage() {
   const go = (id: string | null) => {
     history.replaceState(null, '', id ? `#arcade/${id}` : '#arcade')
     setOpen(id)
-    if (id) try { localStorage.setItem(RECENT_KEY, JSON.stringify([id, ...recentIds().filter((x) => x !== id)].slice(0, 6))) } catch { /* optional */ }
+    if (id) try { localStorage.setItem(RECENT_KEY, JSON.stringify([id, ...recentIds().filter((x) => x !== id)].slice(0, 6))); localStorage.setItem('bloom-arcade-plays', String(plays() + 1)) } catch { /* optional */ }
   }
   useLayoutEffect(() => {
     if (open || !grid.current || reducedMotion()) return
@@ -40,7 +41,7 @@ export function ArcadePage() {
   const best = (id: string) => { try { return Number(localStorage.getItem(`bloom-arcade-best-${id}`) ?? 0) } catch { return 0 } }
   return (
     <section className="arcade">
-      <header className="ar-head"><h2>Arcade</h2><p>{GAMES.length} games · one tap to play</p><button type="button" className="ar-random" onClick={() => go(GAMES[Math.floor(Math.random() * GAMES.length)].id)}>🎲 Random game</button></header>
+      <header className="ar-head"><h2>Arcade</h2><p>{GAMES.length} games · one tap to play{plays() ? ` · ${plays()} played so far` : ''}</p><button type="button" className="ar-random" onClick={() => go(GAMES[Math.floor(Math.random() * GAMES.length)].id)}>🎲 Random game</button></header>
       {recentIds().length > 0 && (
         <div className="ar-recent" aria-label="Recently played">
           <span>Recently played</span>
