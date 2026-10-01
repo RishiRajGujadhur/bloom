@@ -18,10 +18,36 @@ export interface ThemeSettings {
   customColors?: Record<string, string>
 }
 
-export const COLOR_TOKENS = ['--bg-primary', '--bg-surface', '--bg-sidebar', '--accent-color', '--text-primary', '--text-secondary', '--border-color'] as const
+export const COLOR_TOKENS = [
+  '--bg-primary',
+  '--bg-surface',
+  '--bg-sidebar',
+  '--bg-elevated',
+  '--bg-overlay',
+  '--accent-color',
+  '--accent-hover',
+  '--accent-soft',
+  '--text-primary',
+  '--text-secondary',
+  '--text-muted',
+  '--text-on-accent',
+  '--border-color',
+  '--border-strong',
+  '--card-hover',
+  '--focus-ring',
+  '--success',
+  '--warning',
+  '--danger',
+] as const
 export function safeColors(value: unknown): Record<string, string> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
-  return Object.fromEntries(Object.entries(value).filter(([key, color]) => COLOR_TOKENS.includes(key as typeof COLOR_TOKENS[number]) && isHexColor(color)))
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      ([key, color]) =>
+        COLOR_TOKENS.includes(key as (typeof COLOR_TOKENS)[number]) &&
+        isHexColor(color),
+    ),
+  )
 }
 
 export interface ThemeDefinition {
@@ -227,10 +253,12 @@ const isKnownTheme = (id: unknown): id is string =>
   typeof id === 'string' && THEMES.some((theme) => theme.id === id)
 
 const isKnownFont = (id: unknown): id is string =>
-  typeof id === 'string' && (id === 'local' || FONTS.some((font) => font.id === id))
+  typeof id === 'string' &&
+  (id === 'local' || FONTS.some((font) => font.id === id))
 
 /** A plausible font family name (letters, digits, spaces, a few symbols) — never injected raw. */
-const isFamily = (v: unknown): v is string => typeof v === 'string' && /^[\p{L}\p{N} ._'&+-]{1,80}$/u.test(v)
+const isFamily = (v: unknown): v is string =>
+  typeof v === 'string' && /^[\p{L}\p{N} ._'&+-]{1,80}$/u.test(v)
 
 /** Accepts #rgb / #rrggbb only — anything else is ignored, never injected. */
 const isHexColor = (value: unknown): value is string =>
@@ -306,9 +334,16 @@ export function applyTheme(settings: ThemeSettings): void {
   const mode = getThemeMode(themeId)
 
   root.setAttribute('data-theme', themeId)
-  const local = fontId === 'local' && isFamily(settings.localFont) ? settings.localFont : null
-  root.setAttribute('data-font', local ? 'local' : fontId === 'local' ? DEFAULT_FONT_ID : fontId)
-  if (local) root.style.setProperty('--font-local', `"${local.replace(/"/g, '')}"`)
+  const local =
+    fontId === 'local' && isFamily(settings.localFont)
+      ? settings.localFont
+      : null
+  root.setAttribute(
+    'data-font',
+    local ? 'local' : fontId === 'local' ? DEFAULT_FONT_ID : fontId,
+  )
+  if (local)
+    root.style.setProperty('--font-local', `"${local.replace(/"/g, '')}"`)
   else root.style.removeProperty('--font-local')
   root.setAttribute('data-mode', mode)
   root.style.colorScheme = mode
@@ -330,7 +365,11 @@ export function applyTheme(settings: ThemeSettings): void {
     const base: ThemeSettings = isHexColor(settings.customAccent)
       ? { themeId, fontId, customAccent: settings.customAccent.trim() }
       : { themeId, fontId }
-    const persisted: ThemeSettings = { ...base, ...(local ? { localFont: local } : {}), customColors: colors }
+    const persisted: ThemeSettings = {
+      ...base,
+      ...(local ? { localFont: local } : {}),
+      customColors: colors,
+    }
     localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(persisted))
   } catch {
     /* storage unavailable — theme still applied for this session */

@@ -8,6 +8,7 @@ import i18n from './i18n'
 import { ThemePicker } from './components/settings/ThemePicker'
 import type { ThemeSettings } from './utils/themeEngine'
 import { ThemeMarketplace } from './components/ThemeMarketplace'
+import { ConfigMarketplace } from './components/ConfigMarketplace'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
@@ -644,6 +645,7 @@ const PREF_KEYS = [
   'bloom-sidebar-width',
   'bloom-companion-width',
   'bloom-theme-schedule',
+  'bloom-home-widgets-v1',
 ]
 
 /** Navigation style and a way back into onboarding. */
@@ -1534,6 +1536,7 @@ export function SettingsPage({
         </h2>
         <ThemePicker settings={theme} onChange={setTheme} />
         <ThemeMarketplace theme={theme} setTheme={setTheme} />
+        <ConfigMarketplace settings={settings} setSettings={setSettings} theme={theme} setTheme={setTheme} parseSettings={parseSettings} />
         <ComfortCard />
         <AvatarPicker />
       </section>
