@@ -1,3 +1,4 @@
+import { useTabTitle } from '../../utils/useTabTitle'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { distance } from 'fastest-levenshtein'
@@ -176,6 +177,7 @@ export function TypingPage() {
   }, [pos, text])
 
   const live = start ? stats(pos, errors, Date.now() - start) : { wpm: 0, accuracy: 100 }
+  useTabTitle(done ? `⌨️ ${done.wpm} WPM` : start ? `⌨️ ${live.wpm} WPM · ${Math.round((pos / Math.max(1, text.length)) * 100)}%` : '', 'Typing', 'typing')
   const next = text[pos] ?? ' '
   const recent = store.sessions.slice(-14)
   // Keystroke efficiency: Levenshtein distance between every key you pressed and the drill.
