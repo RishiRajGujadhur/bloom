@@ -218,6 +218,35 @@ export function CalendarPage({ data, setData }: Props) {
           <h2>{heading}</h2>
         </div>
         <div className="planning-toolbar">
+          <button
+            className="quiet-button"
+            title="Download your time blocks as an .ics file (Google, Apple or Outlook calendar)"
+            disabled={!data.calendarBlocks.length}
+            onClick={async () => {
+              const { createEvents } = await import('ics')
+              const parts = (iso: string) => {
+                const d = new Date(iso)
+                return [d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes()] as [number, number, number, number, number]
+              }
+              const { value } = createEvents(
+                data.calendarBlocks.map((b) => ({
+                  title: data.todos.find((t) => t.id === b.taskId)?.title ?? b.title ?? 'Bloom block',
+                  start: parts(b.start),
+                  end: parts(b.end),
+                  startInputType: 'local' as const,
+                  startOutputType: 'local' as const,
+                })),
+              )
+              if (!value) return
+              const a = document.createElement('a')
+              a.href = URL.createObjectURL(new Blob([value], { type: 'text/calendar' }))
+              a.download = 'bloom-calendar.ics'
+              a.click()
+              setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+            }}
+          >
+            ⬇ .ics
+          </button>
           <select
             aria-label="Calendar view"
             value={view}
