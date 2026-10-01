@@ -105,3 +105,6 @@ html[data-theme='galaxy'] .studio[data-studio='pointer'] { --galaxy-light: #ffe0
 
 /* eyes: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='eyes'] { --galaxy-light: #c2ffdd; --galaxy-blue: #a2d9ff; --galaxy-violet: #ede1a8; --galaxy-x: 80%; --galaxy-y: 17%; --galaxy-ring-x: 13%; --galaxy-ring-y: 87%; --galaxy-ring-size: 125px; --galaxy-shape: 40px 18px 23px 46px; }
+
+/* exercises: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='exercises'] { --galaxy-light: #ffc9ad; --galaxy-blue: #b3d7ff; --galaxy-violet: #e2c6ff; --galaxy-x: 68%; --galaxy-y: 30%; --galaxy-ring-x: 88%; --galaxy-ring-y: 69%; --galaxy-ring-size: 165px; --galaxy-shape: 21px 43px 19px 42px; }
