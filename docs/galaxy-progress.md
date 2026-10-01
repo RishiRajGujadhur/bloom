@@ -18,7 +18,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 - [x] Ink
 - [x] Workouts
 - [x] Games
-- [ ] Fasting
+- [x] Fasting
 - [ ] Pointer
 - [ ] Eyes
 - [ ] Exercises
