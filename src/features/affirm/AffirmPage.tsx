@@ -106,6 +106,9 @@ export function AffirmPage() {
               <Repeat2 size={18} /> Say it again
             </button>
           )}
+          <button type="button" className="af-btn" aria-label="Copy this affirmation" title="Copy" onClick={(e) => { void navigator.clipboard?.writeText(current); e.currentTarget.textContent = '✓' }}>
+            📋
+          </button>
           {on('speak') && (
             <button type="button" className="af-btn" aria-label="Read aloud" onClick={() => say(current)}>
               <Volume2 size={20} />
