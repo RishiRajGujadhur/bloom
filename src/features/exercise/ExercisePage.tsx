@@ -1,3 +1,4 @@
+import { useTabTitle } from '../../utils/useTabTitle'
 import Fuse from 'fuse.js'
 import { seatedExercises } from './seated'
 import { useEffect, useRef, useState } from 'react'
@@ -226,6 +227,7 @@ export function ExercisePage() {
         : [...prefs.favourites, id],
     })
   const muscles = Object.keys(muscleNames) as Muscle[]
+  useTabTitle(playing ? `💪 ${pick.name} ${count}/${prefs.target}${pick.hold ? 's' : ''}` : '', 'Exercises', 'exercises')
   // Space starts or stops the coach.
   const tabRef = useRef(tab)
   tabRef.current = tab
