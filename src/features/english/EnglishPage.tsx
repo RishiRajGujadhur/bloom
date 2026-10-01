@@ -175,7 +175,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
           <GoalRing value={xp} goal={store.goal} />
           <div>
             <strong>Daily goal</strong>
-            <small>{Math.min(xp, store.goal)}/{store.goal} XP</small>
+            <small>{Math.min(xp, store.goal)}/{store.goal} XP{xp < store.goal ? ` · ${store.goal - xp} to go` : ' · goal met ✓'}</small>
             <select className="studio-input" aria-label="Daily goal" value={store.goal} onChange={(e) => save((s) => ({ ...s, goal: Number(e.target.value) }))}>
               {goals.map((g) => <option key={g.xp} value={g.xp}>{g.label} · {g.xp} XP</option>)}
             </select>
