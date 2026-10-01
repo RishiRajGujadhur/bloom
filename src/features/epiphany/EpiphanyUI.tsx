@@ -206,6 +206,9 @@ export function EpiphaniesPage({ today }: { today: string }) {
           ⬇ Export all
         </button>
       )}
+      {list.some((e) => e.reviews.some((r) => Date.now() - r.at < 7 * 864e5)) && (
+        <p className="wb-muted">{list.reduce((a, e) => a + e.reviews.filter((r) => Date.now() - r.at < 7 * 864e5).length, 0)} reviews this week · {list.filter((e) => e.due <= today).length} due now</p>
+      )}
       {list.some((e) => e.starred) && (
         <div className="filter-chips" role="group" aria-label="Filter">
           <button type="button" aria-pressed={!onlyStarred} onClick={() => setOnlyStarred(false)}>All · {list.length}</button>
