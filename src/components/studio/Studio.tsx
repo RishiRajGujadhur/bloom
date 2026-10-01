@@ -42,17 +42,22 @@ export function Studio({
   // Each page remembers its last tab (QoL #20).
   const tabKey = `bloom-tab-${name}`
   const remembered = (() => { try { return localStorage.getItem(tabKey) } catch { return null } })()
-  const start = initial && visible.some((t) => t.id === initial) ? initial : remembered && visible.some((t) => t.id === remembered) ? remembered : visible[0]?.id
+  // Deep links: #page/tab opens that tab (and the URL follows the tab you pick).
+  const linked = typeof location !== 'undefined' ? location.hash.split('/')[1] : undefined
+  const fromLink = linked && visible.some((t) => t.id === linked) ? linked : undefined
+  const start = fromLink ?? (initial && visible.some((t) => t.id === initial) ? initial : remembered && visible.some((t) => t.id === remembered) ? remembered : visible[0]?.id)
   const [inner, setInner] = useState(start)
   const active = controlled && visible.some((t) => t.id === controlled) ? controlled : inner
   const setActive = (id: string) => {
     setInner(id)
     onTab?.(id)
     try { localStorage.setItem(tabKey, id) } catch { /* optional */ }
+    try { history.replaceState(null, '', `${location.hash.split('/')[0] || '#'}/${id}`) } catch { /* optional */ }
   }
-  // Controlled pages: restore the remembered tab once on mount.
+  // Controlled pages: restore the linked or remembered tab once on mount.
   useEffect(() => {
-    if (onTab && !initial && remembered && remembered !== controlled && visible.some((t) => t.id === remembered)) onTab(remembered)
+    const want = fromLink ?? (!initial ? remembered : null)
+    if (onTab && want && want !== controlled && visible.some((t) => t.id === want)) onTab(want)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   // Number keys 1–9 switch tabs when you're not typing (QoL #57).
   useEffect(() => {
