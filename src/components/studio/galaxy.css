@@ -129,3 +129,6 @@ html[data-theme='galaxy'] .studio[data-studio='mala'] { --galaxy-light: #ffe0b5;
 
 /* affirm: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='affirm'] { --galaxy-light: #ffd2ea; --galaxy-blue: #c9bdff; --galaxy-violet: #b4ffe0; --galaxy-x: 72%; --galaxy-y: 15%; --galaxy-ring-x: 87%; --galaxy-ring-y: 83%; --galaxy-ring-size: 149px; --galaxy-shape: 46px 20px 19px 39px; }
+
+/* joys: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='joys'] { --galaxy-light: #b7e7ff; --galaxy-blue: #ffe3aa; --galaxy-violet: #ffc5de; --galaxy-x: 83%; --galaxy-y: 38%; --galaxy-ring-x: 14%; --galaxy-ring-y: 81%; --galaxy-ring-size: 101px; --galaxy-shape: 18px 43px 41px 18px; }
