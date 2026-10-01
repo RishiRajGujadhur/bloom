@@ -216,6 +216,12 @@ export function CalendarPage({ data, setData }: Props) {
             Today
           </button>
           <h2>{heading}</h2>
+          {(() => {
+            const mins = data.calendarBlocks
+              .filter((b) => b.start.slice(0, 10) === new Date().toISOString().slice(0, 10) || new Date(b.start).toDateString() === new Date().toDateString())
+              .reduce((a, b) => a + Math.max(0, (new Date(b.end).getTime() - new Date(b.start).getTime()) / 60000), 0)
+            return mins ? <small className="cal-booked">{(mins / 60).toFixed(mins % 60 ? 1 : 0)} h blocked today</small> : null
+          })()}
         </div>
         <div className="planning-toolbar">
           <button
