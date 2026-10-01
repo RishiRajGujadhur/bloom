@@ -7,7 +7,7 @@ import { Heart, Layers, Pause, Play, Plus, Repeat2, Sparkles, Sun, Trash2, Volum
 import { Segmented, Slider, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
-import { AFFIRM_KEY, cardsFor, dailyCard, deckOf, decks, type AffirmStore } from './affirmModel'
+import { AFFIRM_KEY, cardsFor, dailyCard, deckOf, decks, shuffle, type AffirmStore } from './affirmModel'
 import { AffirmQuick } from '../quick/AffirmQuick'
 import './affirm.css'
 
@@ -34,7 +34,9 @@ export function AffirmPage() {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [draft, setDraft] = useState('')
-  const cards = deck === 'daily' ? [dailyCard(), ...cardsFor('mix', store).filter((c) => c !== dailyCard())] : cardsFor(deck, store)
+  const [shuffled, setShuffled] = useState(0)
+  const base = deck === 'daily' ? [dailyCard(), ...cardsFor('mix', store).filter((c) => c !== dailyCard())] : cardsFor(deck, store)
+  const cards = shuffled && deck !== 'daily' ? shuffle(base, shuffled) : base
   const current = cards[Math.min(index, cards.length - 1)]
   const theme = on('themes') ? store.theme : 'gradient'
 
@@ -56,6 +58,11 @@ export function AffirmPage() {
     <div className="af-layout">
       <AffirmQuick onDeck={(d) => { setDeck(d); setIndex(0) }} />
       <div className="studio-chip-row">
+        {deck !== 'daily' && (
+          <button type="button" className="studio-chip" aria-pressed={shuffled > 0} title="Shuffle this deck" onClick={() => { setShuffled(shuffled ? 0 : Math.floor(Math.random() * 1e6) + 1); setIndex(0) }}>
+            🔀
+          </button>
+        )}
         {deckOptions.map((o) => (
           <button key={o.id} type="button" className="studio-chip" aria-pressed={deck === o.id} onClick={() => (setDeck(o.id), setIndex(0))}>
             {o.label}
