@@ -440,6 +440,7 @@ export function RunPage() {
         </h3>
         <div className="studio-stats">
           <Stat value={b.longest ? `${toUnits(b.longest.km, units).toFixed(1)} ${units}` : '—'} label="longest" />
+          <Stat value={`${toUnits(store.runs.filter((r) => new Date(r.at).getMonth() === new Date().getMonth() && new Date(r.at).getFullYear() === new Date().getFullYear()).reduce((a, r) => a + r.km, 0), units).toFixed(1)} ${units}`} label="this month" />
           <Stat value={b.fastest ? fmtPace(pace(b.fastest.km, b.fastest.seconds, units)) : '—'} label={`best pace /${units}`} />
           <Stat value={b.fastestSplit ? fmtTime(b.fastestSplit) : '—'} label="fastest km split" />
           <Stat value={store.runs.length} label="activities" />
