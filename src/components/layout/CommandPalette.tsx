@@ -34,6 +34,7 @@ import { subOn } from '../../features/subFeatures'
 import type { NavKey } from './Sidebar'
 import '../ui/ui.css'
 
+import { quickCalc, quickConvert } from './quickMath'
 const RECENT_KEY = 'bloom-recent-pages'
 const SEARCHES_KEY = 'bloom-recent-searches'
 const readSearches = (): string[] => {
@@ -366,6 +367,23 @@ export function CommandPalette({
           </Command.Group>
         )}
 
+        {(quickCalc(query) ?? quickConvert(query)) && (
+          <Command.Group heading="Answer">
+            <Command.Item
+              value={`answer ${query}`}
+              onSelect={() => {
+                const answer = (quickCalc(query) ?? quickConvert(query))!
+                void navigator.clipboard?.writeText(answer.split(' = ')[1])
+                onOpenChange(false)
+              }}
+            >
+              <span className="cmdk-item-text">
+                {quickCalc(query) ?? quickConvert(query)}
+                <small>Enter copies the result</small>
+              </span>
+            </Command.Item>
+          </Command.Group>
+        )}
         {!query && readSearches().length > 0 && (
           <Command.Group heading="Recent searches">
             {readSearches().map((s) => (
