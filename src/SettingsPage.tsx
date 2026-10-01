@@ -1328,7 +1328,15 @@ export function SettingsPage({
 
   return (
     <div
-      ref={settingsRoot}
+      ref={(el) => {
+        settingsRoot.current = el
+        // Deep links: #settings/appearance scrolls to that section once.
+        const section = location.hash.match(/^#settings\/([\w-]+)/)?.[1]
+        if (el && section && el.dataset.linked !== section) {
+          el.dataset.linked = section
+          requestAnimationFrame(() => document.getElementById(`${section}-heading`)?.scrollIntoView({ behavior: 'instant', block: 'start' }))
+        }
+      }}
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
       <SettingsSearch root={settingsRoot} />
@@ -1340,7 +1348,16 @@ export function SettingsPage({
           ['trash-heading', 'Trash'],
           ['json-heading', 'Data'],
         ].map(([id, label]) => (
-          <button key={id} type="button" aria-label={`Jump to ${label}`} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+          <button
+            key={id}
+            type="button"
+            aria-label={`Jump to ${label}`}
+            onClick={() => {
+              document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              // Shareable deep link, e.g. #settings/appearance.
+              history.replaceState(null, '', `#settings/${id.replace(/-heading$/, '')}`)
+            }}
+          >
             ↓ {label}
           </button>
         ))}
