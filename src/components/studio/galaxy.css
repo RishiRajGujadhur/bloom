@@ -144,3 +144,6 @@ html[data-theme='galaxy'] .studio[data-studio='sounds'] { --galaxy-light: #b7d8f
 
 /* daylight: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='daylight'] { --galaxy-light: #fff0b1; --galaxy-blue: #a9edff; --galaxy-violet: #f9cae3; --galaxy-x: 71%; --galaxy-y: 35%; --galaxy-ring-x: 88%; --galaxy-ring-y: 83%; --galaxy-ring-size: 137px; --galaxy-shape: 17px 40px 18px 47px; }
+
+/* run: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='run'] { --galaxy-light: #c5ffa9; --galaxy-blue: #a7e4ff; --galaxy-violet: #d0bdff; --galaxy-x: 82%; --galaxy-y: 16%; --galaxy-ring-x: 15%; --galaxy-ring-y: 75%; --galaxy-ring-size: 165px; --galaxy-shape: 44px 21px 37px 22px; }
