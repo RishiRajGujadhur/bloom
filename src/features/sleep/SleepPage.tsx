@@ -14,6 +14,7 @@ import {
   SLEEP_SETTINGS_KEY,
   defaultSleepSettings,
   averageBedtime,
+  toMinutes,
   duration,
   factorImpact,
   minutesUntilBedtime,
@@ -97,7 +98,15 @@ export function SleepPage() {
       {stats.count >= 3 && averageBedtime(entries) && (
         <p className="sleep-debt-note">
           You usually go to bed around <strong>{averageBedtime(entries)}</strong>
-          {settings.bedtime ? ` (target ${settings.bedtime})` : ''}.
+          {settings.bedtime ? ` (target ${settings.bedtime})` : ''} and wake around{' '}
+          <strong>
+            {(() => {
+              const recent = [...entries].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7)
+              const m = Math.round(recent.reduce((a, e) => a + toMinutes(e.wake), 0) / recent.length)
+              return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+            })()}
+          </strong>
+          .
         </p>
       )}
       {stats.count >= 3 && (
