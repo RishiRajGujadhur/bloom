@@ -602,6 +602,26 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
       return next
     })
 
+  // Phones: swipe in from the left edge to open the menu.
+  useEffect(() => {
+    if (!isNarrow) return
+    let start: { x: number; y: number } | null = null
+    const down = (e: TouchEvent) => {
+      const t = e.touches[0]
+      start = t && t.clientX < 24 ? { x: t.clientX, y: t.clientY } : null
+    }
+    const up = (e: TouchEvent) => {
+      const t = e.changedTouches[0]
+      if (start && t && t.clientX - start.x > 70 && Math.abs(t.clientY - start.y) < 60) setIsOpen(true)
+      start = null
+    }
+    window.addEventListener('touchstart', down, { passive: true })
+    window.addEventListener('touchend', up, { passive: true })
+    return () => {
+      window.removeEventListener('touchstart', down)
+      window.removeEventListener('touchend', up)
+    }
+  }, [isNarrow, setIsOpen])
   // Filter pages by name; Ctrl+Shift+F opens the sidebar and focuses the box.
   const [navFilter, setNavFilter] = useState('')
   const filterRef = useRef<HTMLInputElement>(null)
