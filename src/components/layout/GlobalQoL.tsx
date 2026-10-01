@@ -47,6 +47,21 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     document.addEventListener('click', onImg)
     return () => document.removeEventListener('click', onImg)
   }, [])
+  // A tiny shared toast: window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'text' })).
+  const [toast, setToast] = useState<string | null>(null)
+  useEffect(() => {
+    let timer = 0
+    const on = (e: Event) => {
+      setToast(String((e as CustomEvent).detail ?? ''))
+      clearTimeout(timer)
+      timer = window.setTimeout(() => setToast(null), 2600)
+    }
+    window.addEventListener('bloom:toast', on)
+    return () => {
+      window.removeEventListener('bloom:toast', on)
+      clearTimeout(timer)
+    }
+  }, [])
   const [offline, setOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
   useEffect(() => {
     const on = () => setOffline(false)
@@ -169,6 +184,7 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
           <img src={zoomImg} alt="" />
         </div>
       )}
+      {toast && <div className="offline-pill quick-toast" role="status">{toast}</div>}
       {offline && <div className="offline-pill" role="status">Offline · everything still saves on this device</div>}
       {showTop && <button type="button" className="to-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>}
     </>

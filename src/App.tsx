@@ -499,6 +499,32 @@ function App() {
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(getStoredTheme)
   const isDark = getThemeMode(themeSettings.themeId) === 'dark'
+  // Anywhere: press m, then 1–5, to log how you feel right now.
+  useEffect(() => {
+    let armedAt = 0
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+      if ((e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"]')) return
+      if (e.key === 'm') {
+        armedAt = Date.now()
+        return
+      }
+      if (!/^[1-5]$/.test(e.key) || Date.now() - armedAt > 1500) return
+      armedAt = 0
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      const value = Number(e.key)
+      try {
+        const list: unknown = JSON.parse(localStorage.getItem(MOOD_KEY) ?? '[]')
+        localStorage.setItem(MOOD_KEY, JSON.stringify([{ id: id(), at: Date.now(), mood: value, note: '' }, ...(Array.isArray(list) ? list : [])]))
+      } catch {
+        return
+      }
+      window.dispatchEvent(new CustomEvent('bloom:toast', { detail: `Mood logged: ${['😣 Rough', '😕 Low', '😐 Okay', '🙂 Good', '😄 Great'][value - 1]}` }))
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
+  }, [])
   // Settings -> Follow system light/dark: match the OS appearance, now and when it changes.
   const [followSys, setFollowSys] = useState(followSystemTheme)
   useEffect(() => {
