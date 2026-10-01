@@ -241,3 +241,6 @@ html[data-high-contrast] :focus-visible { outline: 3px solid var(--accent-color)
 
 /* Long tables keep their column headings in view. */
 main table thead th { position: sticky; top: 0; z-index: 1; background: var(--bg-surface); }
+
+/* Scrolling inside an editor never drags the page or triggers pull-to-refresh. */
+textarea, .ProseMirror, [contenteditable='true'] { overscroll-behavior: contain; }
