@@ -1,3 +1,4 @@
+import { usePageActions } from '../../components/ui/PageMenu'
 import { download } from '../lab/exportSuite'
 import { NextStep } from '../dailyFlow/DailyFlow'
 import { PenLine, Sun, Wind } from 'lucide-react'
@@ -148,6 +149,8 @@ export function BreathePage() {
     stop()
     setTick({ phase: 0, left: pattern.phases[0][1], cycles: 0 })
   }
+  // Space starts and pauses (via the shared page-action shortcut).
+  usePageActions([{ id: 'breathe-toggle', label: running ? 'Pause breathing' : 'Start breathing', icon: running ? '⏸️' : '🌬️', run: () => (running ? stop() : setRunning(true)) }])
   // Finish automatically once the chosen number of rounds is done.
   useEffect(() => {
     if (running && cycles >= rounds) stop()
