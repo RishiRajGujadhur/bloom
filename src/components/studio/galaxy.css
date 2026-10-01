@@ -1,0 +1,68 @@
+/* Galaxy's Studio shell is shared; individual studios set their own coordinates and accents below. */
+html[data-theme='galaxy'] .studio:not([data-studio='money']) {
+  --galaxy-light: #a6f8cf;
+  --galaxy-blue: #9bc6ff;
+  --galaxy-violet: #c3a9ff;
+  --galaxy-x: 72%;
+  --galaxy-y: 20%;
+  --galaxy-shape: 24px 24px 42px 24px;
+  border: 1px solid #bdcce244;
+  border-radius: 30px 30px 50px 30px;
+  background:
+    radial-gradient(circle at var(--galaxy-x) var(--galaxy-y), color-mix(in srgb, var(--galaxy-light) 18%, transparent), transparent 26%),
+    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--galaxy-violet) 13%, transparent), transparent 36%),
+    #080d16;
+  box-shadow: inset 0 1px #ffffff16, 0 24px 56px #0007;
+}
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-scene { opacity: .36; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-tabs {
+  border-color: #c9ddf238;
+  background: #111a29dd;
+  box-shadow: inset 0 1px #ffffff1a;
+}
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-tab-ink {
+  background: linear-gradient(110deg, var(--galaxy-light), var(--galaxy-blue), var(--galaxy-violet));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--galaxy-light) 55%, transparent);
+}
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-tabs button[aria-selected='true'] { color: #081019; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card {
+  position: relative;
+  border: 1px solid #c0d2ef38;
+  border-radius: var(--galaxy-shape);
+  background: linear-gradient(145deg, #162130dc, #0b111ddf 70%, #151d2ed9);
+  box-shadow: inset 0 1px #ffffff18, 0 16px 36px #0004;
+  color: #f8fbff;
+}
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card::before {
+  content: '';
+  position: absolute;
+  top: -28px;
+  right: -28px;
+  width: 110px;
+  height: 110px;
+  border: 1px solid color-mix(in srgb, var(--galaxy-light) 56%, transparent);
+  border-radius: 46% 54% 74% 26%;
+  transform: rotate(-27deg);
+  pointer-events: none;
+  opacity: .52;
+}
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card:nth-child(2n)::before { border-radius: 19% 81% 34% 66%; transform: rotate(29deg); }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card h3 { color: #f9fbff; letter-spacing: -.025em; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-stat { border: 1px solid #c8d7ee2b; background: color-mix(in srgb, var(--galaxy-light) 12%, #0c1521); border-radius: 19px 19px 29px 19px; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-input { background: #0a111de8; border-color: #c8ddf13c; color: #f8fbff; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-seg button,
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-chip { background: #131d2b; border-color: #cadbf238; color: #e1e9f6; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-seg button[aria-checked='true'],
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-chip[aria-pressed='true'],
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-btn.primary,
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-go:not([data-variant='quiet']) {
+  background: linear-gradient(105deg, var(--galaxy-light), var(--galaxy-blue) 62%, var(--galaxy-violet));
+  border-color: transparent;
+  color: #07121a;
+  box-shadow: 0 0 23px color-mix(in srgb, var(--galaxy-blue) 42%, transparent);
+}
+html[data-theme='galaxy'] .studio:not([data-studio='money']) :is(button, input, select, textarea):focus-visible { outline: 2px solid var(--galaxy-light); outline-offset: 2px; }
+@media (max-width: 720px) {
+  html[data-theme='galaxy'] .studio:not([data-studio='money']) { border-radius: 24px; padding: 12px; }
+  html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card { border-radius: 21px 21px 30px 21px; }
+}

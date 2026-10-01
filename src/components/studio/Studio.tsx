@@ -6,6 +6,7 @@ import gsap from 'gsap'
 import './studio.css'
 import { setHeadSlot } from '../ui/headSlot'
 import './shared.css'
+import './galaxy.css'
 
 /**
  * The shared page shell for Bloom's studios (exercise, sounds, meditation…):
