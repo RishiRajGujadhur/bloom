@@ -203,12 +203,21 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
         className="palace-stage"
         ref={stage}
         tabIndex={0}
-        aria-label="Year ring. Use left and right arrows to move between days, Enter to zoom."
+        aria-label="Year ring. Left and right arrows move a day, up and down a week, Page Up and Down a month, Home returns to today, Enter zooms."
         onKeyDown={(e) => {
           if (!subOn('memoryPalace', 'keyboard')) return
           if (e.key === 'ArrowRight') goTo(selected + 1)
           if (e.key === 'ArrowLeft') goTo(selected - 1)
           if (e.key === 'Enter') setZoomed((z) => !z)
+          if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            e.preventDefault()
+            goTo(selected + (e.key === 'ArrowUp' ? 7 : -7))
+          }
+          if (e.key === 'PageUp' || e.key === 'PageDown') {
+            e.preventDefault()
+            goTo(selected + (e.key === 'PageUp' ? 30 : -30))
+          }
+          if (e.key === 'Home') goTo(todayIndex)
         }}
       >
         <Scene3D>
