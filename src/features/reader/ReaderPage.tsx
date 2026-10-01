@@ -34,6 +34,16 @@ export function ReaderPage() {
   }
   const [custom, setCustom] = useState('')
   const [clipErr, setClipErr] = useState('')
+  const [wordScale, setWordScale] = useState(() => Number(localStorage.getItem('bloom-reader-scale')) || 1)
+  const setScale = (v: number) => {
+    const r = Math.round(v * 100) / 100
+    setWordScale(r)
+    try {
+      localStorage.setItem('bloom-reader-scale', String(r))
+    } catch {
+      /* optional */
+    }
+  }
   const [i, setI] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [phase, setPhase] = useState<'ready' | 'reading' | 'quiz' | 'done'>('ready')
@@ -180,7 +190,7 @@ export function ReaderPage() {
             {clipErr && <small className="rd-clip-err">{clipErr}</small>}
           </div>
         ) : (
-          <div className="rd-window" aria-live="off">
+          <div className="rd-window" aria-live="off" style={{ zoom: wordScale } as React.CSSProperties}>
             <span className="rd-guide top" /><span className="rd-guide bottom" />
             <div ref={word} className="rd-word" aria-label={tok?.word}>
               <span className="rd-pre">{phase === 'ready' ? '' : pre}</span>
@@ -196,6 +206,10 @@ export function ReaderPage() {
           <input type="range" min={150} max={900} step={25} value={store.wpm} onChange={(e) => save((s) => ({ ...s, wpm: Number(e.target.value), speeds: { ...s.speeds, [textId]: Number(e.target.value) } }))} aria-label="Words per minute" />
         </label>
         <button type="button" className="rd-cta" disabled={textId === 'custom' && !custom.trim()} onClick={toggle}>{phase === 'reading' ? (playing ? '❚❚ Pause' : '▶ Resume') : phase === 'done' ? '↺ Read again' : '▶ Start reading'}</button>
+        <span className="rd-size" role="group" aria-label="Word size">
+          <button type="button" aria-label="Smaller words" onClick={() => setScale(Math.max(0.6, wordScale - 0.15))}>A−</button>
+          <button type="button" aria-label="Bigger words" onClick={() => setScale(Math.min(2, wordScale + 0.15))}>A+</button>
+        </span>
         <span className="rd-progress">
           {Math.min(i, tokens.length)}/{tokens.length}
           {store.words && ` · ${Object.values(store.words).reduce((a, b) => a + b, 0).toLocaleString()} words read in all`}
