@@ -174,6 +174,19 @@ export function FocusPage({
           { id: 'focus-window', label: 'Open Focus in a small window', icon: '🪟', run: () => void window.open('#focus', 'bloom-focus', 'width=440,height=760') },
         ],
   )
+  // Space starts a session when none is running (it never stops one, to avoid accidents).
+  const activeRef = useRef(active)
+  activeRef.current = active
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || activeRef.current || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select, [contenteditable="true"]')) return
+      e.preventDefault()
+      setNow(Date.now())
+      setData((current) => startFocusQuest(current, current.rpg.focusQuest.soundscape))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [setData])
   const doneToday = history.filter((h) => h.completedAt >= since).length
   const [dailyGoal, setDailyGoalState] = useState(() => readStore<number>('bloom-focus-daily-goal', 4))
   const setDailyGoal = (n: number) => {
