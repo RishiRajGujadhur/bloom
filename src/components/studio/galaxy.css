@@ -78,3 +78,6 @@ html[data-theme='galaxy'] .studio:not([data-studio='money']) :is(button, input, 
 
 /* breathwork: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='breathwork'] { --galaxy-light: #b5fff0; --galaxy-blue: #9acfff; --galaxy-violet: #d0b8ff; --galaxy-x: 81%; --galaxy-y: 24%; --galaxy-ring-x: 19%; --galaxy-ring-y: 78%; --galaxy-ring-size: 115px; --galaxy-shape: 38px 19px 42px 19px; }
+
+/* body: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='body'] { --galaxy-light: #ffd1e0; --galaxy-blue: #b4d8ff; --galaxy-violet: #d7baff; --galaxy-x: 70%; --galaxy-y: 16%; --galaxy-ring-x: 23%; --galaxy-ring-y: 82%; --galaxy-ring-size: 155px; --galaxy-shape: 18px 43px 18px 39px; }
