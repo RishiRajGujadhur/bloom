@@ -826,6 +826,32 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           Reset
         </button>
       </div>
+      <div className={styles.subOption}>
+        <span>
+          <strong>Show tips again</strong>
+          <small>Bring back hints, tours and tips you’ve dismissed.</small>
+        </span>
+        <button
+          type="button"
+          className="quiet-button"
+          onClick={() => {
+            let n = 0
+            try {
+              for (const k of Object.keys(localStorage)) {
+                if (k.startsWith('bloom-') && /(hint|seen|tip|tour|intro|onboard|dismiss)/i.test(k)) {
+                  localStorage.removeItem(k)
+                  n++
+                }
+              }
+            } catch {
+              /* optional */
+            }
+            window.dispatchEvent(new CustomEvent('bloom:toast', { detail: n ? `${n} tip${n === 1 ? '' : 's'} will show again` : 'No dismissed tips' }))
+          }}
+        >
+          Reset tips
+        </button>
+      </div>
       <label className={styles.subOption}>
         <span>
           <strong>Your name</strong>
