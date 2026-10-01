@@ -30,7 +30,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 - [x] Mala
 - [x] Affirm
 - [x] Joys
-- [ ] Dojo
+- [x] Dojo
 - [ ] Stretch
 - [ ] Sounds
 - [ ] Daylight
