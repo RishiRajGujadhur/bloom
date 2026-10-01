@@ -762,7 +762,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           type="button"
           className="quiet-button"
           onClick={() => {
-            for (const k of ['bloom-sidebar-width', 'bloom-companion-width', 'bloom-nav-groups', 'bloom-nav-recent', 'bloom-guide-docked'])
+            for (const k of ['bloom-sidebar-width', 'bloom-companion-width', 'bloom-nav-groups', 'bloom-nav-recent', 'bloom-guide-docked', 'bloom-companion-hidden-pages'])
               try {
                 localStorage.removeItem(k)
               } catch {

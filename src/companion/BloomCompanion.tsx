@@ -141,6 +141,14 @@ export function BloomCompanion({
     }
   }
   const panel = useRef<HTMLElement>(null)
+  // Pages where you've hidden the floating Bloom button (right-click it).
+  const [hiddenOn, setHiddenOn] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('bloom-companion-hidden-pages') ?? '[]')
+    } catch {
+      return []
+    }
+  })
   // Drag the panel's edge to resize; the width lives on <html> so the docked layout follows it.
   const startResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = panel.current
@@ -326,8 +334,19 @@ export function BloomCompanion({
   }
   return (
     <>
-      {!open && (
+      {!open && !hiddenOn.includes(page) && (
         <button
+          onContextMenu={(e) => {
+            e.preventDefault()
+            if (!window.confirm('Hide the Bloom button on this page? (Settings → Reset layout brings it back.)')) return
+            const next = [...hiddenOn, page]
+            setHiddenOn(next)
+            try {
+              localStorage.setItem('bloom-companion-hidden-pages', JSON.stringify(next))
+            } catch {
+              /* optional */
+            }
+          }}
           className="bloom-companion-launch has-face"
           aria-expanded={open}
           onClick={open ? onClose : onOpen}
