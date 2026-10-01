@@ -138,3 +138,6 @@ html[data-theme='galaxy'] .studio[data-studio='dojo'] { --galaxy-light: #ffcabf;
 
 /* stretch: its own orbit, gem hues, and asymmetric card silhouette. */
 html[data-theme='galaxy'] .studio[data-studio='stretch'] { --galaxy-light: #c5eaff; --galaxy-blue: #dbbeff; --galaxy-violet: #b5ffde; --galaxy-x: 77%; --galaxy-y: 14%; --galaxy-ring-x: 21%; --galaxy-ring-y: 89%; --galaxy-ring-size: 121px; --galaxy-shape: 19px 45px 19px 40px; }
+
+/* sounds: its own orbit, gem hues, and asymmetric card silhouette. */
+html[data-theme='galaxy'] .studio[data-studio='sounds'] { --galaxy-light: #b7d8ff; --galaxy-blue: #c5b7ff; --galaxy-violet: #a7ffe3; --galaxy-x: 86%; --galaxy-y: 22%; --galaxy-ring-x: 11%; --galaxy-ring-y: 73%; --galaxy-ring-size: 153px; --galaxy-shape: 43px 18px 46px 18px; }
