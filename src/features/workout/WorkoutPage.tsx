@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../../utils/motion'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Chart as ChartJS, BarElement, CategoryScale, Filler, LinearScale, LineElement, PointElement, Tooltip } from 'chart.js'
@@ -158,6 +159,18 @@ export function WorkoutPage() {
     setRestLeft(0)
   }
 
+  useTabTitle(restLeft > 0 ? `⏱ Rest ${Math.floor(restLeft / 60)}:${String(restLeft % 60).padStart(2, '0')}` : active ? `🏋️ ${active.sets.length} sets` : '', 'Workouts', 'workouts')
+  // L logs the current set.
+  const logRef = useRef(logSet)
+  logRef.current = logSet
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'l' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select')) return
+      logRef.current()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const muted = css('--text-muted', '#9a8f86')
   const grid = css('--border-color', '#eadfd4')
   const chartOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: grid }, ticks: { color: muted } }, y: { grid: { color: grid }, ticks: { color: muted } } } } as const
