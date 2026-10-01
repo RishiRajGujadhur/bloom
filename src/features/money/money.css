@@ -318,3 +318,6 @@ html[data-money-blur] .studio-card strong:hover, html[data-money-blur] .studio-c
 html[data-money-blur] .mn-amount-edit { filter: blur(7px); }
 html[data-money-blur] .mn-amount-edit:hover { filter: none; }
 .mn-repeat { margin-left: 6px; border: 0; background: none; cursor: pointer; font-size: 12px; }
+.mn-month-head { display: flex; align-items: center; gap: 6px; }
+.mn-month-head button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 999px; width: 26px; height: 26px; cursor: pointer; }
+.mn-month-head button:disabled { opacity: 0.35; cursor: default; }

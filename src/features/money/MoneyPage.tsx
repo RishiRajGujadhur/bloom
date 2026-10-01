@@ -137,6 +137,12 @@ export function MoneyPage() {
   }
   const [income, setIncome] = useState(false)
   const [monthly, setMonthly] = useState(false)
+  const [viewMonth, setViewMonth] = useState(() => dayKey().slice(0, 7))
+  const shiftMonth = (m: string, by: number) => {
+    const d = new Date(`${m}-15T12:00:00`)
+    d.setMonth(d.getMonth() + by)
+    return d.toISOString().slice(0, 7)
+  }
   // Monthly repeats that came due since your last visit are added now.
   useEffect(() => {
     if (!store.txns.some((t) => t.repeat === 'monthly')) return
@@ -245,7 +251,11 @@ export function MoneyPage() {
         </button>
       </section>
       <section className="studio-card mn-split">
-        <h3>Where it goes · {new Date(`${today}T12:00:00`).toLocaleDateString([], { month: 'long' })}</h3>
+        <h3 className="mn-month-head">
+          <button type="button" aria-label="Previous month" onClick={() => setViewMonth((m) => shiftMonth(m, -1))}>‹</button>
+          Where it goes · {new Date(`${viewMonth}-15T12:00:00`).toLocaleDateString([], { month: 'long', ...(viewMonth.slice(0, 4) !== today.slice(0, 4) ? { year: 'numeric' } : {}) })}
+          <button type="button" aria-label="Next month" disabled={viewMonth >= month} onClick={() => setViewMonth((m) => shiftMonth(m, 1))}>›</button>
+        </h3>
         {(() => {
           const big = store.txns.filter((x) => !x.income && x.date.startsWith(month)).sort((a, b) => b.amount - a.amount)[0]
           // Pace: this month so far vs the same days of last month.
@@ -270,21 +280,21 @@ export function MoneyPage() {
             </>
           ) : null
         })()}
-        {byCategory(store.txns, month).length ? (
+        {byCategory(store.txns, viewMonth).length ? (
           <div className="mn-bars">
-            {byCategory(store.txns, month).map((c) => {
+            {byCategory(store.txns, viewMonth).map((c) => {
               const cat = categoryOf(c.category)
               return (
                 <div key={c.category} className="mn-bar" data-hint={`${cat.name}: ${fmt(c.amount)}`}>
                   <span>{cat.emoji} {cat.name}</span>
-                  <i style={{ width: `${Math.max(4, (c.amount / Math.max(1, t.month)) * 100)}%`, background: cat.color }} />
+                  <i style={{ width: `${Math.max(4, (c.amount / Math.max(1, byCategory(store.txns, viewMonth).reduce((a, x) => a + x.amount, 0))) * 100)}%`, background: cat.color }} />
                   <strong>{fmt(c.amount, true)}</strong>
                 </div>
               )
             })}
           </div>
         ) : (
-          <p className="studio-empty">Nothing yet this month.</p>
+          <p className="studio-empty">{viewMonth === month ? 'Nothing yet this month.' : 'Nothing logged that month.'}</p>
         )}
       </section>
       <section className="studio-card mn-list">
