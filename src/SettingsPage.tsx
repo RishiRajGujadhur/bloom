@@ -872,6 +872,33 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Private notifications</strong>
+          <small>System notifications say “Open Bloom to see it” instead of the habit or routine name.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            defaultChecked={(() => {
+              try {
+                return localStorage.getItem('bloom-private-notifications') === '1'
+              } catch {
+                return false
+              }
+            })()}
+            onChange={(e) => {
+              try {
+                localStorage.setItem('bloom-private-notifications', e.target.checked ? '1' : '0')
+              } catch {
+                /* optional */
+              }
+            }}
+            aria-label="Private notifications"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>Quiet hours</strong>
           <small>No habit or routine reminders during these hours.</small>
         </span>

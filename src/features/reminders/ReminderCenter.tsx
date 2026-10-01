@@ -165,7 +165,7 @@ export function ReminderCenter({
       )
         for (const item of due)
           new Notification(item.kind === 'habit' ? 'Time for a small habit' : 'Routine time', {
-            body: item.title,
+            body: localStorage.getItem('bloom-private-notifications') === '1' ? 'Open Bloom to see it' : item.title,
             tag: `bloom-${item.id}`,
           })
     }
