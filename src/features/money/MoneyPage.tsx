@@ -139,8 +139,11 @@ export function MoneyPage() {
   const [monthly, setMonthly] = useState(false)
   // Monthly repeats that came due since your last visit are added now.
   useEffect(() => {
-    const added = catchUpRecurring(store.txns, dayKey())
-    if (added.length) save((s) => ({ ...s, txns: [...added, ...s.txns].sort((a, b) => b.date.localeCompare(a.date)) }))
+    if (!store.txns.some((t) => t.repeat === 'monthly')) return
+    save((s) => {
+      const added = catchUpRecurring(s.txns, dayKey())
+      return added.length ? { ...s, txns: [...added, ...s.txns].sort((a, b) => b.date.localeCompare(a.date)) } : s
+    })
     // Once per visit.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
