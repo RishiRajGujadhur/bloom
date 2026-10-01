@@ -107,6 +107,17 @@ export function MixerPage() {
   }
   const visible = layers.filter((l) => (l.noise ? on('noiseColours') : on('natureLayers')))
 
+  // Tab title names what's playing.
+  const playingNames = visible.filter((l) => (store.mix[l.id] ?? 0) > 0).map((l) => l.label)
+  const mixTitle = playing && playingNames.length ? `🎧 ${playingNames.slice(0, 3).join(' + ')}${playingNames.length > 3 ? ' …' : ''}` : ''
+  useEffect(() => {
+    if (!mixTitle) return
+    const before = document.title
+    document.title = `${mixTitle} · Soundscapes`
+    return () => {
+      document.title = before
+    }
+  }, [mixTitle])
   // Surprise me: 2–4 random layers at gentle levels.
   const randomise = () => {
     const pick = [...visible].sort(() => Math.random() - 0.5).slice(0, 2 + Math.floor(Math.random() * 3))
