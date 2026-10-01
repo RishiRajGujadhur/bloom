@@ -634,6 +634,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
   const [compact, setCompact] = useState(compactTitles)
   const [banner, setBanner] = useState(pageBanner)
   const [followSys, setFollowSys] = useState(followSystemTheme)
+  const [dense, setDense] = useState(() => localStorage.getItem('bloom-nav-dense') === '1')
   const [pixel, setPixel] = useState(pixelIconsOn)
   return (
     <section className={styles.card} aria-labelledby="navigation-heading">
@@ -683,6 +684,29 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
               setCompactTitles(e.target.checked)
             }}
             aria-label="Icon page headings"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>Compact sidebar</strong>
+          <small>Tighter rows so more pages fit without scrolling.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={dense}
+            onChange={(e) => {
+              setDense(e.target.checked)
+              try {
+                localStorage.setItem('bloom-nav-dense', e.target.checked ? '1' : '0')
+              } catch {
+                /* optional */
+              }
+              document.documentElement.toggleAttribute('data-nav-dense', e.target.checked)
+            }}
+            aria-label="Compact sidebar"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>

@@ -40,6 +40,11 @@ createRoot(document.getElementById('root')!).render(
 
 applyCompactTitles()
 applyPageBanner()
+try {
+  document.documentElement.toggleAttribute('data-nav-dense', localStorage.getItem('bloom-nav-dense') === '1')
+} catch {
+  /* default density */
+}
 document.documentElement.toggleAttribute('data-pixel-icons', pixelIconsOn())
 registerChartTheme()
 installCardGlow()

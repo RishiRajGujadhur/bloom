@@ -223,3 +223,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
   body { background: none !important; }
   * { animation: none !important; transition: none !important; box-shadow: none !important; }
 }
+
+/* Settings -> Compact sidebar. */
+html[data-nav-dense] .sidebar nav button { padding-top: 4px !important; padding-bottom: 4px !important; min-height: 0 !important; font-size: 0.84rem; }
+html[data-nav-dense] .sidebar nav { gap: 0 !important; }
