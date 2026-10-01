@@ -78,8 +78,10 @@ export function PeoplePage() {
   const svg = useRef<SVGSVGElement>(null)
   const fuse = useMemo(() => new Fuse(people, { keys: ['name', 'notes'], threshold: 0.35 }), [people])
   const [group, setGroup] = useState('All')
+  const [sortBy, setSortBy] = useState(() => localStorage.getItem('bloom-people-sort') ?? 'added')
   const groups = ['Family', 'Friends', 'Work', 'Other']
   const shown = (query ? fuse.search(query).map((r) => r.item) : people).filter((p) => group === 'All' || (p.group ?? 'Other') === group)
+    .sort((a, b) => (sortBy === 'name' ? a.name.localeCompare(b.name) : sortBy === 'overdue' ? daysSince(b) / b.every - daysSince(a) / a.every : 0))
   const person = people.find((p) => p.id === sel) ?? null
   const cols = Math.max(4, Math.min(6, Math.ceil(Math.sqrt(shown.length * 2))))
   const rows = Math.max(1, Math.ceil(shown.length / cols))
@@ -138,6 +140,11 @@ export function PeoplePage() {
               <button type="button" role="radio" aria-checked={view === 'garden'} className={view === 'garden' ? 'on' : ''} onClick={() => setView('garden')}>🌱 Garden</button>
               <button type="button" role="radio" aria-checked={view === 'globe'} className={view === 'globe' ? 'on' : ''} onClick={() => setView('globe')}>🌍 Globe</button>
             </div>
+            <select className="studio-input pg-sort" aria-label="Sort people" value={sortBy} onChange={(e) => { setSortBy(e.target.value); try { localStorage.setItem('bloom-people-sort', e.target.value) } catch { /* optional */ } }}>
+              <option value="added">As added</option>
+              <option value="overdue">Most overdue</option>
+              <option value="name">A–Z</option>
+            </select>
             <input className="studio-input pg-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find someone…" aria-label="Find someone" />
           </div>
         </header>
