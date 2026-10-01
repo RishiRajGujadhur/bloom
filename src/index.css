@@ -227,3 +227,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 /* Settings -> Compact sidebar. */
 html[data-nav-dense] .sidebar nav button { padding-top: 4px !important; padding-bottom: 4px !important; min-height: 0 !important; font-size: 0.84rem; }
 html[data-nav-dense] .sidebar nav { gap: 0 !important; }
+
+/* Scrollbars follow the theme everywhere: thin, accent-tinted thumb. */
+html { scrollbar-color: color-mix(in oklab, var(--accent-color) 45%, transparent) transparent; }
+* { scrollbar-width: thin; }
