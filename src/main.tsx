@@ -45,6 +45,8 @@ try {
   document.documentElement.toggleAttribute('data-nav-dense', localStorage.getItem('bloom-nav-dense') === '1')
   document.documentElement.toggleAttribute('data-high-contrast', localStorage.getItem('bloom-high-contrast') === '1')
   document.documentElement.toggleAttribute('data-bloom-right', localStorage.getItem('bloom-chat-right') === '1')
+  const round = localStorage.getItem('bloom-round')
+  if (round) document.documentElement.dataset.round = round
 } catch {
   /* default density */
 }

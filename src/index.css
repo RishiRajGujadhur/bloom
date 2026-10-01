@@ -249,3 +249,9 @@ textarea, .ProseMirror, [contenteditable='true'] { overscroll-behavior: contain;
 .storage-bar i { display: block; height: 100%; background: var(--accent-color); }
 .storage-meter ul { margin: 6px 0 0; padding-left: 18px; }
 .settings-css { width: 100%; margin-top: 8px; font-family: ui-monospace, monospace; font-size: 12px; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
+
+/* Settings -> Corner roundness. */
+html[data-round='square'] { --radius-xs: 2px; --radius-sm: 3px; --radius-md: 4px; --radius-lg: 6px; }
+html[data-round='square'] .card, html[data-round='square'] .studio-card, html[data-round='square'] .wb-card { border-radius: 6px !important; }
+html[data-round='round'] { --radius-xs: 8px; --radius-sm: 11px; --radius-md: 15px; --radius-lg: 22px; }
+html[data-round='round'] .card, html[data-round='round'] .studio-card, html[data-round='round'] .wb-card { border-radius: 28px !important; }

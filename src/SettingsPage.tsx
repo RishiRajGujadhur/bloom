@@ -831,6 +831,30 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Corner roundness</strong>
+          <small>How rounded buttons, fields and cards look.</small>
+        </span>
+        <select
+          className="settings-name"
+          aria-label="Corner roundness"
+          defaultValue={document.documentElement.dataset.round ?? ''}
+          onChange={(e) => {
+            try {
+              localStorage.setItem('bloom-round', e.target.value)
+            } catch {
+              /* optional */
+            }
+            if (e.target.value) document.documentElement.dataset.round = e.target.value
+            else delete document.documentElement.dataset.round
+          }}
+        >
+          <option value="">Soft</option>
+          <option value="square">Square-ish</option>
+          <option value="round">Extra round</option>
+        </select>
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>High contrast</strong>
           <small>Stronger text and borders on every theme.</small>
         </span>
