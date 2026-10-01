@@ -257,3 +257,9 @@ html[data-round='square'] { --radius-xs: 2px; --radius-sm: 3px; --radius-md: 4px
 html[data-round='square'] .card, html[data-round='square'] .studio-card, html[data-round='square'] .wb-card { border-radius: 6px !important; }
 html[data-round='round'] { --radius-xs: 8px; --radius-sm: 11px; --radius-md: 15px; --radius-lg: 22px; }
 html[data-round='round'] .card, html[data-round='round'] .studio-card, html[data-round='round'] .wb-card { border-radius: 28px !important; }
+
+/* Buttons dip slightly when pressed (independent 'scale' property, so it never fights GSAP transforms). */
+@media (prefers-reduced-motion: no-preference) {
+  button:not(:disabled) { transition: scale 90ms ease; }
+  button:not(:disabled):active { scale: 0.97; }
+}
