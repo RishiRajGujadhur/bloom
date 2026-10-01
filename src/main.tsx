@@ -11,7 +11,7 @@ import { AudioMixerProvider } from './contexts/AudioMixerContext'
 import { AudioMixer } from './components/AudioMixer'
 import { installInteractions } from './components/ui/interactions'
 import './components/ui/interactions.css'
-import { applyCompactTitles, applyCustomCss, applyPageBanner } from './components/ui/Flow'
+import { applyCompactTitles, applyCustomCss, applyDisplayToggles, applyPageBanner } from './components/ui/Flow'
 import { pixelIconsOn } from './icons/pixelated'
 import { registerChartTheme } from './components/ui/chartTheme'
 import { installCardEntrance, installCardGlow, installTitleReveal } from './components/ui/cardGlow'
@@ -41,6 +41,7 @@ createRoot(document.getElementById('root')!).render(
 applyCompactTitles()
 applyPageBanner()
 applyCustomCss()
+applyDisplayToggles()
 try {
   document.documentElement.toggleAttribute('data-nav-dense', localStorage.getItem('bloom-nav-dense') === '1')
   document.documentElement.toggleAttribute('data-high-contrast', localStorage.getItem('bloom-high-contrast') === '1')

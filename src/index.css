@@ -271,3 +271,9 @@ html[data-low-battery] *, html[data-low-battery] *::before, html[data-low-batter
 .app-shell .topbar { position: sticky; top: 0; z-index: 30; background: color-mix(in oklab, var(--bg-primary) 86%, transparent); backdrop-filter: blur(10px); transition: transform 220ms ease; }
 html[data-topbar-hidden] .app-shell .topbar { transform: translateY(-100%); }
 .settings-diag { display: block; margin: 10px auto 0; font-size: 12px; }
+
+/* Settings display toggles. */
+html[data-hide-launch] .bloom-companion-launch { display: none !important; }
+html[data-hide-quicklog] .quick-log-row { display: none !important; }
+html[data-hide-affirm] .affirm-ticker { display: none !important; }
+html[data-static-topbar] .app-shell .topbar { position: static; transform: none !important; }

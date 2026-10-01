@@ -110,7 +110,7 @@ import {
 import { Menu } from 'lucide-react'
 import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
-import { ShowMore, applyCustomCss, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
+import { DISPLAY_TOGGLES, ShowMore, applyCustomCss, applyDisplayToggles, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
 import { DataReset } from './settings/DataReset'
 import { StorageMeter } from './settings/StorageMeter'
@@ -706,6 +706,30 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
+      {DISPLAY_TOGGLES.map((t) => (
+        <label key={t.key} className={styles.subOption}>
+          <span>
+            <strong>{t.label}</strong>
+            <small>{t.hint}</small>
+          </span>
+          <span className={styles.switch} data-size="small">
+            <input
+              type="checkbox"
+              defaultChecked={document.documentElement.hasAttribute(t.attr)}
+              onChange={(e) => {
+                try {
+                  localStorage.setItem(t.key, e.target.checked ? '1' : '0')
+                } catch {
+                  /* optional */
+                }
+                applyDisplayToggles()
+              }}
+              aria-label={t.label}
+            />
+            <span className={styles.slider} aria-hidden="true" />
+          </span>
+        </label>
+      ))}
       <details className={styles.subOption}>
         <summary>
           <strong>Custom CSS (advanced)</strong>
