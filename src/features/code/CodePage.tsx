@@ -80,7 +80,7 @@ function Workspace({ title, body, starter, solution, checks, hint, draft, onDraf
         </ul>
         <div className="cd-help">
           {hint && <button type="button" className="studio-btn" onClick={() => setShowHint((v) => !v)}><Lightbulb size={14} /> Hint</button>}
-          <button type="button" className="studio-btn" onClick={() => { setCode(solution); setResult(null) }}>Get unstuck</button>
+          <button type="button" className="studio-btn" onClick={() => { if (code !== starter && code !== solution && !window.confirm('Replace your code with the solution?')) return; setCode(solution); setResult(null) }}>Get unstuck</button>
           {nav}
         </div>
         {showHint && hint && <p className="cd-hint">💡 {hint}</p>}
@@ -91,7 +91,8 @@ function Workspace({ title, body, starter, solution, checks, hint, draft, onDraf
         </Suspense>
         <div className="cd-bar">
           <button type="button" className="cd-run" onClick={run} disabled={running}><Play size={15} /> {running ? 'Running…' : 'Run'} <kbd>Ctrl ↵</kbd></button>
-          <button type="button" className="studio-btn" onClick={() => { setCode(starter); setResult(null) }}><RotateCcw size={14} /> Reset</button>
+          <button type="button" className="studio-btn" onClick={() => { if (code !== starter && !window.confirm('Reset to the starter code? Your changes will be lost.')) return; setCode(starter); setResult(null) }}><RotateCcw size={14} /> Reset</button>
+          <button type="button" className="studio-btn" title="Copy your code" onClick={() => void navigator.clipboard?.writeText(code).then(() => window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'Code copied' })))}>📋 Copy</button>
           {result && <span className={`cd-score ${passCount === checks.length ? 'all' : ''}`}>{passCount}/{checks.length} checks</span>}
         </div>
       </section>
