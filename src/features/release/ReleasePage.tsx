@@ -1,7 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { NextStep } from '../dailyFlow/DailyFlow'
 import { subOn } from '../subFeatures'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDrag } from '@use-gesture/react'
 import { animated, useSpring } from '@react-spring/web'
 import { Flame, Heart, RotateCcw } from 'lucide-react'
@@ -127,6 +127,19 @@ export function ReleasePage() {
     { filterTaps: true },
   )
 
+  // Enter burns the card, Esc puts it back.
+  const releaseRef = useRef(release)
+  releaseRef.current = release
+  useEffect(() => {
+    if (!card || burning) return
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      if (e.key === 'Enter') { e.preventDefault(); releaseRef.current() }
+      if (e.key === 'Escape') setCard(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [card, burning])
   usePageActions(card ? [{ id: 'rl-go', label: 'Release it', icon: '🔥', run: release }, { id: 'rl-not', label: 'Not yet', icon: '↩️', run: () => setCard(null) }] : [])
   return (
     <section className="release-page" aria-label="Burn and release">
@@ -165,7 +178,7 @@ export function ReleasePage() {
                 aria-label="Worry card, drag it into the fire"
               >
                 <p>{card}</p>
-                <small>Drag me into the fire →</small>
+                <small>Drag me into the fire → (or press Enter)</small>
               </animated.div>
               <div className="release-actions">
                 <button className="ov-primary" onClick={release} disabled={burning}>
