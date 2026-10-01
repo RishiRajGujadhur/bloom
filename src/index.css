@@ -284,3 +284,4 @@ html[data-static-topbar] .app-shell .topbar { position: static; transform: none 
 .slider-bubble { position: fixed; transform: translate(-50%, -100%); padding: 2px 8px; border-radius: 8px; font: 600 12px/1.5 ui-monospace, monospace; background: var(--accent-color); color: var(--bg-surface); pointer-events: none; z-index: 9999; }
 html[data-thin-scroll], html[data-thin-scroll] * { scrollbar-width: thin; }
 html[data-tab-hidden] *, html[data-tab-hidden] *::before, html[data-tab-hidden] *::after { animation-play-state: paused !important; }
+.cmdk-kbd { margin-left: auto; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border-color); font: 600 11px/1.5 ui-monospace, monospace; opacity: .75; white-space: nowrap; }

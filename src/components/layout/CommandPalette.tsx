@@ -243,6 +243,11 @@ export function CommandPalette({
     return !need || flags[need]
   })
   const recent = open ? readRecentPages().filter((key) => pages.includes(key)) : []
+  // Pinned pages have Alt+1–9 shortcuts in the sidebar; show them here too.
+  const pins: string[] = (() => {
+    if (!open) return []
+    try { return JSON.parse(localStorage.getItem('bloom-nav-pins') ?? '[]') as string[] } catch { return [] }
+  })()
   const sessions = useMemo(
     () =>
       data.sessions
@@ -447,6 +452,24 @@ export function CommandPalette({
               Switch to {isDark ? 'light' : 'dark'} mode
             </span>
           </Command.Item>
+          <Command.Item value="privacy blur hide screen" onSelect={() => go(() => document.documentElement.toggleAttribute('data-privacy-blur'))}>
+            <Moon size={17} aria-hidden="true" />
+            <span className="cmdk-item-text">Privacy blur</span>
+            <kbd className="cmdk-kbd">Ctrl Shift L</kbd>
+          </Command.Item>
+          <Command.Item
+            value="focus mode distraction free"
+            onSelect={() =>
+              go(() => {
+                const root = document.documentElement
+                root.dataset.focusMode = root.dataset.focusMode === 'on' ? 'off' : 'on'
+              })
+            }
+          >
+            <Timer size={17} aria-hidden="true" />
+            <span className="cmdk-item-text">Focus mode (hide the chrome)</span>
+            <kbd className="cmdk-kbd">Ctrl .</kbd>
+          </Command.Item>
         </Command.Group>
 
         <Command.Group heading="Go to">
@@ -462,6 +485,7 @@ export function CommandPalette({
                 {pageDetails[key].title}
                 <small>{pageDetails[key].description}</small>
               </span>
+              {pins.indexOf(key) >= 0 && pins.indexOf(key) < 9 && <kbd className="cmdk-kbd">Alt {pins.indexOf(key) + 1}</kbd>}
             </Command.Item>
           ))}
         </Command.Group>
