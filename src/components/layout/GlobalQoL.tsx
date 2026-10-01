@@ -10,6 +10,10 @@ import gsap from 'gsap'
  * - a skip-to-content link for keyboard users
  * - the favicon shows how many habits are left today
  */
+/** Last submitted value per text field (this visit only), for Up-arrow recall. */
+const lastEntries = new Map<string, string>()
+const fieldKey = (el: HTMLInputElement) => `${location.hash.split('/')[0]}|${el.getAttribute('aria-label') ?? el.placeholder ?? el.name}`
+
 export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
   // Character counter near any length-limited field once you're past 80% of it.
@@ -84,6 +88,16 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
         history.back()
         return
       }
+      // Up-arrow in an empty text field brings back what you last submitted there.
+      if (e.key === 'ArrowUp' && t instanceof HTMLInputElement && t.type === 'text' && !t.value) {
+        const last = lastEntries.get(fieldKey(t))
+        if (last) {
+          e.preventDefault()
+          Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set?.call(t, last)
+          t.dispatchEvent(new Event('input', { bubbles: true }))
+        }
+        return
+      }
       // Ctrl+/ jumps to this page's own search box.
       if ((e.ctrlKey || e.metaKey) && e.key === '/') {
         const box = [...document.querySelectorAll<HTMLInputElement>('main input[type="search"], main input[placeholder*="earch"], main input[placeholder^="Find"]')].find((el) => el.offsetParent !== null)
@@ -106,12 +120,18 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
         root.dataset.focusMode = root.dataset.focusMode === 'on' ? 'off' : 'on'
       }
     }
+    const onSubmit = (e: SubmitEvent) => {
+      const form = e.target as HTMLFormElement
+      for (const el of form.querySelectorAll<HTMLInputElement>('input[type="text"], input:not([type])')) if (el.value.trim()) lastEntries.set(fieldKey(el), el.value)
+    }
+    document.addEventListener('submit', onSubmit, true)
     window.addEventListener('keydown', onKey, true)
     return () => {
       document.removeEventListener('visibilitychange', vis)
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('click', onClick)
       window.removeEventListener('keydown', onKey, true)
+      document.removeEventListener('submit', onSubmit, true)
     }
   }, [])
 
