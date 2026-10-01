@@ -1,0 +1,7 @@
+.nav-galaxy-icon { display: none; }
+.nav-original-icon { display: inline-flex; align-items: center; }
+html[data-theme='galaxy'] .nav-original-icon { display: none; }
+html[data-theme='galaxy'] .nav-galaxy-icon { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px; }
+html[data-theme='galaxy'] .nav-item { border: 1px solid transparent; border-radius: 15px 15px 23px 15px; }
+html[data-theme='galaxy'] .nav-item.active { border-color: #b6ecf75c; background: linear-gradient(105deg, #b0ffd020, #a8c9ff22, #d4baff1a); box-shadow: inset 0 1px #ffffff21, 0 0 20px #a9dfff22; color: #f8fbff; }
+html[data-theme='galaxy'] .nav-item:hover { border-color: #b8d9ed48; }

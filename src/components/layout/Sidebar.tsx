@@ -1,5 +1,7 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { ConfirmDisable, NavContextMenu, type NavMenuState } from './NavContextMenu'
+import { GalaxyGlyph } from '../studio/GalaxyGlyph'
+import './sidebarGalaxy.css'
 import './navContext.css'
 import type { ReactNode } from 'react'
 import {
@@ -926,7 +928,8 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                       setCtx({ key, title, x: e.clientX, y: e.clientY, canDisable: !!req && !!onDisable, pinned: pins.includes(key) })
                     }}
                   >
-                    <Icon size={19} aria-hidden="true" />
+                    <span className="nav-original-icon"><Icon size={19} aria-hidden="true" /></span>
+                    <span className="nav-galaxy-icon"><GalaxyGlyph label={title} id={key} /></span>
                     <span className={styles.navLabel}>{title}</span>
                     {active === key && <span className="nav-indicator" />}
                   </button>

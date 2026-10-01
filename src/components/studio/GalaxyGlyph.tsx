@@ -5,6 +5,7 @@ export function GalaxyGlyph({ label, id }: { label: string; id: string }) {
   const gradientId = useId().replace(/:/g, '')
   const word = `${id} ${label}`.toLowerCase()
   const kind = /chart|trend|record|history|stats|progress/.test(word) ? 'chart'
+    : /menu|navigation/.test(word) ? 'menu'
     : /budget|money|spend|bill|price|cost/.test(word) ? 'money'
     : /plan|goal|roadmap|map|journey/.test(word) ? 'compass'
     : /play|game|practice|train|workout|exercise|session|breathe/.test(word) ? 'play'
@@ -23,6 +24,7 @@ export function GalaxyGlyph({ label, id }: { label: string; id: string }) {
       <path d="M2.7 15.8c4.3 1.5 13.5 1.5 18.6-6.8" stroke={`url(#${gradientId})`} strokeOpacity=".55" strokeWidth=".85" strokeLinecap="round"/>
       <g stroke={`url(#${gradientId})`} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
         {kind === 'chart' && <><path d="M6.5 16.5v-3m4 3V9m4 7.5v-6m3.5 6V7"/><path d="M5.5 17.5h13"/></>}
+        {kind === 'menu' && <><path d="M6 8h12M6 12h9M6 16h12"/><circle cx="18" cy="12" r=".6" fill={`url(#${gradientId})`} stroke="none"/></>}
         {kind === 'money' && <><rect x="6" y="8" width="12" height="8.5" rx="2"/><path d="M8 8V6.5h8M11 12h4m-2-2v4"/></>}
         {kind === 'compass' && <><path d="m14.9 9.1-2 5.8-3.8-3.8 5.8-2Z"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2"/></>}
         {kind === 'play' && <><path d="m9 7 7 5-7 5V7Z"/><path d="M7 5.5a8 8 0 0 1 10 0"/></>}

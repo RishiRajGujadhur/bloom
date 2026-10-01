@@ -57,6 +57,7 @@ html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card::befor
 }
 html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card:nth-child(2n)::before { border-radius: 19% 81% 34% 66%; transform: rotate(29deg); }
 html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card h3 { color: #f9fbff; letter-spacing: -.025em; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-empty { color: #adbed2; }
 html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-stat { border: 1px solid #c8d7ee2b; background: color-mix(in srgb, var(--galaxy-light) 12%, #0c1521); border-radius: 19px 19px 29px 19px; }
 html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-input { background: #0a111de8; border-color: #c8ddf13c; color: #f8fbff; }
 html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-seg button,
@@ -74,6 +75,8 @@ html[data-theme='galaxy'] .studio:not([data-studio='money']) :is(button, input, 
 @media (max-width: 720px) {
   html[data-theme='galaxy'] .studio:not([data-studio='money']) { border-radius: 24px; padding: 12px; }
   html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card { border-radius: 21px 21px 30px 21px; }
+  html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-tab-ink { display: none; }
+  html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-tabs button[aria-selected='true'] { background: linear-gradient(110deg, var(--galaxy-light), var(--galaxy-blue), var(--galaxy-violet)); }
 }
 
 /* breathwork: its own orbit, gem hues, and asymmetric card silhouette. */

@@ -1,0 +1,45 @@
+/* Galaxy's page frame. Every selector requires the explicit Galaxy theme. */
+html[data-theme='galaxy'],
+html[data-theme='galaxy'] body,
+html[data-theme='galaxy'] .app-shell {
+  background:
+    radial-gradient(circle at 84% 8%, #21315488, transparent 28%),
+    radial-gradient(circle at 9% 81%, #25214d65, transparent 30%),
+    radial-gradient(#a3caff52 .55px, transparent .8px) 0 0 / 67px 67px,
+    #05070d;
+  background-attachment: fixed;
+}
+html[data-theme='galaxy'] .app-shell .topbar { border-bottom-color: transparent; }
+html[data-theme='galaxy'] .app-shell .topbar-search,
+html[data-theme='galaxy'] .app-shell .topbar-menu {
+  border: 1px solid #c2d9f136;
+  border-radius: 16px 16px 23px 16px;
+  background: #111925d9;
+  color: #e9f0fd;
+  box-shadow: inset 0 1px #ffffff12;
+}
+html[data-theme='galaxy'] .app-shell .topbar-search:hover,
+html[data-theme='galaxy'] .app-shell .topbar-menu:hover { border-color: #b0f5e6a6; box-shadow: 0 0 20px #97f4df26; }
+html[data-theme='galaxy'] .app-shell .bloom-heading.feature-heading:not(.is-hero) {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #c1d3f038;
+  border-radius: 22px 48px 22px 34px;
+  background: linear-gradient(120deg, #111a28e8, #0c111de3 65%, #192238cf);
+  box-shadow: inset 0 1px #ffffff16, 0 18px 38px #0004;
+}
+html[data-theme='galaxy'] .app-shell .bloom-heading.feature-heading:not(.is-hero)::after {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  right: -54px;
+  top: -83px;
+  border: 1px solid #b3d4ff6b;
+  border-radius: 46% 54% 25% 75%;
+  transform: rotate(-25deg);
+  pointer-events: none;
+}
+html[data-theme='galaxy'] .app-shell .bloom-heading.feature-heading h1 { font-family: var(--font-display); font-weight: 800; letter-spacing: -.055em; }
+html[data-theme='galaxy'] .app-shell .bloom-heading.feature-heading p { color: #becadc; }
+html[data-theme='galaxy'] .app-shell button:focus-visible { outline-color: #a6f8cf; }

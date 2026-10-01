@@ -123,7 +123,7 @@ export function Studio({
                 tabIndex={t.id === tab?.id ? 0 : -1}
                 onClick={(e) => {
                   go(i)
-                  const icon = e.currentTarget.querySelector('svg')
+                  const icon = e.currentTarget.querySelector(document.documentElement.dataset.theme === 'galaxy' ? '.studio-galaxy-icon svg' : '.studio-original-icon svg')
                   if (icon && !reduced()) gsap.fromTo(icon, { rotate: -25, scale: 0.6 }, { rotate: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1.2, 0.4)' })
                 }}
                 onKeyDown={(e) => {

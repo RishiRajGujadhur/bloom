@@ -132,6 +132,7 @@ import { addEpiphany } from './features/epiphany/epiphanyStore'
 import { createEpiphany } from './features/epiphany/epiphanyModel'
 import { PageMenu, type PageAction } from './components/ui/PageMenu'
 import { Menu as MenuIcon } from 'lucide-react'
+import { GalaxyGlyph } from './components/studio/GalaxyGlyph'
 import { pageRequires } from './components/layout/Sidebar'
 import { PointerFx } from './components/ui/PointerFx'
 import { HoverHints, LinkRail, followSystemTheme } from './components/ui/Flow'
@@ -870,7 +871,8 @@ function App() {
               <StreakRewards data={data} today={today} />
               <div className="topbar-tools">{topTools}</div>
               <button type="button" className="topbar-menu" aria-label="Open menu" data-hint="Menu" onClick={() => window.dispatchEvent(new Event('bloom:toggle-nav'))}>
-                <MenuIcon size={20} aria-hidden="true" />
+                <span className="nav-original-icon"><MenuIcon size={20} aria-hidden="true" /></span>
+                <span className="nav-galaxy-icon"><GalaxyGlyph id="menu" label="Menu" /></span>
               </button>
             </div>
           </header>
