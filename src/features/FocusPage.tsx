@@ -169,6 +169,7 @@ export function FocusPage({
           { id: 'focus-25', label: 'Set 25 minutes', icon: '🍅', run: () => update({ durationMinutes: 25 }) },
           { id: 'focus-50', label: 'Set 50 minutes', icon: '🔥', run: () => update({ durationMinutes: 50 }) },
           { id: 'focus-strict', label: quest.strict ? 'Turn strict mode off' : 'Turn strict mode on', icon: '🔒', run: () => update({ strict: !quest.strict }) },
+          { id: 'focus-window', label: 'Open Focus in a small window', icon: '🪟', run: () => void window.open('#focus', 'bloom-focus', 'width=440,height=760') },
         ],
   )
   const doneToday = history.filter((h) => h.completedAt >= since).length

@@ -150,7 +150,10 @@ export function BreathePage() {
     setTick({ phase: 0, left: pattern.phases[0][1], cycles: 0 })
   }
   // Space starts and pauses (via the shared page-action shortcut).
-  usePageActions([{ id: 'breathe-toggle', label: running ? 'Pause breathing' : 'Start breathing', icon: running ? '⏸️' : '🌬️', run: () => (running ? stop() : setRunning(true)) }])
+  usePageActions([
+    { id: 'breathe-toggle', label: running ? 'Pause breathing' : 'Start breathing', icon: running ? '⏸️' : '🌬️', run: () => (running ? stop() : setRunning(true)) },
+    { id: 'breathe-window', label: 'Open Breathe in a small window', icon: '🪟', run: () => void window.open('#breathe', 'bloom-breathe', 'width=440,height=760') },
+  ])
   // Finish automatically once the chosen number of rounds is done.
   useEffect(() => {
     if (running && cycles >= rounds) stop()
