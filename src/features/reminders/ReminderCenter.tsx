@@ -96,6 +96,26 @@ export function ReminderButton({ id, title }: { id: string; title: string }) {
   )
 }
 
+/** Reminders still to come today, for open habits and routines. */
+export function UpcomingReminders({ items }: { items: { id: string; title: string; open: boolean }[] }) {
+  const [state] = useReminders()
+  const now = new Date()
+  const current = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+  const upcoming = items
+    .filter((i) => i.open && state.items[i.id]?.enabled && state.items[i.id].time > current)
+    .map((i) => ({ ...i, time: state.items[i.id].time }))
+    .sort((a, b) => a.time.localeCompare(b.time))
+  if (!upcoming.length) return null
+  return (
+    <p className="reminder-upcoming">
+      <BellRing size={14} aria-hidden="true" /> Later today:{' '}
+      {upcoming.map((u, i) => (
+        <span key={u.id}>{i > 0 && ' · '}<strong>{u.time}</strong> {u.title}</span>
+      ))}
+    </p>
+  )
+}
+
 type Toast = Remindable & { at: number }
 
 /**

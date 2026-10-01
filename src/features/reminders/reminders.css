@@ -112,3 +112,5 @@
     animation: none;
   }
 }
+
+.reminder-upcoming { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0 0 10px; font-size: .85rem; opacity: .85; }

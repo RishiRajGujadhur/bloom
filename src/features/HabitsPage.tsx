@@ -27,7 +27,7 @@ import { inferStat } from '../rpg/schema'
 import { Modal } from '../components/Modal'
 import { HabitLibrary, RoutineLibrary } from './AdoptLibrary'
 import { burst, streakMilestone } from '../components/ui/celebrate'
-import { ReminderButton } from './reminders/ReminderCenter'
+import { ReminderButton, UpcomingReminders } from './reminders/ReminderCenter'
 import { gridDays, habitStats } from './habits'
 import './habits.css'
 import { HabitsQuick } from './quick/HabitsQuick'
@@ -404,6 +404,7 @@ export function HabitsPage({
               </button>
             )}
           </div>
+          {reminders && subOn('reminders', 'habits') && <UpcomingReminders items={active.map((h) => ({ id: h.id, title: h.title, open: !h.dates.includes(today) }))} />}
           <CardRail label="Your habits">
             {shown.map((h, index) => {
               const stats = habitStats(h.dates, today)
