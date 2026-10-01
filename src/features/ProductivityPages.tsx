@@ -1,3 +1,4 @@
+import { useTabTitle } from '../utils/useTabTitle'
 import { prefersReducedMotion } from '../utils/motion'
 import { launchImpact } from './impact/ImpactLayer'
 import { taskWeight } from './impact/impactModel'
@@ -273,6 +274,8 @@ export function TodoPage({ data, setData }: Props) {
       ),
     }))
   const overdue = tasks.filter((t) => !t.done && t.due < dayKey())
+  const dueToday = data.todos.filter((t) => !t.done && t.due <= dayKey()).length
+  useTabTitle(dueToday ? `${dueToday} to do today` : '', 'To-dos')
   return (
     <section id="todo-page" className="task-workspace planning-workspace">
       <TodosQuick data={data} setData={setData} />
