@@ -29,6 +29,7 @@ import {
   toMinor,
   topPlaces,
   totals,
+  catchUpRecurring,
   type MoneyStore,
   type Txn,
 } from './moneyModel'
@@ -135,6 +136,14 @@ export function MoneyPage() {
     }
   }
   const [income, setIncome] = useState(false)
+  const [monthly, setMonthly] = useState(false)
+  // Monthly repeats that came due since your last visit are added now.
+  useEffect(() => {
+    const added = catchUpRecurring(store.txns, dayKey())
+    if (added.length) save((s) => ({ ...s, txns: [...added, ...s.txns].sort((a, b) => b.date.localeCompare(a.date)) }))
+    // Once per visit.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const addBtn = useRef<HTMLButtonElement>(null)
   const today = dayKey()
   const month = today.slice(0, 7)
@@ -145,7 +154,8 @@ export function MoneyPage() {
   const add = () => {
     const n = Number(amount)
     if (!n || n <= 0) return
-    const txn: Txn = { id: crypto.randomUUID(), date: today, amount: toMinor(n), category: income ? 'other' : category, place: place.trim(), income }
+    const id = crypto.randomUUID()
+    const txn: Txn = { id, date: today, amount: toMinor(n), category: income ? 'other' : category, place: place.trim(), income, ...(monthly ? { repeat: 'monthly' as const, series: id } : {}) }
     save((s) => ({ ...s, txns: [txn, ...s.txns] }))
     pinSpend(txn)
     // Budget alert: say so when this purchase takes a budget past 80% or over.
@@ -214,6 +224,7 @@ export function MoneyPage() {
         <div className="studio-chip-row" role="group" aria-label="Type">
           <button type="button" className="studio-chip" aria-pressed={!income} onClick={() => setIncome(false)}>Spent</button>
           <button type="button" className="studio-chip" aria-pressed={income} onClick={() => setIncome(true)}>Received</button>
+          <button type="button" className="studio-chip" aria-pressed={monthly} title="Add it again automatically on this day each month" onClick={() => setMonthly((v) => !v)}>🔁 Monthly</button>
         </div>
         <input className="studio-input" inputMode="decimal" placeholder={`Amount (${code})`} aria-label="Amount" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))} onKeyDown={(e) => e.key === 'Enter' && add()} />
         <input className="studio-input" placeholder="Where? (e.g. Tesco, Netflix)" aria-label="Place" value={place} onChange={(e) => { setPlace(e.target.value); if (on('autoCategory')) setCategory(guessCategory(e.target.value) === 'other' ? category : guessCategory(e.target.value)) }} onKeyDown={(e) => e.key === 'Enter' && add()} />
@@ -307,7 +318,21 @@ export function MoneyPage() {
                 </label>
               )}
               <span className="mn-txn-main">
-                <strong>{x.place || categoryOf(x.category).name}</strong>
+                <strong>
+                  {x.place || categoryOf(x.category).name}
+                  {x.repeat === 'monthly' && (
+                    <button
+                      type="button"
+                      className="mn-repeat"
+                      title="Repeats monthly — click to stop repeating"
+                      onClick={() => {
+                        if (window.confirm('Stop adding this every month?')) save((s) => ({ ...s, txns: s.txns.map((y) => (y.series === x.series ? { ...y, repeat: undefined } : y)) }))
+                      }}
+                    >
+                      🔁
+                    </button>
+                  )}
+                </strong>
                 <small>{x.date}</small>
               </span>
               <button

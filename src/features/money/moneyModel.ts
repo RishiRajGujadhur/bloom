@@ -6,7 +6,7 @@ import Papa from 'papaparse'
  * units (cents) and summed with currency.js so totals never drift.
  */
 export type Category = { id: string; name: string; emoji: string; color: string; bucket: 'fixed' | 'flexible' | 'non-monthly' }
-export type Txn = { id: string; date: string; amount: number; category: string; place: string; note?: string; income?: boolean; /** OPFS path of the scanned receipt image (Receipt Lens). */ receipt?: string }
+export type Txn = { id: string; date: string; amount: number; category: string; place: string; note?: string; income?: boolean; /** OPFS path of the scanned receipt image (Receipt Lens). */ receipt?: string; /** Recurring: added again on the same day each month. */ repeat?: 'monthly'; series?: string }
 export type Budget = { category: string; limit: number }
 export type Holding = { id: string; name: string; kind: 'asset' | 'debt'; value: number }
 export type Goal = { id: string; name: string; target: number; saved: number; emoji: string }
@@ -233,4 +233,26 @@ export function upcomingBills(txns: Txn[], today: string) {
 export const monthsToDebtFree = (holdings: Holding[], monthly: number) => {
   const debt = sumMinor(holdings.filter((h) => h.kind === 'debt').map((h) => h.value))
   return monthly > 0 ? Math.ceil(debt / monthly) : Infinity
+}
+
+/** Adds any monthly repeats that have come due since they were last added (up to today). */
+export function catchUpRecurring(txns: Txn[], today: string): Txn[] {
+  const latest = new Map<string, Txn>()
+  for (const t of txns) if (t.repeat === 'monthly' && t.series && (!latest.has(t.series) || t.date > latest.get(t.series)!.date)) latest.set(t.series, t)
+  const added: Txn[] = []
+  for (const t of latest.values()) {
+    let d = t.date
+    for (let i = 0; i < 24; i++) {
+      const next = new Date(`${d}T12:00:00`)
+      const day = next.getDate()
+      next.setDate(1)
+      next.setMonth(next.getMonth() + 1)
+      next.setDate(Math.min(day, new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate()))
+      const key = `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, '0')}-${String(next.getDate()).padStart(2, '0')}`
+      if (key > today) break
+      added.push({ ...t, id: crypto.randomUUID(), date: key, receipt: undefined })
+      d = key
+    }
+  }
+  return added
 }

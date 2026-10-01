@@ -317,3 +317,4 @@ html[data-money-blur] .studio-card strong:hover, html[data-money-blur] .studio-c
 .mn-amount-edit:hover { text-decoration: underline dotted; }
 html[data-money-blur] .mn-amount-edit { filter: blur(7px); }
 html[data-money-blur] .mn-amount-edit:hover { filter: none; }
+.mn-repeat { margin-left: 6px; border: 0; background: none; cursor: pointer; font-size: 12px; }
