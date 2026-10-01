@@ -212,3 +212,6 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .settings-jump { display: flex; flex-wrap: wrap; gap: 6px; }
 .settings-jump button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
 .settings-jump button:hover { color: var(--accent-color); border-color: var(--accent-color); }
+
+/* Focus rings for keyboard users only; mouse clicks don't leave an outline behind. */
+:focus:not(:focus-visible) { outline: none; }
