@@ -75,6 +75,8 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
   const xp = xpToday(store, today)
   const wod = useMemo(() => wordOfDay(today), [today])
   const quests = useMemo(() => questsFor(today), [today])
+  // The first unit that still has lessons left.
+  const nextUnit = units.findIndex((u) => unitProgress(store, u.id) < LESSONS_PER_UNIT)
 
   const start = (s: Session) => {
     if (s.kind === 'lesson' && on('hearts') && hearts.hearts <= 0) {
@@ -159,6 +161,18 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
               const d = badgeDefs.find((x) => x.id === b)!
               return <p key={b} className="en-badge-new">{d.emoji} New badge: <strong>{d.title}</strong></p>
             })}
+            {nextUnit >= 0 && (
+              <button type="button" className="en-check" onClick={() => startUnit(nextUnit)}>
+                Next lesson →
+              </button>
+            )}
+          </section>
+        )}
+        {!summary && nextUnit >= 0 && unitProgress(store, units[nextUnit].id) > 0 && (
+          <section className="studio-card en-callout">
+            <h3>Pick up where you left off</h3>
+            <p>{units[nextUnit].title} · lesson {unitProgress(store, units[nextUnit].id) + 1} of {LESSONS_PER_UNIT}</p>
+            <button type="button" className="en-check" onClick={() => startUnit(nextUnit)}>Continue</button>
           </section>
         )}
         {on('placement') && (
