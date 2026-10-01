@@ -234,6 +234,17 @@ export function WorkoutPage() {
               <ChevronRight size={16} />
             </button>
           </div>
+          {lift &&
+            (() => {
+              const last = [...allSets].reverse().find((s) => s.liftId === lift.id && !active.sets.includes(s))
+              if (!last) return null
+              const days = Math.round((Date.now() - last.at) / 864e5)
+              return (
+                <p className="studio-empty wo-last">
+                  Last time: {days === 0 ? 'earlier today' : days === 1 ? 'yesterday' : `${days} days ago`} · {last.weight} kg × {last.reps}
+                </p>
+              )
+            })()}
           <div className="wo-dots" aria-hidden="true">
             {liftIds.map((id, i) => (
               <i key={id} data-on={i === liftIdx} data-done={active.sets.some((s) => s.liftId === id)} />
