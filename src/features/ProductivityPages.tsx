@@ -335,6 +335,9 @@ export function TodoPage({ data, setData }: Props) {
             </div>
           )}
         <small className="quick-hint">Tip: type “tomorrow p1 #home every week”, or paste a list to add many.</small>
+        {data.todos.some((t) => t.done && t.completedAt && new Date(t.completedAt).toDateString() === new Date().toDateString()) && (
+          <small className="quick-hint"> · ✓ {data.todos.filter((t) => t.done && t.completedAt && new Date(t.completedAt).toDateString() === new Date().toDateString()).length} done today</small>
+        )}
         {data.todos.length > 6 && (
           <input type="search" className="todo-search" aria-label="Search tasks" placeholder="Search tasks or #tags…" value={taskQuery} onChange={(e) => setTaskQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()} />
         )}
