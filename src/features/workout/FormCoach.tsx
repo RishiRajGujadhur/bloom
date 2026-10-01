@@ -64,7 +64,15 @@ export function FormCoach({ onLog }: { onLog: (liftId: string, reps: number, sec
   const [label, setLabel] = useState('')
   const [held, setHeld] = useState(0)
   const [err, setErr] = useState('')
-  const target = 10
+  const [target, setTargetState] = useState(() => Number(localStorage.getItem('bloom-formcoach-target')) || 10)
+  const setTarget = (n: number) => {
+    setTargetState(n)
+    try {
+      localStorage.setItem('bloom-formcoach-target', String(n))
+    } catch {
+      /* optional */
+    }
+  }
   const video = useRef<HTMLVideoElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const banner = useRef<HTMLDivElement>(null)
@@ -213,7 +221,19 @@ export function FormCoach({ onLog }: { onLog: (liftId: string, reps: number, sec
           {RULES[ex].timed ? (
             <div className="fc-held"><b>{held}s</b><small>held with good form</small></div>
           ) : (
+            <>
             <RepRing count={reps.length} score={avg} target={target} />
+          <label className="fc-target">
+            Target reps{' '}
+            <select value={target} onChange={(e) => setTarget(Number(e.target.value))}>
+              {[5, 8, 10, 12, 15, 20, 30].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </label>
+            </>
           )}
           <div className="fc-dots" aria-label="Rep quality">
             {reps.map((r, i) => <span key={i} className={`fc-dot ${r.score >= 85 ? 'good' : r.score >= 60 ? 'ok' : 'bad'}`} title={`Rep ${i + 1}: ${r.score}${r.faults.length ? ` · ${r.faults.join(', ')}` : ''}`} />)}

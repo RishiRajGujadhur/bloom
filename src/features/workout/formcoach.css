@@ -37,3 +37,4 @@
 .fc-small { margin: 0; color: #9cc3b3; font-size: 0.8rem; text-align: center; }
 html[data-theme='matrix'] .fc { background: #030a05; }
 html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
+.fc-target { display: block; text-align: center; font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
