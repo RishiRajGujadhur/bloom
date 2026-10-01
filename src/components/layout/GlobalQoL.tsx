@@ -63,6 +63,23 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Performance: images load lazily unless a page says otherwise, and CSS animations pause while the tab is hidden.
+  useEffect(() => {
+    const lazy = (root: ParentNode) => root.querySelectorAll?.('img:not([loading])').forEach((img) => img.setAttribute('loading', 'lazy'))
+    lazy(document)
+    const obs = new MutationObserver((records) => {
+      for (const r of records)
+        for (const n of r.addedNodes) {
+          if (!(n instanceof HTMLElement)) continue
+          if (n.tagName !== 'IMG') lazy(n)
+          else if (!n.hasAttribute('loading')) n.setAttribute('loading', 'lazy')
+        }
+    })
+    obs.observe(document.body, { childList: true, subtree: true })
+    const vis = () => document.documentElement.toggleAttribute('data-tab-hidden', document.hidden)
+    document.addEventListener('visibilitychange', vis)
+    return () => { obs.disconnect(); document.removeEventListener('visibilitychange', vis) }
+  }, [])
   // Ctrl+S: Bloom saves as you go, so skip the browser's "save page" dialog (pages with their own save still handle it).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
