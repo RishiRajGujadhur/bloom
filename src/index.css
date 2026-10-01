@@ -268,6 +268,6 @@ html[data-round='round'] .card, html[data-round='round'] .studio-card, html[data
 html[data-low-battery] *, html[data-low-battery] *::before, html[data-low-battery] *::after { animation-play-state: paused !important; }
 
 /* Sticky top bar that tucks away on scroll down and returns on scroll up. */
-.app-shell .topbar { position: sticky; top: 0; z-index: 30; background: color-mix(in oklab, var(--bg-page, var(--bg-surface)) 86%, transparent); backdrop-filter: blur(10px); transition: transform 220ms ease; }
+.app-shell .topbar { position: sticky; top: 0; z-index: 30; background: color-mix(in oklab, var(--bg-primary) 86%, transparent); backdrop-filter: blur(10px); transition: transform 220ms ease; }
 html[data-topbar-hidden] .app-shell .topbar { transform: translateY(-100%); }
 .settings-diag { display: block; margin: 10px auto 0; font-size: 12px; }
