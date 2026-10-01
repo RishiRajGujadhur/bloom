@@ -296,6 +296,17 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
             <div className="diet-water-row">
               <span>
                 <Droplet size={16} aria-hidden="true" /> Water {water}/{waterTarget}
+                {(() => {
+                  const d = new Date(`${today}T12:00:00`)
+                  const key = () => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+                  if ((state.water[key()] ?? 0) < state.targets.water) d.setDate(d.getDate() - 1)
+                  let n = 0
+                  while ((state.water[key()] ?? 0) >= state.targets.water && n < 365) {
+                    n++
+                    d.setDate(d.getDate() - 1)
+                  }
+                  return n > 1 ? <small className="diet-water-bonus"> · 💧 {n}-day streak</small> : null
+                })()}
                 {waterBonus > 0 && <small className="diet-water-bonus" title={`${exerciseMin} active minutes today`}> +{waterBonus} for today’s exercise</small>}
               </span>
               <WaterGlasses count={water} target={waterTarget} onSet={setWater} />
