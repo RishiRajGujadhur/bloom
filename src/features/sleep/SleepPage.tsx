@@ -285,7 +285,25 @@ function WindDown({
   setSettings: (update: (s: SleepSettings) => SleepSettings) => void
 }) {
   const [now, setNow] = useState(() => new Date())
-  const [done, setDone] = useState<string[]>([])
+  // Tonight's ticks survive a reload (they reset the next day).
+  const [done, setDoneState] = useState<string[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('bloom-winddown-done') ?? 'null') as { day: string; ids: string[] } | null
+      return saved?.day === dayKey() ? saved.ids : []
+    } catch {
+      return []
+    }
+  })
+  const setDone = (f: (list: string[]) => string[]) =>
+    setDoneState((list) => {
+      const next = f(list)
+      try {
+        localStorage.setItem('bloom-winddown-done', JSON.stringify({ day: dayKey(), ids: next }))
+      } catch {
+        /* this visit only */
+      }
+      return next
+    })
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 30000)
     return () => clearInterval(timer)
