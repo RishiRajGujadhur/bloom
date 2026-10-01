@@ -6,7 +6,7 @@ import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useDraggable,
 import { SortableContext, arrayMove, horizontalListSortingStrategy, sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { BookOpen, Flower2, Pause, Play, Plus, RotateCcw, Save, Trash2, Waves } from 'lucide-react'
-import { Rail, Slider, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
+import { ACTIVITY_KEY, Rail, Slider, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { FigureSvg } from '../exercise/ExerciseFigure'
@@ -324,6 +324,14 @@ export function YogaPage() {
       tab={tab}
       onTab={setTab}
       scene={<StudioScene colors={['#c9b8ff', '#f4c7d8', '#b8e0d2']} line="wave" />}
+      aside={(() => {
+        const mins = Math.round(
+          readStore<{ at: number; kind: string; seconds?: number }[]>(ACTIVITY_KEY, [])
+            .filter((a) => a.kind === 'yoga' && Date.now() - a.at < 7 * 864e5)
+            .reduce((s, a) => s + (a.seconds ?? 0), 0) / 60,
+        )
+        return mins ? <span className="ex-aside">🧘 {mins} min this week</span> : undefined
+      })()}
       tabs={[
         ...(on('player') ? [{ id: 'practice', label: 'Practice', icon: <Flower2 size={15} />, render: practice }] : []),
         { id: 'flows', label: 'Flows', icon: <Waves size={15} />, render: flows },
