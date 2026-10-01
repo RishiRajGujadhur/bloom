@@ -374,6 +374,19 @@ export function HabitsPage({
                 <button key={v} type="button" role="radio" aria-checked={habitView === v} className={habitView === v ? 'on' : ''} onClick={() => setHabitView(v)}>{label}</button>
               ))}
             </div>
+            {active.length > 0 && habitView !== 'archived' && (
+              <small className="hx-rate">
+                {(() => {
+                  const days = Array.from({ length: 7 }, (_, i) => {
+                    const d = new Date(`${today}T12:00:00`)
+                    d.setDate(d.getDate() - i)
+                    return d.toISOString().slice(0, 10)
+                  })
+                  const done = active.reduce((a, h) => a + days.filter((d) => h.dates.includes(d)).length, 0)
+                  return `This week: ${Math.round((done / (active.length * 7)) * 100)}% of check-ins done`
+                })()}
+              </small>
+            )}
             {missedYesterday.length > 0 && habitView !== 'archived' && (
               <button type="button" className="hx-yday" onClick={() => setData((d) => ({ ...d, habits: d.habits.map((h) => missedYesterday.some((m) => m.id === h.id) ? { ...h, dates: [...h.dates, yesterday].sort() } : h) }))}>
                 ✓ Mark yesterday done for {missedYesterday.length === 1 ? `“${missedYesterday[0].title}”` : `all ${missedYesterday.length}`}
