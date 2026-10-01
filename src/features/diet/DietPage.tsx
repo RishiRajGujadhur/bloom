@@ -275,6 +275,7 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           <p className="diet-sub">
             {totals.meals} {totals.meals === 1 ? 'meal' : 'meals'} ·{' '}
             {totals.kcal <= state.targets.kcal ? `${state.targets.kcal - totals.kcal} kcal left` : `${totals.kcal - state.targets.kcal} kcal over, and that’s okay`}
+            {state.targets.protein > totals.protein ? ` · ${state.targets.protein - totals.protein} g protein to go` : state.targets.protein ? ' · protein goal met 💪' : ''}
           </p>
           {subOn('dietTracker', 'macros') && (
             <div className="diet-macros">
