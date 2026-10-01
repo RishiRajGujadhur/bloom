@@ -83,6 +83,22 @@ export function UrgePage({ data, setData }: Props) {
     setLastEvent(event)
   }
 
+  // Keys: 1–5 pick the intensity, Esc steps back.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      if (step === 2 && /^[1-5]$/.test(e.key)) setIntensity(Number(e.key))
+      else if (e.key === 'Escape' && step === 2) reset()
+      else if (e.key === 'Escape' && step === 3) setIntensity(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
+  const undoLast = () => {
+    if (!lastEvent) return
+    setData((current) => ({ ...current, urgeEvents: current.urgeEvents.filter((e) => e.id !== lastEvent.id) }))
+    reset()
+  }
   const addContext = (tag: string) => {
     if (!lastEvent || lastEvent.tags.includes(tag)) return
     const updated = { ...lastEvent, tags: [...lastEvent.tags, tag] }
@@ -269,6 +285,9 @@ export function UrgePage({ data, setData }: Props) {
                 </div>
                 <button className="primary" onClick={reset}>
                   Log another <ChevronRight size={16} />
+                </button>
+                <button className="quiet-button" onClick={undoLast}>
+                  Undo this log
                 </button>
               </div>
             )}
