@@ -872,6 +872,37 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Quiet hours</strong>
+          <small>No habit or routine reminders during these hours.</small>
+        </span>
+        <select
+          className="settings-name"
+          aria-label="Quiet hours"
+          defaultValue={(() => {
+            try {
+              return localStorage.getItem('bloom-quiet-hours') ?? ''
+            } catch {
+              return ''
+            }
+          })()}
+          onChange={(e) => {
+            try {
+              if (e.target.value) localStorage.setItem('bloom-quiet-hours', e.target.value)
+              else localStorage.removeItem('bloom-quiet-hours')
+            } catch {
+              /* optional */
+            }
+          }}
+        >
+          <option value="">Off</option>
+          <option value="22-7">22:00–07:00</option>
+          <option value="21-8">21:00–08:00</option>
+          <option value="23-9">23:00–09:00</option>
+          <option value="12-14">12:00–14:00 (lunch)</option>
+        </select>
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>Week starts on</strong>
           <small>Used by the calendar.</small>
         </span>

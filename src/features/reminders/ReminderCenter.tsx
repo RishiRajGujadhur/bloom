@@ -118,6 +118,19 @@ export function ReminderCenter({
   const [toasts, setToasts] = useState<Toast[]>([])
   useEffect(() => {
     const check = () => {
+      // Settings -> Quiet hours: hold reminders overnight.
+      const quiet = (() => {
+        try {
+          return localStorage.getItem('bloom-quiet-hours')
+        } catch {
+          return null
+        }
+      })()
+      if (quiet) {
+        const [from, to] = quiet.split('-').map(Number)
+        const h = new Date().getHours()
+        if (from > to ? h >= from || h < to : h >= from && h < to) return
+      }
       const weekday = new Date().getDay()
       const items: Remindable[] = [
         ...data.habits.map((h) => ({
