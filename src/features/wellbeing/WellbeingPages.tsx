@@ -574,10 +574,23 @@ export function MoodPage() {
           )
         })()}
         {(() => {
+          const daysWith = new Set(entries.map((e) => new Date(e.at).toDateString()))
+          const cur = new Date()
+          if (!daysWith.has(cur.toDateString())) cur.setDate(cur.getDate() - 1)
+          let streak = 0
+          while (daysWith.has(cur.toDateString())) {
+            streak++
+            cur.setDate(cur.getDate() - 1)
+          }
           const month = entries.filter((e) => new Date(e.at).getMonth() === new Date().getMonth() && new Date(e.at).getFullYear() === new Date().getFullYear())
           const counts = month.flatMap((e) => e.emotions ?? []).reduce<Record<string, number>>((a, w) => ({ ...a, [w]: (a[w] ?? 0) + 1 }), {})
           const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]
-          return top && top[1] > 1 ? <p className="wb-muted">Most common feeling this month: <strong>{top[0]}</strong> ({top[1]}×)</p> : null
+          return (
+            <>
+              {streak > 1 && <p className="wb-muted">🔥 {streak}-day check-in streak</p>}
+              {top && top[1] > 1 && <p className="wb-muted">Most common feeling this month: <strong>{top[0]}</strong> ({top[1]}×)</p>}
+            </>
+          )
         })()}
         <ol className="wb-week">
           {week.map((day) => {
