@@ -75,6 +75,7 @@ import {
   readPage,
 } from './components/layout/FeatureGuide'
 import { GrowthRewards } from './rpg/GrowthRewards'
+import { startFocusQuest } from './rpg/engine'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
@@ -798,6 +799,9 @@ function App() {
       }
     } else if (action.type === 'theme') {
       setThemeSettings((s) => ({ ...s, themeId: action.themeId }))
+    } else if (action.type === 'focus') {
+      setData((d) => startFocusQuest({ ...d, rpg: { ...d.rpg, focusQuest: { ...d.rpg.focusQuest, durationMinutes: action.minutes } } }, d.rpg.focusQuest.soundscape))
+      window.location.hash = 'focus'
     }
     burst(null, 'stars')
   }

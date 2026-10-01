@@ -13,6 +13,7 @@ export type OmniAction =
   | { type: 'meal'; name: string; kcal: number }
   | { type: 'mood'; value: number }
   | { type: 'theme'; themeId: string; name: string }
+  | { type: 'focus'; minutes: number }
 
 export type OmniSuggestion = { id: string; label: string; hint: string; action: OmniAction | null }
 
@@ -56,6 +57,10 @@ export function parseCommand(input: string, data: AppData, today: string): OmniS
     const v = parseInt(arg(/^mood/i))
     out.push({ id: 'mood', label: v >= 1 && v <= 5 ? `Log mood: ${v}/5` : 'Log mood: 1–5', hint: 'Quick check-in', action: v >= 1 && v <= 5 ? { type: 'mood', value: v } : null })
   }
+  if (/^(start )?focus\b/.test(lower) || !q) {
+    const m = Math.min(180, Math.max(5, parseInt(arg(/^(start )?focus/i)) || 25))
+    out.push({ id: 'focus', label: `Start focus: ${m} min`, hint: 'e.g. “focus 50”', action: { type: 'focus', minutes: m } })
+  }
   if (/^(set )?theme\b/.test(lower) || !q) {
     const term = norm(arg(/^(set )?theme/i))
     for (const t of THEMES.filter((t) => !term || norm(t.name).includes(term) || t.id.includes(term.replace(/ /g, '-'))).slice(0, q ? 8 : 3))
@@ -66,4 +71,4 @@ export function parseCommand(input: string, data: AppData, today: string): OmniS
 
 /** Which Settings option (omnibox.<id>) governs a suggestion. */
 export const commandGroup = (id: string) =>
-  id.startsWith('habit') ? 'habits' : id === 'task' ? 'tasks' : id === 'water' || id === 'meal' ? 'nourish' : 'themes'
+  id.startsWith('habit') ? 'habits' : id === 'task' ? 'tasks' : id === 'water' || id === 'meal' ? 'nourish' : id === 'focus' ? 'tasks' : 'themes'
