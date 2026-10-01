@@ -20,6 +20,20 @@ const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').ma
 export function DecidePage() {
   const [d, setD] = useState<Decision>(load)
   const save = (f: (x: Decision) => Decision) => setD((x) => { const n = decisionSchema.parse(f(x)); writeStore(KEY, n); return n })
+  // A shelf of decisions you've made, to revisit or reopen.
+  const [saved, setSaved] = useState(() => readStore<{ at: number; winner: string; decision: Decision }[]>('bloom-decide-saved', []))
+  const saveDecision = (dec: Decision, winner: string) =>
+    setSaved((list) => {
+      const n = [{ at: Date.now(), winner, decision: dec }, ...list.filter((s) => s.decision.question !== dec.question)].slice(0, 50)
+      writeStore('bloom-decide-saved', n)
+      return n
+    })
+  const removeDecision = (at: number) =>
+    setSaved((list) => {
+      const n = list.filter((s) => s.at !== at)
+      writeStore('bloom-decide-saved', n)
+      return n
+    })
   const [flipKey, setFlipKey] = useState(0)
   const [flip, setFlip] = useState<{ result: 'heads' | 'tails'; landed: boolean } | null>(null)
   const [feel, setFeel] = useState<'relief' | 'sink' | null>(null)
@@ -83,7 +97,24 @@ export function DecidePage() {
         <div className="dc-actions">
           <button type="button" className="dc-ghost" onClick={() => save((x) => ({ ...x, criteria: [...x.criteria, { id: crypto.randomUUID(), name: 'Something else', weight: 3 }] }))}>+ What matters</button>
           {d.options.length < 4 && <button type="button" className="dc-ghost" onClick={() => save((x) => ({ ...x, options: [...x.options, { id: crypto.randomUUID(), name: `Option ${String.fromCharCode(65 + x.options.length)}` }] }))}>+ Option</button>}
+          <button type="button" className="dc-ghost" onClick={() => saveDecision(d, top?.name ?? '')}>💾 Save decision</button>
+          <button type="button" className="dc-ghost" onClick={() => save(() => decisionSchema.parse({ question: 'What should I decide?' }))}>＋ New</button>
         </div>
+        {saved.length > 0 && (
+          <details className="dc-saved">
+            <summary>Saved decisions ({saved.length})</summary>
+            <ul>
+              {saved.map((s) => (
+                <li key={s.at}>
+                  <button type="button" onClick={() => save(() => decisionSchema.parse(s.decision))}>
+                    <strong>{s.decision.question}</strong> <small>→ {s.winner || '—'} · {new Date(s.at).toLocaleDateString([], { day: 'numeric', month: 'short' })}</small>
+                  </button>
+                  <button type="button" aria-label="Delete" onClick={() => removeDecision(s.at)}>×</button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
       </section>
       <section className="dc-right">
         <svg ref={bars} className="dc-bars" viewBox={`0 0 420 ${res.length * 64}`} role="img" aria-label={res.map((r) => `${r.name} ${r.pct}%`).join(', ')}>

@@ -41,3 +41,10 @@
 .dc-101010 summary { cursor: pointer; font-weight: 800; }
 .dc-101010 p { margin: 6px 0 0; }
 .dc-coin-fallback span { display: grid; place-items: center; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff6c8, #e8b923 60%, #b38b00); border: 6px solid #c9a227; font: 900 3rem 'Manrope', sans-serif; color: #5a3f00; box-shadow: 0 12px 24px #b38b0055; }
+.dc-saved { margin-top: 12px; font-size: 14px; }
+.dc-saved summary { cursor: pointer; color: var(--text-secondary); }
+.dc-saved ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.dc-saved li { display: flex; gap: 6px; }
+.dc-saved li button { border: 0; background: none; color: inherit; cursor: pointer; text-align: left; }
+.dc-saved li button:first-child { flex: 1; }
+.dc-saved small { color: var(--text-muted); }
