@@ -238,3 +238,6 @@ html[data-high-contrast] :focus-visible { outline: 3px solid var(--accent-color)
 .overview-date-link { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; padding: 0; }
 .overview-date-link:hover { color: var(--accent-color); text-decoration: underline; }
 .settings-name { max-width: 180px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
+
+/* Long tables keep their column headings in view. */
+main table thead th { position: sticky; top: 0; z-index: 1; background: var(--bg-surface); }
