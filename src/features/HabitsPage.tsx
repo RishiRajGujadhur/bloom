@@ -384,7 +384,18 @@ export function HabitsPage({
                   })
                   const done = active.reduce((a, h) => a + days.filter((d) => h.dates.includes(d)).length, 0)
                   return `This week: ${Math.round((done / (active.length * 7)) * 100)}% of check-ins done`
-                })()}
+                })()}{' '}
+                <button
+                  type="button"
+                  className="hx-copy"
+                  title="Copy today's habits as a checklist"
+                  onClick={(e) => {
+                    void navigator.clipboard?.writeText(active.map((h) => `${h.dates.includes(today) ? '☑' : '☐'} ${h.title}`).join('\n'))
+                    e.currentTarget.textContent = '✓ copied'
+                  }}
+                >
+                  📋 copy today
+                </button>
               </small>
             )}
             {missedYesterday.length > 0 && habitView !== 'archived' && (

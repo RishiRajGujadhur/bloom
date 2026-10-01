@@ -247,3 +247,4 @@
   color: #2b2230;
 }
 .hx-rate { display: block; margin: 4px 0 8px; color: var(--text-muted); }
+.hx-copy { border: 0; background: none; color: var(--accent-color); cursor: pointer; font-size: inherit; text-decoration: underline; }
