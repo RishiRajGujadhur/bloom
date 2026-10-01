@@ -435,6 +435,7 @@ export function VoicePage(props: FeaturePageProps) {
         </button>
         <div className="voice-rec-side">
           <h3>{stream ? `Recording · ${fmt(elapsed)}` : 'Think out loud'}</h3>
+          {!stream && memos.length > 0 && <small className="voice-meta">{memos.length} memos · {Math.round(memos.reduce((a, m) => a + m.duration, 0) / 60)} min recorded</small>}
           {stream && subOn('voiceMemos', 'liveMeter') ? (
             <LiveMeter stream={stream} />
           ) : (
