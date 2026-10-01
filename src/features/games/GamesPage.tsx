@@ -145,6 +145,17 @@ function Stroop({ level, finish, sound }: { level: number; finish: Finish; sound
     setTrial(stroopTrial(level))
   }
   const hex = stroopColors.find((c) => c.name === trial.ink)!.hex
+  // 1–4 pick an answer.
+  const pickRef = useRef({ pick, options: trial.options })
+  pickRef.current = { pick, options: trial.options }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const o = /^[1-9]$/.test(e.key) ? pickRef.current.options[Number(e.key) - 1] : undefined
+      if (o) pickRef.current.pick(o)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   return (
     <div className="bg-play bg-stroop">
       <div className="bg-word" style={{ color: hex }} key={n}>
@@ -153,8 +164,8 @@ function Stroop({ level, finish, sound }: { level: number; finish: Finish; sound
       <div className="bg-controls">
         <p>What colour is the ink? {left}s</p>
         <div className="bg-options">
-          {trial.options.map((o) => (
-            <button key={o} type="button" className="studio-chip" onClick={() => pick(o)}>
+          {trial.options.map((o, k) => (
+            <button key={o} type="button" className="studio-chip" title={`${o} (${k + 1})`} onClick={() => pick(o)}>
               {o}
             </button>
           ))}
@@ -196,6 +207,18 @@ function Reaction({ finish, sound }: { finish: Finish; sound: boolean }) {
       finish(reactionScore(avg), Math.min(1, reactionScore(avg) / 80))
     } else setState('wait')
   }
+  // Space taps too.
+  const tapRef = useRef(tap)
+  tapRef.current = tap
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || e.repeat || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      e.preventDefault()
+      tapRef.current()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   return (
     <div className="bg-play">
       <PixiBoard size={1} cells={[state === 'go' ? 'go' : state === 'early' ? 'miss' : 'wait']} onTap={tap} label="Reaction target" />
