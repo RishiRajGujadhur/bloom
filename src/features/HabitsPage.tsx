@@ -75,6 +75,17 @@ export function HabitsPage({
   const [extras, setExtras] = useHabitExtras()
   const [habitView, setHabitView] = useState<'all' | 'left' | 'done' | 'archived'>('all')
   const [noting, setNoting] = useState<string | null>(null)
+  // 1–9 check in the habit at that position (this page stays mounted, so only while it's showing).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!/^[1-9]$/.test(e.key) || e.ctrlKey || e.metaKey || e.altKey || location.hash.slice(1).split('/')[0] !== 'habits') return
+      if ((e.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"]')) return
+      const buttons = [...document.querySelectorAll<HTMLButtonElement>('button[aria-label^="Check in: "]')].filter((b) => b.offsetParent)
+      buttons[Number(e.key) - 1]?.click()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const yesterday = (() => { const d = new Date(`${today}T12:00:00`); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10) })()
   const active = ordered(data.habits.filter((h) => !extras.archived.includes(h.id)), extras.order)
   const missedYesterday = active.filter((h) => !h.dates.includes(yesterday))
