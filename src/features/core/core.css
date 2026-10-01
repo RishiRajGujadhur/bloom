@@ -606,3 +606,9 @@
 .affirm-ticker > span:last-child { transition: opacity 400ms ease; }
 .affirm-ticker[data-shown='false'] > span:last-child { opacity: 0; }
 .affirm-ticker:hover { color: var(--accent-color); }
+.quick-log-row { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 12px 0; padding: 8px 14px; border-radius: 16px; border: 1px solid var(--border-color); background: var(--bg-surface); }
+.ql-group { display: inline-flex; gap: 4px; align-items: center; }
+.ql-group small { color: var(--text-muted); margin-right: 4px; font-size: 12px; }
+.ql-group button { border: 1px solid transparent; background: transparent; border-radius: 10px; padding: 3px 7px; cursor: pointer; font-size: 17px; color: inherit; }
+.ql-group button:hover, .ql-group button[aria-pressed='true'] { border-color: var(--accent-color); }
+.ql-group button:disabled { opacity: 0.4; }

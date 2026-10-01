@@ -31,6 +31,7 @@ import { WritingAssist } from './components/layout/WritingAssist'
 import { BedtimeNudge } from './features/sleep/BedtimeNudge'
 import { EpiphanyCapture } from './features/epiphany/EpiphanyCapture'
 import { FastGoalNudge } from './features/fasting/FastGoalNudge'
+import { QuickLogRow } from './features/core/QuickLogRow'
 import { TodayGlance } from './components/dashboard/TodayGlance'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
@@ -1383,6 +1384,7 @@ function App() {
                       {subOn('bloomCore', 'nowCard') && (
                         <NowCard data={data} setData={setData} today={today} flags={settings.features} onNavigate={jump} onPlan={() => setModal('plan')} />
                       )}
+                      <QuickLogRow mood={settings.features.moodCheckin} water={settings.features.dietTracker} />
                       {subOn('bloomCore', 'growth') && <GrowthGarden data={data} today={today} />}
                     </>
                   )}
