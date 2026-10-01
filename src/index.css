@@ -209,3 +209,6 @@ html[data-privacy-blur] body::after { content: 'Hidden · press Ctrl+Shift+L to 
 /* Notched phones (viewport-fit=cover): keep content clear of the notch and home bar. */
 .app-shell { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
 body { padding-bottom: env(safe-area-inset-bottom); }
+.settings-jump { display: flex; flex-wrap: wrap; gap: 6px; }
+.settings-jump button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
+.settings-jump button:hover { color: var(--accent-color); border-color: var(--accent-color); }

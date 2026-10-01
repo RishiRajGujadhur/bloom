@@ -898,6 +898,19 @@ export function SettingsPage({
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
       <SettingsSearch root={settingsRoot} />
+      <nav className="settings-jump" aria-label="Settings sections">
+        {[
+          ['features-heading', 'Features'],
+          ['navigation-heading', 'Navigation'],
+          ['appearance-heading', 'Appearance'],
+          ['trash-heading', 'Trash'],
+          ['json-heading', 'Data'],
+        ].map(([id, label]) => (
+          <button key={id} type="button" onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+            {label}
+          </button>
+        ))}
+      </nav>
 
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>
