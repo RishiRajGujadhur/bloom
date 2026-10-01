@@ -55,7 +55,14 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
       return n
     })
   const [tab, setTab] = useState('timeline')
-  const [sel, setSel] = useState(store.goals[0]?.id ?? '')
+  const [sel, setSelState] = useState(() => {
+    const saved = localStorage.getItem('bloom-roadmap-goal')
+    return saved && store.goals.some((g) => g.id === saved) ? saved : (store.goals[0]?.id ?? '')
+  })
+  const setSel = (id: string) => {
+    setSelState(id)
+    try { localStorage.setItem('bloom-roadmap-goal', id) } catch { /* optional */ }
+  }
   const [title, setTitle] = useState('')
   const [msTitle, setMsTitle] = useState('')
   const [msWeeks, setMsWeeks] = useState(2)
