@@ -208,6 +208,7 @@ export function TodoPage({ data, setData }: Props) {
           .filter(Boolean),
       ),
     ].slice(0, 6)
+  const [taskQuery, setTaskQuery] = useState('')
   const allTags = [...new Set(data.todos.flatMap((task) => task.tags))].sort()
   const priorityOrder = { P1: 1, P2: 2, P3: 3, P4: 4 }
   const tasks = data.todos
@@ -220,6 +221,7 @@ export function TodoPage({ data, setData }: Props) {
             : !task.done
       return (
         matchesStatus &&
+        (!taskQuery.trim() || `${task.title} ${task.tags.join(' ')}`.toLowerCase().includes(taskQuery.trim().toLowerCase())) &&
         (tagFilter === 'all' || task.tags.includes(tagFilter)) &&
         matchesPerspective(data, task, perspective)
       )
@@ -333,6 +335,9 @@ export function TodoPage({ data, setData }: Props) {
             </div>
           )}
         <small className="quick-hint">Tip: type “tomorrow p1 #home every week”, or paste a list to add many.</small>
+        {data.todos.length > 6 && (
+          <input type="search" className="todo-search" aria-label="Search tasks" placeholder="Search tasks or #tags…" value={taskQuery} onChange={(e) => setTaskQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()} />
+        )}
         {data.todos.filter((t) => t.done).length > 2 && (
           <button
             type="button"

@@ -716,3 +716,4 @@
 .focus-distract-log ul { margin: 6px 0 0; padding-left: 18px; }
 .focus-distract-log small { color: var(--text-muted); }
 .focus-note { width: 100%; margin-top: 10px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: transparent; color: var(--text-primary); font: inherit; font-size: 13px; resize: vertical; }
+.todo-search { display: block; width: 100%; margin: 8px 0 4px; padding: 7px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
