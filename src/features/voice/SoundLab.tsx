@@ -49,6 +49,16 @@ export function SoundLab({ memo, onApply, onRestore }: { memo: VoiceMemo; onAppl
   const [res, setRes] = useState<CleanResult | null>(null)
   const [busy, setBusy] = useState<{ done: number; total: number } | null>(null)
   const [showAfter, setShowAfter] = useState(true)
+  // Keyboard A/B: press A for the original, B for the cleaned version.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]')) return
+      if (e.key === 'a' || e.key === 'A') setShowAfter(false)
+      else if (e.key === 'b' || e.key === 'B') setShowAfter(true)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const [opts, setOpts] = useState({ ai: true, gate: true, strength: 0.8, level: true, trim: false })
   const [play, setPlay] = useState(0)
   const [err, setErr] = useState('')
