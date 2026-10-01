@@ -102,6 +102,21 @@ export function InkPage() {
   }
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
+      const typing = (e.target as HTMLElement | null)?.closest?.('input, textarea, select')
+      if (!typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const key = e.key.toLowerCase()
+        if (key === 'p') setTool('pen')
+        else if (key === 'h' && on('highlighter')) setTool('marker')
+        else if (key === 'e' && on('eraser')) setTool('eraser')
+        else if (key === '[') setStore((s) => ({ ...s, size: Math.max(2, s.size - 2) }))
+        else if (key === ']') setStore((s) => ({ ...s, size: Math.min(24, s.size + 2) }))
+        return
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+        e.preventDefault()
+        doRedo()
+        return
+      }
       if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return
       e.preventDefault()
       if (e.shiftKey) doRedo()
@@ -158,16 +173,16 @@ export function InkPage() {
     <div className="ink-layout">
       <div className="ink-tools studio-card">
         <div className="ink-toolrow" role="radiogroup" aria-label="Tool">
-          <button type="button" role="radio" aria-checked={tool === 'pen'} aria-label="Pen" onClick={() => setTool('pen')}>
+          <button type="button" role="radio" aria-checked={tool === 'pen'} aria-label="Pen" title="Pen (P)" onClick={() => setTool('pen')}>
             <Pen size={18} />
           </button>
           {on('highlighter') && (
-            <button type="button" role="radio" aria-checked={tool === 'marker'} aria-label="Highlighter" onClick={() => setTool('marker')}>
+            <button type="button" role="radio" aria-checked={tool === 'marker'} aria-label="Highlighter" title="Highlighter (H)" onClick={() => setTool('marker')}>
               <Highlighter size={18} />
             </button>
           )}
           {on('eraser') && (
-            <button type="button" role="radio" aria-checked={tool === 'eraser'} aria-label="Eraser" onClick={() => setTool('eraser')}>
+            <button type="button" role="radio" aria-checked={tool === 'eraser'} aria-label="Eraser" title="Eraser (E)" onClick={() => setTool('eraser')}>
               <Eraser size={18} />
             </button>
           )}
