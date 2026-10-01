@@ -10,7 +10,7 @@ export function BillsNudge() {
   const [due, setDue] = useState<{ biller: string; days: number } | null>(null)
   useEffect(() => {
     const check = () => {
-      let bills: Bill[] = []
+      let bills: Bill[]
       try {
         bills = JSON.parse(localStorage.getItem(MONEY_KEY) ?? '{}')?.bills ?? []
       } catch {
