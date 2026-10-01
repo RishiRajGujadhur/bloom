@@ -56,7 +56,18 @@ export function SleepPage() {
       <NightSky quality={stats.count ? stats.quality : 3}>
       <div className="sleep-stats">
         <Stat label="Avg sleep" value={stats.count ? `${stats.average}h` : '—'} hint={`Goal ${settings.targetHours}h`} />
-        <Stat label="Quality" value={stats.count ? `${stats.quality}/5` : '—'} />
+        <Stat
+          label="Quality"
+          value={stats.count ? `${stats.quality}/5` : '—'}
+          hint={(() => {
+            const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date))
+            const prev = sorted.slice(7, 14)
+            if (prev.length < 3) return undefined
+            const before = prev.reduce((a, e) => a + e.quality, 0) / prev.length
+            const diff = stats.quality - before
+            return Math.abs(diff) < 0.2 ? '→ steady vs last week' : diff > 0 ? `↑ ${diff.toFixed(1)} vs last week` : `↓ ${(-diff).toFixed(1)} vs last week`
+          })()}
+        />
         <Stat label="Consistency" value={stats.count ? `${stats.consistency}%` : '—'} hint="Bedtime regularity" />
         <Stat label="Sleep debt" value={stats.count ? `${stats.debt}h` : '—'} hint="Last 7 nights" />
       </div>
