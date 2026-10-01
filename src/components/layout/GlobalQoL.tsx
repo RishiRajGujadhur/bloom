@@ -63,6 +63,20 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  // Opening a collapsible section (<details>) puts the cursor in its first field.
+  useEffect(() => {
+    const onToggle = (e: Event) => {
+      const d = e.target
+      if (!(d instanceof HTMLDetailsElement) || !d.open) return
+      // Don't pull you out of a field you're already typing in elsewhere.
+      const active = document.activeElement
+      if (active?.closest('input, textarea, [contenteditable="true"]') && !d.contains(active)) return
+      const field = d.querySelector<HTMLElement>('input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([disabled]), textarea:not([disabled])')
+      field?.focus({ preventScroll: true })
+    }
+    document.addEventListener('toggle', onToggle, true)
+    return () => document.removeEventListener('toggle', onToggle, true)
+  }, [])
   // Scrolling the page over a focused number field shouldn't silently change its value.
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
