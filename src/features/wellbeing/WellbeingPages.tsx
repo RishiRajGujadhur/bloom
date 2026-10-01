@@ -565,6 +565,12 @@ export function MoodPage() {
             </p>
           )
         })()}
+        {(() => {
+          const month = entries.filter((e) => new Date(e.at).getMonth() === new Date().getMonth() && new Date(e.at).getFullYear() === new Date().getFullYear())
+          const counts = month.flatMap((e) => e.emotions ?? []).reduce<Record<string, number>>((a, w) => ({ ...a, [w]: (a[w] ?? 0) + 1 }), {})
+          const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]
+          return top && top[1] > 1 ? <p className="wb-muted">Most common feeling this month: <strong>{top[0]}</strong> ({top[1]}×)</p> : null
+        })()}
         <ol className="wb-week">
           {week.map((day) => {
             const mood = day.mood === null ? null : moods[Math.round(day.mood) - 1]
