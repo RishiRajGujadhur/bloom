@@ -1430,6 +1430,25 @@ function App() {
                         />
                         <QuickLogRow mood={settings.features.moodCheckin} water={settings.features.dietTracker} />
                       </div>
+                      {(() => {
+                        const next = data.calendarBlocks.filter((b) => new Date(b.start).getTime() > Date.now() && new Date(b.start).toDateString() === new Date().toDateString()).sort((a, b) => a.start.localeCompare(b.start))[0]
+                        const overdue = data.todos.filter((x) => !x.done && x.due < today).length
+                        if (!next && !overdue) return null
+                        return (
+                          <div className="home-continue" aria-label="Coming up">
+                            {next && (
+                              <button type="button" onClick={() => jump('calendar')}>
+                                🗓 {new Date(next.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} · {data.todos.find((x) => x.id === next.taskId)?.title ?? next.title ?? 'Block'}
+                              </button>
+                            )}
+                            {overdue > 0 && (
+                              <button type="button" onClick={() => jump('todos')}>
+                                ⚠️ {overdue} overdue {overdue === 1 ? 'task' : 'tasks'}
+                              </button>
+                            )}
+                          </div>
+                        )
+                      })()}
                       {readRecentPages().filter((p) => p !== 'overview' && pageEnabled(p)).length > 0 && (
                         <div className="home-continue" aria-label="Continue where you left off">
                           <span>Continue</span>
