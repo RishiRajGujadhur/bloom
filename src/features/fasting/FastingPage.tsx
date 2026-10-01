@@ -10,6 +10,7 @@ import { burst } from '../../components/ui/celebrate'
 import { FAST_KEY, endMessage, fmtH, hours, perDay, protocols, stageAt, stages, stats, type Fast, type FastStore } from './fastingModel'
 import { StageTrack } from '../showcase/StageTrack'
 import { usePageActions } from '../../components/ui/PageMenu'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './fasting.css'
 
 const on = (id: string) => subOn('fasting', id)
@@ -106,6 +107,7 @@ export function FastingPage() {
     setEnded({ ...ended, feeling, note })
   }
   const st = stats(store.history)
+  useTabTitle(cur ? `⏳ ${fmtH(h)}` : '', 'Fasting', 'fasting')
 
   usePageActions([cur ? { id: 'fs-end', label: 'End this fast', icon: '🍽️', run: end } : { id: 'fs-start', label: `Start a ${protocol.label} fast`, icon: '⏳', run: start }])
   const fast = () => (
@@ -154,6 +156,7 @@ export function FastingPage() {
               <Stat value={new Date(cur.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} label="started" />
               <Stat value={new Date(cur.start + cur.goal * 3_600_000).toLocaleTimeString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' })} label="goal at" />
               <Stat value={h >= cur.goal ? 'Reached' : fmtH(cur.goal - h)} label="to go" />
+              <Stat value={`${Math.min(100, Math.round((h / cur.goal) * 100))}%`} label="done" />
             </div>
             <button ref={btn} type="button" className="studio-go" onClick={end}>
               <Square size={16} /> {h >= cur.goal ? 'End fast' : 'End now'}
