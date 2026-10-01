@@ -248,3 +248,4 @@ textarea, .ProseMirror, [contenteditable='true'] { overscroll-behavior: contain;
 .storage-bar { display: block; height: 8px; border-radius: 8px; background: var(--border-color); overflow: hidden; }
 .storage-bar i { display: block; height: 100%; background: var(--accent-color); }
 .storage-meter ul { margin: 6px 0 0; padding-left: 18px; }
+.settings-css { width: 100%; margin-top: 8px; font-family: ui-monospace, monospace; font-size: 12px; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }

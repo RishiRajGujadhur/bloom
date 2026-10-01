@@ -110,7 +110,7 @@ import {
 import { Menu } from 'lucide-react'
 import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
-import { ShowMore, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
+import { ShowMore, applyCustomCss, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
 import { DataReset } from './settings/DataReset'
 import { StorageMeter } from './settings/StorageMeter'
@@ -706,6 +706,33 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
+      <details className={styles.subOption}>
+        <summary>
+          <strong>Custom CSS (advanced)</strong>
+        </summary>
+        <textarea
+          className="settings-css"
+          rows={5}
+          spellCheck={false}
+          placeholder={'/* e.g. */\n.bloom-heading { border-radius: 4px; }'}
+          aria-label="Custom CSS"
+          defaultValue={(() => {
+            try {
+              return localStorage.getItem('bloom-custom-css') ?? ''
+            } catch {
+              return ''
+            }
+          })()}
+          onBlur={(e) => {
+            try {
+              localStorage.setItem('bloom-custom-css', e.currentTarget.value)
+            } catch {
+              /* optional */
+            }
+            applyCustomCss()
+          }}
+        />
+      </details>
       <div className={styles.subOption}>
         <span>
           <strong>Settings file</strong>

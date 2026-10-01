@@ -195,6 +195,24 @@ export function setCompactTitles(on: boolean) {
   applyCompactTitles()
 }
 
+/** Settings → Custom CSS: a <style> tag kept in sync with the saved snippet. */
+export function applyCustomCss() {
+  let css = ''
+  try {
+    css = localStorage.getItem('bloom-custom-css') ?? ''
+  } catch {
+    /* none */
+  }
+  let tag = document.getElementById('bloom-custom-css') as HTMLStyleElement | null
+  if (!css) return tag?.remove()
+  if (!tag) {
+    tag = document.createElement('style')
+    tag.id = 'bloom-custom-css'
+    document.head.appendChild(tag)
+  }
+  tag.textContent = css
+}
+
 /** Settings → "Follow system light/dark" (off by default). */
 const SYSTEM_THEME_KEY = 'bloom-follow-system-theme'
 export const followSystemTheme = () => {
