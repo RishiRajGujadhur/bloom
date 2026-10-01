@@ -42,7 +42,9 @@ export function MindMapPage() {
       const first: MindMap = { id: crypto.randomUUID(), title: 'My goal', md: templates[0].md, updatedAt: Date.now() }
       return { ...s, maps: [first], current: first.id }
     }
-    return s
+    // Deep link: #mindmaps/<id> opens that map.
+    const linked = decodeURIComponent(location.hash.match(/^#mindmaps\/(.+)$/)?.[1] ?? '')
+    return linked && s.maps.some((m) => m.id === linked) ? { ...s, current: linked } : s
   })
   const setStore = (fn: (s: MapStore) => MapStore) =>
     setStoreState((c) => {
@@ -69,6 +71,10 @@ export function MindMapPage() {
   const view = useRef<Markmap | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const map = store.maps.find((m) => m.id === store.current) ?? store.maps[0]
+  // Keep the URL pointing at the open map so it can be bookmarked or shared between tabs.
+  useEffect(() => {
+    if (location.hash.slice(1).split('/')[0] === 'mindmaps') history.replaceState(null, '', `#mindmaps/${encodeURIComponent(map.id)}`)
+  }, [map.id])
   const pages = useMemo(() => {
     try {
       return (JSON.parse(localStorage.getItem(DAYBOOK_STORAGE_KEY) ?? '[]') as { id: string; modeTitle: string; updatedAt: string; content: unknown }[]).slice(-12).reverse()
