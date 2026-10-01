@@ -167,6 +167,7 @@ function SleepLog({
   onSave: (entry: SleepEntry) => void
   settings: SleepSettings
 }) {
+  const [night, setNight] = useState(dayKey())
   const [bedtime, setBedtime] = useState(settings.bedtime)
   const [wake, setWake] = useState('06:30')
   const [quality, setQuality] = useState<SleepEntry['quality']>(4)
@@ -179,12 +180,17 @@ function SleepLog({
       className="sleep-card sleep-log"
       onSubmit={(e) => {
         e.preventDefault()
-        onSave({ id: crypto.randomUUID(), date: dayKey(), bedtime, wake, quality, factors })
+        onSave({ id: crypto.randomUUID(), date: night, bedtime, wake, quality, factors })
         setSaved(true)
         setLastQuality(quality)
         setFactors([])
       }}
     >
+      <label className="sleep-night">
+        Woke up on
+        <input type="date" value={night} max={dayKey()} onChange={(e) => setNight(e.target.value || dayKey())} />
+        {night !== dayKey() && <small> · saving replaces that night</small>}
+      </label>
       <div className="sleep-times">
         <label>
           <Moon size={18} aria-hidden="true" /> Bedtime
