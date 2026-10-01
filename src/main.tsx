@@ -57,3 +57,20 @@ installTitleReveal()
 installCardEntrance()
 installFunLayer()
 installAppHealth()
+
+// Dev only: log Largest Contentful Paint and layout shifts to spot slow or jumpy pages.
+if (import.meta.env.DEV && typeof PerformanceObserver !== 'undefined') {
+  try {
+    new PerformanceObserver((list) => {
+      const last = list.getEntries().at(-1)
+      if (last) console.debug(`[vitals] LCP ${Math.round(last.startTime)} ms`)
+    }).observe({ type: 'largest-contentful-paint', buffered: true })
+    let cls = 0
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) if (!e.hadRecentInput) cls += e.value
+      if (cls > 0.1) console.debug(`[vitals] CLS ${cls.toFixed(3)} on ${location.hash || '#overview'}`)
+    }).observe({ type: 'layout-shift', buffered: true })
+  } catch {
+    /* unsupported entry types */
+  }
+}
