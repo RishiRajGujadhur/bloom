@@ -36,6 +36,7 @@ import { BillsNudge } from './features/money/BillsNudge'
 import { PeopleNudge } from './features/people/PeopleNudge'
 import { QuickLogRow, TodayRing } from './features/core/QuickLogRow'
 import { TodayGlance } from './components/dashboard/TodayGlance'
+import { WidgetBoard } from './components/dashboard/WidgetBoard'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
 import './components/layout/shortcuts.css'
 import gsap from 'gsap'
@@ -1492,6 +1493,7 @@ function App() {
                     />
                   )}
                   {active === 'overview' && <TodayGlance data={data} today={today} onNavigate={jump} />}
+                  {active === 'overview' && <WidgetBoard onNavigate={jump} enabled={pageEnabled} />}
                   {active === 'overview' && modules.stats && !simpleHome && (
                     <>
                       <StatsRow data={data} today={today} onNavigate={jump} />

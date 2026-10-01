@@ -15,6 +15,13 @@ export interface ThemeSettings {
   customAccent?: string
   /** A font family installed on this computer (Local Font Access); used when fontId is 'local'. */
   localFont?: string
+  customColors?: Record<string, string>
+}
+
+export const COLOR_TOKENS = ['--bg-primary', '--bg-surface', '--bg-sidebar', '--accent-color', '--text-primary', '--text-secondary', '--border-color'] as const
+export function safeColors(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
+  return Object.fromEntries(Object.entries(value).filter(([key, color]) => COLOR_TOKENS.includes(key as typeof COLOR_TOKENS[number]) && isHexColor(color)))
 }
 
 export interface ThemeDefinition {
@@ -259,6 +266,7 @@ export function getStoredTheme(): ThemeSettings {
           ? { customAccent: parsed.customAccent }
           : {}),
         ...(isFamily(parsed.localFont) ? { localFont: parsed.localFont } : {}),
+        customColors: safeColors(parsed.customColors),
       }
     } catch {
       // fall through to legacy migration / defaults
@@ -312,12 +320,17 @@ export function applyTheme(settings: ThemeSettings): void {
   } else {
     root.style.removeProperty('--accent-color')
   }
+  const colors = safeColors(settings.customColors)
+  for (const token of COLOR_TOKENS) {
+    if (colors[token]) root.style.setProperty(token, colors[token])
+    else root.style.removeProperty(token)
+  }
 
   try {
     const base: ThemeSettings = isHexColor(settings.customAccent)
       ? { themeId, fontId, customAccent: settings.customAccent.trim() }
       : { themeId, fontId }
-    const persisted: ThemeSettings = local ? { ...base, localFont: local } : base
+    const persisted: ThemeSettings = { ...base, ...(local ? { localFont: local } : {}), customColors: colors }
     localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(persisted))
   } catch {
     /* storage unavailable — theme still applied for this session */

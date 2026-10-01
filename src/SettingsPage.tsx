@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import i18n from './i18n'
 import { ThemePicker } from './components/settings/ThemePicker'
 import type { ThemeSettings } from './utils/themeEngine'
+import { ThemeMarketplace } from './components/ThemeMarketplace'
 import styles from './settings.module.css'
 import { SETTINGS_STORAGE_KEY } from './settingsKey'
 import { pageOptions, subFeatures, type SubFeature } from './features/subFeatures'
@@ -1532,6 +1533,7 @@ export function SettingsPage({
           {t('settings.appearanceHeading')}
         </h2>
         <ThemePicker settings={theme} onChange={setTheme} />
+        <ThemeMarketplace theme={theme} setTheme={setTheme} />
         <ComfortCard />
         <AvatarPicker />
       </section>
