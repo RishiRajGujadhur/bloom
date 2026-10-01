@@ -259,14 +259,16 @@ export function AdaptiveEditor({
       : mode.editorType === 'split-pane'
         ? 2
         : 1
+  const greet = (i18n.resolvedLanguage ?? 'en').startsWith('en') ? `${['Good night', 'Good morning', 'Good afternoon', 'Good evening'][Math.floor(new Date().getHours() / 6)]}. ` : ''
   const placeholder = useMemo(
     () =>
-      mode.editorType === 'bujo'
+      greet +
+      (mode.editorType === 'bujo'
         ? t('journal.startRapid')
         : mode.editorType === 'focus'
           ? t('journal.oneThing')
-          : t('journal.holdThought'),
-    [mode.editorType, t],
+          : t('journal.holdThought')),
+    [mode.editorType, t, greet],
   )
   const update = (key: string, value: DocumentValue) => {
     setDirty(true)
