@@ -234,10 +234,26 @@ export function MoneyPage() {
         <h3>Where it goes · {new Date(`${today}T12:00:00`).toLocaleDateString([], { month: 'long' })}</h3>
         {(() => {
           const big = store.txns.filter((x) => !x.income && x.date.startsWith(month)).sort((a, b) => b.amount - a.amount)[0]
+          // Pace: this month so far vs the same days of last month.
+          const dayN = today.slice(8)
+          const prevD = new Date(`${today}T12:00:00`)
+          prevD.setMonth(prevD.getMonth() - 1)
+          const prevMonth = prevD.toISOString().slice(0, 7)
+          const spent = (m: string) => store.txns.filter((x) => !x.income && x.date.startsWith(m) && x.date.slice(8) <= dayN).reduce((a, x) => a + x.amount, 0)
+          const now = spent(month)
+          const before = spent(prevMonth)
+          const pace = before > 0 ? Math.round(((now - before) / before) * 100) : null
           return big ? (
+            <>
+            {pace !== null && (
+              <p className="studio-empty">
+                By day {Number(dayN)} you’ve spent {fmt(now)} — {Math.abs(pace) < 3 ? 'about the same as' : `${Math.abs(pace)}% ${pace > 0 ? 'more' : 'less'} than`} last month.
+              </p>
+            )}
             <p className="studio-empty">
               Biggest spend: <strong>{fmt(big.amount)}</strong> {big.place ? `at ${big.place}` : `on ${categoryOf(big.category).name}`} ({big.date.slice(8)}/{big.date.slice(5, 7)})
             </p>
+            </>
           ) : null
         })()}
         {byCategory(store.txns, month).length ? (
