@@ -862,6 +862,17 @@ export function GratitudePage() {
           )}
           <p className="wb-muted">
             <Heart size={14} aria-hidden="true" /> {inJar.length} / {JAR_CAPACITY}
+            {(() => {
+              const days = new Set(entries.map((e) => new Date(e.at).toDateString()))
+              const d = new Date()
+              if (!days.has(d.toDateString())) d.setDate(d.getDate() - 1)
+              let n = 0
+              while (days.has(d.toDateString())) {
+                n++
+                d.setDate(d.getDate() - 1)
+              }
+              return n > 1 ? ` · 🔥 ${n}-day gratitude streak` : ''
+            })()}
           </p>
           {added > 0 && (
             <NextStep
