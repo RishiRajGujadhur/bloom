@@ -244,3 +244,7 @@ main table thead th { position: sticky; top: 0; z-index: 1; background: var(--bg
 
 /* Scrolling inside an editor never drags the page or triggers pull-to-refresh. */
 textarea, .ProseMirror, [contenteditable='true'] { overscroll-behavior: contain; }
+.storage-meter { display: grid; gap: 6px; margin: 16px 0 0; font-size: 13px; color: var(--text-secondary); }
+.storage-bar { display: block; height: 8px; border-radius: 8px; background: var(--border-color); overflow: hidden; }
+.storage-bar i { display: block; height: 100%; background: var(--accent-color); }
+.storage-meter ul { margin: 6px 0 0; padding-left: 18px; }

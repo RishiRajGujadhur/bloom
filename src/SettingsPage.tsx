@@ -113,6 +113,7 @@ import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
 import { ShowMore, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
 import { DataReset } from './settings/DataReset'
+import { StorageMeter } from './settings/StorageMeter'
 import { InstallApp } from './settings/InstallApp'
 import type { LucideIcon } from 'lucide-react'
 
@@ -1288,6 +1289,7 @@ export function SettingsPage({
       )}
       <section className={styles.card}>
         <DataReset />
+        <StorageMeter />
         <p className="settings-build">
           {(() => {
             const last = Number(localStorage.getItem('bloom-last-backup'))
