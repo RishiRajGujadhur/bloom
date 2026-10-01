@@ -305,6 +305,14 @@ export function CardsPage() {
           <Stat value={st.fresh} label="new" />
           <Stat value={st.young} label="learning" />
           <Stat value={st.mature} label="mature (21+ days)" />
+        <Stat
+          value={(() => {
+            const recent = store.log.slice(-30)
+            const n = recent.reduce((a, l) => a + l.count, 0)
+            return n ? `${Math.round((recent.reduce((a, l) => a + l.correct, 0) / n) * 100)}%` : '—'
+          })()}
+          label="recalled (30 days)"
+        />
         </div>
         <p className="studio-empty">
           Accuracy today: {reviewedToday ? `${Math.round(((store.log.find((l) => l.date === today)?.correct ?? 0) / reviewedToday) * 100)}%` : '—'}
