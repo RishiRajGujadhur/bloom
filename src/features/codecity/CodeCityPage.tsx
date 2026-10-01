@@ -1,3 +1,4 @@
+import { loadHandle, regrant, saveHandle } from '../../platform/handleStore'
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { mean } from 'simple-statistics'
@@ -89,9 +90,13 @@ export function CodeCityPage() {
     })
   }, [])
 
-  const openRepo = async () => {
+  const [lastRepo, setLastRepo] = useState<FileSystemDirectoryHandle | null>(null)
+  useEffect(() => {
+    void loadHandle<FileSystemDirectoryHandle>('codecity-repo').then(setLastRepo)
+  }, [])
+  const openRepo = async (given?: FileSystemDirectoryHandle) => {
     setErr('')
-    const handle = await pickDirectory()
+    const handle = given ?? (await pickDirectory())
     if (!handle) return
     try {
       const fs = fsaFs(handle)
@@ -111,6 +116,8 @@ export function CodeCityPage() {
       setCommits(cs)
       setFiles(fileStats(cs, sizes))
       setName(handle.name)
+      void saveHandle('codecity-repo', handle)
+      setLastRepo(handle)
     } catch (e) {
       setErr(`That folder doesn’t look like a git repository (${(e as Error).message}). Pick the folder that contains .git.`)
     } finally {
@@ -136,6 +143,7 @@ export function CodeCityPage() {
         </header>
         <div className="cc-actions">
           <button type="button" className="cc-cta" onClick={() => void openRepo()}><FolderGit2 size={16} /> Open a local repository</button>
+            {lastRepo && <button type="button" className="cc-cta" onClick={() => void regrant(lastRepo).then((ok) => { if (ok) void openRepo(lastRepo) })}>↻ Reopen {lastRepo.name}</button>}
           <button type="button" className="cc-ghost" onClick={sample}>Try the sample city</button>
           {progress && <span className="cc-prog">Walking history on {progress.cores || '…'} cores · {progress.done}/{progress.total} batches</span>}
         </div>
