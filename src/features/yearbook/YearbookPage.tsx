@@ -1,5 +1,5 @@
 import { subOn } from '../subFeatures'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BookMarked, Download, Loader2 } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
 import { DAYBOOK_STORAGE_KEY } from '../../components/daybook/storage'
@@ -30,15 +30,29 @@ const chapterLabels: Record<keyof YearbookChapters, string> = {
 export function YearbookPage({ data, today }: FeaturePageProps) {
   const thisYear = Number(today.slice(0, 4))
   const [year, setYear] = useState(thisYear)
-  const [title, setTitle] = useState('My year in Bloom')
-  const [author, setAuthor] = useState('')
-  const [chapters, setChapters] = useState<YearbookChapters>({
+  // Title, author and chapter picks are remembered between visits.
+  const saved = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('bloom-yearbook-opts') ?? 'null') as { title?: string; author?: string; chapters?: YearbookChapters } | null
+    } catch {
+      return null
+    }
+  })()
+  const [title, setTitle] = useState(saved?.title ?? 'My year in Bloom')
+  const [author, setAuthor] = useState(() => {
+    if (saved?.author) return saved.author
+    try { return localStorage.getItem('bloom-name') ?? '' } catch { return '' }
+  })
+  const [chapters, setChapters] = useState<YearbookChapters>(saved?.chapters ?? {
     stats: true,
     moods: true,
     daybook: true,
     journal: true,
     gratitude: true,
   })
+  useEffect(() => {
+    try { localStorage.setItem('bloom-yearbook-opts', JSON.stringify({ title, author, chapters })) } catch { /* optional */ }
+  }, [title, author, chapters])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const book = useMemo(
