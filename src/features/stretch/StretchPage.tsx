@@ -105,7 +105,21 @@ export function StretchPage() {
       return n
     })
   const [tab, setTab] = useState('session')
-  const [routine, setRoutine] = useState(routines[0])
+  const [routine, setRoutineState] = useState(() => {
+    try {
+      return routines.find((r) => r.id === localStorage.getItem('bloom-stretch-last')) ?? routines[0]
+    } catch {
+      return routines[0]
+    }
+  })
+  const setRoutine = (r: (typeof routines)[number]) => {
+    setRoutineState(r)
+    try {
+      if (r.id !== 'custom') localStorage.setItem('bloom-stretch-last', r.id)
+    } catch {
+      /* optional */
+    }
+  }
   const [areas, setAreas] = useState<Area[]>([])
   const [i, setI] = useState(0)
   const [playing, setPlaying] = useState(false)
