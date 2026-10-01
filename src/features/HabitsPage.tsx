@@ -79,7 +79,7 @@ export function HabitsPage({
   const active = ordered(data.habits.filter((h) => !extras.archived.includes(h.id)), extras.order)
   const missedYesterday = active.filter((h) => !h.dates.includes(yesterday))
   const leftToday = active.filter((h) => !h.dates.includes(today)).length
-  useTabTitle(active.length ? (leftToday ? `${leftToday} habits left` : 'All habits done ✓') : '', 'Habits')
+  useTabTitle(active.length ? (leftToday ? `${leftToday} habits left` : 'All habits done ✓') : '', 'Habits', 'habits')
   const shown = habitView === 'archived'
     ? data.habits.filter((h) => extras.archived.includes(h.id))
     : active.filter((h) => habitView === 'all' || (habitView === 'done') === h.dates.includes(today))

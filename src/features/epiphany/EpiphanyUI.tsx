@@ -162,7 +162,7 @@ export function EpiphaniesPage({ today }: { today: string }) {
   const [text, setText] = useState('')
   const [onlyStarred, setOnlyStarred] = useState(false)
   const dueCount = list.filter((e) => e.due <= today).length
-  useTabTitle(dueCount ? `${dueCount} to review` : '', 'Epiphanies')
+  useTabTitle(dueCount ? `${dueCount} to review` : '', 'Epiphanies', 'epiphanies')
   const sorted = [...list]
     .filter((e) => !onlyStarred || e.starred)
     .sort((a, b) => Number(Boolean(b.starred)) - Number(Boolean(a.starred)) || a.due.localeCompare(b.due))

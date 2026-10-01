@@ -275,7 +275,7 @@ export function TodoPage({ data, setData }: Props) {
     }))
   const overdue = tasks.filter((t) => !t.done && t.due < dayKey())
   const dueToday = data.todos.filter((t) => !t.done && t.due <= dayKey()).length
-  useTabTitle(dueToday ? `${dueToday} to do today` : '', 'To-dos')
+  useTabTitle(dueToday ? `${dueToday} to do today` : '', 'To-dos', 'todos')
   return (
     <section id="todo-page" className="task-workspace planning-workspace">
       <TodosQuick data={data} setData={setData} />

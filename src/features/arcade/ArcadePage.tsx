@@ -15,6 +15,12 @@ export function ArcadePage() {
   const grid = useRef<HTMLDivElement>(null)
   const [q, setQ] = useState('')
   const [tech, setTech] = useState('all')
+  const [favs, setFavs] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('bloom-arcade-favs') ?? '[]') } catch { return [] } })
+  const toggleFav = (id: string) => setFavs((list) => {
+    const next = list.includes(id) ? list.filter((x) => x !== id) : [...list, id]
+    try { localStorage.setItem('bloom-arcade-favs', JSON.stringify(next)) } catch { /* optional */ }
+    return next
+  })
   const techs = ['all', 'Three.js', 'Babylon.js', 'PlayCanvas', 'p5.js', 'matter-js', 'SVG']
   useEffect(() => {
     const on = () => setOpen(fromHash())
@@ -57,14 +63,21 @@ export function ArcadePage() {
         </div>
       </div>
       <div className="ar-grid" ref={grid}>
-        {GAMES.filter((g) => (tech === 'all' || g.tech.includes(tech)) && (!q.trim() || `${g.title} ${g.blurb}`.toLowerCase().includes(q.trim().toLowerCase()))).map((g) => (
-          <button key={g.id} type="button" className="ar-card" style={{ '--ar-hue': g.hue } as React.CSSProperties} onClick={() => go(g.id)}>
-            <svg viewBox="0 0 64 64" aria-hidden="true" dangerouslySetInnerHTML={{ __html: g.art }} />
-            <span className="ar-n">#{g.n}</span>
-            <b>{g.title}</b>
-            <small>{g.blurb}</small>
-            <em>{g.tech}{best(g.id) ? ` · best ${best(g.id)}` : ''}</em>
-          </button>
+        {GAMES.filter((g) => (tech === 'all' || g.tech.includes(tech)) && (!q.trim() || `${g.title} ${g.blurb}`.toLowerCase().includes(q.trim().toLowerCase())))
+          .sort((a, b) => Number(favs.includes(b.id)) - Number(favs.includes(a.id)))
+          .map((g) => (
+          <div key={g.id} className="ar-wrap">
+            <button type="button" className="ar-card" style={{ '--ar-hue': g.hue } as React.CSSProperties} onClick={() => go(g.id)}>
+              <svg viewBox="0 0 64 64" aria-hidden="true" dangerouslySetInnerHTML={{ __html: g.art }} />
+              <span className="ar-n">#{g.n}</span>
+              <b>{g.title}</b>
+              <small>{g.blurb}</small>
+              <em>{g.tech}{best(g.id) ? ` · best ${best(g.id)}` : ''}</em>
+            </button>
+            <button type="button" className="ar-fav" aria-pressed={favs.includes(g.id)} aria-label={favs.includes(g.id) ? `Unfavourite ${g.title}` : `Favourite ${g.title}`} onClick={() => toggleFav(g.id)}>
+              {favs.includes(g.id) ? '★' : '☆'}
+            </button>
+          </div>
         ))}
       </div>
     </section>

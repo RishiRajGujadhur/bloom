@@ -89,7 +89,7 @@ export function PeoplePage() {
   const H = rows * 150 + 30
   const sugg = suggestions(people).slice(0, 4)
   const overdueCount = people.filter((p) => daysSince(p) > p.every).length
-  useTabTitle(overdueCount ? `${overdueCount} to reach out to` : '', 'People')
+  useTabTitle(overdueCount ? `${overdueCount} to reach out to` : '', 'People', 'people')
   const birthdays = people.map((p) => ({ p, d: nextBirthday(p) })).filter((x) => x.d).sort((a, b) => a.d!.getTime() - b.d!.getTime()).slice(0, 4)
 
   // Plants sway gently.

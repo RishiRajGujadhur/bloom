@@ -69,3 +69,7 @@
 .ar-recent button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
 /* 100 cards: let the browser skip off-screen ones until they scroll near. */
 .ar-card { content-visibility: auto; contain-intrinsic-size: auto 190px; }
+.ar-wrap { position: relative; content-visibility: auto; contain-intrinsic-size: auto 190px; }
+.ar-wrap .ar-card { width: 100%; height: 100%; content-visibility: visible; }
+.ar-fav { position: absolute; top: 8px; right: 10px; border: 0; background: none; cursor: pointer; font-size: 16px; color: #d4a017; opacity: 0.5; }
+.ar-fav[aria-pressed='true'], .ar-wrap:hover .ar-fav { opacity: 1; }
