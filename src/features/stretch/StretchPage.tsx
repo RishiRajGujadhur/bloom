@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useKeepAwake } from '../../platform/presence'
+import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { Armchair, BellRing, HeartPulse, Pause, Play, PersonStanding, SkipForward, Sparkles } from 'lucide-react'
 import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeStore } from '../../components/studio/Studio'
@@ -168,6 +169,23 @@ export function StretchPage() {
     setPlaying(false)
     setTab('session')
   }
+  useLeaveGuard(playing && !finished)
+  // Space plays or pauses; N moves to the next stretch.
+  const keysRef = useRef({ playing, finished, next, setPlaying })
+  keysRef.current = { playing, finished, next, setPlaying }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      const k = keysRef.current
+      if (k.finished) return
+      if (e.code === 'Space') {
+        e.preventDefault()
+        k.setPlaying(!k.playing)
+      } else if (e.key.toLowerCase() === 'n') k.next()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const saveCheckIn = (a: number) => {
     setAfter(a)
     setStore((s) => ({ ...s, sessions: [...s.sessions, { at: Date.now(), routine: routine.name, before, after: a }].slice(-100) }))
