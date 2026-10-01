@@ -158,7 +158,7 @@ export function ReceiptLens({ code, onAdd }: { code: string; onAdd: (txns: Txn[]
           {items.map((it) => (
             <li key={it.id} className={`rl-card ${it.status}`}>
               <div className="rl-img" data-matrix-native>
-                <img src={it.url} alt={`Receipt ${it.name}`} />
+                <img loading="lazy" decoding="async" src={it.url} alt={`Receipt ${it.name}`} />
                 {(it.status === 'reading' || it.status === 'queued') && <div className="rl-laser" aria-hidden="true" />}
                 <Highlights item={it} />
               </div>

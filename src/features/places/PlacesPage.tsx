@@ -97,7 +97,7 @@ function ShopReceipts({ shop, money }: { shop: Shop; money: MoneyStore }) {
     })
     return () => { off = true; made.forEach((u) => URL.revokeObjectURL(u)) }
   }, [shop, money.txns])
-  return urls.length ? <div className="lm-receipts">{urls.map((u) => <img key={u} src={u} alt="Receipt" />)}</div> : null
+  return urls.length ? <div className="lm-receipts">{urls.map((u) => <img loading="lazy" decoding="async" key={u} src={u} alt="Receipt" />)}</div> : null
 }
 
 /**

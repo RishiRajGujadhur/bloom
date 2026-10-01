@@ -34,7 +34,7 @@ export function ImageNode({ id, data, selected }: NodeProps<CanvasNode>) {
       <NodeResizer isVisible={selected} minWidth={160} minHeight={140} keepAspectRatio color="var(--accent-color)" />
       <Ports />
       <Head label="Image" onRemove={() => remove(id)} />
-      {typeof data.src === 'string' && <img src={data.src} alt={String(data.caption ?? 'Board image')} draggable={false} />}
+      {typeof data.src === 'string' && <img loading="lazy" decoding="async" src={data.src} alt={String(data.caption ?? 'Board image')} draggable={false} />}
       <input className="nodrag" aria-label="Image caption" placeholder="Add a caption" value={String(data.caption ?? '')} onChange={(e) => update(id, { caption: e.target.value })} />
     </figure>
   )

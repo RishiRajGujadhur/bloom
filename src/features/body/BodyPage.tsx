@@ -198,7 +198,7 @@ export function BodyPage() {
         <Rail label="Progress photos">
           {photos.map((p) => (
             <figure key={p.id} role="listitem" className="bd-photo" data-blur={blurred}>
-              <img src={urls.get(p.id)} alt={`Progress photo ${p.date}`} />
+              <img loading="lazy" decoding="async" src={urls.get(p.id)} alt={`Progress photo ${p.date}`} />
               <figcaption>
                 {p.date}
                 {on('compare') && (

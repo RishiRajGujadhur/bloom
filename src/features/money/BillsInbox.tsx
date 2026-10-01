@@ -43,7 +43,7 @@ function ScanStage({ scan }: { scan: Scan }) {
   return (
     <div className="bi-stage" data-matrix-native>
       <div className="bi-photo">
-        <img src={scan.photo} alt="Photo of the letter" />
+        <img loading="lazy" decoding="async" src={scan.photo} alt="Photo of the letter" />
         <svg viewBox={`0 0 ${scan.size.w} ${scan.size.h}`} preserveAspectRatio="none" aria-hidden="true">
           {pts && <polygon ref={poly} points={pts} className="bi-poly" vectorEffect="non-scaling-stroke" />}
           <g ref={dots}>{scan.corners?.map((c, i) => <circle key={i} cx={c.x} cy={c.y} r={Math.max(8, scan.size.w / 90)} className="bi-corner" />)}</g>
@@ -52,7 +52,7 @@ function ScanStage({ scan }: { scan: Scan }) {
       </div>
       <div className="bi-arrow" aria-hidden="true">→</div>
       <div className="bi-flat">
-        {scan.page ? <img ref={flat} src={scan.page} alt="Flattened page" /> : <span>{scan.stage === 'error' ? scan.error : 'Finding the page…'}</span>}
+        {scan.page ? <img loading="lazy" decoding="async" ref={flat} src={scan.page} alt="Flattened page" /> : <span>{scan.stage === 'error' ? scan.error : 'Finding the page…'}</span>}
         {scan.stage === 'reading' && <div className="bi-scan" />}
       </div>
     </div>

@@ -40,7 +40,7 @@ export function JournalMediaGrid({
       {media.map((item) =>
         item.kind === 'photo' ? (
           <figure key={item.id}>
-            <img src={item.url} alt={item.name || t('journal.photoLabel')} />
+            <img loading="lazy" decoding="async" src={item.url} alt={item.name || t('journal.photoLabel')} />
             <figcaption>
               <ImageIcon size={12} /> {item.name}
             </figcaption>
