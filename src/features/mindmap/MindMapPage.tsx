@@ -2,7 +2,7 @@ import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Transformer } from 'markmap-lib'
 import { Markmap } from 'markmap-view'
-import { BookOpen, Download, Expand, ImageDown, Maximize, Network, Plus, Shrink, Trash2 } from 'lucide-react'
+import { BookOpen, Copy, Download, Expand, ImageDown, Maximize, Network, Plus, Shrink, Trash2 } from 'lucide-react'
 import { Rail, Slider, Studio, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { journalText } from '../../search/db'
@@ -272,6 +272,19 @@ export function MindMapPage() {
                   <span aria-hidden="true">🗺️</span>
                   <strong>{m.title}</strong>
                   <small>{new Date(m.updatedAt).toLocaleDateString()}</small>
+                </button>
+                <button
+                  type="button"
+                  className="yg-remove"
+                  style={{ right: store.maps.length > 1 ? 28 : undefined }}
+                  aria-label={`Duplicate ${m.title}`}
+                  title="Duplicate"
+                  onClick={() => {
+                    const copy: MindMap = { ...m, id: crypto.randomUUID(), title: `${m.title} (copy)`, updatedAt: Date.now() }
+                    setStore((s) => ({ ...s, maps: [...s.maps, copy], current: copy.id }))
+                  }}
+                >
+                  <Copy size={13} />
                 </button>
                 {store.maps.length > 1 && (
                   <button type="button" className="yg-remove" aria-label={`Delete ${m.title}`} onClick={() => setStore((s) => ({ ...s, maps: s.maps.filter((x) => x.id !== m.id), current: s.current === m.id ? s.maps[0].id : s.current }))}>
