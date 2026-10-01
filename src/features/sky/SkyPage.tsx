@@ -24,7 +24,18 @@ export function SkyPage() {
   const [loc, setLoc] = useState<Loc>(() => readStore(KEY, guess()))
   const [offset, setOffset] = useState(0) // minutes from now
   const [playing, setPlaying] = useState(false)
-  const [pick, setPick] = useState<string>('Big Dipper')
+  const [pick, setPickState] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-sky-pick')
+      return saved && constellations.some((c) => c.name === saved) ? saved : 'Big Dipper'
+    } catch {
+      return 'Big Dipper'
+    }
+  })
+  const setPick = (name: string) => {
+    setPickState(name)
+    try { localStorage.setItem('bloom-sky-pick', name) } catch { /* optional */ }
+  }
   const [hover, setHover] = useState<string | null>(null)
   const svg = useRef<SVGSVGElement>(null)
   const date = useMemo(() => addMinutes(new Date(), offset), [offset])
@@ -136,6 +147,22 @@ export function SkyPage() {
           <input type="range" min={-720} max={720} step={10} value={Math.max(-720, Math.min(720, offset))} aria-label="Time offset" onChange={(e) => { setPlaying(false); setOffset(Number(e.target.value)) }} />
           <button type="button" className="sk-btn" onClick={() => setPlaying((v) => !v)}>{playing ? '❚❚' : '▶'} 6 h</button>
           <button type="button" className="sk-btn ghost" onClick={() => { setPlaying(false); setOffset(0) }}>Now</button>
+          <button
+            type="button"
+            className="sk-btn ghost"
+            title="What’s up at 22:00 tonight"
+            onClick={() => {
+              setPlaying(false)
+              const now = new Date()
+              const h = now.getHours()
+              if (h >= 22 || h < 4) return setOffset(0)
+              const t = new Date(now)
+              t.setHours(22, 0, 0, 0)
+              setOffset(Math.round((+t - +now) / 60000))
+            }}
+          >
+            🌌 Tonight
+          </button>
         </div>
         <h3>Up now</h3>
         <ul className="sk-list">
