@@ -126,6 +126,18 @@ export function EyesPage() {
     setRunning(true)
     setTab('practice')
   }
+  // Space starts, pauses and resumes.
+  const spaceRef = useRef(() => {})
+  spaceRef.current = () => (queue.length ? setRunning(!running) : start(routine))
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      e.preventDefault()
+      spaceRef.current()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const visible = exercises.filter((e) => (e.id === 'rule20' ? on('rule20') : e.id === 'nearfar' ? on('nearFar') : e.id === 'blink' ? on('blink') : e.id === 'palming' ? on('palming') : on('followDot')))
 
   usePageActions([
@@ -163,6 +175,11 @@ export function EyesPage() {
           <button type="button" className="studio-go" onClick={() => (queue.length ? setRunning(!running) : start(routine))}>
             {running ? <Square size={16} /> : <Play size={16} />} {running ? 'Pause' : queue.length ? 'Resume' : 'Start 2-minute routine'}
           </button>
+          {running && i + 1 < queue.length && (
+            <button type="button" className="studio-go" data-variant="quiet" onClick={() => { setI(i + 1); setT(0) }}>
+              Skip →
+            </button>
+          )}
         </div>
         {on('followDot') && current.path && <Slider label="Dot speed" value={store.speed} min={0.4} max={2} step={0.1} unit="×" format={(v) => v.toFixed(1)} compact onChange={(v) => setStore((s) => ({ ...s, speed: v }))} />}
       </div>
