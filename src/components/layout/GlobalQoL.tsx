@@ -18,6 +18,28 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
   // Character counter near any length-limited field once you're past 80% of it.
   const [counter, setCounter] = useState<{ x: number; y: number; text: string; full: boolean } | null>(null)
+  // Hold Alt for a moment to reveal shortcut hints written in button titles, e.g. "Restart (R)".
+  useEffect(() => {
+    let timer = 0
+    const clear = () => {
+      window.clearTimeout(timer)
+      document.querySelectorAll('[data-kbd-hint]').forEach((el) => el.removeAttribute('data-kbd-hint'))
+    }
+    const down = (e: KeyboardEvent) => {
+      if (e.key !== 'Alt' || e.repeat) return
+      timer = window.setTimeout(() => {
+        document.querySelectorAll<HTMLElement>('button[title]').forEach((b) => {
+          const m = /\(([^()]{1,14})\)\s*$/.exec(b.title)
+          if (m && b.offsetParent) b.setAttribute('data-kbd-hint', m[1])
+        })
+      }, 400)
+    }
+    const up = (e: KeyboardEvent) => { if (e.key === 'Alt') clear() }
+    window.addEventListener('keydown', down)
+    window.addEventListener('keyup', up)
+    window.addEventListener('blur', clear)
+    return () => { clear(); window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); window.removeEventListener('blur', clear) }
+  }, [])
   useEffect(() => {
     const show = (e: Event) => {
       const el = e.target

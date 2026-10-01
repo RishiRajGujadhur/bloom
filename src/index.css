@@ -277,3 +277,7 @@ html[data-hide-launch] .bloom-companion-launch { display: none !important; }
 html[data-hide-quicklog] .quick-log-row { display: none !important; }
 html[data-hide-affirm] .affirm-ticker { display: none !important; }
 html[data-static-topbar] .app-shell .topbar { position: static; transform: none !important; }
+
+/* Hold Alt: shortcut hints on buttons */
+[data-kbd-hint] { position: relative; }
+[data-kbd-hint]::after { content: attr(data-kbd-hint); position: absolute; top: -8px; right: -6px; padding: 1px 5px; border-radius: 6px; font: 600 10px/1.4 ui-monospace, monospace; background: var(--accent); color: var(--bg-surface); pointer-events: none; z-index: 5; }
