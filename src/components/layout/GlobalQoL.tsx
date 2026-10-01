@@ -18,6 +18,23 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
   // Character counter near any length-limited field once you're past 80% of it.
   const [counter, setCounter] = useState<{ x: number; y: number; text: string; full: boolean } | null>(null)
+  // Home/End jump to the first/last button of the list holding focus.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.key !== 'Home' && e.key !== 'End') || e.ctrlKey || e.altKey || e.metaKey) return
+      const t = e.target as HTMLElement | null
+      if (!t || t.closest('input, textarea, select, [contenteditable="true"]')) return
+      const list = t.closest('[role="list"], ul, ol')
+      if (!list) return
+      const items = [...list.querySelectorAll<HTMLElement>('button:not([disabled]), a[href]')].filter((el) => el.offsetParent)
+      const pick = e.key === 'Home' ? items[0] : items[items.length - 1]
+      if (!pick || pick === t) return
+      e.preventDefault()
+      pick.focus()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   // Hold Alt for a moment to reveal shortcut hints written in button titles, e.g. "Restart (R)".
   useEffect(() => {
     let timer = 0
