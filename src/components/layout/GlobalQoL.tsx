@@ -170,6 +170,14 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
       if (t?.closest('#page-heading')) window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     document.addEventListener('click', onClick)
+    // Text cut off with an ellipsis gets its full wording as a tooltip.
+    const onOver = (e: MouseEvent) => {
+      const el = e.target as HTMLElement | null
+      if (!el || el.title || el.children.length > 2) return
+      const text = el.textContent?.trim()
+      if (text && text.length < 400 && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2) && getComputedStyle(el).overflow !== 'visible') el.title = text
+    }
+    document.addEventListener('mouseover', onOver, { passive: true })
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null
       if (e.key === 'Escape' && t instanceof HTMLInputElement && t.value && (t.type === 'search' || /search|find|filter/i.test(t.placeholder + (t.getAttribute('aria-label') ?? '')))) {
@@ -231,6 +239,7 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
       document.removeEventListener('visibilitychange', vis)
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('click', onClick)
+      document.removeEventListener('mouseover', onOver)
       window.removeEventListener('keydown', onKey, true)
       document.removeEventListener('submit', onSubmit, true)
     }
