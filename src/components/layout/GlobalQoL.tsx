@@ -18,6 +18,22 @@ export function GlobalQoL({ habitsLeft }: { habitsLeft: number }) {
   const [showTop, setShowTop] = useState(false)
   // Character counter near any length-limited field once you're past 80% of it.
   const [counter, setCounter] = useState<{ x: number; y: number; text: string; full: boolean } | null>(null)
+  // When a dialog closes and focus falls back to the page body, return it to whatever opened the dialog.
+  useEffect(() => {
+    let opener: HTMLElement | null = null
+    const onFocus = (e: FocusEvent) => {
+      const t = e.target as HTMLElement
+      if (t instanceof HTMLElement && !t.closest('[role="dialog"], [role="alertdialog"], dialog')) opener = t
+    }
+    const isDialog = (n: Node) => n instanceof HTMLElement && (n.matches('[role="dialog"], [role="alertdialog"], dialog') || !!n.querySelector('[role="dialog"], [role="alertdialog"], dialog'))
+    const obs = new MutationObserver((records) => {
+      if (!records.some((r) => [...r.removedNodes].some(isDialog))) return
+      if (document.activeElement === document.body && opener?.isConnected && opener.offsetParent) opener.focus({ preventScroll: true })
+    })
+    document.addEventListener('focusin', onFocus)
+    obs.observe(document.body, { childList: true, subtree: true })
+    return () => { document.removeEventListener('focusin', onFocus); obs.disconnect() }
+  }, [])
   // Range sliders show their value in a bubble while you move them.
   const [slider, setSlider] = useState<{ x: number; y: number; text: string } | null>(null)
   useEffect(() => {
