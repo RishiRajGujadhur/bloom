@@ -276,6 +276,18 @@ export function AdaptiveEditor({
   // One id for the life of this page, so autosaves update rather than duplicate.
   const pageId = useRef(entry?.id ?? crypto.randomUUID())
   const createdAt = useRef(entry?.createdAt ?? new Date().toISOString())
+  // "Saved · 12 s ago" ticks along so you can trust the autosave.
+  const [savedAt, setSavedAt] = useState(0)
+  const [, tick] = useState(0)
+  useEffect(() => {
+    if (!savedAt) return
+    const id = setInterval(() => tick((n) => n + 1), 10_000)
+    return () => clearInterval(id)
+  }, [savedAt])
+  const ago = (at: number) => {
+    const s = Math.round((Date.now() - at) / 1000)
+    return s < 10 ? 'just now' : s < 60 ? `${s} s ago` : `${Math.round(s / 60)} min ago`
+  }
   const [goal, setGoal] = useState(() => Number(localStorage.getItem('bloom-daybook-word-goal')) || 0)
   const [mood, setMood] = useState(entry?.mood)
   const moodRef = useRef(mood)
@@ -308,6 +320,7 @@ export function AdaptiveEditor({
       if (!journalText(content).trim()) return
       onAutosave(snapshot())
       setSaved(true)
+      setSavedAt(Date.now())
       setDirty(false)
     }, 900)
     return () => clearTimeout(timer)
@@ -385,6 +398,7 @@ export function AdaptiveEditor({
                 <>
                   <Check size={13} aria-hidden="true" />{' '}
                   {t('journal.savedPrivately')}
+                  {savedAt > 0 && <small className="daybook-saved-ago"> · {ago(savedAt)}</small>}
                 </>
               ) : (
                 t('journal.unsaved')
