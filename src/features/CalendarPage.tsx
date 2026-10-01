@@ -86,9 +86,15 @@ export function CalendarPage({ data, setData }: Props) {
   const [selectedDay, setSelectedDay] = useState(dayKey)
   const narrow = typeof window !== 'undefined' && window.innerWidth < 700
   const [trayOpen, setTrayOpen] = useState(false)
-  const [view, setView] = useState(() =>
-    window.innerWidth < 700 ? 'timeGridDay' : 'timeGridWeek',
-  )
+  // The view you last used (day/week/month) is remembered; phones default to day.
+  const [view, setViewState] = useState(() => {
+    const saved = localStorage.getItem('bloom-calendar-view')
+    return saved && window.innerWidth >= 700 ? saved : window.innerWidth < 700 ? 'timeGridDay' : 'timeGridWeek'
+  })
+  const setView = (v: string) => {
+    setViewState(v)
+    try { localStorage.setItem('bloom-calendar-view', v) } catch { /* optional */ }
+  }
   const [heading, setHeading] = useState('')
   const [draft, setDraft] = useState<CalendarBlock | null>(null)
   const [notice, setNotice] = useState('')
