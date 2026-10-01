@@ -342,11 +342,24 @@ export function MoodPage() {
   const [entries, setEntries] = useStoredList<MoodEntry>(MOOD_KEY)
   const [note, setNote] = useState('')
   const [picked, setPicked] = useState<number | null>(null)
-  // Advanced mode: name the feeling precisely and rate energy.
-  const [detailed, setDetailed] = useState(false)
+  // Advanced mode: name the feeling precisely and rate energy (remembered).
+  const [detailed, setDetailedState] = useState(() => localStorage.getItem('bloom-mood-mode') === 'detailed')
   // Orb mode: log mood by shaping a liquid orb from anxious to calm.
   const orbEnabled = loadSettings().features.moodOrb
-  const [orb, setOrb] = useState(false)
+  const [orb, setOrbState] = useState(() => orbEnabled && localStorage.getItem('bloom-mood-mode') === 'orb')
+  const rememberMode = (m: string) => { try { localStorage.setItem('bloom-mood-mode', m) } catch { /* optional */ } }
+  const setDetailed = (v: boolean) => { setDetailedState(v); if (v) rememberMode('detailed') }
+  const setOrb = (v: boolean) => { setOrbState(v); if (v) rememberMode('orb') }
+  // 1–5 pick a mood (the "m then 1–5" shortcut still logs straight away).
+  useEffect(() => {
+    if (orb) return
+    const onKey = (e: KeyboardEvent) => {
+      if (!/^[1-5]$/.test(e.key) || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select')) return
+      setPicked(Number(e.key))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [orb])
   const [calm, setCalm] = useState(0.5)
   const [core, setCore] = useState<string | null>(null)
   const [emotions, setEmotions] = useState<string[]>([])
@@ -393,6 +406,7 @@ export function MoodPage() {
               onClick={() => {
                 setDetailed(false)
                 setOrb(false)
+                rememberMode('quick')
               }}
             >
               Quick
