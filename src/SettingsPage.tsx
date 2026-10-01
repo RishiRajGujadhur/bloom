@@ -850,6 +850,39 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Open Bloom on</strong>
+          <small>The page you land on when you open Bloom without a link.</small>
+        </span>
+        <select
+          className="settings-name"
+          aria-label="Open Bloom on"
+          defaultValue={(() => {
+            try {
+              return localStorage.getItem('bloom-start-page') ?? ''
+            } catch {
+              return ''
+            }
+          })()}
+          onChange={(e) => {
+            try {
+              if (e.target.value) localStorage.setItem('bloom-start-page', e.target.value)
+              else localStorage.removeItem('bloom-start-page')
+            } catch {
+              /* optional */
+            }
+          }}
+        >
+          <option value="">Home</option>
+          <option value="last">The last page I used</option>
+          <option value="daybook">Daybook</option>
+          <option value="habits">Habits</option>
+          <option value="todos">To-dos</option>
+          <option value="focus">Focus</option>
+          <option value="calendar">Calendar</option>
+        </select>
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>Theme schedule</strong>
           <small>Switch to dark in the evening and back to light in the morning.</small>
         </span>

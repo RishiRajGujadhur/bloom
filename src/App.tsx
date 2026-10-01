@@ -110,6 +110,7 @@ import { StreakRewards } from './features/rewards/StreakRewards'
 import { ReminderCenter } from './features/reminders/ReminderCenter'
 import {
   CommandPalette,
+  readRecentPages,
   rememberPage,
 } from './components/layout/CommandPalette'
 import type { NavKey } from './components/layout/Sidebar'
@@ -451,7 +452,19 @@ function App() {
   >(null)
   const [editPlan, setEditPlan] = useState<string | null>(null)
   const [viewSession, setViewSession] = useState<Session | null>(null)
-  const [active, setActive] = useState<NavKey>(readPage)
+  // Settings -> Open Bloom on: home, the last page, or a chosen page (only when no page is in the URL).
+  const [active, setActive] = useState<NavKey>(() => {
+    const page = readPage()
+    if (page !== 'overview' || window.location.hash.slice(1)) return page
+    try {
+      const pref = localStorage.getItem('bloom-start-page')
+      if (pref === 'last') return readRecentPages()[0] ?? page
+      if (pref && pref in pageDetails) return pref as NavKey
+    } catch {
+      /* home */
+    }
+    return page
+  })
   // Bloom's panel reopens if you left it open.
   const [companionOpen, setCompanionOpen] = useState(() => localStorage.getItem('bloom-companion-open') === '1')
   useEffect(() => {
