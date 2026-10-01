@@ -315,3 +315,5 @@ html[data-money-blur] .studio-card strong:hover, html[data-money-blur] .studio-c
 .mn-cat-pick select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
 .mn-amount-edit { border: 0; background: none; color: inherit; font: inherit; font-weight: 700; cursor: pointer; padding: 0; }
 .mn-amount-edit:hover { text-decoration: underline dotted; }
+html[data-money-blur] .mn-amount-edit { filter: blur(7px); }
+html[data-money-blur] .mn-amount-edit:hover { filter: none; }
