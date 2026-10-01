@@ -850,6 +850,33 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
       </label>
       <label className={styles.subOption}>
         <span>
+          <strong>Week starts on</strong>
+          <small>Used by the calendar.</small>
+        </span>
+        <select
+          className="settings-name"
+          aria-label="Week starts on"
+          defaultValue={(() => {
+            try {
+              return localStorage.getItem('bloom-week-start') ?? '1'
+            } catch {
+              return '1'
+            }
+          })()}
+          onChange={(e) => {
+            try {
+              localStorage.setItem('bloom-week-start', e.target.value)
+            } catch {
+              /* optional */
+            }
+          }}
+        >
+          <option value="1">Monday</option>
+          <option value="0">Sunday</option>
+        </select>
+      </label>
+      <label className={styles.subOption}>
+        <span>
           <strong>Open Bloom on</strong>
           <small>The page you land on when you open Bloom without a link.</small>
         </span>

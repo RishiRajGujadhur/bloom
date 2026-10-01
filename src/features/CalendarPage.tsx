@@ -450,7 +450,7 @@ export function CalendarPage({ data, setData }: Props) {
             height={fullscreen ? 'calc(100dvh - 190px)' : 680}
             nowIndicator={subOn('fullCalendar', 'nowLine')}
             weekends={subOn('fullCalendar', 'weekends')}
-            firstDay={1}
+            firstDay={(() => { try { return localStorage.getItem('bloom-week-start') === '0' ? 0 : 1 } catch { return 1 } })()}
             allDaySlot={false}
             editable
             selectable
