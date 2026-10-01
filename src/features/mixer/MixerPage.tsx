@@ -128,7 +128,12 @@ export function MixerPage() {
     <div className="studio-split mx-split">
       <div className="studio-card mx-layers">
         {visible.map((l) => (
-          <div key={l.id} className="mx-layer" data-on={(store.mix[l.id] ?? 0) > 0} data-hint={`${l.label}: ${(store.mix[l.id] ?? 0) ? `${Math.round((store.mix[l.id] ?? 0) * 100)}%` : 'off'}`}>
+          <div
+            key={l.id}
+            className="mx-layer"
+            title="Double-click to solo this layer"
+            onDoubleClick={() => setStore((s) => ({ ...s, mix: Object.fromEntries(visible.map((v) => [v.id, v.id === l.id ? Math.max(0.5, s.mix[l.id] ?? 0) : 0])) as Mix }))}
+            data-on={(store.mix[l.id] ?? 0) > 0} data-hint={`${l.label}: ${(store.mix[l.id] ?? 0) ? `${Math.round((store.mix[l.id] ?? 0) * 100)}%` : 'off'}`}>
             <span className="mx-emoji" aria-hidden="true">
               {l.emoji}
             </span>
