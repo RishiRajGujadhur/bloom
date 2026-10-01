@@ -32,6 +32,7 @@ import { BedtimeNudge } from './features/sleep/BedtimeNudge'
 import { EpiphanyCapture } from './features/epiphany/EpiphanyCapture'
 import { FastGoalNudge } from './features/fasting/FastGoalNudge'
 import { BillsNudge } from './features/money/BillsNudge'
+import { PeopleNudge } from './features/people/PeopleNudge'
 import { QuickLogRow, TodayRing } from './features/core/QuickLogRow'
 import { TodayGlance } from './components/dashboard/TodayGlance'
 import { TrashAndSync, TrashList } from './components/layout/TrashAndSync'
@@ -843,6 +844,7 @@ function App() {
         {settings.features.epiphanies && <EpiphanyCapture />}
         {settings.features.fasting && <FastGoalNudge />}
         {settings.features.moneyTracker && <BillsNudge />}
+        {settings.features.peopleGarden && <PeopleNudge />}
         <GlobalQoL habitsLeft={data.habits.filter((h) => !h.dates.includes(today)).length} />
         <Shortcuts onNavigate={jump} onToggleTheme={() => setThemeSettings((t) => toggleThemeMode(t))} />
         {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}
