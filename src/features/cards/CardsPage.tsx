@@ -64,7 +64,20 @@ export function CardsPage() {
       return n
     })
   const [tab, setTab] = useState('review')
-  const [deck, setDeck] = useState<string>('')
+  const [deck, setDeckState] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-cards-deck') ?? ''
+      return !saved || store.decks.some((d) => d.id === saved) ? saved : ''
+    } catch {
+      return ''
+    }
+  })
+  const setDeck = (d: string) => {
+    setDeckState(d)
+    try { localStorage.setItem('bloom-cards-deck', d) } catch { /* optional */ }
+  }
+  // The last grade, so a mis-tap can be undone.
+  const [undo, setUndo] = useState<CardStore | null>(null)
   const [flipped, setFlipped] = useState(false)
   const [reversed, setReversed] = useState(false)
   const [front, setFront] = useState('')
@@ -94,6 +107,7 @@ export function CardsPage() {
   const grade = (g: (typeof grades)[number]) => {
     if (!card) return
     piles.current?.fly(g.grade < 3 ? 'again' : g.grade === 5 || card.interval >= 21 ? 'known' : 'learning')
+    setUndo(store)
     setStore((s) => {
       const log = s.log.find((l) => l.date === today) ?? { date: today, count: 0, correct: 0 }
       return {
@@ -118,11 +132,19 @@ export function CardsPage() {
       }
       const g = grades.find((x) => x.key === e.key)
       if (g && flipped) grade(g)
+      if (e.key.toLowerCase() === 'u' && undo) undoGrade()
     }
     window.addEventListener('keydown', k)
     return () => window.removeEventListener('keydown', k)
   })
 
+  function undoGrade() {
+    if (!undo) return
+    const prev = undo
+    setStore(() => prev)
+    setUndo(null)
+    setFlipped(true)
+  }
   const inDeck = store.cards.filter((c) => !deck || c.deck === deck)
   usePageActions(card ? [{ id: 'fc-flip', label: flipped ? 'Hide answer' : 'Show answer', icon: '🔄', run: () => setFlipped(!flipped) }, ...(flipped ? [{ id: 'fc-good', label: 'Grade: Good', icon: '✅', run: () => grade(grades[2]) }] : [])] : [])
   const reviewTab = () => (
@@ -133,6 +155,11 @@ export function CardsPage() {
           <button type="button" className="studio-chip" aria-pressed={shuffle} title="Study due cards in a random order" onClick={() => setShuffle((v) => { try { localStorage.setItem('bloom-cards-shuffle', v ? '0' : '1') } catch { /* optional */ } return !v })}>
             🔀 Shuffle
           </button>
+          {undo && (
+            <button type="button" className="studio-chip" title="Undo the last grade (U)" onClick={undoGrade}>
+              ↶ Undo grade
+            </button>
+          )}
           <button type="button" className="studio-chip" aria-pressed={!deck} onClick={() => setDeck('')}>
             All decks
           </button>
