@@ -123,6 +123,20 @@ export function MixerPage() {
     const pick = [...visible].sort(() => Math.random() - 0.5).slice(0, 2 + Math.floor(Math.random() * 3))
     setStore((s) => ({ ...s, mix: Object.fromEntries(visible.map((l) => [l.id, pick.includes(l) ? Math.round((0.25 + Math.random() * 0.5) * 20) / 20 : 0])) as Mix }))
   }
+  // Space plays or pauses; M mutes every layer.
+  const keysRef = useRef({ toggle, mute: () => {} })
+  keysRef.current = { toggle, mute: () => visible.forEach((l) => setLayer(l.id, 0)) }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      if (e.code === 'Space') {
+        e.preventDefault()
+        keysRef.current.toggle()
+      } else if (e.key.toLowerCase() === 'm') keysRef.current.mute()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   usePageActions([{ id: 'mx-random', label: 'Surprise me with a mix', icon: '🎲', run: randomise }, { id: 'mx-toggle', label: playing ? 'Pause the mix' : 'Play the mix', icon: '🎚️', run: toggle }, { id: 'mx-mute', label: 'Mute every layer', icon: '🔇', run: () => visible.forEach((l) => setLayer(l.id, 0)) }])
   const mixTab = () => (
     <div className="studio-split mx-split">
