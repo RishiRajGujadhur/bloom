@@ -1,3 +1,4 @@
+import { loadHandle, regrant, saveHandle } from '../../platform/handleStore'
 import { prefersReducedMotion } from '../../utils/motion'
 import { subOn } from '../../features/subFeatures'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -152,12 +153,20 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
   const openFile = async (file: File, handle: SaveHandle | null) => {
     try {
       const doc = unpackBoard(new Uint8Array(await file.arrayBuffer()))
+      if (handle) {
+        void saveHandle('board-last', handle as unknown as FileSystemHandle)
+        setLastBoard(handle as unknown as FileSystemFileHandle)
+      }
       if (nodes.length) setConfirmOpen({ doc, handle })
       else { await loadDoc(doc); setFileHandle(handle); setFileMsg(`Opened ${file.name}`) }
     } catch (e) {
       setFileMsg((e as Error).message)
     }
   }
+  const [lastBoard, setLastBoard] = useState<FileSystemFileHandle | null>(null)
+  useEffect(() => {
+    void loadHandle<FileSystemFileHandle>('board-last').then(setLastBoard)
+  }, [])
   const pickAndOpen = async () => {
     const [f] = await openFiles('Bloom board', { [BOARD_MIME]: [BOARD_EXT] })
     if (f) await openFile(f.file, f.handle as SaveHandle | null)
@@ -592,6 +601,19 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
               <>
                 <button disabled={!ready} onClick={() => void saveToDisk()} title="Save to a .bloomboard file (Ctrl+S)">💾 {fileHandle ? 'Save' : 'Save file'}</button>
                 <button disabled={!ready} onClick={() => void pickAndOpen()}>📂 Open file</button>
+          {lastBoard && (
+            <button
+              disabled={!ready}
+              title={`Reopen ${lastBoard.name}`}
+              onClick={() =>
+                void regrant(lastBoard).then(async (ok) => {
+                  if (ok) await openFile(await lastBoard.getFile(), lastBoard as unknown as SaveHandle)
+                })
+              }
+            >
+              ↻ {lastBoard.name.replace(/\.[^.]+$/, '')}
+            </button>
+          )}
                 <button disabled={!ready || !nodes.length} onClick={() => void share()}>⤴ Share</button>
               </>
             )}
