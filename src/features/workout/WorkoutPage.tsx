@@ -196,6 +196,12 @@ export function WorkoutPage() {
             </button>
           </p>
         )}
+        {store.workouts.some((w) => Date.now() - w.startedAt < 7 * 864e5) && (
+          <p className="studio-empty">
+            This week: {store.workouts.filter((w) => Date.now() - w.startedAt < 7 * 864e5).length} sessions ·{' '}
+            {Math.round(volume(store.workouts.filter((w) => Date.now() - w.startedAt < 7 * 864e5).flatMap((w) => w.sets), store.bodyweight)).toLocaleString()} kg moved
+          </p>
+        )}
         {on('weekBars') && store.workouts.length > 0 && (
           <WeekBars
             unit="kg lifted"
