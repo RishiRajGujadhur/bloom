@@ -350,6 +350,21 @@ export function MoneyPage() {
               >
                 {x.income ? '+' : '−'}{fmt(x.amount)}
               </button>
+              {x.receipt && (
+                <button
+                  type="button"
+                  className="mn-del"
+                  aria-label="Show receipt"
+                  title="Show the scanned receipt"
+                  onClick={async () => {
+                    const { opfsRead } = await import('../../platform/opfs')
+                    const blob = await opfsRead(x.receipt!)
+                    if (blob) window.open(URL.createObjectURL(blob), '_blank', 'noopener')
+                  }}
+                >
+                  🧾
+                </button>
+              )}
               {!x.income && (
                 <button
                   type="button"
