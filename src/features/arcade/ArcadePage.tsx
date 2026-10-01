@@ -21,6 +21,7 @@ export function ArcadePage() {
     try { localStorage.setItem('bloom-arcade-favs', JSON.stringify(next)) } catch { /* optional */ }
     return next
   })
+  const [favOnly, setFavOnly] = useState(false)
   const techs = ['all', 'Three.js', 'Babylon.js', 'PlayCanvas', 'p5.js', 'matter-js', 'SVG']
   useEffect(() => {
     const on = () => setOpen(fromHash())
@@ -84,9 +85,14 @@ export function ArcadePage() {
         <div role="radiogroup" aria-label="Filter by engine">
           {techs.map((t) => <button key={t} type="button" role="radio" aria-checked={tech === t} className={tech === t ? 'on' : ''} onClick={() => setTech(t)}>{t === 'all' ? 'All' : t}</button>)}
         </div>
+        {favs.length > 0 && (
+          <button type="button" aria-pressed={favOnly} className={favOnly ? 'on' : ''} onClick={() => setFavOnly((v) => !v)}>
+            ★ Favourites
+          </button>
+        )}
       </div>
       <div className="ar-grid" ref={grid}>
-        {GAMES.filter((g) => (tech === 'all' || g.tech.includes(tech)) && (!q.trim() || `${g.title} ${g.blurb}`.toLowerCase().includes(q.trim().toLowerCase())))
+        {GAMES.filter((g) => (tech === 'all' || g.tech.includes(tech)) && (!favOnly || favs.includes(g.id)) &&(!q.trim() || `${g.title} ${g.blurb}`.toLowerCase().includes(q.trim().toLowerCase())))
           .sort((a, b) => Number(favs.includes(b.id)) - Number(favs.includes(a.id)))
           .map((g) => (
           <div key={g.id} className="ar-wrap">
