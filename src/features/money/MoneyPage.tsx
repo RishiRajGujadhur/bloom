@@ -267,8 +267,15 @@ export function MoneyPage() {
           const now = spent(month)
           const before = spent(prevMonth)
           const pace = before > 0 ? Math.round(((now - before) / before) * 100) : null
+          const incomeM = store.txns.filter((x) => x.income && x.date.startsWith(month)).reduce((a, x) => a + x.amount, 0)
+          const spendM = store.txns.filter((x) => !x.income && x.date.startsWith(month)).reduce((a, x) => a + x.amount, 0)
           return big ? (
             <>
+            {incomeM > 0 && (
+              <p className="studio-empty">
+                In {fmt(incomeM)} · out {fmt(spendM)} · {incomeM >= spendM ? `${fmt(incomeM - spendM)} left over so far 🌱` : `${fmt(spendM - incomeM)} more out than in`}
+              </p>
+            )}
             {pace !== null && (
               <p className="studio-empty">
                 By day {Number(dayN)} you’ve spent {fmt(now)} (about {fmt(Math.round(now / Math.max(1, Number(dayN))))} a day) —{Math.abs(pace) < 3 ? 'about the same as' : `${Math.abs(pace)}% ${pace > 0 ? 'more' : 'less'} than`} last month.
