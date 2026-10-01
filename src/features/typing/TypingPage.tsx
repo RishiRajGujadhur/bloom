@@ -205,7 +205,7 @@ export function TypingPage() {
         <Keyboard next={next} flash={flash} />
         <aside className="ty-side">
           <div className="ty-lessons">
-            {lessons.map((l, i) => <button key={l.id} type="button" className={`ty-pill ${i === li && !usingOwn ? 'on' : ''} ${store.best[l.id] ? 'done' : ''}`} onClick={() => { setUsingOwn(false); if (i === li) void newDrill(); else setLi(i) }} title={l.title}>{i + 1}</button>)}
+            {lessons.map((l, i) => <button key={l.id} type="button" className={`ty-pill ${i === li && !usingOwn ? 'on' : ''} ${store.best[l.id] ? 'done' : ''}`} onClick={() => { setUsingOwn(false); if (i === li) void newDrill(); else setLi(i) }} title={store.best[l.id] ? `${l.title} · best ${store.best[l.id]} WPM` : l.title}>{i + 1}{store.best[l.id] ? <sup>{store.best[l.id]}</sup> : null}</button>)}
           </div>
           <button type="button" className="ty-cta ghost ty-own-btn" aria-expanded={ownOpen} onClick={() => setOwnOpen((v) => !v)}>✍️ Practise your own text</button>
           {ownOpen && (
