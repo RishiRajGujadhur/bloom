@@ -232,6 +232,14 @@ export function MoneyPage() {
       </section>
       <section className="studio-card mn-split">
         <h3>Where it goes · {new Date(`${today}T12:00:00`).toLocaleDateString([], { month: 'long' })}</h3>
+        {(() => {
+          const big = store.txns.filter((x) => !x.income && x.date.startsWith(month)).sort((a, b) => b.amount - a.amount)[0]
+          return big ? (
+            <p className="studio-empty">
+              Biggest spend: <strong>{fmt(big.amount)}</strong> {big.place ? `at ${big.place}` : `on ${categoryOf(big.category).name}`} ({big.date.slice(8)}/{big.date.slice(5, 7)})
+            </p>
+          ) : null
+        })()}
         {byCategory(store.txns, month).length ? (
           <div className="mn-bars">
             {byCategory(store.txns, month).map((c) => {
