@@ -105,6 +105,15 @@ export function WorldPage({
   )
 
   const selected = world.districts.find((d) => d.id === focus) ?? null
+  // Esc returns to the whole island.
+  useEffect(() => {
+    if (!focus) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setFocus(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [focus])
+  // The district closest to its next stage gets a nudge.
+  const closest = world.districts.filter((d) => d.stage < d.maxStage).sort((a, b) => b.progress - a.progress)[0]?.id
   const unlocked = world.decorations.filter((d) => d.unlocked).length
 
   return (
@@ -207,6 +216,7 @@ export function WorldPage({
                   {d.name}
                   <small>
                     Stage {d.stage}/{d.maxStage}
+                    {d.id === closest && d.progress >= 0.5 ? ' · almost there ✨' : ''}
                   </small>
                 </span>
                 <span className="world-district-verb">{d.verb}</span>
