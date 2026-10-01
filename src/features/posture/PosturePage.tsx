@@ -16,6 +16,7 @@ import {
   stopPosture,
   subscribePosture,
 } from './postureRuntime'
+import { useTabTitle } from '../../utils/useTabTitle'
 import './posture.css'
 
 const usePosture = () => useSyncExternalStore(subscribePosture, getPosture, getPosture)
@@ -121,6 +122,19 @@ export function PosturePage({ data }: FeaturePageProps) {
       ctx.stroke()
     }
   }, [posture.landmarks, posture.slouching])
+  useTabTitle(posture.status === 'running' && posture.score !== null ? `${posture.slouching ? '⚠️' : '✓'} ${posture.score}` : '', 'Posture', 'posture')
+  // C calibrates while the guard is running.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'c' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      if (getPosture().status === 'running' && calibratePosture()) {
+        setSettings(postureSettings())
+        window.dispatchEvent(new CustomEvent('bloom:toast', { detail: 'Calibrated' }))
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   if (!consented)
     return (
@@ -177,6 +191,7 @@ export function PosturePage({ data }: FeaturePageProps) {
           )}
           <button
             className="ov-secondary"
+            title="Calibrate (C)"
             disabled={!running || posture.absent}
             onClick={() => {
               if (calibratePosture()) setSettings(postureSettings())
