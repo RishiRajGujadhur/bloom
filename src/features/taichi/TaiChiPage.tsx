@@ -28,8 +28,28 @@ function BreathCue({ value }: { value: React.MutableRefObject<number> }) {
 
 export function TaiChiPage() {
   const breath = useBreath()
-  const [element, setElement] = useState<ElementId>('earth')
+  const [element, setElementState] = useState<ElementId>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-taichi-element') as ElementId | null
+      return saved && saved in elements ? saved : 'earth'
+    } catch {
+      return 'earth'
+    }
+  })
+  const setElement = (id: ElementId) => {
+    setElementState(id)
+    try { localStorage.setItem('bloom-taichi-element', id) } catch { /* optional */ }
+  }
   const [playing, setPlaying] = useState(false)
+  // How long the soundscape has been playing this time.
+  const [playedFor, setPlayedFor] = useState(0)
+  useEffect(() => {
+    if (!playing) return
+    const started = Date.now()
+    setPlayedFor(0)
+    const t = setInterval(() => setPlayedFor(Math.floor((Date.now() - started) / 1000)), 1000)
+    return () => clearInterval(t)
+  }, [playing])
   const [camera, setCamera] = useState<'off' | 'starting' | 'on' | 'error'>('off')
   const [stance, setStance] = useState<Stance | null>(null)
   const [manual, setManual] = useState(0.3)
@@ -129,7 +149,7 @@ export function TaiChiPage() {
 
         <div className="tc-controls">
           <button type="button" className="tc-btn tc-play" onClick={toggleSound} aria-pressed={playing}>
-            {playing ? <Pause size={18} /> : <Play size={18} />} {playing ? 'Stop soundscape' : 'Play soundscape'}
+            {playing ? <Pause size={18} /> : <Play size={18} />} {playing ? `Stop soundscape · ${Math.floor(playedFor / 60)}:${String(playedFor % 60).padStart(2, '0')}` : 'Play soundscape'}
           </button>
           {silkOn && subOn('breathSilk', 'mic') && (
             <button type="button" className="tc-btn" onClick={breath.mic === 'on' ? breath.end : breath.start} aria-pressed={breath.mic === 'on'}>
