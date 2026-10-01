@@ -4,7 +4,7 @@ import { geoAzimuthalEquidistant, geoGraticule10, geoPath } from 'd3-geo'
 import * as SunCalc from 'suncalc'
 import { addMinutes, format } from 'date-fns'
 import { readStore, writeStore } from '../../components/studio/Studio'
-import { constellations, direction, height, phaseName, skyAt } from './skyModel'
+import { constellations, direction, height, nextFullMoon, phaseName, skyAt } from './skyModel'
 import './sky.css'
 
 /**
@@ -147,7 +147,7 @@ export function SkyPage() {
             </li>
           )) : <li>Nothing bright above the horizon — try later tonight.</li>}
         </ul>
-        <p className="sk-moon">🌙 {phaseName(sky.moonPhase)} · {Math.round(sky.moonLit * 100)}% lit · sunset {sunTimes.sunset && !isNaN(+sunTimes.sunset) ? format(sunTimes.sunset, 'HH:mm') : '—'}</p>
+        <p className="sk-moon">🌙 {phaseName(sky.moonPhase)} · {Math.round(sky.moonLit * 100)}% lit{(() => { const f = nextFullMoon(new Date()); return f && sky.moonLit < 0.98 ? ` · full moon ${f.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}` : '' })()} · sunset {sunTimes.sunset && !isNaN(+sunTimes.sunset) ? format(sunTimes.sunset, 'HH:mm') : '—'}</p>
         <h3>Star-hop</h3>
         <div className="sk-chips">
           {constellations.map((c) => <button key={c.name} type="button" className={`sk-chip ${pick === c.name ? 'on' : ''}`} onClick={() => setPick(c.name)}>{c.name}</button>)}

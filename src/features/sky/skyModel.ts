@@ -63,3 +63,9 @@ export const direction = (az: number) => compass[Math.round(az / 45) % 8]
 export const height = (alt: number) => (alt > 60 ? 'high overhead' : alt > 30 ? 'halfway up' : alt > 10 ? 'low' : 'just above the horizon')
 export const phaseName = (deg: number) =>
   deg < 22.5 || deg >= 337.5 ? 'New moon' : deg < 67.5 ? 'Waxing crescent' : deg < 112.5 ? 'First quarter' : deg < 157.5 ? 'Waxing gibbous' : deg < 202.5 ? 'Full moon' : deg < 247.5 ? 'Waning gibbous' : deg < 292.5 ? 'Last quarter' : 'Waning crescent'
+
+/** Date of the next full moon (within ~30 days), or null. */
+export function nextFullMoon(from: Date) {
+  const t = A.SearchMoonPhase(180, from, 32)
+  return t ? t.date : null
+}
