@@ -1,5 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { useKeepAwake } from '../../platform/presence'
+import { useLeaveGuard } from '../../utils/useLeaveGuard'
+import { useTabTitle } from '../../utils/useTabTitle'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useDraggable, useDroppable, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
@@ -140,6 +142,22 @@ export function YogaPage() {
     }
   }, [elapsed, length, running, current.name])
 
+  useLeaveGuard(running)
+  useTabTitle(running ? `🧘 ${pose.name}` : '', 'Yoga', 'yoga')
+  // Space pauses and resumes a flow in progress.
+  const spaceRef = useRef({ elapsed, length })
+  spaceRef.current = { elapsed, length }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      const k = spaceRef.current
+      if (k.elapsed <= 0 || k.elapsed >= k.length) return
+      e.preventDefault()
+      setRunning((r) => !r)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const play = (f: Flow) => {
     try {
       localStorage.setItem('bloom-yoga-last', JSON.stringify(f))
