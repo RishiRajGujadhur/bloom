@@ -215,3 +215,11 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 
 /* Focus rings for keyboard users only; mouse clicks don't leave an outline behind. */
 :focus:not(:focus-visible) { outline: none; }
+
+/* Printing (Ctrl+P) gives a clean page: no sidebar, top bar, floating buttons or animations. */
+@media print {
+  #app-sidebar, header, nav, .bloom-companion-launch, .bc-panel, .to-top, .wa-bar, .skip-link, .bloom-heading .bloom-contours, [class*='scene'], canvas { display: none !important; }
+  main { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+  body { background: none !important; }
+  * { animation: none !important; transition: none !important; box-shadow: none !important; }
+}
