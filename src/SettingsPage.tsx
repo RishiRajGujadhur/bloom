@@ -1481,6 +1481,25 @@ export function SettingsPage({
       <section className={styles.card}>
         <DataReset />
         <StorageMeter />
+        <button
+          type="button"
+          className="quiet-button settings-diag"
+          title="Copies build, browser and screen details (no personal data) for a bug report"
+          onClick={(e) => {
+            const info = [
+              `Bloom build ${__COMMIT__} (${__BUILD_TIME__})`,
+              `Browser: ${navigator.userAgent}`,
+              `Screen: ${screen.width}×${screen.height} @${devicePixelRatio}x · window ${innerWidth}×${innerHeight}`,
+              `Theme: ${document.documentElement.dataset.theme ?? '?'} · font ${document.documentElement.dataset.font ?? '?'}`,
+              `Online: ${navigator.onLine} · language ${navigator.language}`,
+              `Page: ${location.hash || '#overview'}`,
+            ].join('\n')
+            void navigator.clipboard?.writeText(info)
+            e.currentTarget.textContent = '✓ Diagnostics copied'
+          }}
+        >
+          Copy diagnostics
+        </button>
         <p className="settings-build">
           {(() => {
             const last = Number(localStorage.getItem('bloom-last-backup'))
