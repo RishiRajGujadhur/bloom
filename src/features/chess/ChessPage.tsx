@@ -235,6 +235,7 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
         <div className="ch-row">
           <button type="button" className="studio-btn" disabled={thinking || history.length < 2} onClick={() => { const g = new Chess(); for (const m of history.slice(0, -2)) g.move(m); setGame(g); setLast(null) }}>Undo</button>
           <button type="button" className="studio-btn" disabled={!history.length} title="Copy the game as PGN (for Lichess or other chess apps)" onClick={(e) => { void navigator.clipboard?.writeText(game.pgn()); e.currentTarget.textContent = '✓ Copied' }}>PGN</button>
+          <button type="button" className="studio-btn" title="Copy the current position (FEN) to analyse it elsewhere" onClick={(e) => { void navigator.clipboard?.writeText(game.fen()); e.currentTarget.textContent = '✓ Copied' }}>FEN</button>
           <button type="button" className="studio-btn" aria-pressed={flipped} title="View the board from Bloom's side (F)" onClick={() => setFlipped((f) => !f)}>⇅ Flip</button>
           <button
             type="button"
