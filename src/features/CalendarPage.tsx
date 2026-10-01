@@ -247,6 +247,27 @@ export function CalendarPage({ data, setData }: Props) {
           >
             ⬇ .ics
           </button>
+          <label className="quiet-button" title="Add events from an .ics file as time blocks">
+            ⬆ .ics
+            <input
+              type="file"
+              accept=".ics,text/calendar"
+              hidden
+              onChange={async (e) => {
+                const file = e.target.files?.[0]
+                e.target.value = ''
+                if (!file) return
+                const { parseIcs } = await import('./planning/icsImport')
+                const events = parseIcs(await file.text()).filter((ev) => +ev.start > Date.now() - 30 * 864e5)
+                if (!events.length) return setNotice('No upcoming events found in that file.')
+                setData((d) => ({
+                  ...d,
+                  calendarBlocks: [...d.calendarBlocks, ...events.map((ev) => ({ id: id(), title: ev.title, taskId: null, start: ev.start.toISOString(), end: ev.end.toISOString(), deepWork: false }))],
+                }))
+                setNotice(`Imported ${events.length} event${events.length === 1 ? '' : 's'} from ${file.name}.`)
+              }}
+            />
+          </label>
           <select
             aria-label="Calendar view"
             value={view}
