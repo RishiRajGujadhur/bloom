@@ -260,6 +260,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'moodTag', title: 'What is under it?', description: 'One-tap mood; alternatives match it.' },
   ],
   habitTracker: [
+    { id: 'calendar', title: 'Habit calendar', description: 'Show the weekly habit calendar and item details on the Habits page.' },
     { id: 'library', title: 'Habit & routine library', description: 'Adopt ready-made cards.' },
     { id: 'routines', title: 'Routines', description: 'Timed step-by-step routines.' },
     { id: 'grid', title: 'Contribution grid', description: 'History heatmap on each habit.' },

@@ -276,7 +276,7 @@ export function HabitsPage({
       <p role="status" className="habit-message">
         {message}
       </p>
-      {tab === 'habits' && <HabitCalendar data={data} setData={setData} today={today} />}
+      {tab === 'habits' && subOn('habitTracker', 'calendar') && <HabitCalendar data={data} setData={setData} today={today} />}
       {run && (
         <section className="routine-player" aria-label="Active routine">
           <div>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { HabitsPage } from '../src/features/HabitsPage'
 import { defaults } from '../src/model'
+import { defaultSettings, SETTINGS_STORAGE_KEY } from '../src/SettingsPage'
 
 function Harness() {
   const [data, setData] = useState(() => ({ ...defaults(), routines: [{ id: 'r', title: 'Morning ritual', period: 'morning' as const, days: [1], dates: [] as string[], steps: [{ id: 's', title: 'Read a page', minutes: 1 }, { id: 't', title: 'Stretch', minutes: 1 }] }] }))
@@ -35,4 +36,15 @@ test('skipped steps do not award a completed routine', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Complete step' }))
   expect(screen.getByText('0 completions')).toBeInTheDocument()
   expect(screen.getByRole('status')).toHaveTextContent('1 skipped step')
+})
+
+test('habit calendar can be hidden with its Settings option', () => {
+  localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ ...defaultSettings, sub: { 'habitTracker.calendar': false } }))
+  const { unmount } = render(<Harness />)
+  expect(screen.queryByRole('region', { name: 'Habit calendar' })).not.toBeInTheDocument()
+  unmount()
+  localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(defaultSettings))
+  render(<Harness />)
+  expect(screen.getByRole('region', { name: 'Habit calendar' })).toBeInTheDocument()
+  localStorage.removeItem(SETTINGS_STORAGE_KEY)
 })
