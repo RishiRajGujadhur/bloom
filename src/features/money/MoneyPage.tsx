@@ -310,7 +310,18 @@ export function MoneyPage() {
                 <strong>{x.place || categoryOf(x.category).name}</strong>
                 <small>{x.date}</small>
               </span>
-              <strong className={x.income ? 'mn-in' : ''}>{x.income ? '+' : '−'}{fmt(x.amount)}</strong>
+              <button
+                type="button"
+                className={`mn-amount-edit ${x.income ? 'mn-in' : ''}`}
+                title="Change amount"
+                onClick={() => {
+                  const v = window.prompt(`Amount for ${x.place || categoryOf(x.category).name}`, (x.amount / 100).toFixed(2))
+                  const n = v === null ? NaN : Number(v.replace(',', '.'))
+                  if (Number.isFinite(n) && n > 0) save((s) => ({ ...s, txns: s.txns.map((y) => (y.id === x.id ? { ...y, amount: toMinor(n) } : y)) }))
+                }}
+              >
+                {x.income ? '+' : '−'}{fmt(x.amount)}
+              </button>
               <button type="button" className="mn-del" aria-label="Delete" onClick={() => save((s) => ({ ...s, txns: s.txns.filter((y) => y.id !== x.id) }))}>
                 <Trash2 size={14} />
               </button>
