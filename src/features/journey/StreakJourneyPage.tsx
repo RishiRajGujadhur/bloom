@@ -73,7 +73,17 @@ export function StreakJourneyPage({ data, today }: FeaturePageProps) {
   const ranked = [...data.habits].sort(
     (a, b) => habitStats(b.dates, today).best - habitStats(a.dates, today).best,
   )
-  const [habitId, setHabitId] = useState(ranked[0]?.id ?? '')
+  const [habitId, setHabitIdState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bloom-journey-habit')
+      if (saved && data.habits.some((h) => h.id === saved)) return saved
+    } catch { /* optional */ }
+    return ranked[0]?.id ?? ''
+  })
+  const setHabitId = (v: string) => {
+    setHabitIdState(v)
+    try { localStorage.setItem('bloom-journey-habit', v) } catch { /* optional */ }
+  }
   const habit = data.habits.find((h) => h.id === habitId)
   const steps = useMemo(() => (habit ? journeySteps(habit.dates, today) : []), [habit, today])
   const curve = useMemo(
@@ -125,6 +135,11 @@ export function StreakJourneyPage({ data, today }: FeaturePageProps) {
           <strong>
             {steps.length} day{steps.length === 1 ? '' : 's'} · day {Math.min(current + 1, steps.length)}
           </strong>
+          {steps.length > 2 && (
+            <button type="button" className="quiet-button" onClick={() => list.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>
+              Latest day ↓
+            </button>
+          )}
         </div>
         <div className="journey-stage">
           {steps.length >= 2 ? (
