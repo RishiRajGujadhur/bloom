@@ -624,9 +624,22 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
   }, [isNarrow, setIsOpen])
   // Filter pages by name; Ctrl+Shift+F opens the sidebar and focuses the box.
   const [navFilter, setNavFilter] = useState('')
+  const pinsRef = useRef(pins)
+  pinsRef.current = pins
+  const navRef = useRef(onNavigate)
+  navRef.current = onNavigate
   const filterRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Alt+1–9 jumps to your pinned pages, in order.
+      if (e.altKey && !e.ctrlKey && !e.metaKey && /^[1-9]$/.test(e.key)) {
+        const key = pinsRef.current[Number(e.key) - 1]
+        if (key) {
+          e.preventDefault()
+          navRef.current(key as NavKey)
+        }
+        return
+      }
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'f') {
         e.preventDefault()
         setIsOpen(true)

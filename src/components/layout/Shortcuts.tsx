@@ -66,6 +66,7 @@ function CheatSheet({ onClose }: { onClose: () => void }) {
             {row('Ctrl Shift L', 'Hide / show everything (privacy)')}
             {row('Ctrl /', 'Search within this page')}
             {row('Ctrl Shift F', 'Filter the sidebar')}
+            {row('Alt 1–9', 'Open a pinned page')}
             {row('m then 1–5', 'Log your mood')}
             {row('Ctrl Shift D', 'Insert date (while writing)')}
           </ul></section>
