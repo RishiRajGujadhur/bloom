@@ -635,6 +635,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
   const [banner, setBanner] = useState(pageBanner)
   const [followSys, setFollowSys] = useState(followSystemTheme)
   const [dense, setDense] = useState(() => localStorage.getItem('bloom-nav-dense') === '1')
+  const [contrast, setContrast] = useState(() => localStorage.getItem('bloom-high-contrast') === '1')
   const [pixel, setPixel] = useState(pixelIconsOn)
   return (
     <section className={styles.card} aria-labelledby="navigation-heading">
@@ -684,6 +685,29 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
               setCompactTitles(e.target.checked)
             }}
             aria-label="Icon page headings"
+          />
+          <span className={styles.slider} aria-hidden="true" />
+        </span>
+      </label>
+      <label className={styles.subOption}>
+        <span>
+          <strong>High contrast</strong>
+          <small>Stronger text and borders on every theme.</small>
+        </span>
+        <span className={styles.switch} data-size="small">
+          <input
+            type="checkbox"
+            checked={contrast}
+            onChange={(e) => {
+              setContrast(e.target.checked)
+              try {
+                localStorage.setItem('bloom-high-contrast', e.target.checked ? '1' : '0')
+              } catch {
+                /* optional */
+              }
+              document.documentElement.toggleAttribute('data-high-contrast', e.target.checked)
+            }}
+            aria-label="High contrast"
           />
           <span className={styles.slider} aria-hidden="true" />
         </span>
