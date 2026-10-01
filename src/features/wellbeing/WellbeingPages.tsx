@@ -548,6 +548,23 @@ export function MoodPage() {
             </button>
           )}
         </h2>
+        {(() => {
+          const avg = (from: number, to: number) => {
+            const xs = entries.filter((e) => e.at >= from && e.at < to)
+            return xs.length ? xs.reduce((a, e) => a + e.mood, 0) / xs.length : null
+          }
+          const now = Date.now()
+          const thisWeek = avg(now - 7 * 864e5, now + 1)
+          const lastWeek = avg(now - 14 * 864e5, now - 7 * 864e5)
+          if (thisWeek === null || lastWeek === null) return null
+          const diff = thisWeek - lastWeek
+          return (
+            <p className="wb-muted">
+              This week {thisWeek.toFixed(1)}/5 · last week {lastWeek.toFixed(1)}/5{' '}
+              {Math.abs(diff) < 0.15 ? '· about the same' : diff > 0 ? `· up ${diff.toFixed(1)} 🌱` : `· down ${(-diff).toFixed(1)} — be gentle with yourself`}
+            </p>
+          )
+        })()}
         <ol className="wb-week">
           {week.map((day) => {
             const mood = day.mood === null ? null : moods[Math.round(day.mood) - 1]
