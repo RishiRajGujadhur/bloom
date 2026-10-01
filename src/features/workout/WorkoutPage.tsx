@@ -291,6 +291,7 @@ export function WorkoutPage() {
             <Stat value={active.sets.length} label="sets" />
             <Stat value={`${volume(active.sets, store.bodyweight)} kg`} label="volume" />
           </div>
+          <input className="studio-input wo-name" aria-label="Workout name" value={active.name} maxLength={40} onChange={(e) => setStore((st) => ({ ...st, workouts: st.workouts.map((w) => (w.id === active.id ? { ...w, name: e.target.value } : w)) }))} />
           <textarea className="studio-input wo-note" rows={2} maxLength={400} placeholder="Notes: how it felt, what to change next time…" aria-label="Workout notes" value={active.note ?? ''} onChange={(e) => setStore((st) => ({ ...st, workouts: st.workouts.map((w) => (w.id === active.id ? { ...w, note: e.target.value } : w)) }))} />
           <button type="button" className="studio-go" data-variant="quiet" onClick={finish}>
             Finish workout

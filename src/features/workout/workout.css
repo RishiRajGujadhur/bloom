@@ -220,3 +220,4 @@
 .wo-del-set { margin-left: auto; border: 0; background: none; color: var(--text-muted); cursor: pointer; }
 .wo-note { width: 100%; resize: vertical; margin: 8px 0; }
 .wo-export { border: 0; background: none; color: var(--accent-color); text-decoration: underline; cursor: pointer; font-size: inherit; }
+.wo-name { width: 100%; margin-top: 8px; font-weight: 700; }
