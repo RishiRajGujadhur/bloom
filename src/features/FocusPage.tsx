@@ -224,7 +224,7 @@ export function FocusPage({
         </div>
         {active && <p className="focus-ends">Finishes at {new Date(Date.now() + left).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</p>}
         <p className="focus-goal">
-          {doneToday}/{dailyGoal} sessions today{doneToday >= dailyGoal ? ' 🎉' : ''} ·{' '}
+          {doneToday}/{dailyGoal} sessions today{doneToday >= dailyGoal ? ' 🎉' : ''} · {history.filter((h) => Date.now() - h.completedAt < 7 * 864e5).reduce((a, h) => a + h.minutes, 0)} min this week ·{' '}
           <label>
             goal{' '}
             <select aria-label="Daily focus goal" value={dailyGoal} onChange={(e) => setDailyGoal(Number(e.target.value))}>
