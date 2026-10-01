@@ -379,6 +379,7 @@ export function AdaptiveEditor({
             </span>
             <span className="daybook-goal">
               {goal ? `${words}/${goal} words${words >= goal ? ' ✓' : ''}` : `${words} ${words === 1 ? 'word' : 'words'}`}
+              {words >= 200 && ` · ${Math.max(1, Math.round(words / 230))} min read`}
               {goal > 0 && <i style={{ width: `${Math.min(100, (words / goal) * 100)}%` }} aria-hidden="true" />}
               <select
                 aria-label="Word goal"
