@@ -337,6 +337,17 @@ export function AdaptiveEditor({
       setCelebrating(false)
     }, 500)
   }
+  // Ctrl/Cmd+S completes the page (same as the Complete button).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && !e.shiftKey) {
+        e.preventDefault()
+        if (journalText(content).trim()) save()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
   const ambient = mode.category === 'reflection'
   return (
     <div
