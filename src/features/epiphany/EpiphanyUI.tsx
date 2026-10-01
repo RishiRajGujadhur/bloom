@@ -164,8 +164,11 @@ export function EpiphaniesPage({ today }: { today: string }) {
   const [epQuery, setEpQuery] = useState('')
   const dueCount = list.filter((e) => e.due <= today).length
   useTabTitle(dueCount ? `${dueCount} to review` : '', 'Epiphanies', 'epiphanies')
+  const [onlyDue, setOnlyDue] = useState(false)
+  const [surprise, setSurprise] = useState<Epiphany | null>(null)
   const sorted = [...list]
     .filter((e) => !onlyStarred || e.starred)
+    .filter((e) => !onlyDue || e.due <= today)
     .filter((e) => !epQuery.trim() || e.text.toLowerCase().includes(epQuery.trim().toLowerCase()))
     .sort((a, b) => Number(Boolean(b.starred)) - Number(Boolean(a.starred)) || a.due.localeCompare(b.due))
   return (
@@ -214,10 +217,19 @@ export function EpiphaniesPage({ today }: { today: string }) {
       {list.length > 4 && (
         <input type="search" className="epiphany-search" aria-label="Search epiphanies" placeholder={`Search ${list.length} insights…`} value={epQuery} onChange={(e) => setEpQuery(e.target.value)} />
       )}
-      {list.some((e) => e.starred) && (
+      {(list.some((e) => e.starred) || dueCount > 0) && (
         <div className="filter-chips" role="group" aria-label="Filter">
-          <button type="button" aria-pressed={!onlyStarred} onClick={() => setOnlyStarred(false)}>All · {list.length}</button>
-          <button type="button" aria-pressed={onlyStarred} onClick={() => setOnlyStarred(true)}>★ Starred · {list.filter((e) => e.starred).length}</button>
+          <button type="button" aria-pressed={!onlyStarred && !onlyDue} onClick={() => { setOnlyStarred(false); setOnlyDue(false) }}>All · {list.length}</button>
+          {list.some((e) => e.starred) && <button type="button" aria-pressed={onlyStarred} onClick={() => setOnlyStarred((v) => !v)}>★ Starred · {list.filter((e) => e.starred).length}</button>}
+          {dueCount > 0 && <button type="button" aria-pressed={onlyDue} onClick={() => setOnlyDue((v) => !v)}>⏰ Due now · {dueCount}</button>}
+        </div>
+      )}
+      {list.length > 2 && (
+        <div className="epiphany-surprise">
+          <button type="button" className="quiet-button" onClick={() => setSurprise(list[Math.floor(Math.random() * list.length)])}>
+            🎲 Surprise me
+          </button>
+          {surprise && <blockquote className="wb-muted">“{surprise.text}” <small>— {surprise.source.title}</small></blockquote>}
         </div>
       )}
       <ShowMore as="ul" className="epiphany-list" initial={5} label="insights">
