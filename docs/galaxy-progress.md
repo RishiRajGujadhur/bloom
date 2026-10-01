@@ -27,7 +27,7 @@ Galaxy is a selectable dark theme. Changes below are scoped to `data-theme="gala
 - [x] English
 - [x] Mindmap
 - [x] Meditate
-- [ ] Mala
+- [x] Mala
 - [ ] Affirm
 - [ ] Joys
 - [ ] Dojo
