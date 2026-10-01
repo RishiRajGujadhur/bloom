@@ -78,6 +78,13 @@ export function MindMapPage() {
   }, [])
 
   const edit = (md: string) => setStore((s) => ({ ...s, maps: s.maps.map((m) => (m.id === map.id ? { ...m, md, title: titleOf(md), updatedAt: Date.now() } : m)) }))
+  /** Set a map's title by rewriting its root heading. */
+  const retitle = (md: string, t: string) => (/^# .*$/m.test(md) ? md.replace(/^# .*$/m, `# ${t}`) : `# ${t}\n${md}`)
+  const rename = (m: MindMap) => {
+    const t = window.prompt('Rename map', m.title)?.trim()
+    if (!t) return
+    setStore((s) => ({ ...s, maps: s.maps.map((x) => (x.id === m.id ? { ...x, title: t, md: retitle(x.md, t), updatedAt: Date.now() } : x)) }))
+  }
   const create = (md: string) => {
     const m: MindMap = { id: crypto.randomUUID(), title: titleOf(md), md, updatedAt: Date.now() }
     setStore((s) => ({ ...s, maps: [...s.maps, m], current: m.id }))
@@ -266,9 +273,9 @@ export function MindMapPage() {
                 <strong>Blank map</strong>
               </button>
             </div>
-            {store.maps.map((m) => (
+            {[...store.maps].sort((a, b) => b.updatedAt - a.updatedAt).map((m) => (
               <div key={m.id} role="listitem" className="yg-saved">
-                <button type="button" className="iv-card" data-on={m.id === map.id} onClick={() => (setStore((s) => ({ ...s, current: m.id })), setTab('map'))}>
+                <button type="button" className="iv-card" data-on={m.id === map.id} title="Double-click to rename" onDoubleClick={() => rename(m)} onClick={() => (setStore((s) => ({ ...s, current: m.id })), setTab('map'))}>
                   <span aria-hidden="true">🗺️</span>
                   <strong>{m.title}</strong>
                   <small>{new Date(m.updatedAt).toLocaleDateString()}</small>
@@ -280,7 +287,8 @@ export function MindMapPage() {
                   aria-label={`Duplicate ${m.title}`}
                   title="Duplicate"
                   onClick={() => {
-                    const copy: MindMap = { ...m, id: crypto.randomUUID(), title: `${m.title} (copy)`, updatedAt: Date.now() }
+                    const t = `${m.title} (copy)`
+                    const copy: MindMap = { ...m, id: crypto.randomUUID(), title: t, md: retitle(m.md, t), updatedAt: Date.now() }
                     setStore((s) => ({ ...s, maps: [...s.maps, copy], current: copy.id }))
                   }}
                 >
