@@ -54,6 +54,7 @@ export function ArcadePage() {
           {recentIds().map((id) => GAMES.find((g) => g.id === id)).filter((g) => !!g).map((g) => (
             <button key={g!.id} type="button" onClick={() => go(g!.id)}>{g!.title}</button>
           ))}
+          <button type="button" className="ar-recent-clear" aria-label="Clear recently played" onClick={() => { try { localStorage.removeItem(RECENT_KEY) } catch { /* optional */ } setFavs((f) => [...f]) /* re-render without the row */ }}>✕</button>
         </div>
       )}
       <div className="ar-filters">
