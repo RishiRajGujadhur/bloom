@@ -133,7 +133,7 @@ export function GlobePage() {
         </svg>
       </section>
       <aside className="gq-side">
-        <p className="gq-eyebrow">Globe quiz · {score.right}/{score.total}</p>
+        <p className="gq-eyebrow">Globe quiz · {score.right}/{score.total}{score.total >= 3 ? ` · ${Math.round((score.right / score.total) * 100)}%` : ''}</p>
         <h2>{q.mode === 'find' ? <>Find <em>{q.country.name}</em></> : q.mode === 'name' ? 'Which country is glowing?' : <>Capital of <em>{q.country.name}</em>?</>}</h2>
         <div className="gq-row">
           {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
