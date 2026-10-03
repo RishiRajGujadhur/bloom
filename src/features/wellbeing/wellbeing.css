@@ -689,3 +689,9 @@
 .wb-note { position: relative; }
 .wb-note-del { position: absolute; top: 4px; right: 6px; border: 0; background: none; color: var(--text-muted); cursor: pointer; opacity: 0; font-size: 16px; }
 .wb-note:hover .wb-note-del, .wb-note-del:focus-visible { opacity: 1; }
+.wb-grat-undo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}

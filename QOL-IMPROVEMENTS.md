@@ -55,7 +55,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Add accessible labels to jar selection and reveal controls.
 - [ ] Add a confirmation animation that respects reduced-motion settings.
 - [ ] Allow filtering or browsing notes by date.
-- [ ] Add an undo path for removing a note.
+- [x] Add an undo path for removing a note.
 
 ## Soundscapes
 

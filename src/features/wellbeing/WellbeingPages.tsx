@@ -718,6 +718,7 @@ export function GratitudePage() {
   })()
   const [creating, setCreating] = useState(false)
   const [added, setAdded] = useState(0)
+  const [undoEntry, setUndoEntry] = useState<GratitudeEntry | null>(null)
   const [newJar, setNewJar] = useState({ name: '', emoji: '🫙' })
   const jar = jars.find((j) => j.id === jarId) ?? jars[0]
   const inJar = entries.filter((e) => (e.jarId ?? 'moments') === jar.id)
@@ -767,6 +768,15 @@ export function GratitudePage() {
     ])
     setText('')
     setAdded((n) => n + 1)
+  }
+  const removeEntry = (entry: GratitudeEntry) => {
+    setEntries((list) => list.filter((item) => item.id !== entry.id))
+    setUndoEntry(entry)
+  }
+  const undoRemove = () => {
+    if (!undoEntry) return
+    setEntries((list) => list.some((entry) => entry.id === undoEntry.id) ? list : [undoEntry, ...list])
+    setUndoEntry(null)
   }
   const createJar = () => {
     const name = newJar.name.trim()
@@ -980,6 +990,12 @@ export function GratitudePage() {
           </AnimatePresence>
         </div>
       </div>
+      {undoEntry && (
+        <p className="wb-muted wb-grat-undo" role="status">
+          Note removed.
+          <button type="button" className="quiet-button" onClick={undoRemove}>Undo</button>
+        </p>
+      )}
       {entries.length > 5 && (
         <div className="wb-card wb-grat-search">
           <button
@@ -1002,7 +1018,7 @@ export function GratitudePage() {
                   <li key={e.id}>
                     <span aria-hidden="true">{jars.find((j) => j.id === (e.jarId ?? 'moments'))?.emoji}</span> {e.text}
                     <small>{new Date(e.at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</small>
-                    <button type="button" className="wb-note-del" style={{ position: 'static', opacity: 1 }} aria-label="Delete this note" onClick={() => setEntries((list) => list.filter((x) => x.id !== e.id))}>
+                    <button type="button" className="wb-note-del" style={{ position: 'static', opacity: 1 }} aria-label="Delete this note" onClick={() => removeEntry(e)}>
                       ×
                     </button>
                   </li>
@@ -1050,7 +1066,7 @@ export function GratitudePage() {
               <button
                 className="icon-button"
                 aria-label={`Remove “${entry.text}”`}
-                onClick={() => setEntries((list) => list.filter((e) => e.id !== entry.id))}
+                onClick={() => removeEntry(entry)}
               >
                 <Trash2 size={15} />
               </button>
