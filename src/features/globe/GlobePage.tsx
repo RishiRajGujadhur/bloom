@@ -101,11 +101,12 @@ export function GlobePage() {
   const idle = useRef(true)
   useEffect(() => {
     if (reduced()) return
-    const id = window.setInterval(() => { if (idle.current && !tween.current?.isActive() && q.mode === 'find' && !answer) setRot(([x, y]) => [x + 0.25, y]) }, 40)
+    const id = window.setInterval(() => { if (!paused && idle.current && !tween.current?.isActive() && q.mode === 'find' && !answer) setRot(([x, y]) => [x + 0.25, y]) }, 40)
     return () => window.clearInterval(id)
-  }, [q.mode, answer])
+  }, [q.mode, answer, paused])
 
   const bind = useDrag(({ delta: [dx, dy], first, last }) => {
+    if (paused) return
     if (first) { idle.current = false; tween.current?.kill() }
     setRot(([x, y]) => [x + dx * 0.4, Math.max(-80, Math.min(80, y - dy * 0.4))])
     if (last) window.setTimeout(() => (idle.current = true), 3000)
@@ -194,10 +195,10 @@ export function GlobePage() {
         <h2>{q.mode === 'find' ? <>Find <em>{q.country.name}</em></> : q.mode === 'name' ? 'Which country is glowing?' : <>Capital of <em>{q.country.name}</em>?</>}</h2>
         <p className="gq-shortcuts">Keyboard: S skips · Enter continues · 1–4 answer capital choices</p>
         <div className="gq-row">
-          {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" disabled={retryMode} className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
+          {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" disabled={retryMode || paused} className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
         </div>
         <div className="gq-row">
-          {continents.map((c) => <button key={c} type="button" disabled={retryMode} className={`gq-chip small ${continent === c ? 'on' : ''}`} onClick={() => setContinent(c)}>{c}</button>)}
+          {continents.map((c) => <button key={c} type="button" disabled={retryMode || paused} className={`gq-chip small ${continent === c ? 'on' : ''}`} onClick={() => setContinent(c)}>{c}</button>)}
         </div>
         {paused && <p className="gq-hint" role="status">Quiz paused. Your question is saved; resume whenever you’re ready.</p>}
         {q.mode === 'find' && !answer && <p className="gq-hint">Drag to spin the globe, then click the country.</p>}
