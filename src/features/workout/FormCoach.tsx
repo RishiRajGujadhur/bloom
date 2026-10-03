@@ -8,10 +8,11 @@ import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisi
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
 import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick, formXP } from './coachAnalysis'
-import { readCoachHistory, saveCoachSession, recoverySuggestion, type CoachSession } from './coachHistory'
+import { readCoachHistory, saveCoachSession, recoverySuggestion, coachMarkdown, type CoachSession } from './coachHistory'
 import { CoachHistoryPanel } from './CoachHistoryPanel'
 import { readGhost, saveGhost, ghostFrame } from './coachReplay'
 import { CoachGhost } from './CoachGhost'
+import { download } from '../lab/exportSuite'
 import { Sprite } from '../../rpg/Sprite'
 import { CoachSecondary, calibrateDepth, fuseDepth, type DepthCalibration } from './CoachSecondary'
 import { COACH_WASM, COACH_MODEL, COACH_HAND_MODEL, prepareCoachOffline } from './coachOffline'
@@ -429,6 +430,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
         {options.rpg && <div className="fc-diagnostics fc-rpg"><h4>Garden battle</h4><Sprite name="boss" label="Pixel garden enemy" size={48} /><p>{Math.floor(metrics.joules / 10)} damage earned · applied to your weekly raid when you log this real set</p><small>Game conversion: 10 estimated joules = 1 damage. Demo awards nothing.</small></div>}
         {options.replay && worstRep && <CoachReplayPanel replay={worstRep} />}
+        <button disabled={!history.length} onClick={() => download(new Blob([coachMarkdown(history)], { type: 'text/markdown;charset=utf-8' }), `bloom-form-coach-${new Date().toISOString().slice(0, 10)}.md`)}>Export Form Coach Markdown</button>
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
         <div className="fc-diagnostics"><h4>Offline training</h4><button disabled={preparingOffline} onClick={() => { setPreparingOffline(true); void prepareCoachOffline(setOfflineStatus).catch(error => setOfflineStatus(error instanceof Error ? error.message : 'Offline setup failed')).finally(() => setPreparingOffline(false)) }}>Prepare offline tracking</button><p role="status">{offlineStatus}</p><small>Processing stays local. Latency depends on your hardware; the GPU delegate does not guarantee WebGPU or zero latency.</small></div>
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />

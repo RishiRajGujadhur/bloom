@@ -32,7 +32,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Lowest-scoring rep replay and compensation review
 - [x] Frame-exit auto-pause and metronome hold
 - [x] Focus-mode background dimming
-- [ ] Markdown session export
+- [x] Markdown session export
 - [ ] Battery saver
 - [ ] Silent wearable feedback and heart-rate connection
 - [x] Performance history and range-of-motion trends
