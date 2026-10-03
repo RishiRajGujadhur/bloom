@@ -30,7 +30,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Custom high-contrast skeletal colors
 - [ ] Offline tracking asset preparation
 - [ ] Lowest-scoring rep replay and compensation review
-- [ ] Frame-exit auto-pause and metronome hold
+- [x] Frame-exit auto-pause and metronome hold
 - [ ] Focus-mode background dimming
 - [ ] Markdown session export
 - [ ] Battery saver

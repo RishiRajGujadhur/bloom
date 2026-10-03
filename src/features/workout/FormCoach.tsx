@@ -53,6 +53,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [label, setLabel] = useState('')
   const [err, setErr] = useState('')
   const [message, setMessage] = useState('')
+  const [trackingPaused, setTrackingPaused] = useState(false)
   const [calibration, setCalibration] = useState(0)
   const [balance, setBalance] = useState<ReturnType<typeof alignment>>(null)
   const [metrics, setMetrics] = useState<MotionState>(emptyMotion)
@@ -242,6 +243,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     }
     const aligned = alignment(lm, baseline.current); setBalance(aligned)
     const trackingValid = accessible ? upperVisible(lm) : exerciseVisible(exercise.current, lm)
+    setTrackingPaused(!trackingValid)
     if (hovered || (accessible && !baseline.current) || !trackingValid) {
       setFault(null)
       counter.current.phase = 'up'; hold.current.last = 0
@@ -310,7 +312,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       try { model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' }, runningMode: 'VIDEO', numPoses: 1 }) }
       catch { if (generation.current !== run) return; model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1 }) }
       if (generation.current !== run) { model.close(); return }
-      detector.current = model as unknown as Detector; setMode('camera'); modeRef.current = 'camera'
+      detector.current = model as unknown as Detector; setTrackingPaused(false); setMode('camera'); modeRef.current = 'camera'
       let sampledAt = 0, videoTime = -1
       const loop = (at: number) => {
         if (generation.current !== run) return
@@ -324,13 +326,13 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
             if (result.landmarks[0]) frameRef.current(result.landmarks[0], result.worldLandmarks?.[0], at, true)
             else {
               hold.current.last = 0; counter.current.phase = 'up'; gestureState.current = emptyGesture(); setGesture({ id: null, progress: 0, latched: false })
-              motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current); setBalance(null); setLabel('No upper body detected · counting held')
+              motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current); setBalance(null); setTrackingPaused(true); lastFrame.current = 0; setLabel('No upper body detected · counting held')
               canvas.current?.getContext('2d')?.clearRect(0, 0, 640, 480)
             }
           } catch (error) { release(); setMode('idle'); setErr(`Tracking stopped: ${error instanceof Error ? error.message : 'camera unavailable'}`); return }
         } else if (at - sampledAt > 300) {
           hold.current.last = 0; counter.current.phase = 'up'; gestureState.current = emptyGesture(); setGesture({ id: null, progress: 0, latched: false })
-          motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current); setBalance(null); setLabel('Camera frames paused · counting held')
+          motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current); setBalance(null); setTrackingPaused(true); lastFrame.current = 0; setLabel('Camera frames paused · counting held')
         }
         if (generation.current === run) raf.current = requestAnimationFrame(loop)
       }
@@ -342,7 +344,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   }
   const startDemo = () => {
     release(); const run = generation.current
-    resetSet(); recalibrate(); filters.current = []; motion.current = emptyMotion(); setMetrics(motion.current); setErr(''); setMessage(''); setMode('demo'); modeRef.current = 'demo'
+    resetSet(); recalibrate(); filters.current = []; motion.current = emptyMotion(); setMetrics(motion.current); setErr(''); setMessage(''); setTrackingPaused(false); setMode('demo'); modeRef.current = 'demo'
     const start = performance.now()
     let flowStart: number | null = null
     const loop = (at: number) => {
@@ -375,14 +377,15 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
             {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
           </div>
         </div>
-        {options.reference && <CoachReference exercise={ex} anglesVisible={options.angles} lineage={lineage} />}</div>
+        {options.reference && <CoachReference exercise={ex} anglesVisible={options.angles} lineage={lineage} paused={options.autoPause && trackingPaused} />}</div>
         {options.angles && <div className="fc-live-angles">Your projected elbow angles: L {jointAngles.left}° · R {jointAngles.right}°</div>}
         <div className="fc-asymmetry"><strong>Asymmetry Alert <small>silent · relative to your neutral position</small></strong><div className="fc-balance-track" role="meter" aria-label="Upper-body asymmetry" aria-valuemin={-100} aria-valuemax={100} aria-valuenow={Math.round((balance?.value ?? 0) * 100)} aria-valuetext={silentStatus}><i style={{ left: `${50 + (balance?.value ?? 0) * 45}%`, background: balance?.alert ? '#ffd43b' : '#5dffc0' }} /></div><span>{silentStatus}</span></div>
+        {ready && options.autoPause && trackingPaused && <p role="status" className="fc-error">Tracking and pacing paused. Return your head and arms to the frame to resume.</p>}
         <p className="fc-instructions">{accessible ? 'Face camera. Calibrated for upper-body forms.' : 'Face camera. Keep the exercise joints visible.'}</p>
         <div className="fc-calibration"><span>{calibration < 1 && ready ? `Stay in your comfortable neutral position · ${Math.round(calibration * 100)}%` : calibration >= 1 ? 'Neutral position calibrated' : 'Calibration begins when you start'}</span><button type="button" className="fc-ghost" onClick={recalibrate} disabled={!ready}>Recalibrate</button></div>
         {!RULES[ex].timed && <div className="fc-calibration"><span role="status">{romStatus}</span><button type="button" disabled={!ready || calibration < 1} onClick={() => { rom.current = { active: true, seconds: 0, low: Infinity, high: -Infinity }; resetSet(); setRomStatus('Move through your comfortable range for 8 seconds') }}>Calibrate movement range</button></div>}
       </div>
-      <div className="fc-side"><div className="fc-pacing"><RepRing count={RULES[ex].timed ? held : reps.length} target={target} timed={!!RULES[ex].timed} /><div className="fc-metronome"><strong>Rhythm Metronome</strong><div className={ready ? 'fc-beat running' : 'fc-beat'} style={{ '--fc-beat': `${60000 / bpm}ms` } as CSSProperties} aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ height: `${12 + (4 - Math.abs(i - 4)) * 7}px` }} />)}</div><label>Pace <input type="number" aria-label="Metronome BPM" min="20" max="140" value={bpm} onChange={(e) => setBpm(Math.max(20, Math.min(140, Number(e.target.value) || 40)))} /> BPM</label></div></div>
+      <div className="fc-side"><div className="fc-pacing"><RepRing count={RULES[ex].timed ? held : reps.length} target={target} timed={!!RULES[ex].timed} /><div className="fc-metronome"><strong>Rhythm Metronome</strong><div className={ready && !(options.autoPause && trackingPaused) ? 'fc-beat running' : 'fc-beat'} style={{ '--fc-beat': `${60000 / bpm}ms` } as CSSProperties} aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ height: `${12 + (4 - Math.abs(i - 4)) * 7}px` }} />)}</div><label>Pace <input type="number" aria-label="Metronome BPM" min="20" max="140" value={bpm} onChange={(e) => setBpm(Math.max(20, Math.min(140, Number(e.target.value) || 40)))} /> BPM</label></div></div>
         {!RULES[ex].timed && <label className="fc-target">Target reps <select value={target} onChange={(e) => setTarget(Number(e.target.value))}>{[5, 8, 10, 12, 15, 20, 30].map((n) => <option key={n}>{n}</option>)}</select></label>}
         {options.energy && <div className="fc-energy" aria-label="Energy metrics"><h4>Energy Metrics {mode === 'demo' && <small>DEMO</small>}</h4><dl><div><dt>Est. Kcal</dt><dd>{metrics.kcal.toFixed(2)}</dd></div><div><dt>Est. kinetic work (J)</dt><dd>{metrics.joules.toFixed(1)}</dd></div><div><dt>Average Power (W) · est.</dt><dd>{(metrics.seconds ? metrics.joules / metrics.seconds : 0).toFixed(1)}</dd></div><div><dt>Active Power (W) · est.</dt><dd>{Math.round(metrics.watts)}</dd></div><div><dt>Motion Intensity</dt><dd>{metrics.left + metrics.right > 2 ? 'High' : metrics.left + metrics.right > .5 ? 'Moderate' : 'Low'}</dd></div><div><dt>Left / right hand · est. m/s</dt><dd>{metrics.left.toFixed(2)} / {metrics.right.toFixed(2)}</dd></div><div><dt>Arm velocity · est. m/s</dt><dd>{metrics.arm.toFixed(2)}</dd></div></dl><small>Arm-mass and velocity estimates, not measured mechanical work. Calories use a motion-based activity proxy, adjusted for seated upper-body exercise. {metrics.source === 'world' ? 'Using model-estimated 3D coordinates.' : 'Scale estimated from shoulder span.'}</small><label>Shoulder span (cm) <input type="number" min="20" max="70" value={span} onChange={(e) => { setSpan(Math.max(20, Math.min(70, Number(e.target.value) || 40))); motion.current.points = null }} /></label></div>}
         {options.reaction && <div className="fc-diagnostics"><h4>Reaction drill</h4><p>Onset: {drill.elapsed == null ? 'Wait for the target, then move' : `${drill.elapsed}ms`} · {drill.hit ? 'Target reached' : 'Reach the lit target'}</p><small>Measured from the rendered cue to detected hand movement; includes camera sampling delay.</small></div>}
@@ -395,7 +398,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.routing && recoverySuggestion(history) && <div className="fc-diagnostics"><h4>A gentler flow today?</h4><p>Yesterday included {Math.round(recoverySuggestion(history)!.minutes)} active minutes and {Math.round(recoverySuggestion(history)!.work)} estimated J. Consider seated mobility to keep your habit comfortable.</p><button onClick={() => change('taiChi')}>Choose gentle Tai Chi</button><small>Based on logged workload, not a diagnosis of fatigue.</small></div>}
         {options.xp && <div className="fc-diagnostics"><h4>Perfect form XP</h4><p>{RULES[ex].timed ? flowXP : formXP(reps).xp} XP · {RULES[ex].timed ? '5 XP per continuous 5s of 90%+ flow' : `${formXP(reps).streak} streak · ×${formXP(reps).multiplier.toFixed(2)}`}</p><small>Saved to your local RPG streak ledger when you log a real set.</small></div>}
         {options.ghost && <div className="fc-diagnostics"><h4>Personal best ghost</h4><select aria-label="Ghost record" value={ghostKind} onChange={e => setGhostKind(e.target.value as typeof ghostKind)}><option value="form">Best form</option><option value="power">Most powerful</option></select><p>{ghost ? `${Math.round(ghost.score)}% form · ${ghost.power.toFixed(1)} W` : 'Enable this option and log a camera set to record a ghost.'}</p><small>Stores skeletal points only, up to the last 15 seconds of a set. Your camera video is never saved.</small></div>}
-        {options.breathing && <div className="fc-diagnostics fc-breathing"><div className={`fc-breath-ring ${ready ? 'running' : ''}`} style={{ '--fc-breath': `${120000 / bpm}ms` } as CSSProperties} aria-hidden="true" /><div><h4>Breathing guide</h4><p>Expand: inhale · Contract: exhale</p><small>Follow your comfortable pace; never hold your breath.</small></div></div>}
+        {options.breathing && <div className="fc-diagnostics fc-breathing"><div className={`fc-breath-ring ${ready && !(options.autoPause && trackingPaused) ? 'running' : ''}`} style={{ '--fc-breath': `${120000 / bpm}ms` } as CSSProperties} aria-hidden="true" /><div><h4>Breathing guide</h4><p>Expand: inhale · Contract: exhale</p><small>Follow your comfortable pace; never hold your breath.</small></div></div>}
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
         {options.rpg && <div className="fc-diagnostics fc-rpg"><h4>Garden battle</h4><Sprite name="boss" label="Pixel garden enemy" size={48} /><p>{Math.floor(metrics.joules / 10)} damage earned · applied to your weekly raid when you log this real set</p><small>Game conversion: 10 estimated joules = 1 damage. Demo awards nothing.</small></div>}
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}

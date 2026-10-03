@@ -3,7 +3,7 @@ import { angle, BONES, referencePose, RULES, UPPER_BONES, type Exercise, type Li
 import { prefersReducedMotion } from '../../utils/motion'
 
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
-export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang' }: { exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage }) {
+export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false }: { exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const [available, setAvailable] = useState(true)
   const [angles, setAngles] = useState({left: 0, right: 0})
@@ -28,12 +28,13 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       const seatGeometry = new THREE.BoxGeometry(.8, .045, .55), seatMaterial = new THREE.MeshStandardMaterial({ color: '#375d55', transparent: true, opacity: .65 })
       if (RULES[exercise].upper) { const seat = new THREE.Mesh(seatGeometry, seatMaterial); seat.position.set(0, -.8, 0); group.add(seat) }
       const axis = new THREE.Vector3(0, 1, 0)
-      let renderedAt = 0
+      let renderedAt = 0, phaseTime = 0
       const loop = (now: number) => {
         if (cancelled) return
         if (now - renderedAt < 50) { raf = requestAnimationFrame(loop); return }
+        if (!paused && renderedAt) phaseTime += now - renderedAt
         renderedAt = now
-        const pose = referencePose(exercise, prefersReducedMotion() ? .25 : now / 4000 % 1, lineage)
+        const pose = referencePose(exercise, prefersReducedMotion() ? .25 : phaseTime / 4000 % 1, lineage)
         setAngles({ left: Math.round(angle(pose[11], pose[13], pose[15])), right: Math.round(angle(pose[12], pose[14], pose[16])) })
         const positions = pose.map((p) => new THREE.Vector3((p.x - .5) * 2.7, (.58 - p.y) * 2.7, (p.z ?? 0) * 2.7))
         joints.forEach(({ i, mesh }) => { mesh.position.copy(positions[i]) })
@@ -48,6 +49,6 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       raf = requestAnimationFrame(loop)
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
-  }, [exercise, lineage])
+  }, [exercise, lineage, paused])
   return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
 }
