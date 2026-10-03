@@ -14,7 +14,7 @@ export function motionTick(previous: MotionState, lm: P[], world: P[] | undefine
   const source = useWorld ? 'world' : 'scaled'
   const dt = (at - previous.at) / 1000
   if (!previous.points || previous.source !== source || dt <= 0 || dt > .25) return { ...previous, at, points, left: 0, right: 0, arm: 0, watts: 0, source }
-  const speed = (i: number) => Math.min(5, Math.hypot(points[i].x - previous.points![i].x, points[i].y - previous.points![i].y, (points[i].z ?? 0) - (previous.points![i].z ?? 0)) / dt)
+  const speed = (i: number) => { const value = Math.min(5, Math.hypot(points[i].x - previous.points![i].x, points[i].y - previous.points![i].y, (points[i].z ?? 0) - (previous.points![i].z ?? 0)) / dt); return value < .01 ? 0 : value }
   const smooth = 1 - Math.exp(-dt * 8)
   const left = previous.left + (speed(0) - previous.left) * smooth
   const right = previous.right + (speed(1) - previous.right) * smooth

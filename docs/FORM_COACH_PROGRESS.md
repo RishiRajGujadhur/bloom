@@ -38,6 +38,8 @@ not a medical prescription or a validated martial-arts master.
 - [x] Performance history and range-of-motion trends
 - [x] Custom routine chaining
 
+- [x] Persistent personal profiles and configurable rep triggers
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation

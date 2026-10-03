@@ -4,7 +4,7 @@ import { OneEuroFilter } from '1eurofilter'
 import { Camera, Maximize, Play } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
-import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
+import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, loadPersonalRanges, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
 import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick, formXP } from './coachAnalysis'
@@ -82,7 +82,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [history, setHistory] = useState(readCoachHistory)
   const [worstRep, setWorstRep] = useState<RepReplay | null>(null)
   const worst = useRef<RepReplay | null>(null), repStarted = useRef(0)
-  const timedXP = useRef({ good: 0, total: 0 })
+  const timedXP = useRef({ good: 0, total: 0, streak: 0 })
   const [flowXP, setFlowXP] = useState(0)
   const compensation = useRef({ frames: 0, changed: 0 })
   const reaction = useRef(emptyReaction())
@@ -105,7 +105,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [jointAngles, setJointAngles] = useState({ left: 0, right: 0 })
   const [romStatus, setRomStatus] = useState('Optional: calibrate your comfortable movement range')
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
-  const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
+  const ranges = useRef(loadPersonalRanges())
   useKeepAwake(!options.battery && (mode === 'camera' || mode === 'demo'))
   const [routine, setRoutine] = useState<{ exercise: Exercise; amount: number }[]>([{ exercise: 'boxing', amount: 10 }, { exercise: 'taiChi', amount: 60 }, { exercise: 'seatedTwist', amount: 10 }])
   const [routineIndex, setRoutineIndex] = useState(-1)
@@ -125,10 +125,11 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const ready = mode === 'camera' || mode === 'demo'
   useEffect(() => { if (mode === 'camera') void detector.current?.setOptions?.({ outputSegmentationMasks: options.dimming && !options.battery }).catch(() => setErr('Background focus could not start on this device.')) }, [mode, options.dimming, options.battery])
 
+  useEffect(() => { counter.current.range = ranges.current[exercise.current] ?? null }, [])
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
     boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); goalAlerted.current = false; counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
-    motion.current = emptyMotion(); setMetrics(motion.current); compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0 }; setFlowXP(0); setLabel('')
+    motion.current = emptyMotion(); setMetrics(motion.current); compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0, streak: 0 }; setFlowXP(0); setLabel('')
   }
   const release = useCallback(() => {
     generation.current++; cancelAnimationFrame(raf.current)
@@ -196,6 +197,11 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     const next = state.index + 1
     if (next >= state.steps.length) { setRoutineIndex(-1); finish(); setMessage('Routine complete. Real camera sets are saved; demo sets are never saved.'); return }
     logSet(); change(state.steps[next].exercise, true); setRoutineIndex(next); setMessage(`Routine step ${next + 1}: ${RULES[state.steps[next].exercise].name}`)
+  }
+  const setThreshold = (key: 'down' | 'up', value: number) => {
+    const rule = RULES[ex], saved = ranges.current[ex], range = { low: saved?.low ?? Math.max(0, rule.down - 25), high: saved?.high ?? 180, down: saved?.down ?? rule.down, up: saved?.up ?? rule.up, [key]: value }
+    if (!Number.isFinite(value) || range.low > range.down || range.down + 5 >= range.up || range.up > range.high) { setRomStatus('Triggers need at least a 5° gap inside your comfortable range.'); return }
+    ranges.current[ex] = range; counter.current.range = range; counter.current.phase = 'up'; try { localStorage.setItem('bloom-coach-ranges-v1', JSON.stringify(ranges.current)) } catch { /* optional */ }; setRomStatus('Personal rep triggers saved')
   }
   const nextExercise = (step: number) => {
     const list = GROUPS.flatMap((g) => g.exercises).filter((id) => !accessible || RULES[id].upper)
@@ -283,28 +289,29 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     compensation.current.frames++; if (aligned?.alert) compensation.current.changed++
     const rule = RULES[exercise.current]
     const reading = rule.upper ? readUpper(exercise.current, lm, baseline.current) : read(exercise.current, lm)
+    if (rule.upper && aligned?.alert) reading.faults.push('Alignment changed from your neutral baseline')
     if (rom.current.active) {
       const r = rom.current; r.seconds += dt; r.low = Math.min(r.low, reading.metric); r.high = Math.max(r.high, reading.metric)
       setRomStatus(`Move gently through your comfortable range · ${Math.max(0, Math.ceil(8 - r.seconds))}s`)
       if (r.seconds >= 8) {
         r.active = false; const range = personalRange(r.low, r.high)
-        ranges.current[exercise.current] = range; counter.current.range = range; counter.current.phase = 'up'
+        ranges.current[exercise.current] = range; try { localStorage.setItem('bloom-coach-ranges-v1', JSON.stringify(ranges.current)) } catch { setErr('Personal range could not be saved to this browser.') }; counter.current.range = range; counter.current.phase = 'up'
         setRomStatus(range ? `Personal range saved: ${Math.round(r.low)}–${Math.round(r.high)}° · scoring uses your range` : 'Range too small to distinguish reps. Retry or use default thresholds.')
       }
       return
     }
     if (options.reaction) { reaction.current = reactionTick(reaction.current, lm, frames.current.at(-1)?.pose, at); setDrill(reaction.current) }
-    frames.current.push({ at, pose: lm.map(p => ({ ...p })), score: Math.max(0, 100 - reading.faults.length * 25) }); frames.current = frames.current.slice(-300)
+    frames.current.push({ at, pose: lm.map(p => ({ ...p })), score: Math.max(0, 100 - reading.faults.length * 25) }); frames.current = frames.current.filter(frame => at - frame.at <= 15000).slice(-300)
     setTrailFrames(frames.current.slice(-24))
     if (exercise.current === 'karate') setBlock(blockCue(lm))
     if (options.haptics && aligned?.alert) wearableAlert.current('form')
     setLabel(reading.label); setFault(reading.faults[0] ?? null)
-    motion.current = motionTick(motion.current, lm, world, at, bodyweight, span / 100, accessible || !!RULES[exercise.current].upper); setMetrics(motion.current)
+    motion.current = motionTick(motion.current, lm, depth.current && sidePose.current && at - sidePose.current.at < 150 ? undefined : world, at, bodyweight, span / 100, accessible || !!RULES[exercise.current].upper); setMetrics(motion.current)
     if (exercise.current === 'boxing') { boxing.current = boxingTick(boxing.current, lm, at, lead); setStrikes(boxing.current); if (options.guard && !boxing.current.guard && motion.current.left + motion.current.right > .3) reading.faults.push('Return the other hand to your comfortable guard') }
     flow.current = flowTick(flow.current, motion.current); setFlowScore(flow.current.score)
     analysis.current = analysisTick(analysis.current, lm, motion.current, at); setCombat(analysis.current)
     if (rule.timed) {
-      if (options.xp && (flow.current.score ?? 0) >= 90 && !aligned?.alert) { timedXP.current.good += dt; timedXP.current.total = Math.min(500, Math.floor(timedXP.current.good / 5) * 5); setFlowXP(timedXP.current.total) } else timedXP.current.good = 0
+      if (options.xp && (flow.current.score ?? 0) >= 90 && !aligned?.alert) { timedXP.current.good += dt; if (timedXP.current.good >= 5) { timedXP.current.good -= 5; timedXP.current.streak++; timedXP.current.total = Math.min(500, timedXP.current.total + Math.round(5 * Math.min(4, 1.25 ** (timedXP.current.streak - 1)))); setFlowXP(timedXP.current.total) } } else { timedXP.current.good = 0; timedXP.current.streak = 0 }
       const moving = !rule.upper || (motion.current.left + motion.current.right + motion.current.arm) > .04
       if (!reading.faults.length && moving && hold.current.last) hold.current.seconds += Math.min(.15, (at - hold.current.last) / 1000)
       hold.current.last = reading.faults.length || !moving ? 0 : at; setHeld(Math.floor(hold.current.seconds))
@@ -447,7 +454,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.rhythm && ex === 'boxing' && <div className="fc-diagnostics"><h4>Combo rhythm</h4><p>{rhythmGrade(reps.map(rep => rep.at)) ? `${rhythmGrade(reps.map(rep => rep.at))!.score}% consistency · ${rhythmGrade(reps.map(rep => rep.at))!.gap}ms average gap` : 'Complete three strikes to grade timing'}</p></div>}
         {options.snap && ['boxing', 'karate', 'kungFu'].includes(ex) && <div className="fc-diagnostics"><h4>Strike deceleration · estimate</h4><p>Snap proxy: {combat.snap ?? '—'} / 100 · sampled slowdown: {combat.stopMs == null ? '—' : `${Math.round(combat.stopMs)} ms`}</p><small>Camera sampling cannot resolve precise impact or contact force.</small></div>}
         {options.routing && recoverySuggestion(history) && <div className="fc-diagnostics"><h4>A gentler flow today?</h4><p>Yesterday included {Math.round(recoverySuggestion(history)!.minutes)} active minutes and {Math.round(recoverySuggestion(history)!.work)} estimated J. Consider seated mobility to keep your habit comfortable.</p><button onClick={() => change('taiChi')}>Choose gentle Tai Chi</button><small>Based on logged workload, not a diagnosis of fatigue.</small></div>}
-        {options.xp && <div className="fc-diagnostics"><h4>Perfect form XP</h4><p>{RULES[ex].timed ? flowXP : formXP(reps).xp} XP · {RULES[ex].timed ? '5 XP per continuous 5s of 90%+ flow' : `${formXP(reps).streak} streak · ×${formXP(reps).multiplier.toFixed(2)}`}</p><small>Saved to your local RPG streak ledger when you log a real set.</small></div>}
+        {options.xp && <div className="fc-diagnostics"><h4>Perfect form XP</h4><p>{RULES[ex].timed ? flowXP : formXP(reps).xp} XP · {RULES[ex].timed ? 'Compounding XP per continuous 5s of 90%+ flow' : `${formXP(reps).streak} streak · ×${formXP(reps).multiplier.toFixed(2)}`}</p><small>Saved to your local RPG streak ledger when you log a real set.</small></div>}
         {options.ghost && <div className="fc-diagnostics"><h4>Personal best ghost</h4><select aria-label="Ghost record" value={ghostKind} onChange={e => setGhostKind(e.target.value as typeof ghostKind)}><option value="form">Best form</option><option value="power">Most powerful</option></select><p>{ghost ? `${Math.round(ghost.score)}% form · ${ghost.power.toFixed(1)} W` : 'Enable this option and log a camera set to record a ghost.'}</p><small>Stores skeletal points only, up to the last 15 seconds of a set. Your camera video is never saved.</small></div>}
         {options.breathing && <div className="fc-diagnostics fc-breathing"><div className={`fc-breath-ring ${ready && !(options.autoPause && trackingPaused) ? 'running' : ''}`} style={{ '--fc-breath': `${120000 / bpm}ms` } as CSSProperties} aria-hidden="true" /><div><h4>Breathing guide</h4><p>Expand: inhale · Contract: exhale</p><small>Follow your comfortable pace; never hold your breath.</small></div></div>}
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
@@ -461,6 +468,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />
         <div className="fc-diagnostics"><label>Side camera position <select value={depthDirection} onChange={event => { setDepthDirection(Number(event.target.value)); depth.current = null; setDepthStatus('Recalibrate after changing camera position') }}><option value="1">At your left side</option><option value="-1">At your right side</option></select></label><button disabled={!ready} onClick={() => { const side = sidePose.current; const calibration = side && performance.now() - side.at < 150 ? calibrateDepth(frontPose.current, side.pose, depthDirection) : null; depth.current = calibration; setDepthStatus(calibration ? '90° side-depth estimate calibrated. Keep both cameras fixed.' : 'Both feeds must show your head, shoulders and arms to calibrate.') }}>Calibrate two-camera depth</button><p>{depthStatus}</p><small>Approximate orthogonal projection. Side-view occlusions retain front-camera estimates; this is not flawless 3D reconstruction.</small></div>
         {options.contrast && <div className="fc-diagnostics"><h4>Skeleton colors</h4><label>Left side <input aria-label="Left skeleton color" type="color" value={colors.left} onChange={e => setColors({ ...colors, left: e.target.value })} /></label><label>Right side <input aria-label="Right skeleton color" type="color" value={colors.right} onChange={e => setColors({ ...colors, right: e.target.value })} /></label></div>}
+        {!RULES[ex].timed && <details className="fc-diagnostics"><summary>Personal rep triggers</summary><label>Lower trigger (degrees)<input aria-label="Lower rep trigger" type="number" min="0" max="175" value={ranges.current[ex]?.down ?? RULES[ex].down} onChange={event => setThreshold('down', Number(event.target.value))} /></label><label>Return trigger (degrees)<input aria-label="Return rep trigger" type="number" min="5" max="180" value={ranges.current[ex]?.up ?? RULES[ex].up} onChange={event => setThreshold('up', Number(event.target.value))} /></label><button onClick={() => { delete ranges.current[ex]; counter.current.range = null; try { localStorage.setItem('bloom-coach-ranges-v1', JSON.stringify(ranges.current)) } catch { /* optional */ }; setRomStatus('Default rep triggers restored') }}>Use default triggers</button></details>}
         <div className="fc-settings"><h4>Form Coach Settings</h4><label><input type="checkbox" checked={gestures} onChange={(e) => { setGestures(e.target.checked); gestureState.current = emptyGesture() }} /> Hand-hover controls</label><label><input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> Skeletal overlay</label>{Object.entries(COACH_OPTIONS).map(([key, name]) => <label key={key}><input type="checkbox" checked={options[key as keyof typeof options]} onChange={(e) => setOptions(previous => ({ ...previous, [key]: e.target.checked }))} />{name}</label>)}<p className="fc-small">Audio feedback: off. All coaching is visual or silent.</p><small>Hold either hand on a button for ~3 seconds. Move away to rearm. Next workout changes the exercise and logs completed reps first.</small></div>
         {mode === 'idle' ? <div className="fc-actions"><button type="button" className="fc-cta" onClick={() => void startCamera()}><Camera size={16} /> Start camera</button><button type="button" className="fc-ghost" onClick={startDemo}><Play size={16} /> Watch the demo athlete</button></div> : mode === 'loading' ? <button type="button" className="fc-ghost" onClick={() => { release(); setMode('idle') }}>Cancel camera setup</button> : <button type="button" className="fc-ghost" onClick={enterFocus}><Maximize size={16} /> Camera-only fullscreen</button>}
         {err && <p role="alert" className="fc-error">{err}</p>}<p role="status" className="fc-message">{message}</p><p className="fc-small">Video stays on your device. Tracking files download on first use.</p>

@@ -149,7 +149,7 @@ export function upperPose(ex: Exercise, phase: number): P[] {
     const arm = Math.atan2(shoulder.y - elbow.y, shoulder.x - elbow.x) + sign * theta
     const wrist = { x: elbow.x + .17 * Math.cos(arm), y: elbow.y + .17 * Math.sin(arm), z: 0, visibility: 1 }
     if (ex === 'seatedTwist') shoulder.z = sign * cycle * .15
-    if (ex === 'seatedPress') { elbow.y = .42 - cycle * .2; wrist.x = shoulder.x; wrist.y = elbow.y - .17 }
+    if (ex === 'seatedPress') { elbow.x = shoulder.x + sign * .07; elbow.y = .47 - cycle * .26; const phi = Math.atan2(shoulder.y - elbow.y, shoulder.x - elbow.x) + sign * (95 + cycle * 75) * Math.PI / 180; wrist.x = elbow.x + .17 * Math.cos(phi); wrist.y = elbow.y + .17 * Math.sin(phi) }
     if (ex === 'chestFly') { wrist.x = .5 + sign * (.03 + cycle * .34); wrist.y = .4 }
     if (ex === 'karate') wrist.y = .42 - cycle * .3
     if (RULES[ex].timed) { elbow.x += sign * cycle * .04; wrist.x = .5 + sign * (.1 + cycle * .23); wrist.y = .5 - cycle * .25 }
@@ -240,7 +240,7 @@ export function squatPose(depth: number, lean = 0): P[] {
 
 export function personalRange(low: number, high: number) {
   if (!Number.isFinite(low) || !Number.isFinite(high) || high - low < 12) return null
-  return { low, down: low + (high - low) * .3, up: low + (high - low) * .8 }
+  return { low, high, down: low + (high - low) * .3, up: low + (high - low) * .8 }
 }
 
 export type Lineage = 'Yang' | 'Chen'
@@ -254,4 +254,11 @@ export function referencePose(ex: Exercise, phase: number, lineage: Lineage = 'Y
     }
   }
   return pose
+}
+
+export function loadPersonalRanges(): Partial<Record<Exercise, ReturnType<typeof personalRange>>> {
+  try {
+    const value = JSON.parse(localStorage.getItem('bloom-coach-ranges-v1') ?? '{}')
+    return Object.fromEntries(Object.entries(value).filter(([key, range]) => { const r = range as { low: number; high: number; down: number; up: number }; return key in RULES && r && [r.low, r.high, r.down, r.up].every(Number.isFinite) && r.low >= 0 && r.high <= 180 && r.low <= r.down && r.down + 5 < r.up && r.up <= r.high }))
+  } catch { return {} }
 }
