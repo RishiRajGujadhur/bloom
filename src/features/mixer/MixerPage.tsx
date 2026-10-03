@@ -90,6 +90,7 @@ export function MixerPage() {
     })
   const playing = useSyncExternalStore((fn) => mixer.subscribe(fn), () => mixer.playing)
   const [name, setName] = useState('')
+  const [saveMessage, setSaveMessage] = useState('')
   const [clockNow, setClockNow] = useState(() => Date.now())
   useEffect(() => {
     if (!playing || !mixer.endsAt) return
@@ -265,15 +266,25 @@ export function MixerPage() {
             className="sc-manual"
             onSubmit={(e) => {
               e.preventDefault()
-              if (!name.trim()) return
-              setStore((s) => ({ ...s, saved: [...s.saved, { id: crypto.randomUUID(), name: name.trim(), mix: s.mix }] }))
+              const cleanName = name.trim()
+              if (!cleanName) {
+                setSaveMessage('Enter a name for this mix.')
+                return
+              }
+              if (store.saved.some((savedMix) => savedMix.name.trim().toLocaleLowerCase() === cleanName.toLocaleLowerCase())) {
+                setSaveMessage(`A mix named “${cleanName}” already exists. Choose a different name.`)
+                return
+              }
+              setStore((s) => ({ ...s, saved: [...s.saved, { id: crypto.randomUUID(), name: cleanName, mix: s.mix }] }))
               setName('')
+              setSaveMessage(`Saved mix “${cleanName}”.`)
             }}
           >
-            <input className="studio-input" aria-label="Mix name" placeholder="Name this mix" value={name} onChange={(e) => setName(e.target.value)} />
-            <button type="submit" className="studio-go" data-variant="quiet" aria-label="Save mix">
+            <input className="studio-input" aria-label="Mix name" placeholder="Name this mix" value={name} onChange={(e) => { setName(e.target.value); setSaveMessage('') }} />
+            <button type="submit" className="studio-go" data-variant="quiet" aria-label="Save mix" disabled={!name.trim()}>
               <Save size={16} />
             </button>
+            <span className="sr-only" role="status" aria-live="polite">{saveMessage}</span>
           </form>
         )}
         <p className="studio-empty">{on('organic') ? 'Every layer drifts on its own, so it never loops.' : 'Steady levels.'}</p>
