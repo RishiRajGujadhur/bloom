@@ -100,15 +100,36 @@ export function CalendarPage({ data, setData }: Props) {
   const [notice, setNotice] = useState('')
   const [search, setSearch] = useState('')
   const [includeScheduled, setIncludeScheduled] = useState(false)
+  const [taskFocus, setTaskFocusState] = useState<'all' | 'today' | 'deep' | 'unscheduled'>(() => {
+    try {
+      return (localStorage.getItem('bloom-calendar-task-focus') as 'all' | 'today' | 'deep' | 'unscheduled') || 'all'
+    } catch {
+      return 'all'
+    }
+  })
+  const setTaskFocus = (value: 'all' | 'today' | 'deep' | 'unscheduled') => {
+    setTaskFocusState(value)
+    try { localStorage.setItem('bloom-calendar-task-focus', value) } catch { /* optional */ }
+  }
   const capacity = dayCapacity(data, selectedDay)
   const selectedDate = new Date(`${selectedDay}T12:00:00`)
-  const tasks = data.todos.filter(
-    (task) =>
+  const tasks = data.todos.filter((task) => {
+    const matchesText = task.title.toLowerCase().includes(search.toLowerCase())
+    const matchesFocus =
+      taskFocus === 'all'
+        ? true
+        : taskFocus === 'today'
+          ? task.due <= dayKey()
+          : taskFocus === 'deep'
+            ? planningOf(task).deepWork
+            : !data.calendarBlocks.some((block) => block.taskId === task.id)
+    return (
       !task.done &&
-      task.title.toLowerCase().includes(search.toLowerCase()) &&
-      (includeScheduled ||
-        !data.calendarBlocks.some((block) => block.taskId === task.id)),
-  )
+      matchesText &&
+      matchesFocus &&
+      (includeScheduled || !data.calendarBlocks.some((block) => block.taskId === task.id))
+    )
+  })
   const dailyBlocks = data.calendarBlocks
     .filter(
       (b) =>
@@ -309,6 +330,17 @@ export function CalendarPage({ data, setData }: Props) {
               }}
             />
           </label>
+          <button
+            type="button"
+            className="quiet-button"
+            onClick={() => {
+              const today = dayKey()
+              setSelectedDay(today)
+              calendar.current?.getApi().gotoDate(today)
+            }}
+          >
+            Today
+          </button>
           <select
             aria-label="Calendar view"
             value={view}
@@ -378,6 +410,24 @@ export function CalendarPage({ data, setData }: Props) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          <div className="filter-chips" role="tablist" aria-label="Calendar task filters">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'today', label: 'Due today' },
+              { id: 'deep', label: 'Deep work' },
+              { id: 'unscheduled', label: 'Unscheduled' },
+            ].map((chip) => (
+              <button
+                key={chip.id}
+                type="button"
+                role="tab"
+                aria-selected={taskFocus === chip.id}
+                onClick={() => setTaskFocus(chip.id as 'all' | 'today' | 'deep' | 'unscheduled')}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
           <label className="planning-check">
             <input
               type="checkbox"

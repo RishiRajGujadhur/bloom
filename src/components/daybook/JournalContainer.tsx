@@ -33,6 +33,9 @@ export function JournalContainer() {
   const [category, setCategory] = useState<JournalCategory | null>(null)
   const [browse, setBrowse] = useState(false)
   const [selected, setSelected] = useState<JournalMode | null>(null)
+  const [lastModeId, setLastModeId] = useState<string | null>(() => {
+    try { return localStorage.getItem('bloom-daybook-last-mode') } catch { return null }
+  })
   const [storageError, setStorageError] = useState('')
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [revealed, setRevealed] = useState<string | null>(null)
@@ -166,17 +169,22 @@ export function JournalContainer() {
     return () => clearTimeout(t)
   }, [undoPage])
   const openPage = (page: JournalEntry) => {
+    const mode = modes.find((m) => m.id === page.modeId) ?? {
+      ...modes[0],
+      id: page.modeId,
+      title: page.modeTitle,
+    }
+    try { localStorage.setItem('bloom-daybook-last-mode', mode.id) } catch { /* optional */ }
+    setLastModeId(mode.id)
     setSession((s) => s + 1)
     setEntryId(page.id)
-    setSelected(
-      modes.find((m) => m.id === page.modeId) ?? {
-        ...modes[0],
-        id: page.modeId,
-        title: page.modeTitle,
-      },
-    )
+    setSelected(mode)
   }
   const startPage = (mode: JournalMode | null) => {
+    if (mode) {
+      try { localStorage.setItem('bloom-daybook-last-mode', mode.id) } catch { /* optional */ }
+      setLastModeId(mode.id)
+    }
     setSession((s) => s + 1)
     setEntryId(null)
     setSelected(mode)
@@ -297,6 +305,11 @@ export function JournalContainer() {
                 ))}
               </div>
             )}
+            {lastModeId && !selected && (() => { const lastMode = modes.find((m) => m.id === lastModeId); return lastMode ? (
+              <button type="button" className="quiet-button" onClick={() => startPage(lastMode)}>
+                Resume last mode · {lastMode.title}
+              </button>
+            ) : null })()}
             {subOn('daybookModes', 'bookshelf') && <Bookshelf pages={recentPages} modes={modes} onEdit={openPage} language={language} />}
             {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
               <label className="daybook-sort">

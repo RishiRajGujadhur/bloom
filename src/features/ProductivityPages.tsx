@@ -236,6 +236,12 @@ export function TodoPage({ data, setData }: Props) {
   const [taskQuery, setTaskQuery] = useState('')
   const allTags = [...new Set(data.todos.flatMap((task) => task.tags))].sort()
   const priorityOrder = { P1: 1, P2: 2, P3: 3, P4: 4 }
+  const filterCounts = {
+    open: data.todos.filter((task) => !task.done).length,
+    today: data.todos.filter((task) => !task.done && task.due <= dayKey()).length,
+    soon: data.todos.filter((task) => !task.done && task.due > dayKey() && task.due <= addDays(dayKey(), 7)).length,
+    done: data.todos.filter((task) => task.done).length,
+  }
   const tasks = data.todos
     .filter((task) => {
       const matchesStatus =
@@ -243,7 +249,9 @@ export function TodoPage({ data, setData }: Props) {
           ? task.done
           : filter === 'today'
             ? !task.done && task.due <= dayKey()
-            : !task.done
+            : filter === 'soon'
+              ? !task.done && task.due > dayKey() && task.due <= addDays(dayKey(), 7)
+              : !task.done
       return (
         matchesStatus &&
         (!taskQuery.trim() || `${task.title} ${task.tags.join(' ')}`.toLowerCase().includes(taskQuery.trim().toLowerCase())) &&
@@ -363,6 +371,29 @@ export function TodoPage({ data, setData }: Props) {
         {data.todos.some((t) => t.done && t.completedAt && new Date(t.completedAt).toDateString() === new Date().toDateString()) && (
           <small className="quick-hint"> · ✓ {data.todos.filter((t) => t.done && t.completedAt && new Date(t.completedAt).toDateString() === new Date().toDateString()).length} done today</small>
         )}
+        <div className="filter-chips" role="tablist" aria-label="Task status filters">
+          {[
+            { id: 'open', label: 'Open' },
+            { id: 'today', label: 'Due today' },
+            { id: 'soon', label: 'Due soon' },
+            { id: 'done', label: 'Done' },
+          ].map((chip) => (
+            <button
+              key={chip.id}
+              type="button"
+              role="tab"
+              aria-selected={filter === chip.id}
+              onClick={() => setFilter(chip.id)}
+            >
+              {chip.label} ({filterCounts[chip.id as keyof typeof filterCounts]})
+            </button>
+          ))}
+          {(taskQuery || filter !== 'open') && (
+            <button type="button" className="quiet-button" onClick={() => { setFilter('open'); setTaskQuery('') }}>
+              Reset filters
+            </button>
+          )}
+        </div>
         {data.todos.length > 6 && (
           <input type="search" className="todo-search" aria-label="Search tasks" placeholder="Search tasks or #tags…" value={taskQuery} onChange={(e) => setTaskQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()} />
         )}

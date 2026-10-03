@@ -75,6 +75,17 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
 
   const timeline = () => (
     <div className="rm-timeline">
+      <div className="studio-chip-row">
+        <button type="button" className="studio-chip" onClick={() => setTab('new')}>
+          <Plus size={13} /> New goal
+        </button>
+        <button type="button" className="studio-chip" onClick={() => setSel((store.goals[0]?.id ?? ''))}>
+          Focus current goal
+        </button>
+        <button type="button" className="studio-chip" onClick={() => setTab('timeline')}>
+          Jump to today
+        </button>
+      </div>
       {on('views') && (
         <Segmented label="View" value={store.view} onChange={(v) => setStore((s) => ({ ...s, view: v }))} options={[{ id: 'Week', label: 'Weeks' }, { id: 'Month', label: 'Months' }, { id: 'Year', label: 'Year' }]} />
       )}

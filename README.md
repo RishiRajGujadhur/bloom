@@ -1,236 +1,39 @@
 # Bloom — Mindfulness Dashboard
 
-A personal React 19 health-coaching dashboard with a Habitica-inspired purple palette. No account or external AI service is required. Coaching uses a four-step reflection script.
-
-
-## Screenshots
-
-| Bloom Light | Matrix |
-|---|---|
-| ![Home, Bloom Light theme](docs/screenshots/home-light.png) | ![Home, Matrix theme](docs/screenshots/home-matrix.png) |
-| ![English course, Bloom Light theme](docs/screenshots/english-light.png) | ![English course, Matrix theme](docs/screenshots/english-matrix.png) |
-| ![Money, Bloom Light theme](docs/screenshots/money-light.png) | ![Money, Matrix theme](docs/screenshots/money-matrix.png) |
-| ![Little Joys, Bloom Light theme](docs/screenshots/little-joys-light.png) | ![Little Joys, Matrix theme](docs/screenshots/little-joys-matrix.png) |
-| ![Tai Chi, Bloom Light theme](docs/screenshots/tai-chi-light.png) | ![Tai Chi, Matrix theme](docs/screenshots/tai-chi-matrix.png) |
-| ![Talk to Bloom — chat with typed commands, Bloom Light theme](docs/screenshots/chat-light.png) | ![Talk to Bloom — chat with typed commands, Matrix theme](docs/screenshots/chat-matrix.png) |
-| ![Brain games, Bloom Light theme](docs/screenshots/games-light.png) | ![Brain games, Matrix theme](docs/screenshots/games-matrix.png) |
-| ![English lesson, Bloom Light theme](docs/screenshots/english-lesson-light.png) | ![English lesson, Matrix theme](docs/screenshots/english-lesson-matrix.png) |
-| ![English story mode, Bloom Light theme](docs/screenshots/english-story-light.png) | ![English story mode, Matrix theme](docs/screenshots/english-story-matrix.png) |
-| ![English league, shop and badges, Bloom Light theme](docs/screenshots/english-league-light.png) | ![English league, shop and badges, Matrix theme](docs/screenshots/english-league-matrix.png) |
-| ![Code Cup intro video](docs/screenshots/codecup-intro.png) | ![Code Cup duel against UNIT-7](docs/screenshots/codecup-duel.png) |
-| ![Code Cup versus screen](docs/screenshots/codecup-versus.png) | ![Code Cup finale video](docs/screenshots/codecup-finale.png) |
-| ![Learn to code, Bloom Light theme](docs/screenshots/code-light.png) | ![Learn to code, Matrix theme](docs/screenshots/code-matrix.png) |
-| ![Code quiz, Bloom Light theme](docs/screenshots/code-quiz-light.png) | ![Code quiz, Matrix theme](docs/screenshots/code-quiz-matrix.png) |
-| ![English speak lab, Bloom Light theme](docs/screenshots/english-speak-light.png) | ![English speak lab, Matrix theme](docs/screenshots/english-speak-matrix.png) |
-| ![English writing coach, Bloom Light theme](docs/screenshots/english-write-light.png) | ![English writing coach, Matrix theme](docs/screenshots/english-write-matrix.png) |
-| ![Money charts, Bloom Light theme](docs/screenshots/money-charts-light.png) | ![Money charts, Matrix theme](docs/screenshots/money-charts-matrix.png) |
-| ![Little Joys — sky, Bloom Light theme](docs/screenshots/little-joys-sky-light.png) | ![Little Joys — sky, Matrix theme](docs/screenshots/little-joys-sky-matrix.png) |
-| ![Little Joys — postcard, Bloom Light theme](docs/screenshots/little-joys-postcard-light.png) | ![Little Joys — postcard, Matrix theme](docs/screenshots/little-joys-postcard-matrix.png) |
-| ![To-dos, Bloom Light theme](docs/screenshots/todos-light.png) | ![To-dos, Matrix theme](docs/screenshots/todos-matrix.png) |
-| ![Calendar, Bloom Light theme](docs/screenshots/calendar-light.png) | ![Calendar, Matrix theme](docs/screenshots/calendar-matrix.png) |
-| ![Focus, Bloom Light theme](docs/screenshots/focus-light.png) | ![Focus, Matrix theme](docs/screenshots/focus-matrix.png) |
-| ![Daybook, Bloom Light theme](docs/screenshots/daybook-light.png) | ![Daybook, Matrix theme](docs/screenshots/daybook-matrix.png) |
-| ![Meditate, Bloom Light theme](docs/screenshots/meditate-light.png) | ![Meditate, Matrix theme](docs/screenshots/meditate-matrix.png) |
-| ![Sleep, Bloom Light theme](docs/screenshots/sleep-light.png) | ![Sleep, Matrix theme](docs/screenshots/sleep-matrix.png) |
-| ![Let it go, Bloom Light theme](docs/screenshots/let-it-go-light.png) | ![Let it go, Matrix theme](docs/screenshots/let-it-go-matrix.png) |
-| ![Workouts, Bloom Light theme](docs/screenshots/workouts-light.png) | ![Workouts, Matrix theme](docs/screenshots/workouts-matrix.png) |
-| ![Yoga, Bloom Light theme](docs/screenshots/yoga-light.png) | ![Yoga, Matrix theme](docs/screenshots/yoga-matrix.png) |
-| ![Dojo, Bloom Light theme](docs/screenshots/dojo-light.png) | ![Dojo, Matrix theme](docs/screenshots/dojo-matrix.png) |
-| ![Bloom World (3D), Bloom Light theme](docs/screenshots/bloom-world-light.png) | ![Bloom World (3D), Matrix theme](docs/screenshots/bloom-world-matrix.png) |
-| ![Settings — avatar picker, Bloom Light theme](docs/screenshots/settings-avatars-light.png) | ![Settings — avatar picker, Matrix theme](docs/screenshots/settings-avatars-matrix.png) |
-
-### Advanced features
-
-Built on Web Bluetooth, WebGPU, WebAssembly SIMD, multi-core workers, the Origin Private File System and File System Access (see [docs/WOW_ADVANCED_PLAN.md](docs/WOW_ADVANCED_PLAN.md)).
-
-| Feature | Bloom Light | Matrix |
-|---|---|---|
-| **Sound Lab**: one-tap noise removal for voice memos (RNNoise and a SIMD spectral gate, all cores, WebGPU spectrogram) | ![Sound Lab](docs/screenshots/wow-13-soundlab.png) | ![Sound Lab, Matrix](docs/screenshots/wow-13-soundlab-matrix.png) |
-| **Terrain Replay**: fly a drone along a GPX route over its own elevation, in sync with the map | ![Terrain Replay](docs/screenshots/wow-14-terrain.png) | ![Terrain Replay, Matrix](docs/screenshots/wow-14-terrain-matrix.png) |
-| **Morning Readiness Scan**: 60-second HRV from a Bluetooth strap, the fingertip camera or a simulator | ![Readiness](docs/screenshots/wow-15-readiness.png) | ![Readiness, Matrix](docs/screenshots/wow-15-readiness-matrix.png) |
-| **Receipt Lens**: on-device OCR on every core turns receipts into Money transactions | ![Receipt Lens](docs/screenshots/wow-16-receipts.png) | ![Receipt Lens, Matrix](docs/screenshots/wow-16-receipts-matrix.png) |
-| **Bills Inbox**: photograph a letter; OpenCV flattens it, OCR reads it, deadlines get countdowns, and you can ask your paperwork questions | ![Bills Inbox](docs/screenshots/wow-17-bills.png) | ![Bills Inbox, Matrix](docs/screenshots/wow-17-bills-matrix.png) |
-| **Morning Briefing Radio**: a spoken summary of your day (calendar, tasks, readiness, bills, weather) in an on-device neural voice on WebGPU, with a live spectrum dial | ![Morning Briefing Radio](docs/screenshots/wow-18-briefing-hd.png) | ![Morning Briefing Radio, Matrix](docs/screenshots/wow-18-briefing-matrix.png) |
-| **Study Duel**: race a friend through the same English round peer to peer (Yjs CRDT over encrypted WebRTC), with racing score orbs and a shared whiteboard | ![Study Duel](docs/screenshots/wow-19-duel.png) | ![Study Duel, Matrix](docs/screenshots/wow-19-duel-matrix.png) |
-| **Form Coach**: camera rep counting with GPU pose tracking, live form faults (depth, chest, hips) and hands-free set logging in Workout | ![Form Coach](docs/screenshots/wow-20-formcoach.png) | ![Form Coach, Matrix](docs/screenshots/wow-20-formcoach-matrix.png) |
-| **Code City & Burnout Radar**: your local git repo walked on every core (isomorphic-git over File System Access) becomes a WebGPU 3D city; a radar blends commit rhythm with sleep, mood and readiness | ![Code City & Burnout Radar](docs/screenshots/wow-21-codecity.png) | ![Code City & Burnout Radar, Matrix](docs/screenshots/wow-21-codecity-matrix.png) |
-| **Render thread (A2)**: 3D scenes render inside a worker on an OffscreenCanvas (three.js WebGPU), so page work never stutters them; first used by the Sound Lab mountain | ![Render thread (A2)](docs/screenshots/a2-offscreen-soundlab.png) | ![Render thread (A2), Matrix](docs/screenshots/a2-offscreen-soundlab-matrix.png) |
-| **Render thread everywhere (A3)**: Code City, Terrain Replay and the Matrix rain also render in workers; orbit and hover work through forwarded pointer events | ![Render thread everywhere (A3)](docs/screenshots/a3-codecity.png) | ![Render thread everywhere (A3), Matrix](docs/screenshots/a3-codecity-matrix.png) |
-| **Life Map (M2, M3, M4, M7)**: Places becomes a layered map: mood geography on H3 hexagons, spending by shop with receipts, memory pins with “On this spot…”, and habits tied to places that offer a check-in when you arrive | ![Life Map (M2, M3, M4, M7)](docs/screenshots/m2-life-map.png) | ![Life Map (M2, M3, M4, M7), Matrix](docs/screenshots/m2-life-map-matrix.png) |
-| **People on the globe (M5)**: friends placed on the Globe quiz globe with a live day/night terminator, their local time, a good-time-to-call glow and birthday rings | ![People on the globe (M5)](docs/screenshots/m5-people-globe.png) | ![People on the globe (M5), Matrix](docs/screenshots/m5-people-globe-matrix.png) |
-| **Soundscape engine (C5)**: the Mixer's noise is generated live on the audio thread by a hand-written WebAssembly SIMD kernel (4 voices per instruction), plus binaural beats and a render-thread aurora that calms down under CPU pressure | ![Soundscape engine (C5)](docs/screenshots/c5-mixer.png) | ![Soundscape engine (C5), Matrix](docs/screenshots/c5-mixer-matrix.png) |
-| **Vision board files (C7)**: save, open and share boards as .bloomboard files (a zip with images, via File System Access and the OS file handler); Ctrl+S saves; every replaced board is backed up in OPFS | ![Vision board files (C7)](docs/screenshots/c7-vision-board.png) | ![Vision board files (C7), Matrix](docs/screenshots/c7-vision-board-matrix.png) |
-| **Your desktop fonts (P1)**: Settings lists the fonts installed on your computer (Local Font Access), each previewed in its own face and searchable; pick one and it becomes Bloom's font, even over a theme's own face | ![Your desktop fonts (P1)](docs/screenshots/p1-local-fonts.png) | ![Your desktop fonts (P1), Matrix](docs/screenshots/p1-local-fonts-matrix.png) |
-| **Away detection & screen on (P2, P3)**: Focus pauses when you step away (Idle Detection: OS idle and screen lock, page-activity fallback) and resumes where you left off; guided sessions hold a Screen Wake Lock | ![Away detection & screen on (P2, P3)](docs/screenshots/p2-focus-away.png) | ![Away detection & screen on (P2, P3), Matrix](docs/screenshots/p2-focus-back-matrix.png) |
-| **Themed title bar (P4)**: installed on desktop, Bloom draws its own title bar (Window Controls Overlay): page name, search and streak beside the window buttons, draggable, in every theme; the window frame colour follows the theme (preview) | ![Themed title bar (P4)](docs/screenshots/p4-titlebar.png) | ![Themed title bar (P4), Matrix](docs/screenshots/p4-titlebar-matrix.png) |
-| **Houdini page scenes (P5)**: every page header paints its own animated generative scene with a CSS Houdini paint worklet — 12 styles (rays, leaves, notes, rain, waves, stars, pulse, topo, hex, grid, petals, bubbles) seeded by the page, with a seeded SVG fallback | ![Houdini page scenes (P5)](docs/screenshots/p5-houdini-headers.png) | ![Houdini page scenes (P5), Matrix](docs/screenshots/p5-houdini-headers-matrix.png) |
-| **Morphing navigation (P6)**: moving between pages uses the View Transitions API: the page cross-fades with a soft blur, the title glides into place and the sidebar highlight slides between items (mid-transition capture) | ![Morphing navigation (P6)](docs/screenshots/p6-view-transition.png) | ![Morphing navigation (P6), Matrix](docs/screenshots/p6-view-transition-matrix.png) |
-| **Sidebar page menu (QoL)**: right-click any page in the sidebar: open, pin to the top, or disable it with a confirm prompt and an Undo toast | ![Sidebar page menu (QoL)](docs/screenshots/qol-nav-menu.png) | ![Sidebar page menu (QoL), Matrix](docs/screenshots/qol-nav-disable-matrix.png) |
-| **Keyboard layer (QoL)**: g+letter jumps to pages, ? shows every shortcut, n adds, Space plays/pauses, t flips the theme, 1–9 switch tabs, and each page remembers its last tab | ![Keyboard layer (QoL)](docs/screenshots/qol-shortcuts.png) | ![Keyboard layer (QoL), Matrix](docs/screenshots/qol-shortcuts-matrix.png) |
-| **Page-specific studio scenes (QoL)**: every Studio page has its own animated motif — coins fall on Money, brackets rise on Code, pieces march on Chess, notes sway on Sounds — plus its own line | ![Page-specific studio scenes (QoL)](docs/screenshots/qol-studio-scenes.png) | ![Page-specific studio scenes (QoL), Matrix](docs/screenshots/qol-studio-scenes-matrix.png) |
-| **Comfort settings & settings search (QoL)**: text size, reading line height, density, page width, scene/transition/wake-lock/away toggles with a live Saved tick; type to filter Settings | ![Comfort settings & settings search (QoL)](docs/screenshots/qol-comfort.png) | ![Comfort settings & settings search (QoL), Matrix](docs/screenshots/qol-comfort-matrix.png) |
-| **Trash, undo & cross-tab sync (QoL)**: deleting a habit, to-do, calendar block or project shows an Undo toast and keeps it in a 30-day Trash (restorable in Settings); open tabs stay in sync | ![Trash, undo & cross-tab sync (QoL)](docs/screenshots/qol-trash-undo.png) | ![Trash, undo & cross-tab sync (QoL), Matrix](docs/screenshots/qol-trash-undo.png) |
-| **Today at a glance (QoL)**: one row on the dashboard pulls readiness, bills due, people to reach out to, streaks at risk, tomorrow's first block, wind-down and the briefing — each one tap away | ![Today at a glance (QoL)](docs/screenshots/qol-today-glance.png) | ![Today at a glance (QoL), Matrix](docs/screenshots/qol-today-glance-matrix.png) |
-| **Quick-add to-dos**: Type a to-do the way you'd say it and Bloom picks out the date, priority, repeat and tags, with a live preview. Paste a list to add many at once. Overdue items come first, and every row has one-tap Tomorrow and +1 week snooze. | ![Quick-add to-dos](qol-quick-task.png) | ![Quick-add to-dos, Matrix](qol-quick-task-matrix.png) |
-| **Habit archive, notes and strength**: Filter habits by left today or done, archive the ones on pause, reorder them, jot a note per day, see a 60-day strength bar and mark yesterday done in one tap. | ![Habit archive, notes and strength](qol-habits-extras.png) | ![Habit archive, notes and strength, Matrix](qol-habits-extras-matrix.png) |
-| **Arcade #1 · Pantry Tetris**: The new Games section opens the Arcade. First game: drop the shopping into a physics fridge, turn items to fit, and make sure the door shuts — bonus for keeping soon-to-expire food up front. | ![Arcade #1 · Pantry Tetris](arcade-hub.png) | ![Arcade #1 · Pantry Tetris, Matrix](arcade-pantry.png) |
-| **Arcade #2 · Coin Cascade**: Drop a month of coins through a peg board into Home, Food, Fun and Later jars. Bills come due partway through, and the Later jar quietly grows every week. | ![Arcade #2 · Coin Cascade](arcade-coins.png) | ![Arcade #2 · Coin Cascade, Matrix](arcade-coins-matrix.png) |
-| **Arcade #3 · Knot Garden**: Watch a firefly trace a path through the pegs, then guide a real verlet rope along it. Each path cinches into a knot and lights a lantern before dusk. | ![Arcade #3 · Knot Garden](arcade-knots.png) | ![Arcade #3 · Knot Garden, Matrix](arcade-knots-matrix.png) |
-| **Arcade #4 · Burner Juggle**: Run four burners through a 90-second service. Each dish cooks only at its own heat, some need stirring, and too much flame scorches the pan. | ![Arcade #4 · Burner Juggle](arcade-burners.png) | ![Arcade #4 · Burner Juggle, Matrix](arcade-burners-matrix.png) |
-| **Arcade #5 · Laundry Sorter**: Grab and fling tumbling clothes into Whites, Colours, Darks or Hand wash before the pile hits ten. Read the colour and the little care tag, and watch out for the red sock. | ![Arcade #5 · Laundry Sorter](arcade-laundry.png) | ![Arcade #5 · Laundry Sorter, Matrix](arcade-laundry-matrix.png) |
-| **Arcade #6 · Compound Orchard**: A 3D floating island in Babylon.js. Plant saplings, let them grow on their own growth, and harvest before they turn gold and wither. Twenty seasons to fill the basket. | ![Arcade #6 · Compound Orchard](arcade-orchard.png) | ![Arcade #6 · Compound Orchard, Matrix](arcade-orchard-matrix.png) |
-| **Arcade #7 · Scam Bubbles**: Messages float up to your phone inside soap bubbles. Pop the sketchy ones before they land and let the real ones through, while the bubbles keep getting faster. | ![Arcade #7 · Scam Bubbles](arcade-scam.png) | ![Arcade #7 · Scam Bubbles, Matrix](arcade-scam-matrix.png) |
-| **Arcade #8 · Focus Lighthouse**: A Three.js night sea. Steer the lighthouse beam with your pointer and hold it on each ship until it turns for harbour, while fireworks over the town try to pull your eye away. | ![Arcade #8 · Focus Lighthouse](arcade-lighthouse.png) | ![Arcade #8 · Focus Lighthouse, Matrix](arcade-lighthouse-matrix.png) |
-| **Arcade #9 · Breath Kite**: Hold to climb, let go to glide. Rings ride a slow wave of wind (about four seconds up, six seconds down), and threading them in a row builds your streak. | ![Arcade #9 · Breath Kite](arcade-kite.png) | ![Arcade #9 · Breath Kite, Matrix](arcade-kite-matrix.png) |
-| **Arcade #10 · Traffic Light Crossing**: A PlayCanvas voxel street. Hop lane by lane across four lanes of traffic to run errands; cars queue at the crossing light, and waiting for the green man pays a bonus. | ![Arcade #10 · Traffic Light Crossing](arcade-crossing.png) | ![Arcade #10 · Traffic Light Crossing, Matrix](arcade-crossing-matrix.png) |
-| **Arcade #11 · Sleep Tide**: Gadgets keep buzzing awake in a night-time bedroom. Tap each glowing thing off, and the moon-tide of sleep only rises while the room stays dark and quiet. | ![Arcade #11 · Sleep Tide](arcade-sleep.png) | ![Arcade #11 · Sleep Tide, Matrix](arcade-sleep-matrix.png) |
-| **Arcade #12 · Recycling Rush**: Rubbish rides a speeding conveyor over five bins. Tap each item as it passes the right bin and it tumbles in with real physics; anything missed goes to landfill. | ![Arcade #12 · Recycling Rush](arcade-recycle.png) | ![Arcade #12 · Recycling Rush, Matrix](arcade-recycle-matrix.png) |
-| **Arcade #13 · Listening Pond**: A generative koi pond in p5.js. The koi only rise once the water is still; tap one right as it surfaces, because a careless splash sends every fish diving. | ![Arcade #13 · Listening Pond](arcade-pond.png) | ![Arcade #13 · Listening Pond, Matrix](arcade-pond-matrix.png) |
-| **Arcade #14 · Delay Dessert**: A cake keeps growing layers, each worth more than the last. Serve it now, or wait for a taller one while a cat creeps along the counter toward it. | ![Arcade #14 · Delay Dessert](arcade-dessert.png) | ![Arcade #14 · Delay Dessert, Matrix](arcade-dessert-matrix.png) |
-| **Arcade #15 · Camp Fire**: Drop tinder, kindling and logs into a stone ring and strike one of three matches. Flames jump from piece to piece; build it in the right order and don't smother it. | ![Arcade #15 · Camp Fire](arcade-campfire.png) | ![Arcade #15 · Camp Fire, Matrix](arcade-campfire-matrix.png) |
-| **Arcade #16 · Germ Wash**: Press and scrub to foam wiggly germs off two soapy hands before the 20-second song runs out. They hide on fingertips, thumbs, between fingers and round the wrists. | ![Arcade #16 · Germ Wash](arcade-germs.png) | ![Arcade #16 · Germ Wash, Matrix](arcade-germs-matrix.png) |
-| **Arcade #17 · Star Compass**: Stand under a real northern sky in Three.js. Drag to look around and find the Pole Star; each night the sky has turned and you're somewhere new. Find it and north lights up on the horizon. | ![Arcade #17 · Star Compass](arcade-stars.png) | ![Arcade #17 · Star Compass, Matrix](arcade-stars-matrix.png) |
-| **Arcade #18 · Pack the Suitcase**: Drag and turn belongings to fit one carry-on before the taxi comes. The gold-edged essentials matter most, and the big pillow probably doesn't make the cut. | ![Arcade #18 · Pack the Suitcase](arcade-suitcase.png) | ![Arcade #18 · Pack the Suitcase, Matrix](arcade-suitcase-matrix.png) |
-| **Arcade #19 · Debt Dragon**: A Babylon.js dragon curls round a borrowed hoard and grows every moon. Mine the glowing crystals, then choose: feed the dragon to shrink it, or buy a better pick. | ![Arcade #19 · Debt Dragon](arcade-dragon.png) | ![Arcade #19 · Debt Dragon, Matrix](arcade-dragon-matrix.png) |
-| **Arcade #20 · Pomodoro Forge**: Strike while the iron's hot. Hammering glowing metal shapes it fast, cold metal cracks, and the forge needs time to bring the bar back to a glow. | ![Arcade #20 · Pomodoro Forge](arcade-forge.png) | ![Arcade #20 · Pomodoro Forge, Matrix](arcade-forge-matrix.png) |
-| **Arcade #21 · Plate Painter**: Paint veg, protein and grains onto a plate spinning on a lazy Susan. Match the chef's sketch for each meal; the live pie shows how your plate compares. | ![Arcade #21 · Plate Painter](arcade-plate.png) | ![Arcade #21 · Plate Painter, Matrix](arcade-plate-matrix.png) |
-| **Arcade #22 · Posture Tower**: Stack vertebrae into a tall spine on a chair that keeps slumping to one side. Lean against the drift to sit it back up before the bones slide off. | ![Arcade #22 · Posture Tower](arcade-posture.png) | ![Arcade #22 · Posture Tower, Matrix](arcade-posture-matrix.png) |
-| **Arcade #23 · Hydration Hose**: Hold to spray arcs of water across a sunny garden. Each plant dries out at its own pace and has its own happy band (the cactus barely wants any), and passing joggers love a splash. | ![Arcade #23 · Hydration Hose](arcade-hose.png) | ![Arcade #23 · Hydration Hose, Matrix](arcade-hose-matrix.png) |
-| **Arcade #24 · Bike Fix**: Spin a flat tyre through a tub of water in Three.js until a stream of bubbles gives the puncture away. Click to patch it, pump it back up, and get five wheels ready to ride. | ![Arcade #24 · Bike Fix](arcade-bike.png) | ![Arcade #24 · Bike Fix, Matrix](arcade-bike-matrix.png) |
-| **Arcade #25 · Clock Juggler**: A busy Saturday of timers sweeping down at their own speeds. Tap each one in its green window: too early wastes a trip, too late burns the bread or earns a parking ticket. | ![Arcade #25 · Clock Juggler](arcade-clocks.png) | ![Arcade #25 · Clock Juggler, Matrix](arcade-clocks-matrix.png) |
-| **Arcade #26 · Knife Rhythm**: Vegetables glide under the knife on a steady, quickening beat. Tap as each dotted line meets the blade for even slices and a growing rhythm combo. | ![Arcade #26 · Knife Rhythm](arcade-knife.png) | ![Arcade #26 · Knife Rhythm, Matrix](arcade-knife-matrix.png) |
-| **Arcade #27 · Label Detective**: Sweep a magnifying glass over tiny ingredient lists and click every sugar hiding under another name, from dextrose to invert syrup, across five packs. | ![Arcade #27 · Label Detective](arcade-labels.png) | ![Arcade #27 · Label Detective, Matrix](arcade-labels-matrix.png) |
-| **Arcade #28 · Team Raft**: Six friends shoot the rapids, and you can only choose who paddles on which side. Balance strong and tired arms to dodge rocks and banks, and rest people before they fade. | ![Arcade #28 · Team Raft](arcade-raft.png) | ![Arcade #28 · Team Raft, Matrix](arcade-raft-matrix.png) |
-| **Arcade #29 · Weather Wardrobe**: Glance at the sky and the thermometer, then tap clothes on or off before Pip heads out. Six days of rain, snow, sun and gusts, and umbrellas don't survive a windy day. | ![Arcade #29 · Weather Wardrobe](arcade-wardrobe.png) | ![Arcade #29 · Weather Wardrobe, Matrix](arcade-wardrobe-matrix.png) |
-| **Arcade #30 · Goal Mountain**: A 3D Babylon.js peak you climb camp by camp. Pick ledges inside today's reach ring: big leaps drain energy, steady steps keep you strong, and storms cut everyone short. | ![Arcade #30 · Goal Mountain](arcade-mountain.png) | ![Arcade #30 · Goal Mountain, Matrix](arcade-mountain-matrix.png) |
-| **Arcade #31 · Memory Market**: Your friend calls out the shopping list one item at a time, then it blows away. Tap everything that was on it among stalls full of tempting decoys; each trip's list is longer. | ![Arcade #31 · Memory Market](arcade-market.png) | ![Arcade #31 · Memory Market, Matrix](arcade-market-matrix.png) |
-| **Arcade #32 · Fuse Box**: Everyone wants power at once. Plug kettles, ovens and hairdryers into three 3 kW circuits without tripping a fuse, and don't leave anyone waiting too long. | ![Arcade #32 · Fuse Box](arcade-fuse.png) | ![Arcade #32 · Fuse Box, Matrix](arcade-fuse-matrix.png) |
-| **Arcade #33 · Smoke Escape**: A Three.js maze of a flat filling with smoke. Crawl to stay under it, feel each door before opening it, and find the green exit in three flats. | ![Arcade #33 · Smoke Escape](arcade-smoke.png) | ![Arcade #33 · Smoke Escape, Matrix](arcade-smoke-matrix.png) |
-| **Arcade #34 · Button Sewer**: Click the holes to pull thread up and down in a steady pattern (across, parallel, a cross, round the square), then wrap and knot. Sew as many buttons back onto the coat as you can. | ![Arcade #34 · Button Sewer](arcade-buttons.png) | ![Arcade #34 · Button Sewer, Matrix](arcade-buttons-matrix.png) |
-| **Arcade #35 · Thank-You Planes**: Neighbours did lovely things this week. Drag back to throw a paper-plane note at the right window, reading who it's for from what they're holding, and watch them wave. | ![Arcade #35 · Thank-You Planes](arcade-planes.png) | ![Arcade #35 · Thank-You Planes, Matrix](arcade-planes-matrix.png) |
-| **Arcade #36 · Stretch Snap**: Drag a bendy figure's hands and feet into each glowing stretch, from star to side bend to lunge, then hold still while the breath ring fills. | ![Arcade #36 · Stretch Snap](arcade-stretch.png) | ![Arcade #36 · Stretch Snap, Matrix](arcade-stretch-matrix.png) |
-| **Arcade #37 · Inbox River**: Letters float down a river toward the falls. Drag each to Do it now, Schedule or Hand off, or let the junk go over the edge, before anything important is swept away. | ![Arcade #37 · Inbox River](arcade-inbox.png) | ![Arcade #37 · Inbox River, Matrix](arcade-inbox-matrix.png) |
-| **Arcade #38 · Procrastination Pinball**: Real flipper physics. Light all five START THE TASK targets while bouncy gremlins like "one more video" and "snack?" chip away at your focus. | ![Arcade #38 · Procrastination Pinball](arcade-pinball.png) | ![Arcade #38 · Procrastination Pinball, Matrix](arcade-pinball-matrix.png) |
-| **Arcade #39 · Shopping Cart Dash**: Steer a cart round a PlayCanvas supermarket to grab the list and reach the till on budget. Treat displays have a magnetic pull and add themselves to the bill if you drift too close. | ![Arcade #39 · Shopping Cart Dash](arcade-cart.png) | ![Arcade #39 · Shopping Cart Dash, Matrix](arcade-cart-matrix.png) |
-| **Arcade #40 · Kindness Chain**: A grey Babylon.js town square and a small warm light. Pass it to anyone inside your reach ring and they start to glow; keep the chain moving before the warmth fades. | ![Arcade #40 · Kindness Chain](arcade-kindness.png) | ![Arcade #40 · Kindness Chain, Matrix](arcade-kindness-matrix.png) |
-| **Arcade #41 · Negotiation Tug**: Haggle over a bike, an armchair and more in a physics tug-of-war. Pull while the seller rests, ease off when they heave, and let go with the knot in the fair zone. | ![Arcade #41 · Negotiation Tug](arcade-haggle.png) | ![Arcade #41 · Negotiation Tug, Matrix](arcade-haggle-matrix.png) |
-| **Arcade #42 · Tidy Sprint**: The room's a tip and guests are coming. Drag every item to the home that shows its faint outline; putting it straight away in one touch earns a bonus. | ![Arcade #42 · Tidy Sprint](arcade-tidy.png) | ![Arcade #42 · Tidy Sprint, Matrix](arcade-tidy-matrix.png) |
-| **Arcade #43 · Bridge Builder**: Lay planks between grid dots to span the gap on a budget, then press Test and watch a heavy cart roll across. Flat spans sag and snap, while triangles hold. | ![Arcade #43 · Bridge Builder](arcade-bridge.png) | ![Arcade #43 · Bridge Builder, Matrix](arcade-bridge-matrix.png) |
-| **Arcade #44 · Leak Hunter**: Pipes in an old house keep springing leaks. Shut the valve that feeds the leak, patch it, and turn the water back on; the main stopcock works too, but the whole house grumbles. | ![Arcade #44 · Leak Hunter](arcade-leaks.png) | ![Arcade #44 · Leak Hunter, Matrix](arcade-leaks-matrix.png) |
-| **Arcade #45 · Insurance Umbrella**: Storm clouds drift over six little houses. Open umbrellas for a coin a season each, or gamble on nine-coin repairs when lightning strikes. Twelve seasons to finish in the black. | ![Arcade #45 · Insurance Umbrella](arcade-umbrella.png) | ![Arcade #45 · Insurance Umbrella, Matrix](arcade-umbrella-matrix.png) |
-| **Arcade #46 · Water Filter**: Camping by a murky stream: layer cloth, charcoal, sand and gravel into a cut-down bottle, pour, and watch the drops clear as they trickle through. The order you stack them makes all the difference. | ![Arcade #46 · Water Filter](arcade-filter.png) | ![Arcade #46 · Water Filter, Matrix](arcade-filter-matrix.png) |
-| **Arcade #47 · Shelf Level**: Hold one end of a shelf and watch the spirit-level bubble drift as you tilt. Drive the screw when it sits between the lines, because a wonky shelf sends the ornaments sliding. | ![Arcade #47 · Shelf Level](arcade-shelf.png) | ![Arcade #47 · Shelf Level, Matrix](arcade-shelf-matrix.png) |
-| **Arcade #48 · Clock Tower**: The town clock has stopped. Drag the minute hand round (the hour hand follows like real gearing) to the time people shout up, in words or 24-hour, then ring the bell. | ![Arcade #48 · Clock Tower](arcade-clocktower.png) | ![Arcade #48 · Clock Tower, Matrix](arcade-clocktower-matrix.png) |
-| **Arcade #49 · Swim Float**: You've drifted past the buoys. Swim hard toward the pointer, then roll onto your back to float and get your breath back through the big wave sets; frantic tapping only makes it worse. | ![Arcade #49 · Swim Float](arcade-swim.png) | ![Arcade #49 · Swim Float, Matrix](arcade-swim-matrix.png) |
-| **Arcade #50 · Egg Timer Symphony**: Brunch orders for soft, jammy and hard eggs, and no clocks, only a pulse of lit beats on each pot. Drop eggs in, count, lift them out, and crack them open to see how you did. | ![Arcade #50 · Egg Timer Symphony](arcade-eggs.png) | ![Arcade #50 · Egg Timer Symphony, Matrix](arcade-eggs-matrix.png) |
-| **Arcade #51 · Habit Hatchery**: Every egg needs one warm tap a day, and seven days in a row hatches something wonderful. Add more eggs from the basket if you dare, because a missed day cools an egg right back to the start. | ![Arcade #51 · Habit Hatchery](arcade-hatchery.png) | ![Arcade #51 · Habit Hatchery, Matrix](arcade-hatchery-matrix.png) |
-| **Arcade #52 · Morning Flow**: The tram leaves at 7:30. Start the kettle and toast so they run by themselves while you shower and dress, get every must-do done, and reach the door in time. | ![Arcade #52 · Morning Flow](arcade-morning.png) | ![Arcade #52 · Morning Flow, Matrix](arcade-morning-matrix.png) |
-| **Arcade #53 · Risk River**: Hop a frog upstream across drifting stones. Grey rocks are steady, brown ones wobble and sink if you linger, lily pads barely hold, and the shiny coin stones are always just a bit too far. | ![Arcade #53 · Risk River](arcade-river.png) | ![Arcade #53 · Risk River, Matrix](arcade-river-matrix.png) |
-| **Arcade #54 · Allergy Chef**: Dishes glide out on a belt showing what's in them, and guests wear badges for what they can't eat. Tap a dish, then a guest, and keep everyone fed and happy. | ![Arcade #54 · Allergy Chef](arcade-allergy.png) | ![Arcade #54 · Allergy Chef, Matrix](arcade-allergy-matrix.png) |
-| **Arcade #55 · Password Forge**: Forge a vault lock from rune words, then let the imps loose. They know every popular word and the a→@ trick, but a long string of odd, unrelated words leaves them scratching their horns. | ![Arcade #55 · Password Forge](arcade-passforge.png) | ![Arcade #55 · Password Forge, Matrix](arcade-passforge-matrix.png) |
-| **Arcade #56 · Conflict Knots**: Two ropes lie tangled on a table. Tease them apart until they no longer cross, but yank too hard and the knot tightens and locks up until you slow down. | ![Arcade #56 · Conflict Knots](arcade-knots2.png) | ![Arcade #56 · Conflict Knots, Matrix](arcade-knots2-matrix.png) |
-| **Arcade #57 · Apology Origami**: Drag each glowing corner across its dashed crease and the paper really folds, layer by layer, with the flap following your hand. Fold an envelope, a fortune teller and a cup, carefully. | ![Arcade #57 · Apology Origami](arcade-origami.png) | ![Arcade #57 · Apology Origami, Matrix](arcade-origami-matrix.png) |
-| **Arcade #58 · Car Care Garage**: Cars roll into a 3D bay before a road trip. Walk round each one and tap the tyres, oil, lights and wipers to check them; anything that glows red needs a second tap to fix. | ![Arcade #58 · Car Care Garage](arcade-garage.png) | ![Arcade #58 · Car Care Garage, Matrix](arcade-garage-matrix.png) |
-| **Arcade #59 · Jet Lag Globe**: Plan a nap on the plane, then fly round a Three.js globe as day and night sweep across it. Sleep while it's night where you're going and you'll land fresh as a daisy. | ![Arcade #59 · Jet Lag Globe](arcade-jetlag.png) | ![Arcade #59 · Jet Lag Globe, Matrix](arcade-jetlag-matrix.png) |
-| **Arcade #60 · Compost Castle**: Pour greens, browns and water into a falling-sand compost bin and turn it with the fork. Get the mix right and it steams and slowly turns dark and rich; too green and it starts to smell. | ![Arcade #60 · Compost Castle](arcade-compost.png) | ![Arcade #60 · Compost Castle, Matrix](arcade-compost-matrix.png) |
-| **Arcade #61 · Gift Radar**: Spend a week with a friend and tap the offhand remarks that sound like hints into your notebook. Then shop: the gift that shows you were listening beats the priciest one. | ![Arcade #61 · Gift Radar](arcade-gifts.png) | ![Arcade #61 · Gift Radar, Matrix](arcade-gifts-matrix.png) |
-| **Arcade #62 · Sunscreen Snake**: Slither along the beach collecting shells as the sun climbs. Sunscreen wears off, UV peaks at noon, and umbrella shade and fresh bottles keep the snake from turning red. | ![Arcade #62 · Sunscreen Snake](arcade-sunsnake.png) | ![Arcade #62 · Sunscreen Snake, Matrix](arcade-sunsnake-matrix.png) |
-| **Arcade #63 · Spice Mixer**: Every dish has a flavour shape on the wheel. Shake in salt, honey, lemon, chilli and more a pinch at a time until your shape matches, because there's no taking it back out. | ![Arcade #63 · Spice Mixer](arcade-spice.png) | ![Arcade #63 · Spice Mixer, Matrix](arcade-spice-matrix.png) |
-| **Arcade #64 · Big Rocks Jar**: A week is a jar. Pour in big rocks (friends, sleep, exercise), pebbles and sand with real physics; the order you pour decides whether the big things still fit under the lid. | ![Arcade #64 · Big Rocks Jar](arcade-rocks.png) | ![Arcade #64 · Big Rocks Jar, Matrix](arcade-rocks-matrix.png) |
-| **Arcade #65 · Toothbrush Tempo**: A smile in eight zones, fronts and backs. Follow the glowing zone to the beat and scrub little back-and-forth strokes to lift the yellow plaque before the song moves on. | ![Arcade #65 · Toothbrush Tempo](arcade-teeth.png) | ![Arcade #65 · Toothbrush Tempo, Matrix](arcade-teeth-matrix.png) |
-| **Arcade #66 · Step Garden**: Tap left, right, left, right to walk through the hills. Every steady step plants a flower that grows taller with your rhythm; rushing or tripping over your own feet sprouts weeds. | ![Arcade #66 · Step Garden](arcade-steps.png) | ![Arcade #66 · Step Garden, Matrix](arcade-steps-matrix.png) |
-| **Arcade #67 · Paint the Room**: Dip the roller and roll colour onto a PlayCanvas wall that really takes paint. Overload it and it drips, one coat is patchy, and rolling over wet paint just smears it. | ![Arcade #67 · Paint the Room](arcade-paint.png) | ![Arcade #67 · Paint the Room, Matrix](arcade-paint-matrix.png) |
-| **Arcade #68 · Unit Price Duel**: Two products swing onto the shelf; grab the one that gives more for your money before they swing away. Big packs aren't always cheaper, and 3-for-2 deals need a second look. | ![Arcade #68 · Unit Price Duel](arcade-unitprice.png) | ![Arcade #68 · Unit Price Duel, Matrix](arcade-unitprice-matrix.png) |
-| **Arcade #69 · Interview Spotlight**: Stay in the spotlight while you answer six interview questions. Nerves make the light wander and shrink; hold a slow breath to steady it, though your answer pauses while you do. | ![Arcade #69 · Interview Spotlight](arcade-spotlight.png) | ![Arcade #69 · Interview Spotlight, Matrix](arcade-spotlight-matrix.png) |
-| **Arcade #70 · Meeting Meteor**: Chair a meeting on a planet called Agenda. Blue on-topic meteors should land; click the grey tangents to nudge them past before the meeting goes off the rails. | ![Arcade #70 · Meeting Meteor](arcade-meeting.png) | ![Arcade #70 · Meeting Meteor, Matrix](arcade-meeting-matrix.png) |
-| **Arcade #71 · Storm Pack**: A storm is coming and everything in the house whirls past on a speeding carousel. Tap to pack an eight-slot go-bag, then see how your choices hold up when the power goes. | ![Arcade #71 · Storm Pack](arcade-storm.png) | ![Arcade #71 · Storm Pack, Matrix](arcade-storm-matrix.png) |
-| **Arcade #72 · Calendar Blocks**: Blocks of work, errands, friends, exercise and rest drop into the week. A full day with rest and variety glows and clears; stack a day past the top and it burns out. | ![Arcade #72 · Calendar Blocks](arcade-calendar.png) | ![Arcade #72 · Calendar Blocks, Matrix](arcade-calendar-matrix.png) |
-| **Arcade #73 · Heartbeat Hero**: Keep a heart monitor's line alive with strong, steady presses in the 100–120 sweet spot, then two big held breaths after every thirty, until help arrives. | ![Arcade #73 · Heartbeat Hero](arcade-heartbeat.png) | ![Arcade #73 · Heartbeat Hero, Matrix](arcade-heartbeat-matrix.png) |
-| **Arcade #74 · Bandage Wrap**: Press and trace the dotted spiral to wrap a grazed knee, wrist and elbow. Stay on the guide for a snug, even wrap that covers the graze; wander off and the bandage bunches up. | ![Arcade #74 · Bandage Wrap](arcade-bandage.png) | ![Arcade #74 · Bandage Wrap, Matrix](arcade-bandage-matrix.png) |
-| **Arcade #75 · Energy Meter**: A busy family evening: people wander from room to room and never switch anything off. Tap lights and gadgets off in empty rooms, but leave on whatever someone's using. | ![Arcade #75 · Energy Meter](arcade-energy.png) | ![Arcade #75 · Energy Meter, Matrix](arcade-energy-matrix.png) |
-| **Arcade #76 · Wind-Down Lanterns**: Stroll a winding Three.js path home at dusk. Light the lanterns as you pass and fold away the cold blue screens that pop up in the hedges, arriving at the cottage drowsy and ready for bed. | ![Arcade #76 · Wind-Down Lanterns](arcade-lanterns.png) | ![Arcade #76 · Wind-Down Lanterns, Matrix](arcade-lanterns-matrix.png) |
-| **Arcade #77 · Fridge Chef**: Five evenings, one fridge of odds and ends with little countdowns. Tap things into the pan and the cookbook shows what they'll make; use the wobbly spinach before it ends up in the bin. | ![Arcade #77 · Fridge Chef](arcade-fridgechef.png) | ![Arcade #77 · Fridge Chef, Matrix](arcade-fridgechef-matrix.png) |
-| **Arcade #78 · Deadline Dominoes**: Every domino is a task and the bell is the deadline. Stand them along the shelf and tip the first; a gap wider than a domino is tall stops the chain dead. | ![Arcade #78 · Deadline Dominoes](arcade-dominoes.png) | ![Arcade #78 · Deadline Dominoes, Matrix](arcade-dominoes-matrix.png) |
-| **Arcade #79 · Note Nest**: Ideas drift down from a lecture like dandelion seeds. Catch the bright, important ones in your nest, let the chatter float by, and link related notes together before the quiz. | ![Arcade #79 · Note Nest](arcade-notenest.png) | ![Arcade #79 · Note Nest, Matrix](arcade-notenest-matrix.png) |
-| **Arcade #80 · Decision Maze**: Walk a 3D hedge maze where each fork offers something shiny now or something better later. Step through a gate and find out, one fork further on, what that choice really cost. | ![Arcade #80 · Decision Maze](arcade-maze.png) | ![Arcade #80 · Decision Maze, Matrix](arcade-maze-matrix.png) |
-| **Arcade #81 · Tip Split Café**: The lunch bill lands. Drag coins onto each friend's plate so everyone pays for what they had plus their share of the tip, then settle up and see if it was fair. | ![Arcade #81 · Tip Split Café](arcade-tipsplit.png) | ![Arcade #81 · Tip Split Café, Matrix](arcade-tipsplit-matrix.png) |
-| **Arcade #82 · Seasonal Market**: A round Three.js market turns through the year: blossom, sunshine, falling leaves, snow. Tap the stalls piled with what's naturally in season and skip the out-of-season crates. | ![Arcade #82 · Seasonal Market](arcade-seasonal.png) | ![Arcade #82 · Seasonal Market, Matrix](arcade-seasonal-matrix.png) |
-| **Arcade #83 · Salary Slide**: Payday pours down a slide into Rent, Food, Fun and Savings. Drag the gates to set the split, then see whether each bucket covers the month's needs and surprise bills. | ![Arcade #83 · Salary Slide](arcade-salary.png) | ![Arcade #83 · Salary Slide, Matrix](arcade-salary-matrix.png) |
-| **Arcade #84 · Resume Tower**: Stack solid achievement blocks into a tower an interviewer will notice. Buzzword balloons like "Synergy!" look big but float and roll away, so skip them. | ![Arcade #84 · Resume Tower](arcade-resume.png) | ![Arcade #84 · Resume Tower, Matrix](arcade-resume-matrix.png) |
-| **Arcade #85 · Phrasebook Parrot**: Travel with a chatty parrot through four countries. Locals greet you in their language; feed the parrot the right reply card, and the words it learns glow brighter next time. | ![Arcade #85 · Phrasebook Parrot](arcade-parrot.png) | ![Arcade #85 · Phrasebook Parrot, Matrix](arcade-parrot-matrix.png) |
-| **Arcade #86 · Medicine Cabinet**: Clear-out day: read each box's expiry date and who it's for, then drag it to the cabinet, the locked high shelf, or the pharmacy return bag. | ![Arcade #86 · Medicine Cabinet](arcade-meds.png) | ![Arcade #86 · Medicine Cabinet, Matrix](arcade-meds-matrix.png) |
-| **Arcade #87 · Queue Hop**: Five tills, five queues. Judge the trolleys and the cashiers, not just the number of people, and tap the till you think will get you out quickest. | ![Arcade #87 · Queue Hop](arcade-queue.png) | ![Arcade #87 · Queue Hop, Matrix](arcade-queue-matrix.png) |
-| **Arcade #88 · Receipt Rain**: A month of receipts flutters down. Catch the dodgy ones (charged twice, a cancelled subscription, a price that doesn't match the shelf) in your dispute folder, and let the honest ones fall. | ![Arcade #88 · Receipt Rain](arcade-receipts.png) | ![Arcade #88 · Receipt Rain, Matrix](arcade-receipts-matrix.png) |
-| **Arcade #89 · Mood Weather**: Clouds drift by carrying little moments like "I got the job!" or "missed the last bus". Drag each to the word that names the feeling; the ones you miss gather into a storm. | ![Arcade #89 · Mood Weather](arcade-moodweather.png) | ![Arcade #89 · Mood Weather, Matrix](arcade-moodweather-matrix.png) |
-| **Arcade #90 · Echo Talk**: A friend tells you about their day. Choose replies that show you're really listening and they glow warmer; talk about yourself or change the subject and they go quiet. | ![Arcade #90 · Echo Talk](arcade-echo.png) | ![Arcade #90 · Echo Talk, Matrix](arcade-echo-matrix.png) |
-| **Arcade #91 · Boundary Garden**: Open and close the garden gates as visitors wander up. Welcome the bees and friends, keep out the slugs and the tool-borrowing neighbour; shut everything and the garden gets lonely. | ![Arcade #91 · Boundary Garden](arcade-boundary.png) | ![Arcade #91 · Boundary Garden, Matrix](arcade-boundary-matrix.png) |
-| **Arcade #92 · Map Runner**: Plot your way across a little 3D city to the red pin. Dodge the roadworks, hop on the bus road, and compare your route with the quickest one possible. | ![Arcade #92 · Map Runner](arcade-maprun.png) | ![Arcade #92 · Map Runner, Matrix](arcade-maprun-matrix.png) |
-| **Arcade #93 · Tool Match**: Household jobs slide along a speeding conveyor. Grab the right tool for each, like a screwdriver for the wobbly hinge or a spanner for the dripping tap, before it reaches the end. | ![Arcade #93 · Tool Match](arcade-tools.png) | ![Arcade #93 · Tool Match, Matrix](arcade-tools-matrix.png) |
-| **Arcade #94 · Stain Lab**: A basket of stained clothes. Choose cold water, soap, vinegar, bicarb or blotting and dab; the right fix lifts the stain, and the wrong one (like hot water on blood) sets it for good. | ![Arcade #94 · Stain Lab](arcade-stains.png) | ![Arcade #94 · Stain Lab, Matrix](arcade-stains-matrix.png) |
-| **Arcade #95 · Drawer Organiser**: The junk drawer gets a foam insert with a shaped slot for every thing. Drag each item into its matching outline and you'll always know where the scissors are. | ![Arcade #95 · Drawer Organiser](arcade-drawer.png) | ![Arcade #95 · Drawer Organiser, Matrix](arcade-drawer-matrix.png) |
-| **Arcade #96 · Pitch Balloon**: Pitch an idea in a lift while your balloon of attention sinks. Tap clear, strong words to lift it, and steer clear of "um", "basically" and "like". | ![Arcade #96 · Pitch Balloon](arcade-pitch.png) | ![Arcade #96 · Pitch Balloon, Matrix](arcade-pitch-matrix.png) |
-| **Arcade #97 · Water Wheel**: Keep a village mill wheel turning all day with little sips from the pump. Let the trough run dry and the wheel stalls; gulp too much and it overflows. | ![Arcade #97 · Water Wheel](arcade-waterwheel.png) | ![Arcade #97 · Water Wheel, Matrix](arcade-waterwheel-matrix.png) |
-<!-- advanced-features-end -->
-
-To regenerate them, start the dev server (`npm run dev`) and run `node scripts/screenshots.mjs`. It uses Playwright with your installed Chrome, and doubles as a smoke test: it records console errors, uncaught exceptions, crashed pages and blank pages for every shot in `docs/screenshots/report.json`.
+Bloom is a personal React 19 wellness dashboard for habits, planning, focus, journaling, money, and learning. It runs locally, keeps data in the browser, and does not require an account or external AI service.
 
 ## Highlights
 
-- **Bloom, your companion:** nine switchable avatars (Bloom, Robot, Mood orb, Sparky, Beacon, Tinker, Pixel Bloom, Globe and more), animated with GSAP and SVG. Bloom acts out each page (lifting a dumbbell on Exercise, burning a note on Let it go…). In the chat you can type commands: log expenses, add to-dos, check off habits, log mood and gratitude, and get quiz hints.
-- **Bloom English:** a Duolingo-style course with a lesson path, XP, streaks, hearts, leagues, quests, stories, speaking and pronunciation, a writing coach, themed weather scenes for every unit, and **Story mode**: a tournament side quest with a Remotion intro video.
-- **Learn to code:** a Codecademy-style JavaScript course with a CodeMirror editor, a sandboxed runner (Web Worker with a time limit), instant checklists (console output, probes and acorn syntax-tree checks), hints, Get unstuck, a quiz, challenges, searchable cheat sheets and an animated certificate.
-- **The Code Cup (story mode for Learn to code):** a tournament side quest — GLITCH has scrambled the Lighthouse code and Bloom World is going dark. Three code duels (predict the output / spot the bug) against racing rivals Mochi, Sparky and UNIT-7, Persona-style dialogue, a bonus wheel, and two Remotion videos: an intro and a finale that plays when you win the Cup.
-- **Money:** spending in any currency, with budgets, charts (circle packing, candlesticks, calendar heatmap, glowing radar), a plan tab and CSV import.
-- **Little Joys:** hydration, sky (moon phase and the sun's arc), a kindness deck, mood colours and a QR postcard.
-- **Themes:** Bloom Light and Dark, **Matrix** (phosphor green, CRT scanlines, glyph rain), five **Glow** gradient themes, and more. Cards light up under the pointer.
-- **Quality:** installable, works offline, per-page error recovery, DOMPurify sanitising, an accessibility audit, a Clear my data option and 300+ tests. See [docs/QUALITY.md](docs/QUALITY.md).
+- Habit tracking, calendar planning, and focus sessions
+- Journaling, money, learning, and reflection tools
+- Light and Matrix themes with a calm purple design
+- Optional local WebLLM support for privacy-friendly AI assistance
 
-## Start
+## Screenshots
 
-Double-click **Start Bloom.cmd**, or run:
+| Overview | Workspace |
+|---|---|
+| ![Home](docs/screenshots/home-light.png) | ![Focus](docs/screenshots/focus-light.png) |
+| ![Money](docs/screenshots/money-light.png) | ![Talk to Bloom](docs/screenshots/chat-light.png) |
 
-```powershell
-cd path\to\bloom
-node launch.mjs
-```
+## Advanced features
 
-Open **http://127.0.0.1:5173/**. The launcher runs the built app in the background and opens your browser. Starting it again reuses the running app. No GitHub setup is required. Use that exact address: browser storage belongs to an origin, so `localhost` and `127.0.0.1` have separate data. The server listens only on this computer. To run in a visible terminal instead, use `node server.mjs` and press Ctrl+C to stop it. The background app stops when Windows restarts; double-click the launcher to start it again.
+Built on Web Bluetooth, WebGPU, WebAssembly SIMD, multi-core workers, OPFS, and File System Access.
 
-## Features
-
-- Daily habits with animated SVG checkmarks, per-day completion and seven-day history.
-- Guided journal: check-in, win, challenge and tomorrow’s micro-action.
-- Separate typed flow, transcript and metadata; mood/energy, suggested replies, Formik validation, typing feedback and scrollable conversation.
-- Draft recovery after refresh, including an interrupted prompt delay. Completed sessions save once, with tags and a review card.
-- Add, edit and complete daily intentions; customize your affirmation.
-- To-dos with nested projects, reorderable parallel or sequential actions, inherited deferred dates, and saved perspectives for context, energy, time of day, and availability.
-- Full calendar with day/week/month/agenda views, drag-to-schedule tasks, movable and resizable time blocks, deep-work totals, and daily capacity. Enable or disable it in Settings without deleting schedules.
-- Reflection history and JSON backup export.
-- Responsive layout, labeled controls, native focus-trapping dialogs and reduced-motion support.
-
-## Data and recovery
-
-Data is stored in this browser’s localStorage under `mindfulness-dashboard-v1`. It is not sent to a server or synced across browsers or devices. Clearing site data or using a private window can lose it. Use **Export my data** regularly. Export contains your records; there is currently no in-app import feature. Prior-day intentions remain in exports, while the dashboard shows today's intentions.
-
-Malformed data is preserved: saving is disabled and you can export the original before choosing a fresh start. Storage failures display an alert and leave current edits in memory for export. Use one active editing tab; simultaneous edits in multiple tabs are not merged.
-
-Fonts are bundled locally. The companion makes no model requests until you choose **Download & enable local AI**. Extensions such as Dark Reader may recolor the UI.
-
-## Bloom companion
-
-Use **Plan with Bloom** on the home screen or **Talk to Bloom** from any page. The lightweight planner works without a model download. Ask for a session such as “I have 40 minutes and I’m tired”, adjust time and energy, then review and add the selected tasks to today's intentions. It respects task dependencies, deferral, estimates, and existing future calendar bookings. It does not move deadlines or book calendar time. Acceptance is idempotent and refuses changed or outdated proposals. Intentions use the existing save and export system.
-
-The optional open-source [WebLLM](https://webllm.mlc.ai/docs/) integration runs Qwen2.5 0.5B Instruct (4-bit) in a dedicated browser worker. It needs compatible WebGPU hardware and downloads several hundred MB from Hugging Face and WebLLM's model host on first use. Cached files may be reused by the browser. No API key or inference server is required. Enable it per app session; cancellation and **Turn off & free memory** terminate the worker. A failed or slow model falls back to the lightweight planner. Small-model understanding is experimental, and performance varies by device.
-
-Conversation text and a small summary of activity totals are processed locally. Journal bodies are not included. The conversation is kept in memory until refresh and is not part of the backup. Model output is validated against a limited intent schema; the model cannot write app data, award rewards, or call arbitrary tools. Every proposed change requires the user's Apply action.
-
-The home screen's weekly memory summarizes seven local calendar days of recorded habit check-ins, completed journal sessions, and focus minutes. It is a rolling view of existing records, not a newly stored journal entry or a mental-health assessment.
-
-Projects, perspectives, task estimates, and time blocks use the same local backup as other records. The calendar uses the browser's local timezone. Daily capacity counts occupied time within the availability hours you set; standalone events reserve time alongside tasks. Overlapping blocks are rejected. Sequential projects unlock actions after preceding sibling tasks or subprojects are completed; empty subprojects do not block progress. Project deletion keeps its actions under the parent project (or Inbox). Deferral is separate from a due date. Calendar integration is local to Bloom; there is no Google or Outlook synchronization.
+| Feature | Image |
+|---|---|
+| Sound Lab | ![Sound Lab](docs/screenshots/wow-13-soundlab.png) |
+| Terrain Replay | ![Terrain Replay](docs/screenshots/wow-14-terrain.png) |
+| Morning Readiness Scan | ![Readiness](docs/screenshots/wow-15-readiness.png) |
+| Receipt Lens | ![Receipt Lens](docs/screenshots/wow-16-receipts.png) |
+| Bills Inbox | ![Bills Inbox](docs/screenshots/wow-17-bills.png) |
+| Morning Briefing Radio | ![Morning Briefing Radio](docs/screenshots/wow-18-briefing-hd.png) |
+| Study Duel | ![Study Duel](docs/screenshots/wow-19-duel.png) |
+| Form Coach | ![Form Coach](docs/screenshots/wow-20-formcoach.png) |
+| Code City & Burnout Radar | ![Code City](docs/screenshots/wow-21-codecity.png) |
+| Render thread (A2) | ![Render thread](docs/screenshots/a2-offscreen-soundlab.png) |
 
 ## Development
-
-Node 24.18.0 and npm 11.17.0 were already installed. Libraries include React/React DOM 19, TypeScript 6, Formik 2 and Framer Motion 13. The lockfile records exact installed versions.
 
 ```powershell
 npm.cmd ci
@@ -243,177 +46,32 @@ npm.cmd run build
 npm.cmd run preview
 ```
 
-VS Code ESLint (`dbaeumer.vscode-eslint`) and Prettier (`esbenp.prettier-vscode`) are installed. Workspace settings enable formatting and ESLint fixes on save. `npm run format` formats source/tests/configuration.
+Typical project layout:
 
-- `src/model.ts`: types, schema validation, prompt transitions, day-based habits.
-- `src/useCoach.ts`: guarded persistence.
-- `src/components/journal/`: journal presentation and flow container.
-- `src/App.tsx` and styles: dashboard and forms.
-- `tests/`: Jest progression, persistence, recovery and rendered-flow tests.
-- `e2e/`: isolated Playwright desktop/mobile planning tests, including task dragging and reload persistence. The test server uses port 5175.
-- `src/features/planning.ts`: project hierarchy, action availability, perspectives, and scheduling validation. The calendar uses FullCalendar's MIT-licensed standard React, time-grid, day-grid, list, and interaction plugins.
-
-This repository contains the complete Bloom dashboard application and its tests.
+- `src/`: app logic, features, views, and styling
+- `tests/`: unit and persistence tests
+- `e2e/`: Playwright end-to-end checks
+- `docs/`: feature docs and screenshots
 
 ## Open-source libraries
 
-Bloom is built on these open-source packages (runtime dependencies from `package.json`). The table is generated from the imports in `src/`, and "Where it is used" names the feature folder or area that imports each package.
+Bloom uses the following libraries in the app:
 
-| Library | Where it is used |
+| Library | Purpose |
 |---|---|
-| [`@chatscope/chat-ui-kit-react`](https://www.npmjs.com/package/@chatscope/chat-ui-kit-react) | companion |
-| [`@chatscope/chat-ui-kit-styles`](https://www.npmjs.com/package/@chatscope/chat-ui-kit-styles) | companion |
-| [`@codemirror/lang-javascript`](https://www.npmjs.com/package/@codemirror/lang-javascript) | code |
-| [`@codemirror/theme-one-dark`](https://www.npmjs.com/package/@codemirror/theme-one-dark) | code |
-| [`@codemirror/view`](https://www.npmjs.com/package/@codemirror/view) | code |
-| [`@dnd-kit/core`](https://www.npmjs.com/package/@dnd-kit/core) | english, yoga |
-| [`@dnd-kit/sortable`](https://www.npmjs.com/package/@dnd-kit/sortable) | english, yoga |
-| [`@dnd-kit/utilities`](https://www.npmjs.com/package/@dnd-kit/utilities) | english, yoga |
-| [`@fontsource/caveat`](https://www.npmjs.com/package/@fontsource/caveat) | global styles |
-| [`@fontsource/dm-sans`](https://www.npmjs.com/package/@fontsource/dm-sans) | global styles |
-| [`@fontsource/fira-code`](https://www.npmjs.com/package/@fontsource/fira-code) | global styles |
-| [`@fontsource/manrope`](https://www.npmjs.com/package/@fontsource/manrope) | global styles |
-| [`@fontsource/press-start-2p`](https://www.npmjs.com/package/@fontsource/press-start-2p) | global styles |
-| [`@fontsource/vt323`](https://www.npmjs.com/package/@fontsource/vt323) | global styles |
-| [`@formkit/auto-animate`](https://www.npmjs.com/package/@formkit/auto-animate) | quick |
-| [`@fullcalendar/daygrid`](https://www.npmjs.com/package/@fullcalendar/daygrid) | CalendarPage.tsx |
-| [`@fullcalendar/interaction`](https://www.npmjs.com/package/@fullcalendar/interaction) | CalendarPage.tsx |
-| [`@fullcalendar/list`](https://www.npmjs.com/package/@fullcalendar/list) | CalendarPage.tsx |
-| [`@fullcalendar/react`](https://www.npmjs.com/package/@fullcalendar/react) | CalendarPage.tsx |
-| [`@fullcalendar/timegrid`](https://www.npmjs.com/package/@fullcalendar/timegrid) | CalendarPage.tsx |
-| [`@hello-pangea/dnd`](https://www.npmjs.com/package/@hello-pangea/dnd) | diet |
-| [`@lottiefiles/react-lottie-player`](https://www.npmjs.com/package/@lottiefiles/react-lottie-player) | daybook, rpg |
-| [`@mediapipe/tasks-vision`](https://www.npmjs.com/package/@mediapipe/tasks-vision) | posture, taichi |
-| [`@mlc-ai/web-llm`](https://www.npmjs.com/package/@mlc-ai/web-llm) | companion |
-| [`@nivo/calendar`](https://www.npmjs.com/package/@nivo/calendar) | money |
-| [`@nivo/radar`](https://www.npmjs.com/package/@nivo/radar) | diet |
-| [`@nivo/sankey`](https://www.npmjs.com/package/@nivo/sankey) | energy |
-| [`@radix-ui/react-context-menu`](https://www.npmjs.com/package/@radix-ui/react-context-menu) | ui |
-| [`@radix-ui/react-dropdown-menu`](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu) | ui |
-| [`@radix-ui/react-hover-card`](https://www.npmjs.com/package/@radix-ui/react-hover-card) | rewards |
-| [`@radix-ui/react-popover`](https://www.npmjs.com/package/@radix-ui/react-popover) | reminders |
-| [`@radix-ui/react-select`](https://www.npmjs.com/package/@radix-ui/react-select) | ui |
-| [`@react-pdf/renderer`](https://www.npmjs.com/package/@react-pdf/renderer) | lab, yearbook |
-| [`@react-spring/web`](https://www.npmjs.com/package/@react-spring/web) | release |
-| [`@react-three/drei`](https://www.npmjs.com/package/@react-three/drei) | rpg, wellbeing, world |
-| [`@react-three/fiber`](https://www.npmjs.com/package/@react-three/fiber) | games, journey, palace, rpg, taichi, wellbeing, world |
-| [`@remotion/player`](https://www.npmjs.com/package/@remotion/player) | english |
-| [`@tiptap/extension-highlight`](https://www.npmjs.com/package/@tiptap/extension-highlight) | daybook |
-| [`@tiptap/extension-placeholder`](https://www.npmjs.com/package/@tiptap/extension-placeholder) | daybook |
-| [`@tiptap/extension-task-item`](https://www.npmjs.com/package/@tiptap/extension-task-item) | daybook |
-| [`@tiptap/extension-task-list`](https://www.npmjs.com/package/@tiptap/extension-task-list) | daybook |
-| [`@tiptap/react`](https://www.npmjs.com/package/@tiptap/react) | daybook |
-| [`@tiptap/starter-kit`](https://www.npmjs.com/package/@tiptap/starter-kit) | daybook |
-| [`@tsparticles/react`](https://www.npmjs.com/package/@tsparticles/react) | meditate |
-| [`@tsparticles/slim`](https://www.npmjs.com/package/@tsparticles/slim) | meditate |
-| [`@turf/turf`](https://www.npmjs.com/package/@turf/turf) | run |
-| [`@uiw/react-codemirror`](https://www.npmjs.com/package/@uiw/react-codemirror) | code |
-| [`@use-gesture/react`](https://www.npmjs.com/package/@use-gesture/react) | release, ui |
-| [`@xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers) | search, voice |
-| [`@xyflow/react`](https://www.npmjs.com/package/@xyflow/react) | VisionBoard |
-| [`@zxing/browser`](https://www.npmjs.com/package/@zxing/browser) | scan |
-| [`acorn`](https://www.npmjs.com/package/acorn) | code |
-| [`acorn-walk`](https://www.npmjs.com/package/acorn-walk) | code |
-| [`an-array-of-english-words`](https://www.npmjs.com/package/an-array-of-english-words) | english |
-| [`animejs`](https://www.npmjs.com/package/animejs) | exercise |
-| [`automated-readability`](https://www.npmjs.com/package/automated-readability) | english |
-| [`canvas-confetti`](https://www.npmjs.com/package/canvas-confetti) | core, juice, ui |
-| [`chart.js`](https://www.npmjs.com/package/chart.js) | english, ui, workout |
-| [`chroma-js`](https://www.npmjs.com/package/chroma-js) | rpg |
-| [`chrono-node`](https://www.npmjs.com/package/chrono-node) | quick |
-| [`cmdk`](https://www.npmjs.com/package/cmdk) | layout |
-| [`cmu-pronouncing-dictionary`](https://www.npmjs.com/package/cmu-pronouncing-dictionary) | english |
-| [`compromise`](https://www.npmjs.com/package/compromise) | companion, daybook, english |
-| [`compromise-speech`](https://www.npmjs.com/package/compromise-speech) | english |
-| [`currency.js`](https://www.npmjs.com/package/currency.js) | money |
-| [`cursor-effects`](https://www.npmjs.com/package/cursor-effects) | ui |
-| [`d3-hierarchy`](https://www.npmjs.com/package/d3-hierarchy) | money |
-| [`d3-shape`](https://www.npmjs.com/package/d3-shape) | flow |
-| [`date-fns`](https://www.npmjs.com/package/date-fns) | quick, timeSince |
-| [`dexie`](https://www.npmjs.com/package/dexie) | search |
-| [`diff`](https://www.npmjs.com/package/diff) | daybook |
-| [`dompurify`](https://www.npmjs.com/package/dompurify) | cards, code |
-| [`double-metaphone`](https://www.npmjs.com/package/double-metaphone) | english |
-| [`driver.js`](https://www.npmjs.com/package/driver.js) | layout, rpg |
-| [`easytimer.js`](https://www.npmjs.com/package/easytimer.js) | interval |
-| [`embla-carousel-react`](https://www.npmjs.com/package/embla-carousel-react) | ui |
-| [`fastest-levenshtein`](https://www.npmjs.com/package/fastest-levenshtein) | english |
-| [`fireworks-js`](https://www.npmjs.com/package/fireworks-js) | games |
-| [`flesch`](https://www.npmjs.com/package/flesch) | english |
-| [`formik`](https://www.npmjs.com/package/formik) | app shell, journal |
-| [`framer-motion`](https://www.npmjs.com/package/framer-motion) | achievements, app shell, collectibles, daybook, journal, posture, reminders, rewards, rpg, sleep, urgeClock.tsx, wellbeing, world |
-| [`franc-min`](https://www.npmjs.com/package/franc-min) | english |
-| [`frappe-gantt`](https://www.npmjs.com/package/frappe-gantt) | roadmap |
-| [`fuse.js`](https://www.npmjs.com/package/fuse.js) | code, companion, english, exercise |
-| [`gsap`](https://www.npmjs.com/package/gsap) | VisionBoard, app shell, body, cards, code, companion, core, dailyFlow, daybook, daylight, diet, dojo, english, epiphany, exercise, fasting, games, interval, journey, joys, juice, lab, meditate, mindmap, mirror, mixer, money, monk, palace, quick, release, routines, rpg, scan, showcase, sleep, sounds, street, studio, ui, utils, welcome, wellbeing, workout, world, yoga |
-| [`howler`](https://www.npmjs.com/package/howler) | AudioMixerContext |
-| [`i18next`](https://www.npmjs.com/package/i18next) | translations |
-| [`ics`](https://www.npmjs.com/package/ics) | daybook |
-| [`jszip`](https://www.npmjs.com/package/jszip) | lab |
-| [`leaflet`](https://www.npmjs.com/package/leaflet) | places, run |
-| [`lightweight-charts`](https://www.npmjs.com/package/lightweight-charts) | money |
-| [`lottie-web`](https://www.npmjs.com/package/lottie-web) | ui |
-| [`lucide-react`](https://www.npmjs.com/package/lucide-react) | AdoptLibrary.tsx, AudioMixer.tsx, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, LanguageSelector.tsx, Modal.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, achievements, affirm, app shell, body, breathwork, cards, code, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, focusRoom, games, icons, ink, interval, journal, joys, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, settings, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, ui, urgeClock.tsx, voice, welcome, wellbeing, workout, yearbook, yoga |
-| [`lunarphase-js`](https://www.npmjs.com/package/lunarphase-js) | joys |
-| [`marked`](https://www.npmjs.com/package/marked) | cards, code |
-| [`markmap-lib`](https://www.npmjs.com/package/markmap-lib) | mindmap |
-| [`markmap-view`](https://www.npmjs.com/package/markmap-view) | mindmap |
-| [`mathjs`](https://www.npmjs.com/package/mathjs) | diet |
-| [`matter-js`](https://www.npmjs.com/package/matter-js) | impact, showcase |
-| [`meyda`](https://www.npmjs.com/package/meyda) | taichi |
-| [`minisearch`](https://www.npmjs.com/package/minisearch) | search |
-| [`mouse-follower`](https://www.npmjs.com/package/mouse-follower) | ui |
-| [`nosleep.js`](https://www.npmjs.com/package/nosleep.js) | breathwork |
-| [`number-to-words`](https://www.npmjs.com/package/number-to-words) | english |
-| [`page-flip`](https://www.npmjs.com/package/page-flip) | daybook |
-| [`papaparse`](https://www.npmjs.com/package/papaparse) | money |
-| [`perfect-freehand`](https://www.npmjs.com/package/perfect-freehand) | ink |
-| [`pixelarticons`](https://www.npmjs.com/package/pixelarticons) | icons |
-| [`pixi.js`](https://www.npmjs.com/package/pixi.js) | games |
-| [`pluralize`](https://www.npmjs.com/package/pluralize) | english |
-| [`qrcode`](https://www.npmjs.com/package/qrcode) | joys |
-| [`react`](https://www.npmjs.com/package/react) | AdoptLibrary.tsx, AudioMixer.tsx, AudioMixerContext, BloomExperience.tsx, CalendarPage.tsx, FocusPage.tsx, HabitsPage.tsx, Modal.tsx, PersonalInsights.tsx, PlanningTools.tsx, ProductivityPages.tsx, SettingsPage, UrgePage.tsx, VisionBoard, achievements, affirm, app shell, app start-up, body, breathwork, cards, code, collectibles, companion, core, dailyFlow, dashboard, daybook, daylight, diet, dojo, energy, english, epiphany, exercise, explore, eyes, fasting, flow, focusRoom, games, icons, impact, ink, interval, journal, journey, joys, juice, lab, layout, mala, meditate, mindmap, mirror, mixer, money, monk, palace, places, pointer, posture, quick, release, reminders, rewards, roadmap, routines, rpg, run, scan, screen, search, settings, shared, showcase, sleep, sounds, street, stretch, studio, taichi, timeCapsule.tsx, timeSince, tsparticles react.d, ui, urgeClock.tsx, useCoach, voice, welcome, wellbeing, workout, world, yearbook, yoga |
-| [`react-calendar-heatmap`](https://www.npmjs.com/package/react-calendar-heatmap) | fasting |
-| [`react-chartjs-2`](https://www.npmjs.com/package/react-chartjs-2) | english, workout |
-| [`react-compare-slider`](https://www.npmjs.com/package/react-compare-slider) | body |
-| [`react-countdown-circle-timer`](https://www.npmjs.com/package/react-countdown-circle-timer) | stretch |
-| [`react-dom`](https://www.npmjs.com/package/react-dom) | BloomExperience.tsx, app start-up, daybook, monk, showcase, welcome |
-| [`react-flip-numbers`](https://www.npmjs.com/package/react-flip-numbers) | quick, timeSince |
-| [`react-i18next`](https://www.npmjs.com/package/react-i18next) | DashboardWelcome.tsx, LanguageSelector.tsx, Modal.tsx, SettingsPage, app shell, daybook, journal, layout, rpg, settings, translations, useCoach |
-| [`react-idle-timer`](https://www.npmjs.com/package/react-idle-timer) | screen |
-| [`react-leaflet`](https://www.npmjs.com/package/react-leaflet) | places |
-| [`react-querybuilder`](https://www.npmjs.com/package/react-querybuilder) | explore |
-| [`reading-time`](https://www.npmjs.com/package/reading-time) | daybook, reading time.d |
-| [`remotion`](https://www.npmjs.com/package/remotion) | english |
-| [`rough-notation`](https://www.npmjs.com/package/rough-notation) | dojo |
-| [`roughjs`](https://www.npmjs.com/package/roughjs) | daybook, exercise, eyes |
-| [`rrule`](https://www.npmjs.com/package/rrule) | routines |
-| [`seedrandom`](https://www.npmjs.com/package/seedrandom) | english, joys |
-| [`sentiment`](https://www.npmjs.com/package/sentiment) | companion, english, mirror, quick |
-| [`simple-statistics`](https://www.npmjs.com/package/simple-statistics) | lab |
-| [`simplex-noise`](https://www.npmjs.com/package/simplex-noise) | mixer, quick |
-| [`stopword`](https://www.npmjs.com/package/stopword) | english |
-| [`suncalc`](https://www.npmjs.com/package/suncalc) | daylight, joys, quick |
-| [`supermemo`](https://www.npmjs.com/package/supermemo) | cards, epiphany |
-| [`swiper`](https://www.npmjs.com/package/swiper) | affirm, showcase |
-| [`syllable`](https://www.npmjs.com/package/syllable) | english |
-| [`tailwindcss`](https://www.npmjs.com/package/tailwindcss) | global styles |
-| [`three`](https://www.npmjs.com/package/three) | games, journey, palace, rpg, taichi, wellbeing, world |
-| [`tinycolor2`](https://www.npmjs.com/package/tinycolor2) | joys |
-| [`tone`](https://www.npmjs.com/package/tone) | taichi |
-| [`ts-fsrs`](https://www.npmjs.com/package/ts-fsrs) | english |
-| [`tunajs`](https://www.npmjs.com/package/tunajs) | sounds |
-| [`typed.js`](https://www.npmjs.com/package/typed.js) | quick |
-| [`vivus`](https://www.npmjs.com/package/vivus) | achievements |
-| [`wavesurfer.js`](https://www.npmjs.com/package/wavesurfer.js) | voice |
-| [`wink-lemmatizer`](https://www.npmjs.com/package/wink-lemmatizer) | english |
-| [`write-good`](https://www.npmjs.com/package/write-good) | english |
-| [`zdog`](https://www.npmjs.com/package/zdog) | mala |
-| [`zod`](https://www.npmjs.com/package/zod) | collectibles, companion, model, rpg |
+| React / React DOM | UI framework |
+| TypeScript | Type safety |
+| Framer Motion | Motion and transitions |
+| Formik | Form handling |
+| FullCalendar | Calendar and scheduling |
+| @react-three/fiber + drei | 3D scenes and interaction |
+| Nivo | Charts and data visualization |
+| Tiptap | Rich text editing |
+| Radix UI | Accessible menus, popovers, selects |
+| @mlc-ai/web-llm | Optional local AI model support |
+| CodeMirror | Code editing and review experiences |
+| DnD Kit | Drag-and-drop interactions |
+| @react-pdf/renderer | PDF generation |
+| @fontsource/* | App typography |
 
-Supporting packages (types, build plugins and peer packages of the above): `@fullcalendar/core`, `@gsap/react`, `@radix-ui/react-tooltip`, `@tailwindcss/vite`, `@tiptap/extensions`, `@types/chroma-js`, `@types/react-calendar-heatmap`, `@zxing/library`, `decimal.js`, `fast-diff`, `mustache`, `react-joyride`.
-
-Dev tooling includes Vite, vite-plugin-pwa (Workbox), TypeScript, ESLint, Jest with Testing Library, Playwright (screenshots) and axe-core (accessibility audit).
-
-Remotion is used under the [Remotion licence](https://www.remotion.dev/license), which is free for individuals and small teams.
-
+This keeps the project lightweight while covering planning, journaling, focus, money, and learning workflows.
