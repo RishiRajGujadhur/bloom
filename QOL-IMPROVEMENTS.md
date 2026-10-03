@@ -6,7 +6,7 @@ Items are intentionally small enough to review and verify independently.
 ## To-dos
 
 - [ ] Add a keyboard shortcut to focus the task composer.
-- [ ] Show an at-a-glance open, due-today, and completed summary.
+- [x] Show an at-a-glance open, due-today, and completed summary.
 - [ ] Add one-tap task completion undo.
 - [ ] Add a clear empty-search state with a reset action.
 - [ ] Provide a compact task-density toggle.

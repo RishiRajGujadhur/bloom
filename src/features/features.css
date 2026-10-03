@@ -96,6 +96,40 @@
   max-width: 960px;
   margin: auto;
 }
+.todo-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.todo-overview button {
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in oklab, var(--accent-color) 16%, var(--border-color));
+  border-radius: 14px;
+  background: linear-gradient(150deg, var(--bg-surface), color-mix(in oklab, var(--accent-color) 5%, var(--bg-surface)));
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.todo-overview button:hover,
+.todo-overview button[aria-pressed='true'] {
+  border-color: color-mix(in oklab, var(--accent-color) 48%, var(--border-color));
+  box-shadow: 0 14px 24px -22px var(--accent-color);
+  transform: translateY(-1px);
+}
+.todo-overview strong {
+  color: var(--text-primary);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.todo-overview span {
+  font-size: 12px;
+}
 .task-add {
   display: flex;
   gap: 10px;

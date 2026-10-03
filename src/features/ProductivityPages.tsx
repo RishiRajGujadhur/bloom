@@ -329,6 +329,20 @@ export function TodoPage({ data, setData }: Props) {
           setPerspective(next)
         }}
       />
+      <div className="todo-overview" role="group" aria-label="Task overview">
+        <button type="button" aria-pressed={filter === 'open'} onClick={() => setFilter('open')}>
+          <strong>{filterCounts.open}</strong>
+          <span>Open tasks</span>
+        </button>
+        <button type="button" aria-pressed={filter === 'today'} onClick={() => setFilter('today')}>
+          <strong>{filterCounts.today}</strong>
+          <span>Due today</span>
+        </button>
+        <button type="button" aria-pressed={filter === 'done'} onClick={() => setFilter('done')}>
+          <strong>{filterCounts.done}</strong>
+          <span>Completed</span>
+        </button>
+      </div>
       <form className="task-composer" onSubmit={add}>
         <div className="task-add">
           <input
