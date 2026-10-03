@@ -26,7 +26,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Personal-best ghost replay
 - [x] Perfect-form XP and local journal
 - [x] Fatigue-aware routine suggestions
-- [ ] Secondary camera connection and depth calibration
+- [x] Secondary camera connection and depth calibration
 - [ ] Custom high-contrast skeletal colors
 - [ ] Offline tracking asset preparation
 - [ ] Lowest-scoring rep replay and compensation review
@@ -53,3 +53,8 @@ will be recorded here as implementation proceeds.
 
 Angle labels are camera-plane projections, not clinical goniometry. Hidden joints
 are not assigned invented knee or spine measurements.
+
+Secondary-camera pairing exchanges WebRTC offers/answers manually on the same LAN;
+requires secure camera access on both devices. Depth fusion assumes fixed 90° cameras,
+uses synchronized visible landmarks, and falls back on occlusion. Hardware validation
+is still required. [WebRTC connectivity](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity).
