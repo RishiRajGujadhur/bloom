@@ -35,7 +35,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Add pause and resume controls for active sessions.
 - [x] Show the current session's remaining time in an accessible status.
 - [x] Add a quick way to extend or shorten a not-yet-started session.
-- [ ] Provide a quieter scene option for reduced-distraction sessions.
+- [x] Provide a quieter scene option for reduced-distraction sessions.
 - [x] Add an explicit soundtrack preview state before playback.
 - [x] Show a gentle completed-session summary.
 

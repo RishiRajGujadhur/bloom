@@ -18,6 +18,27 @@
     linear-gradient(180deg, transparent 72%, #4a3326 72% 74%, #5e4030 74%),
     linear-gradient(180deg, #3b3150, #2c2540);
 }
+.room-scene.is-quiet {
+  background:
+    linear-gradient(180deg, transparent 72%, #80634f 72% 74%, #97745d 74%),
+    linear-gradient(180deg, #e8e3dc, #ddd7cd);
+}
+.room-scene.is-night.is-quiet {
+  background:
+    linear-gradient(180deg, transparent 72%, #3c3942 72% 74%, #48444d 74%),
+    linear-gradient(180deg, #292833, #33323b);
+}
+.room-scene.is-quiet .room-window,
+.room-scene.is-quiet .room-shelf,
+.room-scene.is-quiet .room-avatar,
+.room-scene.is-quiet .room-notes,
+.room-scene.is-quiet .room-lamp,
+.room-scene.is-quiet .room-mug {
+  display: none;
+}
+.room-scene.is-quiet .room-laptop {
+  animation: none;
+}
 .room-window {
   position: absolute;
   top: 36px;
@@ -256,6 +277,13 @@
   display: grid;
   gap: 12px;
   justify-items: center;
+}
+.room-quiet-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
 }
 .room-controls .wb-chips button {
   display: inline-flex;

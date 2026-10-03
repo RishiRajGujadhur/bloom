@@ -30,6 +30,13 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const { shop } = useShop()
   const [now, setNow] = useState(() => Date.now())
   const [previewing, setPreviewing] = useState(false)
+  const [quietScene, setQuietSceneState] = useState(() => {
+    try { return localStorage.getItem('bloom-room-quiet') === 'true' } catch { return false }
+  })
+  const setQuietScene = (enabled: boolean) => {
+    setQuietSceneState(enabled)
+    try { localStorage.setItem('bloom-room-quiet', String(enabled)) } catch { /* optional */ }
+  }
   const [track, setTrackState] = useState<(typeof soundtracks)[number]['id']>(() => {
     try {
       const saved = localStorage.getItem('bloom-room-track')
@@ -66,7 +73,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
 
   return (
     <section className="room-page" aria-label="Focus room">
-      <div className={`room-scene${night ? ' is-night' : ''}${running ? ' is-working' : ''}`}>
+      <div className={`room-scene${night ? ' is-night' : ''}${running ? ' is-working' : ''}${quietScene ? ' is-quiet' : ''}`}>
         <div className="room-window" aria-hidden="true">
           <span className="room-sky" />
           <span className="room-moon" />
@@ -111,6 +118,10 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
         </p>
       )}
       <div className="room-controls">
+        <label className="room-quiet-toggle">
+          <input type="checkbox" checked={quietScene} onChange={(event) => setQuietScene(event.target.checked)} />
+          Quiet scene
+        </label>
         <div className="wb-chips" role="radiogroup" aria-label="Session length">
           {lengths.map((m) => (
             <button
