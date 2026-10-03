@@ -16,7 +16,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Strike trajectory SVG trails
 - [x] Impact deceleration grading
 - [x] Combo rhythm consistency
-- [ ] Tai Chi flow grading and Yang/Chen reference selection
+- [x] Tai Chi flow grading and Yang/Chen reference selection
 - [ ] Boxing strike classification and guard feedback
 - [ ] Kung Fu hand/wrist and Karate block guidance
 - [ ] Reaction-time visual drills

@@ -24,3 +24,14 @@ export function rhythmGrade(times: number[]) {
   const deviation = Math.sqrt(gaps.reduce((sum, gap) => sum + (gap - mean) ** 2, 0) / gaps.length)
   return { score: Math.round(Math.max(0, 100 * (1 - deviation / mean))), gap: Math.round(mean) }
 }
+
+export type FlowState = { at: number; speed: number; acceleration: number; score: number | null }
+export const emptyFlow = (): FlowState => ({ at: 0, speed: 0, acceleration: 0, score: null })
+export function flowTick(previous: FlowState, motion: MotionState) {
+  const speed = (motion.left + motion.right) / 2, dt = (motion.at - previous.at) / 1000
+  if (dt <= 0 || dt > .25 || !motion.points || speed < .025) return { at: motion.at, speed, acceleration: 0, score: null }
+  const acceleration = (speed - previous.speed) / dt
+  const jerk = Math.abs(acceleration - previous.acceleration) / dt
+  const grade = Math.max(0, 100 - jerk * 3)
+  return { at: motion.at, speed, acceleration, score: previous.score == null ? grade : previous.score * .9 + grade * .1 }
+}

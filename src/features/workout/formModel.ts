@@ -242,3 +242,16 @@ export function personalRange(low: number, high: number) {
   if (!Number.isFinite(low) || !Number.isFinite(high) || high - low < 12) return null
   return { low, down: low + (high - low) * .3, up: low + (high - low) * .8 }
 }
+
+export type Lineage = 'Yang' | 'Chen'
+export function referencePose(ex: Exercise, phase: number, lineage: Lineage = 'Yang') {
+  const pose = demoPose(ex, phase)
+  if (ex === 'taiChi' && lineage === 'Chen') {
+    for (const [el, wr, sign] of [[13, 15, -1], [14, 16, 1]]) {
+      pose[el].x += sign * .03 * Math.sin(phase * Math.PI * 2)
+      pose[wr].y += .06 * Math.sin(phase * Math.PI * 4)
+      pose[wr].z = sign * .12 * Math.sin(phase * Math.PI * 2)
+    }
+  }
+  return pose
+}
