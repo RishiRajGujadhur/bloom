@@ -262,3 +262,8 @@ export function loadPersonalRanges(): Partial<Record<Exercise, ReturnType<typeof
     return Object.fromEntries(Object.entries(value).filter(([key, range]) => { const r = range as { low: number; high: number; down: number; up: number }; return key in RULES && r && [r.low, r.high, r.down, r.up].every(Number.isFinite) && r.low >= 0 && r.high <= 180 && r.low <= r.down && r.down + 5 < r.up && r.up <= r.high }))
   } catch { return {} }
 }
+
+export function jointCallouts(pose: P[]) {
+  const measured = (a: number, b: number, c: number) => [a,b,c].every(i => visible(pose[i])) ? Math.round(angle(pose[a], pose[b], pose[c])) : null
+  return { left: measured(11,13,15), right: measured(12,14,16), leftWrist: measured(13,15,19), rightWrist: measured(14,16,20), leftKnee: measured(23,25,27), rightKnee: measured(24,26,28) }
+}

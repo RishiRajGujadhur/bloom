@@ -4,7 +4,7 @@ import { OneEuroFilter } from '1eurofilter'
 import { Camera, Maximize, Play } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
-import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, loadPersonalRanges, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
+import { jointCallouts, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, loadPersonalRanges, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
 import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick, formXP, consistencyGrade, outputDrop } from './coachAnalysis'
@@ -104,7 +104,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [combat, setCombat] = useState(emptyAnalysis)
   const frames = useRef<PoseFrame[]>([])
   const [trailFrames, setTrailFrames] = useState<PoseFrame[]>([])
-  const [jointAngles, setJointAngles] = useState({ left: 0, right: 0 })
+  const [jointAngles, setJointAngles] = useState(() => jointCallouts([]))
   const [romStatus, setRomStatus] = useState('Optional: calibrate your comfortable movement range')
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
   const ranges = useRef(loadPersonalRanges())
@@ -166,7 +166,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     if (modeRef.current === 'demo') setMessage('Demo set complete. Demo movements are not saved to workout history.')
     else {
       const m = motion.current, stats = counter.current.reps
-      const session: CoachSession = { id: crypto.randomUUID(), exercise: exercise.current, at: Date.now(), seconds: m.seconds, reps: rule.timed ? 0 : count, score: rule.timed ? flow.current.score ?? 0 : stats.reduce((sum, rep) => sum + rep.score, 0) / Math.max(1, stats.length), joules: m.joules, kcal: m.kcal, power: m.seconds ? m.joules / m.seconds : 0, peak: m.peak, leftWork: m.leftWork, rightWork: m.rightWork, leftAngle: jointAngles.left, rightAngle: jointAngles.right, range: ranges.current[exercise.current] ?? null, compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }
+      const session: CoachSession = { id: crypto.randomUUID(), exercise: exercise.current, at: Date.now(), seconds: m.seconds, reps: rule.timed ? 0 : count, score: rule.timed ? flow.current.score ?? 0 : stats.reduce((sum, rep) => sum + rep.score, 0) / Math.max(1, stats.length), joules: m.joules, kcal: m.kcal, power: m.seconds ? m.joules / m.seconds : 0, peak: m.peak, leftWork: m.leftWork, rightWork: m.rightWork, leftAngle: jointAngles.left ?? 0, rightAngle: jointAngles.right ?? 0, range: ranges.current[exercise.current] ?? null, compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }
       if (options.ghost) { try { saveGhost(exercise.current, frames.current, session.score, session.power); setGhost(readGhost(exercise.current, ghostKind)) } catch { setErr('Ghost storage is full; set metrics are still logged.') } }
       if (options.haptics) wearableAlert.current('set')
       session.damage = options.rpg ? Math.floor(m.joules / 10) : 0
@@ -252,7 +252,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     const upperOnly = accessible || RULES[exercise.current].upper
     const lm = raw.map((p, i) => (!upperOnly || i === 0 || (i >= 11 && i <= 22)) && Number.isFinite(p.x) && Number.isFinite(p.y) ? { ...p, x: filters.current[i * 3].filter(p.x, at / 1000), y: filters.current[i * 3 + 1].filter(p.y, at / 1000), z: filters.current[i * 3 + 2].filter(p.z ?? 0, at / 1000) } : p)
     draw(lm, mirror)
-    if (upperVisible(lm)) setJointAngles({ left: Math.round(angle(lm[11], lm[13], lm[15])), right: Math.round(angle(lm[12], lm[14], lm[16])) })
+    setJointAngles(jointCallouts(lm))
     let hovered: string | null = null
     if (gestures && mirror && canvas.current && panel.current) {
       const feed = canvas.current.getBoundingClientRect()
@@ -440,7 +440,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
           </div>
         </div>
         {options.reference && <CoachReference exercise={ex} anglesVisible={options.angles} lineage={lineage} paused={options.autoPause && trackingPaused} battery={options.battery} />}</div>
-        {options.angles && <div className="fc-live-angles">Your projected elbow angles: L {jointAngles.left}° · R {jointAngles.right}°</div>}
+        {options.angles && <div className="fc-live-angles">Projected angles · Elbows L {jointAngles.left ?? '—'}° / R {jointAngles.right ?? '—'}° · Wrists L {jointAngles.leftWrist ?? '—'}° / R {jointAngles.rightWrist ?? '—'}°</div>}
         <div className="fc-asymmetry"><strong>Asymmetry Alert <small>silent · relative to your neutral position</small></strong><div className="fc-balance-track" role="meter" aria-label="Upper-body asymmetry" aria-valuemin={-100} aria-valuemax={100} aria-valuenow={Math.round((balance?.value ?? 0) * 100)} aria-valuetext={silentStatus}><i style={{ left: `${50 + (balance?.value ?? 0) * 45}%`, background: balance?.alert ? '#ffd43b' : '#5dffc0' }} /></div><span>{silentStatus}</span></div>
         {ready && options.autoPause && trackingPaused && <p role="status" className="fc-error">Tracking and pacing paused. Return your head and arms to the frame to resume.</p>}
         <p className="fc-instructions">{accessible ? 'Face camera. Calibrated for upper-body forms.' : 'Face camera. Keep the exercise joints visible.'}</p>

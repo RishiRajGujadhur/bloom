@@ -45,6 +45,8 @@ not a medical prescription or a validated martial-arts master.
 - [x] Work/rest efficiency, power consistency and output-decline feedback
 - [x] Upper-body stability proxy (not measured centre of gravity)
 
+- [x] Wrist callouts, visible standing knee callouts and reference torso wireframe
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation

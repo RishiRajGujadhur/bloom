@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { angle, BONES, referencePose, RULES, UPPER_BONES, type Exercise, type Lineage } from './formModel'
+import { jointCallouts, BONES, referencePose, RULES, UPPER_BONES, type Exercise, type Lineage } from './formModel'
 import { prefersReducedMotion } from '../../utils/motion'
 
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
 export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false }: { exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const [available, setAvailable] = useState(true)
-  const [angles, setAngles] = useState({left: 0, right: 0})
+  const [angles, setAngles] = useState(() => jointCallouts(referencePose(exercise, 0, lineage)))
   useEffect(() => {
     let cancelled = false, raf = 0, release = () => {}
     setAvailable(true)
@@ -19,7 +19,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       camera.position.set(1.15, .25, 3.4); camera.lookAt(0, .15, 0)
       const group = new THREE.Group(); scene.add(group)
       scene.add(new THREE.HemisphereLight(0xffffff, 0x1b4f40, 2.8))
-      const bones = RULES[exercise].upper ? UPPER_BONES : BONES
+      const bones = RULES[exercise].upper ? [...UPPER_BONES, [0, 33], [33, 34]] : BONES
       const jointGeometry = new THREE.SphereGeometry(.035, 12, 10), boneGeometry = new THREE.CylinderGeometry(.018, .018, 1, 10)
       const green = new THREE.MeshStandardMaterial({ color: '#5dffc0' }), cyan = new THREE.MeshStandardMaterial({ color: '#7df9ff' })
       const ids = [...new Set([0, ...bones.flat()])]
@@ -35,7 +35,8 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
         if (!paused && renderedAt) phaseTime += now - renderedAt
         renderedAt = now
         const pose = referencePose(exercise, prefersReducedMotion() ? .25 : phaseTime / 4000 % 1, lineage)
-        setAngles({ left: Math.round(angle(pose[11], pose[13], pose[15])), right: Math.round(angle(pose[12], pose[14], pose[16])) })
+        setAngles(jointCallouts(pose))
+        if (RULES[exercise].upper) { pose.push({ x: (pose[11].x + pose[12].x) / 2, y: (pose[11].y + pose[12].y) / 2, z: 0 }, { x: .5, y: .69, z: 0 }) }
         const positions = pose.map((p) => new THREE.Vector3((p.x - .5) * 2.7, (.58 - p.y) * 2.7, (p.z ?? 0) * 2.7))
         joints.forEach(({ i, mesh }) => { mesh.position.copy(positions[i]) })
         links.forEach(({ a, b, mesh }) => {
@@ -50,5 +51,5 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
   }, [exercise, lineage, paused, battery])
-  return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
+  return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Wrist L / R</dt><dd>{angles.leftWrist ?? '—'}° / {angles.rightWrist ?? '—'}°</dd></div>{!RULES[exercise].upper && <div><dt>Knee L / R</dt><dd>{angles.leftKnee ?? '—'}° / {angles.rightKnee ?? '—'}°</dd></div>}<div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
 }
