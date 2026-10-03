@@ -70,6 +70,8 @@ export function GlobePage() {
     setTyped('')
     if (m !== 'find') spinTo(byAtlas.get(nq.country.atlas))
   }, [mode, continent, spinTo])
+  const nextRef = useRef(next)
+  nextRef.current = next
   const advance = () => {
     if (retryMode) {
       const [country, ...remaining] = retryQueue
@@ -123,6 +125,8 @@ export function GlobePage() {
     spinTo(target)
     if (svg.current && !reduced()) gsap.fromTo(svg.current.querySelector('.gq-target'), { strokeWidth: 1 }, { strokeWidth: 5, duration: 0.4, yoyo: true, repeat: 3 })
   }
+  const judgeRef = useRef(judge)
+  judgeRef.current = judge
   const clickCountry = (name: string) => {
     if (q.mode !== 'find' || answer || paused) return
     setClicked(name)
@@ -140,21 +144,21 @@ export function GlobePage() {
       if (paused || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
       if (answer && e.key === 'Enter') {
         e.preventDefault()
-        next()
+        nextRef.current()
         return
       }
       if (!answer && e.key.toLowerCase() === 's') {
-        next()
+        nextRef.current()
         return
       }
       if (q.mode === 'capital' && !answer && q.options && /^[1-4]$/.test(e.key)) {
         const pick = q.options[Number(e.key) - 1]
-        if (pick) judge(pick === q.country.capital)
+        if (pick) judgeRef.current(pick === q.country.capital)
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [answer, continent, mode, next, paused, q])
+  }, [answer, paused, q])
   const showTarget = q.mode !== 'find' || answer !== null
   return (
     <div className="gq-page">
