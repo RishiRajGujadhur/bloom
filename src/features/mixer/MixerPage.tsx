@@ -1,7 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import gsap from 'gsap'
-import { Moon, Pause, Play, Save, SlidersHorizontal, Sparkles, Trash2 } from 'lucide-react'
+import { Moon, Pause, Play, Save, SlidersHorizontal, Sparkles, Trash2, Volume2, VolumeX } from 'lucide-react'
 import { Rail, Slider, Studio, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { layers, mixer, presets, type Mix } from './mixerEngine'
@@ -13,7 +13,7 @@ import './mixer.css'
 
 const on = (id: string) => subOn('soundMixer', id)
 const KEY = 'bloom-mixer-v1'
-type Store = { mix: Mix; saved: { id: string; name: string; mix: Mix }[]; sleep: number; volume?: number }
+type Store = { mix: Mix; saved: { id: string; name: string; mix: Mix }[]; sleep: number; volume?: number; unmutedVolume?: number }
 
 /** The scene answers the mix: rain falls, waves roll, fire glows, birds fly. */
 function Scene({ mix }: { mix: Mix }) {
@@ -167,15 +167,34 @@ export function MixerPage() {
       </div>
       <div className="studio-card mx-side">
         {on('aurora') && <Aurora playing={playing} />}
-        <Slider
-          label="Master volume"
-          value={store.volume ?? 0.8}
-          min={0}
-          max={1}
-          step={0.05}
-          format={(v) => `${Math.round(v * 100)}%`}
-          onChange={(volume) => setStore((s) => ({ ...s, volume }))}
-        />
+        <div className="mx-master-volume">
+          <Slider
+            label="Master volume"
+            value={store.volume ?? 0.8}
+            min={0}
+            max={1}
+            step={0.05}
+            format={(v) => `${Math.round(v * 100)}%`}
+            onChange={(volume) => setStore((s) => ({
+              ...s,
+              volume,
+              ...(volume > 0 ? { unmutedVolume: volume } : {}),
+            }))}
+          />
+          <button
+            type="button"
+            className="mx-mute-btn"
+            aria-label={(store.volume ?? 0.8) === 0 ? 'Restore master volume' : 'Mute master volume'}
+            onClick={() => setStore((s) => {
+              const volume = s.volume ?? 0.8
+              return volume === 0
+                ? { ...s, volume: s.unmutedVolume ?? 0.8 }
+                : { ...s, unmutedVolume: volume, volume: 0 }
+            })}
+          >
+            {(store.volume ?? 0.8) === 0 ? <Volume2 size={18} aria-hidden="true" /> : <VolumeX size={18} aria-hidden="true" />}
+          </button>
+        </div>
         {(store.mix.binaural ?? 0) > 0 && (
           <div className="mx-beats" role="radiogroup" aria-label="Binaural beat">
             {[[2, 'Delta · sleep'], [6, 'Theta · drift'], [10, 'Alpha · calm focus'], [16, 'Beta · alert']].map(([hz, label]) => (

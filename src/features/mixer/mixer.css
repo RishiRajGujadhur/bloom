@@ -76,3 +76,25 @@
 html[data-theme='matrix'] .mx-beats button[aria-checked='true'] { color: #d6ffe0; background: #0b3a1a; }
 html[data-theme='matrix'] .mx-beats button[aria-checked='true'] small { color: #9dffb8; }
 .mx-favs { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.mx-master-volume {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+}
+.mx-mute-btn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 2px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.mx-mute-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
