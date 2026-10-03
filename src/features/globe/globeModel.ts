@@ -31,6 +31,16 @@ export const continents = ['All', 'Africa', 'Asia', 'Europe', 'North America', '
 
 export type Mode = 'find' | 'name' | 'capital'
 export type Question = { mode: Mode; country: Country; options?: string[] }
+export function questionForCountry(mode: Mode, country: Country, seed = String(Date.now())): Question {
+  if (mode !== 'capital') return { mode, country }
+  const rng = seedrandom(seed)
+  const distractors = countries
+    .filter((candidate) => candidate.atlas !== country.atlas)
+    .sort(() => rng() - 0.5)
+    .slice(0, 3)
+    .map((candidate) => candidate.capital)
+  return { mode, country, options: [country.capital, ...distractors].sort(() => rng() - 0.5) }
+}
 export function question(mode: Mode, continent: string, seed = String(Date.now())): Question {
   const rng = seedrandom(seed)
   const pool = countries.filter((c) => continent === 'All' || c.continent.includes(continent))

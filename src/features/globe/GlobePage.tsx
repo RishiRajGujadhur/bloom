@@ -9,7 +9,7 @@ import { useDrag } from '@use-gesture/react'
 import world from 'world-atlas/countries-110m.json'
 import { burst } from '../../components/ui/celebrate'
 import { setQuiz } from '../../companion/quizContext'
-import { continents, countries, question, type Mode, type Question } from './globeModel'
+import { continents, countries, question, questionForCountry, type Country, type Mode, type Question } from './globeModel'
 import './globe.css'
 
 /**
@@ -38,7 +38,10 @@ export function GlobePage() {
   const [score, setScore] = useState({ right: 0, total: 0 })
   const [streak, setStreak] = useState(0)
   // Countries you missed this session, to revisit.
-  const [missed, setMissed] = useState<typeof q.country[]>([])
+  const [missed, setMissed] = useState<Country[]>([])
+  const [retryQueue, setRetryQueue] = useState<Country[]>([])
+  const [retryMode, setRetryMode] = useState(false)
+  const [paused, setPaused] = useState(false)
   const svg = useRef<SVGSVGElement>(null)
   const tween = useRef<gsap.core.Tween | null>(null)
   const projection = useMemo(() => geoOrthographic().scale(SIZE / 2 - 8).translate([SIZE / 2, SIZE / 2]).clipAngle(90).rotate(rot), [rot])
@@ -59,14 +62,33 @@ export function GlobePage() {
     tween.current = gsap.to(from, { x: tx, y: -lat, duration: 1.4, ease: 'power3.inOut', onUpdate: () => setRot([from.x, from.y]) })
   }, [rot])
 
-  const next = useCallback((m = mode, c = continent) => {
-    const nq = question(m, c)
+  const next = useCallback((m = mode, c = continent, country?: Country) => {
+    const nq = country ? questionForCountry(m, country) : question(m, c)
     setQ(nq)
     setAnswer(null)
     setClicked(null)
     setTyped('')
     if (m !== 'find') spinTo(byAtlas.get(nq.country.atlas))
   }, [mode, continent, spinTo])
+  const advance = () => {
+    if (retryMode) {
+      const [country, ...remaining] = retryQueue
+      if (country) {
+        setRetryQueue(remaining)
+        next(mode, continent, country)
+        return
+      }
+      setRetryMode(false)
+    }
+    next()
+  }
+  const startRetryRound = () => {
+    const round = [...missed].sort(() => Math.random() - 0.5)
+    if (!round.length) return
+    setRetryMode(true)
+    setRetryQueue(round.slice(1))
+    next(mode, continent, round[0])
+  }
   useEffect(() => {
     next(mode, continent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,20 +112,23 @@ export function GlobePage() {
   }, { filterTaps: true })
 
   const judge = (ok: boolean) => {
+    if (paused) return
     setAnswer(ok ? 'right' : 'wrong')
     setScore((s) => ({ right: s.right + (ok ? 1 : 0), total: s.total + 1 }))
     setStreak((n) => (ok ? n + 1 : 0))
     if (!ok) setMissed((list) => [q.country, ...list.filter((c) => c.atlas !== q.country.atlas)].slice(0, 20))
+    else setMissed((list) => list.filter((c) => c.atlas !== q.country.atlas))
     if (ok) burst(undefined, 'stars')
     spinTo(target)
     if (svg.current && !reduced()) gsap.fromTo(svg.current.querySelector('.gq-target'), { strokeWidth: 1 }, { strokeWidth: 5, duration: 0.4, yoyo: true, repeat: 3 })
   }
   const clickCountry = (name: string) => {
-    if (q.mode !== 'find' || answer) return
+    if (q.mode !== 'find' || answer || paused) return
     setClicked(name)
     judge(name === q.country.atlas)
   }
   const submitName = () => {
+    if (paused) return
     const hit = fuse.search(typed.trim())[0]?.item
     judge(!!hit && hit.atlas === q.country.atlas)
   }
@@ -111,7 +136,7 @@ export function GlobePage() {
   // Keyboard: 1–4 pick a capital, Enter moves on after an answer.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
+      if (paused || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea')) return
       if (answer && e.key === 'Enter') {
         e.preventDefault()
         next()
@@ -128,7 +153,7 @@ export function GlobePage() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  })
+  }, [answer, continent, mode, next, paused, q])
   const showTarget = q.mode !== 'find' || answer !== null
   return (
     <div className="gq-page">
@@ -163,39 +188,47 @@ export function GlobePage() {
             </button>
           )}
         </p>
+        <button type="button" className="gq-chip small" aria-pressed={paused} onClick={() => setPaused((value) => !value)}>
+          {paused ? 'Resume quiz' : 'Pause quiz'}
+        </button>
         <h2>{q.mode === 'find' ? <>Find <em>{q.country.name}</em></> : q.mode === 'name' ? 'Which country is glowing?' : <>Capital of <em>{q.country.name}</em>?</>}</h2>
         <p className="gq-shortcuts">Keyboard: S skips · Enter continues · 1–4 answer capital choices</p>
         <div className="gq-row">
-          {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
+          {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" disabled={retryMode} className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
         </div>
         <div className="gq-row">
-          {continents.map((c) => <button key={c} type="button" className={`gq-chip small ${continent === c ? 'on' : ''}`} onClick={() => setContinent(c)}>{c}</button>)}
+          {continents.map((c) => <button key={c} type="button" disabled={retryMode} className={`gq-chip small ${continent === c ? 'on' : ''}`} onClick={() => setContinent(c)}>{c}</button>)}
         </div>
+        {paused && <p className="gq-hint" role="status">Quiz paused. Your question is saved; resume whenever you’re ready.</p>}
         {q.mode === 'find' && !answer && <p className="gq-hint">Drag to spin the globe, then click the country.</p>}
         {!answer && (
-          <button type="button" className="gq-chip small" title="Skip (S)" onClick={() => next()}>
+          <button type="button" disabled={paused} className="gq-chip small" title="Skip (S)" onClick={() => next()}>
             Skip →
           </button>
         )}
         {q.mode === 'name' && !answer && (
           <form className="gq-row" onSubmit={(e) => { e.preventDefault(); submitName() }}>
-            <input className="studio-input" value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type the country…" aria-label="Country name" autoFocus />
-            <button type="submit" className="gq-cta">Check</button>
+            <input className="studio-input" disabled={paused} value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type the country…" aria-label="Country name" autoFocus />
+            <button type="submit" disabled={paused} className="gq-cta">Check</button>
           </form>
         )}
         {q.mode === 'capital' && q.options && (
           <div className="gq-opts">
-            {q.options.map((o) => <button key={o} type="button" disabled={!!answer} className={`gq-opt ${answer && o === q.country.capital ? 'right' : ''}`} onClick={() => judge(o === q.country.capital)}>{o}</button>)}
+            {q.options.map((o) => <button key={o} type="button" disabled={!!answer || paused} className={`gq-opt ${answer && o === q.country.capital ? 'right' : ''}`} onClick={() => judge(o === q.country.capital)}>{o}</button>)}
           </div>
         )}
         {answer && (
           <div className={`gq-result ${answer}`} role="status">
             <strong>{answer === 'right' ? 'Correct!' : 'Not quite.'}</strong>
             <span>{q.country.name} · {q.country.continent} · capital {q.country.capital}</span>
-            <button type="button" className="gq-cta" onClick={() => next()}>Next →</button>
+            <button type="button" className="gq-cta" onClick={advance}>{retryMode ? retryQueue.length ? 'Next missed →' : 'Finish review →' : 'Next →'}</button>
           </div>
         )}
         {missed.length > 0 && (
+          <div className="gq-missed-actions">
+            <button type="button" className="gq-chip small" onClick={startRetryRound} disabled={retryMode}>
+              Retry missed ({missed.length})
+            </button>
           <details className="gq-missed">
             <summary>Review {missed.length} missed</summary>
             <ul>
@@ -208,6 +241,7 @@ export function GlobePage() {
               ))}
             </ul>
           </details>
+          </div>
         )}
       </aside>
     </div>
