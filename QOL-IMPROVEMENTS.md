@@ -25,16 +25,16 @@ Items are intentionally small enough to review and verify independently.
 
 - [x] Add a clear empty state with a direct habit-creation path.
 - [x] Make intensity selection announce the selected value accessibly.
-- [ ] Add a quick retry action after logging an urge.
+- [x] Add a quick retry action after logging an urge.
 - [x] Show recent logging history without entering patterns.
-- [ ] Add stronger confirmation feedback after a log is saved.
+- [x] Add stronger confirmation feedback after a log is saved.
 - [x] Persist the last selected urge-tracker view.
 
 ## Focus room
 
 - [ ] Add pause and resume controls for active sessions.
 - [x] Show the current session's remaining time in an accessible status.
-- [ ] Add a quick way to extend or shorten a not-yet-started session.
+- [x] Add a quick way to extend or shorten a not-yet-started session.
 - [ ] Provide a quieter scene option for reduced-distraction sessions.
 - [ ] Add an explicit soundtrack preview state before playback.
 - [x] Show a gentle completed-session summary.
@@ -45,14 +45,14 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Add a visible unsaved/saved indicator for edits.
 - [ ] Add an undo action for accidental map deletion.
 - [x] Make export actions announce completion.
-- [ ] Add a reset-zoom / fit-map action near the map.
-- [ ] Add a useful empty-search state for map selection.
+- [x] Add a reset-zoom / fit-map action near the map.
+- [x] Add a useful empty-search state for map selection.
 
 ## Gratitude jar
 
-- [ ] Add a direct entry point to write a gratitude note from an empty jar.
-- [ ] Show the selected jar's note count and capacity clearly.
-- [ ] Add accessible labels to jar selection and reveal controls.
+- [x] Add a direct entry point to write a gratitude note from an empty jar.
+- [x] Show the selected jar's note count and capacity clearly.
+- [x] Add accessible labels to jar selection and reveal controls.
 - [ ] Add a confirmation animation that respects reduced-motion settings.
 - [ ] Allow filtering or browsing notes by date.
 - [x] Add an undo path for removing a note.
@@ -70,19 +70,19 @@ Items are intentionally small enough to review and verify independently.
 
 - [ ] Add a draft-save status in guided and quick-entry modes.
 - [x] Add a keyboard shortcut to submit a journal response.
-- [ ] Make the active prompt and step progress easier to scan.
-- [ ] Add a quick way to continue an incomplete draft.
-- [ ] Improve attachment removal affordances and labels.
+- [x] Make the active prompt and step progress easier to scan.
+- [x] Add a quick way to continue an incomplete draft.
+- [x] Improve attachment removal affordances and labels.
 - [ ] Add a search or filter for past reflections.
 
 ## Globe quiz
 
 - [x] Add a visible keyboard-shortcut hint.
 - [ ] Add a pause control for quiz questions.
-- [ ] Show session accuracy and streak together.
+- [x] Show session accuracy and streak together.
 - [ ] Offer a retry round for missed countries.
-- [ ] Make answer feedback available to screen readers.
-- [ ] Add a next-question action after answering.
+- [x] Make answer feedback available to screen readers.
+- [x] Add a next-question action after answering.
 
 ## Energy flow
 
@@ -95,9 +95,9 @@ Items are intentionally small enough to review and verify independently.
 
 ## English
 
-- [ ] Add a resume-last-lesson action.
-- [ ] Show a concise progress summary for the current unit.
-- [ ] Make exercise feedback and score changes announce accessibly.
+- [x] Add a resume-last-lesson action.
+- [x] Show a concise progress summary for the current unit.
+- [x] Make exercise feedback and score changes announce accessibly.
 - [ ] Add an optional reduced-animation lesson setting.
 - [x] Add a review-queue count and direct start action.
 - [x] Clarify why lessons are unavailable when hearts are depleted.

@@ -53,6 +53,7 @@ export function MindMapPage() {
       return n
     })
   const [tab, setTab] = useState('map')
+  const [mapQuery, setMapQuery] = useState('')
   const [full, setFull] = useState(false)
   const narrow = typeof window !== 'undefined' && window.innerWidth < 720
   const [editing, setEditing] = useState(!narrow)
@@ -313,6 +314,17 @@ export function MindMapPage() {
       {on('saved') && (
         <>
           <h3>Your maps</h3>
+          <label className="mm-search">
+            <Network size={15} aria-hidden="true" />
+            <input
+              type="search"
+              aria-label="Search saved maps"
+              placeholder="Find a map by name…"
+              value={mapQuery}
+              onChange={(event) => setMapQuery(event.target.value)}
+            />
+            {mapQuery && <button type="button" onClick={() => setMapQuery('')}>Clear</button>}
+          </label>
           <Rail label="Saved maps">
             <div role="listitem">
               <button type="button" className="iv-card mm-new" onClick={() => create('# New idea\n## Branch\n- Leaf')}>
@@ -320,7 +332,7 @@ export function MindMapPage() {
                 <strong>Blank map</strong>
               </button>
             </div>
-            {[...store.maps].sort((a, b) => b.updatedAt - a.updatedAt).map((m) => (
+            {[...store.maps].filter((m) => m.title.toLocaleLowerCase().includes(mapQuery.trim().toLocaleLowerCase())).sort((a, b) => b.updatedAt - a.updatedAt).map((m) => (
               <div key={m.id} role="listitem" className="yg-saved">
                 <button type="button" className="iv-card" data-on={m.id === map.id} title="Double-click to rename" onDoubleClick={() => rename(m)} onClick={() => (setStore((s) => ({ ...s, current: m.id })), setTab('map'))}>
                   <span aria-hidden="true">🗺️</span>
@@ -349,6 +361,12 @@ export function MindMapPage() {
               </div>
             ))}
           </Rail>
+          {mapQuery.trim() && !store.maps.some((m) => m.title.toLocaleLowerCase().includes(mapQuery.trim().toLocaleLowerCase())) && (
+            <p className="mm-search-empty" role="status">
+              No saved maps match “{mapQuery.trim()}”.
+              <button type="button" onClick={() => setMapQuery('')}>Clear search</button>
+            </p>
+          )}
         </>
       )}
       {on('fromJournal') && pages.length > 0 && (
