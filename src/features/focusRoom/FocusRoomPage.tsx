@@ -1,6 +1,6 @@
 import { subOn } from '../subFeatures'
 import { useEffect, useState } from 'react'
-import { Music, Pause, Play } from 'lucide-react'
+import { Music, Pause, Play, Sparkles } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
 import { startFocusQuest } from '../../rpg/engine'
 import { useOptionalAudioMixer } from '../../contexts/AudioMixerContext'
@@ -49,6 +49,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const total = quest.durationMinutes * 60000
   const left = running ? Math.max(0, total - (now - quest.startedAt!)) : total
   const progress = running ? 1 - left / total : 0
+  const recentlyCompleted = Boolean(quest.completedAt && now - quest.completedAt < 15 * 60_000)
   useTabTitle(running ? `⏱ ${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}` : '', 'Focus room', 'focus-room')
   const hour = new Date().getHours()
   const night = subOn('focusRoom', 'nightSky') && (hour < 7 || hour >= 19)
@@ -96,6 +97,12 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
           <i style={{ width: `${progress * 100}%` }} />
         </div>
       </div>
+      {recentlyCompleted && !quest.failedAt && (
+        <p className="room-complete" role="status">
+          <Sparkles size={17} aria-hidden="true" />
+          Focus session complete. Take a breath before your next one.
+        </p>
+      )}
       <div className="room-controls">
         <div className="wb-chips" role="radiogroup" aria-label="Session length">
           {lengths.map((m) => (

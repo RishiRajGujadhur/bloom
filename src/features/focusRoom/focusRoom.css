@@ -286,3 +286,23 @@
     animation: none !important;
   }
 }
+.room-complete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px auto 0;
+  padding: 11px 16px;
+  width: fit-content;
+  border: 1px solid color-mix(in oklab, var(--accent-color) 24%, var(--border-color));
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--accent-color) 8%, var(--bg-surface));
+  color: var(--text-primary);
+  animation: room-complete-in 300ms ease-out both;
+}
+@keyframes room-complete-in {
+  from { opacity: 0; transform: translateY(5px) scale(0.98); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .room-complete { animation: none; }
+}
