@@ -123,3 +123,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-battery-badge{position:absolute;top:8px;left:8px;font-size:10px;background:#13261fe0;padding:4px;border-radius:6px;pointer-events:none}
 
 .fc-routine-step{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:6px 0}.fc-routine-step select{max-width:160px}.fc-routine-step input{width:52px}.fc-diagnostics input:not([type=color]):not([type=range]){max-width:100%}
+
+.fc-muscle-map{height:130px;width:100%}

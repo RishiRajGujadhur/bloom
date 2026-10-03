@@ -1,4 +1,5 @@
 export const COACH_OPTIONS = {
+  muscles: 'Muscle group guide',
   reference: 'Master reference view', angles: 'Joint-angle callouts', energy: 'Energy estimates',
   trails: 'Strike trajectory trails', snap: 'Strike deceleration', rhythm: 'Combo rhythm',
   flow: 'Tai Chi smoothness', guard: 'Boxing guard feedback', technique: 'Hand / block guidance',

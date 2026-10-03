@@ -40,6 +40,8 @@ not a medical prescription or a validated martial-arts master.
 
 - [x] Persistent personal profiles and configurable rep triggers
 
+- [x] Upper-body muscle group guide
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation

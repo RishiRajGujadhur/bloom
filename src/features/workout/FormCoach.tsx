@@ -18,6 +18,7 @@ import { CoachSecondary, calibrateDepth, fuseDepth, type DepthCalibration } from
 import { COACH_WASM, COACH_MODEL, COACH_HAND_MODEL, prepareCoachOffline } from './coachOffline'
 import { CoachReplayPanel, type RepReplay } from './CoachReplayPanel'
 import { CoachWearables, type SilentAlert } from './CoachWearables'
+import { CoachMuscles } from './CoachMuscles'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -457,6 +458,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.xp && <div className="fc-diagnostics"><h4>Perfect form XP</h4><p>{RULES[ex].timed ? flowXP : formXP(reps).xp} XP · {RULES[ex].timed ? 'Compounding XP per continuous 5s of 90%+ flow' : `${formXP(reps).streak} streak · ×${formXP(reps).multiplier.toFixed(2)}`}</p><small>Saved to your local RPG streak ledger when you log a real set.</small></div>}
         {options.ghost && <div className="fc-diagnostics"><h4>Personal best ghost</h4><select aria-label="Ghost record" value={ghostKind} onChange={e => setGhostKind(e.target.value as typeof ghostKind)}><option value="form">Best form</option><option value="power">Most powerful</option></select><p>{ghost ? `${Math.round(ghost.score)}% form · ${ghost.power.toFixed(1)} W` : 'Enable this option and log a camera set to record a ghost.'}</p><small>Stores skeletal points only, up to the last 15 seconds of a set. Your camera video is never saved.</small></div>}
         {options.breathing && <div className="fc-diagnostics fc-breathing"><div className={`fc-breath-ring ${ready && !(options.autoPause && trackingPaused) ? 'running' : ''}`} style={{ '--fc-breath': `${120000 / bpm}ms` } as CSSProperties} aria-hidden="true" /><div><h4>Breathing guide</h4><p>Expand: inhale · Contract: exhale</p><small>Follow your comfortable pace; never hold your breath.</small></div></div>}
+        {options.muscles && <CoachMuscles exercise={ex} />}
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
         {options.rpg && <div className="fc-diagnostics fc-rpg"><h4>Garden battle</h4><Sprite name="boss" label="Pixel garden enemy" size={48} /><p>{Math.floor(metrics.joules / 10)} damage earned · applied to your weekly raid when you log this real set</p><small>Game conversion: 10 estimated joules = 1 damage. Demo awards nothing.</small></div>}
         {options.replay && worstRep && <CoachReplayPanel replay={worstRep} />}
