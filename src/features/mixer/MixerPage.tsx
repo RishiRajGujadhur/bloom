@@ -90,6 +90,12 @@ export function MixerPage() {
     })
   const playing = useSyncExternalStore((fn) => mixer.subscribe(fn), () => mixer.playing)
   const [name, setName] = useState('')
+  const [clockNow, setClockNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!playing || !mixer.endsAt) return
+    const timer = window.setInterval(() => setClockNow(Date.now()), 1000)
+    return () => window.clearInterval(timer)
+  }, [playing, mixer.endsAt])
 
   useEffect(() => {
     mixer.organic = on('organic')
@@ -301,7 +307,10 @@ export function MixerPage() {
       aside={
         playing ? (
           <span className="ex-aside mx-aside">
-            <Moon size={15} /> {mixer.endsAt ? `Fades at ${new Date(mixer.endsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : 'Playing'}
+            <Moon size={15} />
+            {mixer.endsAt
+              ? <span aria-live="polite">{`Sleep timer · ${Math.max(0, Math.ceil((mixer.endsAt - clockNow) / 60_000))} min left`}</span>
+              : 'Playing'}
           </span>
         ) : undefined
       }
