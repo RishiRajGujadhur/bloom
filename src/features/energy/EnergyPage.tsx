@@ -99,6 +99,25 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
               }}
             />
           </div>
+          <details className="energy-data">
+            <summary>View this flow as a table</summary>
+            <div className="energy-data-scroll">
+              <table>
+                <thead>
+                  <tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Hours</th></tr>
+                </thead>
+                <tbody>
+                  {flow.links.map((link, index) => (
+                    <tr key={`${link.source}-${link.target}-${index}`}>
+                      <th scope="row">{labels[link.source] ?? link.source}</th>
+                      <td>{labels[link.target] ?? link.target}</td>
+                      <td>{link.value} h</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
         )}
         {subOn('energySankey', 'burnout') && (
           <p className="energy-burnout" data-level={flow.burnout}>
