@@ -115,3 +115,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-ghost-pose{opacity:.35;filter:drop-shadow(0 0 3px white)}
 
 .fc-side-video{width:100%;aspect-ratio:4/3;object-fit:fill}.fc-diagnostics textarea{display:block;width:100%;max-height:80px;background:#13261f;color:#eafff6}.fc-diagnostics button{margin:4px 2px}
+
+.fc-replay-view{position:relative;aspect-ratio:4/3;background:#09130e;border-radius:8px}.fc-replay-view .fc-ghost-pose{opacity:1;filter:none}.fc-compensation{height:12px;border-radius:6px;margin-bottom:8px}

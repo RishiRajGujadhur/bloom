@@ -29,7 +29,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Secondary camera connection and depth calibration
 - [x] Custom high-contrast skeletal colors
 - [x] Offline tracking asset preparation
-- [ ] Lowest-scoring rep replay and compensation review
+- [x] Lowest-scoring rep replay and compensation review
 - [x] Frame-exit auto-pause and metronome hold
 - [ ] Focus-mode background dimming
 - [ ] Markdown session export

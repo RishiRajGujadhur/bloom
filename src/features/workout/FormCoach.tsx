@@ -15,6 +15,7 @@ import { CoachGhost } from './CoachGhost'
 import { Sprite } from '../../rpg/Sprite'
 import { CoachSecondary, calibrateDepth, fuseDepth, type DepthCalibration } from './CoachSecondary'
 import { COACH_WASM, COACH_MODEL, COACH_HAND_MODEL, prepareCoachOffline } from './coachOffline'
+import { CoachReplayPanel, type RepReplay } from './CoachReplayPanel'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -76,6 +77,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [ghost, setGhost] = useState(() => readGhost(ex, 'form'))
   useEffect(() => { setGhost(readGhost(ex, ghostKind)) }, [ex, ghostKind, mode])
   const [history, setHistory] = useState(readCoachHistory)
+  const [worstRep, setWorstRep] = useState<RepReplay | null>(null)
+  const worst = useRef<RepReplay | null>(null), repStarted = useRef(0)
   const timedXP = useRef({ good: 0, total: 0 })
   const [flowXP, setFlowXP] = useState(0)
   const compensation = useRef({ frames: 0, changed: 0 })
@@ -112,7 +115,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
-    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
+    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = emptyMotion(); setMetrics(motion.current); compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0 }; setFlowXP(0); setLabel('')
   }
   const release = useCallback(() => {
@@ -281,7 +284,16 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       const moving = !rule.upper || (motion.current.left + motion.current.right + motion.current.arm) > .04
       if (!reading.faults.length && moving && hold.current.last) hold.current.seconds += Math.min(.15, (at - hold.current.last) / 1000)
       hold.current.last = reading.faults.length || !moving ? 0 : at; setHeld(Math.floor(hold.current.seconds))
-    } else if (counter.current.push(reading, at)) setReps([...counter.current.reps])
+    } else {
+      const phase = counter.current.phase, rep = counter.current.push(reading, at)
+      if (phase === 'up' && counter.current.phase === 'down') repStarted.current = at - 300
+      if (rep) {
+        setReps([...counter.current.reps])
+        if (options.replay && (!worst.current || rep.score < worst.current.score)) {
+          worst.current = { exercise: exercise.current, score: rep.score, frames: frames.current.filter(frame => frame.at >= repStarted.current).slice(-120), compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }; setWorstRep(worst.current)
+        }
+      }
+    }
   }
   const frameRef = useRef(frame)
   useLayoutEffect(() => { frameRef.current = frame })
@@ -404,6 +416,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.breathing && <div className="fc-diagnostics fc-breathing"><div className={`fc-breath-ring ${ready && !(options.autoPause && trackingPaused) ? 'running' : ''}`} style={{ '--fc-breath': `${120000 / bpm}ms` } as CSSProperties} aria-hidden="true" /><div><h4>Breathing guide</h4><p>Expand: inhale · Contract: exhale</p><small>Follow your comfortable pace; never hold your breath.</small></div></div>}
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
         {options.rpg && <div className="fc-diagnostics fc-rpg"><h4>Garden battle</h4><Sprite name="boss" label="Pixel garden enemy" size={48} /><p>{Math.floor(metrics.joules / 10)} damage earned · applied to your weekly raid when you log this real set</p><small>Game conversion: 10 estimated joules = 1 damage. Demo awards nothing.</small></div>}
+        {options.replay && worstRep && <CoachReplayPanel replay={worstRep} />}
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
         <div className="fc-diagnostics"><h4>Offline training</h4><button disabled={preparingOffline} onClick={() => { setPreparingOffline(true); void prepareCoachOffline(setOfflineStatus).catch(error => setOfflineStatus(error instanceof Error ? error.message : 'Offline setup failed')).finally(() => setPreparingOffline(false)) }}>Prepare offline tracking</button><p role="status">{offlineStatus}</p><small>Processing stays local. Latency depends on your hardware; the GPU delegate does not guarantee WebGPU or zero latency.</small></div>
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />
