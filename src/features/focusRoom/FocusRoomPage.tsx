@@ -29,6 +29,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const mixer = subOn('focusRoom', 'soundtrack') ? audio : null
   const { shop } = useShop()
   const [now, setNow] = useState(() => Date.now())
+  const [previewing, setPreviewing] = useState(false)
   const [track, setTrackState] = useState<(typeof soundtracks)[number]['id']>(() => {
     try {
       const saved = localStorage.getItem('bloom-room-track')
@@ -55,6 +56,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const night = subOn('focusRoom', 'nightSky') && (hour < 7 || hour >= 19)
 
   const start = () => {
+    setPreviewing(false)
     setData((d) => startFocusQuest(d, d.rpg.focusQuest.soundscape))
     if (mixer) {
       mixer.applyPreset(track)
@@ -128,21 +130,44 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
           ))}
         </div>
         {mixer && (
-          <div className="wb-chips" role="radiogroup" aria-label="Soundtrack">
-            {soundtracks.map((s) => (
+          <>
+            <div className="wb-chips" role="radiogroup" aria-label="Soundtrack">
+              {soundtracks.map((s) => (
+                <button
+                  key={s.id}
+                  role="radio"
+                  aria-checked={track === s.id}
+                  onClick={() => {
+                    setTrack(s.id)
+                    if (mixer.isPlaying) mixer.applyPreset(s.id)
+                  }}
+                >
+                  <Music size={14} aria-hidden="true" /> {s.label}
+                </button>
+              ))}
+            </div>
+            {!running && (
               <button
-                key={s.id}
-                role="radio"
-                aria-checked={track === s.id}
+                type="button"
+                className="ov-secondary room-preview"
+                aria-pressed={previewing}
                 onClick={() => {
-                  setTrack(s.id)
-                  if (mixer.isPlaying) mixer.applyPreset(s.id)
+                  if (previewing) mixer.toggleMasterPlay()
+                  else {
+                    mixer.applyPreset(track)
+                    if (!mixer.isPlaying) mixer.toggleMasterPlay()
+                  }
+                  setPreviewing((value) => !value)
                 }}
               >
-                <Music size={14} aria-hidden="true" /> {s.label}
+                {previewing ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
+                {previewing ? 'Stop preview' : `Preview ${soundtracks.find((soundtrack) => soundtrack.id === track)?.label ?? 'soundtrack'}`}
               </button>
-            ))}
-          </div>
+            )}
+            <span className="sr-only" role="status" aria-live="polite">
+              {previewing && !running ? `Previewing ${soundtracks.find((soundtrack) => soundtrack.id === track)?.label ?? 'soundtrack'}.` : ''}
+            </span>
+          </>
         )}
         <div className="room-buttons">
           {running ? (

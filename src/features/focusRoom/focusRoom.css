@@ -306,3 +306,7 @@
 @media (prefers-reduced-motion: reduce) {
   .room-complete { animation: none; }
 }
+.room-preview {
+  align-self: flex-start;
+  min-height: 40px;
+}
