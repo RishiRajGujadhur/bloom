@@ -18,7 +18,7 @@ const readArray = <T,>(key: string): T[] => {
   }
 }
 
-export function EnergyPage({ data, today }: FeaturePageProps) {
+export function EnergyPage({ data, today, onNavigate }: FeaturePageProps) {
   const [store, setStore] = useStoredValue<{ logs: TimeLog[] }>(ENERGY_KEY, { logs: [] })
   const [days, setDaysState] = useState(() => {
     try { return localStorage.getItem('bloom-energy-days') === '30' ? 30 : 7 } catch { return 7 }
@@ -111,9 +111,14 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
           Showing the last {days} days through {new Date(`${today}T12:00:00`).toLocaleDateString()}.
         </p>
         {flow.links.length < 2 ? (
-          <p className="energy-empty">
-            Not enough to draw yet. Log sleep, finish a focus session, or add a few hours below and your week will start to flow.
-          </p>
+          <div className="energy-empty">
+            <p>Not enough to draw yet. Log sleep, finish a focus session, or add a few hours below and your week will start to flow.</p>
+            <div className="energy-empty-actions" aria-label="Add energy data">
+              <button type="button" onClick={() => onNavigate('sleep')}>Log sleep</button>
+              <button type="button" onClick={() => onNavigate('focus')}>Start a focus session</button>
+              <button type="button" onClick={() => onNavigate('daybook')}>Write a reflection</button>
+            </div>
+          </div>
         ) : (
           <>
           <div className="energy-sankey" role="img" aria-label={`Sankey diagram: ${flow.links.map((l) => `${l.source} to ${l.target} ${l.value} hours`).join(', ')}`}>

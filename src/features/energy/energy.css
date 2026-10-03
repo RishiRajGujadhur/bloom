@@ -58,6 +58,30 @@
 .energy-note {
   color: var(--text-secondary);
 }
+.energy-empty p {
+  margin: 0 0 12px;
+  text-align: center;
+}
+.energy-empty-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.energy-empty-actions button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.energy-empty-actions button:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
 .energy-note {
   font-size: 13px;
 }

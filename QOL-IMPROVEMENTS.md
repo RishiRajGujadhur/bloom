@@ -91,7 +91,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Add a quick undo after removing a manual log.
 - [x] Add an accessible tabular alternative for the flow chart.
 - [x] Explain the selected date range beside the chart.
-- [ ] Add a clearer empty-state link to relevant logging actions.
+- [x] Add a clearer empty-state link to relevant logging actions.
 
 ## English
 
