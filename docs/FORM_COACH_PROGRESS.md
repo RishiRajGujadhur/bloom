@@ -25,7 +25,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Breathing sync visualizer
 - [x] Personal-best ghost replay
 - [x] Perfect-form XP and local journal
-- [ ] Fatigue-aware routine suggestions
+- [x] Fatigue-aware routine suggestions
 - [ ] Secondary camera connection and depth calibration
 - [ ] Custom high-contrast skeletal colors
 - [ ] Offline tracking asset preparation
