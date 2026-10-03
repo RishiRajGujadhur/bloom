@@ -1,9 +1,9 @@
 import { J, upperVisible, type P } from './formModel'
 
-export type MotionState = { at: number; points: P[] | null; left: number; right: number; arm: number; watts: number; kcal: number; seconds: number; source: 'world' | 'scaled' }
-export const emptyMotion = (): MotionState => ({ at: 0, points: null, left: 0, right: 0, arm: 0, watts: 0, kcal: 0, seconds: 0, source: 'scaled' })
+export type MotionState = { at: number; points: P[] | null; left: number; right: number; arm: number; watts: number; kcal: number; seconds: number; source: 'world' | 'scaled'; joules: number; kinetic: number; leftWork: number; rightWork: number; peak: number }
+export const emptyMotion = (): MotionState => ({ at: 0, points: null, left: 0, right: 0, arm: 0, watts: 0, kcal: 0, seconds: 0, source: 'scaled', joules: 0, kinetic: 0, leftWork: 0, rightWork: 0, peak: 0 })
 /** Camera-relative arm motion. World landmarks use metres; fallback uses a supplied shoulder span. */
-export function motionTick(previous: MotionState, lm: P[], world: P[] | undefined, at: number, mass: number, span: number): MotionState {
+export function motionTick(previous: MotionState, lm: P[], world: P[] | undefined, at: number, mass: number, span: number, seated = false): MotionState {
   if (!upperVisible(lm)) return { ...previous, at, points: null, left: 0, right: 0, arm: 0, watts: 0 }
   const useWorld = world && [11, 12, 13, 14, 15, 16].every((i) => world[i] && Number.isFinite(world[i].x) && Number.isFinite(world[i].y))
   const pose = useWorld ? world! : lm
@@ -21,8 +21,15 @@ export function motionTick(previous: MotionState, lm: P[], world: P[] | undefine
   const arm = previous.arm + ((speed(2) + speed(3)) / 2 - previous.arm) * smooth
   const effort = Math.max(0, Math.min(1, ((left + right) / 2 + arm * .5 - .025) / 1.5))
   // A heuristic effort-to-energy proxy. These are estimates, never measured calories or strike power.
-  const watts = effort * Math.max(20, Math.min(250, mass)) * 3
-  return { at, points, left, right, arm, watts, kcal: previous.kcal + watts * dt / 4184, seconds: previous.seconds + dt, source }
+  const bodyMass = Math.max(20, Math.min(250, mass)), limbMass = bodyMass * .05
+  const leftWork = Math.max(0, .5 * limbMass * (left * left - previous.left * previous.left))
+  const rightWork = Math.max(0, .5 * limbMass * (right * right - previous.right * previous.right))
+  const kinetic = .5 * limbMass * (left * left + right * right)
+  const work = leftWork + rightWork
+  const watts = previous.watts + (work / dt - previous.watts) * smooth
+  // Net activity MET proxy excludes resting energy and full-body stepping assumptions.
+  const activityMET = effort * (seated ? 3.5 : 6.5)
+  return { at, points, left, right, arm, watts, kcal: previous.kcal + activityMET * 3.5 * bodyMass / 200 * dt / 60, seconds: previous.seconds + dt, source, joules: previous.joules + work, kinetic, leftWork: previous.leftWork + leftWork, rightWork: previous.rightWork + rightWork, peak: Math.max(previous.peak, left, right) }
 }
 export type GestureState = { id: string | null; elapsed: number; latched: boolean; away: number }
 export const emptyGesture = (): GestureState => ({ id: null, elapsed: 0, latched: false, away: 0 })

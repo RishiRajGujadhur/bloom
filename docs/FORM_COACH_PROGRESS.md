@@ -12,7 +12,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Detailed wireframe with live joint-angle callouts
 - [x] Seated press, chest fly and chair squat exercise presets
 - [x] Granular persistent Form Coach settings
-- [ ] Adaptive seated calorie estimates, kinetic joules and average power
+- [x] Adaptive seated calorie estimates, kinetic joules and average power
 - [ ] Strike trajectory SVG trails
 - [ ] Impact deceleration grading
 - [ ] Combo rhythm consistency
