@@ -16,3 +16,11 @@ export function analysisTick(previous: Analysis, pose: P[], motion: MotionState,
   if (at - peakAt > 1000) { peak = speed; peakAt = at }
   return { at, speed, peak, peakAt, snap, stopMs }
 }
+
+export function rhythmGrade(times: number[]) {
+  const gaps = times.slice(1).map((at, i) => at - times[i]).filter(gap => gap > 100 && gap < 4000).slice(-8)
+  if (gaps.length < 2) return null
+  const mean = gaps.reduce((sum, gap) => sum + gap, 0) / gaps.length
+  const deviation = Math.sqrt(gaps.reduce((sum, gap) => sum + (gap - mean) ** 2, 0) / gaps.length)
+  return { score: Math.round(Math.max(0, 100 * (1 - deviation / mean))), gap: Math.round(mean) }
+}

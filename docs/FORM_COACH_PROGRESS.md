@@ -15,7 +15,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Adaptive seated calorie estimates, kinetic joules and average power
 - [x] Strike trajectory SVG trails
 - [x] Impact deceleration grading
-- [ ] Combo rhythm consistency
+- [x] Combo rhythm consistency
 - [ ] Tai Chi flow grading and Yang/Chen reference selection
 - [ ] Boxing strike classification and guard feedback
 - [ ] Kung Fu hand/wrist and Karate block guidance
