@@ -24,7 +24,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Independent limb workload/fatigue gauges
 - [x] Breathing sync visualizer
 - [x] Personal-best ghost replay
-- [ ] Perfect-form XP and local journal
+- [x] Perfect-form XP and local journal
 - [ ] Fatigue-aware routine suggestions
 - [ ] Secondary camera connection and depth calibration
 - [ ] Custom high-contrast skeletal colors

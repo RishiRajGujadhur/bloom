@@ -90,3 +90,13 @@ export function reactionTick(previous: Reaction, pose: P[], before: P[] | undefi
   const hit = previous.hit || Math.hypot(wrist.x - targetX, wrist.y - .35) < .1
   return { ...previous, elapsed: previous.elapsed ?? (moved ? Math.round(at - previous.cueAt) : null), hit }
 }
+
+export function formXP(reps: { score: number; at: number }[]) {
+  let xp = 0, streak = 0, previousAt = 0
+  for (const rep of reps) {
+    if (rep.score < 90 || (previousAt && rep.at - previousAt > 5000)) streak = 0
+    if (rep.score >= 90) { streak++; xp += Math.round(5 * Math.min(4, 1.25 ** (streak - 1))) }
+    previousAt = rep.at
+  }
+  return { xp: Math.min(500, xp), streak, multiplier: Math.min(4, 1.25 ** Math.max(0, streak - 1)) }
+}
