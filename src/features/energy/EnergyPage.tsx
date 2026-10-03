@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ResponsiveSankey } from '@nivo/sankey'
 import { Plus, Trash2, Zap } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
@@ -30,6 +30,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
   const [category, setCategory] = useState(categories[0].id)
   const [hours, setHours] = useState('1')
   const [logMessage, setLogMessage] = useState('')
+  const [undoLog, setUndoLog] = useState<TimeLog | null>(null)
   const flow = useMemo(
     () =>
       buildFlow({
@@ -50,6 +51,22 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
     return m
   }, [flow])
   const todayLogs = store.logs.filter((l) => l.date === today)
+  useEffect(() => {
+    if (!undoLog) return
+    const timer = window.setTimeout(() => setUndoLog(null), 8000)
+    return () => window.clearTimeout(timer)
+  }, [undoLog])
+  const removeLog = (log: TimeLog) => {
+    setStore((current) => ({ logs: current.logs.filter((item) => item.id !== log.id) }))
+    setUndoLog(log)
+  }
+  const restoreLog = () => {
+    if (!undoLog) return
+    setStore((current) => current.logs.some((item) => item.id === undoLog.id)
+      ? current
+      : { logs: [...current.logs, undoLog] })
+    setUndoLog(null)
+  }
 
   return (
     <div className="energy-page">
@@ -132,6 +149,12 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
         )}
       </section>
 
+      {undoLog && (
+        <p className="energy-undo" role="status">
+          Removed {categories.find((c) => c.id === undoLog.category)?.label ?? 'activity'} log.
+          <button type="button" onClick={restoreLog}>Undo</button>
+        </p>
+      )}
       <div className="energy-grid">
         {subOn('energySankey', 'manualLog') && (
           <section className="energy-card">
@@ -169,7 +192,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
                   <li key={l.id}>
                     <span className="energy-dot" style={{ background: c?.color }} />
                     {c?.label} <strong>{l.hours} h</strong>
-                    <button className="icon-button" aria-label={`Remove ${c?.label}`} onClick={() => setStore((s) => ({ logs: s.logs.filter((x) => x.id !== l.id) }))}>
+                    <button className="icon-button" aria-label={`Remove ${c?.label}`} onClick={() => removeLog(l)}>
                       <Trash2 size={14} />
                     </button>
                   </li>
