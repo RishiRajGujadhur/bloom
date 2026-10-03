@@ -99,7 +99,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Show a concise progress summary for the current unit.
 - [ ] Make exercise feedback and score changes announce accessibly.
 - [ ] Add an optional reduced-animation lesson setting.
-- [ ] Add a review-queue count and direct start action.
+- [x] Add a review-queue count and direct start action.
 - [ ] Clarify why lessons are unavailable when hearts are depleted.
 
 ## Verification and polish

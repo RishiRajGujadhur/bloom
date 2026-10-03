@@ -8,7 +8,7 @@ import { subOn } from '../subFeatures'
 import { leagueColors, leagues, units } from './englishCourse'
 import {
   ENGLISH_KEY, LESSONS_PER_UNIT, MAX_HEARTS, applyFreezes, badgeDefs, earn, emptyEnglish, goals, heartsNow, leagueTable,
-  loseHeart, newBadges, questsFor, reviewWord, rollLeague, streak, totalXp, unitProgress, weekXp,
+  dueWords, loseHeart, newBadges, questsFor, reviewWord, rollLeague, streak, totalXp, unitProgress, weekXp,
   wordOfDay, xpToday, type EnglishStore,
 } from './englishModel'
 import { speak } from './englishNlp'
@@ -73,6 +73,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
   const hearts = heartsNow(store)
   const days = streak(store, today)
   const xp = xpToday(store, today)
+  const reviewQueue = dueWords(store)
   const wod = useMemo(() => wordOfDay(today), [today])
   const quests = useMemo(() => questsFor(today), [today])
   // The first unit that still has lessons left.
@@ -228,6 +229,14 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
         )}
         {on('review') && (
           <section className="studio-card en-practice-quick">
+            <button
+              type="button"
+              className="studio-btn"
+              disabled={reviewQueue.length === 0}
+              onClick={() => start({ title: 'Word review', exercises: makeReview(reviewQueue), kind: 'review' })}
+            >
+              <Dumbbell size={15} /> Review due words ({reviewQueue.length})
+            </button>
             <button type="button" className="studio-btn" onClick={() => setTab('practice')}><Dumbbell size={15} /> Practice hub</button>
             {onNavigate && <button type="button" className="studio-btn" onClick={() => onNavigate('habits')}>Make it a habit</button>}
           </section>
