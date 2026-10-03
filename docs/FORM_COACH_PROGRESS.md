@@ -19,7 +19,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Tai Chi flow grading and Yang/Chen reference selection
 - [x] Boxing strike classification and guard feedback
 - [x] Kung Fu hand/wrist and Karate block guidance
-- [ ] Reaction-time visual drills
+- [x] Reaction-time visual drills
 - [ ] Energy-to-RPG damage
 - [ ] Independent limb workload/fatigue gauges
 - [ ] Breathing sync visualizer

@@ -75,3 +75,18 @@ export function blockCue(pose: P[]) {
   if (low) return 'Low block · return to guard smoothly'
   return Math.abs(pose[15].x - pose[16].x) < .18 ? 'Inner block position' : 'Outer block position'
 }
+
+export type Reaction = { cueAt: number; nextAt: number; side: 15 | 16; elapsed: number | null; hit: boolean }
+export const emptyReaction = (): Reaction => ({ cueAt: 0, nextAt: 0, side: 15, elapsed: null, hit: false })
+export function reactionTick(previous: Reaction, pose: P[], before: P[] | undefined, at: number): Reaction {
+  if (!previous.nextAt) return { ...previous, nextAt: at + 3000 }
+  if (at < previous.nextAt) return previous
+  if (!previous.cueAt) return { cueAt: at, nextAt: at, side: previous.side, elapsed: null, hit: false }
+  if (at - previous.cueAt > 3000) return { cueAt: 0, nextAt: at + 2000, side: previous.side === 15 ? 16 : 15, elapsed: previous.elapsed, hit: previous.hit }
+  const wrist = pose[previous.side], last = before?.[previous.side]
+  if (!wrist || !last) return previous
+  const moved = Math.hypot(wrist.x - last.x, wrist.y - last.y) > .008
+  const targetX = previous.side === 15 ? .3 : .7
+  const hit = previous.hit || Math.hypot(wrist.x - targetX, wrist.y - .35) < .1
+  return { ...previous, elapsed: previous.elapsed ?? (moved ? Math.round(at - previous.cueAt) : null), hit }
+}

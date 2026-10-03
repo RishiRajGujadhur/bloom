@@ -7,7 +7,7 @@ import { useKeepAwake } from '../../platform/presence'
 import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
-import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue } from './coachAnalysis'
+import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick } from './coachAnalysis'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -57,6 +57,8 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const [target, setTarget] = useState(10)
   const [bpm, setBpm] = useState(45)
   const [span, setSpan] = useState(40)
+  const reaction = useRef(emptyReaction())
+  const [drill, setDrill] = useState(emptyReaction)
   const handDetector = useRef<{ detectForVideo: (video: HTMLVideoElement, at: number) => { landmarks: P[][] }; close: () => void } | null>(null)
   const [handTarget, setHandTarget] = useState<'open' | 'fist' | 'claw'>('open')
   const [handScores, setHandScores] = useState<ReturnType<typeof handForm>[]>([])
@@ -88,7 +90,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
-    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
+    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = { ...motion.current, points: null }; setLabel('')
   }
   const release = useCallback(() => {
@@ -232,6 +234,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
       }
       return
     }
+    if (options.reaction) { reaction.current = reactionTick(reaction.current, lm, frames.current.at(-1)?.pose, at); setDrill(reaction.current) }
     frames.current.push({ at, pose: lm.map(p => ({ ...p })), score: Math.max(0, 100 - reading.faults.length * 25) }); frames.current = frames.current.slice(-300)
     setTrailFrames(frames.current.slice(-24))
     if (exercise.current === 'karate') setBlock(blockCue(lm))
@@ -335,6 +338,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
       <div className="fc-center">
         <div className={`fc-split ${options.reference ? '' : 'fc-no-reference'}`}><div ref={panel} className={`fc-camera-panel ${focus ? 'fc-focused' : ''}`} aria-label="Camera training view">
           <div className="fc-view" data-matrix-native><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
+            {ready && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}
             {ready && options.trails && ['boxing', 'karate', 'kungFu'].includes(ex) && <CoachTrails frames={trailFrames} mirror={mode === 'camera'} />}
             {mode === 'idle' && <p className="fc-tip">{accessible ? 'Show your head, torso and arms. No need to show your legs.' : RULES[ex].tip}</p>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
@@ -351,6 +355,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
       <div className="fc-side"><div className="fc-pacing"><RepRing count={RULES[ex].timed ? held : reps.length} target={target} timed={!!RULES[ex].timed} /><div className="fc-metronome"><strong>Rhythm Metronome</strong><div className={ready ? 'fc-beat running' : 'fc-beat'} style={{ '--fc-beat': `${60000 / bpm}ms` } as CSSProperties} aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ height: `${12 + (4 - Math.abs(i - 4)) * 7}px` }} />)}</div><label>Pace <input type="number" aria-label="Metronome BPM" min="20" max="140" value={bpm} onChange={(e) => setBpm(Math.max(20, Math.min(140, Number(e.target.value) || 40)))} /> BPM</label></div></div>
         {!RULES[ex].timed && <label className="fc-target">Target reps <select value={target} onChange={(e) => setTarget(Number(e.target.value))}>{[5, 8, 10, 12, 15, 20, 30].map((n) => <option key={n}>{n}</option>)}</select></label>}
         {options.energy && <div className="fc-energy" aria-label="Energy metrics"><h4>Energy Metrics {mode === 'demo' && <small>DEMO</small>}</h4><dl><div><dt>Est. Kcal</dt><dd>{metrics.kcal.toFixed(2)}</dd></div><div><dt>Est. kinetic work (J)</dt><dd>{metrics.joules.toFixed(1)}</dd></div><div><dt>Average Power (W) · est.</dt><dd>{(metrics.seconds ? metrics.joules / metrics.seconds : 0).toFixed(1)}</dd></div><div><dt>Active Power (W) · est.</dt><dd>{Math.round(metrics.watts)}</dd></div><div><dt>Motion Intensity</dt><dd>{metrics.left + metrics.right > 2 ? 'High' : metrics.left + metrics.right > .5 ? 'Moderate' : 'Low'}</dd></div><div><dt>Left / right hand · est. m/s</dt><dd>{metrics.left.toFixed(2)} / {metrics.right.toFixed(2)}</dd></div><div><dt>Arm velocity · est. m/s</dt><dd>{metrics.arm.toFixed(2)}</dd></div></dl><small>Arm-mass and velocity estimates, not measured mechanical work. Calories use a motion-based activity proxy, adjusted for seated upper-body exercise. {metrics.source === 'world' ? 'Using model-estimated 3D coordinates.' : 'Scale estimated from shoulder span.'}</small><label>Shoulder span (cm) <input type="number" min="20" max="70" value={span} onChange={(e) => { setSpan(Math.max(20, Math.min(70, Number(e.target.value) || 40))); motion.current.points = null }} /></label></div>}
+        {options.reaction && <div className="fc-diagnostics"><h4>Reaction drill</h4><p>Onset: {drill.elapsed == null ? 'Wait for the target, then move' : `${drill.elapsed}ms`} · {drill.hit ? 'Target reached' : 'Reach the lit target'}</p><small>Measured from the rendered cue to detected hand movement; includes camera sampling delay.</small></div>}
         {options.technique && ex === 'kungFu' && <div className="fc-diagnostics"><h4>Hand structure · projected finger angles</h4><label>Hand form <select value={handTarget} onChange={e => setHandTarget(e.target.value as typeof handTarget)}><option value="open">Open palm</option><option value="fist">Closed fist</option><option value="claw">Claw shape</option></select></label><button disabled={mode !== 'camera' || handStatus.startsWith('Preparing')} onClick={() => void enableHands()}>Enable detailed hand tracking</button><p>{handStatus}</p>{handScores.map((score, i) => score && <p key={i}>Hand {i + 1}: {score.score}% shape match · fingers {score.bends.join('° / ')}°</p>)}<small>Shape guide only; does not certify traditional technique.</small></div>}
         {options.technique && ex === 'karate' && <div className="fc-diagnostics"><h4>Block guidance</h4><p>{block || 'Start tracking to see your block position'}</p></div>}
         {ex === 'boxing'  && <div className="fc-diagnostics"><h4>Boxing · camera estimates</h4><label>Lead hand <select value={lead} onChange={e => setLead(e.target.value as 'left' | 'right')}><option value="left">Left</option><option value="right">Right</option></select></label><p>{strikes.strike} · {Object.entries(strikes.counts).map(([name, count]) => `${name}: ${count}`).join(' / ')}</p>{options.guard && <p>{strikes.guard ? 'Guard near face' : 'Return the non-striking hand to guard'}</p>}<small>Heuristic classification; angled or occluded strikes may be missed.</small></div>}
