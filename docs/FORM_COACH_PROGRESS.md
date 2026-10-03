@@ -35,7 +35,7 @@ not a medical prescription or a validated martial-arts master.
 - [ ] Markdown session export
 - [ ] Battery saver
 - [ ] Silent wearable feedback and heart-rate connection
-- [ ] Performance history and range-of-motion trends
+- [x] Performance history and range-of-motion trends
 - [ ] Custom routine chaining
 
 ## Maintained

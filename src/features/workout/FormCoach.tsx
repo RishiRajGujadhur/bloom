@@ -8,6 +8,8 @@ import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisi
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
 import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick } from './coachAnalysis'
+import { readCoachHistory, saveCoachSession, type CoachSession } from './coachHistory'
+import { CoachHistoryPanel } from './CoachHistoryPanel'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -57,6 +59,8 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const [target, setTarget] = useState(10)
   const [bpm, setBpm] = useState(45)
   const [span, setSpan] = useState(40)
+  const [history, setHistory] = useState(readCoachHistory)
+  const compensation = useRef({ frames: 0, changed: 0 })
   const reaction = useRef(emptyReaction())
   const [drill, setDrill] = useState(emptyReaction)
   const handDetector = useRef<{ detectForVideo: (video: HTMLVideoElement, at: number) => { landmarks: P[][] }; close: () => void } | null>(null)
@@ -91,7 +95,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
     boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
-    motion.current = { ...motion.current, points: null }; setLabel('')
+    motion.current = emptyMotion(); setMetrics(motion.current); compensation.current = { frames: 0, changed: 0 }; setLabel('')
   }
   const release = useCallback(() => {
     generation.current++; cancelAnimationFrame(raf.current)
@@ -123,7 +127,11 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
     const rule = RULES[exercise.current], count = rule.timed ? Math.floor(hold.current.seconds) : counter.current.reps.length
     if (!count) { setMessage('No completed movement to log yet.'); return }
     if (modeRef.current === 'demo') setMessage('Demo set complete. Demo movements are not saved to workout history.')
-    else { onLog(rule.liftId, count, rule.timed ? count : undefined); setMessage(`${rule.name}: ${count}${rule.timed ? ' seconds' : ' reps'} logged.`) }
+    else {
+      const m = motion.current, stats = counter.current.reps
+      const session: CoachSession = { id: crypto.randomUUID(), exercise: exercise.current, at: Date.now(), seconds: m.seconds, reps: rule.timed ? 0 : count, score: rule.timed ? flow.current.score ?? 0 : stats.reduce((sum, rep) => sum + rep.score, 0) / Math.max(1, stats.length), joules: m.joules, kcal: m.kcal, power: m.seconds ? m.joules / m.seconds : 0, peak: m.peak, leftWork: m.leftWork, rightWork: m.rightWork, leftAngle: jointAngles.left, rightAngle: jointAngles.right, range: ranges.current[exercise.current] ?? null, compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }
+      try { setHistory(saveCoachSession(session)) } catch { setErr('History storage is full. Export and clear old sets to make room.') }
+      onLog(rule.liftId, count, rule.timed ? count : undefined); setMessage(`${rule.name}: ${count}${rule.timed ? ' seconds' : ' reps'} logged.`) }
     resetSet()
   }
   const finish = () => {
@@ -213,7 +221,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
         baseline.current = { width: sum.width / n, slope: sum.slope / n, headOffset: sum.headOffset / n, twist: sum.twist / n }; setCalibration(1)
       }
     }
-    setBalance(alignment(lm, baseline.current))
+    const aligned = alignment(lm, baseline.current); setBalance(aligned)
     const trackingValid = accessible ? upperVisible(lm) : exerciseVisible(exercise.current, lm)
     if (hovered || (accessible && !baseline.current) || !trackingValid) {
       setFault(null)
@@ -222,6 +230,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
       setLabel(hovered ? 'Gesture control · counting held' : !trackingValid ? accessible ? 'Show head, shoulders and both arms' : 'Keep exercise joints visible' : 'Stay comfortably still to calibrate')
       return
     }
+    compensation.current.frames++; if (aligned?.alert) compensation.current.changed++
     const rule = RULES[exercise.current]
     const reading = rule.upper ? readUpper(exercise.current, lm, baseline.current) : read(exercise.current, lm)
     if (rom.current.active) {
@@ -362,6 +371,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
         {ex === 'taiChi'  && <div className="fc-diagnostics"><label>Reference style <select aria-label="Tai Chi lineage" value={lineage} onChange={e => setLineage(e.target.value as Lineage)}><option>Yang</option><option>Chen</option></select></label><p>{lineage === 'Yang' ? 'Broad, even sweeping guide' : 'Circular, spiralling guide'}</p>{options.flow && <p>Flow smoothness: {flowScore == null ? 'Move continuously to grade flow' : `${Math.round(flowScore)} / 100`}</p>}<small>Illustrative style presets; not validated lineage instruction.</small></div>}
         {options.rhythm && ex === 'boxing' && <div className="fc-diagnostics"><h4>Combo rhythm</h4><p>{rhythmGrade(reps.map(rep => rep.at)) ? `${rhythmGrade(reps.map(rep => rep.at))!.score}% consistency · ${rhythmGrade(reps.map(rep => rep.at))!.gap}ms average gap` : 'Complete three strikes to grade timing'}</p></div>}
         {options.snap && ['boxing', 'karate', 'kungFu'].includes(ex) && <div className="fc-diagnostics"><h4>Strike deceleration · estimate</h4><p>Snap proxy: {combat.snap ?? '—'} / 100 · sampled slowdown: {combat.stopMs == null ? '—' : `${Math.round(combat.stopMs)} ms`}</p><small>Camera sampling cannot resolve precise impact or contact force.</small></div>}
+        {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
         <div className="fc-settings"><h4>Form Coach Settings</h4><label><input type="checkbox" checked={gestures} onChange={(e) => { setGestures(e.target.checked); gestureState.current = emptyGesture() }} /> Hand-hover controls</label><label><input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> Skeletal overlay</label>{Object.entries(COACH_OPTIONS).map(([key, name]) => <label key={key}><input type="checkbox" checked={options[key as keyof typeof options]} onChange={(e) => setOptions(previous => ({ ...previous, [key]: e.target.checked }))} />{name}</label>)}<p className="fc-small">Audio feedback: off. All coaching is visual or silent.</p><small>Hold either hand on a button for ~3 seconds. Move away to rearm. Next workout changes the exercise and logs completed reps first.</small></div>
         {mode === 'idle' ? <div className="fc-actions"><button type="button" className="fc-cta" onClick={() => void startCamera()}><Camera size={16} /> Start camera</button><button type="button" className="fc-ghost" onClick={startDemo}><Play size={16} /> Watch the demo athlete</button></div> : mode === 'loading' ? <button type="button" className="fc-ghost" onClick={() => { release(); setMode('idle') }}>Cancel camera setup</button> : <button type="button" className="fc-ghost" onClick={enterFocus}><Maximize size={16} /> Camera-only fullscreen</button>}
         {err && <p role="alert" className="fc-error">{err}</p>}<p role="status" className="fc-message">{message}</p><p className="fc-small">Video stays on your device. Tracking files download on first use.</p>
