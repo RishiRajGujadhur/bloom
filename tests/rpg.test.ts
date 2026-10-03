@@ -1,7 +1,7 @@
 import { defaults, newSession, parseData, reply, advance, toggleHabit } from '../src/model'
 import { dayKey, previousDay } from '../src/dates'
 import { initialRpg } from '../src/rpg/schema'
-import { bossHealth, combo, commitBoss, contractSignature, elapsedParts, failFocusQuest, focusQuestState, habitKey, initializeGame, multiplier, openLoot, resetMomentum, startFocusQuest, startMomentum, syncGame, totals, unlocks, completeFocusQuest, FOCUS_QUEST_MS } from '../src/rpg/engine'
+import { bossHealth, combo, commitBoss, contractSignature, elapsedParts, failFocusQuest, focusQuestState, habitKey, initializeGame, multiplier, openLoot, pauseFocusQuest, resetMomentum, resumeFocusQuest, startFocusQuest, startMomentum, syncGame, totals, unlocks, completeFocusQuest, FOCUS_QUEST_MS } from '../src/rpg/engine'
 import type { AppData } from '../src/model'
 const time=(day: number,hour=10)=>new Date(2026,8,day,hour).getTime()
 function fresh(at=time(1)) { const data=defaults(); data.rpg=initialRpg(at);return data }
@@ -20,6 +20,21 @@ test('focus quest requires the full 25 minutes and damage is idempotent',()=>{
   expect(completeFocusQuest(data,time(1)+FOCUS_QUEST_MS)).not.toBe(data)
   data=failFocusQuest(data,time(1)+1000);expect(data.rpg.focusQuest.damage).toBe(1)
   expect(failFocusQuest(data,time(1)+2000)).toBe(data)
+})
+test('paused focus quest holds its elapsed time and resumes with the remaining time',()=>{
+  const started = time(1)
+  const pausedAt = started + 10 * 60_000
+  let data = startFocusQuest(fresh(), 'forest', started)
+  data = pauseFocusQuest(data, pausedAt)
+  expect(data.rpg.focusQuest.pausedAt).toBe(pausedAt)
+  expect(focusQuestState(data.rpg, started + FOCUS_QUEST_MS * 2)).toBe('active')
+  expect(completeFocusQuest(data, started + FOCUS_QUEST_MS * 2)).toBe(data)
+
+  const resumedAt = started + 60 * 60_000
+  data = resumeFocusQuest(data, resumedAt)
+  expect(data.rpg.focusQuest.startedAt).toBe(started + 50 * 60_000)
+  expect(data.rpg.focusQuest.pausedAt).toBeNull()
+  expect(completeFocusQuest(data, resumedAt + 25 * 60_000)).not.toBe(data)
 })
 test('contract signatures are deterministic and input-sensitive',()=>{
   expect(contractSignature('a','b','c')).toBe(contractSignature('a','b','c'))

@@ -32,7 +32,7 @@ Items are intentionally small enough to review and verify independently.
 
 ## Focus room
 
-- [ ] Add pause and resume controls for active sessions.
+- [x] Add pause and resume controls for active sessions.
 - [x] Show the current session's remaining time in an accessible status.
 - [x] Add a quick way to extend or shorten a not-yet-started session.
 - [x] Provide a quieter scene option for reduced-distraction sessions.

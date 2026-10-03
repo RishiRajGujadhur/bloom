@@ -2,7 +2,7 @@ import { subOn } from '../subFeatures'
 import { useEffect, useState } from 'react'
 import { Music, Pause, Play, Sparkles } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
-import { startFocusQuest } from '../../rpg/engine'
+import { pauseFocusQuest, resumeFocusQuest, startFocusQuest } from '../../rpg/engine'
 import { useOptionalAudioMixer } from '../../contexts/AudioMixerContext'
 import { AvatarPreview } from '../rewards/ShopPage'
 import { useShop } from '../rewards/shop'
@@ -25,6 +25,7 @@ const lengths = [15, 25, 50, 90] as const
 export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   const quest = data.rpg.focusQuest
   const running = quest.startedAt !== null && !quest.completedAt && !quest.failedAt
+  const paused = quest.pausedAt !== null
   const audio = useOptionalAudioMixer()
   const mixer = subOn('focusRoom', 'soundtrack') ? audio : null
   const { shop } = useShop()
@@ -50,15 +51,16 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
     try { localStorage.setItem('bloom-room-track', id) } catch { /* optional */ }
   }
   useEffect(() => {
-    if (!running) return
+    if (!running || paused) return
     const timer = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(timer)
-  }, [running])
+  }, [running, paused])
   const total = quest.durationMinutes * 60000
-  const left = running ? Math.max(0, total - (now - quest.startedAt!)) : total
+  const elapsedAt = paused ? quest.pausedAt! : now
+  const left = running ? Math.max(0, total - (elapsedAt - quest.startedAt!)) : total
   const progress = running ? 1 - left / total : 0
   const recentlyCompleted = Boolean(quest.completedAt && now - quest.completedAt < 15 * 60_000)
-  useTabTitle(running ? `⏱ ${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}` : '', 'Focus room', 'focus-room')
+  useTabTitle(running ? `${paused ? '⏸' : '⏱'} ${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}` : '', 'Focus room', 'focus-room')
   const hour = new Date().getHours()
   const night = subOn('focusRoom', 'nightSky') && (hour < 7 || hour >= 19)
 
@@ -89,7 +91,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
         </div>
         {running && (
           <span className="sr-only" role="status" aria-live="polite">
-            {Math.ceil(left / 60000)} {Math.ceil(left / 60000) === 1 ? 'minute' : 'minutes'} remaining in your focus session.
+            {Math.ceil(left / 60000)} {Math.ceil(left / 60000) === 1 ? 'minute' : 'minutes'} remaining in your focus session{paused ? ', currently paused.' : '.'}
           </span>
         )}
         <div className="room-desk" aria-hidden="true">
@@ -182,10 +184,20 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
         )}
         <div className="room-buttons">
           {running ? (
-            <p className="wb-muted">Deep work in progress. The session ends by itself.</p>
+            <p className="wb-muted">{paused ? 'Session paused. Your remaining time is saved.' : 'Deep work in progress. The session ends by itself.'}</p>
           ) : (
             <button className="ov-primary" onClick={start}>
               <LottieIcon name="play" size={18} /> Enter flow
+            </button>
+          )}
+          {running && (
+            <button
+              type="button"
+              className="ov-secondary"
+              onClick={() => setData((current) => paused ? resumeFocusQuest(current) : pauseFocusQuest(current))}
+            >
+              {paused ? <Play size={16} aria-hidden="true" /> : <Pause size={16} aria-hidden="true" />}
+              {paused ? 'Resume session' : 'Pause session'}
             </button>
           )}
           {mixer && (

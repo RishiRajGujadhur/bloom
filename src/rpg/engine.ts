@@ -39,16 +39,37 @@ export function focusQuestState(rpg: Rpg, now = Date.now()): FocusQuestState {
   const quest = rpg.focusQuest
   if (quest.completedAt) return 'completed'
   if (quest.failedAt) return 'failed'
+  if (quest.pausedAt !== null) return 'active'
   if (quest.startedAt && now - quest.startedAt >= FOCUS_QUEST_MS) return 'active'
   return quest.startedAt ? 'active' : 'idle'
 }
+export function pauseFocusQuest(data: AppData, now = Date.now()): AppData {
+  const quest = data.rpg.focusQuest
+  if (!quest.startedAt || quest.completedAt || quest.failedAt || quest.pausedAt !== null) return data
+  return { ...data, rpg: { ...data.rpg, focusQuest: { ...quest, pausedAt: now } } }
+}
+export function resumeFocusQuest(data: AppData, now = Date.now()): AppData {
+  const quest = data.rpg.focusQuest
+  if (!quest.startedAt || quest.pausedAt === null || quest.completedAt || quest.failedAt) return data
+  return {
+    ...data,
+    rpg: {
+      ...data.rpg,
+      focusQuest: {
+        ...quest,
+        startedAt: quest.startedAt + Math.max(0, now - quest.pausedAt),
+        pausedAt: null,
+      },
+    },
+  }
+}
 export function startFocusQuest(data: AppData, soundscape: Rpg['focusQuest']['soundscape'], now = Date.now()): AppData {
   if (focusQuestState(data.rpg, now) === 'active') return data
-  return { ...data, rpg: { ...data.rpg, focusQuest: { ...data.rpg.focusQuest, startedAt: now, completedAt: null, failedAt: null, soundscape } } }
+  return { ...data, rpg: { ...data.rpg, focusQuest: { ...data.rpg.focusQuest, startedAt: now, pausedAt: null, completedAt: null, failedAt: null, soundscape } } }
 }
 export function completeFocusQuest(data: AppData, now = Date.now()): AppData {
   const quest = data.rpg.focusQuest
-  if (!quest.startedAt || quest.completedAt || quest.failedAt || now - quest.startedAt < (quest.durationMinutes ?? 25) * 60000) return data
+  if (!quest.startedAt || quest.pausedAt !== null || quest.completedAt || quest.failedAt || now - quest.startedAt < (quest.durationMinutes ?? 25) * 60000) return data
   const key = `focus:${quest.startedAt}`
   const minutes = quest.durationMinutes ?? 25
   const bonus = data.rpg.skills.meditation?.state === 'unlocked' ? 5 : 0
@@ -58,7 +79,7 @@ export function completeFocusQuest(data: AppData, now = Date.now()): AppData {
 export function failFocusQuest(data: AppData, now = Date.now()): AppData {
   const quest = data.rpg.focusQuest
   if (!quest.startedAt || quest.completedAt || quest.failedAt) return data
-  return { ...data, rpg: { ...data.rpg, focusQuest: { ...quest, failedAt: now, damage: quest.damage + 1 } } }
+  return { ...data, rpg: { ...data.rpg, focusQuest: { ...quest, pausedAt: null, failedAt: now, damage: quest.damage + 1 } } }
 }
 export function contractSignature(given: string, when: string, then: string) {
   return `BLOOM-${[given, when, then].join('|').replace(/\s+/g, ' ').trim().split('').reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 7).toString(16).toUpperCase()}`

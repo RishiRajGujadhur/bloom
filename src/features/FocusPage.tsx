@@ -2,13 +2,15 @@ import { useLeaveGuard } from '../utils/useLeaveGuard'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { idleGranted, idleSupported, requestIdle, useAway, useKeepAwake } from '../platform/presence'
 import { writeStore } from '../components/studio/Studio'
-import { Play, Square, Check, Timer } from 'lucide-react'
+import { Pause, Play, Square, Check, Timer } from 'lucide-react'
 import { toggleTodo } from './productivity'
 import type { AppData } from '../model'
 import { FocusCompanion } from './collectibles/Collectibles'
 import {
   completeFocusQuest,
   failFocusQuest,
+  pauseFocusQuest,
+  resumeFocusQuest,
   focusQuestState,
   startFocusQuest,
 } from '../rpg/engine'
@@ -65,7 +67,7 @@ export function useFocusLifecycle(
 ) {
   const quest = data.rpg.focusQuest
   useEffect(() => {
-    if (!quest.startedAt || quest.completedAt || quest.failedAt) return
+    if (!quest.startedAt || quest.pausedAt !== null || quest.completedAt || quest.failedAt) return
     const tick = () => {
       if (Date.now() - quest.startedAt! >= quest.durationMinutes * 60000)
         setData((current) => completeFocusQuest(current))
@@ -87,6 +89,7 @@ export function useFocusLifecycle(
     }
   }, [
     quest.startedAt,
+    quest.pausedAt,
     quest.completedAt,
     quest.failedAt,
     quest.strict,
@@ -117,7 +120,8 @@ export function FocusPage({
   // Step away from the computer and the session pauses; come back and it resumes (Idle Detection).
   const [awayOn, setAwayOn] = useState(() => readStore<boolean>('bloom-focus-away', true))
   const [osIdle, setOsIdle] = useState(idleGranted)
-  const running = focusQuestState(data.rpg, now) === 'active'
+  const active = focusQuestState(data.rpg, now) === 'active'
+  const running = active && quest.pausedAt === null
   const away = useAway(running && awayOn, 60_000)
   const awayStart = useRef<number | null>(null)
   const [awayNote, setAwayNote] = useState('')
@@ -135,11 +139,11 @@ export function FocusPage({
   }, [away.away, away.since, running, setData])
   // While away, the clock stands still.
   const clock = away.away && awayStart.current ? awayStart.current : now
-  const active = focusQuestState(data.rpg, clock) === 'active'
   const total = quest.durationMinutes * 60000
-  const left = active ? Math.max(0, total - (clock - quest.startedAt!)) : total
+  const elapsedAt = quest.pausedAt ?? clock
+  const left = active ? Math.max(0, total - (elapsedAt - quest.startedAt!)) : total
   const progress = active
-    ? Math.min(1, (clock - quest.startedAt!) / total)
+    ? Math.min(1, (elapsedAt - quest.startedAt!) / total)
     : quest.completedAt
       ? 1
       : 0
@@ -238,7 +242,7 @@ export function FocusPage({
           {String(Math.floor(left / 60000)).padStart(2, '0')}:
           {String(Math.floor(left / 1000) % 60).padStart(2, '0')}
         </div>
-        {active && <p className="focus-ends">Finishes at {new Date(Date.now() + left).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</p>}
+        {active && quest.pausedAt === null && <p className="focus-ends">Finishes at {new Date(Date.now() + left).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</p>}
         <p className="focus-goal">
           {doneToday}/{dailyGoal} sessions today{doneToday >= dailyGoal ? ' 🎉' : ''} · {history.filter((h) => Date.now() - h.completedAt < 7 * 864e5).reduce((a, h) => a + h.minutes, 0)} min this week
           {(() => {
@@ -364,12 +368,20 @@ export function FocusPage({
               value={total - left}
               aria-label="Focus progress"
             />
+            {quest.pausedAt !== null && <p className="focus-away" role="status">Session paused. Resume when you’re ready.</p>}
             {away.away && <p className="focus-away" role="status">👣 Away{away.locked ? ' (screen locked)' : ''} — timer paused</p>}
             {!away.away && awayNote && <p className="focus-away back" role="status">{awayNote}</p>}
             <p>
               {data.todos.find((task) => task.id === quest.taskId)?.title ??
                 'Keep your attention here.'}
             </p>
+            <button
+              className="quiet-button"
+              onClick={() => setData((current) => quest.pausedAt !== null ? resumeFocusQuest(current) : pauseFocusQuest(current))}
+            >
+              {quest.pausedAt !== null ? <Play size={16} /> : <Pause size={16} />}
+              {quest.pausedAt !== null ? 'Resume session' : 'Pause session'}
+            </button>
             {confirmStop ? (
               <div className="feature-actions">
                 <button
