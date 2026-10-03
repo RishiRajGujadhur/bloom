@@ -49,6 +49,8 @@ not a medical prescription or a validated martial-arts master.
 
 - [x] Optional digital auto-framing with consistent hover coordinates
 
+- [x] Radial gesture dwell progress and optional floating fullscreen metrics
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation

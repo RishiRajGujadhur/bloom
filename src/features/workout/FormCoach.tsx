@@ -423,7 +423,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     }
     raf.current = requestAnimationFrame(loop)
   }
-  const control = (id: string, text: string, click: () => void) => <button type="button" data-gesture={id} onClick={() => { gestureState.current = { id, elapsed: 0, latched: true, away: 0 }; click() }} className={gesture.id === id ? 'fc-hovering' : ''} style={{ '--fc-dwell': `${gesture.id === id ? gesture.progress * 100 : 0}%` } as CSSProperties}>{text}{gesture.id === id && <small>{gesture.latched ? 'Move hand away' : `${Math.ceil(2.8 * (1 - gesture.progress))}s`}</small>}</button>
+  const control = (id: string, text: string, click: () => void) => <button type="button" data-gesture={id} onClick={() => { gestureState.current = { id, elapsed: 0, latched: true, away: 0 }; click() }} className={gesture.id === id ? 'fc-hovering' : ''} style={{ '--fc-dwell': `${gesture.id === id ? gesture.progress * 100 : 0}%` } as CSSProperties}>{text}{gesture.id === id && <svg className="fc-dwell-ring" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="#ffffff30" strokeWidth="3" /><circle cx="14" cy="14" r="11" fill="none" stroke="#5dffc0" strokeWidth="3" strokeDasharray={`${gesture.progress * 69.12} 69.12`} transform="rotate(-90 14 14)" /></svg>}{gesture.id === id && <small>{gesture.latched ? 'Move hand away' : `${Math.ceil(2.8 * (1 - gesture.progress))}s`}</small>}</button>
   const silentStatus = balance ? balance.alert ? 'Alignment changed from your baseline' : 'Near your calibrated baseline' : calibration < 1 ? 'Awaiting calibration' : 'Tracking unavailable'
   return <section className="fc" aria-label="Form coach">
     <header className="fc-head"><div><p className="fc-eyebrow">Form coach</p><h3>Hands-free reps, real-time form.</h3></div><CapsBadge caps={['gpu', 'mt', 'opfs']} /></header>
@@ -439,6 +439,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
             {ready && options.trails && ['boxing', 'karate', 'kungFu'].includes(ex) && <CoachTrails frames={trailFrames} mirror={mode === 'camera'} />}
             </div>
             {mode === 'idle' && <p className="fc-tip">{accessible ? 'Show your head, torso and arms. No need to show your legs.' : RULES[ex].tip}</p>}
+            {focus && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
             {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
           </div>

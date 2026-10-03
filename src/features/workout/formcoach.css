@@ -127,3 +127,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-muscle-map{height:130px;width:100%}
 
 .fc-scene{position:absolute;inset:0;transform-origin:0 0}.fc-range-calibration{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;font-size:11px;color:#b5d5c7}.fc-diagnostics{width:100%;min-width:0}.fc-diagnostics label{display:block}.fc-diagnostics select{max-width:100%}.fc-side>button:disabled{opacity:.5}
+
+.fc-camera-controls button{position:relative}.fc-dwell-ring{position:absolute;top:2px;right:2px;width:22px;height:22px}.fc-floating-metrics{position:absolute;top:20px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#071b16e8;border:1px solid #5dffc0;border-radius:12px;padding:10px;color:white;font-size:clamp(12px,1.5vw,20px)}
