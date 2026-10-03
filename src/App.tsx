@@ -77,7 +77,7 @@ import {
   readPage,
 } from './components/layout/FeatureGuide'
 import { GrowthRewards } from './rpg/GrowthRewards'
-import { startFocusQuest } from './rpg/engine'
+import { raidAttack, startFocusQuest } from './rpg/engine'
 import { RpgDashboard } from './rpg/RpgDashboard'
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
@@ -1130,7 +1130,7 @@ function App() {
               </Suspense>
             ) : active === 'workouts' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>
-                <WorkoutPage />
+                <WorkoutPage onCoachReward={reward => setData(d => raidAttack(d, reward.damage))} />
               </Suspense>
             ) : active === 'intervals' ? (
               <Suspense fallback={<p role="status">Loading…</p>}>

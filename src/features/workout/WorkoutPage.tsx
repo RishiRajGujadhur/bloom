@@ -74,7 +74,7 @@ function Barbell({ perSide }: { perSide: number[] }) {
   )
 }
 
-export function WorkoutPage() {
+export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: string; damage: number; xp: number }) => void }) {
   const [store, setStoreState] = useState<WorkoutStore>(() => readStore(WORKOUT_KEY, { workouts: [], rest: 90, bodyweight: 70 }))
   const setStore = (fn: (s: WorkoutStore) => WorkoutStore) =>
     setStoreState((cur) => {
@@ -469,7 +469,7 @@ export function WorkoutPage() {
       }
       tabs={[
         { id: 'train', label: 'Train', icon: <Dumbbell size={15} />, render: train },
-        ...(on('formCoach') ? [{ id: 'coach', label: 'Form coach', icon: <ScanFace size={15} />, render: () => <Suspense fallback={<p role="status">Loading the form coach…</p>}><FormCoach bodyweight={store.bodyweight} onFinish={() => { setRestLeft(0); setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return { ...s, workouts: s.workouts.map((w) => w.id === open?.id ? { ...w, finishedAt: Date.now() } : w) } }) }} onLog={(liftId, reps, seconds) => { const set: WSet = { liftId, weight: 0, reps, seconds, at: Date.now() }; setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return open ? { ...s, workouts: s.workouts.map((w) => (w.id === open.id ? { ...w, sets: [...w.sets, set] } : w)) } : { ...s, workouts: [...s.workouts, { id: crypto.randomUUID(), name: 'Form coach', templateId: 'coach', startedAt: Date.now(), sets: [set] }] } }); logActivity('workout', { reps }) }} /></Suspense> }] : []),
+        ...(on('formCoach') ? [{ id: 'coach', label: 'Form coach', icon: <ScanFace size={15} />, render: () => <Suspense fallback={<p role="status">Loading the form coach…</p>}><FormCoach onReward={onCoachReward} bodyweight={store.bodyweight} onFinish={() => { setRestLeft(0); setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return { ...s, workouts: s.workouts.map((w) => w.id === open?.id ? { ...w, finishedAt: Date.now() } : w) } }) }} onLog={(liftId, reps, seconds) => { const set: WSet = { liftId, weight: 0, reps, seconds, at: Date.now() }; setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return open ? { ...s, workouts: s.workouts.map((w) => (w.id === open.id ? { ...w, sets: [...w.sets, set] } : w)) } : { ...s, workouts: [...s.workouts, { id: crypto.randomUUID(), name: 'Form coach', templateId: 'coach', startedAt: Date.now(), sets: [set] }] } }); logActivity('workout', { reps }) }} /></Suspense> }] : []),
         ...(on('progressChart') || on('volumeChart') ? [{ id: 'progress', label: 'Progress', icon: <LineChart size={15} />, render: progressTab }] : []),
         ...(on('muscleVolume') ? [{ id: 'muscles', label: 'Muscles', icon: <Dumbbell size={15} />, render: musclesTab }] : []),
         ...(on('plates') ? [{ id: 'plates', label: 'Plates', icon: <Scale size={15} />, render: platesTab }] : []),

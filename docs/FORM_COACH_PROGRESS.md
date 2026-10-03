@@ -20,7 +20,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Boxing strike classification and guard feedback
 - [x] Kung Fu hand/wrist and Karate block guidance
 - [x] Reaction-time visual drills
-- [ ] Energy-to-RPG damage
+- [x] Energy-to-RPG damage
 - [ ] Independent limb workload/fatigue gauges
 - [ ] Breathing sync visualizer
 - [ ] Personal-best ghost replay
