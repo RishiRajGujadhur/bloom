@@ -4,7 +4,7 @@
  * and per-exercise form checks. Pure, so it's unit-tested with synthetic poses.
  */
 export type P = { x: number; y: number; z?: number; visibility?: number }
-export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'taiChi' | 'boxing' | 'karate' | 'kungFu'
+export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'seatedPress' | 'chestFly' | 'chairSquat' | 'taiChi' | 'boxing' | 'karate' | 'kungFu'
 
 // MediaPipe pose indices.
 export const J = { nose: 0, lSh: 11, rSh: 12, lEl: 13, rEl: 14, lWr: 15, rWr: 16, lHip: 23, rHip: 24, lKn: 25, rKn: 26, lAn: 27, rAn: 28 } as const
@@ -33,6 +33,9 @@ export const RULES: Record<Exercise, { name: string; liftId: string; down: numbe
   seatedTwist: { name: 'Seated Core Twist', liftId: 'seatedtwist', down: 145, up: 170, unit: 'torsoÂ°', upper: true, bpm: 40, tip: 'Sit in your usual supported position. Turn your shoulders gently, then return to centre.' },
   wheelchairDip: { name: 'Wheelchair Dips', liftId: 'wheelchairdip', down: 110, up: 150, unit: 'elbowÂ°', upper: true, bpm: 45, tip: 'Use stable armrests. Bend and straighten your elbows through your comfortable range.' },
   chairPushup: { name: 'Chair Push-up', liftId: 'chairpushup', down: 110, up: 150, unit: 'elbowÂ°', upper: true, bpm: 45, tip: 'Hands on stable chair supports. Press through your arms and return gently.' },
+  seatedPress: { name: 'Seated Press', liftId: 'seatedpress', down: 110, up: 150, unit: 'elbow°', upper: true, bpm: 40, tip: 'Press your hands upward within your comfortable shoulder range, then lower.' },
+  chestFly: { name: 'Seated Chest Fly', liftId: 'seatedchestfly', down: 100, up: 155, unit: 'reach°', upper: true, bpm: 40, tip: 'Open your arms gently, then bring your hands toward the centre.' },
+  chairSquat: { name: 'Chair Squats', liftId: 'chairsquat', down: 100, up: 160, unit: 'knee°', bpm: 40, tip: 'Chair-assisted sit-to-stand; requires visible legs and standing ability.' },
   taiChi: { name: 'Tai Chi (Flow)', liftId: 'taichiflow', down: 0, up: 0, unit: 'flow', upper: true, timed: true, bpm: 30, tip: 'Stay seated and supported. Sweep your arms slowly with the visual rhythm.' },
   boxing: { name: 'Boxing (Jab-Cross)', liftId: 'seatedboxing', down: 115, up: 150, unit: 'elbowÂ°', upper: true, bpm: 80, tip: 'Face the camera with both arms visible. Extend one arm, return to guard, then alternate.' },
   karate: { name: 'Karate (Blocks)', liftId: 'seatedkarate', down: 115, up: 160, unit: 'arm raise', upper: true, bpm: 50, tip: 'Raise a forearm above shoulder level, then return to your comfortable guard.' },
@@ -42,7 +45,7 @@ export const RULES: Record<Exercise, { name: string; liftId: string; down: numbe
 export function read(ex: Exercise, lm: P[]): Reading {
   if (RULES[ex].upper) return readUpper(ex, lm)
   const faults: string[] = []
-  if (ex === 'squat') {
+  if (ex === 'squat' || ex === 'chairSquat') {
     const kL = angle(lm[J.lHip], lm[J.lKn], lm[J.lAn])
     const kR = angle(lm[J.rHip], lm[J.rKn], lm[J.rAn])
     const knee = (kL + kR) / 2
@@ -93,7 +96,7 @@ export const visible = (p: P | undefined) => !!p && Number.isFinite(p.x) && Numb
 export function upperVisible(lm: P[]) { return [0, 11, 12, 13, 14, 15, 16].every((i) => visible(lm[i])) }
 export function exerciseVisible(ex: Exercise, lm: P[]) {
   if (RULES[ex].upper) return upperVisible(lm)
-  if (ex === 'squat' || ex === 'lunge') return [11, 12, 23, 24, 25, 26, 27, 28].every((i) => visible(lm[i]))
+  if (ex === 'squat' || ex === 'lunge' || ex === 'chairSquat') return [11, 12, 23, 24, 25, 26, 27, 28].every((i) => visible(lm[i]))
   return [[11, 13, 15, 23, 27], [12, 14, 16, 24, 28]].some((indices) => (ex === 'plank' ? [indices[0], indices[3], indices[4]] : indices).every((i) => visible(lm[i])))
 }
 export type UpperBaseline = { slope: number; headOffset: number; twist: number; width: number }
@@ -118,6 +121,11 @@ export function readUpper(ex: Exercise, lm: P[], baseline?: UpperBaseline | null
     const twist = Math.atan(Math.abs(b.twist - (baseline?.twist ?? 0))) * 180 / Math.PI
     return { metric: 180 - twist * 2, label: `${Math.round(twist)}Â° torso turn`, faults: [] }
   }
+  if (ex === 'chestFly') {
+    const w = Math.max(.06, Math.abs(lm[11].x - lm[12].x))
+    const reach = Math.abs(lm[15].x - lm[16].x) / w
+    return { metric: Math.max(0, 180 - reach * 60), label: `${reach.toFixed(1)}× shoulder span`, faults: [] }
+  }
   if (ex === 'karate') {
     const width = Math.max(.08, Math.abs(lm[11].x - lm[12].x))
     const raise = Math.max(lm[11].y - lm[15].y, lm[12].y - lm[16].y) / width
@@ -141,6 +149,8 @@ export function upperPose(ex: Exercise, phase: number): P[] {
     const arm = Math.atan2(shoulder.y - elbow.y, shoulder.x - elbow.x) + sign * theta
     const wrist = { x: elbow.x + .17 * Math.cos(arm), y: elbow.y + .17 * Math.sin(arm), z: 0, visibility: 1 }
     if (ex === 'seatedTwist') shoulder.z = sign * cycle * .15
+    if (ex === 'seatedPress') { elbow.y = .42 - cycle * .2; wrist.x = shoulder.x; wrist.y = elbow.y - .17 }
+    if (ex === 'chestFly') { wrist.x = .5 + sign * (.03 + cycle * .34); wrist.y = .4 }
     if (ex === 'karate') wrist.y = .42 - cycle * .3
     if (RULES[ex].timed) { elbow.x += sign * cycle * .04; wrist.x = .5 + sign * (.1 + cycle * .23); wrist.y = .5 - cycle * .25 }
     lm[sh] = shoulder; lm[el] = elbow; lm[wr] = wrist
@@ -152,7 +162,7 @@ export function upperPose(ex: Exercise, phase: number): P[] {
 export function demoPose(ex: Exercise, phase: number): P[] {
   if (RULES[ex].upper) return upperPose(ex, phase)
   const depth = (1 - Math.cos(phase * Math.PI * 2)) / 2
-  if (ex === 'squat' || ex === 'lunge') return squatPose(depth)
+  if (ex === 'squat' || ex === 'lunge' || ex === 'chairSquat') return squatPose(depth)
   const lm = squatPose(0)
   for (const [sh, el, wr, hip, an] of [[11, 13, 15, 23, 27], [12, 14, 16, 24, 28]]) {
     lm[sh] = { x: .2, y: .4, visibility: 1 }; lm[hip] = { x: .5, y: .4, visibility: 1 }; lm[an] = { x: .8, y: .4, visibility: 1 }

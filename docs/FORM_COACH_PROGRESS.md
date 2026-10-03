@@ -10,7 +10,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Personal seated range-of-motion calibration and adaptive rep thresholds
 - [x] Dynamic side-by-side reference view
 - [x] Detailed wireframe with live joint-angle callouts
-- [ ] Seated press, chest fly and chair squat exercise presets
+- [x] Seated press, chest fly and chair squat exercise presets
 - [ ] Granular persistent Form Coach settings
 - [ ] Adaptive seated calorie estimates, kinetic joules and average power
 - [ ] Strike trajectory SVG trails

@@ -11,9 +11,9 @@ import { CoachReference } from './CoachReference'
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm'
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task'
 const GROUPS: { title: string; exercises: Exercise[] }[] = [
-  { title: 'Seated Basic', exercises: ['seatedTwist', 'wheelchairDip', 'chairPushup'] },
+  { title: 'Seated Basic', exercises: ['seatedTwist', 'wheelchairDip', 'chairPushup', 'seatedPress', 'chestFly'] },
   { title: 'Martial Arts', exercises: ['taiChi', 'boxing', 'karate', 'kungFu'] },
-  { title: 'Standing & Floor', exercises: ['squat', 'pushup', 'lunge', 'plank'] },
+  { title: 'Standing & Floor', exercises: ['chairSquat', 'squat', 'pushup', 'lunge', 'plank'] },
 ]
 type Mode = 'idle' | 'loading' | 'camera' | 'demo'
 type Detector = { detectForVideo: (video: HTMLVideoElement, at: number) => { landmarks: P[][]; worldLandmarks?: P[][] }; close: () => void }
