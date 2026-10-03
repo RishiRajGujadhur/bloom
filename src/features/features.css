@@ -223,6 +223,27 @@
 .todo-density-toggle {
   margin: 0 0 4px auto;
 }
+.todo-undo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 9px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.todo-undo button {
+  border: 0;
+  background: transparent;
+  color: var(--accent-color);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
 .todo-sort {
   display: flex;
   justify-content: flex-end;

@@ -7,7 +7,7 @@ Items are intentionally small enough to review and verify independently.
 
 - [x] Add a keyboard shortcut to focus the task composer.
 - [x] Show an at-a-glance open, due-today, and completed summary.
-- [ ] Add one-tap task completion undo.
+- [x] Add one-tap task completion undo.
 - [x] Add a clear empty-search state with a reset action.
 - [x] Provide a compact task-density toggle.
 - [x] Allow sorting tasks by due date, priority, or creation order.

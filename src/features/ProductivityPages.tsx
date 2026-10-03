@@ -225,6 +225,7 @@ export function TodoPage({ data, setData }: Props) {
   >('none')
   const [expanded, setExpanded] = useState<string | null>(null)
   const [subtaskTitle, setSubtaskTitle] = useState('')
+  const [undoCompletion, setUndoCompletion] = useState<{ id: string; title: string; completedAt: number } | null>(null)
   const parseTags = (value: string) =>
     [
       ...new Set(
@@ -248,6 +249,11 @@ export function TodoPage({ data, setData }: Props) {
     setTaskSortState(value)
     try { localStorage.setItem('bloom-todo-sort', value) } catch { /* optional preference */ }
   }
+  useEffect(() => {
+    if (!undoCompletion) return
+    const timer = window.setTimeout(() => setUndoCompletion(null), 8000)
+    return () => window.clearTimeout(timer)
+  }, [undoCompletion])
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
@@ -668,7 +674,14 @@ export function TodoPage({ data, setData }: Props) {
                     ) {
                       // The physics body takes over; skip the small burst.
                     } else if (!task.done) burst(event.currentTarget)
-                    setData((current) => toggleTodo(current, task.id))
+                    if (task.done) {
+                      setUndoCompletion(null)
+                      setData((current) => toggleTodo(current, task.id))
+                    } else {
+                      const completedAt = Date.now()
+                      setUndoCompletion({ id: task.id, title: task.title, completedAt })
+                      setData((current) => toggleTodo(current, task.id, completedAt))
+                    }
                   }}
                 >
                   {waterDo && !task.done ? <svg viewBox="0 0 28 28" width="22" height="22" aria-hidden="true"><circle cx="14" cy="14" r="10" /><path d="M8 11c1-3 3-5 6-5" /></svg> : <Check size={18} />}
@@ -962,6 +975,25 @@ export function TodoPage({ data, setData }: Props) {
           )
         })}
       </ShowMore>
+      {undoCompletion && (
+        <p className="todo-undo" role="status">
+          Completed “{undoCompletion.title}”.
+          <button
+            type="button"
+            onClick={() => {
+              setData((current) => {
+                const task = current.todos.find((item) => item.id === undoCompletion.id)
+                return task?.done && task.completedAt === undoCompletion.completedAt
+                  ? toggleTodo(current, undoCompletion.id)
+                  : current
+              })
+              setUndoCompletion(null)
+            }}
+          >
+            Undo
+          </button>
+        </p>
+      )}
       {!tasks.length && taskQuery.trim() ? (
         <div className="calm-empty todo-search-empty" role="status">
           <p>No tasks found for “{taskQuery.trim()}”.</p>
