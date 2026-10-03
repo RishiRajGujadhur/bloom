@@ -10,7 +10,7 @@ export function readCoachHistory(): CoachSession[] {
   try {
     const value = JSON.parse(localStorage.getItem(KEY) ?? '[]')
     if (!Array.isArray(value)) return []
-    return value.filter(row => row && typeof row.id === 'string' && row.exercise in RULES && ['at', 'seconds', 'reps', 'score', 'joules', 'kcal', 'power', 'peak', 'leftWork', 'rightWork', 'leftAngle', 'rightAngle', 'compensation'].every(key => typeof row[key] === 'number' && Number.isFinite(row[key]) && row[key] >= 0)).slice(-100)
+    return value.filter(row => row && typeof row.id === 'string' && typeof row.exercise === 'string' && Object.hasOwn(RULES, row.exercise) && ['at', 'seconds', 'reps', 'score', 'joules', 'kcal', 'power', 'peak', 'leftWork', 'rightWork', 'leftAngle', 'rightAngle', 'compensation'].every(key => typeof row[key] === 'number' && Number.isFinite(row[key]) && row[key] >= 0)).slice(-100)
   } catch { return [] }
 }
 export function saveCoachSession(session: CoachSession) {

@@ -239,7 +239,7 @@ export function squatPose(depth: number, lean = 0): P[] {
 }
 
 export function personalRange(low: number, high: number) {
-  if (!Number.isFinite(low) || !Number.isFinite(high) || high - low < 12) return null
+  if (!Number.isFinite(low) || !Number.isFinite(high) || low < 0 || high > 180 || high - low < 12) return null
   return { low, high, down: low + (high - low) * .3, up: low + (high - low) * .8 }
 }
 
@@ -259,7 +259,7 @@ export function referencePose(ex: Exercise, phase: number, lineage: Lineage = 'Y
 export function loadPersonalRanges(): Partial<Record<Exercise, ReturnType<typeof personalRange>>> {
   try {
     const value = JSON.parse(localStorage.getItem('bloom-coach-ranges-v1') ?? '{}')
-    return Object.fromEntries(Object.entries(value).filter(([key, range]) => { const r = range as { low: number; high: number; down: number; up: number }; return key in RULES && r && [r.low, r.high, r.down, r.up].every(Number.isFinite) && r.low >= 0 && r.high <= 180 && r.low <= r.down && r.down + 5 < r.up && r.up <= r.high }))
+    return Object.fromEntries(Object.entries(value).filter(([key, range]) => { const r = range as { low: number; high: number; down: number; up: number }; return Object.hasOwn(RULES, key) && r && [r.low, r.high, r.down, r.up].every(Number.isFinite) && r.low >= 0 && r.high <= 180 && r.low <= r.down && r.down + 5 < r.up && r.up <= r.high }))
   } catch { return {} }
 }
 

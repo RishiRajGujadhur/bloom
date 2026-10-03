@@ -376,7 +376,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         if (generation.current !== run) return
         const v = video.current
         if (document.hidden) { hold.current.last = 0; lastFrame.current = 0; motion.current.points = null; gestureState.current = emptyGesture() }
-        else if (v && v.readyState >= 2 && v.currentTime !== videoTime && at - sampledAt > (latestOptions.current.battery ? 100 : 45)) {
+        else if (v && v.readyState >= 2 && v.currentTime !== videoTime && at - sampledAt > (latestOptions.current.battery ? 100 : ['taiChi', 'kungFu'].includes(exercise.current) ? 30 : 45)) {
           videoTime = v.currentTime; sampledAt = at
           try {
             const result = detector.current!.detectForVideo(v, at)
@@ -388,7 +388,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
                 if (context) { const image = context.createImageData(mask.width, mask.height); for (let i = 0; i < data.length; i++) image.data[i * 4 + 3] = Math.round((1 - Math.max(0, Math.min(1, data[i]))) * 190); context.putImageData(image, 0, 0) }
               } else canvas?.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
             } finally { if (result.close) result.close(); else result.segmentationMasks?.forEach(mask => mask.close()) }
-            if (handDetector.current && !latestOptions.current.battery && exercise.current === 'kungFu' && at - handSample.current > 100) { handSample.current = at; setHandScores(handDetector.current.detectForVideo(v, at).landmarks.map(hand => handForm(hand, handTargetRef.current))) }
+            if (handDetector.current && !latestOptions.current.battery && exercise.current === 'kungFu' && at - handSample.current > 100) { try { handSample.current = at; setHandScores(handDetector.current.detectForVideo(v, at).landmarks.map(hand => handForm(hand, handTargetRef.current))) } catch { handDetector.current.close(); handDetector.current = null; setHandScores([]); setHandStatus('Finger tracking stopped. Body tracking continues; retry when ready.') } }
             if (result.landmarks[0]?.length >= 33) frameRef.current(result.landmarks[0], result.worldLandmarks?.[0], at, true)
             else {
               hold.current.last = 0; counter.current.phase = 'up'; gestureState.current = emptyGesture(); setGesture({ id: null, progress: 0, latched: false })
