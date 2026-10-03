@@ -196,6 +196,23 @@ export function MindMapPage() {
     void m.renderData().then(() => m.fit())
   }
 
+  useEffect(() => {
+    if (tab !== 'map') return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || !event.shiftKey || event.altKey) return
+      if ((event.target as HTMLElement | null)?.closest?.('input, textarea, select, [contenteditable="true"]')) return
+      if (event.key.toLowerCase() === 'f') {
+        event.preventDefault()
+        void view.current?.fit()
+      } else if (event.key.toLowerCase() === 'e') {
+        event.preventDefault()
+        toggleAll(true)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [tab])
+
   usePageActions([
     { id: 'mm-expand', label: 'Expand every branch', icon: '🌳', run: () => toggleAll(true) },
     { id: 'mm-collapse', label: 'Collapse to main branches', icon: '🌱', run: () => toggleAll(false) },
@@ -245,13 +262,13 @@ export function MindMapPage() {
               <button type="button" aria-label="Collapse branches" onClick={() => toggleAll(false)}>
                 <Shrink size={16} />
               </button>
-              <button type="button" aria-label="Expand all" onClick={() => toggleAll(true)}>
+              <button type="button" aria-label="Expand all (Ctrl+Shift+E)" aria-keyshortcuts="Control+Shift+E" title="Expand all · Ctrl+Shift+E" onClick={() => toggleAll(true)}>
                 <Expand size={16} />
               </button>
             </>
           )}
           {on('zoom') && (
-            <button type="button" aria-label="Fit" onClick={() => void view.current?.fit()}>
+            <button type="button" aria-label="Fit (Ctrl+Shift+F)" aria-keyshortcuts="Control+Shift+F" title="Fit map · Ctrl+Shift+F" onClick={() => void view.current?.fit()}>
               <Network size={16} />
             </button>
           )}
