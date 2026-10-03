@@ -107,6 +107,9 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
   const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
   useKeepAwake(!options.battery && (mode === 'camera' || mode === 'demo'))
+  const [routine, setRoutine] = useState<{ exercise: Exercise; amount: number }[]>([{ exercise: 'boxing', amount: 10 }, { exercise: 'taiChi', amount: 60 }, { exercise: 'seatedTwist', amount: 10 }])
+  const [routineIndex, setRoutineIndex] = useState(-1)
+  const routineRef = useRef({ steps: routine, index: routineIndex }); routineRef.current = { steps: routine, index: routineIndex }
   const wearableAlert = useRef<(kind: SilentAlert) => void>(() => {})
   const receiveWearable = useCallback((notify: (kind: SilentAlert) => void) => { wearableAlert.current = notify }, [])
   const goalAlerted = useRef(false)
@@ -171,12 +174,14 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     resetSet()
   }
   const finish = () => {
+    setRoutineIndex(-1)
     const wasDemo = modeRef.current === 'demo'
     logSet(); release(); setMode('idle'); exitFocus()
     motion.current = { ...motion.current, watts: 0, left: 0, right: 0, arm: 0, points: null }; setMetrics(motion.current)
     if (!wasDemo) onFinish?.()
   }
-  const change = (next: Exercise) => {
+  const change = (next: Exercise, chained = false) => {
+    if (!chained) setRoutineIndex(-1)
     if (next === exercise.current) return
     if (counter.current.reps.length || Math.floor(hold.current.seconds)) logSet()
     rom.current.active = false; setRomStatus('Optional: calibrate your comfortable movement range'); exercise.current = next; setEx(next); setBpm(RULES[next].bpm ?? 45); resetSet(next)
@@ -184,6 +189,13 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       setAccessible(true); try { localStorage.setItem('bloom-coach-accessible', 'true') } catch { /* optional */ }
       recalibrate()
     }
+  }
+  const advanceRoutine = () => {
+    const state = routineRef.current
+    if (state.index < 0) return
+    const next = state.index + 1
+    if (next >= state.steps.length) { setRoutineIndex(-1); finish(); setMessage('Routine complete. Real camera sets are saved; demo sets are never saved.'); return }
+    logSet(); change(state.steps[next].exercise, true); setRoutineIndex(next); setMessage(`Routine step ${next + 1}: ${RULES[state.steps[next].exercise].name}`)
   }
   const nextExercise = (step: number) => {
     const list = GROUPS.flatMap((g) => g.exercises).filter((id) => !accessible || RULES[id].upper)
@@ -200,7 +212,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     // Gesture-driven entry may lack browser activation; the camera focus view still works.
     if (document.fullscreenEnabled && panel.current?.requestFullscreen) void panel.current.requestFullscreen().catch(() => {})
   }
-  actionRef.current = { previous: () => nextExercise(-1), next: () => nextExercise(1), log: logSet, finish, exit: exitFocus }
+  actionRef.current = { previous: () => nextExercise(-1), next: () => nextExercise(1), log: logSet, finish, exit: exitFocus, routineNext: advanceRoutine }
 
   const draw = (lm: P[], mirror: boolean) => {
     const c = canvas.current, g = c?.getContext('2d'); if (!c || !g) return
@@ -307,6 +319,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         }
       }
     }
+    const routineState = routineRef.current, amount = rule.timed ? Math.floor(hold.current.seconds) : counter.current.reps.length
+    if (options.routine && routineState.index >= 0 && amount >= (routineState.steps[routineState.index]?.amount ?? Infinity)) actionRef.current.routineNext?.()
   }
   const frameRef = useRef(frame)
   useLayoutEffect(() => { frameRef.current = frame })
@@ -442,6 +456,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         <button disabled={!history.length} onClick={() => download(new Blob([coachMarkdown(history)], { type: 'text/markdown;charset=utf-8' }), `bloom-form-coach-${new Date().toISOString().slice(0, 10)}.md`)}>Export Form Coach Markdown</button>
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
         <div className="fc-diagnostics"><h4>Offline training</h4><button disabled={preparingOffline} onClick={() => { setPreparingOffline(true); void prepareCoachOffline(setOfflineStatus).catch(error => setOfflineStatus(error instanceof Error ? error.message : 'Offline setup failed')).finally(() => setPreparingOffline(false)) }}>Prepare offline tracking</button><p role="status">{offlineStatus}</p><small>Processing stays local. Latency depends on your hardware; the GPU delegate does not guarantee WebGPU or zero latency.</small></div>
+        {options.routine && <div className="fc-diagnostics"><h4>Custom routine</h4>{routine.map((step, i) => <div className="fc-routine-step" key={i}><select aria-label={`Routine exercise ${i + 1}`} disabled={routineIndex >= 0} value={step.exercise} onChange={event => setRoutine(routine.map((row, index) => index === i ? { ...row, exercise: event.target.value as Exercise } : row))}>{Object.entries(RULES).filter(([, rule]) => !accessible || rule.upper).map(([id, rule]) => <option key={id} value={id}>{rule.name}</option>)}</select><input aria-label={`Routine amount ${i + 1}`} disabled={routineIndex >= 0} type="number" min="1" max="300" value={step.amount} onChange={event => setRoutine(routine.map((row, index) => index === i ? { ...row, amount: Math.max(1, Math.min(300, Number(event.target.value) || 1)) } : row))} /><span>{RULES[step.exercise].timed ? 'sec' : 'reps'}</span><button disabled={routineIndex >= 0} onClick={() => setRoutine(routine.filter((_, index) => index !== i))}>Remove</button></div>)}<button disabled={routine.length >= 12 || routineIndex >= 0} onClick={() => setRoutine([...routine, { exercise: ex, amount: 10 }])}>Add movement</button><button disabled={!ready || !routine.length || routineIndex >= 0} onClick={() => { change(routine[0].exercise, true); resetSet(routine[0].exercise); setRoutineIndex(0) }}>Start routine</button><button disabled={routineIndex < 0} onClick={() => setRoutineIndex(-1)}>Stop routine</button><p>{routineIndex >= 0 ? `Step ${routineIndex + 1} / ${routine.length} · goal ${routine[routineIndex]?.amount}` : 'Sets log and exercises change automatically at each goal.'}</p></div>}
         <CoachWearables enabled={options.haptics} onReady={receiveWearable} />
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />
         <div className="fc-diagnostics"><label>Side camera position <select value={depthDirection} onChange={event => { setDepthDirection(Number(event.target.value)); depth.current = null; setDepthStatus('Recalibrate after changing camera position') }}><option value="1">At your left side</option><option value="-1">At your right side</option></select></label><button disabled={!ready} onClick={() => { const side = sidePose.current; const calibration = side && performance.now() - side.at < 150 ? calibrateDepth(frontPose.current, side.pose, depthDirection) : null; depth.current = calibration; setDepthStatus(calibration ? '90° side-depth estimate calibrated. Keep both cameras fixed.' : 'Both feeds must show your head, shoulders and arms to calibrate.') }}>Calibrate two-camera depth</button><p>{depthStatus}</p><small>Approximate orthogonal projection. Side-view occlusions retain front-camera estimates; this is not flawless 3D reconstruction.</small></div>

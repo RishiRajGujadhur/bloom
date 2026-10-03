@@ -121,3 +121,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-background-mask{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);pointer-events:none}.fc-background-mask[hidden]{display:none}
 
 .fc-battery-badge{position:absolute;top:8px;left:8px;font-size:10px;background:#13261fe0;padding:4px;border-radius:6px;pointer-events:none}
+
+.fc-routine-step{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:6px 0}.fc-routine-step select{max-width:160px}.fc-routine-step input{width:52px}.fc-diagnostics input:not([type=color]):not([type=range]){max-width:100%}

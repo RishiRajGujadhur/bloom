@@ -36,7 +36,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Battery saver
 - [x] Silent wearable feedback and heart-rate connection
 - [x] Performance history and range-of-motion trends
-- [ ] Custom routine chaining
+- [x] Custom routine chaining
 
 ## Maintained
 
