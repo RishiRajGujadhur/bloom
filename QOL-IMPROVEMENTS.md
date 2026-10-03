@@ -10,7 +10,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Add one-tap task completion undo.
 - [x] Add a clear empty-search state with a reset action.
 - [x] Provide a compact task-density toggle.
-- [ ] Allow sorting tasks by due date, priority, or creation order.
+- [x] Allow sorting tasks by due date, priority, or creation order.
 
 ## Daybook modes
 

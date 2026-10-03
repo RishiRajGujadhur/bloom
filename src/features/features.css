@@ -223,6 +223,24 @@
 .todo-density-toggle {
   margin: 0 0 4px auto;
 }
+.todo-sort {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.todo-sort select {
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+}
 .task-list.is-compact .task-item {
   padding-top: 9px;
   padding-bottom: 9px;

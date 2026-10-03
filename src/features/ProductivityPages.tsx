@@ -238,6 +238,16 @@ export function TodoPage({ data, setData }: Props) {
   const [compactTasks, setCompactTasks] = useState(() => {
     try { return localStorage.getItem('bloom-todo-density') === 'compact' } catch { return false }
   })
+  const [taskSort, setTaskSortState] = useState<'default' | 'due' | 'priority' | 'created'>(() => {
+    try {
+      const saved = localStorage.getItem('bloom-todo-sort')
+      return saved === 'due' || saved === 'priority' || saved === 'created' ? saved : 'default'
+    } catch { return 'default' }
+  })
+  const setTaskSort = (value: typeof taskSort) => {
+    setTaskSortState(value)
+    try { localStorage.setItem('bloom-todo-sort', value) } catch { /* optional preference */ }
+  }
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
@@ -278,13 +288,17 @@ export function TodoPage({ data, setData }: Props) {
         matchesPerspective(data, task, perspective)
       )
     })
-    .sort(
-      (a, b) =>
+    .sort((a, b) => {
+      if (taskSort === 'due') return a.due.localeCompare(b.due) || priorityOrder[a.priority] - priorityOrder[b.priority]
+      if (taskSort === 'priority') return priorityOrder[a.priority] - priorityOrder[b.priority] || a.due.localeCompare(b.due)
+      if (taskSort === 'created') return planningOf(a).order - planningOf(b).order
+      return (
         Number(!a.done && b.due < dayKey()) -
           Number(!b.done && a.due < dayKey()) ||
         priorityOrder[a.priority] - priorityOrder[b.priority] ||
-        a.due.localeCompare(b.due),
-    )
+        a.due.localeCompare(b.due)
+      )
+    })
   const quick = parseQuickTask(title, dayKey())
   const addMany = (lines: string[]) => {
     const made = lines.map((line) => {
@@ -598,6 +612,15 @@ export function TodoPage({ data, setData }: Props) {
       >
         {compactTasks ? 'Comfortable rows' : 'Compact rows'}
       </button>
+      <label className="todo-sort">
+        Sort tasks
+        <select aria-label="Sort tasks" value={taskSort} onChange={(event) => setTaskSort(event.target.value as typeof taskSort)}>
+          <option value="default">Recommended</option>
+          <option value="due">Due date</option>
+          <option value="priority">Priority</option>
+          <option value="created">Created order</option>
+        </select>
+      </label>
       <ShowMore as="ul" key={`${filter}-${tagFilter}`} className={`task-list${compactTasks ? ' is-compact' : ''}`} initial={10} label="tasks">
         {tasks.map((task) => {
           const completedSteps = task.subtasks.filter(
