@@ -397,23 +397,24 @@ export function JournalContainer() {
                       </small>
                     </button>
                     <div className="daybook-page-tools">
-                      <button type="button" title="Duplicate this page" onClick={() => {
+                      <button type="button" aria-label={`Duplicate ${page.modeTitle}`} title="Duplicate this page" onClick={() => {
                         const now = new Date().toISOString()
                         persist({ ...page, id: crypto.randomUUID(), modeTitle: `${page.modeTitle} (copy)`, createdAt: now, updatedAt: now, flow: undefined }, false)
                       }}>
                         ⧉
                       </button>
-                      <button type="button" title={page.private ? 'Show on the home screen' : 'Blur on the home screen'} aria-pressed={Boolean(page.private)} onClick={() => persist({ ...page, private: !page.private }, false)}>
+                      <button type="button" aria-label={`${page.private ? 'Show' : 'Hide'} ${page.modeTitle} preview on the home screen`} title={page.private ? 'Show on the home screen' : 'Blur on the home screen'} aria-pressed={Boolean(page.private)} onClick={() => persist({ ...page, private: !page.private }, false)}>
                         {page.private ? '🔒' : '🔓'}
                       </button>
-                      <button type="button" title={page.pinned ? 'Unpin' : 'Pin to the front'} aria-pressed={Boolean(page.pinned)} onClick={() => persist({ ...page, pinned: !page.pinned }, false)}>
+                      <button type="button" aria-label={`${page.pinned ? 'Unpin' : 'Pin'} ${page.modeTitle}`} title={page.pinned ? 'Unpin' : 'Pin to the front'} aria-pressed={Boolean(page.pinned)} onClick={() => persist({ ...page, pinned: !page.pinned }, false)}>
                         📌
                       </button>
-                      <button type="button" title="Copy the text" onClick={(e) => { void navigator.clipboard?.writeText(text); e.currentTarget.textContent = '✓' }}>
+                      <button type="button" aria-label={`Copy text from ${page.modeTitle}`} title="Copy the text" onClick={(e) => { void navigator.clipboard?.writeText(text); e.currentTarget.textContent = '✓' }}>
                         📋
                       </button>
                       <button
                         type="button"
+                        aria-label={`Download ${page.modeTitle} as Markdown`}
                         title="Download as Markdown"
                         onClick={() => {
                           const md = `# ${page.modeTitle}\n\n_${new Date(page.createdAt).toLocaleDateString(language, { dateStyle: 'full' })}${page.mood ? ` · ${page.mood}` : ''}_\n\n${text}\n`
@@ -426,7 +427,7 @@ export function JournalContainer() {
                       >
                         ⬇
                       </button>
-                      <button type="button" title="Delete this page" onClick={() => removePage(page)}>
+                      <button type="button" aria-label={`Delete ${page.modeTitle}`} title="Delete this page" onClick={() => removePage(page)}>
                         🗑
                       </button>
                     </div>
