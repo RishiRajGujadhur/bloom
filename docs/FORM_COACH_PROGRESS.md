@@ -21,7 +21,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Kung Fu hand/wrist and Karate block guidance
 - [x] Reaction-time visual drills
 - [x] Energy-to-RPG damage
-- [ ] Independent limb workload/fatigue gauges
+- [x] Independent limb workload/fatigue gauges
 - [ ] Breathing sync visualizer
 - [ ] Personal-best ghost replay
 - [ ] Perfect-form XP and local journal
