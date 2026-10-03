@@ -100,7 +100,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Make exercise feedback and score changes announce accessibly.
 - [ ] Add an optional reduced-animation lesson setting.
 - [x] Add a review-queue count and direct start action.
-- [ ] Clarify why lessons are unavailable when hearts are depleted.
+- [x] Clarify why lessons are unavailable when hearts are depleted.
 
 ## Verification and polish
 

@@ -373,3 +373,12 @@ html[data-theme='matrix'] .avatar-option[aria-checked='true'] {
   color: #39ff6a !important;
 }
 .en-wod-copy { border: 0; background: none; cursor: pointer; font-size: 14px; }
+.en-heart-notice {
+  margin: 0 0 8px;
+  padding: 8px 11px;
+  border: 1px solid color-mix(in oklab, var(--warning) 28%, var(--border-color));
+  border-radius: 10px;
+  background: var(--warning-soft);
+  color: var(--text-primary);
+  font-size: 12px;
+}

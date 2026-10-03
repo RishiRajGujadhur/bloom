@@ -61,6 +61,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
   const [tab, setTab] = useState('learn')
   const [session, setSession] = useState<Session | null>(null)
   const [summary, setSummary] = useState<{ xp: number; acc: number; badges: string[] } | null>(null)
+  const [lessonNotice, setLessonNotice] = useState('')
   const [, tick] = useState(0)
 
   // New day / new week housekeeping: freezes and league promotion.
@@ -81,9 +82,11 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
 
   const start = (s: Session) => {
     if (s.kind === 'lesson' && on('hearts') && hearts.hearts <= 0) {
+      setLessonNotice('Lessons need at least one heart. Hearts refill over time; you can still practice without hearts.')
       setTab('shop')
       return
     }
+    setLessonNotice('')
     setSummary(null)
     setSession(s)
   }
@@ -140,12 +143,15 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
   }
 
   const header = (
-    <div className="en-stats" aria-label="Your stats">
-      <span className="en-stat flame" data-hint="Day streak"><Flame size={18} /> {days}</span>
-      <span className="en-stat gem" data-hint="Gems"><Gem size={18} /> {store.gems}</span>
-      {on('hearts') && <span className="en-stat heart" data-hint="Hearts"><Heart size={18} fill="currentColor" /> {hearts.hearts}</span>}
-      <span className="en-stat xp" data-hint="XP today"><Zap size={18} /> {xp}</span>
-    </div>
+    <>
+      {lessonNotice && <p className="en-heart-notice" role="status">{lessonNotice}</p>}
+      <div className="en-stats" aria-label="Your stats">
+        <span className="en-stat flame" data-hint="Day streak"><Flame size={18} /> {days}</span>
+        <span className="en-stat gem" data-hint="Gems"><Gem size={18} /> {store.gems}</span>
+        {on('hearts') && <span className="en-stat heart" data-hint="Hearts"><Heart size={18} fill="currentColor" /> {hearts.hearts}</span>}
+        <span className="en-stat xp" data-hint="XP today"><Zap size={18} /> {xp}</span>
+      </div>
+    </>
   )
 
   const learnTab = () => (
