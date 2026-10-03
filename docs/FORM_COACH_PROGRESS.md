@@ -17,7 +17,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Impact deceleration grading
 - [x] Combo rhythm consistency
 - [x] Tai Chi flow grading and Yang/Chen reference selection
-- [ ] Boxing strike classification and guard feedback
+- [x] Boxing strike classification and guard feedback
 - [ ] Kung Fu hand/wrist and Karate block guidance
 - [ ] Reaction-time visual drills
 - [ ] Energy-to-RPG damage

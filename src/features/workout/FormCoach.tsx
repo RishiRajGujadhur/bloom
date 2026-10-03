@@ -7,7 +7,7 @@ import { useKeepAwake } from '../../platform/presence'
 import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
-import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick } from './coachAnalysis'
+import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick } from './coachAnalysis'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -56,6 +56,9 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const [target, setTarget] = useState(10)
   const [bpm, setBpm] = useState(45)
   const [span, setSpan] = useState(40)
+  const boxing = useRef(emptyBoxing())
+  const [strikes, setStrikes] = useState(emptyBoxing)
+  const [lead, setLead] = useState<'left' | 'right'>('left')
   const [lineage, setLineage] = useState<Lineage>('Yang')
   const flow = useRef(emptyFlow())
   const [flowScore, setFlowScore] = useState<number | null>(null)
@@ -79,7 +82,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
-    flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
+    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = { ...motion.current, points: null }; setLabel('')
   }
   const release = useCallback(() => {
@@ -226,6 +229,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
     setTrailFrames(frames.current.slice(-24))
     setLabel(reading.label); setFault(reading.faults[0] ?? null)
     motion.current = motionTick(motion.current, lm, world, at, bodyweight, span / 100, accessible || !!RULES[exercise.current].upper); setMetrics(motion.current)
+    if (exercise.current === 'boxing') { boxing.current = boxingTick(boxing.current, lm, at, lead); setStrikes(boxing.current); if (options.guard && !boxing.current.guard && motion.current.left + motion.current.right > .3) reading.faults.push('Return the other hand to your comfortable guard') }
     flow.current = flowTick(flow.current, motion.current); setFlowScore(flow.current.score)
     analysis.current = analysisTick(analysis.current, lm, motion.current, at); setCombat(analysis.current)
     if (rule.timed) {
@@ -326,7 +330,8 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
       <div className="fc-side"><div className="fc-pacing"><RepRing count={RULES[ex].timed ? held : reps.length} target={target} timed={!!RULES[ex].timed} /><div className="fc-metronome"><strong>Rhythm Metronome</strong><div className={ready ? 'fc-beat running' : 'fc-beat'} style={{ '--fc-beat': `${60000 / bpm}ms` } as CSSProperties} aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ height: `${12 + (4 - Math.abs(i - 4)) * 7}px` }} />)}</div><label>Pace <input type="number" aria-label="Metronome BPM" min="20" max="140" value={bpm} onChange={(e) => setBpm(Math.max(20, Math.min(140, Number(e.target.value) || 40)))} /> BPM</label></div></div>
         {!RULES[ex].timed && <label className="fc-target">Target reps <select value={target} onChange={(e) => setTarget(Number(e.target.value))}>{[5, 8, 10, 12, 15, 20, 30].map((n) => <option key={n}>{n}</option>)}</select></label>}
         {options.energy && <div className="fc-energy" aria-label="Energy metrics"><h4>Energy Metrics {mode === 'demo' && <small>DEMO</small>}</h4><dl><div><dt>Est. Kcal</dt><dd>{metrics.kcal.toFixed(2)}</dd></div><div><dt>Est. kinetic work (J)</dt><dd>{metrics.joules.toFixed(1)}</dd></div><div><dt>Average Power (W) · est.</dt><dd>{(metrics.seconds ? metrics.joules / metrics.seconds : 0).toFixed(1)}</dd></div><div><dt>Active Power (W) · est.</dt><dd>{Math.round(metrics.watts)}</dd></div><div><dt>Motion Intensity</dt><dd>{metrics.left + metrics.right > 2 ? 'High' : metrics.left + metrics.right > .5 ? 'Moderate' : 'Low'}</dd></div><div><dt>Left / right hand · est. m/s</dt><dd>{metrics.left.toFixed(2)} / {metrics.right.toFixed(2)}</dd></div><div><dt>Arm velocity · est. m/s</dt><dd>{metrics.arm.toFixed(2)}</dd></div></dl><small>Arm-mass and velocity estimates, not measured mechanical work. Calories use a motion-based activity proxy, adjusted for seated upper-body exercise. {metrics.source === 'world' ? 'Using model-estimated 3D coordinates.' : 'Scale estimated from shoulder span.'}</small><label>Shoulder span (cm) <input type="number" min="20" max="70" value={span} onChange={(e) => { setSpan(Math.max(20, Math.min(70, Number(e.target.value) || 40))); motion.current.points = null }} /></label></div>}
-        {ex === 'taiChi' && <div className="fc-diagnostics"><label>Reference style <select aria-label="Tai Chi lineage" value={lineage} onChange={e => setLineage(e.target.value as Lineage)}><option>Yang</option><option>Chen</option></select></label><p>{lineage === 'Yang' ? 'Broad, even sweeping guide' : 'Circular, spiralling guide'}</p>{options.flow && <p>Flow smoothness: {flowScore == null ? 'Move continuously to grade flow' : `${Math.round(flowScore)} / 100`}</p>}<small>Illustrative style presets; not validated lineage instruction.</small></div>}
+        {ex === 'boxing' && <div className="fc-diagnostics"><h4>Boxing · camera estimates</h4><label>Lead hand <select value={lead} onChange={e => setLead(e.target.value as 'left' | 'right')}><option value="left">Left</option><option value="right">Right</option></select></label><p>{strikes.strike} · {Object.entries(strikes.counts).map(([name, count]) => `${name}: ${count}`).join(' / ')}</p>{options.guard && <p>{strikes.guard ? 'Guard near face' : 'Return the non-striking hand to guard'}</p>}<small>Heuristic classification; angled or occluded strikes may be missed.</small></div>}
+        {ex === 'taiChi'  && <div className="fc-diagnostics"><label>Reference style <select aria-label="Tai Chi lineage" value={lineage} onChange={e => setLineage(e.target.value as Lineage)}><option>Yang</option><option>Chen</option></select></label><p>{lineage === 'Yang' ? 'Broad, even sweeping guide' : 'Circular, spiralling guide'}</p>{options.flow && <p>Flow smoothness: {flowScore == null ? 'Move continuously to grade flow' : `${Math.round(flowScore)} / 100`}</p>}<small>Illustrative style presets; not validated lineage instruction.</small></div>}
         {options.rhythm && ex === 'boxing' && <div className="fc-diagnostics"><h4>Combo rhythm</h4><p>{rhythmGrade(reps.map(rep => rep.at)) ? `${rhythmGrade(reps.map(rep => rep.at))!.score}% consistency · ${rhythmGrade(reps.map(rep => rep.at))!.gap}ms average gap` : 'Complete three strikes to grade timing'}</p></div>}
         {options.snap && ['boxing', 'karate', 'kungFu'].includes(ex) && <div className="fc-diagnostics"><h4>Strike deceleration · estimate</h4><p>Snap proxy: {combat.snap ?? '—'} / 100 · sampled slowdown: {combat.stopMs == null ? '—' : `${Math.round(combat.stopMs)} ms`}</p><small>Camera sampling cannot resolve precise impact or contact force.</small></div>}
         <div className="fc-settings"><h4>Form Coach Settings</h4><label><input type="checkbox" checked={gestures} onChange={(e) => { setGestures(e.target.checked); gestureState.current = emptyGesture() }} /> Hand-hover controls</label><label><input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> Skeletal overlay</label>{Object.entries(COACH_OPTIONS).map(([key, name]) => <label key={key}><input type="checkbox" checked={options[key as keyof typeof options]} onChange={(e) => setOptions(previous => ({ ...previous, [key]: e.target.checked }))} />{name}</label>)}<p className="fc-small">Audio feedback: off. All coaching is visual or silent.</p><small>Hold either hand on a button for ~3 seconds. Move away to rearm. Next workout changes the exercise and logs completed reps first.</small></div>
