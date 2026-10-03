@@ -389,7 +389,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
               } else canvas?.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
             } finally { if (result.close) result.close(); else result.segmentationMasks?.forEach(mask => mask.close()) }
             if (handDetector.current && !latestOptions.current.battery && exercise.current === 'kungFu' && at - handSample.current > 100) { handSample.current = at; setHandScores(handDetector.current.detectForVideo(v, at).landmarks.map(hand => handForm(hand, handTargetRef.current))) }
-            if (result.landmarks[0]) frameRef.current(result.landmarks[0], result.worldLandmarks?.[0], at, true)
+            if (result.landmarks[0]?.length >= 33) frameRef.current(result.landmarks[0], result.worldLandmarks?.[0], at, true)
             else {
               hold.current.last = 0; counter.current.phase = 'up'; gestureState.current = emptyGesture(); setGesture({ id: null, progress: 0, latched: false })
               motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current); setBalance(null); setTrackingPaused(true); lastFrame.current = 0; setLabel('No upper body detected · counting held')

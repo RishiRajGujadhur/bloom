@@ -51,6 +51,8 @@ not a medical prescription or a validated martial-arts master.
 
 - [x] Radial gesture dwell progress and optional floating fullscreen metrics
 
+- [x] Post-set torso alignment and elbow excursion diagram
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation

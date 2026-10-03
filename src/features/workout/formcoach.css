@@ -132,3 +132,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 
 .fc-toolbar .fc-actions{grid-template-columns:1fr 1fr}.fc-toolbar{display:flex;justify-content:flex-end}.fc-toolbar .fc-actions{max-width:650px}.fc-tools{width:100%;min-width:0}.fc-tools summary{padding:12px;border:1px solid #ffffff30;border-radius:12px;font-size:12px;cursor:pointer;color:#7df9ff}.fc-tool-grid{display:grid;gap:12px;margin-top:12px}.fc-settings{padding:12px;border:1px solid #ffffff30;border-radius:12px}.fc-tool-grid .fc-diagnostics{box-sizing:border-box}
 @media(max-width:650px){.fc-toolbar .fc-actions{grid-template-columns:1fr}.fc-toolbar{display:block}}
+
+.fc-motion-map{width:100%;height:100px}
