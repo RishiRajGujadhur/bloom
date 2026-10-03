@@ -266,6 +266,32 @@
   background: var(--accent-soft);
   color: var(--accent-color);
 }
+.urge-recent {
+  width: 100%;
+  margin-top: 12px;
+}
+.urge-recent h3 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.urge-recent ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.urge-recent li {
+  display: grid;
+  gap: 2px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+}
+.urge-recent li strong { color: var(--text-primary); }
+.urge-recent li span,
+.urge-recent li time { color: var(--text-muted); }
 .urge-privacy svg {
   flex: 0 0 auto;
 }

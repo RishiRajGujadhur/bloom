@@ -26,7 +26,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Add a clear empty state with a direct habit-creation path.
 - [x] Make intensity selection announce the selected value accessibly.
 - [ ] Add a quick retry action after logging an urge.
-- [ ] Show recent logging history without entering patterns.
+- [x] Show recent logging history without entering patterns.
 - [ ] Add stronger confirmation feedback after a log is saved.
 - [ ] Persist the last selected urge-tracker view.
 

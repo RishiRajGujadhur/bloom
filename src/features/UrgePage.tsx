@@ -311,6 +311,22 @@ export function UrgePage({ data, setData }: Props) {
                 device.
               </span>
             </div>
+            {data.urgeEvents.length > 0 && (
+              <section className="urge-recent" aria-label="Recent urge logs">
+                <h3>Recent logs</h3>
+                <ul>
+                  {[...data.urgeEvents].sort((a, b) => b.timestamp - a.timestamp).slice(0, 3).map((event) => (
+                    <li key={event.id}>
+                      <strong>{data.urgeHabits.find((habit) => habit.id === event.habitId)?.title ?? 'Archived habit'}</strong>
+                      <span>{event.kind} · intensity {event.intensity}/5</span>
+                      <time dateTime={new Date(event.timestamp).toISOString()}>
+                        {new Date(event.timestamp).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                      </time>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </aside>
         </div>
       )}
