@@ -96,3 +96,6 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 @media (max-width: 1100px) { .fc-stage { grid-template-columns: minmax(145px,.75fr) minmax(0,1.2fr); } .fc-side { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; align-items: start; } .fc-side > .fc-small, .fc-side > .fc-message { grid-column: 1 / -1; } }
 @media (max-width: 650px) { .fc-stage { grid-template-columns: 1fr; } .fc-side { grid-template-columns: 1fr; } .fc-library { grid-template-columns: 1fr 1fr; } .fc-library .fc-small, .fc-reference { grid-column: 1 / -1; } .fc-library .fc-ex { grid-template-columns: 1fr; } .fc { padding: 12px; } .fc-camera-controls { gap: 4px; left: 5px; right: 5px; bottom: 5px; } .fc-camera-controls button { padding: 4px; font-size: 10px; } }
 @media (prefers-reduced-motion: reduce) { .fc-beat.running i { animation: none; opacity: .9; } .fc-ring-fill { transition: none; } }
+
+.fc-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.7fr);gap:12px;align-items:start}.fc-split .fc-reference{margin:0;height:100%;min-height:260px}.fc-split .fc-reference canvas{width:100%;height:auto}.fc-split .fc-camera-panel{min-width:0}
+@media(max-width:800px){.fc-split{grid-template-columns:1fr}.fc-split .fc-reference{min-height:0}}
