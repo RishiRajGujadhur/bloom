@@ -13,7 +13,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Seated press, chest fly and chair squat exercise presets
 - [x] Granular persistent Form Coach settings
 - [x] Adaptive seated calorie estimates, kinetic joules and average power
-- [ ] Strike trajectory SVG trails
+- [x] Strike trajectory SVG trails
 - [ ] Impact deceleration grading
 - [ ] Combo rhythm consistency
 - [ ] Tai Chi flow grading and Yang/Chen reference selection
