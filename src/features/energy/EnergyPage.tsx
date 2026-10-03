@@ -67,6 +67,9 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
             </div>
           )}
         </div>
+        <p className="energy-range-caption" aria-live="polite">
+          Showing the last {days} days through {new Date(`${today}T12:00:00`).toLocaleDateString()}.
+        </p>
         {flow.links.length < 2 ? (
           <p className="energy-empty">
             Not enough to draw yet. Log sleep, finish a focus session, or add a few hours below and your week will start to flow.

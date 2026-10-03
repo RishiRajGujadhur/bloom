@@ -90,7 +90,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Allow editing a logged activity instead of removing and re-adding it.
 - [ ] Add a quick undo after removing a manual log.
 - [x] Add an accessible tabular alternative for the flow chart.
-- [ ] Explain the selected date range beside the chart.
+- [x] Explain the selected date range beside the chart.
 - [ ] Add a clearer empty-state link to relevant logging actions.
 
 ## English

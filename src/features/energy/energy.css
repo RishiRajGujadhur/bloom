@@ -181,3 +181,8 @@
   color: var(--text-primary);
   font-weight: 650;
 }
+.energy-range-caption {
+  margin: -4px 0 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
