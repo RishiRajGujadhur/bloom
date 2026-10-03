@@ -2,7 +2,7 @@ import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Transformer } from 'markmap-lib'
 import { Markmap } from 'markmap-view'
-import { BookOpen, Copy, Download, Expand, ImageDown, Maximize, Network, Plus, Shrink, Trash2 } from 'lucide-react'
+import { BookOpen, Check, Copy, Download, Expand, ImageDown, Maximize, Network, Plus, Shrink, Trash2 } from 'lucide-react'
 import { Rail, Slider, Studio, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { journalText } from '../../search/db'
@@ -248,7 +248,13 @@ export function MindMapPage() {
               requestAnimationFrame(() => ta.setSelectionRange(Math.max(lineStart, a + (e.shiftKey ? Math.min(0, delta) : 2)), b + delta))
             }}
           />
-          <p className="studio-empty">Use # for the centre, ## for branches, - for leaves. {branches(map.md)} branches.</p>
+          <div className="mm-editor-footer">
+            <p className="studio-empty">Use # for the centre, ## for branches, - for leaves. {branches(map.md)} branches.</p>
+            <span className="mm-save-status" aria-label={`Saved locally at ${new Date(map.updatedAt).toLocaleTimeString()}`}>
+              <Check size={14} aria-hidden="true" />
+              Saved locally · <time dateTime={new Date(map.updatedAt).toISOString()}>{new Date(map.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</time>
+            </span>
+          </div>
         </div>
       )}
       <div className="studio-card mm-canvas" ref={wrap}>

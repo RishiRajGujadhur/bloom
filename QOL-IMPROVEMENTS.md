@@ -42,7 +42,7 @@ Items are intentionally small enough to review and verify independently.
 ## Mind maps
 
 - [x] Add keyboard-accessible shortcuts for common map actions.
-- [ ] Add a visible unsaved/saved indicator for edits.
+- [x] Add a visible unsaved/saved indicator for edits.
 - [ ] Add an undo action for accidental map deletion.
 - [x] Make export actions announce completion.
 - [x] Add a reset-zoom / fit-map action near the map.
