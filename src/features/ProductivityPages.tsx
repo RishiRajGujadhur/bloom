@@ -924,7 +924,14 @@ export function TodoPage({ data, setData }: Props) {
           )
         })}
       </ShowMore>
-      {!tasks.length && (
+      {!tasks.length && taskQuery.trim() ? (
+        <div className="calm-empty todo-search-empty" role="status">
+          <p>No tasks found for “{taskQuery.trim()}”.</p>
+          <button type="button" className="quiet-button" onClick={() => setTaskQuery('')}>
+            Clear search
+          </button>
+        </div>
+      ) : !tasks.length && (
         <div className="calm-empty">
           <Sprite name="fox" label="Resting fox" size={64} />
           <p>
