@@ -450,3 +450,12 @@
     font-size: 0;
   }
 }
+.urge-empty {
+  margin: 12px 0;
+  padding: 16px;
+  border: 1px dashed var(--border-color);
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--accent-color) 5%, var(--bg-surface));
+  color: var(--text-secondary);
+  text-align: center;
+}

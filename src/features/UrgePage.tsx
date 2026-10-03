@@ -152,6 +152,11 @@ export function UrgePage({ data, setData }: Props) {
             {step === 1 && (
               <div className="urge-step">
                 <h2>What showed up?</h2>
+                {habits.length === 0 ? (
+                  <p className="urge-empty" role="status">
+                    Add a habit you want to interrupt to start tracking urges.
+                  </p>
+                ) : (
                 <div className="urge-habit-grid">
                   {habits.map((habit) => (
                     <article key={habit.id}>
@@ -179,7 +184,8 @@ export function UrgePage({ data, setData }: Props) {
                     </article>
                   ))}
                 </div>
-                <details className="urge-manage">
+                )}
+                <details className="urge-manage" open={habits.length === 0}>
                   <summary>Manage habits</summary>
                   <form
                     onSubmit={(event) => {

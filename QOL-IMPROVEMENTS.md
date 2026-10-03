@@ -23,7 +23,7 @@ Items are intentionally small enough to review and verify independently.
 
 ## Urges
 
-- [ ] Add a clear empty state with a direct habit-creation path.
+- [x] Add a clear empty state with a direct habit-creation path.
 - [ ] Make intensity selection announce the selected value accessibly.
 - [ ] Add a quick retry action after logging an urge.
 - [ ] Show recent logging history without entering patterns.
