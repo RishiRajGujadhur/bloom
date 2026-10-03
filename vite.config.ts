@@ -21,6 +21,9 @@ const isolation = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-E
 // https://vite.dev/config/
 export default defineConfig({
   define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()), __COMMIT__: JSON.stringify(commit) },
+  optimizeDeps: {
+    include: ['@react-three/drei', 'gsap/Draggable'],
+  },
   server: { headers: isolation },
   preview: { headers: isolation },
   plugins: [
