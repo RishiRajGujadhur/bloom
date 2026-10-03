@@ -173,11 +173,12 @@ export class RepCounter {
   private low = 180
   private seen = new Set<string>()
   ex: Exercise
+  range: { down: number; up: number; low: number } | null = null
   constructor(ex: Exercise) {
     this.ex = ex
   }
   push(r: Reading, t: number): Rep | null {
-    const rule = RULES[this.ex]
+    const rule = { ...RULES[this.ex], ...this.range }
     if (rule.timed) return null
     if (this.phase === 'down') {
       this.low = Math.min(this.low, r.metric)
@@ -189,7 +190,7 @@ export class RepCounter {
       this.seen = new Set(r.faults)
     } else if (this.phase === 'down' && r.metric > rule.up) {
       this.phase = 'up'
-      const depthBonus = Math.max(0, Math.min(1, (rule.down - this.low) / 25))
+      const depthBonus = Math.max(0, Math.min(1, (rule.down - this.low) / (this.range ? Math.max(1, rule.down - this.range.low) : 25)))
       const score = Math.round(Math.max(0, 70 + depthBonus * 30 - this.seen.size * 25))
       const rep = { depth: Math.round(this.low), faults: [...this.seen], score, at: t }
       this.reps.push(rep)
@@ -225,4 +226,9 @@ export function squatPose(depth: number, lean = 0): P[] {
   put(31, 32, { x: ankle.x + 0.05, y: 0.92 })
   lm[J.nose] = { x: sh.x + 0.05 * Math.sin(torso) + 0.02, y: sh.y - 0.08, visibility: 0.99 }
   return lm
+}
+
+export function personalRange(low: number, high: number) {
+  if (!Number.isFinite(low) || !Number.isFinite(high) || high - low < 12) return null
+  return { low, down: low + (high - low) * .3, up: low + (high - low) * .8 }
 }

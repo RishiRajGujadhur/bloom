@@ -4,7 +4,7 @@ import { OneEuroFilter } from '1eurofilter'
 import { Camera, Maximize, Play } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
-import { BONES, RULES, RepCounter, alignment, demoPose, exerciseVisible, read, readUpper, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline } from './formModel'
+import { BONES, RULES, RepCounter, alignment, demoPose, exerciseVisible, read, readUpper, personalRange, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { CoachReference } from './CoachReference'
 
@@ -51,6 +51,9 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const [target, setTarget] = useState(10)
   const [bpm, setBpm] = useState(45)
   const [span, setSpan] = useState(40)
+  const [romStatus, setRomStatus] = useState('Optional: calibrate your comfortable movement range')
+  const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
+  const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
   useKeepAwake(mode === 'camera' || mode === 'demo')
   const video = useRef<HTMLVideoElement>(null), canvas = useRef<HTMLCanvasElement>(null), panel = useRef<HTMLDivElement>(null)
   const detector = useRef<Detector | null>(null), stream = useRef<MediaStream | null>(null)
@@ -63,7 +66,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
-    counter.current = new RepCounter(next); setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
+    counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = { ...motion.current, points: null }; setLabel('')
   }
   const release = useCallback(() => {
@@ -107,7 +110,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const change = (next: Exercise) => {
     if (next === exercise.current) return
     if (counter.current.reps.length || Math.floor(hold.current.seconds)) logSet()
-    exercise.current = next; setEx(next); setBpm(RULES[next].bpm ?? 45); resetSet(next)
+    rom.current.active = false; setRomStatus('Optional: calibrate your comfortable movement range'); exercise.current = next; setEx(next); setBpm(RULES[next].bpm ?? 45); resetSet(next)
     if (RULES[next].upper && !accessible) {
       setAccessible(true); try { localStorage.setItem('bloom-coach-accessible', 'true') } catch { /* optional */ }
       recalibrate()
@@ -195,6 +198,16 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
     }
     const rule = RULES[exercise.current]
     const reading = rule.upper ? readUpper(exercise.current, lm, baseline.current) : read(exercise.current, lm)
+    if (rom.current.active) {
+      const r = rom.current; r.seconds += dt; r.low = Math.min(r.low, reading.metric); r.high = Math.max(r.high, reading.metric)
+      setRomStatus(`Move gently through your comfortable range · ${Math.max(0, Math.ceil(8 - r.seconds))}s`)
+      if (r.seconds >= 8) {
+        r.active = false; const range = personalRange(r.low, r.high)
+        ranges.current[exercise.current] = range; counter.current.range = range; counter.current.phase = 'up'
+        setRomStatus(range ? `Personal range saved: ${Math.round(r.low)}–${Math.round(r.high)}° · scoring uses your range` : 'Range too small to distinguish reps. Retry or use default thresholds.')
+      }
+      return
+    }
     setLabel(reading.label); setFault(reading.faults[0] ?? null)
     motion.current = motionTick(motion.current, lm, world, at, bodyweight, span / 100); setMetrics(motion.current)
     if (rule.timed) {
@@ -287,6 +300,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
         <div className="fc-asymmetry"><strong>Asymmetry Alert <small>silent Â· relative to your neutral position</small></strong><div className="fc-balance-track" role="meter" aria-label="Upper-body asymmetry" aria-valuemin={-100} aria-valuemax={100} aria-valuenow={Math.round((balance?.value ?? 0) * 100)} aria-valuetext={silentStatus}><i style={{ left: `${50 + (balance?.value ?? 0) * 45}%`, background: balance?.alert ? '#ffd43b' : '#5dffc0' }} /></div><span>{silentStatus}</span></div>
         <p className="fc-instructions">{accessible ? 'Face camera. Calibrated for upper-body forms.' : 'Face camera. Keep the exercise joints visible.'}</p>
         <div className="fc-calibration"><span>{calibration < 1 && ready ? `Stay in your comfortable neutral position Â· ${Math.round(calibration * 100)}%` : calibration >= 1 ? 'Neutral position calibrated' : 'Calibration begins when you start'}</span><button type="button" className="fc-ghost" onClick={recalibrate} disabled={!ready}>Recalibrate</button></div>
+        {!RULES[ex].timed && <div className="fc-calibration"><span role="status">{romStatus}</span><button type="button" disabled={!ready || calibration < 1} onClick={() => { rom.current = { active: true, seconds: 0, low: Infinity, high: -Infinity }; resetSet(); setRomStatus('Move through your comfortable range for 8 seconds') }}>Calibrate movement range</button></div>}
       </div>
       <div className="fc-side"><div className="fc-pacing"><RepRing count={RULES[ex].timed ? held : reps.length} target={target} timed={!!RULES[ex].timed} /><div className="fc-metronome"><strong>Rhythm Metronome</strong><div className={ready ? 'fc-beat running' : 'fc-beat'} style={{ '--fc-beat': `${60000 / bpm}ms` } as CSSProperties} aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ height: `${12 + (4 - Math.abs(i - 4)) * 7}px` }} />)}</div><label>Pace <input type="number" aria-label="Metronome BPM" min="20" max="140" value={bpm} onChange={(e) => setBpm(Math.max(20, Math.min(140, Number(e.target.value) || 40)))} /> BPM</label></div></div>
         {!RULES[ex].timed && <label className="fc-target">Target reps <select value={target} onChange={(e) => setTarget(Number(e.target.value))}>{[5, 8, 10, 12, 15, 20, 30].map((n) => <option key={n}>{n}</option>)}</select></label>}

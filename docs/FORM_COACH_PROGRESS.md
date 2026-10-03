@@ -7,7 +7,7 @@ not a medical prescription or a validated martial-arts master.
 
 ## Requested features
 
-- [ ] Personal seated range-of-motion calibration and adaptive rep thresholds
+- [x] Personal seated range-of-motion calibration and adaptive rep thresholds
 - [ ] Dynamic side-by-side reference view
 - [ ] Detailed wireframe with live joint-angle callouts
 - [ ] Seated press, chest fly and chair squat exercise presets
