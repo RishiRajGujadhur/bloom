@@ -31,7 +31,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Offline tracking asset preparation
 - [x] Lowest-scoring rep replay and compensation review
 - [x] Frame-exit auto-pause and metronome hold
-- [ ] Focus-mode background dimming
+- [x] Focus-mode background dimming
 - [ ] Markdown session export
 - [ ] Battery saver
 - [ ] Silent wearable feedback and heart-rate connection

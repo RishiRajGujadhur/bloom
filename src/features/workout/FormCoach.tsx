@@ -28,7 +28,8 @@ const GROUPS: { title: string; exercises: Exercise[] }[] = [
   { title: 'Standing & Floor', exercises: ['chairSquat', 'squat', 'pushup', 'lunge', 'plank'] },
 ]
 type Mode = 'idle' | 'loading' | 'camera' | 'demo'
-type Detector = { detectForVideo: (video: HTMLVideoElement, at: number) => { landmarks: P[][]; worldLandmarks?: P[][] }; close: () => void }
+type Mask = { width: number; height: number; getAsFloat32Array: () => Float32Array; close: () => void }
+type Detector = { setOptions?: (options: { outputSegmentationMasks: boolean }) => Promise<void>; detectForVideo: (video: HTMLVideoElement, at: number) => { landmarks: P[][]; worldLandmarks?: P[][]; segmentationMasks?: Mask[]; close?: () => void }; close: () => void }
 const preference = () => { try { return localStorage.getItem('bloom-coach-accessible') === 'true' } catch { return false } }
 const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -104,6 +105,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
   const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
   useKeepAwake(mode === 'camera' || mode === 'demo')
+  const maskCanvas = useRef<HTMLCanvasElement>(null)
+  const latestOptions = useRef(options); latestOptions.current = options
   const video = useRef<HTMLVideoElement>(null), canvas = useRef<HTMLCanvasElement>(null), panel = useRef<HTMLDivElement>(null)
   const detector = useRef<Detector | null>(null), stream = useRef<MediaStream | null>(null)
   const generation = useRef(0), raf = useRef(0), modeRef = useRef<Mode>('idle'), exercise = useRef(ex)
@@ -112,6 +115,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const baseline = useRef<UpperBaseline | null>(null), samples = useRef<UpperBaseline[]>([]), calibrationTime = useRef(0)
   const gestureState = useRef(emptyGesture()), actionRef = useRef<Record<string, () => void>>({}), nativeFocus = useRef(false)
   const ready = mode === 'camera' || mode === 'demo'
+  useEffect(() => { if (mode === 'camera') void detector.current?.setOptions?.({ outputSegmentationMasks: options.dimming }).catch(() => setErr('Background focus could not start on this device.')) }, [mode, options.dimming])
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
@@ -324,8 +328,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       const files = await FilesetResolver.forVisionTasks(WASM)
       if (generation.current !== run) return
       let model
-      try { model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' }, runningMode: 'VIDEO', numPoses: 1 }) }
-      catch { if (generation.current !== run) return; model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1 }) }
+      try { model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' }, runningMode: 'VIDEO', numPoses: 1, outputSegmentationMasks: options.dimming }) }
+      catch { if (generation.current !== run) return; model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1, outputSegmentationMasks: options.dimming }) }
       if (generation.current !== run) { model.close(); return }
       detector.current = model as unknown as Detector; setTrackingPaused(false); setMode('camera'); modeRef.current = 'camera'
       let sampledAt = 0, videoTime = -1
@@ -337,6 +341,14 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
           videoTime = v.currentTime; sampledAt = at
           try {
             const result = detector.current!.detectForVideo(v, at)
+            try {
+              const mask = result.segmentationMasks?.[0], canvas = maskCanvas.current
+              if (mask && canvas && latestOptions.current.dimming) {
+                canvas.width = mask.width; canvas.height = mask.height
+                const context = canvas.getContext('2d'), data = mask.getAsFloat32Array()
+                if (context) { const image = context.createImageData(mask.width, mask.height); for (let i = 0; i < data.length; i++) image.data[i * 4 + 3] = Math.round((1 - Math.max(0, Math.min(1, data[i]))) * 190); context.putImageData(image, 0, 0) }
+              } else canvas?.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
+            } finally { if (result.close) result.close(); else result.segmentationMasks?.forEach(mask => mask.close()) }
             if (handDetector.current && exercise.current === 'kungFu' && at - handSample.current > 100) { handSample.current = at; setHandScores(handDetector.current.detectForVideo(v, at).landmarks.map(hand => handForm(hand, handTargetRef.current))) }
             if (result.landmarks[0]) frameRef.current(result.landmarks[0], result.worldLandmarks?.[0], at, true)
             else {
@@ -383,7 +395,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       <aside className="fc-library" aria-label="Exercise library">{GROUPS.filter((g) => !accessible || g.title !== 'Standing & Floor').map((g) => <div key={g.title}><h4>{g.title}</h4><div className="fc-ex" role="radiogroup" aria-label={g.title}>{g.exercises.map((id) => <button key={id} type="button" role="radio" aria-checked={ex === id} disabled={mode === 'loading'} className={ex === id ? 'on' : ''} onClick={() => change(id)}>{RULES[id].name}</button>)}</div></div>)}<p className="fc-small">{RULES[ex].tip}</p></aside>
       <div className="fc-center">
         <div className={`fc-split ${options.reference ? '' : 'fc-no-reference'}`}><div ref={panel} className={`fc-camera-panel ${focus ? 'fc-focused' : ''}`} aria-label="Camera training view">
-          <div className="fc-view" data-matrix-native><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
+          <div className="fc-view" data-matrix-native><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
             {ready && options.ghost && ghost && ghostFrame(ghost, metrics.seconds) && <CoachGhost exercise={ex} pose={ghostFrame(ghost, metrics.seconds)!} mirror={mode === 'camera'} />}
             {ready && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}
             {ready && options.trails && ['boxing', 'karate', 'kungFu'].includes(ex) && <CoachTrails frames={trailFrames} mirror={mode === 'camera'} />}
