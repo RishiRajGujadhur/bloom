@@ -34,6 +34,8 @@ export function CoachWearables({ enabled, onReady }: { enabled: boolean; onReady
       catch (error) { setStatus(error instanceof Error ? error.message : 'Invalid vibration command') }
     })
     const interval = setInterval(() => { if (lastPulseAt.current && performance.now() - lastPulseAt.current > 10000) setBpm(null) }, 2000)
+    // The counter intentionally invalidates pending async connections during teardown.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => { generation.current++; clearInterval(interval); hapticDevice.current?.gatt?.disconnect(); if (hr.current && hrListener.current) hr.current.removeEventListener('characteristicvaluechanged', hrListener.current); void hr.current?.stopNotifications().catch(() => {}); hrDevice.current?.gatt?.disconnect(); onReady(() => {}) }
   }, [onReady])
   const connectVibration = async () => {

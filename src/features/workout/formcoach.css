@@ -129,3 +129,6 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-scene{position:absolute;inset:0;transform-origin:0 0}.fc-range-calibration{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;font-size:11px;color:#b5d5c7}.fc-diagnostics{width:100%;min-width:0}.fc-diagnostics label{display:block}.fc-diagnostics select{max-width:100%}.fc-side>button:disabled{opacity:.5}
 
 .fc-camera-controls button{position:relative}.fc-dwell-ring{position:absolute;top:2px;right:2px;width:22px;height:22px}.fc-floating-metrics{position:absolute;top:20px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#071b16e8;border:1px solid #5dffc0;border-radius:12px;padding:10px;color:white;font-size:clamp(12px,1.5vw,20px)}
+
+.fc-toolbar .fc-actions{grid-template-columns:1fr 1fr}.fc-toolbar{display:flex;justify-content:flex-end}.fc-toolbar .fc-actions{max-width:650px}.fc-tools{width:100%;min-width:0}.fc-tools summary{padding:12px;border:1px solid #ffffff30;border-radius:12px;font-size:12px;cursor:pointer;color:#7df9ff}.fc-tool-grid{display:grid;gap:12px;margin-top:12px}.fc-settings{padding:12px;border:1px solid #ffffff30;border-radius:12px}.fc-tool-grid .fc-diagnostics{box-sizing:border-box}
+@media(max-width:650px){.fc-toolbar .fc-actions{grid-template-columns:1fr}.fc-toolbar{display:block}}
