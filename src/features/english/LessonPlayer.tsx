@@ -10,6 +10,7 @@ import { sfx } from './sfx'
 import { BloomFace, type BloomFaceHandle } from '../../components/ui/BloomFace'
 import { UnitScene, type UnitTheme } from './UnitScene'
 import { setQuiz } from '../../companion/quizContext'
+import { prefersReducedMotion } from '../../utils/motion'
 
 export type LessonResult = { correct: number; total: number; mistakes: { prompt: string; answer: string; given: string }[]; words: { en: string; good: boolean }[] }
 
@@ -47,6 +48,14 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
   const [pickL, setPickL] = useState<string | null>(null)
   const [heard, setHeard] = useState<string | null>(null)
   const [explain, setExplain] = useState(false)
+  const [reducedAnimations, setReducedAnimationsState] = useState(() => {
+    try { return localStorage.getItem('bloom-english-reduced-motion') === 'true' } catch { return false }
+  })
+  const reduceAnimations = reducedAnimations || prefersReducedMotion()
+  const setReducedAnimations = (enabled: boolean) => {
+    setReducedAnimationsState(enabled)
+    try { localStorage.setItem('bloom-english-reduced-motion', String(enabled)) } catch { /* optional */ }
+  }
   const results = useRef<LessonResult>({ correct: 0, total: 0, mistakes: [], words: [] })
   const card = useRef<HTMLDivElement>(null)
   const banner = useRef<HTMLDivElement>(null)
@@ -55,7 +64,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
   const rightSide = useMemo(() => (ex?.kind === 'match' ? [...ex.pairs].sort(() => Math.random() - 0.5) : []), [ex])
 
   useLayoutEffect(() => {
-    if (!card.current) return
+    if (!card.current || reduceAnimations) return
     const tl = gsap.timeline()
     tl.fromTo(card.current, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' })
       // fromTo (not from): a killed-and-rerun effect must still end fully visible.
@@ -63,7 +72,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
       .fromTo(card.current.querySelectorAll('.en-option, .en-pic, .en-bank .en-chip, .en-speaker, .en-mic, .en-type'), { y: 18, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.35, stagger: 0.05, ease: 'back.out(1.8)', clearProps: 'transform,opacity' }, 0.2)
     if (ex?.kind === 'listen') speak(ex.answer)
     return () => void tl.progress(1).kill()
-  }, [i, ex])
+  }, [i, ex, reduceAnimations])
   // Let Bloom's chat give hints for the question on screen.
   useEffect(() => {
     if (!ex) return
@@ -77,8 +86,8 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
   }, [ex])
   useEffect(() => () => setQuiz(null), [])
   useEffect(() => {
-    if (status !== 'idle' && banner.current) gsap.fromTo(banner.current, { yPercent: 100 }, { yPercent: 0, duration: 0.3, ease: 'back.out(1.6)' })
-  }, [status])
+    if (!reduceAnimations && status !== 'idle' && banner.current) gsap.fromTo(banner.current, { yPercent: 100 }, { yPercent: 0, duration: 0.3, ease: 'back.out(1.6)' })
+  }, [status, reduceAnimations])
 
   if (!ex) return null
   const progress = i / queue.length
@@ -113,7 +122,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
       onHeartLost()
       sfx('wrong')
       buddy.current?.react('think')
-      if (card.current) gsap.fromTo(card.current, { x: -10 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.25)' })
+      if (card.current && !reduceAnimations) gsap.fromTo(card.current, { x: -10 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.25)' })
       // Duolingo repeats a missed exercise at the end of the lesson.
       setQueue((q) => [...q, ex])
     } else {
@@ -121,7 +130,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
       if (word) r.words.push({ en: word, good: true })
       sfx('right')
       buddy.current?.react('cheer')
-      if (card.current) gsap.fromTo(card.current, { scale: 1 }, { scale: 1.03, duration: 0.15, yoyo: true, repeat: 1 })
+      if (card.current && !reduceAnimations) gsap.fromTo(card.current, { scale: 1 }, { scale: 1.03, duration: 0.15, yoyo: true, repeat: 1 })
     }
     setStatus(verdict)
   }
@@ -167,6 +176,10 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
         <div className="en-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${progress * 100}%` }} /></div>
         {theme?.cast[0] && <BloomFace ref={buddy} variant={theme.cast[0].face} size={44} follow={false} waveOnMount={false} label={theme.cast[0].name} />}
         <span className="en-hearts" aria-label={`${hearts} hearts`}><Heart size={18} fill="currentColor" /> {hearts}</span>
+        <label className="en-motion-setting">
+          <input type="checkbox" checked={reducedAnimations} onChange={(event) => setReducedAnimations(event.target.checked)} />
+          Reduce animations
+        </label>
       </div>
 
       <div ref={card} className="en-ex" key={i}>

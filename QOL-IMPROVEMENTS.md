@@ -98,7 +98,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Add a resume-last-lesson action.
 - [x] Show a concise progress summary for the current unit.
 - [x] Make exercise feedback and score changes announce accessibly.
-- [ ] Add an optional reduced-animation lesson setting.
+- [x] Add an optional reduced-animation lesson setting.
 - [x] Add a review-queue count and direct start action.
 - [x] Clarify why lessons are unavailable when hearts are depleted.
 
