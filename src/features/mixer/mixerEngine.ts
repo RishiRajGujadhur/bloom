@@ -68,6 +68,7 @@ class MixerEngine {
   private noise = createNoise2D()
   private t = 0
   mix: Mix = {}
+  masterVolume = 0.8
   playing = false
   organic = true
   spatial = true
@@ -236,6 +237,13 @@ class MixerEngine {
     this.emit()
   }
 
+  setMasterVolume(volume: number) {
+    this.masterVolume = Math.min(1, Math.max(0, volume))
+    if (this.ctx && this.master && this.playing)
+      this.master.gain.setTargetAtTime(this.masterVolume * 0.9, this.ctx.currentTime, this.fade ? 0.25 : 0.02)
+    this.emit()
+  }
+
   async play(sleepMinutes: number | null) {
     if (!this.ctx) {
       this.ctx = new AudioContext()
@@ -250,7 +258,7 @@ class MixerEngine {
     }
     await this.ctx.resume()
     for (const l of layers) if ((this.mix[l.id] ?? 0) > 0) this.channel(l.id)
-    this.master!.gain.setTargetAtTime(0.9, this.ctx.currentTime, this.fade ? 1.2 : 0.02)
+    this.master!.gain.setTargetAtTime(this.masterVolume * 0.9, this.ctx.currentTime, this.fade ? 1.2 : 0.02)
     this.mod ??= setInterval(this.modulate, 100)
     this.playing = true
     if (this.sleep) clearTimeout(this.sleep)

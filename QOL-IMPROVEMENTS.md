@@ -59,7 +59,7 @@ Items are intentionally small enough to review and verify independently.
 
 ## Soundscapes
 
-- [ ] Add a visible master-volume control.
+- [x] Add a visible master-volume control.
 - [ ] Add a one-tap mute and restore-last-mix action.
 - [x] Add a clear playback status for assistive technology.
 - [ ] Show the remaining sleep-timer duration while playing.
