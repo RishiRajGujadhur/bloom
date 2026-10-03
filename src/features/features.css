@@ -220,6 +220,19 @@
   padding: 0;
   margin: 20px 0 0;
 }
+.todo-density-toggle {
+  margin: 0 0 4px auto;
+}
+.task-list.is-compact .task-item {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+.task-list.is-compact .task-meta {
+  margin-top: 3px;
+}
+.task-list.is-compact .checklist-toggle {
+  margin-top: 4px;
+}
 .task-list li {
   display: flex;
   gap: 14px;

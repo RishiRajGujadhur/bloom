@@ -235,6 +235,9 @@ export function TodoPage({ data, setData }: Props) {
       ),
     ].slice(0, 6)
   const [taskQuery, setTaskQuery] = useState('')
+  const [compactTasks, setCompactTasks] = useState(() => {
+    try { return localStorage.getItem('bloom-todo-density') === 'compact' } catch { return false }
+  })
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
@@ -583,7 +586,19 @@ export function TodoPage({ data, setData }: Props) {
           })}
         </details>
       )}
-      <ShowMore as="ul" key={`${filter}-${tagFilter}`} className="task-list" initial={10} label="tasks">
+      <button
+        type="button"
+        className="quiet-button todo-density-toggle"
+        aria-pressed={compactTasks}
+        onClick={() => setCompactTasks((compact) => {
+          const next = !compact
+          try { localStorage.setItem('bloom-todo-density', next ? 'compact' : 'comfortable') } catch { /* optional preference */ }
+          return next
+        })}
+      >
+        {compactTasks ? 'Comfortable rows' : 'Compact rows'}
+      </button>
+      <ShowMore as="ul" key={`${filter}-${tagFilter}`} className={`task-list${compactTasks ? ' is-compact' : ''}`} initial={10} label="tasks">
         {tasks.map((task) => {
           const completedSteps = task.subtasks.filter(
             (step) => step.done,

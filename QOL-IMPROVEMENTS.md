@@ -9,7 +9,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Show an at-a-glance open, due-today, and completed summary.
 - [ ] Add one-tap task completion undo.
 - [x] Add a clear empty-search state with a reset action.
-- [ ] Provide a compact task-density toggle.
+- [x] Provide a compact task-density toggle.
 - [ ] Allow sorting tasks by due date, priority, or creation order.
 
 ## Daybook modes
