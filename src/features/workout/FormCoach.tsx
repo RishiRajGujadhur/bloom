@@ -62,6 +62,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [focus, setFocus] = useState(false)
   const [target, setTarget] = useState(10)
   const [bpm, setBpm] = useState(45)
+  const [colors, setColors] = useState(() => { try { const value = JSON.parse(localStorage.getItem('bloom-coach-colors') ?? '{}'); return { left: /^#[0-9a-f]{6}$/i.test(value.left) ? value.left : '#5dffc0', right: /^#[0-9a-f]{6}$/i.test(value.right) ? value.right : '#7df9ff' } } catch { return { left: '#5dffc0', right: '#7df9ff' } } })
+  useEffect(() => { try { localStorage.setItem('bloom-coach-colors', JSON.stringify(colors)) } catch { /* optional */ } }, [colors])
   const [span, setSpan] = useState(40)
   const sidePose = useRef<{ at: number; pose: P[] } | null>(null), depth = useRef<DepthCalibration | null>(null), frontPose = useRef<P[]>([])
   const [depthStatus, setDepthStatus] = useState('Single-camera depth estimates')
@@ -188,10 +190,10 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     const X = (p: P) => (mirror ? 1 - p.x : p.x) * c.width, Y = (p: P) => p.y * c.height
     if (overlay) {
       const bones = accessible || RULES[exercise.current].upper ? UPPER_BONES : BONES
-      g.lineCap = 'round'; g.lineWidth = 4
+      g.lineCap = 'round'; g.lineWidth = options.contrast ? 7 : 4
       for (const [a, b] of bones) {
         if (!visible(lm[a]) || !visible(lm[b])) continue
-        g.strokeStyle = a % 2 ? '#5dffc0' : '#7df9ff'; g.beginPath(); g.moveTo(X(lm[a]), Y(lm[a])); g.lineTo(X(lm[b]), Y(lm[b])); g.stroke()
+        g.strokeStyle = a % 2 ? colors.left : colors.right; g.beginPath(); g.moveTo(X(lm[a]), Y(lm[a])); g.lineTo(X(lm[b]), Y(lm[b])); g.stroke()
       }
       if (visible(lm[11]) && visible(lm[12]) && visible(lm[0])) {
         const middle = { x: (lm[11].x + lm[12].x) / 2, y: (lm[11].y + lm[12].y) / 2 }
@@ -199,7 +201,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       }
       for (const i of [...new Set([0, ...bones.flat()])]) {
         if (!visible(lm[i])) continue
-        g.fillStyle = i % 2 ? '#5dffc0' : '#7df9ff'; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), i === 0 ? 7 : 5, 0, Math.PI * 2); g.fill()
+        g.fillStyle = i % 2 ? colors.left : colors.right; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), options.contrast ? 8 : i === 0 ? 7 : 5, 0, Math.PI * 2); g.fill()
       }
     }
     if (gestures && mirror) for (const i of [15, 16]) if (visible(lm[i])) { g.strokeStyle = '#fff'; g.lineWidth = 2; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), 13, 0, Math.PI * 2); g.stroke() }
@@ -399,6 +401,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />
         <div className="fc-diagnostics"><label>Side camera position <select value={depthDirection} onChange={event => { setDepthDirection(Number(event.target.value)); depth.current = null; setDepthStatus('Recalibrate after changing camera position') }}><option value="1">At your left side</option><option value="-1">At your right side</option></select></label><button disabled={!ready} onClick={() => { const side = sidePose.current; const calibration = side && performance.now() - side.at < 150 ? calibrateDepth(frontPose.current, side.pose, depthDirection) : null; depth.current = calibration; setDepthStatus(calibration ? '90° side-depth estimate calibrated. Keep both cameras fixed.' : 'Both feeds must show your head, shoulders and arms to calibrate.') }}>Calibrate two-camera depth</button><p>{depthStatus}</p><small>Approximate orthogonal projection. Side-view occlusions retain front-camera estimates; this is not flawless 3D reconstruction.</small></div>
+        {options.contrast && <div className="fc-diagnostics"><h4>Skeleton colors</h4><label>Left side <input aria-label="Left skeleton color" type="color" value={colors.left} onChange={e => setColors({ ...colors, left: e.target.value })} /></label><label>Right side <input aria-label="Right skeleton color" type="color" value={colors.right} onChange={e => setColors({ ...colors, right: e.target.value })} /></label></div>}
         <div className="fc-settings"><h4>Form Coach Settings</h4><label><input type="checkbox" checked={gestures} onChange={(e) => { setGestures(e.target.checked); gestureState.current = emptyGesture() }} /> Hand-hover controls</label><label><input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> Skeletal overlay</label>{Object.entries(COACH_OPTIONS).map(([key, name]) => <label key={key}><input type="checkbox" checked={options[key as keyof typeof options]} onChange={(e) => setOptions(previous => ({ ...previous, [key]: e.target.checked }))} />{name}</label>)}<p className="fc-small">Audio feedback: off. All coaching is visual or silent.</p><small>Hold either hand on a button for ~3 seconds. Move away to rearm. Next workout changes the exercise and logs completed reps first.</small></div>
         {mode === 'idle' ? <div className="fc-actions"><button type="button" className="fc-cta" onClick={() => void startCamera()}><Camera size={16} /> Start camera</button><button type="button" className="fc-ghost" onClick={startDemo}><Play size={16} /> Watch the demo athlete</button></div> : mode === 'loading' ? <button type="button" className="fc-ghost" onClick={() => { release(); setMode('idle') }}>Cancel camera setup</button> : <button type="button" className="fc-ghost" onClick={enterFocus}><Maximize size={16} /> Camera-only fullscreen</button>}
         {err && <p role="alert" className="fc-error">{err}</p>}<p role="status" className="fc-message">{message}</p><p className="fc-small">Video stays on your device. Tracking files download on first use.</p>

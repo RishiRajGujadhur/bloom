@@ -27,7 +27,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Perfect-form XP and local journal
 - [x] Fatigue-aware routine suggestions
 - [x] Secondary camera connection and depth calibration
-- [ ] Custom high-contrast skeletal colors
+- [x] Custom high-contrast skeletal colors
 - [ ] Offline tracking asset preparation
 - [ ] Lowest-scoring rep replay and compensation review
 - [ ] Frame-exit auto-pause and metronome hold
