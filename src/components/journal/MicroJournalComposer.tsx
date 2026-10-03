@@ -6,6 +6,23 @@ import i18n from '../../i18n'
 import { saveJournalMedia, type PendingJournalMedia } from './journalMedia'
 
 const QUICK_TAGS = ['grateful', 'calm', 'heavy', 'proud', 'idea', 'memory']
+const QUICK_DRAFT_KEY = 'bloom-quick-journal-draft-v1'
+
+function loadQuickDraft() {
+  try {
+    const raw: unknown = JSON.parse(localStorage.getItem(QUICK_DRAFT_KEY) ?? 'null')
+    if (typeof raw !== 'object' || raw === null) return { text: '', tags: [] as string[], mood: null as number | null }
+    const value = raw as Record<string, unknown>
+    return {
+      text: typeof value.text === 'string' ? value.text : '',
+      tags: Array.isArray(value.tags) ? value.tags.filter((tag): tag is string => typeof tag === 'string').slice(0, 8) : [],
+      mood: typeof value.mood === 'number' && value.mood >= 1 && value.mood <= 5 ? value.mood : null,
+    }
+  } catch {
+    return { text: '', tags: [], mood: null }
+  }
+}
+
 export function MicroJournalComposer({
   onSave,
   onGuided,
@@ -21,14 +38,20 @@ export function MicroJournalComposer({
     t('journal.moodGood'),
     t('journal.moodGreat'),
   ]
-  const [text, setText] = useState('')
-  const [tags, setTags] = useState<string[]>([])
+  const [initialDraft] = useState(loadQuickDraft)
+  const [text, setText] = useState(initialDraft.text)
+  const [tags, setTags] = useState<string[]>(initialDraft.tags)
   const [customTag, setCustomTag] = useState('')
-  const [mood, setMood] = useState<number | null>(null)
+  const [mood, setMood] = useState<number | null>(initialDraft.mood)
   const [media, setMedia] = useState<PendingJournalMedia[]>([])
   const [recording, setRecording] = useState(false)
   const [elapsed, setElapsed] = useState(0)
   const [notice, setNotice] = useState('')
+  const [draftStatus, setDraftStatus] = useState(
+    initialDraft.text || initialDraft.tags.length || initialDraft.mood !== null
+      ? 'Draft restored. Text, tags, and mood save on this device.'
+      : 'Your text, tags, and mood save on this device as you write.',
+  )
   const [saving, setSaving] = useState(false)
   const mediaRef = useRef<PendingJournalMedia[]>([])
   const recorder = useRef<MediaRecorder | null>(null)
@@ -49,6 +72,29 @@ export function MicroJournalComposer({
   useEffect(() => {
     mediaRef.current = media
   }, [media])
+
+  useEffect(() => {
+    const hasContent = Boolean(text.trim() || tags.length || mood !== null)
+    if (!hasContent) {
+      try {
+        localStorage.removeItem(QUICK_DRAFT_KEY)
+        setDraftStatus('Your text, tags, and mood save on this device as you write.')
+      } catch {
+        setDraftStatus('Entry saved, but the local draft could not be cleared.')
+      }
+      return
+    }
+    setDraftStatus('Saving draft…')
+    const timer = window.setTimeout(() => {
+      try {
+        localStorage.setItem(QUICK_DRAFT_KEY, JSON.stringify({ text, tags, mood }))
+        setDraftStatus('Draft saved on this device.')
+      } catch {
+        setDraftStatus('Draft could not be saved on this device.')
+      }
+    }, 300)
+    return () => window.clearTimeout(timer)
+  }, [text, tags, mood])
 
   useEffect(
     () => () => {
@@ -223,6 +269,7 @@ export function MicroJournalComposer({
         value={text}
         onChange={(event) => setText(event.target.value)}
       />
+      <p className="micro-draft-status" role="status" aria-live="polite">{draftStatus}</p>
       <div className="quick-tags" aria-label={t('journal.quickTags')}>
         <Tag size={15} aria-hidden="true" />
         {QUICK_TAGS.map((tag) => (

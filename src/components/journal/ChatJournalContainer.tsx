@@ -146,6 +146,11 @@ export function ChatJournalContainer({
           <Clock3 size={15} /> {t('journal.guided')}
         </button>
       </div>
+      {mode === 'guided' && session && (
+        <p className="journal-draft-status" role="status">
+          {saved ? 'Reflection saved on this device.' : 'Your guided draft saves automatically on this device.'}
+        </p>
+      )}
       {mode === 'quick' && subOn('chatJournal', 'quickEntry') ? (
         <>
           <MicroJournalComposer
