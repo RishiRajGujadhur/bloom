@@ -37,6 +37,11 @@ export function ChatInputArea({
           rows={2}
           maxLength={2000}
           value={form.values.message}
+          onKeyDown={(event) => {
+            if (event.key !== 'Enter' || (!event.ctrlKey && !event.metaKey)) return
+            event.preventDefault()
+            void form.submitForm()
+          }}
           onChange={(e) => {
             form.handleChange(e)
             e.target.style.height = 'auto'
@@ -59,6 +64,7 @@ export function ChatInputArea({
             ? form.errors.message
             : t('journal.honesty')}
         </span>
+        <span aria-hidden="true">Ctrl/⌘ + Enter to send</span>
         <span>{t('journal.characters', { count: form.values.message.length })}</span>
       </div>
     </form>

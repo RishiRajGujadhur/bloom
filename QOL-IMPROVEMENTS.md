@@ -69,7 +69,7 @@ Items are intentionally small enough to review and verify independently.
 ## Reflection journal
 
 - [ ] Add a draft-save status in guided and quick-entry modes.
-- [ ] Add a keyboard shortcut to submit a journal response.
+- [x] Add a keyboard shortcut to submit a journal response.
 - [ ] Make the active prompt and step progress easier to scan.
 - [ ] Add a quick way to continue an incomplete draft.
 - [ ] Improve attachment removal affordances and labels.
