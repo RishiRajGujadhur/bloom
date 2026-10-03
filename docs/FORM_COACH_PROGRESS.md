@@ -14,7 +14,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Granular persistent Form Coach settings
 - [x] Adaptive seated calorie estimates, kinetic joules and average power
 - [x] Strike trajectory SVG trails
-- [ ] Impact deceleration grading
+- [x] Impact deceleration grading
 - [ ] Combo rhythm consistency
 - [ ] Tai Chi flow grading and Yang/Chen reference selection
 - [ ] Boxing strike classification and guard feedback
