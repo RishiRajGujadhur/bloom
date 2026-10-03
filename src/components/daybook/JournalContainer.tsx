@@ -39,6 +39,7 @@ export function JournalContainer() {
   const [storageError, setStorageError] = useState('')
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [revealed, setRevealed] = useState<string | null>(null)
+  const [pageSearch, setPageSearch] = useState('')
   const [sort, setSort] = useState(() => {
     try { return localStorage.getItem('bloom-daybook-sort') ?? 'edited' } catch { return 'edited' }
   })
@@ -81,6 +82,13 @@ export function JournalContainer() {
       [...entries].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
     [entries],
   )
+  const visiblePages = useMemo(() => {
+    const query = pageSearch.trim().toLocaleLowerCase()
+    if (!query) return recentPages
+    return recentPages.filter((page) =>
+      `${page.modeTitle} ${journalText(page.content)}`.toLocaleLowerCase().includes(query),
+    )
+  }, [pageSearch, recentPages])
   const language = i18n.resolvedLanguage ?? 'en'
   const modes = useMemo(() => localizedJournalModes(language), [language])
   // The page types you write most, for one-tap fresh pages.
@@ -331,8 +339,25 @@ export function JournalContainer() {
               </button>
             )}
             {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
-              <Carousel label="Your pages" title={`Your pages · ${recentPages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}>
-                {[...recentPages].sort((a, b) =>
+              <>
+                <label className="daybook-search">
+                  <BookOpen size={16} aria-hidden="true" />
+                  <input
+                    type="search"
+                    aria-label="Search saved Daybook pages"
+                    placeholder="Search page types or writing…"
+                    value={pageSearch}
+                    onChange={(event) => setPageSearch(event.target.value)}
+                  />
+                  {pageSearch && (
+                    <button type="button" onClick={() => setPageSearch('')}>
+                      Clear
+                    </button>
+                  )}
+                </label>
+                {visiblePages.length > 0 ? (
+              <Carousel label="Your pages" title={`Your pages · ${visiblePages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}>
+                {[...visiblePages].sort((a, b) =>
                   sort === 'created' ? b.createdAt.localeCompare(a.createdAt)
                   : sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt)
                   : sort === 'title' ? a.modeTitle.localeCompare(b.modeTitle)
@@ -409,6 +434,13 @@ export function JournalContainer() {
                   )
                 })}
               </Carousel>
+                ) : (
+                  <p className="daybook-search-empty" role="status">
+                    No saved pages match “{pageSearch}”.
+                    <button type="button" onClick={() => setPageSearch('')}>Clear search</button>
+                  </p>
+                )}
+              </>
             )}
             <h2>What do you need today?</h2>
             <div className="choice-grid">

@@ -14,7 +14,7 @@ Items are intentionally small enough to review and verify independently.
 
 ## Daybook modes
 
-- [ ] Add search across saved page titles and text.
+- [x] Add search across saved page titles and text.
 - [ ] Add a visible word-count goal while writing.
 - [ ] Make save status persistent and easy to scan.
 - [ ] Add accessible labels to saved-page quick actions.

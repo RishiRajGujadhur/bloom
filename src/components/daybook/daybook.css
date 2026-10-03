@@ -279,6 +279,50 @@ html[data-writing='focus'] .daybook.is-writing {
   font-size: 14px;
   line-height: 1.5;
 }
+.daybook-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 520px;
+  margin: 0 auto 12px;
+  padding: 7px 10px 7px 13px;
+  border: 1px solid color-mix(in oklab, var(--accent-color) 18%, var(--border-color));
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--bg-surface) 92%, var(--accent-soft));
+  color: var(--text-muted);
+}
+.daybook-search:focus-within {
+  border-color: color-mix(in oklab, var(--accent-color) 55%, var(--border-color));
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent-color) 10%, transparent);
+}
+.daybook-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+}
+.daybook-search button,
+.daybook-search-empty button {
+  border: 0;
+  border-radius: 9px;
+  padding: 6px 9px;
+  background: var(--accent-soft);
+  color: var(--accent-color);
+  font: inherit;
+  cursor: pointer;
+}
+.daybook-search-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px;
+  color: var(--text-secondary);
+}
 
 .daybook-page-card small {
   margin-top: auto;
