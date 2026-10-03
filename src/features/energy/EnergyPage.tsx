@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ResponsiveSankey } from '@nivo/sankey'
-import { Plus, Trash2, Zap } from 'lucide-react'
+import { Check, Pencil, Plus, Trash2, X, Zap } from 'lucide-react'
 import type { FeaturePageProps } from '../shared/pageProps'
 import { subOn } from '../subFeatures'
 import { useStoredValue } from '../sleep/useStoredValue'
@@ -31,6 +31,9 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
   const [hours, setHours] = useState('1')
   const [logMessage, setLogMessage] = useState('')
   const [undoLog, setUndoLog] = useState<TimeLog | null>(null)
+  const [editingLogId, setEditingLogId] = useState<string | null>(null)
+  const [editCategory, setEditCategory] = useState(categories[0].id)
+  const [editHours, setEditHours] = useState('1')
   const flow = useMemo(
     () =>
       buildFlow({
@@ -66,6 +69,25 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
       ? current
       : { logs: [...current.logs, undoLog] })
     setUndoLog(null)
+  }
+  const beginEdit = (log: TimeLog) => {
+    setEditingLogId(log.id)
+    setEditCategory(log.category)
+    setEditHours(String(log.hours))
+  }
+  const saveEdit = (log: TimeLog) => {
+    const parsedHours = Number(editHours)
+    if (!Number.isFinite(parsedHours) || parsedHours < 0.25 || parsedHours > 24) {
+      setLogMessage('Enter a duration between 0.25 and 24 hours.')
+      return
+    }
+    setStore((current) => ({
+      logs: current.logs.map((item) => item.id === log.id
+        ? { ...item, category: editCategory, hours: parsedHours }
+        : item),
+    }))
+    setLogMessage(`Updated ${categories.find((item) => item.id === editCategory)?.label ?? 'activity'} to ${parsedHours} ${parsedHours === 1 ? 'hour' : 'hours'}.`)
+    setEditingLogId(null)
   }
 
   return (
@@ -190,11 +212,39 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
                 const c = categories.find((x) => x.id === l.category)
                 return (
                   <li key={l.id}>
-                    <span className="energy-dot" style={{ background: c?.color }} />
-                    {c?.label} <strong>{l.hours} h</strong>
-                    <button className="icon-button" aria-label={`Remove ${c?.label}`} onClick={() => removeLog(l)}>
-                      <Trash2 size={14} />
-                    </button>
+                    {editingLogId === l.id ? (
+                      <div className="energy-log-edit">
+                        <select aria-label="Edit activity" value={editCategory} onChange={(event) => setEditCategory(event.target.value)}>
+                          {categories.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+                        </select>
+                        <input
+                          aria-label="Edit hours"
+                          type="number"
+                          min="0.25"
+                          max="24"
+                          step="0.25"
+                          value={editHours}
+                          onChange={(event) => setEditHours(event.target.value)}
+                        />
+                        <button className="icon-button" type="button" aria-label="Save activity changes" onClick={() => saveEdit(l)}>
+                          <Check size={14} />
+                        </button>
+                        <button className="icon-button" type="button" aria-label="Cancel editing activity" onClick={() => setEditingLogId(null)}>
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="energy-dot" style={{ background: c?.color }} />
+                        {c?.label} <strong>{l.hours} h</strong>
+                        <button className="icon-button" type="button" aria-label={`Edit ${c?.label ?? 'activity'}`} onClick={() => beginEdit(l)}>
+                          <Pencil size={14} />
+                        </button>
+                        <button className="icon-button" type="button" aria-label={`Remove ${c?.label ?? 'activity'}`} onClick={() => removeLog(l)}>
+                          <Trash2 size={14} />
+                        </button>
+                      </>
+                    )}
                   </li>
                 )
               })}

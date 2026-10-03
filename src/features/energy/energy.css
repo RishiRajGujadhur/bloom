@@ -110,6 +110,23 @@
   align-items: center;
   gap: 8px;
 }
+.energy-log-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 82px auto auto;
+  gap: 6px;
+  width: 100%;
+}
+.energy-log-edit select,
+.energy-log-edit input {
+  min-width: 0;
+  min-height: 40px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+}
 .energy-logs strong {
   margin-left: auto;
 }
