@@ -38,19 +38,19 @@ export function flowTick(previous: FlowState, motion: MotionState) {
 
 export type BoxingState = { at: number; pose: P[] | null; lastStrike: number; strike: string; guard: boolean; counts: Record<string, number> }
 export const emptyBoxing = (): BoxingState => ({ at: 0, pose: null, lastStrike: 0, strike: 'Awaiting strike', guard: true, counts: {} })
-export function boxingTick(previous: BoxingState, pose: P[], at: number, lead: 'left' | 'right' = 'left'): BoxingState {
+export function boxingTick(previous: BoxingState, pose: P[], at: number, lead: 'left' | 'right' = 'left', threshold = 150): BoxingState {
   if (!upperVisible(pose)) return { ...previous, at, pose: null }
   const width = Math.max(.06, Math.abs(pose[11].x - pose[12].x)), dt = (at - previous.at) / 1000
   const elbows = [angle(pose[11], pose[13], pose[15]), angle(pose[12], pose[14], pose[16])]
   const side = elbows[0] > elbows[1] ? 0 : 1, other = 16 - side
   const guard = Math.abs(pose[other].y - pose[0].y) < width * 1.1 && Math.abs(pose[other].x - pose[0].x) < width
-  if (!previous.pose || dt <= 0 || dt > .25 || at - previous.lastStrike < 450) return { ...previous, at, pose, guard }
+  if (!previous.pose || dt <= 0 || dt > .25 || at - previous.lastStrike < 250) return { ...previous, at, pose, guard }
   let strike = previous.strike, lastStrike = previous.lastStrike, counts = previous.counts
   for (let i = 0; i < 2; i++) {
     const wrist = 15 + i, elbow = 13 + i, shoulder = 11 + i
     const oldAngle = angle(previous.pose[shoulder], previous.pose[elbow], previous.pose[wrist])
     const dx = (pose[wrist].x - previous.pose[wrist].x) / width / dt, dy = (pose[wrist].y - previous.pose[wrist].y) / width / dt
-    const extended = elbows[i] > 150 && oldAngle <= 150
+    const extended = elbows[i] > threshold && oldAngle <= threshold
     const uppercut = dy < -1.5 && Math.abs(dy) > Math.abs(dx) * 1.5 && elbows[i] < 145
     const hook = Math.abs(dx) > 1.5 && Math.abs(dx) > Math.abs(dy) * 1.5 && elbows[i] < 145
     if (!extended && !uppercut && !hook) continue
