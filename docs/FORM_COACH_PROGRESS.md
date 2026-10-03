@@ -9,7 +9,7 @@ not a medical prescription or a validated martial-arts master.
 
 - [x] Personal seated range-of-motion calibration and adaptive rep thresholds
 - [x] Dynamic side-by-side reference view
-- [ ] Detailed wireframe with live joint-angle callouts
+- [x] Detailed wireframe with live joint-angle callouts
 - [ ] Seated press, chest fly and chair squat exercise presets
 - [ ] Granular persistent Form Coach settings
 - [ ] Adaptive seated calorie estimates, kinetic joules and average power
@@ -50,3 +50,6 @@ not a medical prescription or a validated martial-arts master.
 Baseline: production build, 13 coach model tests, 6 desktop/mobile coach browser
 checks passed before the baseline push. New checks and device-dependent limits
 will be recorded here as implementation proceeds.
+
+Angle labels are camera-plane projections, not clinical goniometry. Hidden joints
+are not assigned invented knee or spine measurements.

@@ -4,7 +4,7 @@ import { OneEuroFilter } from '1eurofilter'
 import { Camera, Maximize, Play } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
-import { BONES, RULES, RepCounter, alignment, demoPose, exerciseVisible, read, readUpper, personalRange, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline } from './formModel'
+import { angle, BONES, RULES, RepCounter, alignment, demoPose, exerciseVisible, read, readUpper, personalRange, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { CoachReference } from './CoachReference'
 
@@ -51,6 +51,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
   const [target, setTarget] = useState(10)
   const [bpm, setBpm] = useState(45)
   const [span, setSpan] = useState(40)
+  const [jointAngles, setJointAngles] = useState({ left: 0, right: 0 })
   const [romStatus, setRomStatus] = useState('Optional: calibrate your comfortable movement range')
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
   const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
@@ -162,6 +163,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
     const upperOnly = accessible || RULES[exercise.current].upper
     const lm = raw.map((p, i) => (!upperOnly || i === 0 || (i >= 11 && i <= 22)) && Number.isFinite(p.x) && Number.isFinite(p.y) ? { ...p, x: filters.current[i * 3].filter(p.x, at / 1000), y: filters.current[i * 3 + 1].filter(p.y, at / 1000), z: filters.current[i * 3 + 2].filter(p.z ?? 0, at / 1000) } : p)
     draw(lm, mirror)
+    if (upperVisible(lm)) setJointAngles({ left: Math.round(angle(lm[11], lm[13], lm[15])), right: Math.round(angle(lm[12], lm[14], lm[16])) })
     let hovered: string | null = null
     if (gestures && mirror && canvas.current && panel.current) {
       const feed = canvas.current.getBoundingClientRect()
@@ -298,6 +300,7 @@ export function FormCoach({ onLog, onFinish, bodyweight = 70 }: { onLog: (liftId
           </div>
         </div>
         <CoachReference exercise={ex} /></div>
+        <div className="fc-live-angles">Your projected elbow angles: L {jointAngles.left}° · R {jointAngles.right}°</div>
         <div className="fc-asymmetry"><strong>Asymmetry Alert <small>silent Â· relative to your neutral position</small></strong><div className="fc-balance-track" role="meter" aria-label="Upper-body asymmetry" aria-valuemin={-100} aria-valuemax={100} aria-valuenow={Math.round((balance?.value ?? 0) * 100)} aria-valuetext={silentStatus}><i style={{ left: `${50 + (balance?.value ?? 0) * 45}%`, background: balance?.alert ? '#ffd43b' : '#5dffc0' }} /></div><span>{silentStatus}</span></div>
         <p className="fc-instructions">{accessible ? 'Face camera. Calibrated for upper-body forms.' : 'Face camera. Keep the exercise joints visible.'}</p>
         <div className="fc-calibration"><span>{calibration < 1 && ready ? `Stay in your comfortable neutral position Â· ${Math.round(calibration * 100)}%` : calibration >= 1 ? 'Neutral position calibrated' : 'Calibration begins when you start'}</span><button type="button" className="fc-ghost" onClick={recalibrate} disabled={!ready}>Recalibrate</button></div>

@@ -99,3 +99,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 
 .fc-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.7fr);gap:12px;align-items:start}.fc-split .fc-reference{margin:0;height:100%;min-height:260px}.fc-split .fc-reference canvas{width:100%;height:auto}.fc-split .fc-camera-panel{min-width:0}
 @media(max-width:800px){.fc-split{grid-template-columns:1fr}.fc-split .fc-reference{min-height:0}}
+
+.fc-reference-angles{font-size:12px;text-align:left}.fc-reference-angles>div{display:flex;justify-content:space-between;gap:8px}.fc-reference-angles dd{margin:0;color:#7df9ff}.fc-live-angles{font-size:12px;color:#7df9ff;margin:8px 0}

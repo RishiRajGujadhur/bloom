@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { BONES, demoPose, RULES, UPPER_BONES, type Exercise } from './formModel'
+import { angle, BONES, demoPose, RULES, UPPER_BONES, type Exercise } from './formModel'
 import { prefersReducedMotion } from '../../utils/motion'
 
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
 export function CoachReference({ exercise }: { exercise: Exercise }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const [available, setAvailable] = useState(true)
+  const [angles, setAngles] = useState({left: 0, right: 0})
   useEffect(() => {
     let cancelled = false, raf = 0, release = () => {}
     setAvailable(true)
@@ -33,6 +34,7 @@ export function CoachReference({ exercise }: { exercise: Exercise }) {
         if (now - renderedAt < 50) { raf = requestAnimationFrame(loop); return }
         renderedAt = now
         const pose = demoPose(exercise, prefersReducedMotion() ? .25 : now / 4000 % 1)
+        setAngles({ left: Math.round(angle(pose[11], pose[13], pose[15])), right: Math.round(angle(pose[12], pose[14], pose[16])) })
         const positions = pose.map((p) => new THREE.Vector3((p.x - .5) * 2.7, (.58 - p.y) * 2.7, (p.z ?? 0) * 2.7))
         joints.forEach(({ i, mesh }) => { mesh.position.copy(positions[i]) })
         links.forEach(({ a, b, mesh }) => {
@@ -47,5 +49,5 @@ export function CoachReference({ exercise }: { exercise: Exercise }) {
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
   }, [exercise])
-  return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}<small>Illustrative motion Â· follow your own comfortable range.</small></div>
+  return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}<dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl><small>Illustrative motion Â· follow your own comfortable range.</small></div>
 }
