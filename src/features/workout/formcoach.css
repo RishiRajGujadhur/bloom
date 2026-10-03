@@ -111,3 +111,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-history-scroll{overflow:auto}.fc-history-scroll table{font-size:11px;width:100%}.fc-history-scroll th,.fc-history-scroll td{padding:4px;text-align:left}
 
 .fc-workload{display:grid;gap:4px;margin:8px 0}.fc-workload meter{width:100%}.fc-breathing{display:flex;align-items:center;gap:18px}.fc-breath-ring{flex:0 0 40px;width:40px;height:40px;border:3px solid #5dffc0;border-radius:50%;background:#5dffc020}.fc-breath-ring.running{animation:fc-breathe var(--fc-breath,4s) ease-in-out infinite}@keyframes fc-breathe{0%,100%{transform:scale(.75)}50%{transform:scale(1.2)}}@media(prefers-reduced-motion:reduce){.fc-breath-ring.running{animation:none}}
+
+.fc-ghost-pose{opacity:.35;filter:drop-shadow(0 0 3px white)}
