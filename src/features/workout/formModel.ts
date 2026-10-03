@@ -4,7 +4,7 @@
  * and per-exercise form checks. Pure, so it's unit-tested with synthetic poses.
  */
 export type P = { x: number; y: number; z?: number; visibility?: number }
-export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank'
+export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'taiChi' | 'boxing' | 'karate' | 'kungFu'
 
 // MediaPipe pose indices.
 export const J = { nose: 0, lSh: 11, rSh: 12, lEl: 13, rEl: 14, lWr: 15, rWr: 16, lHip: 23, rHip: 24, lKn: 25, rKn: 26, lAn: 27, rAn: 28 } as const
@@ -25,14 +25,22 @@ const side = (lm: P[], l: number, r: number) => (vis(lm[l]) >= vis(lm[r]) ? l : 
 
 export type Reading = { metric: number; label: string; faults: string[]; line?: number }
 
-export const RULES: Record<Exercise, { name: string; liftId: string; down: number; up: number; unit: string; timed?: boolean; tip: string }> = {
+export const RULES: Record<Exercise, { name: string; liftId: string; down: number; up: number; unit: string; timed?: boolean; upper?: boolean; bpm?: number; tip: string }> = {
   squat: { name: 'Squat', liftId: 'airsquat', down: 100, up: 160, unit: 'knee°', tip: 'Face the camera, whole body in frame.' },
   pushup: { name: 'Push-up', liftId: 'pushup', down: 95, up: 155, unit: 'elbow°', tip: 'Side-on to the camera, laptop on the floor.' },
   lunge: { name: 'Lunge', liftId: 'lunge', down: 105, up: 155, unit: 'knee°', tip: 'Side-on, step forward and back.' },
   plank: { name: 'Plank', liftId: 'plank', down: 0, up: 0, unit: 'body line°', timed: true, tip: 'Side-on, forearms down, hold a straight line.' },
+  seatedTwist: { name: 'Seated Core Twist', liftId: 'seatedtwist', down: 145, up: 170, unit: 'torso°', upper: true, bpm: 40, tip: 'Sit in your usual supported position. Turn your shoulders gently, then return to centre.' },
+  wheelchairDip: { name: 'Wheelchair Dips', liftId: 'wheelchairdip', down: 110, up: 150, unit: 'elbow°', upper: true, bpm: 45, tip: 'Use stable armrests. Bend and straighten your elbows through your comfortable range.' },
+  chairPushup: { name: 'Chair Push-up', liftId: 'chairpushup', down: 110, up: 150, unit: 'elbow°', upper: true, bpm: 45, tip: 'Hands on stable chair supports. Press through your arms and return gently.' },
+  taiChi: { name: 'Tai Chi (Flow)', liftId: 'taichiflow', down: 0, up: 0, unit: 'flow', upper: true, timed: true, bpm: 30, tip: 'Stay seated and supported. Sweep your arms slowly with the visual rhythm.' },
+  boxing: { name: 'Boxing (Jab-Cross)', liftId: 'seatedboxing', down: 115, up: 150, unit: 'elbow°', upper: true, bpm: 80, tip: 'Face the camera with both arms visible. Extend one arm, return to guard, then alternate.' },
+  karate: { name: 'Karate (Blocks)', liftId: 'seatedkarate', down: 115, up: 160, unit: 'arm raise', upper: true, bpm: 50, tip: 'Raise a forearm above shoulder level, then return to your comfortable guard.' },
+  kungFu: { name: 'Kung Fu (Hand Form)', liftId: 'seatedkungfu', down: 0, up: 0, unit: 'flow', upper: true, timed: true, bpm: 40, tip: 'Use gentle, continuous hand forms with your torso supported.' },
 }
 
 export function read(ex: Exercise, lm: P[]): Reading {
+  if (RULES[ex].upper) return readUpper(ex, lm)
   const faults: string[] = []
   if (ex === 'squat') {
     const kL = angle(lm[J.lHip], lm[J.lKn], lm[J.lAn])
@@ -78,6 +86,82 @@ export function read(ex: Exercise, lm: P[]): Reading {
     faults.push(lm[hip].y > lm[sh].y + t * (lm[an].y - lm[sh].y) ? 'Hips sagging' : 'Hips too high')
   }
   return { metric: line, label: `${Math.round(line)}° body line`, faults, line }
+}
+
+export const UPPER_BONES: [number, number][] = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [15, 19], [16, 20]]
+export const visible = (p: P | undefined) => !!p && Number.isFinite(p.x) && Number.isFinite(p.y) && (p.visibility ?? 1) >= .55
+export function upperVisible(lm: P[]) { return [0, 11, 12, 13, 14, 15, 16].every((i) => visible(lm[i])) }
+export function exerciseVisible(ex: Exercise, lm: P[]) {
+  if (RULES[ex].upper) return upperVisible(lm)
+  if (ex === 'squat' || ex === 'lunge') return [11, 12, 23, 24, 25, 26, 27, 28].every((i) => visible(lm[i]))
+  return [[11, 13, 15, 23, 27], [12, 14, 16, 24, 28]].some((indices) => (ex === 'plank' ? [indices[0], indices[3], indices[4]] : indices).every((i) => visible(lm[i])))
+}
+export type UpperBaseline = { slope: number; headOffset: number; twist: number; width: number }
+export function upperBaseline(lm: P[]): UpperBaseline | null {
+  if (!upperVisible(lm)) return null
+  const width = Math.abs(lm[11].x - lm[12].x)
+  if (width < .06) return null
+  return { width, slope: (lm[11].y - lm[12].y) / width, headOffset: (lm[0].x - (lm[11].x + lm[12].x) / 2) / width, twist: ((lm[11].z ?? 0) - (lm[12].z ?? 0)) / width }
+}
+/** Deviations from the user's own neutral position, not an idealized symmetric body. */
+export function alignment(lm: P[], baseline: UpperBaseline | null) {
+  const current = upperBaseline(lm)
+  if (!baseline || !current) return null
+  const shoulder = current.slope - baseline.slope, head = current.headOffset - baseline.headOffset
+  return { value: Math.max(-1, Math.min(1, shoulder * 3 + head)), alert: Math.abs(shoulder) > .18 || Math.abs(head) > .3 }
+}
+export function readUpper(ex: Exercise, lm: P[], baseline?: UpperBaseline | null): Reading {
+  if (!upperVisible(lm)) return { metric: 180, label: 'Show head, shoulders and both arms', faults: ['Upper-body tracking lost'] }
+  if (ex === 'seatedTwist') {
+    const b = upperBaseline(lm)
+    if (!b) return { metric: 180, label: 'Face the camera for torso tracking', faults: ['Shoulders not clearly visible'] }
+    const twist = Math.atan(Math.abs(b.twist - (baseline?.twist ?? 0))) * 180 / Math.PI
+    return { metric: 180 - twist * 2, label: `${Math.round(twist)}° torso turn`, faults: [] }
+  }
+  if (ex === 'karate') {
+    const width = Math.max(.08, Math.abs(lm[11].x - lm[12].x))
+    const raise = Math.max(lm[11].y - lm[15].y, lm[12].y - lm[16].y) / width
+    return { metric: Math.max(0, Math.min(180, 180 - Math.max(0, raise + .15) * 150)), label: 'Raise, then return to guard', faults: [] }
+  }
+  const left = angle(lm[11], lm[13], lm[15]), right = angle(lm[12], lm[14], lm[16])
+  return { metric: ex === 'boxing' ? Math.max(left, right) : (left + right) / 2, label: RULES[ex].timed ? 'Steady upper-body flow' : `${Math.round(Math.max(left, right))}° elbow`, faults: [] }
+}
+
+/** Seated reference poses never rely on knees, feet or pelvis landmarks. */
+export function upperPose(ex: Exercise, phase: number): P[] {
+  const lm: P[] = Array.from({ length: 33 }, () => ({ x: .5, y: .8, z: 0, visibility: 0 }))
+  const cycle = (1 - Math.cos(phase * Math.PI * 2)) / 2
+  lm[0] = { x: .5, y: .17, z: 0, visibility: 1 }
+  for (const [sh, el, wr, sign] of [[11, 13, 15, -1], [12, 14, 16, 1]]) {
+    const shoulder = { x: .5 + sign * .15, y: .32, z: 0, visibility: 1 }
+    const elbow = { x: shoulder.x + sign * .06, y: .49, z: 0, visibility: 1 }
+    const strike = (1 - Math.cos((phase * 2 % 1) * Math.PI * 2)) / 2
+    const bend = ex === 'boxing' ? (Math.floor(phase * 2) % 2 === (sign < 0 ? 0 : 1) ? strike : 0) : cycle
+    const theta = (90 + bend * 80) * Math.PI / 180
+    const arm = Math.atan2(shoulder.y - elbow.y, shoulder.x - elbow.x) + sign * theta
+    const wrist = { x: elbow.x + .17 * Math.cos(arm), y: elbow.y + .17 * Math.sin(arm), z: 0, visibility: 1 }
+    if (ex === 'seatedTwist') shoulder.z = sign * cycle * .15
+    if (ex === 'karate') wrist.y = .42 - cycle * .3
+    if (RULES[ex].timed) { elbow.x += sign * cycle * .04; wrist.x = .5 + sign * (.1 + cycle * .23); wrist.y = .5 - cycle * .25 }
+    lm[sh] = shoulder; lm[el] = elbow; lm[wr] = wrist
+    lm[wr + 4] = { ...wrist, y: wrist.y - .03 }; lm[wr + 6] = { ...wrist }
+  }
+  return lm
+}
+
+export function demoPose(ex: Exercise, phase: number): P[] {
+  if (RULES[ex].upper) return upperPose(ex, phase)
+  const depth = (1 - Math.cos(phase * Math.PI * 2)) / 2
+  if (ex === 'squat' || ex === 'lunge') return squatPose(depth)
+  const lm = squatPose(0)
+  for (const [sh, el, wr, hip, an] of [[11, 13, 15, 23, 27], [12, 14, 16, 24, 28]]) {
+    lm[sh] = { x: .2, y: .4, visibility: 1 }; lm[hip] = { x: .5, y: .4, visibility: 1 }; lm[an] = { x: .8, y: .4, visibility: 1 }
+    lm[el] = { x: .22, y: .55, visibility: 1 }
+    const phi = Math.atan2(-.15, -.02) + (170 - depth * 90) * Math.PI / 180
+    lm[wr] = { x: .22 + .15 * Math.cos(phi), y: .55 + .15 * Math.sin(phi), visibility: 1 }
+  }
+  lm[0] = { x: .13, y: .36, visibility: 1 }
+  return lm
 }
 
 export type Rep = { depth: number; faults: string[]; score: number; at: number }

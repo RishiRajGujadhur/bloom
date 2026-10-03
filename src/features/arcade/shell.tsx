@@ -17,7 +17,7 @@ export function useBest(id: string) {
 export const reducedMotion = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 /** Frame around a game: live score, best, restart, and an animated result card. */
-export function GameShell({ title, score, best, hint, result, onRestart, children }: {
+export function GameShell({ title, score, best, hint, result, onRestart, children, gentleResult = false }: {
   title: string
   score: number
   best: number
@@ -25,6 +25,7 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
   result: { headline: string; lines: string[]; record: boolean } | null
   onRestart: () => void
   children: ReactNode
+  gentleResult?: boolean
 }) {
   const card = useRef<HTMLDivElement>(null)
   const hintKey = `bloom-arcade-hint-${title}`
@@ -37,10 +38,10 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
   useEffect(() => {
     if (!result || !card.current || reducedMotion()) return
     const t = gsap.timeline()
-    t.fromTo(card.current, { scale: 0.7, opacity: 0, rotate: -4 }, { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: 'back.out(1.8)' })
+    t.fromTo(card.current, { scale: gentleResult ? 0.94 : 0.7, opacity: 0, rotate: gentleResult ? 0 : -4 }, { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: gentleResult ? 'power2.out' : 'back.out(1.8)' })
     t.fromTo(card.current.querySelectorAll('li, .ar-record'), { y: 10, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.3 }, '-=0.2')
     return () => { t.kill() }
-  }, [result])
+  }, [result, gentleResult])
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.ctrlKey || e.metaKey) return

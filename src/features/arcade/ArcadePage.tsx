@@ -56,7 +56,7 @@ export function ArcadePage() {
       <Suspense fallback={<p role="status">Loading…</p>}><game.Game /></Suspense>
     </section>
   )
-  const best = (id: string) => { try { return Number(localStorage.getItem(`bloom-arcade-best-${id}`) ?? 0) } catch { return 0 } }
+  const best = (id: string) => { try { return Number(localStorage.getItem(`bloom-arcade-best-${id === 'vision' ? 'vision-v2-colour' : id}`) ?? 0) } catch { return 0 } }
   return (
     <section className="arcade">
       <header className="ar-head"><h2>Arcade</h2><p>{GAMES.length} games · one tap to play{plays() ? ` · ${plays()} played so far` : ''}</p><button type="button" className="ar-random" onClick={() => go(GAMES[Math.floor(Math.random() * GAMES.length)].id)}>🎲 Random game</button></header>

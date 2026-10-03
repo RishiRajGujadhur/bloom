@@ -181,7 +181,9 @@ export function WorkoutPage() {
       : templates.slice(0, 3).map((t) => ({ id: `wo-${t.id}`, label: `Start ${t.name}`, icon: t.emoji, run: () => start(t.id) })),
   )
   const train = () =>
-    !active ? (
+    active?.templateId === 'coach' ? (
+      <div className="studio-card"><h3>Form coach session</h3><p>{active.sets.length} sets logged</p><ul>{active.sets.map((s, i) => <li key={i}>{liftById(s.liftId)?.name} · {s.seconds !== undefined ? `${s.seconds}s` : `${s.reps} reps`}</li>)}</ul><button type="button" className="studio-go" onClick={() => setTab('coach')}>Return to form coach</button><button type="button" className="studio-chip" onClick={finish}>Finish workout</button></div>
+    ) : !active ? (
       <div className="wo-start">
         {(() => {
           const last = [...store.workouts].reverse().find((w) => w.finishedAt && templates.some((t) => t.id === w.templateId))
@@ -221,8 +223,8 @@ export function WorkoutPage() {
               type="button"
               className="wo-export"
               onClick={() => {
-                const rows = store.workouts.flatMap((w) => w.sets.map((s) => [new Date(s.at).toISOString(), `"${w.name}"`, `"${liftById(s.liftId)?.name ?? s.liftId}"`, s.weight, s.reps, s.rpe ?? ''].join(',')))
-                download(new Blob([['time,workout,lift,weight_kg,reps,rpe', ...rows].join('\n') + '\n'], { type: 'text/csv' }), 'bloom-workouts.csv')
+                const rows = store.workouts.flatMap((w) => w.sets.map((s) => [new Date(s.at).toISOString(), `"${w.name}"`, `"${liftById(s.liftId)?.name ?? s.liftId}"`, s.weight, s.reps, s.seconds ?? '', s.rpe ?? ''].join(',')))
+                download(new Blob([['time,workout,lift,weight_kg,reps,duration_seconds,rpe', ...rows].join('\n') + '\n'], { type: 'text/csv' }), 'bloom-workouts.csv')
               }}
             >
               ⬇ Export sets (CSV)
@@ -324,7 +326,7 @@ export function WorkoutPage() {
               <li key={i}>
                 <span>{liftById(s.liftId)?.name}</span>
                 <strong>
-                  {s.weight} kg × {s.reps}
+                  {s.seconds !== undefined ? `${s.seconds}s` : `${s.weight} kg × ${s.reps}`}
                 </strong>
                 {s.rpe && <small>@{s.rpe}</small>}
                 <button type="button" className="wo-del-set" aria-label="Remove this set" onClick={() => setStore((st) => ({ ...st, workouts: st.workouts.map((w) => (w.id === active.id ? { ...w, sets: w.sets.filter((_, j) => j !== i) } : w)) }))}>
@@ -351,7 +353,7 @@ export function WorkoutPage() {
       </div>
     )
 
-  const liftsWithData = lifts.filter((l) => allSets.some((s) => s.liftId === l.id))
+  const liftsWithData = lifts.filter((l) => allSets.some((s) => s.liftId === l.id && s.seconds === undefined))
   const series = progress(store.workouts, chartLift, store.bodyweight)
   const progressTab = () => (
     <div className="wo-progress">
@@ -439,7 +441,7 @@ export function WorkoutPage() {
                 const best = w.sets.filter((s) => s.liftId === id).sort((a, b) => b.weight - a.weight)[0]
                 return (
                   <li key={id}>
-                    {liftById(id)?.name}: {best.weight}×{best.reps}
+                    {liftById(id)?.name}: {best.seconds !== undefined ? `${best.seconds}s` : `${best.weight}×${best.reps}`}
                   </li>
                 )
               })}
@@ -467,7 +469,7 @@ export function WorkoutPage() {
       }
       tabs={[
         { id: 'train', label: 'Train', icon: <Dumbbell size={15} />, render: train },
-        ...(on('formCoach') ? [{ id: 'coach', label: 'Form coach', icon: <ScanFace size={15} />, render: () => <Suspense fallback={<p role="status">Loading the form coach…</p>}><FormCoach onLog={(liftId, reps) => { const set = { liftId, weight: 0, reps, at: Date.now() }; setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return open ? { ...s, workouts: s.workouts.map((w) => (w.id === open.id ? { ...w, sets: [...w.sets, set] } : w)) } : { ...s, workouts: [...s.workouts, { id: crypto.randomUUID(), name: 'Form coach', templateId: 'coach', startedAt: Date.now(), finishedAt: Date.now(), sets: [set] }] } }); logActivity('workout', { reps }) }} /></Suspense> }] : []),
+        ...(on('formCoach') ? [{ id: 'coach', label: 'Form coach', icon: <ScanFace size={15} />, render: () => <Suspense fallback={<p role="status">Loading the form coach…</p>}><FormCoach bodyweight={store.bodyweight} onFinish={() => { setRestLeft(0); setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return { ...s, workouts: s.workouts.map((w) => w.id === open?.id ? { ...w, finishedAt: Date.now() } : w) } }) }} onLog={(liftId, reps, seconds) => { const set: WSet = { liftId, weight: 0, reps, seconds, at: Date.now() }; setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return open ? { ...s, workouts: s.workouts.map((w) => (w.id === open.id ? { ...w, sets: [...w.sets, set] } : w)) } : { ...s, workouts: [...s.workouts, { id: crypto.randomUUID(), name: 'Form coach', templateId: 'coach', startedAt: Date.now(), sets: [set] }] } }); logActivity('workout', { reps }) }} /></Suspense> }] : []),
         ...(on('progressChart') || on('volumeChart') ? [{ id: 'progress', label: 'Progress', icon: <LineChart size={15} />, render: progressTab }] : []),
         ...(on('muscleVolume') ? [{ id: 'muscles', label: 'Muscles', icon: <Dumbbell size={15} />, render: musclesTab }] : []),
         ...(on('plates') ? [{ id: 'plates', label: 'Plates', icon: <Scale size={15} />, render: platesTab }] : []),

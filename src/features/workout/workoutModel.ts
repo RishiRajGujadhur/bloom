@@ -18,6 +18,13 @@ export const lifts: Lift[] = [
   { id: 'hipthrust', name: 'Hip thrust', muscles: ['glutes', 'hamstrings'], step: 2.5 },
   { id: 'calf', name: 'Calf raise', muscles: ['calves'], step: 2.5 },
   { id: 'plank', name: 'Plank (seconds)', muscles: ['abs'], bodyweight: true, step: 5 },
+  { id: 'seatedtwist', name: 'Seated Core Twist', muscles: ['obliques', 'abs'], step: 1 },
+  { id: 'wheelchairdip', name: 'Wheelchair Dips', muscles: ['triceps', 'shoulders'], step: 1 },
+  { id: 'chairpushup', name: 'Chair Push-up', muscles: ['triceps', 'chest'], step: 1 },
+  { id: 'taichiflow', name: 'Tai Chi (Flow)', muscles: ['shoulders', 'forearms', 'abs'], step: 1 },
+  { id: 'seatedboxing', name: 'Boxing (Jab-Cross)', muscles: ['shoulders', 'triceps', 'abs'], step: 1 },
+  { id: 'seatedkarate', name: 'Karate (Blocks)', muscles: ['shoulders', 'forearms'], step: 1 },
+  { id: 'seatedkungfu', name: 'Kung Fu (Hand Form)', muscles: ['shoulders', 'forearms'], step: 1 },
 ]
 export const liftById = (id: string) => lifts.find((l) => l.id === id)
 
@@ -29,7 +36,7 @@ export const templates = [
   { id: 'home', name: 'Home, no kit', emoji: '🏠', lifts: ['pushup', 'lunge', 'hipthrust', 'plank'] },
 ]
 
-export type WSet = { liftId: string; weight: number; reps: number; rpe?: number; at: number }
+export type WSet = { liftId: string; weight: number; reps: number; seconds?: number; rpe?: number; at: number }
 export type Workout = { id: string; name: string; templateId: string; startedAt: number; finishedAt?: number; sets: WSet[]; note?: string }
 export type WorkoutStore = { workouts: Workout[]; rest: number; bodyweight: number }
 export const WORKOUT_KEY = 'bloom-workouts-v1'
@@ -40,11 +47,12 @@ export const e1rm = (weight: number, reps: number) => (reps <= 1 ? weight : Math
 export const load = (s: WSet, bodyweight = 0) => (liftById(s.liftId)?.bodyweight ? bodyweight + s.weight : s.weight)
 
 export function volume(sets: WSet[], bodyweight = 0) {
-  return Math.round(sets.reduce((t, s) => t + load(s, bodyweight) * s.reps, 0))
+  return Math.round(sets.reduce((t, s) => t + (s.seconds === undefined ? load(s, bodyweight) * s.reps : 0), 0))
 }
 
 /** Personal records a new set would set, compared with all previous sets. */
 export function prsFor(set: WSet, history: WSet[], bodyweight = 0) {
+  if (set.seconds !== undefined) return []
   const prior = history.filter((s) => s.liftId === set.liftId && s.at < set.at)
   const out: ('e1rm' | 'weight' | 'reps')[] = []
   if (!prior.length) return out
@@ -59,11 +67,11 @@ export function prsFor(set: WSet, history: WSet[], bodyweight = 0) {
 /** Best estimated 1RM per workout for one lift, oldest first. */
 export function progress(workouts: Workout[], liftId: string, bodyweight = 0) {
   return workouts
-    .filter((w) => w.sets.some((s) => s.liftId === liftId))
+    .filter((w) => w.sets.some((s) => s.liftId === liftId && s.seconds === undefined))
     .sort((a, b) => a.startedAt - b.startedAt)
     .map((w) => ({
       at: w.startedAt,
-      best: Math.max(...w.sets.filter((s) => s.liftId === liftId).map((s) => e1rm(load(s, bodyweight), s.reps))),
+      best: Math.max(...w.sets.filter((s) => s.liftId === liftId && s.seconds === undefined).map((s) => e1rm(load(s, bodyweight), s.reps))),
       volume: volume(w.sets.filter((s) => s.liftId === liftId), bodyweight),
     }))
 }

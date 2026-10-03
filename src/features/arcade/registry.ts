@@ -16,6 +16,9 @@ const g = (n: number, id: string, title: string, blurb: string, tech: string, hu
   ({ n, id, title, blurb, tech, hue, art, Game: lazy(load) })
 
 export const GAMES: GameDef[] = [
+  g(98, 'vision', 'Bloom Vision Game', 'Your hands are the controller. Reach, match colours and pop floating bubbles.', 'MediaPipe · GSAP · SVG', 155,
+    '<circle cx="18" cy="18" r="10" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="14" r="7" fill="currentColor" opacity=".6"/><circle cx="48" cy="42" r="11" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 56V34q0-5 4-5t4 5v6-18q0-5 4-5t4 5v17-10q0-5 4-5t4 5v17q0 10-12 10z" fill="currentColor" opacity=".8"/>',
+    () => import('./games/BloomVision')),
   g(1, 'pantry', 'Pantry Tetris', 'Drop the shopping into the fridge so the door still shuts.', 'matter-js · SVG', 190,
     '<rect x="14" y="8" width="36" height="48" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="44" r="6" fill="currentColor"/><rect x="33" y="36" width="10" height="14" rx="2" fill="currentColor" opacity=".6"/><rect x="22" y="26" width="18" height="8" rx="3" fill="currentColor" opacity=".8"/>',
     () => import('./games/PantryTetris')),
