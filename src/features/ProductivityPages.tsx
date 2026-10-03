@@ -13,7 +13,7 @@ import { usePageActions } from '../components/ui/PageMenu'
 /** Only heavy tasks drop by default; switching "Heavy tasks only" off lets any task fall. */
 const impactThreshold = () => (subOn('impactTasks', 'heavyOnly') ? 1 : 0)
 import { CardRail } from '../components/BloomExperience'
-import { useState, type Dispatch, type SetStateAction } from 'react'
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import gsap from 'gsap'
 import './waterdo.css'
 import './todos/quickTask.css'
@@ -184,6 +184,7 @@ export function ChallengesPage({
 import { addDays, parseQuickTask, splitLines } from './todos/quickTask'
 
 export function TodoPage({ data, setData }: Props) {
+  const composerRef = useRef<HTMLInputElement>(null)
   const [waterDo, setWaterDo] = useState(() => localStorage.getItem('bloom-waterdo') === 'true')
   const [planning, setPlanning] = useState({ ...emptyPlanning })
   const [editPlanning, setEditPlanning] = useState({ ...emptyPlanning })
@@ -234,6 +235,21 @@ export function TodoPage({ data, setData }: Props) {
       ),
     ].slice(0, 6)
   const [taskQuery, setTaskQuery] = useState('')
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      if (
+        event.key.toLowerCase() !== 'n' ||
+        event.ctrlKey || event.metaKey || event.altKey ||
+        target?.isContentEditable ||
+        target?.closest('input, textarea, select, button, [contenteditable="true"]')
+      ) return
+      event.preventDefault()
+      composerRef.current?.focus()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
   const allTags = [...new Set(data.todos.flatMap((task) => task.tags))].sort()
   const priorityOrder = { P1: 1, P2: 2, P3: 3, P4: 4 }
   const filterCounts = {
@@ -346,6 +362,7 @@ export function TodoPage({ data, setData }: Props) {
       <form className="task-composer" onSubmit={add}>
         <div className="task-add">
           <input
+            ref={composerRef}
             aria-label="New task"
             placeholder="What needs doing?"
             maxLength={150}
@@ -381,7 +398,7 @@ export function TodoPage({ data, setData }: Props) {
               {quick.tags.map((t) => <b key={t}>#{t}</b>)}
             </div>
           )}
-        <small className="quick-hint">Tip: type “tomorrow p1 #home every week”, or paste a list to add many.</small>
+        <small className="quick-hint">Tip: type “tomorrow p1 #home every week”, paste a list to add many, or press N to add a task.</small>
         {data.todos.some((t) => t.done && t.completedAt && new Date(t.completedAt).toDateString() === new Date().toDateString()) && (
           <small className="quick-hint"> · ✓ {data.todos.filter((t) => t.done && t.completedAt && new Date(t.completedAt).toDateString() === new Date().toDateString()).length} done today</small>
         )}
