@@ -235,11 +235,12 @@ export function UrgePage({ data, setData }: Props) {
                 <span className={`event-kind ${kind}`}>{kind}</span>
                 <h2>How strong was it?</h2>
                 <p>{chosenHabit?.title}</p>
-                <div className="intensity-scale" aria-label="Urge intensity">
+                <div className="intensity-scale" role="group" aria-label="Urge intensity">
                   {[1, 2, 3, 4, 5].map((value) => (
                     <button
                       key={value}
                       aria-label={`Intensity ${value} of 5`}
+                      aria-pressed={intensity === value}
                       onClick={() => setIntensity(value)}
                     >
                       <strong>{value}</strong>
@@ -253,6 +254,9 @@ export function UrgePage({ data, setData }: Props) {
                     </button>
                   ))}
                 </div>
+                <p className="sr-only" aria-live="polite">
+                  {intensity ? `Intensity ${intensity} of 5 selected.` : ''}
+                </p>
               </div>
             )}
             {step === 3 && (
