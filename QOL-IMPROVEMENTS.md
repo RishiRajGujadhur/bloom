@@ -33,7 +33,7 @@ Items are intentionally small enough to review and verify independently.
 ## Focus room
 
 - [ ] Add pause and resume controls for active sessions.
-- [ ] Show the current session's remaining time in an accessible status.
+- [x] Show the current session's remaining time in an accessible status.
 - [ ] Add a quick way to extend or shorten a not-yet-started session.
 - [ ] Provide a quieter scene option for reduced-distraction sessions.
 - [ ] Add an explicit soundtrack preview state before playback.

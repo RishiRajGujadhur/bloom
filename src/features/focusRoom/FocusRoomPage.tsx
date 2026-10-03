@@ -78,6 +78,11 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
           {String(Math.floor(left / 60000)).padStart(2, '0')}:
           {String(Math.floor(left / 1000) % 60).padStart(2, '0')}
         </div>
+        {running && (
+          <span className="sr-only" role="status" aria-live="polite">
+            {Math.ceil(left / 60000)} {Math.ceil(left / 60000) === 1 ? 'minute' : 'minutes'} remaining in your focus session.
+          </span>
+        )}
         <div className="room-desk" aria-hidden="true">
           <span className="room-lamp" />
           <span className="room-laptop" />
