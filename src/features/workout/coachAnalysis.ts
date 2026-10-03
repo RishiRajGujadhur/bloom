@@ -60,3 +60,18 @@ export function boxingTick(previous: BoxingState, pose: P[], at: number, lead: '
   }
   return { at, pose, lastStrike, strike, guard, counts }
 }
+
+export function handForm(hand: P[], target: 'open' | 'fist' | 'claw') {
+  if (hand.length !== 21) return null
+  const bends = [5, 9, 13, 17].map(base => angle(hand[base], hand[base + 1], hand[base + 3]))
+  const wanted = target === 'open' ? 175 : target === 'fist' ? 55 : 100
+  return { score: Math.round(Math.max(0, 100 - bends.reduce((sum, bend) => sum + Math.abs(bend - wanted), 0) / 4)), bends: bends.map(Math.round) }
+}
+export function blockCue(pose: P[]) {
+  if (!upperVisible(pose)) return 'Show both forearms'
+  const raised = [15, 16].find(i => pose[i].y < pose[0].y)
+  if (raised) return 'High block · keep the forearm in your comfortable range'
+  const low = [15, 16].find(i => pose[i].y > pose[11].y + .25)
+  if (low) return 'Low block · return to guard smoothly'
+  return Math.abs(pose[15].x - pose[16].x) < .18 ? 'Inner block position' : 'Outer block position'
+}

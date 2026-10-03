@@ -18,7 +18,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Combo rhythm consistency
 - [x] Tai Chi flow grading and Yang/Chen reference selection
 - [x] Boxing strike classification and guard feedback
-- [ ] Kung Fu hand/wrist and Karate block guidance
+- [x] Kung Fu hand/wrist and Karate block guidance
 - [ ] Reaction-time visual drills
 - [ ] Energy-to-RPG damage
 - [ ] Independent limb workload/fatigue gauges
