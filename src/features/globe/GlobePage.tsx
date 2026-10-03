@@ -164,6 +164,7 @@ export function GlobePage() {
           )}
         </p>
         <h2>{q.mode === 'find' ? <>Find <em>{q.country.name}</em></> : q.mode === 'name' ? 'Which country is glowing?' : <>Capital of <em>{q.country.name}</em>?</>}</h2>
+        <p className="gq-shortcuts">Keyboard: S skips · Enter continues · 1–4 answer capital choices</p>
         <div className="gq-row">
           {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
         </div>

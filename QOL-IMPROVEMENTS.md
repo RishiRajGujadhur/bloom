@@ -77,7 +77,7 @@ Items are intentionally small enough to review and verify independently.
 
 ## Globe quiz
 
-- [ ] Add a visible keyboard-shortcut hint.
+- [x] Add a visible keyboard-shortcut hint.
 - [ ] Add a pause control for quiz questions.
 - [ ] Show session accuracy and streak together.
 - [ ] Offer a retry round for missed countries.
