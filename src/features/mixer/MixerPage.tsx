@@ -193,9 +193,12 @@ export function MixerPage() {
         <button type="button" className="studio-chip" onClick={randomise} title="Pick a random mix">
           🎲 Surprise me
         </button>
-        <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
+        <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} aria-pressed={playing}>
           {playing ? <Pause size={36} /> : <Play size={36} />}
         </button>
+        <span className="sr-only" role="status">
+          {playing ? 'Soundscape is playing.' : 'Soundscape is paused.'}
+        </span>
         {on('sleepTimer') && (
           <>
             <Slider label="Sleep timer" value={store.sleep} min={5} max={120} step={5} unit="min" onChange={(v) => setStore((s) => ({ ...s, sleep: v }))} />
