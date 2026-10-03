@@ -64,7 +64,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Add a clear playback status for assistive technology.
 - [x] Show the remaining sleep-timer duration while playing.
 - [ ] Improve saved-mix naming and duplicate feedback.
-- [ ] Add a quick reset-to-preset action.
+- [x] Add a quick reset-to-preset action.
 
 ## Reflection journal
 

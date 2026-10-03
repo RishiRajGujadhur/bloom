@@ -1,7 +1,7 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import gsap from 'gsap'
-import { Moon, Pause, Play, Save, SlidersHorizontal, Sparkles, Trash2, Volume2, VolumeX } from 'lucide-react'
+import { Moon, Pause, Play, RotateCcw, Save, SlidersHorizontal, Sparkles, Trash2, Volume2, VolumeX } from 'lucide-react'
 import { Rail, Slider, Studio, logActivity, readStore, writeStore } from '../../components/studio/Studio'
 import { subOn } from '../subFeatures'
 import { layers, mixer, presets, type Mix } from './mixerEngine'
@@ -227,6 +227,9 @@ export function MixerPage() {
         )}
         <button type="button" className="studio-chip" onClick={randomise} title="Pick a random mix">
           🎲 Surprise me
+        </button>
+        <button type="button" className="studio-chip" onClick={() => setStore((s) => ({ ...s, mix: presets[0].mix }))}>
+          <RotateCcw size={14} aria-hidden="true" /> Reset to {presets[0].name}
         </button>
         <button type="button" className="fm-play mx-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} aria-pressed={playing}>
           {playing ? <Pause size={36} /> : <Play size={36} />}
