@@ -53,7 +53,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Add a direct entry point to write a gratitude note from an empty jar.
 - [x] Show the selected jar's note count and capacity clearly.
 - [x] Add accessible labels to jar selection and reveal controls.
-- [ ] Add a confirmation animation that respects reduced-motion settings.
+- [x] Add a confirmation animation that respects reduced-motion settings.
 - [x] Allow filtering or browsing notes by date.
 - [x] Add an undo path for removing a note.
 
@@ -104,9 +104,9 @@ Items are intentionally small enough to review and verify independently.
 
 ## Verification and polish
 
-- [ ] Check all new controls with keyboard-only navigation.
-- [ ] Check new animated states with reduced motion enabled.
-- [ ] Check layouts at narrow mobile widths.
-- [ ] Confirm preferences survive a page reload where persistence is intended.
-- [ ] Confirm new labels and live regions are meaningful to screen readers.
+- [x] Check all new controls with keyboard-only navigation.
+- [x] Check new animated states with reduced motion enabled.
+- [x] Check layouts at narrow mobile widths.
+- [x] Confirm preferences survive a page reload where persistence is intended.
+- [x] Confirm new labels and live regions are meaningful to screen readers.
 - [x] Run the production build after the final set of changes.
