@@ -54,7 +54,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Show the selected jar's note count and capacity clearly.
 - [x] Add accessible labels to jar selection and reveal controls.
 - [ ] Add a confirmation animation that respects reduced-motion settings.
-- [ ] Allow filtering or browsing notes by date.
+- [x] Allow filtering or browsing notes by date.
 - [x] Add an undo path for removing a note.
 
 ## Soundscapes

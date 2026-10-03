@@ -702,9 +702,11 @@ export function GratitudePage() {
   })
   const setJarId = (id: string) => {
     setJarIdState(id)
+    setNoteMonth('all')
     try { localStorage.setItem('bloom-gratitude-jar', id) } catch { /* optional */ }
   }
   const [text, setText] = useState('')
+  const [noteMonth, setNoteMonth] = useState('all')
   // Today's count and the run of days with at least one entry.
   const dayOf = (at: number) => new Date(at).toDateString()
   const todayCount = entries.filter((e) => dayOf(e.at) === dayOf(Date.now())).length
@@ -722,6 +724,12 @@ export function GratitudePage() {
   const [newJar, setNewJar] = useState({ name: '', emoji: '🫙' })
   const jar = jars.find((j) => j.id === jarId) ?? jars[0]
   const inJar = entries.filter((e) => (e.jarId ?? 'moments') === jar.id)
+  const monthKey = (at: number) => {
+    const date = new Date(at)
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+  }
+  const noteMonths = [...new Set(inJar.map((entry) => monthKey(entry.at)))].sort().reverse()
+  const visibleNotes = noteMonth === 'all' ? inJar : inJar.filter((entry) => monthKey(entry.at) === noteMonth)
   const totals = jarTotals(jars, entries)
   const top = totals[0]
   const fill = (count: number) => Math.min(100, (count / JAR_CAPACITY) * 100)
@@ -1056,8 +1064,23 @@ export function GratitudePage() {
       </div>
       )}
       {inJar.length > 0 && (
+        <div className="wb-note-filter">
+          <label htmlFor="gratitude-note-month">Browse notes by month</label>
+          <select id="gratitude-note-month" value={noteMonth} onChange={(event) => setNoteMonth(event.target.value)}>
+            <option value="all">All dates ({inJar.length})</option>
+            {noteMonths.map((month) => (
+              <option key={month} value={month}>
+                {new Date(`${month}-01T12:00:00`).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
+                {' '}({inJar.filter((entry) => monthKey(entry.at) === month).length})
+              </option>
+            ))}
+          </select>
+          <span aria-live="polite">{visibleNotes.length} {visibleNotes.length === 1 ? 'note' : 'notes'}</span>
+        </div>
+      )}
+      {visibleNotes.length > 0 && (
         <Carousel label={`Notes in ${jar.name}`} title="In this jar" perView={4}>
-          {inJar.map((entry) => (
+          {visibleNotes.map((entry) => (
             <article key={entry.id} className="wb-note">
               <p>{entry.text}</p>
               <small>
