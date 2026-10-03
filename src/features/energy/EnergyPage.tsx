@@ -29,6 +29,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
   }
   const [category, setCategory] = useState(categories[0].id)
   const [hours, setHours] = useState('1')
+  const [logMessage, setLogMessage] = useState('')
   const flow = useMemo(
     () =>
       buildFlow({
@@ -144,6 +145,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
                 e.preventDefault()
                 const h = Math.min(24, Math.max(0.25, Number(hours) || 0))
                 setStore((s) => ({ logs: [...s.logs, { id: crypto.randomUUID(), date: today, category, hours: h }] }))
+                setLogMessage(`Added ${h} ${h === 1 ? 'hour' : 'hours'} for ${categories.find((item) => item.id === category)?.label ?? 'activity'}.`)
               }}
             >
               <select aria-label="Activity" value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -158,6 +160,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
                 <Plus size={16} aria-hidden="true" /> Add
               </button>
             </form>
+            <p className="sr-only" role="status" aria-live="polite">{logMessage}</p>
             <p className="energy-note">Sleep, focus sessions, habits and journaling are counted automatically.</p>
             <ul className="energy-logs">
               {todayLogs.map((l) => {

@@ -86,7 +86,7 @@ Items are intentionally small enough to review and verify independently.
 
 ## Energy flow
 
-- [ ] Add confirmation feedback when a manual log is saved.
+- [x] Add confirmation feedback when a manual log is saved.
 - [ ] Allow editing a logged activity instead of removing and re-adding it.
 - [ ] Add a quick undo after removing a manual log.
 - [x] Add an accessible tabular alternative for the flow chart.
