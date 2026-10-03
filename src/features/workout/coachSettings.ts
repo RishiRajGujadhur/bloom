@@ -1,6 +1,7 @@
 export const COACH_OPTIONS = {
   efficiency: 'Work and rest efficiency', consistency: 'Power consistency', degradation: 'Output decline alerts', stability: 'Upper-body stability proxy',
   autoFrame: 'Digital auto-framing',
+  extension: 'Extension and slowdown cue',
   muscles: 'Muscle group guide',
   fullscreenMetrics: 'Floating fullscreen metrics',
   reference: 'Master reference view', angles: 'Joint-angle callouts', energy: 'Energy estimates',

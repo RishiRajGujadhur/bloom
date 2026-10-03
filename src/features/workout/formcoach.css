@@ -134,3 +134,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 @media(max-width:650px){.fc-toolbar .fc-actions{grid-template-columns:1fr}.fc-toolbar{display:block}}
 
 .fc-motion-map{width:100%;height:100px}
+
+.fc-extension-cue{position:absolute;top:52px;left:8px;right:8px;border-radius:8px;padding:8px;background:#ffc857;color:#1b2019;font-size:11px}

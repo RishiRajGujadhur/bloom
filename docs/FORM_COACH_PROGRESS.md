@@ -53,6 +53,8 @@ not a medical prescription or a validated martial-arts master.
 
 - [x] Post-set torso alignment and elbow excursion diagram
 
+- [x] Projected extension and rapid slowdown visual cue (not joint stress measurement)
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation

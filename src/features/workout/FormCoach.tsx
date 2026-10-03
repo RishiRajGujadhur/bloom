@@ -443,6 +443,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
             </div>
             {mode === 'idle' && <p className="fc-tip">{accessible ? 'Show your head, torso and arms. No need to show your legs.' : RULES[ex].tip}</p>}
             {focus && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}
+            {!focus && ready && options.extension && ['boxing', 'karate', 'kungFu'].includes(ex) && combat.deceleration > 2 && Math.max(jointAngles.left ?? 0, jointAngles.right ?? 0) > 175 && <span className="fc-extension-cue">Near full projected elbow extension during rapid slowdown</span>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
             {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
           </div>
