@@ -33,7 +33,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Frame-exit auto-pause and metronome hold
 - [x] Focus-mode background dimming
 - [x] Markdown session export
-- [ ] Battery saver
+- [x] Battery saver
 - [ ] Silent wearable feedback and heart-rate connection
 - [x] Performance history and range-of-motion trends
 - [ ] Custom routine chaining

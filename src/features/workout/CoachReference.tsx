@@ -3,7 +3,7 @@ import { angle, BONES, referencePose, RULES, UPPER_BONES, type Exercise, type Li
 import { prefersReducedMotion } from '../../utils/motion'
 
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
-export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false }: { exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean }) {
+export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false }: { exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const [available, setAvailable] = useState(true)
   const [angles, setAngles] = useState({left: 0, right: 0})
@@ -14,7 +14,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       if (cancelled || !canvas.current) return
       let renderer: InstanceType<typeof THREE.WebGLRenderer>
       try { renderer = new THREE.WebGLRenderer({ canvas: canvas.current, alpha: true, antialias: true }) } catch { setAvailable(false); return }
-      renderer.setSize(240, 200, false); renderer.setPixelRatio(Math.min(2, window.devicePixelRatio))
+      renderer.setSize(240, 200, false); renderer.setPixelRatio(battery ? 1 : Math.min(2, window.devicePixelRatio))
       const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(42, 1.2, .1, 100)
       camera.position.set(1.15, .25, 3.4); camera.lookAt(0, .15, 0)
       const group = new THREE.Group(); scene.add(group)
@@ -31,7 +31,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       let renderedAt = 0, phaseTime = 0
       const loop = (now: number) => {
         if (cancelled) return
-        if (now - renderedAt < 50) { raf = requestAnimationFrame(loop); return }
+        if (now - renderedAt < (battery ? 125 : 50)) { raf = requestAnimationFrame(loop); return }
         if (!paused && renderedAt) phaseTime += now - renderedAt
         renderedAt = now
         const pose = referencePose(exercise, prefersReducedMotion() ? .25 : phaseTime / 4000 % 1, lineage)
@@ -49,6 +49,6 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       raf = requestAnimationFrame(loop)
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
-  }, [exercise, lineage, paused])
+  }, [exercise, lineage, paused, battery])
   return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
 }

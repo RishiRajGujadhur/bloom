@@ -105,7 +105,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [romStatus, setRomStatus] = useState('Optional: calibrate your comfortable movement range')
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
   const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
-  useKeepAwake(mode === 'camera' || mode === 'demo')
+  useKeepAwake(!options.battery && (mode === 'camera' || mode === 'demo'))
   const maskCanvas = useRef<HTMLCanvasElement>(null)
   const latestOptions = useRef(options); latestOptions.current = options
   const video = useRef<HTMLVideoElement>(null), canvas = useRef<HTMLCanvasElement>(null), panel = useRef<HTMLDivElement>(null)
@@ -116,7 +116,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const baseline = useRef<UpperBaseline | null>(null), samples = useRef<UpperBaseline[]>([]), calibrationTime = useRef(0)
   const gestureState = useRef(emptyGesture()), actionRef = useRef<Record<string, () => void>>({}), nativeFocus = useRef(false)
   const ready = mode === 'camera' || mode === 'demo'
-  useEffect(() => { if (mode === 'camera') void detector.current?.setOptions?.({ outputSegmentationMasks: options.dimming }).catch(() => setErr('Background focus could not start on this device.')) }, [mode, options.dimming])
+  useEffect(() => { if (mode === 'camera') void detector.current?.setOptions?.({ outputSegmentationMasks: options.dimming && !options.battery }).catch(() => setErr('Background focus could not start on this device.')) }, [mode, options.dimming, options.battery])
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
@@ -149,6 +149,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     }
   }, [release, exitFocus])
 
+  useEffect(() => { if (mode === 'camera') void stream.current?.getVideoTracks()[0]?.applyConstraints({ width: options.battery ? 480 : 640, height: options.battery ? 360 : 480, frameRate: options.battery ? 15 : 30 }).catch(() => {}) }, [mode, options.battery])
   const logSet = () => {
     const rule = RULES[exercise.current], count = rule.timed ? Math.floor(hold.current.seconds) : counter.current.reps.length
     if (!count) { setMessage('No completed movement to log yet.'); return }
@@ -329,8 +330,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       const files = await FilesetResolver.forVisionTasks(WASM)
       if (generation.current !== run) return
       let model
-      try { model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' }, runningMode: 'VIDEO', numPoses: 1, outputSegmentationMasks: options.dimming }) }
-      catch { if (generation.current !== run) return; model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1, outputSegmentationMasks: options.dimming }) }
+      try { model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' }, runningMode: 'VIDEO', numPoses: 1, outputSegmentationMasks: options.dimming && !options.battery }) }
+      catch { if (generation.current !== run) return; model = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: MODEL, delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1, outputSegmentationMasks: options.dimming && !options.battery }) }
       if (generation.current !== run) { model.close(); return }
       detector.current = model as unknown as Detector; setTrackingPaused(false); setMode('camera'); modeRef.current = 'camera'
       let sampledAt = 0, videoTime = -1
@@ -338,7 +339,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         if (generation.current !== run) return
         const v = video.current
         if (document.hidden) { hold.current.last = 0; lastFrame.current = 0; motion.current.points = null; gestureState.current = emptyGesture() }
-        else if (v && v.readyState >= 2 && v.currentTime !== videoTime && at - sampledAt > 45) {
+        else if (v && v.readyState >= 2 && v.currentTime !== videoTime && at - sampledAt > (latestOptions.current.battery ? 100 : 45)) {
           videoTime = v.currentTime; sampledAt = at
           try {
             const result = detector.current!.detectForVideo(v, at)
@@ -350,7 +351,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
                 if (context) { const image = context.createImageData(mask.width, mask.height); for (let i = 0; i < data.length; i++) image.data[i * 4 + 3] = Math.round((1 - Math.max(0, Math.min(1, data[i]))) * 190); context.putImageData(image, 0, 0) }
               } else canvas?.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
             } finally { if (result.close) result.close(); else result.segmentationMasks?.forEach(mask => mask.close()) }
-            if (handDetector.current && exercise.current === 'kungFu' && at - handSample.current > 100) { handSample.current = at; setHandScores(handDetector.current.detectForVideo(v, at).landmarks.map(hand => handForm(hand, handTargetRef.current))) }
+            if (handDetector.current && !latestOptions.current.battery && exercise.current === 'kungFu' && at - handSample.current > 100) { handSample.current = at; setHandScores(handDetector.current.detectForVideo(v, at).landmarks.map(hand => handForm(hand, handTargetRef.current))) }
             if (result.landmarks[0]) frameRef.current(result.landmarks[0], result.worldLandmarks?.[0], at, true)
             else {
               hold.current.last = 0; counter.current.phase = 'up'; gestureState.current = emptyGesture(); setGesture({ id: null, progress: 0, latched: false })
@@ -397,6 +398,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       <div className="fc-center">
         <div className={`fc-split ${options.reference ? '' : 'fc-no-reference'}`}><div ref={panel} className={`fc-camera-panel ${focus ? 'fc-focused' : ''}`} aria-label="Camera training view">
           <div className="fc-view" data-matrix-native><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
+            {ready && options.battery && <span className="fc-battery-badge">Battery saver · 10 fps · background focus and finger inference held</span>}
             {ready && options.ghost && ghost && ghostFrame(ghost, metrics.seconds) && <CoachGhost exercise={ex} pose={ghostFrame(ghost, metrics.seconds)!} mirror={mode === 'camera'} />}
             {ready && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}
             {ready && options.trails && ['boxing', 'karate', 'kungFu'].includes(ex) && <CoachTrails frames={trailFrames} mirror={mode === 'camera'} />}
@@ -405,7 +407,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
             {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
           </div>
         </div>
-        {options.reference && <CoachReference exercise={ex} anglesVisible={options.angles} lineage={lineage} paused={options.autoPause && trackingPaused} />}</div>
+        {options.reference && <CoachReference exercise={ex} anglesVisible={options.angles} lineage={lineage} paused={options.autoPause && trackingPaused} battery={options.battery} />}</div>
         {options.angles && <div className="fc-live-angles">Your projected elbow angles: L {jointAngles.left}° · R {jointAngles.right}°</div>}
         <div className="fc-asymmetry"><strong>Asymmetry Alert <small>silent · relative to your neutral position</small></strong><div className="fc-balance-track" role="meter" aria-label="Upper-body asymmetry" aria-valuemin={-100} aria-valuemax={100} aria-valuenow={Math.round((balance?.value ?? 0) * 100)} aria-valuetext={silentStatus}><i style={{ left: `${50 + (balance?.value ?? 0) * 45}%`, background: balance?.alert ? '#ffd43b' : '#5dffc0' }} /></div><span>{silentStatus}</span></div>
         {ready && options.autoPause && trackingPaused && <p role="status" className="fc-error">Tracking and pacing paused. Return your head and arms to the frame to resume.</p>}
