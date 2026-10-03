@@ -72,6 +72,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
             Not enough to draw yet. Log sleep, finish a focus session, or add a few hours below and your week will start to flow.
           </p>
         ) : (
+          <>
           <div className="energy-sankey" role="img" aria-label={`Sankey diagram: ${flow.links.map((l) => `${l.source} to ${l.target} ${l.value} hours`).join(', ')}`}>
             <ResponsiveSankey
               data={flow}
@@ -118,6 +119,7 @@ export function EnergyPage({ data, today }: FeaturePageProps) {
               </table>
             </div>
           </details>
+          </>
         )}
         {subOn('energySankey', 'burnout') && (
           <p className="energy-burnout" data-level={flow.burnout}>

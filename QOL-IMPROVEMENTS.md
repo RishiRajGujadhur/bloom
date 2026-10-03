@@ -109,4 +109,4 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Check layouts at narrow mobile widths.
 - [ ] Confirm preferences survive a page reload where persistence is intended.
 - [ ] Confirm new labels and live regions are meaningful to screen readers.
-- [ ] Run the production build after the final set of changes.
+- [x] Run the production build after the final set of changes.
