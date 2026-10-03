@@ -15,11 +15,11 @@ Items are intentionally small enough to review and verify independently.
 ## Daybook modes
 
 - [x] Add search across saved page titles and text.
-- [ ] Add a visible word-count goal while writing.
-- [ ] Make save status persistent and easy to scan.
+- [x] Add a visible word-count goal while writing.
+- [x] Make save status persistent and easy to scan.
 - [x] Add accessible labels to saved-page quick actions.
-- [ ] Offer a clear recovery action after deleting a page.
-- [ ] Add a compact view of recent writing activity.
+- [x] Offer a clear recovery action after deleting a page.
+- [x] Add a compact view of recent writing activity.
 
 ## Urges
 
