@@ -60,6 +60,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallback: 'index.html',
         runtimeCaching: [
+          { urlPattern: ({ url }) => url.href.startsWith('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm/') || url.href.startsWith('https://storage.googleapis.com/mediapipe-models/pose_landmarker/') || url.href.startsWith('https://storage.googleapis.com/mediapipe-models/hand_landmarker/'), handler: 'CacheFirst', options: { cacheName: 'bloom-coach-tracking-v1', cacheableResponse: { statuses: [200] } } },
+          { urlPattern: ({ url }) => /\/assets\/(FormCoach|Coach|coach|vision_bundle|three)[^/]*\.js$/.test(url.pathname), handler: 'CacheFirst', options: { cacheName: 'bloom-coach-modules' } },
           { urlPattern: ({ url }) => url.pathname.startsWith('/assets/'), handler: 'CacheFirst', options: { cacheName: 'bloom-lazy-assets', expiration: { maxEntries: 60 } } },
           { urlPattern: ({ url }) => url.pathname.startsWith('/audio/'), handler: 'CacheFirst', options: { cacheName: 'bloom-audio', expiration: { maxEntries: 40 } } },
         ],

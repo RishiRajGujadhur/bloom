@@ -28,7 +28,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Fatigue-aware routine suggestions
 - [x] Secondary camera connection and depth calibration
 - [x] Custom high-contrast skeletal colors
-- [ ] Offline tracking asset preparation
+- [x] Offline tracking asset preparation
 - [ ] Lowest-scoring rep replay and compensation review
 - [x] Frame-exit auto-pause and metronome hold
 - [ ] Focus-mode background dimming
@@ -58,3 +58,7 @@ Secondary-camera pairing exchanges WebRTC offers/answers manually on the same LA
 requires secure camera access on both devices. Depth fusion assumes fixed 90° cameras,
 uses synchronized visible landmarks, and falls back on occlusion. Hardware validation
 is still required. [WebRTC connectivity](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity).
+
+Offline preparation caches versioned pose/hand models and all WASM variants.
+It requires the production service worker and retained browser storage. GPU
+tracking is the SDK delegate; neither WebGPU nor zero latency is guaranteed.

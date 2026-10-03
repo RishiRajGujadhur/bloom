@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { COACH_WASM, COACH_MODEL } from './coachOffline'
 import { upperVisible, type P } from './formModel'
 type SidePose = { at: number; pose: P[] }
 export type DepthCalibration = { frontY: number; sideY: number; sideX: number; scale: number; direction: number }
@@ -44,8 +45,8 @@ export function CoachSecondary({ onPose }: { onPose: (pose: SidePose | null) => 
   useEffect(() => () => { generation.current++; cancelAnimationFrame(raf.current); peer.current?.close(); stream.current?.getTracks().forEach(track => track.stop()); model.current?.close() }, [])
   const receiveTracking = async (run: number) => {
     const { FilesetResolver, PoseLandmarker } = await import('@mediapipe/tasks-vision')
-    const files = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm')
-    const detector = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task', delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1 })
+    const files = await FilesetResolver.forVisionTasks(COACH_WASM)
+    const detector = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: COACH_MODEL, delegate: 'CPU' }, runningMode: 'VIDEO', numPoses: 1 })
     if (run !== generation.current) { detector.close(); return }
     model.current = detector
     let last = 0, videoTime = -1

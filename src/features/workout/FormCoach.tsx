@@ -14,12 +14,13 @@ import { readGhost, saveGhost, ghostFrame } from './coachReplay'
 import { CoachGhost } from './CoachGhost'
 import { Sprite } from '../../rpg/Sprite'
 import { CoachSecondary, calibrateDepth, fuseDepth, type DepthCalibration } from './CoachSecondary'
+import { COACH_WASM, COACH_MODEL, COACH_HAND_MODEL, prepareCoachOffline } from './coachOffline'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
-const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm'
-const HAND_MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'
-const MODEL = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task'
+const WASM = COACH_WASM
+const HAND_MODEL = COACH_HAND_MODEL
+const MODEL = COACH_MODEL
 const GROUPS: { title: string; exercises: Exercise[] }[] = [
   { title: 'Seated Basic', exercises: ['seatedTwist', 'wheelchairDip', 'chairPushup', 'seatedPress', 'chestFly'] },
   { title: 'Martial Arts', exercises: ['taiChi', 'boxing', 'karate', 'kungFu'] },
@@ -66,6 +67,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [colors, setColors] = useState(() => { try { const value = JSON.parse(localStorage.getItem('bloom-coach-colors') ?? '{}'); return { left: /^#[0-9a-f]{6}$/i.test(value.left) ? value.left : '#5dffc0', right: /^#[0-9a-f]{6}$/i.test(value.right) ? value.right : '#7df9ff' } } catch { return { left: '#5dffc0', right: '#7df9ff' } } })
   useEffect(() => { try { localStorage.setItem('bloom-coach-colors', JSON.stringify(colors)) } catch { /* optional */ } }, [colors])
   const [span, setSpan] = useState(40)
+  const [offlineStatus, setOfflineStatus] = useState('Prepare once while online to cache camera tracking files')
+  const [preparingOffline, setPreparingOffline] = useState(false)
   const sidePose = useRef<{ at: number; pose: P[] } | null>(null), depth = useRef<DepthCalibration | null>(null), frontPose = useRef<P[]>([])
   const [depthStatus, setDepthStatus] = useState('Single-camera depth estimates')
   const [depthDirection, setDepthDirection] = useState(1)
@@ -402,6 +405,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
         {options.rpg && <div className="fc-diagnostics fc-rpg"><h4>Garden battle</h4><Sprite name="boss" label="Pixel garden enemy" size={48} /><p>{Math.floor(metrics.joules / 10)} damage earned · applied to your weekly raid when you log this real set</p><small>Game conversion: 10 estimated joules = 1 damage. Demo awards nothing.</small></div>}
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
+        <div className="fc-diagnostics"><h4>Offline training</h4><button disabled={preparingOffline} onClick={() => { setPreparingOffline(true); void prepareCoachOffline(setOfflineStatus).catch(error => setOfflineStatus(error instanceof Error ? error.message : 'Offline setup failed')).finally(() => setPreparingOffline(false)) }}>Prepare offline tracking</button><p role="status">{offlineStatus}</p><small>Processing stays local. Latency depends on your hardware; the GPU delegate does not guarantee WebGPU or zero latency.</small></div>
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />
         <div className="fc-diagnostics"><label>Side camera position <select value={depthDirection} onChange={event => { setDepthDirection(Number(event.target.value)); depth.current = null; setDepthStatus('Recalibrate after changing camera position') }}><option value="1">At your left side</option><option value="-1">At your right side</option></select></label><button disabled={!ready} onClick={() => { const side = sidePose.current; const calibration = side && performance.now() - side.at < 150 ? calibrateDepth(frontPose.current, side.pose, depthDirection) : null; depth.current = calibration; setDepthStatus(calibration ? '90° side-depth estimate calibrated. Keep both cameras fixed.' : 'Both feeds must show your head, shoulders and arms to calibrate.') }}>Calibrate two-camera depth</button><p>{depthStatus}</p><small>Approximate orthogonal projection. Side-view occlusions retain front-camera estimates; this is not flawless 3D reconstruction.</small></div>
         {options.contrast && <div className="fc-diagnostics"><h4>Skeleton colors</h4><label>Left side <input aria-label="Left skeleton color" type="color" value={colors.left} onChange={e => setColors({ ...colors, left: e.target.value })} /></label><label>Right side <input aria-label="Right skeleton color" type="color" value={colors.right} onChange={e => setColors({ ...colors, right: e.target.value })} /></label></div>}
