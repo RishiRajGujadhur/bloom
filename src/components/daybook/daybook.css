@@ -213,31 +213,52 @@ html[data-writing='focus'] .daybook.is-writing {
   text-align: left;
 }
 .daybook-page-card {
+  position: relative;
   display: grid;
   align-content: start;
   gap: 6px;
   width: 100%;
   min-height: 168px;
   padding: 16px 18px;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border: 1px solid color-mix(in oklab, var(--accent-color) 18%, var(--border-color));
+  border-radius: 18px;
   background: linear-gradient(
     160deg,
     var(--bg-surface),
-    color-mix(in oklab, var(--accent-color) 6%, var(--bg-surface))
+    color-mix(in oklab, var(--accent-color) 8%, var(--bg-surface))
   );
   color: var(--text-primary);
   text-align: left;
   cursor: pointer;
+  box-shadow: 0 16px 28px -28px color-mix(in oklab, var(--accent-color) 50%, transparent);
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    filter 180ms ease;
 }
-.daybook-page-card:hover {
-  transform: translateY(-3px);
+.daybook-page-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at top right, color-mix(in oklab, var(--accent-color) 16%, transparent), transparent 42%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.daybook-page-card:hover,
+.daybook-page-card:focus-visible {
+  transform: translateY(-3px) scale(1.01);
   border-color: color-mix(in oklab, var(--accent-color) 40%, var(--border-color));
-  box-shadow: 0 16px 30px -20px var(--accent-color);
+  box-shadow: 0 22px 34px -26px color-mix(in oklab, var(--accent-color) 58%, transparent);
+}
+.daybook-page-card:hover::before,
+.daybook-page-card:focus-visible::before {
+  opacity: 1;
+}
+.daybook-page-card > * {
+  position: relative;
+  z-index: 1;
 }
 .daybook-page-card strong {
   font-size: 16px;
@@ -258,6 +279,7 @@ html[data-writing='focus'] .daybook.is-writing {
   font-size: 14px;
   line-height: 1.5;
 }
+
 .daybook-page-card small {
   margin-top: auto;
   color: var(--text-muted);
@@ -404,9 +426,10 @@ html[data-mode='dark'] .thought-diff del {
 .daybook-page-card { position: relative; }
 .daybook-page-card.is-private > :not(.daybook-page-date) { filter: blur(6px); user-select: none; }
 .daybook-page-card.is-private::after { content: 'Private · click to reveal'; position: absolute; inset: auto 0 44% 0; text-align: center; font-size: 12px; color: var(--text-muted); }
-.daybook-page-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0.35; transition: opacity 150ms; }
+.daybook-page-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0.35; transition: opacity 150ms; padding: 4px; background: color-mix(in oklab, var(--bg-surface) 82%, transparent); border: 1px solid color-mix(in oklab, var(--accent-color) 12%, var(--border-color)); border-radius: 12px; backdrop-filter: blur(10px); }
 .daybook-page-wrap:hover .daybook-page-tools, .daybook-page-tools:focus-within { opacity: 1; }
-.daybook-page-tools button { border: 0; background: var(--bg-surface); border-radius: 8px; padding: 3px 6px; cursor: pointer; font-size: 13px; }
+.daybook-page-tools button { border: 0; background: var(--bg-surface); border-radius: 8px; padding: 3px 6px; cursor: pointer; font-size: 13px; transition: transform 160ms ease, background 160ms ease; }
+.daybook-page-tools button:hover { transform: translateY(-1px) scale(1.08); background: var(--accent-soft); }
 .daybook-sort { display: flex; justify-content: flex-end; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: -18px; position: relative; z-index: 1; }
 .daybook-sort select { font-size: 12px; padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
 .daybook-mood { display: inline-flex; gap: 2px; }
@@ -414,11 +437,12 @@ html[data-mode='dark'] .thought-diff del {
 .daybook-mood button:hover { opacity: 0.8; }
 .daybook-mood button[aria-pressed='true'] { opacity: 1; filter: none; transform: scale(1.2); }
 .daybook-favs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 18px; font-size: 13px; color: var(--text-muted); }
-.daybook-favs button { border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
-.daybook-favs button:hover { border-color: var(--accent-color); }
+.daybook-favs button { border: 1px solid var(--border-color); background: linear-gradient(180deg, var(--bg-surface), color-mix(in oklab, var(--accent-color) 4%, var(--bg-surface))); color: var(--text-primary); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 13px; transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.daybook-favs button:hover { border-color: var(--accent-color); transform: translateY(-1px); box-shadow: 0 12px 20px -16px var(--accent-color); }
 .daybook-undo { margin: 0 0 12px; padding: 8px 14px; border-radius: 12px; background: var(--bg-surface); border: 1px solid var(--border-color); font-size: 14px; }
 .daybook-undo button { border: 0; background: none; color: var(--accent-color); font-weight: 700; cursor: pointer; }
-.daybook-memory { display: grid; gap: 4px; width: 100%; margin: 0 0 18px; padding: 12px 16px; text-align: left; border-radius: 16px; border: 1px dashed var(--border-color); background: var(--bg-surface); color: var(--text-primary); cursor: pointer; font-style: italic; }
+.daybook-memory { display: grid; gap: 4px; width: 100%; margin: 0 0 18px; padding: 12px 16px; text-align: left; border-radius: 16px; border: 1px dashed color-mix(in oklab, var(--accent-color) 25%, var(--border-color)); background: linear-gradient(180deg, var(--bg-surface), color-mix(in oklab, var(--accent-color) 4%, var(--bg-surface))); color: var(--text-primary); cursor: pointer; font-style: italic; transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.daybook-memory:hover { transform: translateY(-1px); border-color: color-mix(in oklab, var(--accent-color) 40%, var(--border-color)); box-shadow: 0 16px 24px -22px var(--accent-color); }
 .daybook-memory small { font-style: normal; color: var(--accent-color); font-weight: 600; }
 .daybook-goal { position: relative; display: inline-flex; gap: 6px; align-items: center; }
 .daybook-goal i { position: absolute; left: 0; bottom: -3px; height: 2px; border-radius: 2px; background: var(--accent-color); }

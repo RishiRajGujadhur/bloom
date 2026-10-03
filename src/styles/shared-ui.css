@@ -618,30 +618,54 @@ html[data-compact-sidebar='true'] .app-shell .sidebar nav button {
   margin-bottom: 16px;
 }
 .filter-chips button {
+  position: relative;
   min-height: 38px;
   padding: 7px 16px;
   border-radius: 999px;
   border: 1px solid var(--border-color);
-  background: var(--bg-surface);
+  background: linear-gradient(180deg, var(--bg-surface), color-mix(in oklab, var(--accent-color) 3%, var(--bg-surface)));
   color: var(--text-secondary);
   font: inherit;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
   transition:
+    transform 180ms ease,
     background 180ms ease,
     color 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+.filter-chips button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at top, color-mix(in oklab, var(--accent-color) 16%, transparent), transparent 58%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.filter-chips button > * {
+  position: relative;
+  z-index: 1;
 }
 .filter-chips button:hover {
   color: var(--text-primary);
   border-color: color-mix(in oklab, var(--accent-color) 35%, var(--border-color));
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px -18px var(--accent-color);
+}
+.filter-chips button:hover::before,
+.filter-chips button:focus-visible::before {
+  opacity: 1;
 }
 .filter-chips button[aria-selected='true'],
 .filter-chips button[aria-pressed='true'] {
-  background: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in oklab, var(--accent-color) 70%, #000));
   border-color: transparent;
   color: var(--text-on-accent, #fff);
+  box-shadow: 0 14px 24px -18px var(--accent-color);
 }
 
 /* Sidebar sections */
