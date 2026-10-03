@@ -97,14 +97,18 @@ export function MindMapPage() {
     setTab('map')
     logActivity('mindmap')
   }
+  const [exportMessage, setExportMessage] = useState('')
   const exportSvg = () => {
     const el = wrap.current?.querySelector('svg')
     if (!el) return
     const blob = new Blob([new XMLSerializer().serializeToString(el)], { type: 'image/svg+xml' })
     const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
+    const url = URL.createObjectURL(blob)
+    a.href = url
     a.download = `${map.title.replace(/\W+/g, '-')}.svg`
     a.click()
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+    setExportMessage('SVG download started.')
   }
   // PNG: the whole map (not just the visible part), at print-friendly resolution.
   const [pngBusy, setPngBusy] = useState(false)
@@ -172,6 +176,7 @@ export function MindMapPage() {
       a.download = `${map.title.replace(/\W+/g, '-')}.png`
       a.click()
       setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+      setExportMessage('PNG download started.')
     } catch {
       // Some browsers refuse to rasterise HTML labels; SVG export still works there.
       exportSvg()
@@ -234,6 +239,7 @@ export function MindMapPage() {
             requestAnimationFrame(reveal)
           }} />
         <div className="mm-tools">
+          <span className="sr-only" role="status">{exportMessage}</span>
           {on('collapse') && (
             <>
               <button type="button" aria-label="Collapse branches" onClick={() => toggleAll(false)}>
