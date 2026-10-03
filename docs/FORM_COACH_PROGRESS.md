@@ -34,7 +34,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Focus-mode background dimming
 - [x] Markdown session export
 - [x] Battery saver
-- [ ] Silent wearable feedback and heart-rate connection
+- [x] Silent wearable feedback and heart-rate connection
 - [x] Performance history and range-of-motion trends
 - [ ] Custom routine chaining
 
@@ -62,3 +62,7 @@ is still required. [WebRTC connectivity](https://developer.mozilla.org/en-US/doc
 Offline preparation caches versioned pose/hand models and all WASM variants.
 It requires the production service worker and retained browser storage. GPU
 tracking is the SDK delegate; neither WebGPU nor zero latency is guaranteed.
+
+Wearable alerts require a user-configured companion BLE vibration service; no generic
+watch compatibility is implied. Standard Bluetooth heart-rate notifications are supported.
+Real device testing remains required. [Web Bluetooth](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API).

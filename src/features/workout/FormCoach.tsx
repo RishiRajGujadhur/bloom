@@ -17,6 +17,7 @@ import { Sprite } from '../../rpg/Sprite'
 import { CoachSecondary, calibrateDepth, fuseDepth, type DepthCalibration } from './CoachSecondary'
 import { COACH_WASM, COACH_MODEL, COACH_HAND_MODEL, prepareCoachOffline } from './coachOffline'
 import { CoachReplayPanel, type RepReplay } from './CoachReplayPanel'
+import { CoachWearables, type SilentAlert } from './CoachWearables'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -106,6 +107,9 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const rom = useRef({ active: false, seconds: 0, low: Infinity, high: -Infinity })
   const ranges = useRef<Partial<Record<Exercise, ReturnType<typeof personalRange>>>>({})
   useKeepAwake(!options.battery && (mode === 'camera' || mode === 'demo'))
+  const wearableAlert = useRef<(kind: SilentAlert) => void>(() => {})
+  const receiveWearable = useCallback((notify: (kind: SilentAlert) => void) => { wearableAlert.current = notify }, [])
+  const goalAlerted = useRef(false)
   const maskCanvas = useRef<HTMLCanvasElement>(null)
   const latestOptions = useRef(options); latestOptions.current = options
   const video = useRef<HTMLVideoElement>(null), canvas = useRef<HTMLCanvasElement>(null), panel = useRef<HTMLDivElement>(null)
@@ -120,7 +124,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
 
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
-    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
+    boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); goalAlerted.current = false; counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = emptyMotion(); setMetrics(motion.current); compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0 }; setFlowXP(0); setLabel('')
   }
   const release = useCallback(() => {
@@ -158,6 +162,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       const m = motion.current, stats = counter.current.reps
       const session: CoachSession = { id: crypto.randomUUID(), exercise: exercise.current, at: Date.now(), seconds: m.seconds, reps: rule.timed ? 0 : count, score: rule.timed ? flow.current.score ?? 0 : stats.reduce((sum, rep) => sum + rep.score, 0) / Math.max(1, stats.length), joules: m.joules, kcal: m.kcal, power: m.seconds ? m.joules / m.seconds : 0, peak: m.peak, leftWork: m.leftWork, rightWork: m.rightWork, leftAngle: jointAngles.left, rightAngle: jointAngles.right, range: ranges.current[exercise.current] ?? null, compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }
       if (options.ghost) { try { saveGhost(exercise.current, frames.current, session.score, session.power); setGhost(readGhost(exercise.current, ghostKind)) } catch { setErr('Ghost storage is full; set metrics are still logged.') } }
+      if (options.haptics) wearableAlert.current('set')
       session.damage = options.rpg ? Math.floor(m.joules / 10) : 0
       session.xp = options.xp ? rule.timed ? timedXP.current.total : formXP(stats).xp : 0
       onReward?.({ id: session.id, damage: session.damage, xp: session.xp })
@@ -280,6 +285,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     frames.current.push({ at, pose: lm.map(p => ({ ...p })), score: Math.max(0, 100 - reading.faults.length * 25) }); frames.current = frames.current.slice(-300)
     setTrailFrames(frames.current.slice(-24))
     if (exercise.current === 'karate') setBlock(blockCue(lm))
+    if (options.haptics && aligned?.alert) wearableAlert.current('form')
     setLabel(reading.label); setFault(reading.faults[0] ?? null)
     motion.current = motionTick(motion.current, lm, world, at, bodyweight, span / 100, accessible || !!RULES[exercise.current].upper); setMetrics(motion.current)
     if (exercise.current === 'boxing') { boxing.current = boxingTick(boxing.current, lm, at, lead); setStrikes(boxing.current); if (options.guard && !boxing.current.guard && motion.current.left + motion.current.right > .3) reading.faults.push('Return the other hand to your comfortable guard') }
@@ -295,6 +301,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       if (phase === 'up' && counter.current.phase === 'down') repStarted.current = at - 300
       if (rep) {
         setReps([...counter.current.reps])
+        if (options.haptics && !goalAlerted.current && counter.current.reps.length >= target) { goalAlerted.current = true; wearableAlert.current('goal') }
         if (options.replay && (!worst.current || rep.score < worst.current.score)) {
           worst.current = { exercise: exercise.current, score: rep.score, frames: frames.current.filter(frame => frame.at >= repStarted.current).slice(-120), compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }; setWorstRep(worst.current)
         }
@@ -435,6 +442,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         <button disabled={!history.length} onClick={() => download(new Blob([coachMarkdown(history)], { type: 'text/markdown;charset=utf-8' }), `bloom-form-coach-${new Date().toISOString().slice(0, 10)}.md`)}>Export Form Coach Markdown</button>
         {options.history && <CoachHistoryPanel history={history} exercise={ex} />}
         <div className="fc-diagnostics"><h4>Offline training</h4><button disabled={preparingOffline} onClick={() => { setPreparingOffline(true); void prepareCoachOffline(setOfflineStatus).catch(error => setOfflineStatus(error instanceof Error ? error.message : 'Offline setup failed')).finally(() => setPreparingOffline(false)) }}>Prepare offline tracking</button><p role="status">{offlineStatus}</p><small>Processing stays local. Latency depends on your hardware; the GPU delegate does not guarantee WebGPU or zero latency.</small></div>
+        <CoachWearables enabled={options.haptics} onReady={receiveWearable} />
         <CoachSecondary onPose={pose => { sidePose.current = pose }} />
         <div className="fc-diagnostics"><label>Side camera position <select value={depthDirection} onChange={event => { setDepthDirection(Number(event.target.value)); depth.current = null; setDepthStatus('Recalibrate after changing camera position') }}><option value="1">At your left side</option><option value="-1">At your right side</option></select></label><button disabled={!ready} onClick={() => { const side = sidePose.current; const calibration = side && performance.now() - side.at < 150 ? calibrateDepth(frontPose.current, side.pose, depthDirection) : null; depth.current = calibration; setDepthStatus(calibration ? '90° side-depth estimate calibrated. Keep both cameras fixed.' : 'Both feeds must show your head, shoulders and arms to calibrate.') }}>Calibrate two-camera depth</button><p>{depthStatus}</p><small>Approximate orthogonal projection. Side-view occlusions retain front-camera estimates; this is not flawless 3D reconstruction.</small></div>
         {options.contrast && <div className="fc-diagnostics"><h4>Skeleton colors</h4><label>Left side <input aria-label="Left skeleton color" type="color" value={colors.left} onChange={e => setColors({ ...colors, left: e.target.value })} /></label><label>Right side <input aria-label="Right skeleton color" type="color" value={colors.right} onChange={e => setColors({ ...colors, right: e.target.value })} /></label></div>}
