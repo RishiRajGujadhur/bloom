@@ -19,6 +19,7 @@ import { COACH_WASM, COACH_MODEL, COACH_HAND_MODEL, prepareCoachOffline } from '
 import { CoachReplayPanel, type RepReplay } from './CoachReplayPanel'
 import { CoachWearables, type SilentAlert } from './CoachWearables'
 import { CoachMuscles } from './CoachMuscles'
+import { frameBounds } from './coachFraming'
 import { CoachTrails, type PoseFrame } from './CoachTrails'
 import { CoachReference } from './CoachReference'
 
@@ -59,6 +60,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const [label, setLabel] = useState('')
   const [err, setErr] = useState('')
   const [message, setMessage] = useState('')
+  const [framing, setFraming] = useState({ scale: 1, x: 0, y: 0 })
   const [trackingPaused, setTrackingPaused] = useState(false)
   const [calibration, setCalibration] = useState(0)
   const [balance, setBalance] = useState<ReturnType<typeof alignment>>(null)
@@ -251,6 +253,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     if (!filters.current.length) filters.current = raw.flatMap(() => [new OneEuroFilter(30, 1.2, .02, 1), new OneEuroFilter(30, 1.2, .02, 1), new OneEuroFilter(30, 1.2, .02, 1)])
     const upperOnly = accessible || RULES[exercise.current].upper
     const lm = raw.map((p, i) => (!upperOnly || i === 0 || (i >= 11 && i <= 22)) && Number.isFinite(p.x) && Number.isFinite(p.y) ? { ...p, x: filters.current[i * 3].filter(p.x, at / 1000), y: filters.current[i * 3 + 1].filter(p.y, at / 1000), z: filters.current[i * 3 + 2].filter(p.z ?? 0, at / 1000) } : p)
+    if (options.autoFrame) { const bounds = frameBounds(lm, mirror); if (bounds) setFraming(bounds) }
     draw(lm, mirror)
     setJointAngles(jointCallouts(lm))
     let hovered: string | null = null
@@ -429,11 +432,12 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
       <aside className="fc-library" aria-label="Exercise library">{GROUPS.filter((g) => !accessible || g.title !== 'Standing & Floor').map((g) => <div key={g.title}><h4>{g.title}</h4><div className="fc-ex" role="radiogroup" aria-label={g.title}>{g.exercises.map((id) => <button key={id} type="button" role="radio" aria-checked={ex === id} disabled={mode === 'loading'} className={ex === id ? 'on' : ''} onClick={() => change(id)}>{RULES[id].name}</button>)}</div></div>)}<p className="fc-small">{RULES[ex].tip}</p></aside>
       <div className="fc-center">
         <div className={`fc-split ${options.reference ? '' : 'fc-no-reference'}`}><div ref={panel} className={`fc-camera-panel ${focus ? 'fc-focused' : ''}`} aria-label="Camera training view">
-          <div className="fc-view" data-matrix-native><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
+          <div className="fc-view" data-matrix-native><div className="fc-scene" style={{ transform: options.autoFrame ? `translate(${framing.x * 100}%,${framing.y * 100}%) scale(${framing.scale})` : undefined }}><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
             {ready && options.battery && <span className="fc-battery-badge">Battery saver · 10 fps · background focus and finger inference held</span>}
             {ready && options.ghost && ghost && ghostFrame(ghost, metrics.seconds) && <CoachGhost exercise={ex} pose={ghostFrame(ghost, metrics.seconds)!} mirror={mode === 'camera'} />}
             {ready && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}
             {ready && options.trails && ['boxing', 'karate', 'kungFu'].includes(ex) && <CoachTrails frames={trailFrames} mirror={mode === 'camera'} />}
+            </div>
             {mode === 'idle' && <p className="fc-tip">{accessible ? 'Show your head, torso and arms. No need to show your legs.' : RULES[ex].tip}</p>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
             {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
@@ -445,7 +449,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {ready && options.autoPause && trackingPaused && <p role="status" className="fc-error">Tracking and pacing paused. Return your head and arms to the frame to resume.</p>}
         <p className="fc-instructions">{accessible ? 'Face camera. Calibrated for upper-body forms.' : 'Face camera. Keep the exercise joints visible.'}</p>
         <div className="fc-calibration"><span>{calibration < 1 && ready ? `Stay in your comfortable neutral position · ${Math.round(calibration * 100)}%` : calibration >= 1 ? 'Neutral position calibrated' : 'Calibration begins when you start'}</span><button type="button" className="fc-ghost" onClick={recalibrate} disabled={!ready}>Recalibrate</button></div>
-        {!RULES[ex].timed && <div className="fc-calibration"><span role="status">{romStatus}</span><button type="button" disabled={!ready || calibration < 1} onClick={() => { rom.current = { active: true, seconds: 0, low: Infinity, high: -Infinity }; resetSet(); setRomStatus('Move through your comfortable range for 8 seconds') }}>Calibrate movement range</button></div>}
+        {!RULES[ex].timed && <div className="fc-range-calibration"><span role="status">{romStatus}</span><button type="button" disabled={!ready || calibration < 1} onClick={() => { rom.current = { active: true, seconds: 0, low: Infinity, high: -Infinity }; resetSet(); setRomStatus('Move through your comfortable range for 8 seconds') }}>Calibrate movement range</button></div>}
       </div>
       <div className="fc-side"><div className="fc-pacing"><RepRing count={RULES[ex].timed ? held : reps.length} target={target} timed={!!RULES[ex].timed} /><div className="fc-metronome"><strong>Rhythm Metronome</strong><div className={ready && !(options.autoPause && trackingPaused) ? 'fc-beat running' : 'fc-beat'} style={{ '--fc-beat': `${60000 / bpm}ms` } as CSSProperties} aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ height: `${12 + (4 - Math.abs(i - 4)) * 7}px` }} />)}</div><label>Pace <input type="number" aria-label="Metronome BPM" min="20" max="140" value={bpm} onChange={(e) => setBpm(Math.max(20, Math.min(140, Number(e.target.value) || 40)))} /> BPM</label></div></div>
         {!RULES[ex].timed && <label className="fc-target">Target reps <select value={target} onChange={(e) => setTarget(Number(e.target.value))}>{[5, 8, 10, 12, 15, 20, 30].map((n) => <option key={n}>{n}</option>)}</select></label>}

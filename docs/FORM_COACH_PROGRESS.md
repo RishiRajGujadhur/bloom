@@ -47,6 +47,8 @@ not a medical prescription or a validated martial-arts master.
 
 - [x] Wrist callouts, visible standing knee callouts and reference torso wireframe
 
+- [x] Optional digital auto-framing with consistent hover coordinates
+
 ## Maintained
 
 - [x] Hands-free rep counting, skeletal overlay and upper-body landmark isolation
@@ -75,3 +77,6 @@ tracking is the SDK delegate; neither WebGPU nor zero latency is guaranteed.
 Wearable alerts require a user-configured companion BLE vibration service; no generic
 watch compatibility is implied. Standard Bluetooth heart-rate notifications are supported.
 Real device testing remains required. [Web Bluetooth](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API).
+
+Digital framing crops within the original camera feed; it cannot recover limbs
+that are outside the physical camera view. It is optional and off by default.

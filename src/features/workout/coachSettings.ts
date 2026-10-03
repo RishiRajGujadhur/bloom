@@ -1,5 +1,6 @@
 export const COACH_OPTIONS = {
   efficiency: 'Work and rest efficiency', consistency: 'Power consistency', degradation: 'Output decline alerts', stability: 'Upper-body stability proxy',
+  autoFrame: 'Digital auto-framing',
   muscles: 'Muscle group guide',
   reference: 'Master reference view', angles: 'Joint-angle callouts', energy: 'Energy estimates',
   trails: 'Strike trajectory trails', snap: 'Strike deceleration', rhythm: 'Combo rhythm',
@@ -11,7 +12,7 @@ export const COACH_OPTIONS = {
   haptics: 'Silent wearable alerts', history: 'Performance history', routine: 'Routine chaining',
 } as const
 export type CoachOptions = Record<keyof typeof COACH_OPTIONS, boolean>
-export const defaultOptions: CoachOptions = Object.fromEntries(Object.keys(COACH_OPTIONS).map(key => [key, !['reaction', 'rpg', 'ghost', 'dimming', 'battery', 'haptics', 'routine'].includes(key)])) as CoachOptions
+export const defaultOptions: CoachOptions = Object.fromEntries(Object.keys(COACH_OPTIONS).map(key => [key, !['autoFrame', 'reaction', 'rpg', 'ghost', 'dimming', 'battery', 'haptics', 'routine'].includes(key)])) as CoachOptions
 export function loadCoachOptions(): CoachOptions {
   try {
     const value = JSON.parse(localStorage.getItem('bloom-coach-settings-v1') ?? '{}')

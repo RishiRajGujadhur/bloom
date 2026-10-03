@@ -31,6 +31,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       let renderedAt = 0, phaseTime = 0
       const loop = (now: number) => {
         if (cancelled) return
+        if (document.hidden) { renderedAt = now; raf = requestAnimationFrame(loop); return }
         if (now - renderedAt < (battery ? 125 : 50)) { raf = requestAnimationFrame(loop); return }
         if (!paused && renderedAt) phaseTime += now - renderedAt
         renderedAt = now
