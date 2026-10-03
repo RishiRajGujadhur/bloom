@@ -50,7 +50,13 @@ function usePassiveContext() {
 }
 
 export function UrgePage({ data, setData }: Props) {
-  const [view, setView] = useState<'log' | 'patterns'>('log')
+  const [view, setViewState] = useState<'log' | 'patterns'>(() => {
+    try { return localStorage.getItem('bloom-urge-view') === 'patterns' ? 'patterns' : 'log' } catch { return 'log' }
+  })
+  const setView = (next: 'log' | 'patterns') => {
+    setViewState(next)
+    try { localStorage.setItem('bloom-urge-view', next) } catch { /* optional preference */ }
+  }
   const [habitId, setHabitId] = useState<string | null>(null)
   const [kind, setKind] = useState<UrgeEvent['kind'] | null>(null)
   const [intensity, setIntensity] = useState<number | null>(() => (subOn('urgeTracker', 'intensity') ? null : 3))

@@ -28,7 +28,7 @@ Items are intentionally small enough to review and verify independently.
 - [ ] Add a quick retry action after logging an urge.
 - [x] Show recent logging history without entering patterns.
 - [ ] Add stronger confirmation feedback after a log is saved.
-- [ ] Persist the last selected urge-tracker view.
+- [x] Persist the last selected urge-tracker view.
 
 ## Focus room
 
