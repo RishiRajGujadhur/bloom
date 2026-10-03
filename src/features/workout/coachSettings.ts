@@ -1,4 +1,5 @@
 export const COACH_OPTIONS = {
+  efficiency: 'Work and rest efficiency', consistency: 'Power consistency', degradation: 'Output decline alerts', stability: 'Upper-body stability proxy',
   muscles: 'Muscle group guide',
   reference: 'Master reference view', angles: 'Joint-angle callouts', energy: 'Energy estimates',
   trails: 'Strike trajectory trails', snap: 'Strike deceleration', rhythm: 'Combo rhythm',

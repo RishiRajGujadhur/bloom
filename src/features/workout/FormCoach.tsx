@@ -7,7 +7,7 @@ import { useKeepAwake } from '../../platform/presence'
 import { angle, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, loadPersonalRanges, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
 import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
-import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick, formXP } from './coachAnalysis'
+import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick, formXP, consistencyGrade, outputDrop } from './coachAnalysis'
 import { readCoachHistory, saveCoachSession, recoverySuggestion, coachMarkdown, type CoachSession } from './coachHistory'
 import { CoachHistoryPanel } from './CoachHistoryPanel'
 import { readGhost, saveGhost, ghostFrame } from './coachReplay'
@@ -85,6 +85,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const worst = useRef<RepReplay | null>(null), repStarted = useRef(0)
   const timedXP = useRef({ good: 0, total: 0, streak: 0 })
   const [flowXP, setFlowXP] = useState(0)
+  const activity = useRef({ active: 0, rest: 0, powers: [] as number[], early: [] as number[], recent: [] as number[] })
   const compensation = useRef({ frames: 0, changed: 0 })
   const reaction = useRef(emptyReaction())
   const [drill, setDrill] = useState(emptyReaction)
@@ -130,7 +131,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
     boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); goalAlerted.current = false; counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
-    motion.current = emptyMotion(); setMetrics(motion.current); compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0, streak: 0 }; setFlowXP(0); setLabel('')
+    motion.current = emptyMotion(); setMetrics(motion.current); activity.current = { active: 0, rest: 0, powers: [], early: [], recent: [] }; compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0, streak: 0 }; setFlowXP(0); setLabel('')
   }
   const release = useCallback(() => {
     generation.current++; cancelAnimationFrame(raf.current)
@@ -309,6 +310,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
     setLabel(reading.label); setFault(reading.faults[0] ?? null)
     motion.current = motionTick(motion.current, lm, depth.current && sidePose.current && at - sidePose.current.at < 150 ? undefined : world, at, bodyweight, span / 100, accessible || !!RULES[exercise.current].upper); setMetrics(motion.current)
     if (exercise.current === 'boxing') { boxing.current = boxingTick(boxing.current, lm, at, lead); setStrikes(boxing.current); if (options.guard && !boxing.current.guard && motion.current.left + motion.current.right > .3) reading.faults.push('Return the other hand to your comfortable guard') }
+    const speed = Math.max(motion.current.left, motion.current.right)
+    if (speed > .04) { activity.current.active += dt; activity.current.powers = [...activity.current.powers, motion.current.watts].slice(-120); if (activity.current.early.length < 60) activity.current.early.push(speed); activity.current.recent = [...activity.current.recent, speed].slice(-60) } else activity.current.rest += dt
     flow.current = flowTick(flow.current, motion.current); setFlowScore(flow.current.score)
     analysis.current = analysisTick(analysis.current, lm, motion.current, at); setCombat(analysis.current)
     if (rule.timed) {
@@ -458,6 +461,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLo
         {options.xp && <div className="fc-diagnostics"><h4>Perfect form XP</h4><p>{RULES[ex].timed ? flowXP : formXP(reps).xp} XP · {RULES[ex].timed ? 'Compounding XP per continuous 5s of 90%+ flow' : `${formXP(reps).streak} streak · ×${formXP(reps).multiplier.toFixed(2)}`}</p><small>Saved to your local RPG streak ledger when you log a real set.</small></div>}
         {options.ghost && <div className="fc-diagnostics"><h4>Personal best ghost</h4><select aria-label="Ghost record" value={ghostKind} onChange={e => setGhostKind(e.target.value as typeof ghostKind)}><option value="form">Best form</option><option value="power">Most powerful</option></select><p>{ghost ? `${Math.round(ghost.score)}% form · ${ghost.power.toFixed(1)} W` : 'Enable this option and log a camera set to record a ghost.'}</p><small>Stores skeletal points only, up to the last 15 seconds of a set. Your camera video is never saved.</small></div>}
         {options.breathing && <div className="fc-diagnostics fc-breathing"><div className={`fc-breath-ring ${ready && !(options.autoPause && trackingPaused) ? 'running' : ''}`} style={{ '--fc-breath': `${120000 / bpm}ms` } as CSSProperties} aria-hidden="true" /><div><h4>Breathing guide</h4><p>Expand: inhale · Contract: exhale</p><small>Follow your comfortable pace; never hold your breath.</small></div></div>}
+        {(options.efficiency || options.consistency || options.degradation || options.stability) && <div className="fc-diagnostics"><h4>Movement insights · estimates</h4>{options.efficiency && <p>Active / rest: {Math.round(activity.current.active)}s / {Math.round(activity.current.rest)}s · {metrics.seconds ? (metrics.joules / metrics.seconds * 60).toFixed(1) : '0'} J/min</p>}{options.consistency && <p>Power consistency: {consistencyGrade(activity.current.powers) ?? '—'} / 100</p>}{options.stability && <p>Upper-body stability proxy: {balance ? Math.round((1 - Math.abs(balance.value)) * 100) : '—'} / 100</p>}{options.degradation && <p>{outputDrop(activity.current.early, activity.current.recent) ? 'Recent movement is slower than earlier in this set. Consider a comfortable break.' : 'Compare your pace and comfort through the set.'}</p>}<small>Rest means visible, still frames. Stability uses head/shoulder alignment, not a measured centre of gravity. Strike intervals naturally vary in power.</small></div>}
         {options.muscles && <CoachMuscles exercise={ex} />}
         {options.fatigue && <div className="fc-diagnostics"><h4>Limb workload · fatigue proxy</h4>{[['Left', metrics.leftWork], ['Right', metrics.rightWork]].map(([name, work]) => <label className="fc-workload" key={String(name)}>{name} · {Number(work).toFixed(1)} J <meter min="0" max="1000" value={Math.min(1000, Number(work))} aria-label={`${name} limb workload`} /></label>)}<p>{Math.abs(metrics.leftWork - metrics.rightWork) > Math.max(50, (metrics.leftWork + metrics.rightWork) * .35) ? 'One arm has done substantially more estimated work. Consider a gentle break.' : 'Monitor your comfort and alternate sides.'}</p><small>Work volume is not a measurement of muscle fatigue.</small></div>}
         {options.rpg && <div className="fc-diagnostics fc-rpg"><h4>Garden battle</h4><Sprite name="boss" label="Pixel garden enemy" size={48} /><p>{Math.floor(metrics.joules / 10)} damage earned · applied to your weekly raid when you log this real set</p><small>Game conversion: 10 estimated joules = 1 damage. Demo awards nothing.</small></div>}

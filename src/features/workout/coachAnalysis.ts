@@ -100,3 +100,15 @@ export function formXP(reps: { score: number; at: number }[]) {
   }
   return { xp: Math.min(500, xp), streak, multiplier: Math.min(4, 1.25 ** Math.max(0, streak - 1)) }
 }
+
+export function consistencyGrade(values: number[]) {
+  if (values.length < 6) return null
+  const mean = values.reduce((sum, value) => sum + value, 0) / values.length
+  if (mean < .01) return null
+  const deviation = Math.sqrt(values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length)
+  return Math.round(Math.max(0, 100 * (1 - deviation / mean)))
+}
+export function outputDrop(early: number[], recent: number[]) {
+  const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length)
+  return early.length >= 30 && recent.length >= 30 && mean(early) > .1 && mean(recent) < mean(early) * .6
+}
