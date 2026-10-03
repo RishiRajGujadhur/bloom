@@ -22,7 +22,7 @@ not a medical prescription or a validated martial-arts master.
 - [x] Reaction-time visual drills
 - [x] Energy-to-RPG damage
 - [x] Independent limb workload/fatigue gauges
-- [ ] Breathing sync visualizer
+- [x] Breathing sync visualizer
 - [ ] Personal-best ghost replay
 - [ ] Perfect-form XP and local journal
 - [ ] Fatigue-aware routine suggestions
