@@ -54,6 +54,7 @@ export function MindMapPage() {
     })
   const [tab, setTab] = useState('map')
   const [mapQuery, setMapQuery] = useState('')
+  const [undoMap, setUndoMap] = useState<{ map: MindMap; index: number; wasCurrent: boolean } | null>(null)
   const [full, setFull] = useState(false)
   const narrow = typeof window !== 'undefined' && window.innerWidth < 720
   const [editing, setEditing] = useState(!narrow)
@@ -98,6 +99,37 @@ export function MindMapPage() {
     setTab('map')
     logActivity('mindmap')
   }
+  const deleteMap = (deleted: MindMap) => {
+    const index = store.maps.findIndex((item) => item.id === deleted.id)
+    if (index < 0 || store.maps.length < 2) return
+    setUndoMap({ map: deleted, index, wasCurrent: store.current === deleted.id })
+    setStore((current) => {
+      const maps = current.maps.filter((item) => item.id !== deleted.id)
+      const nextCurrent = current.current === deleted.id
+        ? maps[Math.min(index, maps.length - 1)]?.id ?? ''
+        : current.current
+      return { ...current, maps, current: nextCurrent }
+    })
+  }
+  const restoreMap = () => {
+    if (!undoMap) return
+    setStore((current) => {
+      if (current.maps.some((item) => item.id === undoMap.map.id)) return current
+      const maps = [...current.maps]
+      maps.splice(Math.min(undoMap.index, maps.length), 0, undoMap.map)
+      return {
+        ...current,
+        maps,
+        current: undoMap.wasCurrent ? undoMap.map.id : current.current || undoMap.map.id,
+      }
+    })
+    setUndoMap(null)
+  }
+  useEffect(() => {
+    if (!undoMap) return
+    const timeout = window.setTimeout(() => setUndoMap(null), 8000)
+    return () => window.clearTimeout(timeout)
+  }, [undoMap])
   const [exportMessage, setExportMessage] = useState('')
   const exportSvg = () => {
     const el = wrap.current?.querySelector('svg')
@@ -360,13 +392,19 @@ export function MindMapPage() {
                   <Copy size={13} />
                 </button>
                 {store.maps.length > 1 && (
-                  <button type="button" className="yg-remove" aria-label={`Delete ${m.title}`} onClick={() => setStore((s) => ({ ...s, maps: s.maps.filter((x) => x.id !== m.id), current: s.current === m.id ? s.maps[0].id : s.current }))}>
+                  <button type="button" className="yg-remove" aria-label={`Delete ${m.title}`} onClick={() => deleteMap(m)}>
                     <Trash2 size={13} />
                   </button>
                 )}
               </div>
             ))}
           </Rail>
+          {undoMap && (
+            <p className="mm-undo-map" role="status">
+              “{undoMap.map.title}” deleted.
+              <button type="button" onClick={restoreMap}>Undo</button>
+            </p>
+          )}
           {mapQuery.trim() && !store.maps.some((m) => m.title.toLocaleLowerCase().includes(mapQuery.trim().toLocaleLowerCase())) && (
             <p className="mm-search-empty" role="status">
               No saved maps match “{mapQuery.trim()}”.

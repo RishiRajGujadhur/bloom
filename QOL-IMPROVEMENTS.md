@@ -43,7 +43,7 @@ Items are intentionally small enough to review and verify independently.
 
 - [x] Add keyboard-accessible shortcuts for common map actions.
 - [x] Add a visible unsaved/saved indicator for edits.
-- [ ] Add an undo action for accidental map deletion.
+- [x] Add an undo action for accidental map deletion.
 - [x] Make export actions announce completion.
 - [x] Add a reset-zoom / fit-map action near the map.
 - [x] Add a useful empty-search state for map selection.
