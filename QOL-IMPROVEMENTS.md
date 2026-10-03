@@ -73,7 +73,7 @@ Items are intentionally small enough to review and verify independently.
 - [x] Make the active prompt and step progress easier to scan.
 - [x] Add a quick way to continue an incomplete draft.
 - [x] Improve attachment removal affordances and labels.
-- [ ] Add a search or filter for past reflections.
+- [x] Add a search or filter for past reflections.
 
 ## Globe quiz
 
