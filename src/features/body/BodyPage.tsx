@@ -8,7 +8,7 @@ import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { db, type ProgressPhoto } from '../../search/db'
 import { dayKey } from '../../dates'
-import { BODY_KEY, bmi, bmiBand, display, latest, measures, projection, trend, whtr, whtrBand, type BodyStore, type Entry, type Measure } from './bodyModel'
+import { BODY_KEY, fromDisplay, bmi, bmiBand, display, latest, measures, projection, trend, whtr, whtrBand, type BodyStore, type Entry, type Measure } from './bodyModel'
 import '../run/run.css'
 import { Sparkline } from '../showcase/Sparkline'
 import { usePageActions } from '../../components/ui/PageMenu'
@@ -143,7 +143,8 @@ export function BodyPage() {
           .filter((m) => include.includes(m.id))
           .map((m) => {
             const d = display(draft[m.id] ?? m.min, m.unit, units)
-            return <Slider key={m.id} label={m.label} value={draft[m.id] ?? m.min} min={m.min} max={m.max} step={m.step} unit={d.unit} format={() => d.value.toFixed(1)} onChange={(v) => setDraft((x) => ({ ...x, [m.id]: v }))} />
+            return <div key={m.id}><Slider label={m.label} value={draft[m.id] ?? m.min} min={m.min} max={m.max} step={m.step} unit={d.unit} format={() => d.value.toFixed(1)} onChange={(v) => setDraft((x) => ({ ...x, [m.id]: v }))} />
+              <label className="body-exact-field">Exact {m.label.toLowerCase()} ({d.unit})<input type="number" step="0.1" aria-label={`Exact ${m.label.toLowerCase()}`} value={Number(d.value.toFixed(2))} min={display(m.min, m.unit, units).value} max={display(m.max, m.unit, units).value} onChange={e => { if (!e.target.value.trim()) return; const value = fromDisplay(Number(e.target.value), m.unit, units); if (Number.isFinite(value) && value >= m.min && value <= m.max) setDraft(x => ({ ...x, [m.id]: value })) }} /></label></div>
           })}
         <button ref={saveBtn} type="button" className="studio-go" onClick={save}>
           <Ruler size={16} /> Save today’s check-in

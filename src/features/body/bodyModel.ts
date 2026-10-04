@@ -51,3 +51,7 @@ export function projection(entries: Entry[], goal: number) {
 export function latest(entries: Entry[], m: Measure) {
   return [...entries].sort((a, b) => b.date.localeCompare(a.date)).find((e) => e[m] != null)?.[m]
 }
+
+export function fromDisplay(v: number, unit: 'kg' | 'cm' | '%', units: BodyStore['units']) {
+  return units === 'metric' || unit === '%' ? v : v / (unit === 'kg' ? KG_LB : CM_IN)
+}
