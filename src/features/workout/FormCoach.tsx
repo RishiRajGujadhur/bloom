@@ -62,6 +62,8 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const latestBackground = useRef(background); latestBackground.current = background
   const [backgroundReady, setBackgroundReady] = useState(false)
   useEffect(() => { try { localStorage.setItem('bloom-coach-background', background) } catch { /* optional */ } }, [background])
+  const [countdown, setCountdown] = useState(3)
+  const countdownAt = useRef<number | null>(null)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [settingsSearch, setSettingsSearch] = useState('')
   const [showReference, setShowReference] = useState(true)
@@ -156,6 +158,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   }, [])
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
+    countdownAt.current = null; setCountdown(3)
     boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); goalAlerted.current = false; counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = emptyMotion(); setMetrics(motion.current); activity.current = { active: 0, rest: 0, powers: [], early: [], recent: [] }; compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0, streak: 0 }; setFlowXP(0); setLabel('')
   }
@@ -316,6 +319,9 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       setLabel(hovered ? 'Gesture control · counting held' : !trackingValid ? accessible ? 'Show head, shoulders and both arms' : 'Keep exercise joints visible' : 'Stay comfortably still to calibrate')
       return
     }
+    if (countdownAt.current === null) countdownAt.current = at
+    const remaining = Math.max(0, 3 - Math.floor((at - countdownAt.current) / 1000)); setCountdown(remaining)
+    if (remaining > 0) { counter.current.phase = "up"; hold.current.last = 0; return }
     compensation.current.frames++; if (aligned?.alert) compensation.current.changed++
     const rule = RULES[exercise.current]
     const reading = rule.upper ? readUpper(exercise.current, lm, baseline.current) : read(exercise.current, lm)
@@ -469,13 +475,14 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       <div className="fc-center">
         <div ref={panel} className={`fc-split ${focus ? "fc-workout-focused" : ""} ${showReference && (viewMode !== "advanced" || options.reference) && ex !== "observe" ? "" : "fc-no-reference"}`}><div className="fc-camera-panel" aria-label="Camera training view">
           <div className="fc-view" data-matrix-native><div className="fc-scene" style={{ transform: options.autoFrame ? `translate(${framing.x * 100}%,${framing.y * 100}%) scale(${framing.scale})` : undefined }}><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
-            {viewMode === "game" && <CoachBattle frame={trailFrames.at(-1)} frames={trailFrames} active={ready && !trackingPaused && calibration >= 1} demo={mode === 'demo'} source={mode} mirror={mode === 'camera'} handControls={gestures} onExercise={change} onReward={onReward} onActivity={setGameActivity} />}
+            {viewMode === "game" && <CoachBattle frame={trailFrames.at(-1)} frames={trailFrames} active={ready && !trackingPaused && calibration >= 1 && countdown === 0} demo={mode === 'demo'} source={mode} mirror={mode === 'camera'} handControls={gestures} onExercise={change} onReward={onReward} onActivity={setGameActivity} />}
             {ready && options.battery && <span className="fc-battery-badge">Battery saver · 10 fps · background focus and finger inference held</span>}
             {ready && viewMode === 'advanced' && ex !== 'observe' && options.ghost && ghost && ghostFrame(ghost, metrics.seconds) && <CoachGhost exercise={ex} pose={ghostFrame(ghost, metrics.seconds)!} mirror={mode === 'camera'} />}
             {ready && viewMode !== 'basic' && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}
             {ready && options.trails && ['boxing', 'karate', 'kungFu'].includes(ex) && <CoachTrails frames={trailFrames} mirror={mode === 'camera'} />}
             </div>
             {mode === 'idle' && <p className="fc-tip">{accessible ? 'Show your head, torso and arms. No need to show your legs.' : RULES[ex].tip}</p>}
+            {ready && calibration >= 1 && countdown > 0 && <div className="fc-start-countdown" role="status" aria-label="Workout start countdown">{countdown}<small>Get comfortable · starting soon</small></div>}
             <div className={`fc-workout-hud ${((RULES[ex].timed ? held : reps.length) >= target && ex !== 'observe') ? 'fc-goal-complete' : ''}`} role="status" aria-live="polite"><strong>{RULES[ex].name}</strong><small>{mode === "idle" ? "Camera off" : mode === "loading" ? "Preparing camera" : mode === "demo" ? "Demo · no rewards" : trackingPaused ? "Return to camera frame" : calibration < 1 ? "Calibrating your position" : "Your workout"}</small>{ex !== 'observe' && <><b>{RULES[ex].timed ? held : reps.length} / {target} {RULES[ex].timed ? 'seconds' : ex === 'boxing' ? 'air punches' : 'reps'}</b>{ex === 'boxing' && <small>{Object.entries(strikes.counts).map(([kind, count]) => `${kind}: ${count}`).join(' · ') || 'Extend and return each punch · either arm'}</small>}<progress aria-label="Set progress" value={Math.min(target, RULES[ex].timed ? held : reps.length)} max={target} /><span>{(RULES[ex].timed ? held : reps.length) >= target ? 'Set complete · Log set or Finish' : `${Math.max(0, target - (RULES[ex].timed ? held : reps.length))} remaining`}</span></>}</div>
             {focus && viewMode === 'advanced' && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}
             {!focus && ready && options.extension && ['boxing', 'karate', 'kungFu'].includes(ex) && combat.deceleration > 2 && Math.max(jointAngles.left ?? 0, jointAngles.right ?? 0) > 175 && <span className="fc-extension-cue">Near full projected elbow extension during rapid slowdown</span>}

@@ -11,7 +11,7 @@
 - [x] 09. Black or dim camera background
 - [x] 10. Background availability feedback
 - [x] 11. Remember camera background choice
-- [ ] 12. Three two one start countdown
+- [x] 12. Three two one start countdown
 - [ ] 13. Optional countdown and skip control
 - [ ] 14. Fullscreen encouragement
 - [ ] 15. Hands-free workout pause and resume
