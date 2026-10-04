@@ -155,3 +155,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-video{opacity:1}.fc-background-mask{background:transparent}.fc-background-black .fc-view::after{display:none}
 
 .fc-start-countdown{position:absolute;z-index:5;inset:25% 20%;display:grid;place-content:center;text-align:center;font-size:clamp(44px,8vw,100px);font-weight:900;color:white;background:#031810cc;border-radius:20px;pointer-events:none}.fc-start-countdown small{font-size:12px}
+
+.fc-encouragement{color:#abffd4;font-size:12px;max-width:220px}

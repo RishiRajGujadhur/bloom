@@ -13,7 +13,7 @@
 - [x] 11. Remember camera background choice
 - [x] 12. Three two one start countdown
 - [x] 13. Optional countdown and skip control
-- [ ] 14. Fullscreen encouragement
+- [x] 14. Fullscreen encouragement
 - [ ] 15. Hands-free workout pause and resume
 - [ ] 16. Fold camera setup options
 - [ ] 17. Camera-first responsive layout
