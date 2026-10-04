@@ -35,3 +35,5 @@ Each improvement is committed and pushed separately.
 - [x] 16. confirm finishing while pausing the workout to prevent accidental exits
 
 - [x] 17. keep the optional countdown skip beside the start prompt
+
+- [x] 18. remember preferred hand reach and hold time across visits
