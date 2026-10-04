@@ -6,7 +6,7 @@
 - [x] 04. Arcade movement reference guides
 - [x] 05. One-click air boxing
 - [x] 06. Visible air punch tally
-- [ ] 07. Red skeleton form feedback
+- [x] 07. Red skeleton form feedback
 - [ ] 08. Optional visual correction cues
 - [ ] 09. Black or dim camera background
 - [ ] 10. Background availability feedback

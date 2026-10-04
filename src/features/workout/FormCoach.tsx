@@ -253,15 +253,15 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       g.lineCap = 'round'; g.lineWidth = options.contrast ? 7 : 4
       for (const [a, b] of bones) {
         if (!visible(lm[a]) || !visible(lm[b])) continue
-        g.strokeStyle = a % 2 ? colors.left : colors.right; g.beginPath(); g.moveTo(X(lm[a]), Y(lm[a])); g.lineTo(X(lm[b]), Y(lm[b])); g.stroke()
+        g.strokeStyle = fault ? '#ff5656' : a % 2 ? colors.left : colors.right; g.beginPath(); g.moveTo(X(lm[a]), Y(lm[a])); g.lineTo(X(lm[b]), Y(lm[b])); g.stroke()
       }
       if (visible(lm[11]) && visible(lm[12]) && visible(lm[0])) {
         const middle = { x: (lm[11].x + lm[12].x) / 2, y: (lm[11].y + lm[12].y) / 2 }
-        g.strokeStyle = '#5dffc0'; g.beginPath(); g.moveTo(X(lm[0]), Y(lm[0])); g.lineTo(X(middle), Y(middle)); g.lineTo(X(middle), Math.min(c.height, Y(middle) + c.height * .23)); g.stroke()
+        g.strokeStyle = fault ? '#ff5656' : '#5dffc0'; g.beginPath(); g.moveTo(X(lm[0]), Y(lm[0])); g.lineTo(X(middle), Y(middle)); g.lineTo(X(middle), Math.min(c.height, Y(middle) + c.height * .23)); g.stroke()
       }
       for (const i of [...new Set([0, ...bones.flat()])]) {
         if (!visible(lm[i])) continue
-        g.fillStyle = i % 2 ? colors.left : colors.right; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), options.contrast ? 8 : i === 0 ? 7 : 5, 0, Math.PI * 2); g.fill()
+        g.fillStyle = fault ? '#ff5656' : i % 2 ? colors.left : colors.right; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), options.contrast ? 8 : i === 0 ? 7 : 5, 0, Math.PI * 2); g.fill()
       }
     }
     if (gestures && mirror && viewMode !== 'basic') for (const i of [15, 16]) if (visible(lm[i])) { g.strokeStyle = '#fff'; g.lineWidth = 2; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), 13, 0, Math.PI * 2); g.stroke() }
@@ -330,10 +330,11 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     setTrailFrames(frames.current.slice(-24))
     if (exercise.current === 'karate') setBlock(blockCue(lm))
     if (options.haptics && aligned?.alert) wearableAlert.current('form')
-    setLabel(reading.label); setFault(reading.faults[0] ?? null)
+    setLabel(reading.label)
     motion.current = motionTick(motion.current, lm, depth.current && sidePose.current && at - sidePose.current.at < 150 ? undefined : world, at, bodyweight, span / 100, accessible || !!RULES[exercise.current].upper); setMetrics(motion.current)
     const previousStrikeAt = boxing.current.lastStrike
     if (exercise.current === 'boxing') { boxing.current = boxingTick(boxing.current, lm, at, lead, counter.current.range?.up ?? 150); setStrikes(boxing.current); if (options.guard && !boxing.current.guard && motion.current.left + motion.current.right > .3) reading.faults.push('Return the other hand to your comfortable guard') }
+    setFault(reading.faults[0] ?? null)
     const speed = Math.max(motion.current.left, motion.current.right)
     if (speed > .04) { activity.current.active += dt; activity.current.powers = [...activity.current.powers, motion.current.watts].slice(-120); if (activity.current.early.length < 60) activity.current.early.push(speed); activity.current.recent = [...activity.current.recent, speed].slice(-60) } else activity.current.rest += dt
     flow.current = flowTick(flow.current, motion.current); setFlowScore(flow.current.score)
