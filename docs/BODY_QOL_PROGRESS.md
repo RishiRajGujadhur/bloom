@@ -22,7 +22,7 @@ explicit observation view rather than an invented form score.
 
 - [x] 11. Remember exercise search and filters across visits.
 - [x] 12. Clear search and reset filters without leaving seated-only mode.
-- [ ] 13. Show the matching exercise count and an actionable empty state.
+- [x] 13. Show the matching exercise count and an actionable empty state.
 - [ ] 14. Distinguish animated demonstration counts from measured camera reps.
 - [ ] 15. Cancel queued exercise speech when pausing or leaving.
 - [ ] 16. Enter an exact rep or hold-duration target alongside the slider.

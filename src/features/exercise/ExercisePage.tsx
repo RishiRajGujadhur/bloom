@@ -378,6 +378,7 @@ export function ExercisePage() {
           </div>
         </div>
       )}
+      <p className="studio-empty" role="status">{list.length} matching {list.length === 1 ? 'movement' : 'movements'}{prefs.wheelchair ? ' · seated only' : ''}</p>
       {list.length ? (
         <Rail label="Exercises">
           {list.map((e) => (
@@ -419,7 +420,7 @@ export function ExercisePage() {
           ))}
         </Rail>
       ) : (
-        <p className="studio-empty">Nothing matches. Loosen a filter.</p>
+        <div className="studio-empty"><p>No movements match these filters.</p><button type="button" className="studio-chip" onClick={resetFilters}>Show all {prefs.wheelchair ? 'seated ' : ''}movements</button></div>
       )}
     </div>
   )
