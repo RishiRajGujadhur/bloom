@@ -5,11 +5,12 @@ import { supportedBodyExercise, useCurrentPractice } from './bodyPractice'
 import { setBodySeated, useBodySeated, setBodySilent, useBodySilent } from './bodyPreferences'
 import { RULES } from '../workout/formModel'
 import { BodyPracticeNote } from './BodyPracticeNote'
+import type { FeatureFlags } from '../../SettingsPage'
 import '../workout/formcoach.css'
 import './bodyTools.css'
 
 const FormCoach = lazy(() => import('../workout/FormCoach').then(module => ({ default: module.FormCoach })))
-export const BODY_PAGES: Record<string, { title: string; feature: string }> = {
+export const BODY_PAGES: Record<string, { title: string; feature: keyof FeatureFlags }> = {
   exercises: { title: 'Exercises', feature: 'exerciseGuides' }, workouts: { title: 'Workouts', feature: 'workoutLog' },
   intervals: { title: 'Intervals', feature: 'intervalCoach' }, yoga: { title: 'Yoga', feature: 'yogaFlow' },
   stretch: { title: 'Stretch', feature: 'mobility' }, run: { title: 'Run & walk', feature: 'runTracker' },
@@ -19,7 +20,7 @@ export const BODY_PAGES: Record<string, { title: string; feature: string }> = {
   posture: { title: 'Posture', feature: 'postureGuard' },
 }
 
-export function BodyTools({ page, features, onReward }: { page: string; features: Record<string, boolean>; onReward?: (reward: { id: string; damage: number; xp: number }) => void }) {
+export function BodyTools({ page, features, onReward }: { page: string; features: FeatureFlags; onReward?: (reward: { id: string; damage: number; xp: number }) => void }) {
   const [open, setOpen] = useState(false)
   const [opening, setOpening] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
