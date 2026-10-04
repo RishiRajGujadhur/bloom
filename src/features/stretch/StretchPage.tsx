@@ -323,6 +323,7 @@ export function StretchPage() {
           ))}
         </div>
         <p className="studio-empty">{forAreas(areas).length} stretches match</p>
+        <button type="button" className="studio-chip" disabled={!areas.length} onClick={() => setAreas([])}>Clear selected areas</button>
         <button type="button" className="studio-go" disabled={!areas.length} onClick={() => start({ id: 'custom', name: 'For you', emoji: '🎯', ids: forAreas(areas) })}>
           <Play size={16} /> Stretch these
         </button>
