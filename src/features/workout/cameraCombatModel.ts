@@ -1,11 +1,12 @@
 import { angle, upperVisible, type P } from './formModel'
-export type CombatMode = 'chain' | 'boxing' | 'cloud' | 'ropes' | 'doubleRopes'
+export type CombatMode = 'chain' | 'boxing' | 'cloud' | 'ropes' | 'doubleRopes' | 'sword'
 export const COMBAT_MODES: { id: CombatMode; name: string; cue: string }[] = [
   { id: 'chain', name: 'Wing Chun chain punches', cue: 'Alternate comfortable centre-line punches. Return each hand before striking again.' },
   { id: 'boxing', name: 'Boxing combos & slips', cue: 'Alternate punches and move your head gently sideways within your supported seated range.' },
   { id: 'cloud', name: 'Tai Chi Cloud Hands', cue: 'Trace comfortable circles with both arms. Keep the travel slow, continuous and synchronized.' },
   { id: 'ropes', name: 'Shadow ropes · alternating', cue: 'Lift then lower one hand at a time. Alternate arms without forcing your shoulders.' },
   { id: 'doubleRopes', name: 'Shadow ropes · double slams', cue: 'Raise both empty hands, then lower them together through your comfortable range.' },
+  { id: 'sword', name: 'Empty-hand seated sword', cue: 'No physical prop is required or recognized. Your wrist and forearm orient the virtual blade.' },
 ]
 export type CombatState = { at: number; elapsed: number; pose: P[] | null; hits: number; grade: number | null; slips: number; slipHeld: boolean; centre: number | null; lastHits: number[]; lastSide: number; chain: number; event: boolean; hand: number; speed: number; guard: boolean; velocities: number[]; acceleration: number; power: number }
 export const newCombat = (): CombatState => ({ at: 0, elapsed: 0, pose: null, hits: 0, grade: null, slips: 0, slipHeld: false, centre: null, lastHits: [0, 0], lastSide: -1, chain: 0, event: false, hand: 15, speed: 0, guard: false, velocities: [0, 0], acceleration: 0, power: 0 })
@@ -14,6 +15,14 @@ export function ropeMotion(previous: P[], pose: P[], oldVelocity: number[], dt: 
   const velocities = [15, 16].map(j => (pose[j].y - previous[j].y) / width * .4 / dt)
   const accelerations = velocities.map((v, i) => Math.max(0, (v - oldVelocity[i]) / dt))
   return { velocities, acceleration: Math.min(100, Math.max(...accelerations)), power: Math.min(1000, velocities.reduce((p, v, i) => p + 1.9 * Math.max(0, v) * accelerations[i], 0)) }
+}
+export function swordPose(pose: P[], hand: 15 | 16 = 15) {
+  const wrist = pose[hand], elbow = pose[hand - 2]
+  if (!wrist || !elbow || (wrist.visibility ?? 1) < .65 || (elbow.visibility ?? 1) < .65) return null
+  const dx = wrist.x - elbow.x, dy = wrist.y - elbow.y, length = Math.hypot(dx, dy)
+  if (length < .03) return null
+  const span = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
+  return { hilt: wrist, tip: { x: wrist.x + dx / length * span * 1.4, y: wrist.y + dy / length * span * 1.4 }, angle: Math.atan2(-dy, dx) * 180 / Math.PI }
 }
 export function cloudGrade(previous: P[], pose: P[], dt: number) {
   const width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
@@ -36,6 +45,7 @@ export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: 
   const shift = Math.abs(pose[0].x - centre) / width, slipHeld = shift > .22
   const speeds = [15, 16].map(j => Math.hypot(pose[j].x - state.pose![j].x, pose[j].y - state.pose![j].y) / width / dt)
   const guard = [15, 16].some(j => Math.hypot(pose[j].x - pose[0].x, pose[j].y - pose[0].y) < width * 1.15)
+  if (mode === 'sword') return { ...state, at, pose, centre, elapsed: state.elapsed + dt, speed: Math.max(...speeds), event: false, grade: null }
   if (mode === 'ropes' || mode === 'doubleRopes') {
     const motion = ropeMotion(state.pose, pose, state.velocities, dt)
     const crossed = [0, 1].map(i => pose[15 + i].y >= pose[13 + i].y && state.pose![15 + i].y < state.pose![13 + i].y && motion.velocities[i] > .12)
