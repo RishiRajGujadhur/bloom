@@ -41,6 +41,15 @@ export function cutEfficiency(points: (P | null)[]) {
   const start = visible[0], end = visible.at(-1)!
   return Math.round(Math.min(100, Math.hypot(end.x - start.x, end.y - start.y) / travelled * 100))
 }
+export function rhythmTarget(seconds: number, bpm: number) {
+  const period = 60 / Math.max(40, Math.min(140, Number.isFinite(bpm) ? bpm : 80))
+  const beat = Math.round(seconds / period)
+  return { x: .5 + Math.sin(beat * Math.PI / 2) * .12, y: .4, beat, errorMs: Math.abs(seconds - beat * period) * 1000, period }
+}
+export function rhythmHit(seconds: number, bpm: number, point: P, span: number) {
+  const target = rhythmTarget(seconds, bpm)
+  return { timing: Math.round(Math.max(0, 100 - target.errorMs / 160 * 100)), precision: Math.round(Math.max(0, 100 - Math.hypot(point.x - target.x, point.y - target.y) / Math.max(.08, span) * 100)) }
+}
 export function cloudGrade(previous: P[], pose: P[], dt: number) {
   const width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
   const speeds = [15, 16].map(j => Math.hypot(pose[j].x - previous[j].x, pose[j].y - previous[j].y) / width / dt)
@@ -95,9 +104,11 @@ function movementTick(state: CombatState, mode: CombatMode, pose: P[], at: numbe
   const grade = event ? Math.round(Math.max(0, 100 - Math.abs(pose[hand].x - centre) / width * 35 - (guard ? 0 : 20))) : state.grade
   return { ...state, at, pose, centre, elapsed: state.elapsed + dt, slips: state.slips + (mode === 'boxing' && slipHeld && !state.slipHeld ? 1 : 0), slipHeld, hits: state.hits + Number(event), grade, lastHits: state.lastHits.map((t, i) => i === side ? at : t), lastSide: event ? side : state.lastSide, chain, event, hand, speed: Math.max(...speeds), guard }
 }
-export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: number, swordHand: 15 | 16 = 15): CombatState {
+export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: number, swordHand: 15 | 16 = 15, bpm = 0): CombatState {
   if (state.bossHp <= 0) return { ...state, event: false, damage: 0 }
   const next = movementTick(state, mode, pose, at, swordHand)
-  const damage = next.event && (next.grade ?? 0) >= 70 ? Math.round(35 * Math.min(2, 1 + next.chain * .05) * (1 + Math.min(.5, next.speed * .1))) : 0
+  const targetPoint = mode === 'sword' ? swordPose(pose, swordHand)?.tip : pose[next.hand]
+  const rhythm = bpm > 0 && next.event && targetPoint ? rhythmHit(next.elapsed, bpm, targetPoint, Math.abs(pose[11].x - pose[12].x)) : null
+  const damage = next.event && (next.grade ?? 0) >= 70 && (!rhythm || rhythm.timing >= 50 && rhythm.precision >= 50) ? Math.round(35 * Math.min(2, 1 + next.chain * .05) * (1 + Math.min(.5, next.speed * .1))) : 0
   return { ...next, damage, bossHp: Math.max(0, state.bossHp - damage) }
 }

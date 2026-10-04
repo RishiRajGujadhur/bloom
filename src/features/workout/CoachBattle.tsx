@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { COMBAT_MODES, combatTick, cutEfficiency, newCombat, slashTrail, swordPose, type CombatMode } from './cameraCombatModel'
+import { COMBAT_MODES, combatTick, cutEfficiency, newCombat, rhythmHit, rhythmTarget, slashTrail, swordPose, type CombatMode } from './cameraCombatModel'
+import { bodySilent } from '../body/bodyPreferences'
 import type { PoseFrame } from './CoachTrails'
 import type { Exercise } from './formModel'
 import './coachBattle.css'
@@ -9,13 +10,28 @@ export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }:
   const [weapon, setWeapon] = useState<'broadsword' | 'katana'>('broadsword')
   const [swordHand, setSwordHand] = useState<15 | 16>(15)
   const [goal, setGoal] = useState(10)
+  const [rhythm, setRhythm] = useState(false), [bpm, setBpm] = useState(80), [audio, setAudio] = useState(false)
+  const [melody, setMelody] = useState<'joy' | 'elise'>('joy')
+  const [rhythmScore, setRhythmScore] = useState<{ timing: number; precision: number } | null>(null)
+  const sound = useRef<AudioContext | null>(null), lastBeat = useRef(-1)
   const [state, setState] = useState(() => newCombat())
   const current = useRef(state)
   useEffect(() => {
     if (!frame || !active || paused || !mode) { current.current = { ...current.current, pose: null, event: false }; return }
-    const next = combatTick(current.current, mode, frame.pose, frame.at, swordHand); current.current = next; setState(next)
-  }, [frame, active, paused, mode, swordHand])
-  const reset = () => { const next = newCombat(goal); current.current = next; setState(next); setPaused(false) }
+    const next = combatTick(current.current, mode, frame.pose, frame.at, swordHand, rhythm ? bpm : 0); current.current = next; setState(next)
+    const point = mode === 'sword' ? swordPose(frame.pose, swordHand)?.tip : frame.pose[next.hand]
+    if (rhythm && next.event && point) setRhythmScore(rhythmHit(next.elapsed, bpm, point, Math.abs(frame.pose[11].x - frame.pose[12].x)))
+  }, [frame, active, paused, mode, swordHand, rhythm, bpm])
+  useEffect(() => () => { void sound.current?.close() }, [])
+  useEffect(() => {
+    if (!audio || !rhythm || !mode || !active || paused || !state.bossHp || bodySilent() || !sound.current) return
+    const beat = Math.floor(state.elapsed / (60 / bpm)); if (beat === lastBeat.current) return; lastBeat.current = beat
+    const notes = melody === 'joy' ? [64,64,65,67,67,65,64,62,60,60,62,64,64,62,62] : [76,75,76,75,76,71,74,72,69]
+    const ctx = sound.current, tone = ctx.createOscillator(), volume = ctx.createGain()
+    tone.frequency.value = 440 * 2 ** ((notes[beat % notes.length] - 69) / 12); volume.gain.setValueAtTime(.05, ctx.currentTime); volume.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .18)
+    tone.connect(volume).connect(ctx.destination); tone.start(); tone.stop(ctx.currentTime + .2); tone.onended = () => { tone.disconnect(); volume.disconnect() }
+  }, [state.elapsed, state.bossHp, audio, rhythm, mode, active, paused, bpm, melody])
+  const reset = () => { const next = newCombat(goal); current.current = next; setState(next); setPaused(false); setRhythmScore(null); lastBeat.current = -1 }
   const blade = state.pose && mode === 'sword' ? swordPose(state.pose, swordHand) : null
   const x = (value: number) => (mirror ? 1 - value : value) * 640
   const y = (value: number) => value * 480
@@ -28,11 +44,13 @@ export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }:
     <div className="cb-menu"><label>Seated camera arcade<select aria-label="Seated camera arcade" value={mode} onChange={e => { const next = e.target.value as CombatMode | ''; reset(); setMode(next); if (next) onExercise(next === 'cloud' ? 'taiChi' : next === 'ropes' || next === 'doubleRopes' || next === 'sword' ? 'observe' : 'boxing') }}><option value="">Off</option>{COMBAT_MODES.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}</select></label>
       {mode === 'sword' && <><label>Virtual weapon<select aria-label="Virtual weapon" value={weapon} onChange={e => setWeapon(e.target.value as typeof weapon)}><option value="broadsword">Broadsword</option><option value="katana">Katana</option></select></label><label>Sword hand<select aria-label="Sword hand" value={swordHand} onChange={e => { setSwordHand(Number(e.target.value) as 15 | 16); reset() }}><option value={15}>Left hand</option><option value={16}>Right hand</option></select></label></>}
       {mode && <label>Boss target (movement cycles)<input aria-label="Boss target cycles" type="number" min="5" max="60" value={goal} onChange={e => { const value = Number(e.target.value); if (Number.isFinite(value) && value >= 5 && value <= 60) setGoal(Math.round(value)) }} /></label>}
+      {mode && <><label><input type="checkbox" checked={rhythm} onChange={e => { setRhythm(e.target.checked); reset() }} />Classical rhythm targets</label>{rhythm && <><label>Rhythm BPM<input aria-label="Battle rhythm BPM" type="number" min="40" max="140" value={bpm} onChange={e => { const v = Number(e.target.value); if (v >= 40 && v <= 140) { setBpm(v); reset() } }} /></label><label>Public-domain motif<select aria-label="Classical motif" value={melody} onChange={e => setMelody(e.target.value as typeof melody)}><option value="joy">Ode to Joy</option><option value="elise">Für Elise</option></select></label><label><input type="checkbox" checked={audio} onChange={async e => { const enabled = e.target.checked; setAudio(enabled); if (enabled) try { sound.current ??= new AudioContext(); await sound.current.resume() } catch { setAudio(false) } }} />Play synthesized motif (respects Silent body cues)</label><p>Timing {rhythmScore?.timing ?? '—'}% · target precision {rhythmScore?.precision ?? '—'}% · hit near the ring on the beat</p></>}</>}
       {mode && <p role="status">{state.bossHp === 0 ? 'Boss defeated! Restart for another round.' : `Boss HP ${state.bossHp}/${state.bossMax} · ${state.damage ? `${state.damage} damage` : 'Land a movement cue above 70%'}`} · changed targets apply on restart.</p>}
       {mode && <><p>{COMBAT_MODES.find(m => m.id === mode)?.cue}</p><button type="button" onClick={() => { current.current.pose = null; setPaused(p => !p) }}>{paused ? 'Resume battle' : 'Pause battle'}</button><button type="button" onClick={reset}>Restart battle</button><p role="status">{demo ? 'Demo · no rewards' : !active ? 'Start camera and calibrate to play' : paused ? 'Battle paused' : 'Camera movement estimates'} · {state.hits} strikes · {state.slips} slips · chain {state.chain} · cue match {state.grade ?? '—'}%</p></>}
       {mode === 'sword' && <p>{state.move} · {state.parries} parries · {state.guard ? 'High guard ready' : 'Raise a comfortable diagonal high guard to parry'} · cut straightness {cutEfficiency(trail) ?? '—'}% · projected path only, not 3D blade-plane accuracy</p>}
       {(mode === 'ropes' || mode === 'doubleRopes') && <p>Downward acceleration {state.acceleration.toFixed(1)} m/s² · power proxy {state.power.toFixed(0)} W. Assumes 40cm shoulder span and 1.9kg per arm; no rope resistance is measured.</p>}
     </div>
+    {mode && rhythm && <svg className="cb-overlay" viewBox="0 0 640 480" aria-label="Rhythm strike target"><circle cx={x(rhythmTarget(state.elapsed, bpm).x)} cy={y(.4)} r={18 + rhythmTarget(state.elapsed, bpm).errorMs / 20} stroke="#ffe370" strokeWidth="3" fill="none" /><circle cx={x(rhythmTarget(state.elapsed, bpm).x)} cy={y(.4)} r="5" fill="#ffe370" /></svg>}
     {mode === 'sword' && state.elapsed % 4 > 1.4 && state.elapsed % 4 < 2.8 && <svg className="cb-overlay" viewBox="0 0 640 480" aria-label="Incoming parry projectile"><path d={`M${630 - (state.elapsed % 4 - 1.4) * 280} 150 l-14 -7 v14 Z`} fill="#ffc166" /></svg>}
   </div>
 }
