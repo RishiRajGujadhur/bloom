@@ -8,7 +8,7 @@ committed and pushed independently. Demo sessions never award progression.
 - [x] 02. Cloud Hands synchronization, circular travel and slow-flow cues.
 - [x] 03. Alternating/double shadow-rope slams and estimated acceleration/power.
 - [x] 04. Empty-hand SVG broadsword/katana overlay.
-- [ ] 05. Overhead strikes, thrusts and high-guard projectile parries.
+- [x] 05. Overhead strikes, thrusts and high-guard projectile parries.
 - [ ] 06. Lingering colored sword slash trails.
 - [ ] 07. Pixel-art camera boss battles with movement-driven damage.
 - [ ] 08. Classical melody rhythm targets and timing/position grades.
