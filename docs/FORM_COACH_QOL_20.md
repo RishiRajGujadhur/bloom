@@ -8,7 +8,7 @@
 - [x] 06. Visible air punch tally
 - [x] 07. Red skeleton form feedback
 - [x] 08. Optional visual correction cues
-- [ ] 09. Black or dim camera background
+- [x] 09. Black or dim camera background
 - [ ] 10. Background availability feedback
 - [ ] 11. Remember camera background choice
 - [ ] 12. Three two one start countdown
