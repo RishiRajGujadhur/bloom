@@ -44,7 +44,7 @@ explicit observation view rather than an invented form score.
 
 ## Yoga
 
-- [ ] 26. Search the pose library by name and Sanskrit name.
+- [x] 26. Search the pose library by name and Sanskrit name.
 - [ ] 27. Favourite poses and filter the library to favourites.
 - [ ] 28. Navigate directly to the previous or next pose in a flow.
 - [ ] 29. Undo removal of a custom-flow step.

@@ -17,6 +17,10 @@ export const poses: YogaPose[] = [
   { id: 'warrior3', name: 'Warrior III', sanskrit: 'Virabhadrasana III', pose: { torso: 90, hipR: 90, shL: -180, shR: -180 }, benefit: 'Balance and posterior strength', cue: 'Reach long through fingers and heel' },
 ]
 export const poseById = (id: string) => poses.find((p) => p.id === id)!
+export function searchYogaPoses(query: string) {
+  const text = query.trim().toLocaleLowerCase()
+  return poses.filter(pose => `${pose.name} ${pose.sanskrit}`.toLocaleLowerCase().includes(text))
+}
 
 export type Step = { key: string; poseId: string; breaths: number }
 export type Flow = { id: string; name: string; emoji: string; steps: Step[] }

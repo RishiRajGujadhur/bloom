@@ -14,7 +14,7 @@ import { ACTIVITY_KEY, Rail, Slider, Studio, StudioScene, logActivity, readStore
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { FigureSvg } from '../exercise/ExerciseFigure'
-import { flowSeconds, newStep, poseById, poses, presetFlows, stepAt, type Flow, type Step } from './yogaModel'
+import { flowSeconds, newStep, poseById, poses, presetFlows, searchYogaPoses, stepAt, type Flow, type Step } from './yogaModel'
 import '../exercise/exercise.css'
 import { Lotus } from '../showcase/Lotus'
 import { usePageActions } from '../../components/ui/PageMenu'
@@ -115,6 +115,8 @@ export function YogaPage() {
   useKeepAwake(running)
   const [elapsed, setElapsed] = useState(0)
   const [focus, setFocus] = useState(poses[0].id)
+  const [poseSearch, setPoseSearch] = useState('')
+  const matchingPoses = searchYogaPoses(poseSearch)
   const goRef = useRef<HTMLButtonElement>(null)
   const breath = store.breath
   const length = flowSeconds(current, breath)
@@ -258,8 +260,9 @@ export function YogaPage() {
           </SortableContext>
           {!draft.steps.length && <p className="studio-empty">Drag poses here.</p>}
         </FlowDrop>
+        <label>Find a yoga pose<input className="studio-input" type="search" aria-label="Search yoga poses" maxLength={100} value={poseSearch} onChange={event => setPoseSearch(event.target.value)} /></label>
         <Rail label="Pose library">
-          {poses.map((p) => (
+          {matchingPoses.map((p) => (
             <LibraryPose key={p.id} id={p.id} onAdd={() => setDraft([...draft.steps, newStep(p.id)])} />
           ))}
         </Rail>
@@ -280,8 +283,10 @@ export function YogaPage() {
         {on('sanskrit') && <p className="yg-sanskrit">{focusPose.sanskrit}</p>}
         {on('benefits') && <p className="yg-benefit">✦ {focusPose.benefit}</p>}
         <p className="yg-cue">{focusPose.cue}</p>
+        <label>Find a pose<input className="studio-input" type="search" aria-label="Search yoga poses" maxLength={100} value={poseSearch} onChange={event => setPoseSearch(event.target.value)} /></label>
+        <p className="studio-empty" role="status">{matchingPoses.length} matching poses{!matchingPoses.length && <button type="button" className="studio-chip" onClick={() => setPoseSearch('')}>Clear pose search</button>}</p>
         <div className="yg-pose-chips">
-          {poses.map((p) => (
+          {matchingPoses.map((p) => (
             <button key={p.id} type="button" className="studio-chip" aria-pressed={focus === p.id} onClick={() => setFocus(p.id)}>
               {p.name}
             </button>
