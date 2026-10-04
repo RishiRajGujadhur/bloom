@@ -32,7 +32,7 @@ explicit observation view rather than an invented form score.
 - [x] 17. Undo a removed workout set.
 - [x] 18. Enter exact weight and rep/duration values.
 - [x] 19. Prevent duplicate set logs from held keys and rapid repeat clicks.
-- [ ] 20. Store plank sets as duration rather than repetition count.
+- [x] 20. Store plank sets as duration rather than repetition count.
 
 ## Intervals
 
