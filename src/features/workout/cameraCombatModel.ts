@@ -1,4 +1,5 @@
 import { angle, upperVisible, type P } from './formModel'
+import type { PoseFrame } from './CoachTrails'
 export type CombatMode = 'chain' | 'boxing' | 'cloud' | 'ropes' | 'doubleRopes' | 'sword'
 export const COMBAT_MODES: { id: CombatMode; name: string; cue: string }[] = [
   { id: 'chain', name: 'Wing Chun chain punches', cue: 'Alternate comfortable centre-line punches. Return each hand before striking again.' },
@@ -27,6 +28,18 @@ export function swordPose(pose: P[], hand: 15 | 16 = 15) {
 export function swordGuard(pose: P[], hand: 15 | 16) {
   const blade = swordPose(pose, hand), width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
   return !!blade && pose[hand].y < pose[0].y + width * .6 && Math.min(Math.abs(blade.angle - 45), Math.abs(blade.angle - 135)) <= 20
+}
+export function slashTrail(frames: PoseFrame[], hand: 15 | 16) {
+  const at = frames.at(-1)?.at ?? 0
+  return frames.filter(f => at - f.at <= 1000).map(f => swordPose(f.pose, hand)?.tip ?? null)
+}
+export function cutEfficiency(points: (P | null)[]) {
+  const visible = points.filter((p): p is P => p !== null)
+  if (visible.length < 3) return null
+  const travelled = visible.slice(1).reduce((sum, p, i) => sum + Math.hypot(p.x - visible[i].x, p.y - visible[i].y), 0)
+  if (travelled < .02) return null
+  const start = visible[0], end = visible.at(-1)!
+  return Math.round(Math.min(100, Math.hypot(end.x - start.x, end.y - start.y) / travelled * 100))
 }
 export function cloudGrade(previous: P[], pose: P[], dt: number) {
   const width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
