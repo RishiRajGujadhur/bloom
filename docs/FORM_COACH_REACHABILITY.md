@@ -37,3 +37,5 @@ Each improvement is committed and pushed separately.
 - [x] 17. keep the optional countdown skip beside the start prompt
 
 - [x] 18. remember preferred hand reach and hold time across visits
+
+- [x] 19. fold secondary workout options to reduce page buttons and scrolling
