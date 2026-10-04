@@ -69,7 +69,7 @@ explicit observation view rather than an invented form score.
 ## Body progress
 
 - [x] 41. Enter precise measurements in the selected display units.
-- [ ] 42. Confirm saved check-ins and prevent an empty check-in.
+- [x] 42. Confirm saved check-ins and prevent an empty check-in.
 - [ ] 43. Validate photo files and report failed photo storage.
 - [ ] 44. Undo progress-photo deletion without losing the original image.
 - [ ] 45. Review dated measurement entries and undo entry deletion.

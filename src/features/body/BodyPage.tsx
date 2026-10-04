@@ -97,6 +97,8 @@ export function BodyPage() {
   const [pick, setPick] = useState<[string | null, string | null]>([null, null])
   const [reveal, setReveal] = useState(false)
   const [checkIn, setCheckIn] = useState(() => readNudges()['body-checkin']?.enabled ?? false)
+  const [saveMessage, setSaveMessage] = useState('')
+  const lastSaved = useRef('')
   const saveBtn = useRef<HTMLButtonElement>(null)
   const file = useRef<HTMLInputElement>(null)
   const urls = usePhotoUrls(photos)
@@ -107,6 +109,10 @@ export function BodyPage() {
   }, [])
 
   const save = () => {
+    if (!include.length || include.some(id => { const m = measures.find(x => x.id === id)!; const v = draft[id]; return v == null || !Number.isFinite(v) || v < m.min || v > m.max })) { setSaveMessage('Select at least one valid measurement.'); return }
+    const fingerprint = JSON.stringify([today, include, draft]); if (lastSaved.current === fingerprint) { setSaveMessage('This check-in is already saved.'); return }
+    lastSaved.current = fingerprint
+    setSaveMessage(`Check-in saved for ${today}. You can update it on the same day.`)
     const entry: Entry = { date: today, ...Object.fromEntries(include.map((m) => [m, draft[m]])) }
     setStore((s) => ({ ...s, entries: [...s.entries.filter((e) => e.date !== today), { ...s.entries.find((e) => e.date === today), ...entry }] }))
     logActivity('bodyCheckIn')
@@ -146,9 +152,10 @@ export function BodyPage() {
             return <div key={m.id}><Slider label={m.label} value={draft[m.id] ?? m.min} min={m.min} max={m.max} step={m.step} unit={d.unit} format={() => d.value.toFixed(1)} onChange={(v) => setDraft((x) => ({ ...x, [m.id]: v }))} />
               <label className="body-exact-field">Exact {m.label.toLowerCase()} ({d.unit})<input type="number" step="0.1" aria-label={`Exact ${m.label.toLowerCase()}`} value={Number(d.value.toFixed(2))} min={display(m.min, m.unit, units).value} max={display(m.max, m.unit, units).value} onChange={e => { if (!e.target.value.trim()) return; const value = fromDisplay(Number(e.target.value), m.unit, units); if (Number.isFinite(value) && value >= m.min && value <= m.max) setDraft(x => ({ ...x, [m.id]: value })) }} /></label></div>
           })}
-        <button ref={saveBtn} type="button" className="studio-go" onClick={save}>
+        <button ref={saveBtn} type="button" className="studio-go" disabled={!include.length} onClick={save}>
           <Ruler size={16} /> Save today’s check-in
         </button>
+        <p role="status">{!include.length ? 'Select a measurement to save.' : saveMessage}</p>
       </div>
       <div className="studio-card bd-side">
         {on('sparkline') && (() => {
