@@ -49,3 +49,12 @@ test('new seated movements have workout-history and muscle catalog entries', () 
  expect(liftById('seatedbicepcurl')?.muscles).toContain('biceps')
  expect(liftById('seatedlateralraise')?.muscles).toContain('shoulders')
 })
+
+import { coachMarkdown, readCoachHistory, type CoachSession } from '../src/features/workout/coachHistory'
+test('tempo exports use real lines and corrupt optional timing values are rejected', () => {
+ const row: CoachSession = { id:'tempo', exercise:'bicepCurl', at:1, seconds:40, reps:10, score:95, joules:1, kcal:1, power:1, peak:1, leftWork:1, rightWork:1, leftAngle:90, rightAngle:90, range:null, compensation:0, tempoScore:95, liftSeconds:1, returnSeconds:3 }
+ expect(coachMarkdown([row])).toContain('Tempo score: 95%\n- Lift / return timing: 1.0 / 3.0 s')
+ localStorage.setItem('bloom-coach-history-v1',JSON.stringify([{...row,liftSeconds:'bad'}]))
+ expect(readCoachHistory()).toHaveLength(0)
+ localStorage.removeItem('bloom-coach-history-v1')
+})

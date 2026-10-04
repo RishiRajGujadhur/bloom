@@ -50,7 +50,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       const joints = ids.map((i) => { const mesh = new THREE.Mesh(jointGeometry, i % 2 ? green : cyan); group.add(mesh); return { i, mesh } })
       const links = bones.map(([a, b]) => { const mesh = new THREE.Mesh(boneGeometry, a % 2 ? green : cyan); group.add(mesh); return { a, b, mesh } })
       const seatGeometry = new THREE.BoxGeometry(.8, .045, .55), seatMaterial = new THREE.MeshStandardMaterial({ color: '#375d55', transparent: true, opacity: .65 })
-      if (RULES[exercise].upper) { const seat = new THREE.Mesh(seatGeometry, seatMaterial); seat.position.set(0, -.8, 0); group.add(seat) }
+      if (RULES[exercise].upper) { const seat = new THREE.Mesh(seatGeometry, seatMaterial); seat.position.set(0, -.40, 0); group.add(seat) }
       const axis = new THREE.Vector3(0, 1, 0)
       let renderedAt = 0, phaseTime = savedPhase.current
       const loop = (now: number) => {
@@ -67,7 +67,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
         joints.forEach(({ i, mesh }) => { mesh.position.copy(positions[i]); mesh.visible = wireframe })
         links.forEach(({ mesh }) => { mesh.visible = wireframe })
         head.visible = torso.visible = !wireframe
-        head.position.copy(positions[0]); head.position.y += .07
+        head.position.copy(positions[0]); head.position.y = (positions[11].y + positions[12].y) / 2 + .26
         const shoulders = positions[11].clone().add(positions[12]).multiplyScalar(.5), hips = RULES[exercise].upper ? positions[34] : positions[23].clone().add(positions[24]).multiplyScalar(.5)
         const trunk = shoulders.clone().sub(hips); torso.position.copy(shoulders).add(hips).multiplyScalar(.5); torso.scale.set(Math.max(.8, shoulders.distanceTo(positions[11]) * 2 / .52), trunk.length(), .65); torso.quaternion.setFromUnitVectors(axis, trunk.normalize())
         const neckBottom = shoulders.clone(), neckTop = head.position.clone(); neckTop.y -= .12
