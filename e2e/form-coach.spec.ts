@@ -345,3 +345,19 @@ test('saved set recap shows same-exercise progress and keeps details folded', as
   await expect(page.locator('.fc-set-recap')).toContainText('Today: 2 sets · 18 reps')
   await expect(page.locator('.fc-movement-guide')).toHaveCount(0)
 })
+
+
+test('Auto is selectable and never identifies the prerecorded demo as a real workout', async ({ page }) => {
+  await page.goto('/#workouts/coach')
+  await page.getByLabel('Selected workout').selectOption('auto')
+  await expect(page.locator('.fc-auto-help')).toContainText('first movement is not counted')
+  await page.getByRole('button', { name: 'Demo', exact: true }).click()
+  await expect(page.locator('.fc-side-status')).toContainText('Auto needs a live camera', { timeout: 20000 })
+  await expect(page.locator('.fc-workout-hud')).toContainText('Auto · identifying movement')
+  await expect(page.locator('.fc-workout-hud b')).toContainText('0 /')
+  await expect(page.locator('.fc-movement-guide')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Next workout detail', exact: true }).click()
+  await expect(page.locator('.fc-movement-guide')).toBeVisible()
+  await page.getByRole('button', { name: 'Previous workout detail', exact: true }).click()
+  await expect(page.locator('.fc-movement-guide')).toHaveCount(0)
+})
