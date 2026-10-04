@@ -199,3 +199,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-movement-guide{border:1px solid #426e5b;border-radius:10px;padding:7px;font-size:12px}.fc-movement-guide summary{cursor:pointer;font-weight:700}.fc-movement-guide p{margin:8px 0;color:#d7eddf;line-height:1.5}
 
 .fc-camera-readiness{font-size:11px;color:#bae6cd}.fc-camera-readiness.needs-adjustment{color:#ffdaad;border-left:3px solid #ffc27c;padding-left:8px}
+
+.fc-set-recap{font-size:12px;padding:8px;border:1px solid #426e5b;border-radius:10px}.fc-set-recap summary{cursor:pointer;color:#aeedcd}.fc-set-recap p{margin:7px 0}

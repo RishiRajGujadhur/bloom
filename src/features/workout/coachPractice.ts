@@ -46,3 +46,10 @@ export function poseReadiness(ex: Exercise, pose: P[], seated = false) {
  if(indices.some(i=>pose[i].x < .01 || pose[i].x > .99 || pose[i].y < .01 || pose[i].y > .99)) return { ready:false, confidence, message:'Move the camera a little farther back so the moving joints fit inside the picture.' }
  return { ready:true, confidence, message: upper ? 'Upper-body joints visible' : 'Exercise joints visible' }
 }
+
+export function practiceSummary(rows: { exercise: Exercise; at: number; reps: number; seconds: number; score: number }[], exercise: Exercise, now = Date.now()) {
+ const matching=rows.filter(row=>row.exercise===exercise).sort((a,b)=>a.at-b.at), last=matching.at(-1), previous=matching.at(-2)
+ if(!last) return null
+ const today=matching.filter(row=>new Date(row.at).toDateString()===new Date(now).toDateString())
+ return { last, change:previous ? Math.round(last.score-previous.score) : null, sets:today.length, reps:today.reduce((sum,row)=>sum+row.reps,0), seconds:today.reduce((sum,row)=>sum+row.seconds,0) }
+}

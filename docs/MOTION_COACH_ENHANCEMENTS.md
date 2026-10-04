@@ -22,3 +22,5 @@ These sources informed the choices of features; Bloom’s camera scores remain e
 - [x] 4. add optional tempo grading and a reference that follows lift-return timing
 
 - [x] 5. gate camera scoring on visible joints and provide specific framing feedback
+
+- [x] 6. show a compact saved-set recap and export optional tempo results

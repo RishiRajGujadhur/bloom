@@ -36,3 +36,10 @@ test('readiness ignores legs in seated mode but rejects off-picture wrists', () 
  pose[15].x=1.1; expect(poseReadiness('bicepCurl',pose,true).ready).toBe(false)
  pose[15].x=.4; pose[15].visibility=.2; expect(poseReadiness('bicepCurl',pose,true).message).toContain('both arms')
 })
+
+import { practiceSummary } from '../src/features/workout/coachPractice'
+test('set recaps compare the same exercise and aggregate the current local day', () => {
+ const now=new Date(2026,9,4,12).getTime(); const rows=[{exercise:'bicepCurl' as const,at:now-1000,reps:8,seconds:30,score:85},{exercise:'bicepCurl' as const,at:now,reps:10,seconds:40,score:95},{exercise:'boxing' as const,at:now,reps:99,seconds:20,score:50}]
+ expect(practiceSummary(rows,'bicepCurl',now)).toMatchObject({sets:2,reps:18,change:10})
+ expect(practiceSummary(rows,'lateralRaise',now)).toBeNull()
+})
