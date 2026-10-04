@@ -181,3 +181,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-reference-style{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px}.fc-reference-style select{max-width:110px;background:#173a30;color:white;border-radius:8px;padding:5px;border:1px solid #64a991}
 
 .fc-guide-column .fc-reference canvas{display:block;width:100%;height:clamp(160px,25vw,320px);object-fit:contain}
+
+.fc-start-countdown button{pointer-events:auto;min-height:44px;border-radius:12px;padding:8px;background:#174b37;color:white;border:1px solid #8de5c0;font-size:13px;margin-top:8px}

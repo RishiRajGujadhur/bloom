@@ -33,3 +33,5 @@ Each improvement is committed and pushed separately.
 - [x] 15. light the reference person clearly for readable arm and torso depth
 
 - [x] 16. confirm finishing while pausing the workout to prevent accidental exits
+
+- [x] 17. keep the optional countdown skip beside the start prompt
