@@ -10,7 +10,7 @@
 - [x] 08. Optional visual correction cues
 - [x] 09. Black or dim camera background
 - [x] 10. Background availability feedback
-- [ ] 11. Remember camera background choice
+- [x] 11. Remember camera background choice
 - [ ] 12. Three two one start countdown
 - [ ] 13. Optional countdown and skip control
 - [ ] 14. Fullscreen encouragement

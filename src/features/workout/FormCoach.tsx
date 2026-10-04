@@ -58,9 +58,10 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const coachRoot = useRef<HTMLElement>(null)
   const [gameActivity, setGameActivity] = useState<import('./cameraCombatModel').CombatMode | ''>('')
   const [corrections, setCorrections] = useState(true)
-  const [background, setBackground] = useState<'dim' | 'black'>('dim')
+  const [background, setBackground] = useState<'dim' | 'black'>(() => { try { return localStorage.getItem('bloom-coach-background') === 'black' ? 'black' : 'dim' } catch { return 'dim' } })
   const latestBackground = useRef(background); latestBackground.current = background
   const [backgroundReady, setBackgroundReady] = useState(false)
+  useEffect(() => { try { localStorage.setItem('bloom-coach-background', background) } catch { /* optional */ } }, [background])
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [settingsSearch, setSettingsSearch] = useState('')
   const [showReference, setShowReference] = useState(true)
