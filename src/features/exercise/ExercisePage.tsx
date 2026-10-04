@@ -200,6 +200,7 @@ export function ExercisePage() {
     : filtered
   useBodyPractice('exercises', pick.id, pick.name, () => setPlaying(false))
   const speed = on('slowMo') ? prefs.speed : 1
+  useEffect(() => { return () => window.speechSynthesis?.cancel() }, [playing, pick.id])
   const resetFilters = () => { setSearch(''); setArea('all'); setPosition('all'); setMuscle('all'); setEquipment('all'); setLevel('all'); setFavOnly(false) }
 
   // Holds count seconds; reps come from the animation loop.
