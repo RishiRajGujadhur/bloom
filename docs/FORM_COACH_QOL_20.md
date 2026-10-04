@@ -1,7 +1,7 @@
 # Camera coach: 20 further usability improvements
 
 - [x] 01. Quiet Basic overlays
-- [ ] 02. Advanced-only ghost replay
+- [x] 02. Advanced-only ghost replay
 - [ ] 03. Game reference stays side by side
 - [ ] 04. Arcade movement reference guides
 - [ ] 05. One-click air boxing
