@@ -158,7 +158,7 @@ test('Basic defaults to essentials and fullscreen keeps the reference, count and
 
 
 test('Basic keeps optional markers quiet, counts air punches and shows countdown and encouragement', async ({ page }) => {
-  await page.addInitScript(() => { localStorage.removeItem('bloom-coach-view'); localStorage.setItem('bloom-coach-settings-v1', JSON.stringify({ reaction: true, ghost: true })) })
+  await page.addInitScript(() => { localStorage.removeItem('bloom-coach-view'); if (!localStorage.getItem('bloom-coach-settings-v1')) localStorage.setItem('bloom-coach-settings-v1', JSON.stringify({ reaction: true, ghost: true })) })
   await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
   await page.getByRole('button', { name: 'Air boxing', exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Selected workout' })).toHaveValue('boxing')
@@ -196,4 +196,15 @@ test('Game sword and ropes retain the matching reference next to the camera', as
   await page.getByText('Seated arcade · Empty-hand seated sword', { exact: true }).click()
   await page.getByRole('combobox', { name: 'Seated camera arcade' }).selectOption('doubleRopes')
   await expect(page.locator('.fc-reference')).toContainText('Shadow ropes · double slams')
+})
+
+
+test('standing workouts also show the full start countdown', async ({ page }) => {
+  await page.addInitScript(() => { localStorage.setItem('bloom-coach-accessible', 'false'); localStorage.removeItem('bloom-coach-view') })
+  await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
+  await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
+  await expect(page.getByRole('status', { name: 'Workout start countdown' })).toContainText('3')
+  await expect(page.getByRole('status', { name: 'Workout start countdown' })).toContainText('2')
+  await expect(page.getByRole('status', { name: 'Workout start countdown' })).toContainText('1')
+  await expect(page.getByRole('status', { name: 'Workout start countdown' })).toBeHidden()
 })
