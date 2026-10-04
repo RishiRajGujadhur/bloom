@@ -15,3 +15,5 @@ Each improvement is committed and pushed separately.
 - [x] 6. ignore ambiguous two-hand selections instead of choosing the wrong action
 
 - [x] 7. allow comfortable hand hold durations from two to five seconds
+
+- [x] 8. offer left or right reach zones without moving the camera subject
