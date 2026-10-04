@@ -30,7 +30,7 @@ const say = (t: string) => {
 }
 
 /** Leaflet map with the live route and an optional replay marker. */
-function RouteMap({ points, replay }: { points: Pt[]; replay: number | null }) {
+function RouteMap({ points, replay, follow }: { points: Pt[]; replay: number | null; follow: boolean }) {
   const host = useRef<HTMLDivElement>(null)
   const map = useRef<L.Map | null>(null)
   const line = useRef<L.Polyline | null>(null)
@@ -54,10 +54,10 @@ function RouteMap({ points, replay }: { points: Pt[]; replay: number | null }) {
     line.current.setLatLngs(ll)
     if (ll.length) {
       dot.current.setLatLng(ll[ll.length - 1])
-      if (ll.length > 1) m.fitBounds(L.latLngBounds(ll), { padding: [30, 30], maxZoom: 16, animate: true })
-      else m.setView(ll[0], 16)
+      if (follow && ll.length > 1) m.fitBounds(L.latLngBounds(ll), { padding: [30, 30], maxZoom: 16, animate: true })
+      else if (follow) m.setView(ll[0], 16)
     }
-  }, [points])
+  }, [points, follow])
   useEffect(() => {
     if (replay === null || !dot.current) return
     const p = pointAt(points, replay)
@@ -107,6 +107,7 @@ export function RunPage() {
     })
   const units = on('units') ? store.units : 'km'
   const [tab, setTab] = useState('track')
+  const [followMap, setFollowMap] = useState(() => readStore('bloom-run-map-follow', true))
   const [kind, setKind] = useState<'run' | 'walk'>('run')
   const [points, setPoints] = useState<Pt[]>([])
   const [status, setStatus] = useState<'idle' | 'tracking' | 'paused' | 'demo'>('idle')
@@ -301,7 +302,7 @@ export function RunPage() {
   usePageActions(!active ? [{ id: 'run-go', label: `Start a ${kind}`, icon: kind === 'walk' ? '🚶' : '🏃', run: start }, { id: 'run-demo', label: 'Play a demo route', icon: '🗺️', run: demo }] : status !== 'demo' ? [{ id: 'run-pause', label: status === 'paused' ? 'Resume' : 'Pause', icon: '⏯️', run: pause }] : [])
   const track = () => (
     <div className="studio-split run-split">
-      <div className="studio-card run-map-card">{on('map') ? <RouteMap points={points} replay={replay} /> : <div className="studio-center">Map is off</div>}</div>
+      <div className="studio-card run-map-card">{on('map') ? <><button type="button" className="studio-chip" aria-pressed={followMap} onClick={() => { setFollowMap(!followMap); writeStore('bloom-run-map-follow', !followMap) }}>Follow route {followMap ? 'on' : 'off'}</button><RouteMap points={points} replay={replay} follow={followMap} /></> : <div className="studio-center">Map is off</div>}</div>
       <div className="studio-card run-side">
         <Segmented label="Activity" value={kind} onChange={setKind} options={[{ id: 'run', label: '🏃 Run' }, { id: 'walk', label: '🚶 Walk' }]} />
         <div className="run-big">
