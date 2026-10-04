@@ -4,7 +4,7 @@ import { setBodySeated } from '../body/bodyPreferences'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
 import { OneEuroFilter } from '1eurofilter'
-import { Camera, Maximize, Play } from 'lucide-react'
+import { Camera, Maximize, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
 import { jointCallouts, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, loadPersonalRanges, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
@@ -68,6 +68,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const [useCountdown, setUseCountdown] = useState(true)
   const [encouragement, setEncouragement] = useState(true)
   const [workoutPaused, setWorkoutPaused] = useState(false)
+  const [controlPage, setControlPage] = useState(0)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [settingsSearch, setSettingsSearch] = useState('')
   const [showReference, setShowReference] = useState(true)
@@ -254,7 +255,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     // Gesture-driven entry may lack browser activation; the camera focus view still works.
     if (document.fullscreenEnabled && panel.current?.requestFullscreen) void panel.current.requestFullscreen().catch(() => {})
   }
-  actionRef.current = { previous: () => nextExercise(-1), next: () => nextExercise(1), log: logSet, finish, exit: exitFocus, routineNext: advanceRoutine }
+  actionRef.current = { previous: () => nextExercise(-1), next: () => nextExercise(1), log: logSet, finish, exit: exitFocus, fullscreen: enterFocus, routineNext: advanceRoutine, menuBack: () => setControlPage(value => Math.max(0, value - 1)), menuNext: () => setControlPage(value => Math.min(1, value + 1)) }
 
   const draw = (lm: P[], mirror: boolean) => {
     const c = canvas.current, g = c?.getContext('2d'); if (!c || !g) return
@@ -493,7 +494,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
             {focus && viewMode === 'advanced' && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}
             {!focus && ready && options.extension && ['boxing', 'karate', 'kungFu'].includes(ex) && combat.deceleration > 2 && Math.max(jointAngles.left ?? 0, jointAngles.right ?? 0) > 175 && <span className="fc-extension-cue">Near full projected elbow extension during rapid slowdown</span>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
-            {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{corrections && fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('pauseWorkout', workoutPaused ? 'Resume' : 'Pause', () => setWorkoutPaused(value => !value))}{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{countdown > 0 && useCountdown && <button type="button" onClick={() => { countdownElapsed.current = 3; setCountdown(0) }}>Skip countdown</button>}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
+            {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{corrections && fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls"><div className="fc-control-actions">{controlPage === 0 ? <>{control('pauseWorkout', workoutPaused ? 'Resume' : 'Pause', () => setWorkoutPaused(value => !value))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}</> : <>{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{focus ? control('exit', 'Exit fullscreen', exitFocus) : control('fullscreen', 'Fullscreen', enterFocus)}</>}</div><nav className="fc-control-navigation" aria-label="Camera action pages"><button type="button" data-gesture="menuBack" aria-label="Previous controls" disabled={controlPage === 0} onClick={() => setControlPage(0)}><ChevronLeft aria-hidden="true" /></button><small>{controlPage === 0 ? 'Set · 1 / 2' : 'Workout · 2 / 2'}</small><button type="button" data-gesture="menuNext" aria-label="More controls" disabled={controlPage === 1} onClick={() => setControlPage(1)}><ChevronRight aria-hidden="true" /></button></nav></div></>}
           </div>
         </div>
         {referenceVisible && <CoachReference activity={viewMode === 'game' ? gameActivity || undefined : undefined} exercise={ex === 'observe' ? 'seatedPress' : ex} anglesVisible={viewMode === 'advanced' && options.angles} lineage={lineage} paused={workoutPaused || options.autoPause && trackingPaused} battery={options.battery} />}</div>
