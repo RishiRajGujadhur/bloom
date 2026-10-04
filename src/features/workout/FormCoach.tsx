@@ -292,7 +292,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     let hovered: string | null = null
     if (gestures && mirror && canvas.current && panel.current) {
       const feed = canvas.current.getBoundingClientRect()
-      const hands = [15, 16, 19, 20, 21, 22].filter((i) => visible(lm[i])).map((i) => ({ x: feed.left + (1 - lm[i].x) * feed.width, y: feed.top + lm[i].y * feed.height }))
+      const hands = [15, 16].filter((i) => visible(lm[i]) && (lm[i].visibility ?? 1) >= .7).map((i) => ({ x: feed.left + (1 - lm[i].x) * feed.width, y: feed.top + lm[i].y * feed.height }))
       for (const button of panel.current.querySelectorAll<HTMLButtonElement>('[data-gesture]')) {
         if (button.disabled) continue
         const box = button.getBoundingClientRect()
