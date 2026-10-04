@@ -200,6 +200,7 @@ export function ExercisePage() {
     : filtered
   useBodyPractice('exercises', pick.id, pick.name, () => setPlaying(false))
   const speed = on('slowMo') ? prefs.speed : 1
+  const resetFilters = () => { setSearch(''); setArea('all'); setPosition('all'); setMuscle('all'); setEquipment('all'); setLevel('all'); setFavOnly(false) }
 
   // Holds count seconds; reps come from the animation loop.
   useEffect(() => {
@@ -274,6 +275,7 @@ export function ExercisePage() {
             placeholder="Try seated, elbow, or shoulder"
           />
         </label>
+        <div className="studio-chip-row"><button type="button" className="studio-chip" disabled={!search} onClick={() => setSearch('')}>Clear search</button><button type="button" className="studio-chip" onClick={resetFilters}>Reset filters</button></div>
         {on('wheelchair') && (
           <label>
             <input
