@@ -9,6 +9,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
   const canvas = useRef<HTMLCanvasElement>(null)
   const [available, setAvailable] = useState(true)
   const [wireframe, setWireframe] = useState(false)
+  const [angle, setAngle] = useState("front")
   const [angles, setAngles] = useState(() => jointCallouts(referencePose(exercise, 0, lineage)))
   useEffect(() => {
     let cancelled = false, raf = 0, release = () => {}
@@ -19,7 +20,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       try { renderer = new THREE.WebGLRenderer({ canvas: canvas.current, alpha: true, antialias: true }) } catch { setAvailable(false); return }
       renderer.setSize(240, 200, false); renderer.setPixelRatio(battery ? 1 : Math.min(2, window.devicePixelRatio))
       const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(42, 1.2, .1, 100)
-      camera.position.set(1.15, .25, 3.4); camera.lookAt(0, .15, 0)
+      camera.position.set(angle === "side" ? 2.6 : angle === "threeQuarter" ? 1.15 : 0, .25, angle === "side" ? 1.8 : 3.4); camera.lookAt(0, .15, 0)
       const group = new THREE.Group(); scene.add(group)
       scene.add(new THREE.HemisphereLight(0xffffff, 0x1b4f40, 2.8))
       const bones = RULES[exercise].upper ? [...UPPER_BONES, [0, 33], [33, 34]] : BONES
@@ -68,6 +69,6 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       raf = requestAnimationFrame(loop)
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
-  }, [exercise, lineage, paused, battery, activity, wireframe])
-  return <div className="fc-reference"><label className="fc-reference-style">Reference style <select aria-label="Reference style" value={wireframe ? "skeleton" : "person"} onChange={event => setWireframe(event.target.value === "skeleton")}><option value="person">3D person</option><option value="skeleton">Skeletal guide</option></select></label><span>{activity ? COMBAT_MODES.find(mode => mode.id === activity)?.name : "3D movement reference"}</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Wrist L / R</dt><dd>{angles.leftWrist ?? '—'}° / {angles.rightWrist ?? '—'}°</dd></div>{!RULES[exercise].upper && <div><dt>Knee L / R</dt><dd>{angles.leftKnee ?? '—'}° / {angles.rightKnee ?? '—'}°</dd></div>}<div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{activity && <>{COMBAT_MODES.find(mode => mode.id === activity)?.cue} · </>}{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
+  }, [exercise, lineage, paused, battery, activity, wireframe, angle])
+  return <div className="fc-reference"><label className="fc-reference-style">View angle <select aria-label="Reference view angle" value={angle} onChange={event => setAngle(event.target.value)}><option value="front">Front</option><option value="threeQuarter">Three-quarter</option><option value="side">Side</option></select></label><label className="fc-reference-style">Reference style <select aria-label="Reference style" value={wireframe ? "skeleton" : "person"} onChange={event => setWireframe(event.target.value === "skeleton")}><option value="person">3D person</option><option value="skeleton">Skeletal guide</option></select></label><span>{activity ? COMBAT_MODES.find(mode => mode.id === activity)?.name : "3D movement reference"}</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Wrist L / R</dt><dd>{angles.leftWrist ?? '—'}° / {angles.rightWrist ?? '—'}°</dd></div>{!RULES[exercise].upper && <div><dt>Knee L / R</dt><dd>{angles.leftKnee ?? '—'}° / {angles.rightKnee ?? '—'}°</dd></div>}<div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{activity && <>{COMBAT_MODES.find(mode => mode.id === activity)?.cue} · </>}{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
 }

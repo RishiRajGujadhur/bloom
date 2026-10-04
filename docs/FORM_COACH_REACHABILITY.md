@@ -23,3 +23,5 @@ Each improvement is committed and pushed separately.
 - [x] 10. keep fullscreen coaching information beside the camera instead of covering it
 
 - [x] 11. replace the stick reference with an articulated 3D person and optional skeleton
+
+- [x] 12. offer front and side reference views to make movement direction clearer
