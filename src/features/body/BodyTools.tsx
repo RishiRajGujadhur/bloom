@@ -4,6 +4,7 @@ import { logActivity } from '../../components/studio/Studio'
 import { supportedBodyExercise, useCurrentPractice } from './bodyPractice'
 import { setBodySeated, useBodySeated, setBodySilent, useBodySilent } from './bodyPreferences'
 import { RULES } from '../workout/formModel'
+import { BodyPracticeNote } from './BodyPracticeNote'
 import '../workout/formcoach.css'
 import './bodyTools.css'
 
@@ -47,6 +48,7 @@ export function BodyTools({ page, features, onReward }: { page: string; features
     <button ref={trigger} type="button" disabled={opening} className="body-tool-button" onClick={() => void openCoach()}><Camera size={16} /> {opening ? 'Preparing camera coach…' : 'Camera pose coach'}</button>
     <label className="body-tool-preference"><input type="checkbox" checked={seated} onChange={event => setBodySeated(event.target.checked)} /> Seated / wheelchair mode</label>
     <label className="body-tool-preference"><input type="checkbox" checked={silent} onChange={event => setBodySilent(event.target.checked)} /> Silent body cues</label>
+    <BodyPracticeNote key={page} page={page} title={meta.title} />
     {open && <div className="body-coach-backdrop"><dialog ref={dialog} className="body-coach-dialog" aria-label={`${meta.title} camera pose coach`} onCancel={event => { event.preventDefault(); if (document.fullscreenElement) { void document.exitFullscreen(); return }; setOpen(false) }}>
       <header><h2>{meta.title} · camera pose coach</h2><button type="button" className="body-tool-button" aria-label="Close camera pose coach" onClick={() => setOpen(false)}><X size={18} /> Close</button></header>
       <p>{practice?.label ?? meta.title}. Camera access starts only when you choose Start camera. Your video stays on this device.</p>

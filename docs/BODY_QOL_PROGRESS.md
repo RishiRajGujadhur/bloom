@@ -15,7 +15,7 @@ explicit observation view rather than an invented form score.
 - [x] 06. Pause activities and release competing cameras before camera coaching.
 - [x] 07. Trap keyboard focus in the coach, support Escape and restore focus.
 - [x] 08. Include the source activity in camera history and Markdown exports.
-- [ ] 09. Keep a private, persistent practice note for each body page.
+- [x] 09. Keep a private, persistent practice note for each body page.
 - [ ] 10. Export the current page's practice note as Markdown.
 
 ## Exercises
