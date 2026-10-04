@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from './utils/motion'
+import { BodyTools } from './features/body/BodyTools'
 import { pauseGsapWhenHidden } from './utils/gsapVisibility'
 import { subOn } from './features/subFeatures'
 import { PersonalInsights } from './features/PersonalInsights'
@@ -981,6 +982,7 @@ function App() {
                 <JournalContainer />
               </div>
             )}
+            <BodyTools key={active} page={active} features={settings.features} />
             {(active === 'growth' && !settings.features.rpgSkillTree) ||
             (active === 'collectibles' && !settings.features.collectibles) ||
             (active === 'habits' && !settings.features.habitTracker) ||
