@@ -76,7 +76,7 @@ explicit observation view rather than an invented form score.
 
 ## Eyes, daylight, dojo and readiness
 
-- [ ] 46. Restart a finished eye-care routine without logging it twice.
+- [x] 46. Restart a finished eye-care routine without logging it twice.
 - [ ] 47. Choose a high-contrast eye-guide target color.
 - [ ] 48. Undo the most recent daylight-minute entry.
 - [ ] 49. Search dojo techniques and clear a search with no matches.

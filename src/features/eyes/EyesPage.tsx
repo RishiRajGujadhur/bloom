@@ -93,6 +93,8 @@ export function EyesPage() {
   const [queue, setQueue] = useState<string[]>([])
   const [i, setI] = useState(0)
   const [t, setT] = useState(0)
+  const completed = useRef(false)
+  const [finished, setFinished] = useState(false)
   const [running, setRunning] = useState(false)
   const current = exerciseById(queue[i] ?? 'eight')
   const stage = useRef<HTMLDivElement>(null)
@@ -116,6 +118,8 @@ export function EyesPage() {
       setI(i + 1)
       setT(0)
     } else {
+      if (completed.current) return
+      completed.current = true; setFinished(true)
       setRunning(false)
       setStore((s) => ({ ...s, log: [...s.log, { at: Date.now(), id: queue.join('+') }].slice(-300) }))
       logActivity('eyes')
@@ -124,6 +128,7 @@ export function EyesPage() {
   }, [t, running, current.seconds, i, queue, store.sound])  
 
   const start = (ids: string[]) => {
+    completed.current = false; setFinished(false)
     setQueue(ids)
     setI(0)
     setT(0)
@@ -133,10 +138,10 @@ export function EyesPage() {
   useTabTitle(running ? `👁️ ${current.name} ${Math.max(0, Math.ceil(current.seconds - t))}s` : '', 'Eye care', 'eyes')
   // Space starts, pauses and resumes.
   const spaceRef = useRef(() => {})
-  spaceRef.current = () => (queue.length ? setRunning(!running) : start(routine))
+  spaceRef.current = () => (finished ? start(queue) : queue.length ? setRunning(!running) : start(routine))
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      if (e.repeat || e.code !== 'Space' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select, dialog')) return
       e.preventDefault()
       spaceRef.current()
     }
@@ -147,7 +152,7 @@ export function EyesPage() {
   const visible = exercises.filter((e) => (e.id === 'rule20' ? on('rule20') : e.id === 'nearfar' ? on('nearFar') : e.id === 'blink' ? on('blink') : e.id === 'palming' ? on('palming') : on('followDot')))
 
   usePageActions([
-    { id: 'ey-routine', label: running ? 'Pause' : 'Start the 2-minute routine', icon: '👁️', run: () => (queue.length ? setRunning(!running) : start(routine)) },
+    { id: 'ey-routine', label: running ? 'Pause' : 'Start the 2-minute routine', icon: '👁️', run: () => (finished ? start(queue) : queue.length ? setRunning(!running) : start(routine)) },
     { id: 'ey-2020', label: '20-20-20 break now', icon: '🌳', run: () => start(['rule20']) },
   ])
   const practice = () => (
@@ -177,9 +182,10 @@ export function EyesPage() {
         <div className="ey-progress">
           <span style={{ width: `${Math.min(100, (t / current.seconds) * 100)}%` }} />
         </div>
+        {finished && <p role="status">Routine completed and saved. Restart for a fresh practice.</p>}
         <div className="iv-buttons">
-          <button type="button" className="studio-go" onClick={() => (queue.length ? setRunning(!running) : start(routine))}>
-            {running ? <Square size={16} /> : <Play size={16} />} {running ? 'Pause' : queue.length ? 'Resume' : 'Start 2-minute routine'}
+          <button type="button" className="studio-go" onClick={() => (finished ? start(queue) : queue.length ? setRunning(!running) : start(routine))}>
+            {running ? <Square size={16} /> : <Play size={16} />} {running ? 'Pause' : finished ? 'Restart completed routine' : queue.length ? 'Resume' : 'Start 2-minute routine'}
           </button>
           {running && i + 1 < queue.length && (
             <button type="button" className="studio-go" data-variant="quiet" onClick={() => { setI(i + 1); setT(0) }}>
