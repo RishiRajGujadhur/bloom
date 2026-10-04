@@ -27,3 +27,5 @@ Each improvement is committed and pushed separately.
 - [x] 12. offer front and side reference views to make movement direction clearer
 
 - [x] 13. resize the 3D reference sharply for fullscreen and changing window sizes
+
+- [x] 14. provide a slow-motion reference for learning a movement at your own pace
