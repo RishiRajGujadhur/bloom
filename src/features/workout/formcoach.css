@@ -177,3 +177,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-guide-column{min-width:0;display:grid;align-content:center;gap:12px}.fc .fc-guide-column .fc-workout-hud{position:static;max-width:none;width:auto;pointer-events:auto;box-sizing:border-box}.fc .fc-guide-column .fc-reference{height:auto;min-height:0}.fc-split.fc-no-reference{grid-template-columns:minmax(0,1.7fr) minmax(140px,.8fr)!important}
 
 .fc-guide-column .fc-floating-metrics{position:static}.fc-side-status{font-size:11px;color:#b9e8d5}.fc-side-fault{padding:8px;border:1px solid #ff7373;background:#6b1616;border-radius:10px;color:white;margin:0}.fc .fc-workout-focused .fc-guide-column{max-height:calc(100dvh - 24px);overflow:auto}.fc-guide-column .fc-workout-hud b{font-size:clamp(22px,3vw,38px)}
+
+.fc-reference-style{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px}.fc-reference-style select{max-width:110px;background:#173a30;color:white;border-radius:8px;padding:5px;border:1px solid #64a991}

@@ -21,3 +21,5 @@ Each improvement is committed and pushed separately.
 - [x] 9. move workout name and rep progress beneath the side reference
 
 - [x] 10. keep fullscreen coaching information beside the camera instead of covering it
+
+- [x] 11. replace the stick reference with an articulated 3D person and optional skeleton
