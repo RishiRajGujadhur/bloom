@@ -39,3 +39,5 @@ Each improvement is committed and pushed separately.
 - [x] 18. remember preferred hand reach and hold time across visits
 
 - [x] 19. fold secondary workout options to reduce page buttons and scrolling
+
+- [x] 20. adapt reachable controls and side guidance to small screens with clear focus states
