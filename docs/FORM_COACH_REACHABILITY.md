@@ -41,3 +41,17 @@ Each improvement is committed and pushed separately.
 - [x] 19. fold secondary workout options to reduce page buttons and scrolling
 
 - [x] 20. adapt reachable controls and side guidance to small screens with clear focus states
+
+## Using the camera controls
+
+The Set page contains Pause/Resume, Log set and Finish. Use the SVG arrows for the Workout page: Previous, Next workout and Fullscreen/Exit fullscreen. Narrow previews show one large action per page. Finish asks you to confirm and pauses counting while you decide. Moving your hand away for half a second rearms the controls, including after changing pages.
+
+Coach settings contains the preferred reach side and hold time; both persist locally. Reference options contains the person/skeleton view, viewing angle and slow-motion toggle. Progress, workout name and encouragement are beneath the reference in both regular and fullscreen views.
+
+## Verification
+
+- Production build, TypeScript and targeted lint passed.
+- 47 tracking, scoring and gesture unit tests passed.
+- All 10 browser scenarios passed across the main run and targeted reruns, including both-hand hover actions, duplicate-log protection, finish confirmation, desktop spacing, and the 390px phone layout.
+- Webcam checks used simulated landmarks and a generated camera stream; physical-camera tracking accuracy was not measured.
+- Updated desktop and mobile screenshots are in `docs/screenshots/form-coach-reachable-*.png`.

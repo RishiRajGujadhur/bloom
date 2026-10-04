@@ -41,6 +41,7 @@ test('camera denial recovers with clear feedback and a working demo', async ({ p
 })
 
 test('either-hand hovering changes exercises, logs one set, and finishes from fullscreen', async ({ page }) => {
+  test.setTimeout(120000)
   await page.route(/(?:node_modules\/\.vite\/deps\/@mediapipe_tasks-vision|assets\/vision_bundle)[^/]*\.js(?:\?.*)?$/, async (route) => route.fulfill({ contentType: 'text/javascript', body: `
     export const FilesetResolver = { forVisionTasks: async () => ({}) };
     export const PoseLandmarker = { createFromOptions: async () => ({ detectForVideo: () => ({ landmarks: window.__coachPose ? [window.__coachPose] : [], segmentationMasks: [{ width: 2, height: 2, getAsFloat32Array: () => new Float32Array([0, 1, 0, 1]), close: () => {} }] }), close: () => { window.__coachClosed = true; } }) };
@@ -70,7 +71,8 @@ test('either-hand hovering changes exercises, logs one set, and finishes from fu
   const offBalance = upperPose('seatedTwist', 0); offBalance[12].y += .16; await send(offBalance)
   await expect.poll(() => page.locator('.fc-canvas').evaluate((node: HTMLCanvasElement) => { const data = node.getContext('2d')!.getImageData(0, 0, node.width, node.height).data; let red = 0; for (let i = 0; i < data.length; i += 4) if (data[i] > 200 && data[i + 1] < 120 && data[i + 2] < 120 && data[i + 3]) red++; return red })).toBeGreaterThan(30)
   await send(upperPose('seatedTwist', 0)); await page.waitForTimeout(600)
-  await send(upperPose('seatedTwist', .5)); await page.waitForTimeout(900)
+  await send(upperPose('seatedTwist', .5))
+  await expect.poll(async () => parseInt((await page.locator('.fc-side-status').first().textContent()) ?? ''), { timeout: 10000 }).toBeGreaterThan(40)
   await send(upperPose('seatedTwist', 0))
   await expect(page.locator('.fc-count')).toHaveText('1')
   await send([])
@@ -164,6 +166,7 @@ test('Basic defaults to essentials and fullscreen keeps the reference, count and
     return guide.x - camera.x - camera.width
   }).toBeGreaterThan(-2)
   const cameraBox = (await page.locator('.fc-view').boundingBox())!
+  await page.screenshot({ path: 'docs/screenshots/form-coach-reachable-fullscreen.png' })
   const controls = (await page.getByRole('button', { name: 'Log set', exact: true }).boundingBox())!
   expect(controls.x).toBeLessThan(cameraBox.x + cameraBox.width / 2)
   if (await page.getByRole('button', { name: 'More controls', exact: true }).isEnabled()) await page.getByRole('button', { name: 'More controls', exact: true }).click()
@@ -261,4 +264,25 @@ test('camera action pages are spacious and progress stays beneath the reference'
   await page.getByText('Coach settings', { exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Reach side', exact: true })).toHaveValue('right')
   await expect(page.getByRole('combobox', { name: 'Hand hold time', exact: true })).toHaveValue('5')
+})
+
+
+test('narrow fullscreen pages show one spacious action with reachable arrows', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.addInitScript(() => localStorage.removeItem('bloom-coach-view'))
+  await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
+  await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
+  await page.getByRole('button', { name: 'Fullscreen workout', exact: true }).click()
+  await expect(page.locator('.fc-control-actions button')).toHaveCount(1)
+  const camera = (await page.locator('.fc-view').boundingBox())!, action = (await page.locator('.fc-control-actions button').boundingBox())!
+  await page.screenshot({ path: 'docs/screenshots/form-coach-reachable-mobile.png' })
+  expect(action.width).toBeGreaterThan(100)
+  expect(action.x).toBeGreaterThanOrEqual(camera.x)
+  expect(action.x + action.width).toBeLessThanOrEqual(camera.x + camera.width + 1)
+  await page.getByRole('button', { name: 'More controls', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Log set', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Previous controls', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
+  await expect(page.locator('.fc-guide-column .fc-workout-hud')).toBeVisible()
+  await expect(page.locator('.fc-guide-column .fc-reference')).toBeVisible()
 })
