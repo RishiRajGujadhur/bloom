@@ -203,3 +203,17 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-set-recap{font-size:12px;padding:8px;border:1px solid #426e5b;border-radius:10px}.fc-set-recap summary{cursor:pointer;color:#aeedcd}.fc-set-recap p{margin:7px 0}
 
 .fc-library input[type=search]{width:100%;box-sizing:border-box;min-height:40px;border-radius:10px;padding:8px;background:#153e30;color:white;border:1px solid #6fcba5}.fc-quick-options>label{display:flex;align-items:center;gap:8px;padding:6px;font-size:12px}.fc-quick-options>label select{background:#153e30;color:white;border:1px solid #6fcba5;padding:6px;border-radius:8px;max-width:220px}
+
+/* Keep the reference and count visible; optional details occupy one bounded page. */
+.fc-guide-column .fc-workout-hud b{font-size:clamp(18px,1.6vw,25px);line-height:1.2}
+.fc-info-slider{min-width:0;border:1px solid #38785d;border-radius:12px;padding:6px}
+.fc-info-slider nav{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.fc-info-slider nav button{display:grid;place-items:center;min-width:36px;min-height:36px;padding:4px}
+.fc-info-content{max-height:145px;overflow:auto;font-size:12px;overscroll-behavior:contain}
+.fc-info-content .fc-movement-guide,.fc-info-content .fc-set-recap{border:0;padding:6px}
+.fc .fc-workout-focused .fc-guide-column{align-content:center;gap:6px;overflow:hidden;max-height:calc(100dvh - 24px)}
+.fc .fc-workout-focused .fc-guide-column .fc-reference{flex-shrink:1}
+.fc .fc-workout-focused .fc-guide-column .fc-reference canvas{height:clamp(90px,26vh,260px)}
+.fc .fc-workout-focused .fc-guide-column .fc-workout-hud{padding:8px}
+.fc .fc-workout-focused .fc-info-content{max-height:clamp(70px,17vh,145px)}
+@media(max-height:600px){.fc .fc-workout-focused .fc-guide-column .fc-reference canvas{height:90px}.fc .fc-workout-focused .fc-guide-column{gap:3px}.fc .fc-workout-focused .fc-workout-hud small,.fc .fc-workout-focused .fc-encouragement{font-size:11px}}
