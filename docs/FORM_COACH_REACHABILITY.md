@@ -29,3 +29,5 @@ Each improvement is committed and pushed separately.
 - [x] 13. resize the 3D reference sharply for fullscreen and changing window sizes
 
 - [x] 14. provide a slow-motion reference for learning a movement at your own pace
+
+- [x] 15. light the reference person clearly for readable arm and torso depth

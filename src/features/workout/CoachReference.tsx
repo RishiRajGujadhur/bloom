@@ -25,7 +25,9 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       const resize = () => { if (!canvas.current) return; const bounds = canvas.current.getBoundingClientRect(); renderer.setSize(Math.max(1, bounds.width), Math.max(1, bounds.height), false); camera.aspect = Math.max(1, bounds.width) / Math.max(1, bounds.height); camera.updateProjectionMatrix() }
       const observer = new ResizeObserver(resize); observer.observe(canvas.current); resize()
       const group = new THREE.Group(); scene.add(group)
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x1b4f40, 2.8))
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x1b4f40, 2.2))
+      const key = new THREE.DirectionalLight(0xffedda, 2.5); key.position.set(2,3,4); scene.add(key)
+      const rim = new THREE.DirectionalLight(0x7effd6, 1.3); rim.position.set(-2,1,-2); scene.add(rim)
       const bones = RULES[exercise].upper ? [...UPPER_BONES, [0, 33], [33, 34]] : BONES
       const jointGeometry = new THREE.SphereGeometry(.035, 12, 10), boneGeometry = new THREE.CylinderGeometry(.018, .018, 1, 10)
       const green = new THREE.MeshStandardMaterial({ color: '#5dffc0' }), cyan = new THREE.MeshStandardMaterial({ color: '#7df9ff' })
