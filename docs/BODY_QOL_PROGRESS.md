@@ -79,7 +79,7 @@ explicit observation view rather than an invented form score.
 - [x] 46. Restart a finished eye-care routine without logging it twice.
 - [x] 47. Choose a high-contrast eye-guide target color.
 - [x] 48. Undo the most recent daylight-minute entry.
-- [ ] 49. Search dojo techniques and clear a search with no matches.
+- [x] 49. Search dojo techniques and clear a search with no matches.
 - [ ] 50. Exclude simulated readiness scans from personal baselines/history.
 
 ## Validation

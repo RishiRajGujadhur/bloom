@@ -109,6 +109,7 @@ export function DojoPage() {
   const seatedMode = useBodySeated()
   useEffect(() => { if (s.seated !== seatedMode) { save({ seated: seatedMode }); setPlaying(false) } }, [seatedMode, s.seated])
   const [tab, setTab] = useState('techniques')
+  const [search, setSearch] = useState('')
   const [kind, setKind] = useState<Kind | 'all'>('all')
   const [pick, setPick] = useState<Technique>(techniques[0])
   const [playing, setPlaying] = useState(false)
@@ -129,7 +130,8 @@ export function DojoPage() {
     (t) =>
       (s.seated ? t.position === 'seated' : t.position === 'standing') &&
       (!on('styleFilter') || t.style.some((st) => s.styles.includes(st))) &&
-      (kind === 'all' || t.kind === kind),
+      (kind === 'all' || t.kind === kind) &&
+      `${t.name} ${t.cues.join(' ')} ${t.style.map(st => styleNames[st]).join(' ')}`.toLowerCase().includes(search.trim().toLowerCase()),
   )
 
   useEffect(() => {
@@ -159,6 +161,9 @@ export function DojoPage() {
     <div className="dojo-lib">
       {on('belts') && <Belt reps={s.reps} />}
       <div className="studio-card dojo-filters">
+        <label>Find a technique<input className="studio-input" type="search" aria-label="Search Dojo techniques" maxLength={100} value={search} onChange={e => setSearch(e.target.value)} /></label>
+        <p role="status">{visible.length} matching techniques</p>
+        <button type="button" className="studio-chip" onClick={() => { setSearch(''); setKind('all'); save({ styles: start.styles }) }}>Clear technique filters</button>
         {on('seated') && (
           <label>
             <input type="checkbox" checked={s.seated} onChange={(e) => { setBodySeated(e.target.checked); save({ seated: e.target.checked }) }} /> Seated / wheelchair dojo
