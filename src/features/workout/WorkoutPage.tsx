@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { exactNumber } from '../body/bodyQolModel'
 import { prefersReducedMotion } from '../../utils/motion'
@@ -91,6 +92,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   const [reps, setReps] = useState(8)
   const [rpe, setRpe] = useState(8)
   const [restLeft, setRestLeft] = useState(0)
+  const [restPaused, setRestPaused] = useState(false)
   const [newPrs, setNewPrs] = useState<string[]>([])
   const [removedSet, setRemovedSet] = useState<{ workoutId: string; set: WSet; index: number } | null>(null)
   const [chartLift, setChartLift] = useState('squat')
@@ -103,9 +105,9 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   const lift = liftById(liftIds[liftIdx] ?? '')
 
   useEffect(() => {
-    if (restLeft <= 0) return
+    if (restLeft <= 0 || restPaused) return
     const t = setTimeout(() => setRestLeft((s) => s - 1), 1000)
-    if (restLeft === 1) {
+    if (restLeft === 1 && !bodySilent()) {
       navigator.vibrate?.([80, 60, 80])
       // A soft two-note chime: rest is over.
       try {
@@ -127,14 +129,14 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
       }
     }
     return () => clearTimeout(t)
-  }, [restLeft])
+  }, [restLeft, restPaused])
 
   // Start each lift from what you did last time.
   useEffect(() => {
     if (!lift) return
     const last = [...allSets].reverse().find((s) => s.liftId === lift.id)
     setWeight(last ? last.weight : lift.bodyweight ? 0 : 20)
-    setReps(last ? last.reps : lift.id === 'plank' ? 45 : 8)
+    setReps(last ? (lift.id === 'plank' ? last.seconds ?? 45 : last.reps) : lift.id === 'plank' ? 45 : 8)
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the lift changes
   }, [lift?.id])
 
@@ -191,7 +193,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
     return () => window.removeEventListener('keydown', onKey)
   }, [])
   const logCoach: (liftId: string, reps: number, seconds?: number) => void = (liftId, reps, seconds) => { const set: WSet = { liftId, weight: 0, reps, seconds, at: Date.now() }; setStore((s) => { const open = s.workouts.find((w) => !w.finishedAt); return open ? { ...s, workouts: s.workouts.map((w) => (w.id === open.id ? { ...w, sets: [...w.sets, set] } : w)) } : { ...s, workouts: [...s.workouts, { id: crypto.randomUUID(), name: 'Form coach', templateId: 'coach', startedAt: Date.now(), sets: [set] }] } }); logActivity('workout', { reps }) }
-  useBodyPractice('workouts', lift?.id ?? '', lift?.name ?? 'Workouts', () => {}, logCoach)
+  useBodyPractice('workouts', lift?.id ?? '', lift?.name ?? 'Workouts', () => setRestPaused(true), logCoach)
   const muted = css('--text-muted', '#9a8f86')
   const grid = css('--border-color', '#eadfd4')
   const chartOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: grid }, ticks: { color: muted } }, y: { grid: { color: grid }, ticks: { color: muted } } } } as const
@@ -334,6 +336,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
           {on('restTimer') && (
             <div className="wo-rest-box">
               <RestRing total={store.rest} left={restLeft} />
+              {restPaused && restLeft > 0 && <button type="button" className="studio-chip" onClick={() => setRestPaused(false)}>Resume rest timer</button>}
               {restLeft > 0 && (
                 <span className="wo-rest-adjust">
                   <button type="button" className="studio-chip" onClick={() => setRestLeft((s) => Math.max(1, s - 15))}>−15 s</button>

@@ -184,7 +184,7 @@ export function YogaPage() {
     setRunning(true)
     setTab('practice')
   }
-  useBodyPractice('yoga', pose.id, pose.name, () => setRunning(false))
+  useBodyPractice('yoga', tab === 'poses' ? focus : pose.id, tab === 'poses' ? poseById(focus).name : pose.name, () => setRunning(false))
   const draft = store.draft
   const navigatePose = (direction: number) => {
     const index = Math.max(0, Math.min(current.steps.length - 1, (at?.index ?? current.steps.length - 1) + direction))

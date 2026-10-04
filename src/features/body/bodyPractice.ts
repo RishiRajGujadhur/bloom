@@ -27,3 +27,8 @@ export function supportedBodyExercise(page: string, movement: string): Exercise 
   if (Object.hasOwn(aliases, movement)) return aliases[movement]
   return Object.hasOwn(RULES, movement) ? movement as Exercise : null
 }
+
+export function usePauseForBodyCoach(pause: () => void) {
+  const action = useRef(pause); action.current = pause
+  useEffect(() => { const listener = () => action.current(); window.addEventListener('bloom-body-coach-open', listener); return () => window.removeEventListener('bloom-body-coach-open', listener) }, [])
+}

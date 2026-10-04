@@ -1,6 +1,6 @@
 import { bodySilent } from '../body/bodyPreferences'
 import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
-import { useBodyPractice } from '../body/bodyPractice'
+import { useBodyPractice, usePauseForBodyCoach } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -107,12 +107,13 @@ export function DojoPage() {
   const [s, setS] = useState<Store>(() => ({ ...start, ...readStore(KEY, start) }))
   const save = (p: Partial<Store>) => setS((c) => { const n = { ...c, ...p }; writeStore(KEY, n); return n })
   const seatedMode = useBodySeated()
-  useEffect(() => { if (s.seated !== seatedMode) { save({ seated: seatedMode }); setPlaying(false) } }, [seatedMode, s.seated])
+  useEffect(() => { if (s.seated !== seatedMode) { save({ seated: seatedMode }); setPlaying(false); setCount(0); setPick(techniques.find(t => t.position === (seatedMode ? 'seated' : 'standing')) ?? techniques[0]) } }, [seatedMode, s.seated])
   const [tab, setTab] = useState('techniques')
   const [search, setSearch] = useState('')
   const [kind, setKind] = useState<Kind | 'all'>('all')
   const [pick, setPick] = useState<Technique>(techniques[0])
   const [playing, setPlaying] = useState(false)
+  usePauseForBodyCoach(() => setPlaying(false))
   const [count, setCount] = useState(0)
   const target = 10
   const goBtn = useRef<HTMLButtonElement>(null)
@@ -254,6 +255,7 @@ function Forms({ s, onDone }: { s: Store; onDone: (f: Form, reps: number) => voi
   const [active, setActive] = useState<Form | null>(null)
   const [step, setStep] = useState(0)
   const [playing, setPlaying] = useState(false)
+  usePauseForBodyCoach(() => setPlaying(false))
   const list = active ? formTechniques(active).filter((t) => (s.seated ? t.position === 'seated' : true)) : []
   const t = list[step]
   useEffect(() => {
@@ -308,6 +310,7 @@ function Forms({ s, onDone }: { s: Store; onDone: (f: Form, reps: number) => voi
 /** Rounds with a bell; random combos are called out loud for reaction training. */
 function Caller({ s, save, onReps }: { s: Store; save: (p: Partial<Store>) => void; onReps: (n: number) => void }) {
   const [running, setRunning] = useState(false)
+  usePauseForBodyCoach(() => setRunning(false))
   const [resting, setResting] = useState(false)
   const [left, setLeft] = useState(s.round)
   const [round, setRound] = useState(1)

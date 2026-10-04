@@ -42,7 +42,7 @@ export function BodyTools({ page, features, onReward }: { page: string; features
     practice?.pause()
     window.speechSynthesis?.cancel()
     window.dispatchEvent(new Event('bloom-body-coach-open'))
-    try { const { stopPosture } = await import('../posture/postureRuntime'); stopPosture() } finally { setOpen(true); setOpening(false) }
+    try { const { stopPosture } = await import('../posture/postureRuntime'); stopPosture() } catch { /* Optional posture module can be unavailable offline. */ } finally { setOpen(true); setOpening(false) }
   }
   if (!meta || !features[meta.feature]) return null
   return <div className="body-tools">

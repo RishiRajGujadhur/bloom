@@ -173,6 +173,7 @@ export function StretchPage() {
   }, [playing])
 
   const start = (r: (typeof routines)[number]) => {
+    restartStretch()
     checkInSaved.current = false
     setRoutine(r)
     setI(0)
@@ -189,7 +190,7 @@ export function StretchPage() {
   keysRef.current = { playing, finished, next, setPlaying }
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select, dialog')) return
       const k = keysRef.current
       if (k.finished) return
       if (e.code === 'Space') {

@@ -159,6 +159,7 @@ export function IntervalPage() {
     lastIndex.current = -1
   }
   const skip = () => {
+    cancelPreparation()
     if (!pos) return
     setSkippedSeconds(value => value + pos.left)
     const target = elapsed + pos.left
@@ -168,6 +169,7 @@ export function IntervalPage() {
     if (!running) timer.current?.pause()
   }
   const previous = () => {
+    cancelPreparation()
     if (!pos || pos.index <= 0) return
     const target = segs.slice(0, pos.index - 1).reduce((sum, segment) => sum + segment.seconds, 0)
     timer.current?.stop(); timer.current?.start({ precision: 'seconds', startValues: { seconds: target } })
@@ -175,6 +177,7 @@ export function IntervalPage() {
     if (!running) timer.current?.pause()
   }
   const choose = (p: Program) => {
+    cancelPreparation()
     reset()
     setProgram(p.id.startsWith('c25k-') || presets.some(row => row === p) ? p : normalizeProgram(p, initial.custom))
     setStore(s => ({ ...s, selectedId: p.id }))
