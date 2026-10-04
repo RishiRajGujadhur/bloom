@@ -97,6 +97,7 @@ export type Verdict = { score: number | null; label: string; advice: string; ton
 
 /** Readiness 0–100 from today against the last 30 days (needs at least 3 earlier scans). */
 export function readiness(today: { lnRmssd: number; hr: number }, history: Scan[]): Verdict {
+  history = history.filter(scan => scan.source !== 'simulated')
   const past = history.slice(-30)
   if (past.length < 3) return { score: null, label: 'Building your baseline', advice: `Scan ${3 - past.length} more morning${past.length === 2 ? '' : 's'} and your readiness score appears. Same time, same position, before coffee.`, tone: 'baseline' }
   const ln = past.map((s) => s.lnRmssd)

@@ -109,7 +109,7 @@ export function ReadinessPage() {
   const [source, setSourceState] = useState<Source>(() => {
     try {
       const saved = localStorage.getItem('bloom-readiness-source') as Source | null
-      if (saved && (saved !== 'bluetooth' || hasCap('bt'))) return saved
+      if (saved && ['bluetooth', 'camera', 'simulated'].includes(saved) && (saved !== 'bluetooth' || hasCap('bt'))) return saved
     } catch { /* optional */ }
     return hasCap('bt') ? 'bluetooth' : 'simulated'
   })
@@ -128,6 +128,7 @@ export function ReadinessPage() {
   const [err, setErr] = useState('')
   const [history, setHistory] = useState<Scan[]>([])
   const [result, setResult] = useState<{ scan: Scan; verdict: Verdict } | null>(null)
+  const generation = useRef(0)
   const session = useRef<Session | null>(null)
   const beats = useRef<number[]>([])
   const video = useRef<HTMLVideoElement>(null)
@@ -136,10 +137,11 @@ export function ReadinessPage() {
   const tachoHost = useRef<HTMLDivElement>(null)
   const trendHost = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { void loadScans().then(setHistory) }, [])
-  useEffect(() => () => session.current?.stop(), [])
+  useEffect(() => { void loadScans().then(scans => setHistory(scans.filter(s => s.source !== 'simulated'))) }, [])
+  useEffect(() => () => { generation.current++; session.current?.stop() }, [])
 
   const finish = async () => {
+    const token = generation.current
     session.current?.stop()
     session.current = null
     const clean = cleanRR(beats.current)
@@ -149,13 +151,14 @@ export function ReadinessPage() {
       return
     }
     const { fft } = await getFft(TACHO_N)
+    if (token !== generation.current) return
     const r = rmssd(clean)
     const hr = heartRate(clean)
     const freq = lfhf(clean, fft)
-    const past = history.filter((s) => s.date !== dayKey())
+    const past = source === 'simulated' ? [] : history.filter((s) => s.source !== 'simulated' && s.date !== dayKey())
     const verdict = readiness({ lnRmssd: Math.log(r), hr }, past)
     const scan: Scan = { date: dayKey(), at: Date.now(), source, hr: Math.round(hr * 10) / 10, rmssd: Math.round(r * 10) / 10, sdnn: Math.round(sdnn(clean) * 10) / 10, lnRmssd: Math.log(r), lfhf: freq ? Math.round(freq.ratio * 100) / 100 : null, beats: clean.length, score: verdict.score }
-    setHistory(await saveScan(scan, clean))
+    if (source !== 'simulated') { const saved = await saveScan(scan, clean); if (token !== generation.current) return; setHistory(saved.filter(s => s.source !== 'simulated')) }
     setResult({ scan, verdict })
     setPhase('done')
     if (verdict.tone === 'push') burst(undefined, 'stars')
@@ -174,6 +177,7 @@ export function ReadinessPage() {
   }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const start = async () => {
+    const token = ++generation.current
     setErr('')
     setResult(null)
     beats.current = []
@@ -189,15 +193,18 @@ export function ReadinessPage() {
       onError: (m: string) => setErr(m),
     }
     try {
-      session.current = source === 'bluetooth' ? await connectBluetooth(h) : source === 'camera' ? await cameraPpg({ ...h, onBpm: undefined }, video.current!) : simulate(h, { hr: 57, rsa: 72, seed: Date.now() % 1000 })
-      setDevice(session.current.name)
+      const connected = source === 'bluetooth' ? await connectBluetooth(h) : source === 'camera' ? await cameraPpg({ ...h, onBpm: undefined }, video.current!) : simulate(h, { hr: 57, rsa: 72, seed: Date.now() % 1000 })
+      if (token !== generation.current) { connected.stop(); return }
+      session.current = connected
+      setDevice(connected.name)
       setPhase('scanning')
     } catch (e) {
+      if (token !== generation.current) return
       setErr((e as Error).name === 'NotFoundError' ? 'No device chosen.' : (e as Error).message)
       setPhase('idle')
     }
   }
-  const cancel = () => { session.current?.stop(); session.current = null; setPhase('idle') }
+  const cancel = () => { generation.current++; session.current?.stop(); session.current = null; setPhase('idle') }
 
   useBodyPractice('readiness', '', 'Readiness · pose observation', cancel)
   // Camera: bpm from recent beats, and the raw PPG trace on a canvas.
@@ -263,7 +270,7 @@ export function ReadinessPage() {
             <p className="rd-hint">
               {source === 'bluetooth' && 'Wear a chest strap or turn on heart-rate broadcast on your watch, then pick it from the list.'}
               {source === 'camera' && 'Rest your fingertip gently over the back camera (and flash). Keep still and breathe normally.'}
-              {source === 'simulated' && 'A simulated strap with realistic beat-to-beat variation, for trying it out.'}
+              {source === 'simulated' && 'Demo only. Simulated readings are never saved or used in your personal baseline.'}
             </p>
             {phase === 'scanning' || phase === 'connecting' ? (
               <button type="button" className="rd-ghost" onClick={cancel}>Cancel</button>
