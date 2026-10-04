@@ -9,8 +9,8 @@ export const COMBAT_MODES: { id: CombatMode; name: string; cue: string }[] = [
   { id: 'doubleRopes', name: 'Shadow ropes · double slams', cue: 'Raise both empty hands, then lower them together through your comfortable range.' },
   { id: 'sword', name: 'Empty-hand seated sword', cue: 'No physical prop is required or recognized. Your wrist and forearm orient the virtual blade.' },
 ]
-export type CombatState = { at: number; elapsed: number; pose: P[] | null; hits: number; grade: number | null; slips: number; slipHeld: boolean; centre: number | null; lastHits: number[]; lastSide: number; chain: number; event: boolean; hand: number; speed: number; guard: boolean; velocities: number[]; acceleration: number; power: number; parries: number; projectile: number; move: string }
-export const newCombat = (): CombatState => ({ at: 0, elapsed: 0, pose: null, hits: 0, grade: null, slips: 0, slipHeld: false, centre: null, lastHits: [0, 0], lastSide: -1, chain: 0, event: false, hand: 15, speed: 0, guard: false, velocities: [0, 0], acceleration: 0, power: 0, parries: 0, projectile: -1, move: 'Awaiting movement' })
+export type CombatState = { at: number; elapsed: number; pose: P[] | null; hits: number; grade: number | null; slips: number; slipHeld: boolean; centre: number | null; lastHits: number[]; lastSide: number; chain: number; event: boolean; hand: number; speed: number; guard: boolean; velocities: number[]; acceleration: number; power: number; parries: number; projectile: number; move: string; bossHp: number; bossMax: number; damage: number }
+export const newCombat = (goal = 10): CombatState => ({ at: 0, elapsed: 0, pose: null, hits: 0, grade: null, slips: 0, slipHeld: false, centre: null, lastHits: [0, 0], lastSide: -1, chain: 0, event: false, hand: 15, speed: 0, guard: false, velocities: [0, 0], acceleration: 0, power: 0, parries: 0, projectile: -1, move: 'Awaiting movement', bossHp: Math.max(5, Math.min(60, Number.isFinite(goal) ? goal : 10)) * 35, bossMax: Math.max(5, Math.min(60, Number.isFinite(goal) ? goal : 10)) * 35, damage: 0 })
 export function ropeMotion(previous: P[], pose: P[], oldVelocity: number[], dt: number) {
   const width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
   const velocities = [15, 16].map(j => (pose[j].y - previous[j].y) / width * .4 / dt)
@@ -54,7 +54,7 @@ export function cloudGrade(previous: P[], pose: P[], dt: number) {
   return Math.round(Math.max(0, 100 - Math.abs(speeds[0] - speeds[1]) * 35 - Math.max(0, Math.max(...speeds) - 1.2) * 30 - Math.max(...circular) * 15))
 }
 /** Projected movement cues, not martial-arts certification or contact-force measurement. */
-export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: number, swordHand: 15 | 16 = 15): CombatState {
+function movementTick(state: CombatState, mode: CombatMode, pose: P[], at: number, swordHand: 15 | 16 = 15): CombatState {
   const dt = (at - state.at) / 1000
   if (!upperVisible(pose) || pose.some(p => !Number.isFinite(p.x) || !Number.isFinite(p.y))) return { ...state, at, pose: null, event: false }
   const centre = state.centre ?? pose[0].x, width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
@@ -94,4 +94,10 @@ export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: 
   const chain = event ? (side !== state.lastSide && at - Math.max(...state.lastHits) < 1800 ? state.chain + 1 : 1) : state.chain
   const grade = event ? Math.round(Math.max(0, 100 - Math.abs(pose[hand].x - centre) / width * 35 - (guard ? 0 : 20))) : state.grade
   return { ...state, at, pose, centre, elapsed: state.elapsed + dt, slips: state.slips + (mode === 'boxing' && slipHeld && !state.slipHeld ? 1 : 0), slipHeld, hits: state.hits + Number(event), grade, lastHits: state.lastHits.map((t, i) => i === side ? at : t), lastSide: event ? side : state.lastSide, chain, event, hand, speed: Math.max(...speeds), guard }
+}
+export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: number, swordHand: 15 | 16 = 15): CombatState {
+  if (state.bossHp <= 0) return { ...state, event: false, damage: 0 }
+  const next = movementTick(state, mode, pose, at, swordHand)
+  const damage = next.event && (next.grade ?? 0) >= 70 ? Math.round(35 * Math.min(2, 1 + next.chain * .05) * (1 + Math.min(.5, next.speed * .1))) : 0
+  return { ...next, damage, bossHp: Math.max(0, state.bossHp - damage) }
 }

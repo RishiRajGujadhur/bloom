@@ -10,7 +10,7 @@ committed and pushed independently. Demo sessions never award progression.
 - [x] 04. Empty-hand SVG broadsword/katana overlay.
 - [x] 05. Overhead strikes, thrusts and high-guard projectile parries.
 - [x] 06. Lingering colored sword slash trails.
-- [ ] 07. Pixel-art camera boss battles with movement-driven damage.
+- [x] 07. Pixel-art camera boss battles with movement-driven damage.
 - [ ] 08. Classical melody rhythm targets and timing/position grades.
 - [ ] 09. Seated dodge attacks, guard shields and player HP.
 - [ ] 10. Retro knuckle/sword hit sparks and critical numbers.
