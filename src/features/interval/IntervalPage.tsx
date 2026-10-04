@@ -68,6 +68,10 @@ export function IntervalPage() {
   const [saveName, setSaveName] = useState('')
   const [elapsed, setElapsed] = useState(0)
   const [running, setRunning] = useState(false)
+  const [prepareSeconds, setPrepareSeconds] = useState(0)
+  const preparation = useRef<ReturnType<typeof setInterval> | null>(null)
+  const cancelPreparation = () => { if (preparation.current) clearInterval(preparation.current); preparation.current = null; setPrepareSeconds(0) }
+  useEffect(() => () => { if (preparation.current) clearInterval(preparation.current) }, [])
   // Keep the screen on while the session runs (Screen Wake Lock).
   useKeepAwake(running)
   useLeaveGuard(running)
@@ -143,6 +147,7 @@ export function IntervalPage() {
     }
   }
   const reset = () => {
+    cancelPreparation()
     timer.current?.reset()
     timer.current?.stop()
     setElapsed(0)
@@ -169,7 +174,12 @@ export function IntervalPage() {
     setProgram(p)
     setTab('run')
   }
-  useBodyPractice('intervals', '', program.name, () => { timer.current?.pause(); setRunning(false) })
+  const prepare = () => {
+    if (running || prepareSeconds) return
+    let left = 5; setPrepareSeconds(left)
+    preparation.current = setInterval(() => { left--; setPrepareSeconds(left); if (left === 0) { cancelPreparation(); toggle() } }, 1000)
+  }
+  useBodyPractice('intervals', '', program.name, () => { cancelPreparation(); timer.current?.pause(); setRunning(false) })
   const kind = done ? 'cooldown' : (pos?.segment.kind ?? 'warmup')
   useTabTitle(running && pos ? `${pos.segment.label} ${Math.floor(pos.left / 60)}:${String(Math.ceil(pos.left) % 60).padStart(2, '0')}` : '', 'Intervals', 'intervals')
   // Space starts or pauses; N skips to the next segment.
@@ -232,6 +242,7 @@ export function IntervalPage() {
           <span aria-hidden="true">{program.emoji}</span> {program.name}
         </h3>
         <div className="iv-buttons">
+          {prepareSeconds > 0 ? <p role="status">Get ready · {prepareSeconds}s <button type="button" className="studio-chip" onClick={cancelPreparation}>Cancel preparation</button></p> : !running && <button type="button" className="studio-chip" onClick={prepare}>Start after 5 seconds</button>}
           <button type="button" className="studio-go" onClick={toggle}>
             {running ? <Pause size={18} /> : <Play size={18} />} {running ? 'Pause' : elapsed && !done ? 'Resume' : 'Start'}
           </button>
