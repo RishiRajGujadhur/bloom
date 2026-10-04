@@ -217,3 +217,4 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc .fc-workout-focused .fc-guide-column .fc-workout-hud{padding:8px}
 .fc .fc-workout-focused .fc-info-content{max-height:clamp(70px,17vh,145px)}
 @media(max-height:600px){.fc .fc-workout-focused .fc-guide-column .fc-reference canvas{height:90px}.fc .fc-workout-focused .fc-guide-column{gap:3px}.fc .fc-workout-focused .fc-workout-hud small,.fc .fc-workout-focused .fc-encouragement{font-size:11px}}
+@media(max-width:600px){.fc .fc-workout-focused .fc-guide-column .fc-reference canvas{height:clamp(90px,18vh,150px)}}
