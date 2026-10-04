@@ -2,7 +2,7 @@
 
 - [x] 01. Quiet Basic overlays
 - [x] 02. Advanced-only ghost replay
-- [ ] 03. Game reference stays side by side
+- [x] 03. Game reference stays side by side
 - [ ] 04. Arcade movement reference guides
 - [ ] 05. One-click air boxing
 - [ ] 06. Visible air punch tally

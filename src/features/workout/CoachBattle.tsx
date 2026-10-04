@@ -8,8 +8,9 @@ import { download } from '../lab/exportSuite'
 import type { PoseFrame } from './CoachTrails'
 import type { Exercise, P } from './formModel'
 import './coachBattle.css'
-export function CoachBattle({ frame, frames, active, demo, source, mirror, handControls, onExercise, onReward }: { frame?: PoseFrame; frames: PoseFrame[]; active: boolean; demo: boolean; source: string; mirror: boolean; handControls: boolean; onExercise: (exercise: Exercise) => void; onReward?: (reward: CoachReward) => void }) {
+export function CoachBattle({ frame, frames, active, demo, source, mirror, handControls, onExercise, onReward, onActivity }: { frame?: PoseFrame; frames: PoseFrame[]; active: boolean; demo: boolean; source: string; mirror: boolean; handControls: boolean; onExercise: (exercise: Exercise) => void; onReward?: (reward: CoachReward) => void; onActivity?: (mode: CombatMode | '') => void }) {
   const [mode, setMode] = useState<CombatMode | ''>('')
+  useEffect(() => { onActivity?.(mode) }, [mode, onActivity])
   const [paused, setPaused] = useState(false)
   const [weapon, setWeapon] = useState<'broadsword' | 'katana'>('broadsword')
   const [swordHand, setSwordHand] = useState<15 | 16>(15)
