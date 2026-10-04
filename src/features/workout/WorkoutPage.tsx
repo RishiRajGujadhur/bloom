@@ -1,4 +1,5 @@
 import { useBodyPractice } from '../body/bodyPractice'
+import { exactNumber } from '../body/bodyQolModel'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useTabTitle } from '../../utils/useTabTitle'
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -301,6 +302,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
             ))}
           </div>
           <Slider label={lift?.bodyweight ? 'Added weight' : 'Weight'} value={weight} min={0} max={lift?.bodyweight ? 60 : 250} step={lift?.step ?? 2.5} unit="kg" onChange={setWeight} />
+          <label className="body-exact-field">Exact weight (kg)<input aria-label="Exact workout weight" type="number" min="0" max={lift?.bodyweight ? 60 : 250} step="0.1" value={weight} onChange={event => { const value = exactNumber(event.target.value, 0, lift?.bodyweight ? 60 : 250); if (value !== null) setWeight(value) }} /></label>
           {lift && BARBELL.has(lift.id) && weight >= 20 && (() => {
             const { perSide, leftover } = plates(weight)
             return (
@@ -316,6 +318,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
             </p>
           )}
           <Slider label={lift?.id === 'plank' ? 'Seconds' : 'Reps'} value={reps} min={1} max={lift?.id === 'plank' ? 300 : 30} step={lift?.id === 'plank' ? 5 : 1} onChange={setReps} />
+          <label className="body-exact-field">{lift?.id === 'plank' ? 'Exact duration (seconds)' : 'Exact repetitions'}<input aria-label="Exact workout reps or seconds" type="number" min="1" max={lift?.id === 'plank' ? 300 : 30} step="1" value={reps} onChange={event => { const value = exactNumber(event.target.value, 1, lift?.id === 'plank' ? 300 : 30, true); if (value !== null) setReps(value) }} /></label>
           {on('rpe') && <Slider label="Effort (RPE)" value={rpe} min={5} max={10} step={0.5} format={(v) => `${v}`} onChange={setRpe} />}
           <button ref={logBtn} type="button" className="studio-go" onClick={logSet}>
             <Check size={18} /> Log set
