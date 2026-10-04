@@ -7,7 +7,7 @@
 - [x] 05. One-click air boxing
 - [x] 06. Visible air punch tally
 - [x] 07. Red skeleton form feedback
-- [ ] 08. Optional visual correction cues
+- [x] 08. Optional visual correction cues
 - [ ] 09. Black or dim camera background
 - [ ] 10. Background availability feedback
 - [ ] 11. Remember camera background choice

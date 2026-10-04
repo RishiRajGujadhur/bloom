@@ -149,3 +149,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 @media(max-height:500px){.fc-workout-focused .fc-camera-controls{top:6px;gap:3px}.fc-workout-focused .fc-camera-controls button{min-height:38px}.fc-workout-focused .fc-reference small{display:none}}
 .fc-mode-basic .caps-badge,.fc-mode-game .caps-badge{display:none}
 .fc-workout-focused .cb-actions{left:8px;top:390px;bottom:auto;width:clamp(76px,12vw,145px);box-sizing:border-box;display:flex;flex-direction:column;gap:4px}.fc-workout-focused .cb-actions button{margin:0}@media(max-width:860px){.fc-workout-focused .cb-actions{top:280px;width:76px}}@media(max-height:500px){.fc-workout-focused .cb-actions{top:235px}}
+
+.fc-fault{background:#6b1616;color:#fff;border:1px solid #ff7373}.fc-mode-basic .fc-fault{top:8px;left:auto;right:8px;translate:none;max-width:55%;font-size:11px}

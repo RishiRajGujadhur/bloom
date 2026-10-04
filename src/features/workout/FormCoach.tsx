@@ -57,6 +57,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const [viewMode, setViewMode] = useState<'basic' | 'advanced' | 'game'>(() => { try { const value = localStorage.getItem('bloom-coach-view'); return value === 'advanced' || value === 'game' ? value : 'basic' } catch { return 'basic' } })
   const coachRoot = useRef<HTMLElement>(null)
   const [gameActivity, setGameActivity] = useState<import('./cameraCombatModel').CombatMode | ''>('')
+  const [corrections, setCorrections] = useState(true)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [settingsSearch, setSettingsSearch] = useState('')
   const [showReference, setShowReference] = useState(true)
@@ -253,15 +254,15 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       g.lineCap = 'round'; g.lineWidth = options.contrast ? 7 : 4
       for (const [a, b] of bones) {
         if (!visible(lm[a]) || !visible(lm[b])) continue
-        g.strokeStyle = fault ? '#ff5656' : a % 2 ? colors.left : colors.right; g.beginPath(); g.moveTo(X(lm[a]), Y(lm[a])); g.lineTo(X(lm[b]), Y(lm[b])); g.stroke()
+        g.strokeStyle = corrections && fault ? '#ff5656' : a % 2 ? colors.left : colors.right; g.beginPath(); g.moveTo(X(lm[a]), Y(lm[a])); g.lineTo(X(lm[b]), Y(lm[b])); g.stroke()
       }
       if (visible(lm[11]) && visible(lm[12]) && visible(lm[0])) {
         const middle = { x: (lm[11].x + lm[12].x) / 2, y: (lm[11].y + lm[12].y) / 2 }
-        g.strokeStyle = fault ? '#ff5656' : '#5dffc0'; g.beginPath(); g.moveTo(X(lm[0]), Y(lm[0])); g.lineTo(X(middle), Y(middle)); g.lineTo(X(middle), Math.min(c.height, Y(middle) + c.height * .23)); g.stroke()
+        g.strokeStyle = corrections && fault ? '#ff5656' : '#5dffc0'; g.beginPath(); g.moveTo(X(lm[0]), Y(lm[0])); g.lineTo(X(middle), Y(middle)); g.lineTo(X(middle), Math.min(c.height, Y(middle) + c.height * .23)); g.stroke()
       }
       for (const i of [...new Set([0, ...bones.flat()])]) {
         if (!visible(lm[i])) continue
-        g.fillStyle = fault ? '#ff5656' : i % 2 ? colors.left : colors.right; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), options.contrast ? 8 : i === 0 ? 7 : 5, 0, Math.PI * 2); g.fill()
+        g.fillStyle = corrections && fault ? '#ff5656' : i % 2 ? colors.left : colors.right; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), options.contrast ? 8 : i === 0 ? 7 : 5, 0, Math.PI * 2); g.fill()
       }
     }
     if (gestures && mirror && viewMode !== 'basic') for (const i of [15, 16]) if (visible(lm[i])) { g.strokeStyle = '#fff'; g.lineWidth = 2; g.beginPath(); g.arc(X(lm[i]), Y(lm[i]), 13, 0, Math.PI * 2); g.stroke() }
@@ -473,7 +474,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
             {focus && viewMode === 'advanced' && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}
             {!focus && ready && options.extension && ['boxing', 'karate', 'kungFu'].includes(ex) && combat.deceleration > 2 && Math.max(jointAngles.left ?? 0, jointAngles.right ?? 0) > 175 && <span className="fc-extension-cue">Near full projected elbow extension during rapid slowdown</span>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
-            {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
+            {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{corrections && fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
           </div>
         </div>
         {(viewMode === 'game' || showReference && (viewMode !== 'advanced' || options.reference)) && (ex !== 'observe' || viewMode === 'game') && <CoachReference activity={viewMode === 'game' ? gameActivity || undefined : undefined} exercise={ex === 'observe' ? 'seatedPress' : ex} anglesVisible={viewMode === 'advanced' && options.angles} lineage={lineage} paused={options.autoPause && trackingPaused} battery={options.battery} />}</div>
@@ -514,7 +515,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
         {options.contrast && <div className="fc-diagnostics"><h4>Skeleton colors</h4><label>Left side <input aria-label="Left skeleton color" type="color" value={colors.left} onChange={e => setColors({ ...colors, left: e.target.value })} /></label><label>Right side <input aria-label="Right skeleton color" type="color" value={colors.right} onChange={e => setColors({ ...colors, right: e.target.value })} /></label></div>}
         {!RULES[ex].timed && <details className="fc-diagnostics"><summary>Personal rep triggers</summary><label>Lower trigger (degrees)<input aria-label="Lower rep trigger" type="number" min="0" max="175" value={ranges.current[ex]?.down ?? RULES[ex].down} onChange={event => setThreshold('down', Number(event.target.value))} /></label><label>Return trigger (degrees)<input aria-label="Return rep trigger" type="number" min="5" max="180" value={ranges.current[ex]?.up ?? RULES[ex].up} onChange={event => setThreshold('up', Number(event.target.value))} /></label><button onClick={() => { delete ranges.current[ex]; counter.current.range = null; try { localStorage.setItem('bloom-coach-ranges-v1', JSON.stringify(ranges.current)) } catch { /* optional */ }; setRomStatus('Default rep triggers restored') }}>Use default triggers</button></details>}
         </div></details>
-        <details className="fc-settings"><summary>Coach settings</summary>{viewMode === "advanced" && <label>Find an option <input type="search" value={settingsSearch} onChange={event => setSettingsSearch(event.target.value)} placeholder="Search settings" /></label>}<label><input type="checkbox" checked={gestures} onChange={(e) => { setGestures(e.target.checked); gestureState.current = emptyGesture() }} /> Hand-hover controls</label><label><input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> Skeletal overlay</label>{viewMode === 'advanced' && Object.entries(COACH_OPTIONS).filter(([, name]) => name.toLowerCase().includes(settingsSearch.toLowerCase())).map(([key, name]) => <label key={key}><input type="checkbox" checked={options[key as keyof typeof options]} onChange={(e) => setOptions(previous => ({ ...previous, [key]: e.target.checked }))} />{name}</label>)}<p className="fc-small">Audio feedback: off. All coaching is visual or silent.</p><small>Hold either hand on a button for ~3 seconds. Move away to rearm. Next workout changes the exercise and logs completed reps first.</small></details>
+        <details className="fc-settings"><summary>Coach settings</summary>{viewMode === "advanced" && <label>Find an option <input type="search" value={settingsSearch} onChange={event => setSettingsSearch(event.target.value)} placeholder="Search settings" /></label>}<label><input type="checkbox" checked={gestures} onChange={(e) => { setGestures(e.target.checked); gestureState.current = emptyGesture() }} /> Hand-hover controls</label><label><input type="checkbox" checked={corrections} onChange={event => setCorrections(event.target.checked)} /> Red form corrections</label><label><input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> Skeletal overlay</label>{viewMode === 'advanced' && Object.entries(COACH_OPTIONS).filter(([, name]) => name.toLowerCase().includes(settingsSearch.toLowerCase())).map(([key, name]) => <label key={key}><input type="checkbox" checked={options[key as keyof typeof options]} onChange={(e) => setOptions(previous => ({ ...previous, [key]: e.target.checked }))} />{name}</label>)}<p className="fc-small">Audio feedback: off. All coaching is visual or silent.</p><small>Hold either hand on a button for ~3 seconds. Move away to rearm. Next workout changes the exercise and logs completed reps first.</small></details>
 
         {err && <p role="alert" className="fc-error">{err}</p>}<p role="status" className="fc-message">{message}</p><p className="fc-small">Video stays on your device. Tracking files download on first use.</p>
       </div>
