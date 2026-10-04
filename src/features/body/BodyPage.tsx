@@ -1,3 +1,4 @@
+import { progressPhotoError } from './bodyQolModel'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
@@ -94,6 +95,8 @@ export function BodyPage() {
     })
   const [metric, setMetric] = useState<Measure>('weight')
   const [photos, setPhotos] = useState<ProgressPhoto[]>([])
+  const [photoError, setPhotoError] = useState('')
+  const [photoBusy, setPhotoBusy] = useState(false)
   const [pick, setPick] = useState<[string | null, string | null]>([null, null])
   const [reveal, setReveal] = useState(false)
   const [checkIn, setCheckIn] = useState(() => readNudges()['body-checkin']?.enabled ?? false)
@@ -119,9 +122,16 @@ export function BodyPage() {
     burst(saveBtn.current, 'stars')
   }
   const addPhoto = async (f: File) => {
-    const p: ProgressPhoto = { id: crypto.randomUUID(), date: today, pose: 'front', blob: f }
-    await db.progress_photos.put(p).catch(() => undefined)
-    setPhotos((l) => [...l, p])
+    if (photoBusy) return
+    const invalid = progressPhotoError(f); if (invalid) { setPhotoError(invalid); return }
+    setPhotoBusy(true); setPhotoError('')
+    try {
+      const decoded = await createImageBitmap(f); decoded.close()
+      const p: ProgressPhoto = { id: crypto.randomUUID(), date: today, pose: 'front', blob: f }
+      await db.progress_photos.put(p)
+      setPhotos(l => [...l, p])
+    } catch { setPhotoError('The photo could not be saved. Check that it is a readable image and device storage is available.') }
+    finally { setPhotoBusy(false) }
   }
   const weight = latest(store.entries, 'weight')
   const waist = latest(store.entries, 'waist')
@@ -210,10 +220,10 @@ export function BodyPage() {
   const photosTab = () => (
     <div className="bd-photos">
       <div className="bd-photo-bar">
-        <button type="button" className="studio-go" onClick={() => file.current?.click()}>
+        <button type="button" className="studio-go" disabled={photoBusy} onClick={() => file.current?.click()}>
           <Camera size={16} /> Add photo
         </button>
-        <input ref={file} type="file" accept="image/*" capture="user" hidden onChange={(e) => e.target.files?.[0] && void addPhoto(e.target.files[0])} />
+        <input ref={file} type="file" accept="image/*" capture="user" hidden onChange={(e) => { const selected = e.target.files?.[0]; e.target.value = ''; if (selected) void addPhoto(selected) }} />
         {on('privacyBlur') && (
           <button type="button" className="studio-chip" aria-pressed={reveal} onClick={() => setReveal(!reveal)}>
             {reveal ? <EyeOff size={13} /> : <Eye size={13} />} {reveal ? 'Hide' : 'Reveal'}
@@ -221,6 +231,8 @@ export function BodyPage() {
         )}
         <span className="studio-empty">Stored only on this device.</span>
       </div>
+      {photoError && <p role="alert">{photoError}</p>}
+      {photoBusy && <p role="status">Saving photo…</p>}
       {photos.length ? (
         <Rail label="Progress photos">
           {photos.map((p) => (
