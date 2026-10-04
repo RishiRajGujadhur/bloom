@@ -95,6 +95,7 @@ export function BodyPage() {
     })
   const [metric, setMetric] = useState<Measure>('weight')
   const [photos, setPhotos] = useState<ProgressPhoto[]>([])
+  const [removedPhoto, setRemovedPhoto] = useState<ProgressPhoto | null>(null)
   const [photoError, setPhotoError] = useState('')
   const [photoBusy, setPhotoBusy] = useState(false)
   const [pick, setPick] = useState<[string | null, string | null]>([null, null])
@@ -231,6 +232,7 @@ export function BodyPage() {
         )}
         <span className="studio-empty">Stored only on this device.</span>
       </div>
+      {removedPhoto && <p role="status">Photo deleted. <button type="button" className="studio-chip" disabled={photoBusy} onClick={async () => { setPhotoBusy(true); try { await db.progress_photos.put(removedPhoto); setPhotos(l => [...l.filter(p => p.id !== removedPhoto.id), removedPhoto].sort((a, b) => a.date.localeCompare(b.date))); setRemovedPhoto(null); setPhotoError('') } catch { setPhotoError('Could not restore the photo. Free some device storage and retry.') } finally { setPhotoBusy(false) } }}>Undo photo deletion</button></p>}
       {photoError && <p role="alert">{photoError}</p>}
       {photoBusy && <p role="status">Saving photo…</p>}
       {photos.length ? (
@@ -254,9 +256,12 @@ export function BodyPage() {
                   type="button"
                   className="icon-button"
                   aria-label="Delete photo"
-                  onClick={() => {
-                    setPhotos((l) => l.filter((x) => x.id !== p.id))
-                    void db.progress_photos.delete(p.id)
+                  disabled={photoBusy}
+                  onClick={async () => {
+                    setPhotoBusy(true)
+                    try { await db.progress_photos.delete(p.id); setRemovedPhoto(p); setPhotos(l => l.filter(x => x.id !== p.id)); setPick(x => [x[0] === p.id ? null : x[0], x[1] === p.id ? null : x[1]]); setPhotoError('') }
+                    catch { setPhotoError('Could not delete the photo. Please retry.') }
+                    finally { setPhotoBusy(false) }
                   }}
                 >
                   <Trash2 size={14} />
