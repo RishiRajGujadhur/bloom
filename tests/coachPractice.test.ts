@@ -11,3 +11,10 @@ test('curl elbow drift receives a specific correction', () => {
  expect(readUpper('bicepCurl',pose).faults).toContain('Keep elbows near your sides')
  expect(exerciseGuide('bicepCurl').camera).toContain('seated support')
 })
+
+test('seated lateral raises count arm elevation rather than elbow bends', () => {
+ const counter = new RepCounter('lateralRaise')
+ for (let i=0;i<=80;i++) counter.push(readUpper('lateralRaise',upperPose('lateralRaise',i/80)),i*50)
+ expect(counter.reps).toHaveLength(1)
+ expect(readUpper('lateralRaise',upperPose('lateralRaise',.5)).metric).toBeCloseTo(90)
+})
