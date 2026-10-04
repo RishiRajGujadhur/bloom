@@ -113,6 +113,8 @@ export function RunPage() {
   const [status, setStatus] = useState<'idle' | 'tracking' | 'paused' | 'demo'>('idle')
   useLeaveGuard(status === 'tracking' || status === 'paused')
   const [error, setError] = useState('')
+  const [gpsAccuracy, setGpsAccuracy] = useState<number | null>(null)
+  const gpsGeneration = useRef(0)
   const [now, setNow] = useState(Date.now())
   const [startedAt, setStartedAt] = useState(0)
   const [pausedFor, setPausedFor] = useState(0)
@@ -205,6 +207,24 @@ export function RunPage() {
     lastAlert.current = now
   }, [now, points, status, startedAt, store.targetPace, units])
 
+  const watchGps = () => {
+    const token = ++gpsGeneration.current
+    if (watch.current !== null) navigator.geolocation.clearWatch(watch.current)
+    watch.current = navigator.geolocation.watchPosition(
+      (p) => {
+        if (token !== gpsGeneration.current) return
+        setGpsAccuracy(p.coords.accuracy)
+        if (!Number.isFinite(p.coords.accuracy) || p.coords.accuracy > 40) { setError('Waiting for a clearer GPS fix (40m accuracy or better).'); return }
+        setError('')
+        const fix = { lat: p.coords.latitude, lng: p.coords.longitude, t: p.timestamp, ele: p.coords.altitude ?? undefined }
+        lastFix.current = fix
+        if (statusRef.current !== 'tracking') return
+        setPoints((list) => [...list, fix])
+      },
+      (error) => { if (token !== gpsGeneration.current) return; gpsGeneration.current++; if (watch.current !== null) navigator.geolocation.clearWatch(watch.current); watch.current = null; setError(error.code === 1 ? 'Location permission was not granted. Use manual logging or enable location and retry.' : 'GPS stopped: a location fix could not be obtained. Retry when ready.'); pauseStart.current = Date.now(); setStatus(lastFix.current ? 'paused' : 'idle') },
+      { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 },
+    )
+  }
   const start = () => {
     setError('')
     if (!on('gps') || !('geolocation' in navigator)) return setError('GPS isn’t available here. Try the demo route or log a run by hand.')
@@ -213,17 +233,7 @@ export function RunPage() {
     setStartedAt(Date.now())
     setPausedFor(0)
     setStatus('tracking')
-    watch.current = navigator.geolocation.watchPosition(
-      (p) => {
-        if (p.coords.accuracy > 40) return
-        const fix = { lat: p.coords.latitude, lng: p.coords.longitude, t: p.timestamp, ele: p.coords.altitude ?? undefined }
-        lastFix.current = fix
-        if (statusRef.current !== 'tracking') return
-        setPoints((list) => [...list, fix])
-      },
-      () => setError('Location permission was not granted.'),
-      { enableHighAccuracy: true, maximumAge: 2000 },
-    )
+    lastFix.current = null; setGpsAccuracy(null); watchGps()
   }
   const pause = () => {
     if (status === 'tracking') {
@@ -231,6 +241,7 @@ export function RunPage() {
       autoPaused.current = null
       setStatus('paused')
     } else if (status === 'paused') {
+      if (watch.current === null) watchGps()
       autoPaused.current = null
       setPausedFor((p) => p + Date.now() - pauseStart.current)
       setStatus('tracking')
@@ -314,6 +325,7 @@ export function RunPage() {
           <Stat value={fmtTime(seconds)} label="time" />
           <span data-hint={`Minutes per ${units}; lower is faster`}><Stat value={fmtPace(pace(km, seconds, units))} label={`pace /${units}`} /></span>
           {on('splits') && <Stat value={split.length} label="splits" />}
+          {gpsAccuracy !== null && status !== 'demo' && <Stat value={`±${Math.round(gpsAccuracy)}m`} label={gpsAccuracy <= 40 ? 'GPS accuracy' : 'GPS · waiting for clarity'} />}
         </div>
         {on('paceChart') && <PaceChart values={split} />}
         <div className="iv-buttons">
