@@ -1,4 +1,5 @@
 import { CoachBattle } from './CoachBattle'
+import type { CoachReward } from './coachRewards'
 import { setBodySeated } from '../body/bodyPreferences'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
@@ -52,7 +53,7 @@ function RepRing({ count, target, timed }: { count: number; target: number; time
   return <svg className="fc-ring" viewBox="0 0 180 180" role="img" aria-label={timed ? `${count} active seconds` : `${count} reps`}><g ref={group}><circle cx="90" cy="90" r="70" className="fc-ring-track" /><circle cx="90" cy="90" r="70" className="fc-ring-fill" strokeDasharray={`${Math.min(1, count / target) * circumference} ${circumference}`} transform="rotate(-90 90 90)" /><text x="90" y="100" textAnchor="middle" className="fc-count">{count}</text><text x="90" y="124" textAnchor="middle" className="fc-count-sub">{timed ? 'active seconds' : `of ${target}`}</text></g></svg>
 }
 
-export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialExercise, sourceActivity }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: { id: string; damage: number; xp: number }) => void; bodyweight?: number; initialExercise?: Exercise; sourceActivity?: { page: string; label: string } }) {
+export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialExercise, sourceActivity }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: CoachReward) => void; bodyweight?: number; initialExercise?: Exercise; sourceActivity?: { page: string; label: string } }) {
   const [options, setOptions] = useState(loadCoachOptions)
   useEffect(() => { try { localStorage.setItem('bloom-coach-settings-v1', JSON.stringify(options)) } catch { /* optional */ } }, [options])
   const [accessible, setAccessible] = useState(() => initialExercise && initialExercise !== 'observe' && RULES[initialExercise].upper ? true : preference())
@@ -449,7 +450,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       <div className="fc-center">
         <div className={`fc-split ${options.reference && ex !== 'observe' ? '' : 'fc-no-reference'}`}><div ref={panel} className={`fc-camera-panel ${focus ? 'fc-focused' : ''}`} aria-label="Camera training view">
           <div className="fc-view" data-matrix-native><div className="fc-scene" style={{ transform: options.autoFrame ? `translate(${framing.x * 100}%,${framing.y * 100}%) scale(${framing.scale})` : undefined }}><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
-            <CoachBattle frame={trailFrames.at(-1)} frames={trailFrames} active={ready && !trackingPaused && calibration >= 1} demo={mode === 'demo'} mirror={mode === 'camera'} onExercise={change} />
+            <CoachBattle frame={trailFrames.at(-1)} frames={trailFrames} active={ready && !trackingPaused && calibration >= 1} demo={mode === 'demo'} source={mode} mirror={mode === 'camera'} onExercise={change} onReward={onReward} />
             {ready && options.battery && <span className="fc-battery-badge">Battery saver · 10 fps · background focus and finger inference held</span>}
             {ready && ex !== 'observe' && options.ghost && ghost && ghostFrame(ghost, metrics.seconds) && <CoachGhost exercise={ex} pose={ghostFrame(ghost, metrics.seconds)!} mirror={mode === 'camera'} />}
             {ready && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}

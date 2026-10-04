@@ -635,6 +635,7 @@ export function RpgDashboard({
           title={t('rpg.inventoryTitle')}
           onClose={() => setShowInventory(false)}
         >
+          <div className="inventory-section"><h3>Camera battle loot</h3>{data.rpg.cameraLoot?.length ? <ul>{[...data.rpg.cameraLoot].reverse().slice(0, 20).map(item => <li key={item.id}>✦ {item.item} · {item.hits} movement cycles · {new Date(item.at).toLocaleDateString()}</li>)}</ul> : <p className="muted">Defeat a boss in the seated camera arcade to earn a training collectible.</p>}</div>
           <div className="inventory-section">
             <h3>{t('rpg.worldPalette')}</h3>
             <div className="equipment-grid">

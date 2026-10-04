@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { COMBAT_MODES, combatTick, cutEfficiency, newCombat, rhythmHit, rhythmTarget, slashTrail, swordPose, type CombatMode } from './cameraCombatModel'
 import { bodySilent } from '../body/bodyPreferences'
+import { battleDrop, battleMarkdown, readBattles, saveBattle } from './cameraBattleHistory'
+import type { CoachReward } from './coachRewards'
+import { logActivity } from '../../components/studio/Studio'
+import { download } from '../lab/exportSuite'
 import type { PoseFrame } from './CoachTrails'
 import type { Exercise, P } from './formModel'
 import './coachBattle.css'
-export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }: { frame?: PoseFrame; frames: PoseFrame[]; active: boolean; demo: boolean; mirror: boolean; onExercise: (exercise: Exercise) => void }) {
+export function CoachBattle({ frame, frames, active, demo, source, mirror, onExercise, onReward }: { frame?: PoseFrame; frames: PoseFrame[]; active: boolean; demo: boolean; source: string; mirror: boolean; onExercise: (exercise: Exercise) => void; onReward?: (reward: CoachReward) => void }) {
   const [mode, setMode] = useState<CombatMode | ''>('')
   const [paused, setPaused] = useState(false)
   const [weapon, setWeapon] = useState<'broadsword' | 'katana'>('broadsword')
@@ -17,6 +21,8 @@ export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }:
   const [flash, setFlash] = useState<{ point: P; damage: number; critical: boolean; at: number } | null>(null)
   const sound = useRef<AudioContext | null>(null), lastBeat = useRef(-1)
   const [state, setState] = useState(() => newCombat())
+  const [history, setHistory] = useState(readBattles), [rewardStatus, setRewardStatus] = useState('')
+  const session = useRef(''), rewarded = useRef(false), origin = useRef(source)
   const current = useRef(state)
   useEffect(() => {
     if (!frame || !active || paused || !mode) { current.current = { ...current.current, pose: null, event: false }; return }
@@ -24,7 +30,15 @@ export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }:
     const point = mode === 'sword' ? swordPose(frame.pose, swordHand)?.tip : frame.pose[next.hand]
     if (next.damage && point) setFlash({ point, damage: next.damage, critical: (next.grade ?? 0) >= 90, at: next.elapsed })
     if (rhythm && next.event && point) setRhythmScore(rhythmHit(next.elapsed, bpm, point, Math.abs(frame.pose[11].x - frame.pose[12].x)))
-  }, [frame, active, paused, mode, swordHand, rhythm, bpm, defence, slipRange])
+    const drop = origin.current === source ? battleDrop(session.current, mode, next, source) : null
+    if (drop && !rewarded.current) {
+      rewarded.current = true
+      try { setHistory(saveBattle(drop)); setRewardStatus(`Loot: ${drop.item} · ${drop.xp} XP${onReward ? ' · added to Bloom inventory' : ' · local battle journal only'}`) } catch { setRewardStatus('Battle complete. The local journal could not be saved; check device storage.') }
+      onReward?.({ id: drop.id, damage: 0, xp: drop.xp, battle: drop })
+      logActivity('cameraBattle', { id: drop.id, mode, hits: drop.hits, seconds: drop.seconds })
+    }
+  }, [frame, active, paused, mode, swordHand, rhythm, bpm, defence, slipRange, source, onReward])
+  useEffect(() => { const next = newCombat(goal); current.current = next; setState(next); origin.current = source; session.current = crypto.randomUUID(); rewarded.current = false; setRewardStatus(''); setFlash(null) }, [source]) // eslint-disable-line react-hooks/exhaustive-deps -- source changes must reset demo/camera provenance, not target edits
   useEffect(() => () => { void sound.current?.close() }, [])
   useEffect(() => {
     if (!audio || !rhythm || !mode || !active || paused || !state.bossHp || bodySilent() || !sound.current) return
@@ -34,7 +48,7 @@ export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }:
     tone.frequency.value = 440 * 2 ** ((notes[beat % notes.length] - 69) / 12); volume.gain.setValueAtTime(.05, ctx.currentTime); volume.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .18)
     tone.connect(volume).connect(ctx.destination); tone.start(); tone.stop(ctx.currentTime + .2); tone.onended = () => { tone.disconnect(); volume.disconnect() }
   }, [state.elapsed, state.bossHp, audio, rhythm, mode, active, paused, bpm, melody])
-  const reset = () => { const next = newCombat(goal); current.current = next; setState(next); setPaused(false); setRhythmScore(null); setFlash(null); lastBeat.current = -1 }
+  const reset = () => { const next = newCombat(goal); current.current = next; setState(next); setPaused(false); setRhythmScore(null); setFlash(null); lastBeat.current = -1; session.current = crypto.randomUUID(); rewarded.current = false; origin.current = source; setRewardStatus('') }
   const blade = state.pose && mode === 'sword' ? swordPose(state.pose, swordHand) : null
   const x = (value: number) => (mirror ? 1 - value : value) * 640
   const y = (value: number) => value * 480
@@ -54,6 +68,7 @@ export function CoachBattle({ frame, frames, active, demo, mirror, onExercise }:
       {mode === 'sword' && <p>{state.move} · {state.parries} parries · {state.guard ? 'High guard ready' : 'Raise a comfortable diagonal high guard to parry'} · cut straightness {cutEfficiency(trail) ?? '—'}% · projected path only, not 3D blade-plane accuracy</p>}
       {(mode === 'ropes' || mode === 'doubleRopes') && <p>Downward acceleration {state.acceleration.toFixed(1)} m/s² · power proxy {state.power.toFixed(0)} W. Assumes 40cm shoulder span and 1.9kg per arm; no rope resistance is measured.</p>}
     </div>
+    {mode && <div className="cb-journal"><p role="status">{rewardStatus}</p>{history.length > 0 && <details><summary>Battle journal · {history.length} victories</summary><ul>{history.slice(-3).reverse().map(item => <li key={item.id}>{item.item} · {item.xp} XP</li>)}</ul><button type="button" onClick={() => download(new Blob([battleMarkdown(history)], { type: 'text/markdown' }), 'bloom-camera-battle-journal.md')}>Export battle journal (.md)</button></details>}</div>}
     {mode && flash && state.elapsed - flash.at < .8 && <svg key={flash.at} className="cb-overlay" viewBox="0 0 640 480" aria-label={flash.critical ? 'Critical movement hit' : 'Movement hit'}><g className="cb-hit" transform={`translate(${x(flash.point.x)} ${y(flash.point.y)})`} fill={flash.critical ? '#fff075' : '#75ffe0'}>{Array.from({ length: 8 }, (_, i) => <rect key={i} x={Math.round(Math.cos(i * Math.PI / 4) * 22)} y={Math.round(Math.sin(i * Math.PI / 4) * 22)} width="6" height="6" shapeRendering="crispEdges" />)}<text x="0" y="-30" textAnchor="middle" fontFamily="monospace" fontWeight="bold" fontSize="21">{flash.critical ? 'CRIT ' : ''}{flash.damage}</text></g></svg>}
     {mode && defence && state.elapsed >= 5 && state.elapsed % 5 > 2 && state.elapsed % 5 < 3.5 && <svg className="cb-overlay" viewBox="0 0 640 480" aria-label="Seated defence warning"><circle cx={x(state.centre ?? .5)} cy="130" r="42" stroke="#ffad6b" strokeDasharray="8 7" fill="#ff8c4020" /><text x={x(state.centre ?? .5)} y="130" fill="#fff" textAnchor="middle" fontSize="14">{mode === 'boxing' && Math.floor(state.elapsed / 5) % 2 ? 'SLIP' : 'GUARD'}</text></svg>}
     {mode && rhythm && <svg className="cb-overlay" viewBox="0 0 640 480" aria-label="Rhythm strike target"><circle cx={x(rhythmTarget(state.elapsed, bpm).x)} cy={y(.4)} r={18 + rhythmTarget(state.elapsed, bpm).errorMs / 20} stroke="#ffe370" strokeWidth="3" fill="none" /><circle cx={x(rhythmTarget(state.elapsed, bpm).x)} cy={y(.4)} r="5" fill="#ffe370" /></svg>}
