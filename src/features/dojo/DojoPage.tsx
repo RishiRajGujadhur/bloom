@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -147,6 +148,7 @@ export function DojoPage() {
     setTab('coach')
   }
 
+  useBodyPractice('dojo', pick.id, pick.name, () => setPlaying(false))
   const library = () => (
     <div className="dojo-lib">
       {on('belts') && <Belt reps={s.reps} />}

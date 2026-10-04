@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { useTabTitle } from '../../utils/useTabTitle'
 import { prefersReducedMotion } from '../../utils/motion'
@@ -158,6 +159,7 @@ export function IntervalPage() {
     setProgram(p)
     setTab('run')
   }
+  useBodyPractice('intervals', '', program.name, () => { timer.current?.pause(); setRunning(false) })
   const kind = done ? 'cooldown' : (pos?.segment.kind ?? 'warmup')
   useTabTitle(running && pos ? `${pos.segment.label} ${Math.floor(pos.left / 60)}:${String(Math.ceil(pos.left) % 60).padStart(2, '0')}` : '', 'Intervals', 'intervals')
   // Space starts or pauses; N skips to the next segment.

@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useTabTitle } from '../../utils/useTabTitle'
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -171,6 +172,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+  useBodyPractice('workouts', lift?.id ?? '', lift?.name ?? 'Workouts', () => {})
   const muted = css('--text-muted', '#9a8f86')
   const grid = css('--border-color', '#eadfd4')
   const chartOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: grid }, ticks: { color: muted } }, y: { grid: { color: grid }, ticks: { color: muted } } } } as const

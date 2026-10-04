@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
@@ -279,6 +280,7 @@ export function RunPage() {
     }, 40)
   }
 
+  useBodyPractice('run', '', kind === 'run' ? 'Run preparation' : 'Walk preparation', () => { if (status === 'tracking') pause() })
   const b = bests(store.runs)
   const week = toUnits(weekKm(store.runs), units)
   const goal = store.weeklyGoal

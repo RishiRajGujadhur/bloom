@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useKeepAwake } from '../../platform/presence'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
@@ -170,6 +171,7 @@ export function StretchPage() {
     setPlaying(false)
     setTab('session')
   }
+  useBodyPractice('stretch', step.stretch.id, step.stretch.name, () => setPlaying(false))
   useLeaveGuard(playing && !finished)
   useTabTitle(playing && !finished ? `🤸 ${step.stretch.name} · ${i + 1}/${list.length}` : '', 'Stretch', 'stretch')
   // Space plays or pauses; N moves to the next stretch.

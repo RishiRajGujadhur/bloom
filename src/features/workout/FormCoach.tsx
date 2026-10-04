@@ -49,11 +49,11 @@ function RepRing({ count, target, timed }: { count: number; target: number; time
   return <svg className="fc-ring" viewBox="0 0 180 180" role="img" aria-label={timed ? `${count} active seconds` : `${count} reps`}><g ref={group}><circle cx="90" cy="90" r="70" className="fc-ring-track" /><circle cx="90" cy="90" r="70" className="fc-ring-fill" strokeDasharray={`${Math.min(1, count / target) * circumference} ${circumference}`} transform="rotate(-90 90 90)" /><text x="90" y="100" textAnchor="middle" className="fc-count">{count}</text><text x="90" y="124" textAnchor="middle" className="fc-count-sub">{timed ? 'active seconds' : `of ${target}`}</text></g></svg>
 }
 
-export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70 }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: { id: string; damage: number; xp: number }) => void; bodyweight?: number }) {
+export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialExercise }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: { id: string; damage: number; xp: number }) => void; bodyweight?: number; initialExercise?: Exercise }) {
   const [options, setOptions] = useState(loadCoachOptions)
   useEffect(() => { try { localStorage.setItem('bloom-coach-settings-v1', JSON.stringify(options)) } catch { /* optional */ } }, [options])
-  const [accessible, setAccessible] = useState(preference)
-  const [ex, setEx] = useState<Exercise>(() => preference() ? 'seatedTwist' : 'squat')
+  const [accessible, setAccessible] = useState(() => initialExercise && RULES[initialExercise].upper ? true : preference())
+  const [ex, setEx] = useState<Exercise>(() => initialExercise ?? (preference() ? 'seatedTwist' : 'squat'))
   const [mode, setMode] = useState<Mode>('idle')
   const [reps, setReps] = useState<Rep[]>([])
   const [held, setHeld] = useState(0)

@@ -8,7 +8,7 @@ explicit observation view rather than an invented form score.
 ## Shared body and camera experience
 
 - [x] 01. Open the pose coach within each body page, without navigating away.
-- [ ] 02. Select the matching supported exercise from the current activity.
+- [x] 02. Select the matching supported exercise from the current activity.
 - [ ] 03. Offer an honest observation-only pose view for unsupported activities.
 - [ ] 04. Share seated-mode preferences between body guides and camera coaching.
 - [ ] 05. Provide one silent-feedback switch for body audio and speech.

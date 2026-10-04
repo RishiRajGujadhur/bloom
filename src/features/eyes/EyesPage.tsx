@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useRef, useState } from 'react'
 import rough from 'roughjs'
 import { BellRing, Eye, History, Play, Square } from 'lucide-react'
@@ -140,6 +141,7 @@ export function EyesPage() {
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
   }, [])
+  useBodyPractice('eyes', '', current.name, () => setRunning(false))
   const visible = exercises.filter((e) => (e.id === 'rule20' ? on('rule20') : e.id === 'nearfar' ? on('nearFar') : e.id === 'blink' ? on('blink') : e.id === 'palming' ? on('palming') : on('followDot')))
 
   usePageActions([

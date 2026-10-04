@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useTabTitle } from '../../utils/useTabTitle'
 import Fuse from 'fuse.js'
 import { seatedExercises } from './seated'
@@ -179,6 +180,7 @@ export function ExercisePage() {
         .search(search)
         .map((r) => r.item)
     : filtered
+  useBodyPractice('exercises', pick.id, pick.name, () => setPlaying(false))
   const speed = on('slowMo') ? prefs.speed : 1
 
   // Holds count seconds; reps come from the animation loop.

@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useKeepAwake } from '../../platform/presence'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
@@ -170,6 +171,7 @@ export function YogaPage() {
     setRunning(true)
     setTab('practice')
   }
+  useBodyPractice('yoga', pose.id, pose.name, () => setRunning(false))
   const draft = store.draft
   const setDraft = (steps: Step[]) => setStore((s) => ({ ...s, draft: { ...s.draft, steps } }))
   const onDragEnd = (e: DragEndEvent) => {

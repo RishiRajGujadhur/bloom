@@ -1,6 +1,7 @@
 import { lazy, Suspense, useRef, useState } from 'react'
 import { Camera, X } from 'lucide-react'
 import { logActivity } from '../../components/studio/Studio'
+import { supportedBodyExercise, useCurrentPractice } from './bodyPractice'
 import '../workout/formcoach.css'
 import './bodyTools.css'
 
@@ -18,14 +19,15 @@ export const BODY_PAGES: Record<string, { title: string; feature: string }> = {
 export function BodyTools({ page, features }: { page: string; features: Record<string, boolean> }) {
   const [open, setOpen] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
+  const practice = useCurrentPractice(page)
   const meta = BODY_PAGES[page]
   if (!meta || !features[meta.feature]) return null
   return <div className="body-tools">
     <button ref={trigger} type="button" className="body-tool-button" onClick={() => setOpen(true)}><Camera size={16} /> Camera pose coach</button>
     {open && <div className="body-coach-backdrop"><section className="body-coach-dialog" role="dialog" aria-modal="true" aria-label={`${meta.title} camera pose coach`}>
       <header><h2>{meta.title} · camera pose coach</h2><button type="button" className="body-tool-button" aria-label="Close camera pose coach" onClick={() => setOpen(false)}><X size={18} /> Close</button></header>
-      <p>Camera access starts only when you choose Start camera. Your video stays on this device.</p>
-      <Suspense fallback={<p role="status">Loading camera coach…</p>}><FormCoach onLog={(liftId, reps, seconds) => logActivity('bodyCoach', { page, liftId, reps, seconds })} /></Suspense>
+      <p>{practice?.label ?? meta.title}. Camera access starts only when you choose Start camera. Your video stays on this device.</p>
+      <Suspense fallback={<p role="status">Loading camera coach…</p>}><FormCoach initialExercise={supportedBodyExercise(page, practice?.movement ?? '') ?? undefined} onLog={(liftId, reps, seconds) => logActivity('bodyCoach', { page, liftId, reps, seconds })} /></Suspense>
     </section></div>}
   </div>
 }
