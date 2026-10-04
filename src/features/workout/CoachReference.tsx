@@ -21,6 +21,8 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       renderer.setSize(240, 200, false); renderer.setPixelRatio(battery ? 1 : Math.min(2, window.devicePixelRatio))
       const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(42, 1.2, .1, 100)
       camera.position.set(angle === "side" ? 2.6 : angle === "threeQuarter" ? 1.15 : 0, .25, angle === "side" ? 1.8 : 3.4); camera.lookAt(0, .15, 0)
+      const resize = () => { if (!canvas.current) return; const bounds = canvas.current.getBoundingClientRect(); renderer.setSize(Math.max(1, bounds.width), Math.max(1, bounds.height), false); camera.aspect = Math.max(1, bounds.width) / Math.max(1, bounds.height); camera.updateProjectionMatrix() }
+      const observer = new ResizeObserver(resize); observer.observe(canvas.current); resize()
       const group = new THREE.Group(); scene.add(group)
       scene.add(new THREE.HemisphereLight(0xffffff, 0x1b4f40, 2.8))
       const bones = RULES[exercise].upper ? [...UPPER_BONES, [0, 33], [33, 34]] : BONES
@@ -65,7 +67,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
         renderer.render(scene, camera)
         if (!prefersReducedMotion()) raf = requestAnimationFrame(loop)
       }
-      release = () => { renderer.dispose(); bodyGeometry.dispose(); limbGeometry.dispose(); skin.dispose(); shirt.dispose(); trousers.dispose(); jointGeometry.dispose(); boneGeometry.dispose(); green.dispose(); cyan.dispose(); seatGeometry.dispose(); seatMaterial.dispose() }
+      release = () => { observer.disconnect(); renderer.dispose(); bodyGeometry.dispose(); limbGeometry.dispose(); skin.dispose(); shirt.dispose(); trousers.dispose(); jointGeometry.dispose(); boneGeometry.dispose(); green.dispose(); cyan.dispose(); seatGeometry.dispose(); seatMaterial.dispose() }
       raf = requestAnimationFrame(loop)
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
