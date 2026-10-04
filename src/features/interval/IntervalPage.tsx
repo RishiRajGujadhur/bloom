@@ -18,7 +18,7 @@ import './interval.css'
 
 const on = (id: string) => subOn('intervalCoach', id)
 const KEY = 'bloom-intervals-v1'
-type Store = { custom: Program; saved?: Program[]; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number; skipped?: boolean }[] }
+type Store = { custom: Program; saved?: Program[]; selectedId?: string; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number; skipped?: boolean }[] }
 const initial: Store = {
   custom: { id: 'custom', name: 'My intervals', emoji: '🎛️', work: 30, rest: 15, rounds: 8, warmup: 60, cooldown: 60 },
   c25kDone: 0,
@@ -63,7 +63,7 @@ export function IntervalPage() {
       writeStore(KEY, n)
       return n
     })
-  const [program, setProgram] = useState<Program>(presets[0])
+  const [program, setProgram] = useState<Program>(() => [...presets, store.custom, ...(store.saved ?? [])].find(value => value.id === store.selectedId) ?? (typeof store.selectedId === 'string' && store.selectedId.startsWith('c25k-') ? c25kProgram(store.c25kDone) : presets[0]))
   const [tab, setTab] = useState('run')
   const [saveName, setSaveName] = useState('')
   const [elapsed, setElapsed] = useState(0)
@@ -177,6 +177,7 @@ export function IntervalPage() {
   const choose = (p: Program) => {
     reset()
     setProgram(p)
+    setStore(s => ({ ...s, selectedId: p.id }))
     setTab('run')
   }
   const prepare = () => {
