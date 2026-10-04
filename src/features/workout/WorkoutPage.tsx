@@ -96,6 +96,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   const [chartLift, setChartLift] = useState('squat')
   const [target, setTarget] = useState(100)
   const logBtn = useRef<HTMLButtonElement>(null)
+  const lastLogAt = useRef(-Infinity)
   const allSets = useMemo(() => store.workouts.flatMap((w) => w.sets), [store.workouts])
   const template = templates.find((t) => t.id === active?.templateId)
   const liftIds = template?.lifts ?? []
@@ -145,6 +146,9 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   }
   const logSet = () => {
     if (!active || !lift) return
+    const now = performance.now()
+    if (now - lastLogAt.current < 500 || !Number.isFinite(weight) || !Number.isFinite(reps) || weight < 0 || reps < 1) return
+    lastLogAt.current = now
     const set: WSet = { liftId: lift.id, weight, reps, rpe: on('rpe') ? rpe : undefined, at: Date.now() }
     const prs = on('prs') ? prsFor(set, allSets, store.bodyweight) : []
     setStore((s) => ({ ...s, workouts: s.workouts.map((w) => (w.id === active.id ? { ...w, sets: [...w.sets, set] } : w)) }))
@@ -179,6 +183,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   logRef.current = logSet
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (e.repeat) return
       if (e.key.toLowerCase() !== 'l' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select, dialog')) return
       logRef.current()
     }
