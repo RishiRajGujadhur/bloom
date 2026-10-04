@@ -93,6 +93,7 @@ export function BodyPage() {
       try { localStorage.setItem('bloom-body-include', JSON.stringify(n)) } catch { /* optional */ }
       return n
     })
+  const [removedEntry, setRemovedEntry] = useState<Entry | null>(null)
   const [metric, setMetric] = useState<Measure>('weight')
   const [photos, setPhotos] = useState<ProgressPhoto[]>([])
   const [removedPhoto, setRemovedPhoto] = useState<ProgressPhoto | null>(null)
@@ -204,6 +205,13 @@ export function BodyPage() {
       </div>
     </div>
   )
+
+  const measurementHistory = () => <div className="studio-card">
+    <h3>Measurement history</h3>
+    {removedEntry && <p role="status">Check-in removed. <button type="button" className="studio-chip" onClick={() => { setStore(s => ({ ...s, entries: [...s.entries.filter(e => e.date !== removedEntry.date), { ...removedEntry, ...s.entries.find(e => e.date === removedEntry.date) }] })); setRemovedEntry(null); lastSaved.current = '' }}>Undo check-in deletion</button></p>}
+    {!store.entries.length && <p className="studio-empty">Save your first check-in to see dated measurements here.</p>}
+    <div style={{ overflowX: 'auto' }}><table><thead><tr><th>Date</th>{measures.map(m => <th key={m.id}>{m.label}</th>)}<th>Actions</th></tr></thead><tbody>{[...store.entries].sort((a, b) => b.date.localeCompare(a.date)).map(e => <tr key={e.date}><th scope="row">{e.date}</th>{measures.map(m => <td key={m.id}>{fmt(e[m.id], m.unit)}</td>)}<td><button type="button" className="studio-chip" aria-label={`Delete check-in ${e.date}`} onClick={() => { setRemovedEntry(e); setStore(s => ({ ...s, entries: s.entries.filter(x => x.date !== e.date) })); lastSaved.current = '' }}>Delete</button></td></tr>)}</tbody></table></div>
+  </div>
 
   const trends = () => (
     <div className="studio-card bd-trends">
@@ -333,6 +341,7 @@ export function BodyPage() {
       scene={<StudioScene colors={['#f4a7b9', '#c9b8ff', '#ffd8b0']} line="wave" />}
       tabs={[
         { id: 'checkin', label: 'Check-in', icon: <Ruler size={15} />, render: checkin },
+        { id: 'history', label: 'Measurements', icon: <Ruler size={15} />, render: measurementHistory },
         ...(on('trendLine') ? [{ id: 'trends', label: 'Trends', icon: <ChartLine size={15} />, render: trends }] : []),
         ...(on('photos') ? [{ id: 'photos', label: 'Photos', icon: <Camera size={15} />, render: photosTab }] : []),
         ...(on('compare') && on('photos') ? [{ id: 'compare', label: 'Compare', icon: <GitCompare size={15} />, render: compare }] : []),
