@@ -138,16 +138,18 @@ export function RunPage() {
   const lastFix = useRef<Pt | null>(null)
   const autoPauseOn = store.autoPause !== false
 
+  const [sampleRoute, setSampleRoute] = useState<Run | null>(null)
   const [terrainId, setTerrainId] = useState<string | null>(null)
   const routed = store.runs.filter((r) => r.points.length > 10)
-  const terrainRun = routed.find((r) => r.id === terrainId) ?? routed[routed.length - 1] ?? null
+  const terrainRun = sampleRoute ?? routed.find((r) => r.id === terrainId) ?? routed[routed.length - 1] ?? null
   /** A route from a GPX file (or the sample) becomes a saved run and opens in 3D. */
-  const addRoute = (pts: Pt[]) => {
+  const addRoute = (pts: Pt[], sample = false) => {
     const points = simplifyRoute(pts)
     const km = distanceKm(points)
     const seconds = Math.max(1, (points[points.length - 1].t - points[0].t) / 1000)
     const run: Run = { id: crypto.randomUUID(), at: points[0].t, kind: km / (seconds / 3600) > 7.5 ? 'run' : 'walk', km: Math.round(km * 100) / 100, seconds: Math.round(seconds), points }
-    setStore((s) => ({ ...s, runs: [...s.runs, run] }))
+    if (sample) setSampleRoute(run)
+    else { setSampleRoute(null); setStore((s) => ({ ...s, runs: [...s.runs, run] })) }
     setTerrainId(run.id)
     setTab('terrain')
     setError('')
@@ -269,7 +271,7 @@ export function RunPage() {
   }
   const finish = () => {
     stopPlayback(); stopGps(); setReplay(null)
-    if (km > 0.05) {
+    if (status !== 'demo' && km > 0.05) {
       const run: Run = { id: crypto.randomUUID(), at: Date.now(), kind, km: Math.round(km * 100) / 100, seconds: Math.round(seconds), points }
       setStore((s) => ({ ...s, runs: [...s.runs, run] }))
       logActivity(kind, { km: run.km })
@@ -376,6 +378,7 @@ export function RunPage() {
             />
           </div>
         )}
+        {status === 'demo' && <p role="status">Demo only · excluded from your history and personal bests.</p>}
         {error && <p className="voice-error">{error}</p>}
         {viewing && !active && (
           <p className="studio-empty">
@@ -428,7 +431,7 @@ export function RunPage() {
         {routed.length > 0 && (
           <label className="tr-pick">
             Route
-            <select className="studio-input" value={terrainRun?.id ?? ''} onChange={(e) => setTerrainId(e.target.value)}>
+            <select className="studio-input" value={terrainRun?.id ?? ''} onChange={(e) => { setSampleRoute(null); setTerrainId(e.target.value) }}>
               {[...routed].reverse().map((r) => <option key={r.id} value={r.id}>{new Date(r.at).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {toUnits(r.km, units).toFixed(1)} {units} {r.kind}</option>)}
             </select>
           </label>
@@ -438,7 +441,7 @@ export function RunPage() {
             <FolderOpen size={14} /> Open GPX
           </button>
         )}
-        <button type="button" className="studio-chip" onClick={() => addRoute(demoHills(Date.now() - 50 * 60_000))}>
+        <button type="button" className="studio-chip" onClick={() => addRoute(demoHills(Date.now() - 50 * 60_000), true)}>
           <Mountain size={14} /> Sample hilly run
         </button>
         {on('gpxExport') && terrainRun && (
@@ -448,6 +451,7 @@ export function RunPage() {
         )}
       </div>
       {error && <p className="voice-error">{error}</p>}
+      {sampleRoute && <p role="status">Sample route · excluded from activity history.</p>}
       {terrainRun ? (
         <Suspense fallback={<div className="tr tr-wait">Building the terrain…</div>}>
           <TerrainReplay run={terrainRun} units={units} />

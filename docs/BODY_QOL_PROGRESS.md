@@ -63,7 +63,7 @@ explicit observation view rather than an invented form score.
 - [x] 36. Toggle automatic map following so the route can be inspected.
 - [x] 37. Show GPS accuracy and stop failed location tracking cleanly.
 - [x] 38. Cancel demo/replay timers on restart, finish and page exit.
-- [ ] 39. Keep demonstration routes out of real activity history.
+- [x] 39. Keep demonstration routes out of real activity history.
 - [ ] 40. Confirm and undo a manually logged run or walk.
 
 ## Body progress
