@@ -129,7 +129,7 @@ export function RunPage() {
   const replayEnd = useRef<ReturnType<typeof setTimeout> | null>(null)
   const stopPlayback = () => { if (playback.current) clearInterval(playback.current); if (replayEnd.current) clearTimeout(replayEnd.current); playback.current = null; replayEnd.current = null }
   const stopGps = () => { gpsGeneration.current++; if (watch.current !== null) navigator.geolocation.clearWatch(watch.current); watch.current = null; autoPaused.current = null }
-  useEffect(() => () => { stopPlayback(); stopGps() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => { stopPlayback(); stopGps() }, [])
   const pauseStart = useRef(0)
   const spoken = useRef(0)
   const finishBtn = useRef<HTMLButtonElement>(null)
