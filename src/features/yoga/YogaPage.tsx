@@ -116,7 +116,8 @@ export function YogaPage() {
   const [elapsed, setElapsed] = useState(0)
   const [focus, setFocus] = useState(poses[0].id)
   const [poseSearch, setPoseSearch] = useState('')
-  const matchingPoses = searchYogaPoses(poseSearch)
+  const [favouritePosesOnly, setFavouritePosesOnly] = useState(false)
+  const matchingPoses = searchYogaPoses(poseSearch).filter(p => !favouritePosesOnly || store.favs?.includes(p.id))
   const goRef = useRef<HTMLButtonElement>(null)
   const breath = store.breath
   const length = flowSeconds(current, breath)
@@ -283,6 +284,7 @@ export function YogaPage() {
         {on('sanskrit') && <p className="yg-sanskrit">{focusPose.sanskrit}</p>}
         {on('benefits') && <p className="yg-benefit">✦ {focusPose.benefit}</p>}
         <p className="yg-cue">{focusPose.cue}</p>
+        <div className="studio-chip-row"><button type="button" className="studio-chip" aria-pressed={!!store.favs?.includes(focusPose.id)} onClick={() => setStore(s => ({ ...s, favs: s.favs?.includes(focusPose.id) ? s.favs.filter(id => id !== focusPose.id) : [...(s.favs ?? []), focusPose.id] }))}>{store.favs?.includes(focusPose.id) ? '★ Favourite pose' : '☆ Favourite pose'}</button><button type="button" className="studio-chip" aria-pressed={favouritePosesOnly} onClick={() => setFavouritePosesOnly(value => !value)}>Favourite poses only</button></div>
         <label>Find a pose<input className="studio-input" type="search" aria-label="Search yoga poses" maxLength={100} value={poseSearch} onChange={event => setPoseSearch(event.target.value)} /></label>
         <p className="studio-empty" role="status">{matchingPoses.length} matching poses{!matchingPoses.length && <button type="button" className="studio-chip" onClick={() => setPoseSearch('')}>Clear pose search</button>}</p>
         <div className="yg-pose-chips">
