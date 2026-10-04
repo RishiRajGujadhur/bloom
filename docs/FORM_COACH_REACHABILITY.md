@@ -31,3 +31,5 @@ Each improvement is committed and pushed separately.
 - [x] 14. provide a slow-motion reference for learning a movement at your own pace
 
 - [x] 15. light the reference person clearly for readable arm and torso depth
+
+- [x] 16. confirm finishing while pausing the workout to prevent accidental exits
