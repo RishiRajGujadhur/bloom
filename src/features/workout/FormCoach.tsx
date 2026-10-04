@@ -66,6 +66,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const countdownAt = useRef<number | null>(null)
   const [useCountdown, setUseCountdown] = useState(true)
   const [encouragement, setEncouragement] = useState(true)
+  const [workoutPaused, setWorkoutPaused] = useState(false)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [settingsSearch, setSettingsSearch] = useState('')
   const [showReference, setShowReference] = useState(true)
@@ -160,7 +161,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   }, [])
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
-    countdownAt.current = null; setCountdown(3)
+    countdownAt.current = null; setCountdown(3); setWorkoutPaused(false)
     boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); goalAlerted.current = false; counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)
     motion.current = emptyMotion(); setMetrics(motion.current); activity.current = { active: 0, rest: 0, powers: [], early: [], recent: [] }; compensation.current = { frames: 0, changed: 0 }; timedXP.current = { good: 0, total: 0, streak: 0 }; setFlowXP(0); setLabel('')
   }
@@ -296,9 +297,11 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
         if (hands.some((p) => p.x >= box.left - 4 && p.x <= box.right + 4 && p.y >= box.top - 4 && p.y <= box.bottom + 4)) { hovered = button.dataset.gesture!; break }
       }
     }
+    actionRef.current.pauseWorkout = () => setWorkoutPaused(value => !value)
     const dwell = gestureTick(gestureState.current, hovered, dt)
     gestureState.current = dwell.state; setGesture({ id: hovered, progress: dwell.progress, latched: dwell.state.latched })
     if (dwell.action) { actionRef.current[dwell.action]?.(); return }
+    if (workoutPaused && countdownAt.current !== null) countdownAt.current += dt * 1000
     const candidate = upperBaseline(lm)
     if (!baseline.current && candidate && !hovered) {
       const initial = samples.current[0]
@@ -314,11 +317,11 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     const aligned = alignment(lm, baseline.current); setBalance(aligned)
     const trackingValid = accessible ? upperVisible(lm) : exerciseVisible(exercise.current, lm)
     setTrackingPaused(!trackingValid)
-    if (hovered || (accessible && !baseline.current) || !trackingValid) {
+    if (workoutPaused || hovered || (accessible && !baseline.current) || !trackingValid) {
       setFault(null)
       counter.current.phase = 'up'; hold.current.last = 0
       motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current)
-      setLabel(hovered ? 'Gesture control · counting held' : !trackingValid ? accessible ? 'Show head, shoulders and both arms' : 'Keep exercise joints visible' : 'Stay comfortably still to calibrate')
+      setLabel(workoutPaused ? 'Workout paused' : hovered ? 'Gesture control · counting held' : !trackingValid ? accessible ? 'Show head, shoulders and both arms' : 'Keep exercise joints visible' : 'Stay comfortably still to calibrate')
       return
     }
     if (countdownAt.current === null) countdownAt.current = at
@@ -477,7 +480,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       <div className="fc-center">
         <div ref={panel} className={`fc-split ${focus ? "fc-workout-focused" : ""} ${showReference && (viewMode !== "advanced" || options.reference) && ex !== "observe" ? "" : "fc-no-reference"}`}><div className="fc-camera-panel" aria-label="Camera training view">
           <div className="fc-view" data-matrix-native><div className="fc-scene" style={{ transform: options.autoFrame ? `translate(${framing.x * 100}%,${framing.y * 100}%) scale(${framing.scale})` : undefined }}><video ref={video} className="fc-video" playsInline muted hidden={mode !== 'camera' && mode !== 'loading'} aria-label="Mirrored workout camera" /><canvas ref={maskCanvas} className="fc-background-mask" hidden={!options.dimming || mode !== 'camera'} aria-hidden="true" /><canvas ref={canvas} className="fc-canvas" width={640} height={480} aria-label="Live skeletal joint overlay" />
-            {viewMode === "game" && <CoachBattle frame={trailFrames.at(-1)} frames={trailFrames} active={ready && !trackingPaused && calibration >= 1 && countdown === 0} demo={mode === 'demo'} source={mode} mirror={mode === 'camera'} handControls={gestures} onExercise={change} onReward={onReward} onActivity={setGameActivity} />}
+            {viewMode === "game" && <CoachBattle frame={trailFrames.at(-1)} frames={trailFrames} active={ready && !workoutPaused && !trackingPaused && calibration >= 1 && countdown === 0} demo={mode === 'demo'} source={mode} mirror={mode === 'camera'} handControls={gestures} onExercise={change} onReward={onReward} onActivity={setGameActivity} />}
             {ready && options.battery && <span className="fc-battery-badge">Battery saver · 10 fps · background focus and finger inference held</span>}
             {ready && viewMode === 'advanced' && ex !== 'observe' && options.ghost && ghost && ghostFrame(ghost, metrics.seconds) && <CoachGhost exercise={ex} pose={ghostFrame(ghost, metrics.seconds)!} mirror={mode === 'camera'} />}
             {ready && viewMode !== 'basic' && options.reaction && drill.cueAt > 0 && <div className={`fc-reaction ${drill.hit ? 'hit' : ''}`} style={{ left: `${(mode === 'camera' ? drill.side === 15 ? .7 : .3 : drill.side === 15 ? .3 : .7) * 100}%` }} role="status">{drill.hit ? '✓' : '●'}</div>}
@@ -489,10 +492,10 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
             {focus && viewMode === 'advanced' && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}
             {!focus && ready && options.extension && ['boxing', 'karate', 'kungFu'].includes(ex) && combat.deceleration > 2 && Math.max(jointAngles.left ?? 0, jointAngles.right ?? 0) > 175 && <span className="fc-extension-cue">Near full projected elbow extension during rapid slowdown</span>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
-            {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{corrections && fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{countdown > 0 && useCountdown && <button type="button" onClick={() => { countdownAt.current = performance.now() - 3000; setCountdown(0) }}>Skip countdown</button>}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
+            {ready && <><span className="fc-angle">{RULES[ex].name} · {label}</span>{corrections && fault && <span className="fc-fault">{fault}</span>}<div className="fc-camera-controls" aria-label="Hand-hover controls">{control('pauseWorkout', workoutPaused ? 'Resume' : 'Pause', () => setWorkoutPaused(value => !value))}{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', finish)}{countdown > 0 && useCountdown && <button type="button" onClick={() => { countdownAt.current = performance.now() - 3000; setCountdown(0) }}>Skip countdown</button>}{focus && control('exit', 'Exit fullscreen', exitFocus)}</div></>}
           </div>
         </div>
-        {(viewMode === 'game' || showReference && (viewMode !== 'advanced' || options.reference)) && (ex !== 'observe' || viewMode === 'game') && <CoachReference activity={viewMode === 'game' ? gameActivity || undefined : undefined} exercise={ex === 'observe' ? 'seatedPress' : ex} anglesVisible={viewMode === 'advanced' && options.angles} lineage={lineage} paused={options.autoPause && trackingPaused} battery={options.battery} />}</div>
+        {(viewMode === 'game' || showReference && (viewMode !== 'advanced' || options.reference)) && (ex !== 'observe' || viewMode === 'game') && <CoachReference activity={viewMode === 'game' ? gameActivity || undefined : undefined} exercise={ex === 'observe' ? 'seatedPress' : ex} anglesVisible={viewMode === 'advanced' && options.angles} lineage={lineage} paused={workoutPaused || options.autoPause && trackingPaused} battery={options.battery} />}</div>
         {viewMode === 'advanced' && options.angles && <div className="fc-live-angles">Projected angles · Elbows L {jointAngles.left ?? '—'}° / R {jointAngles.right ?? '—'}° · Wrists L {jointAngles.leftWrist ?? '—'}° / R {jointAngles.rightWrist ?? '—'}°</div>}
         <div hidden={!showAlignment} className="fc-asymmetry"><strong>Asymmetry Alert <small>silent · relative to your neutral position</small></strong><div className="fc-balance-track" role="meter" aria-label="Upper-body asymmetry" aria-valuemin={-100} aria-valuemax={100} aria-valuenow={Math.round((balance?.value ?? 0) * 100)} aria-valuetext={silentStatus}><i style={{ left: `${50 + (balance?.value ?? 0) * 45}%`, background: balance?.alert ? '#ffd43b' : '#5dffc0' }} /></div><span>{silentStatus}</span></div>
         {ready && options.autoPause && trackingPaused && <p role="status" className="fc-error">Tracking and pacing paused. Return your head and arms to the frame to resume.</p>}
