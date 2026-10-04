@@ -293,11 +293,13 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     if (gestures && mirror && canvas.current && panel.current) {
       const feed = canvas.current.getBoundingClientRect()
       const hands = [15, 16].filter((i) => visible(lm[i]) && (lm[i].visibility ?? 1) >= .7).map((i) => ({ x: feed.left + (1 - lm[i].x) * feed.width, y: feed.top + lm[i].y * feed.height }))
+      const hits = new Set<string>()
       for (const button of panel.current.querySelectorAll<HTMLButtonElement>('[data-gesture]')) {
         if (button.disabled) continue
         const box = button.getBoundingClientRect()
-        if (hands.some((p) => p.x >= box.left + 7 && p.x <= box.right - 7 && p.y >= box.top + 7 && p.y <= box.bottom - 7)) { hovered = button.dataset.gesture!; break }
+        if (hands.some((p) => p.x >= box.left + 7 && p.x <= box.right - 7 && p.y >= box.top + 7 && p.y <= box.bottom - 7)) { hits.add(button.dataset.gesture!) }
       }
+      hovered = hits.size === 1 ? [...hits][0] : null
     }
     actionRef.current.pauseWorkout = () => setWorkoutPaused(value => !value)
     const dwell = gestureTick(gestureState.current, hovered, dt)

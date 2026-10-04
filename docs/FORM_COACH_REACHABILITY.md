@@ -11,3 +11,5 @@ Each improvement is committed and pushed separately.
 - [x] 4. require hands inside target borders instead of overlapping hit halos
 
 - [x] 5. use confident wrist positions to avoid finger jitter activations
+
+- [x] 6. ignore ambiguous two-hand selections instead of choosing the wrong action
