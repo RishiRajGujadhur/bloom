@@ -91,6 +91,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   const [rpe, setRpe] = useState(8)
   const [restLeft, setRestLeft] = useState(0)
   const [newPrs, setNewPrs] = useState<string[]>([])
+  const [removedSet, setRemovedSet] = useState<{ workoutId: string; set: WSet; index: number } | null>(null)
   const [chartLift, setChartLift] = useState('squat')
   const [target, setTarget] = useState(100)
   const logBtn = useRef<HTMLButtonElement>(null)
@@ -158,6 +159,17 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
     logActivity('workout', { templateId: active.templateId, sets: active.sets.length })
     burst(null, 'stars')
     setRestLeft(0)
+  }
+  const removeSet = (index: number) => {
+    if (!active?.sets[index]) return
+    setRemovedSet({ workoutId: active.id, set: active.sets[index], index })
+    setStore(s => ({ ...s, workouts: s.workouts.map(w => w.id === active.id ? { ...w, sets: w.sets.filter((_, i) => i !== index) } : w) }))
+  }
+  const undoSet = () => {
+    if (!removedSet) return
+    const removed = removedSet
+    setStore(s => ({ ...s, workouts: s.workouts.map(w => { if (w.id !== removed.workoutId || w.sets.some(row => row.at === removed.set.at && row.liftId === removed.set.liftId)) return w; const sets = [...w.sets]; sets.splice(Math.min(removed.index, sets.length), 0, removed.set); return { ...w, sets } }) }))
+    setRemovedSet(null)
   }
 
   useTabTitle(restLeft > 0 ? `⏱ Rest ${Math.floor(restLeft / 60)}:${String(restLeft % 60).padStart(2, '0')}` : active ? `🏋️ ${active.sets.length} sets` : '', 'Workouts', 'workouts')
@@ -332,12 +344,13 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
                   {s.seconds !== undefined ? `${s.seconds}s` : `${s.weight} kg × ${s.reps}`}
                 </strong>
                 {s.rpe && <small>@{s.rpe}</small>}
-                <button type="button" className="wo-del-set" aria-label="Remove this set" onClick={() => setStore((st) => ({ ...st, workouts: st.workouts.map((w) => (w.id === active.id ? { ...w, sets: w.sets.filter((_, j) => j !== i) } : w)) }))}>
+                <button type="button" className="wo-del-set" aria-label="Remove this set" onClick={() => removeSet(i)}>
                   ✕
                 </button>
               </li>
             ))}
           </ul>
+          {removedSet && <p role="status">Set removed. <button type="button" className="studio-chip" onClick={undoSet}>Undo removed set</button></p>}
           {newPrs.length > 0 && (
             <div className="wo-prs">
               <Trophy size={16} /> {newPrs.join(' · ')}
