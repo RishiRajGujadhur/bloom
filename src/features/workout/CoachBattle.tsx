@@ -14,7 +14,7 @@ export function CoachBattle({ frame, active, demo, mirror, onExercise }: { frame
   }, [frame, active, paused, mode])
   const reset = () => { const next = newCombat(); current.current = next; setState(next); setPaused(false) }
   return <div className="cb-root" data-mirror={mirror}>
-    <div className="cb-menu"><label>Seated camera arcade<select aria-label="Seated camera arcade" value={mode} onChange={e => { const next = e.target.value as CombatMode | ''; reset(); setMode(next); if (next) onExercise('boxing') }}><option value="">Off</option>{COMBAT_MODES.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}</select></label>
+    <div className="cb-menu"><label>Seated camera arcade<select aria-label="Seated camera arcade" value={mode} onChange={e => { const next = e.target.value as CombatMode | ''; reset(); setMode(next); if (next) onExercise(next === 'cloud' ? 'taiChi' : 'boxing') }}><option value="">Off</option>{COMBAT_MODES.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}</select></label>
       {mode && <><p>{COMBAT_MODES.find(m => m.id === mode)?.cue}</p><button type="button" onClick={() => { current.current.pose = null; setPaused(p => !p) }}>{paused ? 'Resume battle' : 'Pause battle'}</button><button type="button" onClick={reset}>Restart battle</button><p role="status">{demo ? 'Demo · no rewards' : !active ? 'Start camera and calibrate to play' : paused ? 'Battle paused' : 'Camera movement estimates'} · {state.hits} strikes · {state.slips} slips · chain {state.chain} · cue match {state.grade ?? '—'}%</p></>}
     </div>
   </div>
