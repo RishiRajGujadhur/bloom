@@ -67,7 +67,7 @@ export function Studio({
       // A page that claimed the key (e.g. a quiz answering with 1–4) takes priority.
       if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return
       const t = e.target as HTMLElement | null
-      if (t?.closest('input, textarea, select, [contenteditable="true"]')) return
+      if (t?.closest('input, textarea, select, dialog, [contenteditable="true"]')) return
       const n = Number(e.key)
       if (n >= 1 && n <= 9 && visible[n - 1]) { e.preventDefault(); setActive(visible[n - 1].id) }
     }

@@ -166,7 +166,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
   logRef.current = logSet
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() !== 'l' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select')) return
+      if (e.key.toLowerCase() !== 'l' || e.ctrlKey || e.metaKey || e.altKey || (e.target as HTMLElement | null)?.closest?.('input, textarea, select, dialog')) return
       logRef.current()
     }
     window.addEventListener('keydown', onKey)

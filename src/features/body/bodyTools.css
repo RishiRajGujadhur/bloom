@@ -6,4 +6,5 @@
 .body-coach-dialog{width:min(1250px,100%);max-height:calc(100dvh - 40px);overflow:auto;overscroll-behavior:contain;border-radius:22px;padding:18px;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-color)}
 .body-coach-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px}.body-coach-dialog h2{font-size:18px;margin:0}.body-coach-dialog>p{font-size:12px}
 .body-coach-dialog .fc{width:100%}
+.body-coach-dialog::backdrop{background:#000a}.body-coach-dialog{margin:auto}
 @media(max-width:650px){.body-coach-backdrop{padding:6px}.body-coach-dialog{max-height:calc(100dvh - 12px);padding:10px}.body-coach-dialog>header{align-items:start}.body-coach-dialog .fc-stage{grid-template-columns:minmax(0,1fr)}}
