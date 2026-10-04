@@ -39,13 +39,18 @@ const say = (t: string) => {
 function BreathCue({ seconds, running }: { seconds: number; running: boolean }) {
   const el = useRef<HTMLDivElement>(null)
   const [label, setLabel] = useState('Inhale')
+  useEffect(() => {
+    if (!running) return
+    const start = performance.now()
+    setLabel('Inhale')
+    const timer = setInterval(() => setLabel(Math.floor((performance.now() - start) / (seconds * 500)) % 2 ? 'Exhale' : 'Inhale'), 200)
+    return () => clearInterval(timer)
+  }, [seconds, running])
   useLayoutEffect(() => {
     if (!el.current || !running || prefersReducedMotion()) return
     const tl = gsap
       .timeline({ repeat: -1 })
-      .call(() => setLabel('Inhale'))
       .fromTo(el.current, { scale: 0.7 }, { scale: 1.15, duration: seconds / 2, ease: 'sine.inOut' })
-      .call(() => setLabel('Exhale'))
       .to(el.current, { scale: 0.7, duration: seconds / 2, ease: 'sine.inOut' })
     return () => void tl.kill()
   }, [seconds, running])

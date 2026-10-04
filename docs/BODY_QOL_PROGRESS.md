@@ -48,7 +48,7 @@ explicit observation view rather than an invented form score.
 - [x] 27. Favourite poses and filter the library to favourites.
 - [x] 28. Navigate directly to the previous or next pose in a flow.
 - [x] 29. Undo removal of a custom-flow step.
-- [ ] 30. Keep inhale/exhale text useful with reduced motion enabled.
+- [x] 30. Keep inhale/exhale text useful with reduced motion enabled.
 
 ## Stretch
 
