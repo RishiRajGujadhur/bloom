@@ -117,6 +117,7 @@ export function YogaPage() {
   const practised = useRef(0), navigated = useRef(false)
   const [focus, setFocus] = useState(poses[0].id)
   const [poseSearch, setPoseSearch] = useState('')
+  const [removedStep, setRemovedStep] = useState<{ step: Step; index: number } | null>(null)
   const [favouritePosesOnly, setFavouritePosesOnly] = useState(false)
   const matchingPoses = searchYogaPoses(poseSearch).filter(p => !favouritePosesOnly || store.favs?.includes(p.id))
   const goRef = useRef<HTMLButtonElement>(null)
@@ -185,6 +186,7 @@ export function YogaPage() {
     setElapsed(flowStepStart(current, breath, index)); setRunning(false); lastIndex.current = -1; navigated.current = true
   }
   const setDraft = (steps: Step[]) => setStore((s) => ({ ...s, draft: { ...s.draft, steps } }))
+  const undoStep = () => { if (!removedStep) return; const removed = removedStep; const next = [...draft.steps]; if (!next.some(row => row.key === removed.step.key)) { next.splice(Math.min(removed.index, next.length), 0, removed.step); setDraft(next) }; setRemovedStep(null) }
   const onDragEnd = (e: DragEndEvent) => {
     const a = String(e.active.id)
     const over = e.over ? String(e.over.id) : null
@@ -263,12 +265,13 @@ export function YogaPage() {
                 key={s.key}
                 step={s}
                 onBreaths={(n) => setDraft(draft.steps.map((x) => (x.key === s.key ? { ...x, breaths: n } : x)))}
-                onRemove={() => setDraft(draft.steps.filter((x) => x.key !== s.key))}
+                onRemove={() => { setRemovedStep({ step: s, index: draft.steps.findIndex(row => row.key === s.key) }); setDraft(draft.steps.filter((x) => x.key !== s.key)) }}
               />
             ))}
           </SortableContext>
           {!draft.steps.length && <p className="studio-empty">Drag poses here.</p>}
         </FlowDrop>
+        {removedStep && <p role="status">{poseById(removedStep.step.poseId).name} removed. <button type="button" className="studio-chip" onClick={undoStep}>Undo removed pose</button></p>}
         <label>Find a yoga pose<input className="studio-input" type="search" aria-label="Search yoga poses" maxLength={100} value={poseSearch} onChange={event => setPoseSearch(event.target.value)} /></label>
         <Rail label="Pose library">
           {matchingPoses.map((p) => (
