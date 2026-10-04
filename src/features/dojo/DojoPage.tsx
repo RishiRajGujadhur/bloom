@@ -1,3 +1,4 @@
+import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -102,6 +103,8 @@ function Belt({ reps }: { reps: number }) {
 export function DojoPage() {
   const [s, setS] = useState<Store>(() => ({ ...start, ...readStore(KEY, start) }))
   const save = (p: Partial<Store>) => setS((c) => { const n = { ...c, ...p }; writeStore(KEY, n); return n })
+  const seatedMode = useBodySeated()
+  useEffect(() => { if (s.seated !== seatedMode) { save({ seated: seatedMode }); setPlaying(false) } }, [seatedMode, s.seated])
   const [tab, setTab] = useState('techniques')
   const [kind, setKind] = useState<Kind | 'all'>('all')
   const [pick, setPick] = useState<Technique>(techniques[0])
@@ -155,7 +158,7 @@ export function DojoPage() {
       <div className="studio-card dojo-filters">
         {on('seated') && (
           <label>
-            <input type="checkbox" checked={s.seated} onChange={(e) => save({ seated: e.target.checked })} /> Seated / wheelchair dojo
+            <input type="checkbox" checked={s.seated} onChange={(e) => { setBodySeated(e.target.checked); save({ seated: e.target.checked }) }} /> Seated / wheelchair dojo
           </label>
         )}
         {on('styleFilter') && (

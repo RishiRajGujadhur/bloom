@@ -1,3 +1,4 @@
+import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useTabTitle } from '../../utils/useTabTitle'
 import Fuse from 'fuse.js'
@@ -135,6 +136,7 @@ export function ExercisePage() {
       writeStore(KEY, next)
       return next
     })
+  const seatedMode = useBodySeated()
   const [search, setSearch] = useState('')
   const [area, setArea] = useState<Area | 'all'>('all')
   const [position, setPosition] = useState<Position | 'all'>('all')
@@ -156,6 +158,12 @@ export function ExercisePage() {
     setPickState(e)
     try { localStorage.setItem('bloom-exercise-pick', e.id) } catch { /* optional */ }
   }
+  useEffect(() => {
+    if (!!prefs.wheelchair === seatedMode) return
+    setPrefs({ wheelchair: seatedMode }); setPlaying(false); setCount(0)
+    if (seatedMode && !pick.wheelchair) setPick(seatedExercises[0])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- shared preference changes
+  }, [seatedMode])
   const [muscle, setMuscle] = useState<Muscle | 'all'>('all')
   const [equipment, setEquipment] = useState<Exercise['equipment'] | 'all'>(
     'all',
@@ -261,6 +269,7 @@ export function ExercisePage() {
               type="checkbox"
               checked={!!prefs.wheelchair}
               onChange={(e) => {
+                setBodySeated(e.target.checked)
                 setPrefs({ wheelchair: e.target.checked })
                 setPlaying(false)
                 setCount(0)

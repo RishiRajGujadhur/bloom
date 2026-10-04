@@ -1,3 +1,4 @@
+import { setBodySeated } from '../body/bodyPreferences'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
 import { OneEuroFilter } from '1eurofilter'
@@ -53,7 +54,7 @@ function RepRing({ count, target, timed }: { count: number; target: number; time
 export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialExercise }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: { id: string; damage: number; xp: number }) => void; bodyweight?: number; initialExercise?: Exercise }) {
   const [options, setOptions] = useState(loadCoachOptions)
   useEffect(() => { try { localStorage.setItem('bloom-coach-settings-v1', JSON.stringify(options)) } catch { /* optional */ } }, [options])
-  const [accessible, setAccessible] = useState(() => initialExercise && RULES[initialExercise].upper ? true : preference())
+  const [accessible, setAccessible] = useState(() => initialExercise && initialExercise !== 'observe' && RULES[initialExercise].upper ? true : preference())
   const [ex, setEx] = useState<Exercise>(() => initialExercise ?? (preference() ? 'seatedTwist' : 'squat'))
   const [mode, setMode] = useState<Mode>('idle')
   const [reps, setReps] = useState<Rep[]>([])
@@ -194,7 +195,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     if (counter.current.reps.length || Math.floor(hold.current.seconds)) logSet()
     rom.current.active = false; setRomStatus('Optional: calibrate your comfortable movement range'); exercise.current = next; setEx(next); setBpm(RULES[next].bpm ?? 45); resetSet(next)
     if (RULES[next].upper && !accessible) {
-      setAccessible(true); try { localStorage.setItem('bloom-coach-accessible', 'true') } catch { /* optional */ }
+      setAccessible(true); setBodySeated(true)
       recalibrate()
     }
   }
@@ -217,7 +218,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const toggleAccessible = () => {
     const next = !accessible
     change(next ? 'seatedTwist' : 'squat'); setAccessible(next)
-    try { localStorage.setItem('bloom-coach-accessible', String(next)) } catch { /* optional */ }
+    setBodySeated(next)
     recalibrate()
   }
   const enterFocus = () => {
