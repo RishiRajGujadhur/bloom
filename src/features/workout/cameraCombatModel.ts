@@ -116,6 +116,6 @@ export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: 
   const hurt = defence && ((resolve && mode !== 'sword' && !shield) || swordMiss)
   const targetPoint = mode === 'sword' ? swordPose(pose, swordHand)?.tip : pose[next.hand]
   const rhythm = bpm > 0 && next.event && targetPoint ? rhythmHit(next.elapsed, bpm, targetPoint, Math.abs(pose[11].x - pose[12].x)) : null
-  const damage = next.event && (next.grade ?? 0) >= 70 && (!rhythm || rhythm.timing >= 50 && rhythm.precision >= 50) ? Math.round(35 * Math.min(2, 1 + next.chain * .05) * (1 + Math.min(.5, next.speed * .1))) : 0
+  const damage = next.event && (next.grade ?? 0) >= 70 && (!rhythm || rhythm.timing >= 50 && rhythm.precision >= 50) ? Math.round(35 * Math.min(2, 1 + next.chain * .05) * (1 + Math.min(.5, next.speed * .1)) * ((next.grade ?? 0) >= 90 ? 1.5 : 1)) : 0
   return { ...next, damage, bossHp: Math.max(0, state.bossHp - damage), hp: Math.max(0, state.hp - (hurt ? 10 : 0)), attack: resolve ? cycle : state.attack, neutralSlope, shield }
 }

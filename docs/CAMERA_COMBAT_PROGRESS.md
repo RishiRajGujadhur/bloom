@@ -13,7 +13,7 @@ committed and pushed independently. Demo sessions never award progression.
 - [x] 07. Pixel-art camera boss battles with movement-driven damage.
 - [x] 08. Classical melody rhythm targets and timing/position grades.
 - [x] 09. Seated dodge attacks, guard shields and player HP.
-- [ ] 10. Retro knuckle/sword hit sparks and critical numbers.
+- [x] 10. Retro knuckle/sword hit sparks and critical numbers.
 - [ ] 11. Idempotent real-camera loot, XP, inventory and battle journal.
 
 Validation pending.
