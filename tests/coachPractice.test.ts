@@ -18,3 +18,14 @@ test('seated lateral raises count arm elevation rather than elbow bends', () => 
  expect(counter.reps).toHaveLength(1)
  expect(readUpper('lateralRaise',upperPose('lateralRaise',.5)).metric).toBeCloseTo(90)
 })
+
+import { emptyTempo, tempoTick, practicePhase } from '../src/features/workout/coachPractice'
+test('reference tempo allocates one second to lift and three to return', () => {
+ expect(practicePhase(1,'1:3')).toBe(.5); expect(practicePhase(2.5,'1:3')).toBe(.75); expect(practicePhase(4,'1:3')).toBe(0)
+})
+test('tempo measures a full cycle and discards interrupted partial movements', () => {
+ let state=emptyTempo(), last: ReturnType<typeof tempoTick>['result']=null
+ for(let at=100;at<=4100;at+=100) { const t=(at-100)/1000; const metric=t<=1?180-90*t:90+90*(t-1)/3; const tick=tempoTick(state,metric,at,110,160,'1:3'); state=tick.state; if(tick.result) last=tick.result }
+ expect(last).not.toBeNull(); expect(last!.lift).toBeCloseTo(1,1); expect(last!.lower).toBeGreaterThan(2); expect(last!.score).toBeGreaterThan(85)
+ const partial=tempoTick(emptyTempo(),180,100,110,160,'1:3'); const bent=tempoTick(partial.state,90,200,110,160,'1:3'); expect(tempoTick(bent.state,180,1500,110,160,'1:3').result).toBeNull()
+})

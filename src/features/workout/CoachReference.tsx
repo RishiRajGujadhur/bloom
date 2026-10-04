@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { jointCallouts, BONES, referencePose, RULES, UPPER_BONES, type Exercise, type Lineage } from './formModel'
 import { arcadeReferencePose } from './arcadeReference'
 import { COMBAT_MODES, type CombatMode } from './cameraCombatModel'
+import { practicePhase, type TempoPreset } from './coachPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
-export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false, activity }: { activity?: CombatMode; exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
+export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false, activity, tempo = 'free' }: { tempo?: TempoPreset; activity?: CombatMode; exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const savedPhase = useRef(0)
   useEffect(() => { savedPhase.current = 0 }, [exercise, activity, lineage])
@@ -58,7 +59,7 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
         if (now - renderedAt < (battery ? 125 : 50)) { raf = requestAnimationFrame(loop); return }
         if (!paused && renderedAt) phaseTime += now - renderedAt
         renderedAt = now; savedPhase.current = phaseTime
-        const phase = prefersReducedMotion() ? .25 : phaseTime / (slow ? 8000 : 4000) % 1
+        const phase = prefersReducedMotion() ? .25 : practicePhase(phaseTime / 1000, activity ? 'free' : tempo, slow)
         const pose = activity ? arcadeReferencePose(activity, phase, lineage) : referencePose(exercise, phase, lineage)
         setAngles(jointCallouts(pose))
         if (RULES[exercise].upper) { pose.push({ x: (pose[11].x + pose[12].x) / 2, y: (pose[11].y + pose[12].y) / 2, z: 0 }, { x: .5, y: .69, z: 0 }) }
@@ -85,6 +86,6 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       raf = requestAnimationFrame(loop)
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
-  }, [exercise, lineage, paused, battery, activity, wireframe, angle, slow])
+  }, [exercise, lineage, paused, battery, activity, wireframe, angle, slow, tempo])
   return <div className="fc-reference"><details className="fc-reference-options" open={anglesVisible || undefined}><summary>Reference options</summary><label className="fc-reference-style"><input type="checkbox" checked={slow} onChange={event => setSlow(event.target.checked)} /> Slow reference movement</label><label className="fc-reference-style">View angle <select aria-label="Reference view angle" value={angle} onChange={event => setAngle(event.target.value)}><option value="front">Front</option><option value="threeQuarter">Three-quarter</option><option value="side">Side</option></select></label><label className="fc-reference-style">Reference style <select aria-label="Reference style" value={wireframe ? "skeleton" : "person"} onChange={event => setWireframe(event.target.value === "skeleton")}><option value="person">3D person</option><option value="skeleton">Skeletal guide</option></select></label></details><span>{activity ? COMBAT_MODES.find(mode => mode.id === activity)?.name : "3D movement reference"}</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <details className="fc-reference-angle-details"><summary>Joint angle details</summary><dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Wrist L / R</dt><dd>{angles.leftWrist ?? '—'}° / {angles.rightWrist ?? '—'}°</dd></div>{!RULES[exercise].upper && <div><dt>Knee L / R</dt><dd>{angles.leftKnee ?? '—'}° / {angles.rightKnee ?? '—'}°</dd></div>}<div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl></details>}<small>{activity && <>{COMBAT_MODES.find(mode => mode.id === activity)?.cue} · </>}{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
 }

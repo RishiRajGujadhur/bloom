@@ -18,3 +18,5 @@ These sources informed the choices of features; Bloom’s camera scores remain e
 - [x] 2. track seated bicep curls with either arm and elbow drift feedback
 
 - [x] 3. add camera-counted seated lateral raises and matching 3D guidance
+
+- [x] 4. add optional tempo grading and a reference that follows lift-return timing
