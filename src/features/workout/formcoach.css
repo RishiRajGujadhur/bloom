@@ -159,3 +159,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-encouragement{color:#abffd4;font-size:12px;max-width:220px}
 
 .fc-setup summary{cursor:pointer;min-height:36px;font-size:12px}.fc-setup{font-size:12px}
+
+.fc-mode-basic .fc-center,.fc-mode-game .fc-center{min-width:0}.fc-library-open .fc-center{grid-column:1}.fc-library-open .fc-library{grid-column:2;grid-row:1}.fc-stage.fc-library-open{grid-template-columns:minmax(0,1fr) minmax(150px,.28fr) minmax(150px,.25fr)}@media(max-width:860px){.fc-stage.fc-library-open{grid-template-columns:1fr}.fc-library-open .fc-library{grid-column:1;grid-row:auto}.fc-library-open .fc-center{grid-row:1}}
