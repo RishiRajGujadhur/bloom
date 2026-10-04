@@ -157,6 +157,13 @@ export function IntervalPage() {
     setElapsed(target)
     if (!running) timer.current?.pause()
   }
+  const previous = () => {
+    if (!pos || pos.index <= 0) return
+    const target = segs.slice(0, pos.index - 1).reduce((sum, segment) => sum + segment.seconds, 0)
+    timer.current?.stop(); timer.current?.start({ precision: 'seconds', startValues: { seconds: target } })
+    setElapsed(target); lastIndex.current = -1
+    if (!running) timer.current?.pause()
+  }
   const choose = (p: Program) => {
     reset()
     setProgram(p)
@@ -231,6 +238,7 @@ export function IntervalPage() {
           <button type="button" className="studio-go" data-variant="quiet" onClick={skip} aria-label="Skip segment">
             <SkipForward size={16} />
           </button>
+          <button type="button" className="studio-chip" disabled={!pos || pos.index <= 0} onClick={previous}>Previous segment</button>
           <button type="button" className="studio-go" data-variant="quiet" onClick={reset} aria-label="Reset">
             <RotateCcw size={16} />
           </button>
