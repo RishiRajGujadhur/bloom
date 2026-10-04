@@ -1,12 +1,20 @@
 import { angle, upperVisible, type P } from './formModel'
-export type CombatMode = 'chain' | 'boxing' | 'cloud'
+export type CombatMode = 'chain' | 'boxing' | 'cloud' | 'ropes' | 'doubleRopes'
 export const COMBAT_MODES: { id: CombatMode; name: string; cue: string }[] = [
   { id: 'chain', name: 'Wing Chun chain punches', cue: 'Alternate comfortable centre-line punches. Return each hand before striking again.' },
   { id: 'boxing', name: 'Boxing combos & slips', cue: 'Alternate punches and move your head gently sideways within your supported seated range.' },
   { id: 'cloud', name: 'Tai Chi Cloud Hands', cue: 'Trace comfortable circles with both arms. Keep the travel slow, continuous and synchronized.' },
+  { id: 'ropes', name: 'Shadow ropes · alternating', cue: 'Lift then lower one hand at a time. Alternate arms without forcing your shoulders.' },
+  { id: 'doubleRopes', name: 'Shadow ropes · double slams', cue: 'Raise both empty hands, then lower them together through your comfortable range.' },
 ]
-export type CombatState = { at: number; elapsed: number; pose: P[] | null; hits: number; grade: number | null; slips: number; slipHeld: boolean; centre: number | null; lastHits: number[]; lastSide: number; chain: number; event: boolean; hand: number; speed: number; guard: boolean }
-export const newCombat = (): CombatState => ({ at: 0, elapsed: 0, pose: null, hits: 0, grade: null, slips: 0, slipHeld: false, centre: null, lastHits: [0, 0], lastSide: -1, chain: 0, event: false, hand: 15, speed: 0, guard: false })
+export type CombatState = { at: number; elapsed: number; pose: P[] | null; hits: number; grade: number | null; slips: number; slipHeld: boolean; centre: number | null; lastHits: number[]; lastSide: number; chain: number; event: boolean; hand: number; speed: number; guard: boolean; velocities: number[]; acceleration: number; power: number }
+export const newCombat = (): CombatState => ({ at: 0, elapsed: 0, pose: null, hits: 0, grade: null, slips: 0, slipHeld: false, centre: null, lastHits: [0, 0], lastSide: -1, chain: 0, event: false, hand: 15, speed: 0, guard: false, velocities: [0, 0], acceleration: 0, power: 0 })
+export function ropeMotion(previous: P[], pose: P[], oldVelocity: number[], dt: number) {
+  const width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
+  const velocities = [15, 16].map(j => (pose[j].y - previous[j].y) / width * .4 / dt)
+  const accelerations = velocities.map((v, i) => Math.max(0, (v - oldVelocity[i]) / dt))
+  return { velocities, acceleration: Math.min(100, Math.max(...accelerations)), power: Math.min(1000, velocities.reduce((p, v, i) => p + 1.9 * Math.max(0, v) * accelerations[i], 0)) }
+}
 export function cloudGrade(previous: P[], pose: P[], dt: number) {
   const width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
   const speeds = [15, 16].map(j => Math.hypot(pose[j].x - previous[j].x, pose[j].y - previous[j].y) / width / dt)
@@ -28,6 +36,13 @@ export function combatTick(state: CombatState, mode: CombatMode, pose: P[], at: 
   const shift = Math.abs(pose[0].x - centre) / width, slipHeld = shift > .22
   const speeds = [15, 16].map(j => Math.hypot(pose[j].x - state.pose![j].x, pose[j].y - state.pose![j].y) / width / dt)
   const guard = [15, 16].some(j => Math.hypot(pose[j].x - pose[0].x, pose[j].y - pose[0].y) < width * 1.15)
+  if (mode === 'ropes' || mode === 'doubleRopes') {
+    const motion = ropeMotion(state.pose, pose, state.velocities, dt)
+    const crossed = [0, 1].map(i => pose[15 + i].y >= pose[13 + i].y && state.pose![15 + i].y < state.pose![13 + i].y && motion.velocities[i] > .12)
+    const side = crossed[0] ? 0 : crossed[1] ? 1 : -1
+    const event = at - Math.max(...state.lastHits) > 250 && (mode === 'doubleRopes' ? crossed.every(Boolean) : side >= 0 && side !== state.lastSide)
+    return { ...state, ...motion, at, pose, centre, elapsed: state.elapsed + dt, speed: Math.max(...speeds), guard, event, grade: event ? mode === 'doubleRopes' ? Math.round(Math.max(50, 100 - Math.abs(motion.velocities[0] - motion.velocities[1]) * 30)) : 90 : state.grade, hand: side >= 0 ? 15 + side : state.hand, hits: state.hits + Number(event), lastSide: event ? side : state.lastSide, lastHits: event ? [at, at] : state.lastHits }
+  }
   if (mode === 'cloud') {
     const measured = cloudGrade(state.pose, pose, dt)
     const grade = measured == null ? null : state.grade == null ? measured : Math.round(state.grade * .85 + measured * .15)
