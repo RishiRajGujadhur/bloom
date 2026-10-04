@@ -4,7 +4,7 @@
 - [x] 02. Advanced-only ghost replay
 - [x] 03. Game reference stays side by side
 - [x] 04. Arcade movement reference guides
-- [ ] 05. One-click air boxing
+- [x] 05. One-click air boxing
 - [ ] 06. Visible air punch tally
 - [ ] 07. Red skeleton form feedback
 - [ ] 08. Optional visual correction cues
