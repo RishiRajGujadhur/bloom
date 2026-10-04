@@ -14,7 +14,7 @@ import { ACTIVITY_KEY, Rail, Slider, Studio, StudioScene, logActivity, readStore
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { FigureSvg } from '../exercise/ExerciseFigure'
-import { flowSeconds, newStep, poseById, poses, presetFlows, searchYogaPoses, stepAt, type Flow, type Step } from './yogaModel'
+import { flowSeconds, flowStepStart, newStep, poseById, poses, presetFlows, searchYogaPoses, stepAt, type Flow, type Step } from './yogaModel'
 import '../exercise/exercise.css'
 import { Lotus } from '../showcase/Lotus'
 import { usePageActions } from '../../components/ui/PageMenu'
@@ -114,6 +114,7 @@ export function YogaPage() {
   // Keep the screen on while the session runs (Screen Wake Lock).
   useKeepAwake(running)
   const [elapsed, setElapsed] = useState(0)
+  const practised = useRef(0), navigated = useRef(false)
   const [focus, setFocus] = useState(poses[0].id)
   const [poseSearch, setPoseSearch] = useState('')
   const [favouritePosesOnly, setFavouritePosesOnly] = useState(false)
@@ -128,7 +129,7 @@ export function YogaPage() {
 
   useEffect(() => {
     if (!running) return
-    const t = setInterval(() => setElapsed((e) => e + 0.25), 250)
+    const t = setInterval(() => { practised.current += .25; setElapsed((e) => e + 0.25) }, 250)
     return () => clearInterval(t)
   }, [running])
   const lastIndex = useRef(-1)
@@ -142,7 +143,7 @@ export function YogaPage() {
   useEffect(() => {
     if (running && elapsed >= length) {
       setRunning(false)
-      logActivity('yoga', { flow: current.name, seconds: length })
+      logActivity('yoga', { flow: current.name, seconds: Math.round(practised.current), modified: navigated.current })
       burst(goRef.current, 'stars')
       if (on('voice')) say('Namaste. Take a moment to notice how you feel.')
     }
@@ -171,6 +172,7 @@ export function YogaPage() {
       /* optional */
     }
     setCurrent(f)
+    practised.current = 0; navigated.current = false
     setElapsed(0)
     lastIndex.current = -1
     setRunning(true)
@@ -178,6 +180,10 @@ export function YogaPage() {
   }
   useBodyPractice('yoga', pose.id, pose.name, () => setRunning(false))
   const draft = store.draft
+  const navigatePose = (direction: number) => {
+    const index = Math.max(0, Math.min(current.steps.length - 1, (at?.index ?? current.steps.length - 1) + direction))
+    setElapsed(flowStepStart(current, breath, index)); setRunning(false); lastIndex.current = -1; navigated.current = true
+  }
   const setDraft = (steps: Step[]) => setStore((s) => ({ ...s, draft: { ...s.draft, steps } }))
   const onDragEnd = (e: DragEndEvent) => {
     const a = String(e.active.id)
@@ -221,9 +227,11 @@ export function YogaPage() {
           <button ref={goRef} type="button" className="studio-go" onClick={() => (elapsed >= length ? play(current) : setRunning(!running))}>
             {running ? <Pause size={18} /> : <Play size={18} />} {running ? 'Pause' : elapsed > 0 && elapsed < length ? 'Resume' : 'Begin'}
           </button>
-          <button type="button" className="studio-go" data-variant="quiet" aria-label="Restart" onClick={() => (setElapsed(0), setRunning(false))}>
+          <button type="button" className="studio-go" data-variant="quiet" aria-label="Restart" onClick={() => { setElapsed(0); setRunning(false); practised.current = 0; navigated.current = false }}>
             <RotateCcw size={16} />
           </button>
+          <button type="button" className="studio-chip" disabled={(at?.index ?? current.steps.length - 1) <= 0} onClick={() => navigatePose(-1)}>Previous pose</button>
+          <button type="button" className="studio-chip" disabled={(at?.index ?? current.steps.length - 1) >= current.steps.length - 1} onClick={() => navigatePose(1)}>Next pose</button>
         </div>
         <p className="studio-empty">
           {fmt(Math.max(0, length - elapsed))} left · step {Math.min((at?.index ?? current.steps.length - 1) + 1, current.steps.length)} of {current.steps.length}

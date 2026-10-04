@@ -37,6 +37,7 @@ export const presetFlows: Flow[] = [
 
 export const newStep = (poseId: string, breaths = 2): Step => s(poseId, breaths)
 export const flowSeconds = (f: Flow, breath: number) => f.steps.reduce((t, x) => t + x.breaths * breath, 0)
+export function flowStepStart(flow: Flow, breath: number, index: number) { return flow.steps.slice(0, Math.max(0, Math.min(flow.steps.length - 1, index))).reduce((sum, step) => sum + step.breaths * breath, 0) }
 
 /** Which step is live after `elapsed` seconds. */
 export function stepAt(f: Flow, breath: number, elapsed: number) {
