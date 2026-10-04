@@ -86,3 +86,42 @@ Real device testing remains required. [Web Bluetooth](https://developer.mozilla.
 
 Digital framing crops within the original camera feed; it cannot recover limbs
 that are outside the physical camera view. It is optional and off by default.
+
+## Accuracy and device boundaries
+
+Energy, calories, fatigue, stability, strike classification and deceleration are
+camera-based estimates or movement proxies. They do not measure impact force,
+joint stress, muscle activation or clinical balance. Wheelchair mode uses a
+personal upper-body range and a seated activity estimate; it does not classify
+wheelchair hardware or infer hidden pelvis/leg motion.
+
+The reference models and Yang/Chen variations are illustrative movement guides,
+not certified lineage instruction or a guarantee of perfect form. Reaction and
+deceleration timing are limited by camera sampling and device performance.
+
+Watch vibration requires a compatible companion exposing a writable Bluetooth
+characteristic. A second camera requires manual local pairing and calibration;
+its depth estimate cannot guarantee flawless 3D reconstruction. Both integrations
+remain pending physical-device validation.
+
+Final automated validation (2026-10-04): production build and all 27 movement,
+metric, history, reward and integration-helper tests passed. All eight desktop
+and mobile Form Coach browser checks passed, covering both-hand dwell controls,
+logging, fullscreen, tracking loss, camera denial, personal calibration and
+preference persistence. Demo workouts do not enter real session history.
+
+The real model/WASM offline test also passed: prepare online, verify cached
+page dependencies, disconnect networking, reload, initialize pose tracking and
+finish the camera session. It uses a blank synthetic camera stream, so it
+verifies offline initialization and frame handling rather than human accuracy.
+This test exposed and fixed first-visit dependency caching and preload-header
+cache matching. The duplicate mobile download test is intentionally skipped.
+
+Targeted workout lint checks passed. Desktop and mobile screenshots are saved
+under `docs/screenshots/form-coach-expanded-*.png`. Feature implementation and
+follow-up fixes are recorded in separate Git commits.
+
+Screenshot review exposed narrow-screen overflow inherited from the workout
+navigation grid. The shared workout column and coach controls now shrink to the
+viewport; desktop/mobile calibration tests passed again with a camera-button
+viewport assertion after this fix.

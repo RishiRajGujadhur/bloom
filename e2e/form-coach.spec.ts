@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import { upperPose } from '../src/features/workout/formModel'
 
 test.use({ serviceWorkers: 'block' })
+test.setTimeout(60000)
 test.beforeEach(async ({ page }) => { await page.addInitScript(() => { localStorage.setItem('bloom-welcome-v1', '{}'); localStorage.setItem('bloom-coach-accessible', 'true') }) })
 
 test('accessible library, visual metrics, demo and camera-only fullscreen are usable', async ({ page }) => {
@@ -57,6 +58,10 @@ test('either-hand hovering changes exercises, logs one set, and finishes from fu
   await send(upperPose('seatedTwist', .5)); await page.waitForTimeout(900)
   await send(upperPose('seatedTwist', 0))
   await expect(page.locator('.fc-count')).toHaveText('1')
+  await send([])
+  await expect(page.locator('.fc-beat')).not.toHaveClass(/running/)
+  await send(upperPose('seatedTwist', 0))
+  await expect(page.locator('.fc-beat')).toHaveClass(/running/)
   const hover = async (id: string, wrist: 15 | 16) => {
     await page.locator(`[data-gesture="${id}"]`).scrollIntoViewIfNeeded()
     const box = (await page.locator(`[data-gesture="${id}"]`).boundingBox())!
@@ -83,4 +88,28 @@ test('either-hand hovering changes exercises, logs one set, and finishes from fu
   expect(finished.workouts[0].finishedAt).toBeGreaterThan(0)
   expect(await page.evaluate(() => (window as typeof window & { __coachStopped: boolean }).__coachStopped)).toBe(true)
   expect(await page.evaluate(() => (window as typeof window & { __coachClosed: boolean }).__coachClosed)).toBe(true)
+})
+
+
+test('personal calibration and visual preferences survive reload without saving demo workouts', async ({ page }, testInfo) => {
+  await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
+  await page.getByRole('checkbox', { name: 'Master reference view', exact: true }).uncheck()
+  await page.getByRole('checkbox', { name: 'Battery saver', exact: true }).check()
+  await page.getByRole('button', { name: 'Watch the demo athlete' }).click()
+  await expect(page.locator('.fc-calibration')).toContainText('Neutral position calibrated', { timeout: 15000 })
+  await page.getByRole('button', { name: 'Calibrate movement range' }).click()
+  await expect(page.locator('.fc-range-calibration')).toContainText('Personal range saved', { timeout: 18000 })
+  await page.getByRole('button', { name: 'Finish', exact: true }).click()
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  await expect(page.getByRole('checkbox', { name: 'Master reference view', exact: true })).not.toBeChecked()
+  await expect(page.getByRole('checkbox', { name: 'Battery saver', exact: true })).toBeChecked()
+  const range = await page.evaluate(() => JSON.parse(localStorage.getItem('bloom-coach-ranges-v1') ?? '{}').seatedTwist)
+  expect(range.down).toBeLessThan(range.up); expect(range.low).toBeLessThan(range.high)
+  const history = await page.evaluate(() => JSON.parse(localStorage.getItem('bloom-coach-history-v1') ?? '[]'))
+  expect(history).toHaveLength(0)
+  await page.getByRole('checkbox', { name: 'Master reference view', exact: true }).check()
+  await page.getByRole('button', { name: 'Start camera' }).scrollIntoViewIfNeeded()
+  const cameraButton = await page.getByRole('button', { name: 'Start camera' }).boundingBox()
+  expect(cameraButton!.x + cameraButton!.width).toBeLessThanOrEqual(page.viewportSize()!.width)
+  await page.screenshot({ path: `docs/screenshots/form-coach-expanded-${testInfo.project.name}.png` })
 })
