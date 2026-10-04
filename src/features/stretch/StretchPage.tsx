@@ -278,6 +278,7 @@ export function StretchPage() {
               <button type="button" className="studio-go" data-variant="quiet" aria-label="Next stretch" onClick={next}>
                 <SkipForward size={16} />
               </button>
+              <button type="button" className="studio-chip" disabled={i <= 0} onClick={() => { setI(index => Math.max(0, index - 1)); setPlaying(false); setWaitingSwitch(false) }}>Previous stretch</button>
             </div>
             {on('stiffness') && i === 0 && !playing && <Slider label="Stiffness now" value={before} min={0} max={10} compact onChange={setBefore} />}
           </>
