@@ -351,7 +351,7 @@ test('Auto is selectable and never identifies the prerecorded demo as a real wor
   await page.goto('/#workouts/coach')
   await page.getByLabel('Selected workout').selectOption('auto')
   await expect(page.locator('.fc-auto-help')).toContainText('first movement is not counted')
-  await page.getByRole('button', { name: 'Demo', exact: true }).click()
+  await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
   await expect(page.locator('.fc-side-status')).toContainText('Auto needs a live camera', { timeout: 20000 })
   await expect(page.locator('.fc-workout-hud')).toContainText('Auto · identifying movement')
   await expect(page.locator('.fc-workout-hud b')).toContainText('0 /')
@@ -361,3 +361,23 @@ test('Auto is selectable and never identifies the prerecorded demo as a real wor
   await page.getByRole('button', { name: 'Previous workout detail', exact: true }).click()
   await expect(page.locator('.fc-movement-guide')).toHaveCount(0)
 })
+
+
+for (const viewport of [{width:1440,height:900},{width:390,height:844}]) {
+  test(`fullscreen keeps the reference and smaller counter visible at ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport)
+    await page.goto('/#workouts/coach')
+    await page.getByRole('button', { name: 'Basic', exact: true }).click()
+    await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
+    await page.getByRole('button', { name: 'Fullscreen workout', exact: true }).click()
+    for (let i=0;i<3;i++) {
+      for (const selector of ['.fc-reference canvas','.fc-workout-hud','.fc-info-slider']) {
+        const box=await page.locator(selector).boundingBox()
+        expect(box).not.toBeNull()
+        expect(box!.y).toBeGreaterThanOrEqual(0)
+        expect(box!.y+box!.height).toBeLessThanOrEqual(viewport.height)
+      }
+      await page.getByRole('button', { name: 'Next workout detail', exact: true }).click()
+    }
+  })
+}
