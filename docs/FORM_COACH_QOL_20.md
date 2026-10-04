@@ -18,7 +18,7 @@
 - [x] 16. Fold camera setup options
 - [x] 17. Camera-first responsive layout
 - [x] 18. Compact essential toolbar
-- [ ] 19. Jump directly to the camera
+- [x] 19. Jump directly to the camera
 - [ ] 20. Short-screen left control layout
 
 Validation pending. Each improvement is committed and pushed separately.
