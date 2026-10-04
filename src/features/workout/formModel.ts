@@ -4,7 +4,7 @@
  * and per-exercise form checks. Pure, so it's unit-tested with synthetic poses.
  */
 export type P = { x: number; y: number; z?: number; visibility?: number }
-export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'seatedPress' | 'chestFly' | 'chairSquat' | 'taiChi' | 'boxing' | 'karate' | 'kungFu'
+export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'seatedPress' | 'chestFly' | 'chairSquat' | 'taiChi' | 'boxing' | 'karate' | 'kungFu' | 'observe'
 
 // MediaPipe pose indices.
 export const J = { nose: 0, lSh: 11, rSh: 12, lEl: 13, rEl: 14, lWr: 15, rWr: 16, lHip: 23, rHip: 24, lKn: 25, rKn: 26, lAn: 27, rAn: 28 } as const
@@ -26,6 +26,7 @@ const side = (lm: P[], l: number, r: number) => (vis(lm[l]) >= vis(lm[r]) ? l : 
 export type Reading = { metric: number; label: string; faults: string[]; line?: number }
 
 export const RULES: Record<Exercise, { name: string; liftId: string; down: number; up: number; unit: string; timed?: boolean; upper?: boolean; bpm?: number; tip: string }> = {
+  observe: { name: 'Pose observation', liftId: 'pose-observation', down: 0, up: 0, unit: 'movement', timed: true, upper: true, bpm: 30, tip: 'Show your head, torso and arms. Observe visible joints and your own alignment; this view does not grade the selected activity.' },
   squat: { name: 'Squat', liftId: 'airsquat', down: 100, up: 160, unit: 'knee°', tip: 'Face the camera, whole body in frame.' },
   pushup: { name: 'Push-up', liftId: 'pushup', down: 95, up: 155, unit: 'elbow°', tip: 'Side-on to the camera, laptop on the floor.' },
   lunge: { name: 'Lunge', liftId: 'lunge', down: 105, up: 155, unit: 'knee°', tip: 'Side-on, step forward and back.' },
@@ -115,6 +116,7 @@ export function alignment(lm: P[], baseline: UpperBaseline | null) {
 }
 export function readUpper(ex: Exercise, lm: P[], baseline?: UpperBaseline | null): Reading {
   if (!upperVisible(lm)) return { metric: 180, label: 'Show head, shoulders and both arms', faults: ['Upper-body tracking lost'] }
+  if (ex === 'observe') return { metric: 180, label: 'Pose visible · observation only', faults: [] }
   if (ex === 'seatedTwist') {
     const b = upperBaseline(lm)
     if (!b) return { metric: 180, label: 'Face the camera for torso tracking', faults: ['Shoulders not clearly visible'] }
