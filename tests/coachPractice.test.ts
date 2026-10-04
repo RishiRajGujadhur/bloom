@@ -43,3 +43,9 @@ test('set recaps compare the same exercise and aggregate the current local day',
  expect(practiceSummary(rows,'bicepCurl',now)).toMatchObject({sets:2,reps:18,change:10})
  expect(practiceSummary(rows,'lateralRaise',now)).toBeNull()
 })
+
+import { liftById } from '../src/features/workout/workoutModel'
+test('new seated movements have workout-history and muscle catalog entries', () => {
+ expect(liftById('seatedbicepcurl')?.muscles).toContain('biceps')
+ expect(liftById('seatedlateralraise')?.muscles).toContain('shoulders')
+})

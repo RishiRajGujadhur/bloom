@@ -201,3 +201,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-camera-readiness{font-size:11px;color:#bae6cd}.fc-camera-readiness.needs-adjustment{color:#ffdaad;border-left:3px solid #ffc27c;padding-left:8px}
 
 .fc-set-recap{font-size:12px;padding:8px;border:1px solid #426e5b;border-radius:10px}.fc-set-recap summary{cursor:pointer;color:#aeedcd}.fc-set-recap p{margin:7px 0}
+
+.fc-library input[type=search]{width:100%;box-sizing:border-box;min-height:40px;border-radius:10px;padding:8px;background:#153e30;color:white;border:1px solid #6fcba5}.fc-quick-options>label{display:flex;align-items:center;gap:8px;padding:6px;font-size:12px}.fc-quick-options>label select{background:#153e30;color:white;border:1px solid #6fcba5;padding:6px;border-radius:8px;max-width:220px}

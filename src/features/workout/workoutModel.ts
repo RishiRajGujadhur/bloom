@@ -18,6 +18,8 @@ export const lifts: Lift[] = [
   { id: 'hipthrust', name: 'Hip thrust', muscles: ['glutes', 'hamstrings'], step: 2.5 },
   { id: 'calf', name: 'Calf raise', muscles: ['calves'], step: 2.5 },
   { id: 'plank', name: 'Plank (seconds)', muscles: ['abs'], bodyweight: true, step: 5 },
+  { id: 'seatedbicepcurl', name: 'Seated Bicep Curl', muscles: ['biceps', 'forearms'], step: 1 },
+  { id: 'seatedlateralraise', name: 'Seated Lateral Raise', muscles: ['shoulders'], step: 1 },
   { id: 'seatedpress', name: 'Seated Press', muscles: ['shoulders', 'triceps'], step: 1 },
   { id: 'seatedchestfly', name: 'Seated Chest Fly', muscles: ['chest'], step: 1 },
   { id: 'chairsquat', name: 'Chair Squats', muscles: ['quads', 'glutes'], step: 1 },

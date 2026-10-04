@@ -24,3 +24,5 @@ These sources informed the choices of features; Bloom’s camera scores remain e
 - [x] 5. gate camera scoring on visible joints and provide specific framing feedback
 
 - [x] 6. show a compact saved-set recap and export optional tempo results
+
+- [x] 7. make the growing movement library searchable and integrate new lifts with history
