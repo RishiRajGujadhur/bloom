@@ -65,6 +65,12 @@ const defaults: Prefs = {
 }
 
 const on = (id: string) => subOn('exerciseGuides', id)
+const FILTER_KEY = 'bloom-exercise-filters-v1'
+function savedFilter<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
+  const saved = readStore<Record<string, unknown>>(FILTER_KEY, {})[key]
+  return typeof saved === 'string' && allowed.includes(saved as T) ? saved as T : fallback
+}
+
 
 function click(high: boolean) {
   if (bodySilent()) return
@@ -140,9 +146,9 @@ export function ExercisePage() {
       return next
     })
   const seatedMode = useBodySeated()
-  const [search, setSearch] = useState('')
-  const [area, setArea] = useState<Area | 'all'>('all')
-  const [position, setPosition] = useState<Position | 'all'>('all')
+  const [search, setSearch] = useState(() => { const saved = readStore<Record<string, unknown>>(FILTER_KEY, {}).search; return typeof saved === 'string' ? saved.slice(0, 100) : '' })
+  const [area, setArea] = useState<Area | 'all'>(() => savedFilter('area', ['all', ...Object.keys(areaNames)] as (Area | 'all')[], 'all'))
+  const [position, setPosition] = useState<Position | 'all'>(() => savedFilter('position', ['all', ...Object.keys(positionNames)] as (Position | 'all')[], 'all'))
   const everything = on('moreMoves') ? allMoves : [...exercises, ...seatedExercises]
   const available = filterLibrary(
     prefs.wheelchair ? everything.filter((e) => e.wheelchair) : everything,
@@ -167,12 +173,13 @@ export function ExercisePage() {
     if (seatedMode && !pick.wheelchair) setPick(seatedExercises[0])
     // eslint-disable-next-line react-hooks/exhaustive-deps -- shared preference changes
   }, [seatedMode])
-  const [muscle, setMuscle] = useState<Muscle | 'all'>('all')
+  const [muscle, setMuscle] = useState<Muscle | 'all'>(() => savedFilter('muscle', ['all', ...Object.keys(muscleNames)] as (Muscle | 'all')[], 'all'))
   const [equipment, setEquipment] = useState<Exercise['equipment'] | 'all'>(
-    'all',
+    () => savedFilter('equipment', ['all', 'none', 'dumbbells', 'wall'], 'all'),
   )
   const [level, setLevel] = useState<Exercise['level'] | 'all'>('all')
-  const [favOnly, setFavOnly] = useState(false)
+  const [favOnly, setFavOnly] = useState(() => readStore<Record<string, unknown>>(FILTER_KEY, {}).favOnly === true)
+  useEffect(() => { writeStore(FILTER_KEY, { search, area, position, muscle, equipment, level, favOnly }) }, [search, area, position, muscle, equipment, level, favOnly])
   const [playing, setPlaying] = useState(false)
   const [count, setCount] = useState(0)
   const [phase, setPhase] = useState<'down' | 'up'>('down')
@@ -261,6 +268,7 @@ export function ExercisePage() {
           Find a movement
           <input
             type="search"
+            maxLength={100}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Try seated, elbow, or shoulder"

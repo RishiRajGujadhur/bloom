@@ -20,7 +20,7 @@ explicit observation view rather than an invented form score.
 
 ## Exercises
 
-- [ ] 11. Remember exercise search and filters across visits.
+- [x] 11. Remember exercise search and filters across visits.
 - [ ] 12. Clear search and reset filters without leaving seated-only mode.
 - [ ] 13. Show the matching exercise count and an actionable empty state.
 - [ ] 14. Distinguish animated demonstration counts from measured camera reps.
