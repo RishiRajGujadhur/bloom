@@ -65,7 +65,7 @@ export function cloudGrade(previous: P[], pose: P[], dt: number) {
 /** Projected movement cues, not martial-arts certification or contact-force measurement. */
 function movementTick(state: CombatState, mode: CombatMode, pose: P[], at: number, swordHand: 15 | 16 = 15, slipRange = .22): CombatState {
   const dt = (at - state.at) / 1000
-  if (!upperVisible(pose) || pose.some(p => !Number.isFinite(p.x) || !Number.isFinite(p.y))) return { ...state, at, pose: null, event: false }
+  if (!upperVisible(pose) || pose.some(p => !Number.isFinite(p.x) || !Number.isFinite(p.y))) return { ...state, at, pose: null, event: false, damage: 0 }
   const centre = state.centre ?? pose[0].x, width = Math.max(.08, Math.abs(pose[11].x - pose[12].x))
   if (!state.pose || dt <= 0 || dt > .2) return { ...state, at, pose, centre, event: false, speed: 0 }
   const shift = Math.abs(pose[0].x - centre) / width, slipHeld = shift > Math.max(.1, Math.min(.4, slipRange))
@@ -74,7 +74,7 @@ function movementTick(state: CombatState, mode: CombatMode, pose: P[], at: numbe
   if (mode === 'sword') {
     const i = swordHand - 15, elbow = angle(pose[11 + i], pose[13 + i], pose[swordHand]), oldElbow = angle(state.pose[11 + i], state.pose[13 + i], state.pose[swordHand])
     const overhead = state.pose[swordHand].y < pose[0].y && pose[swordHand].y >= pose[0].y && pose[swordHand].y > state.pose[swordHand].y
-    const thrust = oldElbow < 140 && elbow >= 150
+    const thrust = oldElbow < 150 && elbow >= 150
     const event = (overhead || thrust) && speeds[i] > .3 && at - state.lastHits[i] >= 450
     const highGuard = swordGuard(pose, swordHand), elapsed = state.elapsed + dt, cycle = Math.floor(elapsed / 4)
     const resolve = elapsed % 4 >= 2.8 && cycle > state.projectile
@@ -96,7 +96,7 @@ function movementTick(state: CombatState, mode: CombatMode, pose: P[], at: numbe
   let side = -1
   for (let i = 0; i < 2; i++) {
     const extended = angle(pose[11 + i], pose[13 + i], pose[15 + i]) > 140
-    const returned = angle(state.pose[11 + i], state.pose[13 + i], state.pose[15 + i]) < 140
+    const returned = angle(state.pose[11 + i], state.pose[13 + i], state.pose[15 + i]) <= 140
     if (extended && returned && speeds[i] > .25 && at - state.lastHits[i] > 180 && (mode !== 'chain' || Math.abs(pose[15 + i].x - centre) < width)) side = i
   }
   const event = side >= 0, hand = event ? 15 + side : state.hand
