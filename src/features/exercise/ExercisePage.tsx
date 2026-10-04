@@ -528,6 +528,7 @@ export function ExercisePage() {
           unit={pick.hold ? 's' : ''}
           onChange={(v) => setPrefs({ target: v })}
         />
+        <label className="body-exact-field">{pick.hold ? 'Exact hold seconds' : 'Exact target reps'}<input type="number" aria-label={pick.hold ? 'Exact hold seconds' : 'Exact target reps'} min={pick.hold ? 10 : 3} max={pick.hold ? 120 : 30} step="1" value={prefs.target} onChange={event => { const value = Number(event.target.value); if (Number.isFinite(value) && value >= (pick.hold ? 10 : 3) && value <= (pick.hold ? 120 : 30)) setPrefs({ target: Math.round(value) }) }} /></label>
         {on('slowMo') && (
           <Slider
             label="Speed"

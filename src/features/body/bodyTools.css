@@ -8,4 +8,5 @@
 .body-coach-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px}.body-coach-dialog h2{font-size:18px;margin:0}.body-coach-dialog>p{font-size:12px}
 .body-coach-dialog .fc{width:100%}
 .body-coach-dialog::backdrop{background:#000a}.body-coach-dialog{margin:auto}
+.body-exact-field{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;margin:8px 0;flex-wrap:wrap}.body-exact-field input{width:90px;max-width:100%;padding:8px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-surface);color:var(--text-primary);font:inherit}
 @media(max-width:650px){.body-coach-backdrop{padding:6px}.body-coach-dialog{max-height:calc(100dvh - 12px);padding:10px}.body-coach-dialog>header{align-items:start}.body-coach-dialog .fc-stage{grid-template-columns:minmax(0,1fr)}}
