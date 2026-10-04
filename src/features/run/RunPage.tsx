@@ -120,6 +120,8 @@ export function RunPage() {
   const [pausedFor, setPausedFor] = useState(0)
   const [replay, setReplay] = useState<number | null>(null)
   const [viewing, setViewing] = useState<Run | null>(null)
+  const [manualSaved, setManualSaved] = useState<Run | null>(null)
+  const manualLock = useRef(0)
   const [manKm, setManKm] = useState(5)
   const [manMin, setManMin] = useState(30)
   const watch = useRef<number | null>(null)
@@ -282,9 +284,12 @@ export function RunPage() {
     setStartedAt(0)
   }
   const addManual = () => {
+    if (Date.now() - manualLock.current < 700 || !Number.isFinite(manKm) || !Number.isFinite(manMin) || manKm <= 0 || manMin <= 0) return
+    manualLock.current = Date.now()
     const run: Run = { id: crypto.randomUUID(), at: Date.now(), kind, km: units === 'mi' ? manKm * 1.609344 : manKm, seconds: manMin * 60, points: [], manual: true }
     setStore((s) => ({ ...s, runs: [...s.runs, run] }))
     logActivity(kind, { km: run.km })
+    setManualSaved(run)
     burst(null, 'stars')
   }
   const playReplay = (run: Run) => {
@@ -402,6 +407,7 @@ export function RunPage() {
         <button type="button" className="studio-go" onClick={addManual}>
           Save
         </button>
+        {manualSaved && <p role="status">Saved {toUnits(manualSaved.km, units).toFixed(2)} {units}. <button type="button" className="studio-chip" onClick={() => { setStore(s => ({ ...s, runs: s.runs.filter(r => r.id !== manualSaved.id) })); setManualSaved(null) }}>Undo saved activity</button></p>}
       </div>
       <div className="studio-card studio-center">
         {on('weeklyGoal') && (
