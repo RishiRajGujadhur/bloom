@@ -123,6 +123,11 @@ export function RunPage() {
   const [manKm, setManKm] = useState(5)
   const [manMin, setManMin] = useState(30)
   const watch = useRef<number | null>(null)
+  const playback = useRef<ReturnType<typeof setInterval> | null>(null)
+  const replayEnd = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const stopPlayback = () => { if (playback.current) clearInterval(playback.current); if (replayEnd.current) clearTimeout(replayEnd.current); playback.current = null; replayEnd.current = null }
+  const stopGps = () => { gpsGeneration.current++; if (watch.current !== null) navigator.geolocation.clearWatch(watch.current); watch.current = null; autoPaused.current = null }
+  useEffect(() => () => { stopPlayback(); stopGps() }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const pauseStart = useRef(0)
   const spoken = useRef(0)
   const finishBtn = useRef<HTMLButtonElement>(null)
@@ -226,6 +231,7 @@ export function RunPage() {
     )
   }
   const start = () => {
+    stopPlayback(); setReplay(null); setViewing(null); stopGps()
     setError('')
     if (!on('gps') || !('geolocation' in navigator)) return setError('GPS isn’t available here. Try the demo route or log a run by hand.')
     setPoints([])
@@ -248,21 +254,21 @@ export function RunPage() {
     }
   }
   const demo = () => {
+    stopPlayback(); stopGps(); setReplay(null); setViewing(null)
     const route = demoRoute(undefined, 3, Date.now())
     setStartedAt(route[0].t)
     setStatus('demo')
     spoken.current = 0
     let i = 1
     setPoints(route.slice(0, 1))
-    const t = setInterval(() => {
+    playback.current = setInterval(() => {
       i += 3
       setPoints(route.slice(0, Math.min(i, route.length)))
-      if (i >= route.length) clearInterval(t)
+      if (i >= route.length) stopPlayback()
     }, 60)
   }
   const finish = () => {
-    if (watch.current !== null) navigator.geolocation.clearWatch(watch.current)
-    watch.current = null
+    stopPlayback(); stopGps(); setReplay(null)
     if (km > 0.05) {
       const run: Run = { id: crypto.randomUUID(), at: Date.now(), kind, km: Math.round(km * 100) / 100, seconds: Math.round(seconds), points }
       setStore((s) => ({ ...s, runs: [...s.runs, run] }))
@@ -280,16 +286,17 @@ export function RunPage() {
     burst(null, 'stars')
   }
   const playReplay = (run: Run) => {
+    stopPlayback(); stopGps(); setStatus('idle'); setStartedAt(0)
     setViewing(run)
     setTab('track')
     setPoints(run.points)
     let f = 0
-    const t = setInterval(() => {
+    playback.current = setInterval(() => {
       f += 0.01
       setReplay(Math.min(1, f))
       if (f >= 1) {
-        clearInterval(t)
-        setTimeout(() => setReplay(null), 800)
+        stopPlayback()
+        replayEnd.current = setTimeout(() => setReplay(null), 800)
       }
     }, 40)
   }
