@@ -13,3 +13,5 @@ Each improvement is committed and pushed separately.
 - [x] 5. use confident wrist positions to avoid finger jitter activations
 
 - [x] 6. ignore ambiguous two-hand selections instead of choosing the wrong action
+
+- [x] 7. allow comfortable hand hold durations from two to five seconds
