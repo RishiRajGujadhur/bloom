@@ -296,7 +296,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
       for (const button of panel.current.querySelectorAll<HTMLButtonElement>('[data-gesture]')) {
         if (button.disabled) continue
         const box = button.getBoundingClientRect()
-        if (hands.some((p) => p.x >= box.left - 4 && p.x <= box.right + 4 && p.y >= box.top - 4 && p.y <= box.bottom + 4)) { hovered = button.dataset.gesture!; break }
+        if (hands.some((p) => p.x >= box.left + 7 && p.x <= box.right - 7 && p.y >= box.top + 7 && p.y <= box.bottom - 7)) { hovered = button.dataset.gesture!; break }
       }
     }
     actionRef.current.pauseWorkout = () => setWorkoutPaused(value => !value)

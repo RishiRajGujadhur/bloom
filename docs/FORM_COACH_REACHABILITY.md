@@ -7,3 +7,5 @@ Each improvement is committed and pushed separately.
 - [x] 2. lower hand controls into a comfortable reach zone
 
 - [x] 3. separate large hand targets with generous safety gaps
+
+- [x] 4. require hands inside target borders instead of overlapping hit halos
