@@ -4,7 +4,7 @@
  * and per-exercise form checks. Pure, so it's unit-tested with synthetic poses.
  */
 export type P = { x: number; y: number; z?: number; visibility?: number }
-export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'seatedPress' | 'chestFly' | 'chairSquat' | 'taiChi' | 'boxing' | 'karate' | 'kungFu' | 'observe'
+export type Exercise = 'squat' | 'pushup' | 'lunge' | 'plank' | 'seatedTwist' | 'wheelchairDip' | 'chairPushup' | 'seatedPress' | 'chestFly' | 'chairSquat' | 'taiChi' | 'boxing' | 'karate' | 'kungFu' | 'observe' | 'bicepCurl'
 
 // MediaPipe pose indices.
 export const J = { nose: 0, lSh: 11, rSh: 12, lEl: 13, rEl: 14, lWr: 15, rWr: 16, lHip: 23, rHip: 24, lKn: 25, rKn: 26, lAn: 27, rAn: 28 } as const
@@ -26,6 +26,7 @@ const side = (lm: P[], l: number, r: number) => (vis(lm[l]) >= vis(lm[r]) ? l : 
 export type Reading = { metric: number; label: string; faults: string[]; line?: number }
 
 export const RULES: Record<Exercise, { name: string; liftId: string; down: number; up: number; unit: string; timed?: boolean; upper?: boolean; bpm?: number; tip: string }> = {
+  bicepCurl: { name: 'Seated Bicep Curl', liftId: 'seatedbicepcurl', down: 85, up: 150, unit: 'elbow°', upper: true, bpm: 40, tip: 'With your torso supported, curl one or both hands toward your shoulders. Keep elbows near your sides and lower gently; no weights required.' },
   observe: { name: 'Pose observation', liftId: 'pose-observation', down: 0, up: 0, unit: 'movement', timed: true, upper: true, bpm: 30, tip: 'Show your head, torso and arms. Observe visible joints and your own alignment; this view does not grade the selected activity.' },
   squat: { name: 'Squat', liftId: 'airsquat', down: 100, up: 160, unit: 'knee°', tip: 'Face the camera, whole body in frame.' },
   pushup: { name: 'Push-up', liftId: 'pushup', down: 95, up: 155, unit: 'elbow°', tip: 'Side-on to the camera, laptop on the floor.' },
@@ -117,6 +118,12 @@ export function alignment(lm: P[], baseline: UpperBaseline | null) {
 export function readUpper(ex: Exercise, lm: P[], baseline?: UpperBaseline | null): Reading {
   if (!upperVisible(lm)) return { metric: 180, label: 'Show head, shoulders and both arms', faults: ['Upper-body tracking lost'] }
   if (ex === 'observe') return { metric: 180, label: 'Pose visible · observation only', faults: [] }
+  if (ex === 'bicepCurl') {
+    const width = Math.max(.06, Math.abs(lm[11].x - lm[12].x))
+    const elbows = [angle(lm[11],lm[13],lm[15]),angle(lm[12],lm[14],lm[16])]
+    const faults = [11,12].some((sh,i) => Math.abs(lm[13+i].x-lm[sh].x) > width * .45) ? ['Keep elbows near your sides'] : []
+    return { metric: Math.min(...elbows), label: `${Math.round(Math.min(...elbows))}° curl elbow`, faults }
+  }
   if (ex === 'seatedTwist') {
     const b = upperBaseline(lm)
     if (!b) return { metric: 180, label: 'Face the camera for torso tracking', faults: ['Shoulders not clearly visible'] }
@@ -147,7 +154,7 @@ export function upperPose(ex: Exercise, phase: number): P[] {
     const elbow = { x: shoulder.x + sign * .06, y: .49, z: 0, visibility: 1 }
     const strike = (1 - Math.cos((phase * 2 % 1) * Math.PI * 2)) / 2
     const bend = ex === 'boxing' ? (Math.floor(phase * 2) % 2 === (sign < 0 ? 0 : 1) ? strike : 0) : cycle
-    const theta = (90 + bend * 80) * Math.PI / 180
+    const theta = (ex === 'bicepCurl' ? 165 - cycle * 100 : 90 + bend * 80) * Math.PI / 180
     const arm = Math.atan2(shoulder.y - elbow.y, shoulder.x - elbow.x) + sign * theta
     const wrist = { x: elbow.x + .17 * Math.cos(arm), y: elbow.y + .17 * Math.sin(arm), z: 0, visibility: 1 }
     if (ex === 'seatedTwist') shoulder.z = sign * cycle * .15

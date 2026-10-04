@@ -33,7 +33,7 @@ const HAND_MODEL = COACH_HAND_MODEL
 const MODEL = COACH_MODEL
 const GROUPS: { title: string; exercises: Exercise[] }[] = [
   { title: 'Pose check', exercises: ['observe'] },
-  { title: 'Seated Basic', exercises: ['seatedTwist', 'wheelchairDip', 'chairPushup', 'seatedPress', 'chestFly'] },
+  { title: 'Seated Basic', exercises: ['seatedTwist', 'wheelchairDip', 'chairPushup', 'seatedPress', 'chestFly', 'bicepCurl'] },
   { title: 'Martial Arts', exercises: ['taiChi', 'boxing', 'karate', 'kungFu'] },
   { title: 'Standing & Floor', exercises: ['chairSquat', 'squat', 'pushup', 'lunge', 'plank'] },
 ]

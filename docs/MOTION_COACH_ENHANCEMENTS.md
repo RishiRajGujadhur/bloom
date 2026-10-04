@@ -14,3 +14,5 @@ These sources informed the choices of features; Bloom’s camera scores remain e
 
 
 - [x] 1. add compact exercise-specific movement and camera guides
+
+- [x] 2. track seated bicep curls with either arm and elbow drift feedback
