@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useRef, useState } from 'react'
 import { Camera, CameraOff, Mic, MicOff, Pause, Play } from 'lucide-react'
 import { subOn } from '../subFeatures'
@@ -92,6 +93,7 @@ export function TaiChiPage() {
     engine.current.setGrounding(grounding)
     setPlaying(true)
   }
+  useBodyPractice('taichi', 'taiChi', 'Tai Chi flow', () => { stopCam.current(); setCamera('off'); setStance(null); engine.current?.stop(); engine.current = null; setPlaying(false) })
   const toggleCamera = async () => {
     if (camera === 'on') {
       stopCam.current()

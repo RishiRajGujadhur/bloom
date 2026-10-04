@@ -134,6 +134,11 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   useEffect(() => { if (mode === 'camera') void detector.current?.setOptions?.({ outputSegmentationMasks: options.dimming && !options.battery }).catch(() => setErr('Background focus could not start on this device.')) }, [mode, options.dimming, options.battery])
 
   useEffect(() => { counter.current.range = ranges.current[exercise.current] ?? null }, [])
+  useEffect(() => {
+    const pause = () => { if (modeRef.current !== 'idle') actionRef.current.finish?.() }
+    window.addEventListener('bloom-body-coach-open', pause)
+    return () => window.removeEventListener('bloom-body-coach-open', pause)
+  }, [])
   const recalibrate = () => { baseline.current = null; samples.current = []; calibrationTime.current = 0; setCalibration(0); setBalance(null); motion.current = { ...motion.current, points: null }; counter.current.phase = 'up'; hold.current.last = 0 }
   const resetSet = (next = exercise.current) => {
     boxing.current = emptyBoxing(); setStrikes(boxing.current); flow.current = emptyFlow(); setFlowScore(null); analysis.current = emptyAnalysis(); setCombat(analysis.current); reaction.current = emptyReaction(); setDrill(reaction.current); worst.current = null; repStarted.current = 0; frames.current = []; setTrailFrames([]); goalAlerted.current = false; counter.current = new RepCounter(next); counter.current.range = ranges.current[next] ?? null; setReps([]); hold.current = { seconds: 0, last: 0 }; setHeld(0); setFault(null)

@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useRef, useState, useSyncExternalStore, type Dispatch, type SetStateAction } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Camera, CameraOff, Crosshair, HeartPulse, ShieldCheck, Skull, Zap } from 'lucide-react'
@@ -86,6 +87,8 @@ export function PostureGuardian({ setData }: { setData: Dispatch<SetStateAction<
 }
 
 export function PosturePage({ data }: FeaturePageProps) {
+  useBodyPractice('posture', '', 'Upper-body posture', stopPosture)
+
   const posture = usePosture()
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)

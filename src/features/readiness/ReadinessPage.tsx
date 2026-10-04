@@ -1,3 +1,4 @@
+import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import uPlot from 'uplot'
@@ -198,6 +199,7 @@ export function ReadinessPage() {
   }
   const cancel = () => { session.current?.stop(); session.current = null; setPhase('idle') }
 
+  useBodyPractice('readiness', '', 'Readiness · pose observation', cancel)
   // Camera: bpm from recent beats, and the raw PPG trace on a canvas.
   useEffect(() => {
     if (source !== 'camera' || phase !== 'scanning') return

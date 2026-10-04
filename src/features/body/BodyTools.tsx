@@ -20,15 +20,24 @@ export const BODY_PAGES: Record<string, { title: string; feature: string }> = {
 
 export function BodyTools({ page, features }: { page: string; features: Record<string, boolean> }) {
   const [open, setOpen] = useState(false)
+  const [opening, setOpening] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
   const practice = useCurrentPractice(page)
   const seated = useBodySeated()
   const silent = useBodySilent()
   const selected = supportedBodyExercise(page, practice?.movement ?? '')
   const meta = BODY_PAGES[page]
+  const openCoach = async () => {
+    if (opening) return
+    setOpening(true)
+    practice?.pause()
+    window.speechSynthesis?.cancel()
+    window.dispatchEvent(new Event('bloom-body-coach-open'))
+    try { const { stopPosture } = await import('../posture/postureRuntime'); stopPosture() } finally { setOpen(true); setOpening(false) }
+  }
   if (!meta || !features[meta.feature]) return null
   return <div className="body-tools">
-    <button ref={trigger} type="button" className="body-tool-button" onClick={() => setOpen(true)}><Camera size={16} /> Camera pose coach</button>
+    <button ref={trigger} type="button" disabled={opening} className="body-tool-button" onClick={() => void openCoach()}><Camera size={16} /> {opening ? 'Preparing camera coach…' : 'Camera pose coach'}</button>
     <label className="body-tool-preference"><input type="checkbox" checked={seated} onChange={event => setBodySeated(event.target.checked)} /> Seated / wheelchair mode</label>
     <label className="body-tool-preference"><input type="checkbox" checked={silent} onChange={event => setBodySilent(event.target.checked)} /> Silent body cues</label>
     {open && <div className="body-coach-backdrop"><section className="body-coach-dialog" role="dialog" aria-modal="true" aria-label={`${meta.title} camera pose coach`}>
