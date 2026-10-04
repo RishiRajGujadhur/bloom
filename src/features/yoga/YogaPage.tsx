@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useKeepAwake } from '../../platform/presence'
@@ -25,6 +26,7 @@ type Store = { breath: number; saved: Flow[]; draft: Flow; favs?: string[] }
 const initial: Store = { breath: 5, saved: [], draft: { id: 'draft', name: 'My flow', emoji: '🪷', steps: presetFlows[0].steps.slice(0, 4) } }
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 const say = (t: string) => {
+  if (bodySilent()) return
   try {
     speechSynthesis.cancel()
     speechSynthesis.speak(Object.assign(new SpeechSynthesisUtterance(t), { rate: 0.9 }))

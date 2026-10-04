@@ -2,7 +2,7 @@ import { lazy, Suspense, useRef, useState } from 'react'
 import { Camera, X } from 'lucide-react'
 import { logActivity } from '../../components/studio/Studio'
 import { supportedBodyExercise, useCurrentPractice } from './bodyPractice'
-import { setBodySeated, useBodySeated } from './bodyPreferences'
+import { setBodySeated, useBodySeated, setBodySilent, useBodySilent } from './bodyPreferences'
 import { RULES } from '../workout/formModel'
 import '../workout/formcoach.css'
 import './bodyTools.css'
@@ -23,12 +23,14 @@ export function BodyTools({ page, features }: { page: string; features: Record<s
   const trigger = useRef<HTMLButtonElement>(null)
   const practice = useCurrentPractice(page)
   const seated = useBodySeated()
+  const silent = useBodySilent()
   const selected = supportedBodyExercise(page, practice?.movement ?? '')
   const meta = BODY_PAGES[page]
   if (!meta || !features[meta.feature]) return null
   return <div className="body-tools">
     <button ref={trigger} type="button" className="body-tool-button" onClick={() => setOpen(true)}><Camera size={16} /> Camera pose coach</button>
     <label className="body-tool-preference"><input type="checkbox" checked={seated} onChange={event => setBodySeated(event.target.checked)} /> Seated / wheelchair mode</label>
+    <label className="body-tool-preference"><input type="checkbox" checked={silent} onChange={event => setBodySilent(event.target.checked)} /> Silent body cues</label>
     {open && <div className="body-coach-backdrop"><section className="body-coach-dialog" role="dialog" aria-modal="true" aria-label={`${meta.title} camera pose coach`}>
       <header><h2>{meta.title} · camera pose coach</h2><button type="button" className="body-tool-button" aria-label="Close camera pose coach" onClick={() => setOpen(false)}><X size={18} /> Close</button></header>
       <p>{practice?.label ?? meta.title}. Camera access starts only when you choose Start camera. Your video stays on this device.</p>

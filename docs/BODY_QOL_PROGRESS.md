@@ -11,7 +11,7 @@ explicit observation view rather than an invented form score.
 - [x] 02. Select the matching supported exercise from the current activity.
 - [x] 03. Offer an honest observation-only pose view for unsupported activities.
 - [x] 04. Share seated-mode preferences between body guides and camera coaching.
-- [ ] 05. Provide one silent-feedback switch for body audio and speech.
+- [x] 05. Provide one silent-feedback switch for body audio and speech.
 - [ ] 06. Pause activities and release competing cameras before camera coaching.
 - [ ] 07. Trap keyboard focus in the coach, support Escape and restore focus.
 - [ ] 08. Include the source activity in camera history and Markdown exports.

@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { prefersReducedMotion } from '../../utils/motion'
@@ -32,6 +33,7 @@ type Store = { reps: number; seated: boolean; styles: Style[]; southpaw: boolean
 const start: Store = { reps: 0, seated: false, styles: ['karate', 'kungfu', 'taekwondo', 'boxing', 'muaythai'], southpaw: false, voice: true, round: 120, rest: 30, forms: {} }
 
 const say = (text: string) => {
+  if (bodySilent()) return
   try {
     speechSynthesis.cancel()
     speechSynthesis.speak(Object.assign(new SpeechSynthesisUtterance(text), { rate: 1.15 }))
@@ -41,6 +43,7 @@ const say = (text: string) => {
 }
 /** A boxing-bell ding made with the Web Audio API. */
 function bell(times = 1) {
+  if (bodySilent()) return
   if (!on('bell')) return
   try {
     const ac = new AudioContext()

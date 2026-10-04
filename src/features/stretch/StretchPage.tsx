@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useKeepAwake } from '../../platform/presence'
@@ -22,6 +23,7 @@ const KEY = 'bloom-stretch-v1'
 type Store = { scale: number; sessions: { at: number; routine: string; before: number; after: number | null }[] }
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 const say = (t: string) => {
+  if (bodySilent()) return
   try {
     speechSynthesis.cancel()
     speechSynthesis.speak(Object.assign(new SpeechSynthesisUtterance(t), { rate: 0.95 }))
@@ -30,6 +32,7 @@ const say = (t: string) => {
   }
 }
 function chime() {
+  if (bodySilent()) return
   try {
     const ac = new AudioContext()
     ;[784, 1175].forEach((f, i) => {

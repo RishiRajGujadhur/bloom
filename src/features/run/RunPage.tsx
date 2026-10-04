@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
@@ -20,6 +21,7 @@ const TerrainReplay = lazy(() => import('./TerrainReplay').then((m) => ({ defaul
 
 const on = (id: string) => subOn('runTracker', id)
 const say = (t: string) => {
+  if (bodySilent()) return
   try {
     speechSynthesis.speak(new SpeechSynthesisUtterance(t))
   } catch {

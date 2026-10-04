@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
 import { useTabTitle } from '../../utils/useTabTitle'
@@ -27,6 +28,7 @@ const initial: Store = {
 const colors = { warmup: '#f2c14e', work: '#e2553f', rest: '#5aa9e6', cooldown: '#6bbf7a' }
 
 function beep(freq: number, len = 0.15) {
+  if (bodySilent()) return
   try {
     const ac = new AudioContext()
     const o = ac.createOscillator()
@@ -44,6 +46,7 @@ function beep(freq: number, len = 0.15) {
   }
 }
 const say = (t: string) => {
+  if (bodySilent()) return
   try {
     speechSynthesis.cancel()
     speechSynthesis.speak(new SpeechSynthesisUtterance(t))

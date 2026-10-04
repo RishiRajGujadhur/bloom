@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useEffect, useRef, useState } from 'react'
 import rough from 'roughjs'
@@ -16,6 +17,7 @@ import { pathLength } from '../../utils/svgLength'
 const on = (id: string) => subOn('eyeCare', id)
 
 function chime(sound: boolean) {
+  if (bodySilent()) return
   if (!sound || !on('sounds')) return
   try {
     const ac = new AudioContext()

@@ -1,3 +1,4 @@
+import { bodySilent } from '../body/bodyPreferences'
 import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useTabTitle } from '../../utils/useTabTitle'
@@ -66,6 +67,7 @@ const defaults: Prefs = {
 const on = (id: string) => subOn('exerciseGuides', id)
 
 function click(high: boolean) {
+  if (bodySilent()) return
   try {
     const ac = new AudioContext()
     const o = ac.createOscillator()
@@ -82,6 +84,7 @@ function click(high: boolean) {
   }
 }
 const say = (text: string) => {
+  if (bodySilent()) return
   try {
     speechSynthesis.cancel()
     speechSynthesis.speak(
