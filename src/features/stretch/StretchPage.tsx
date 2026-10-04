@@ -129,6 +129,10 @@ export function StretchPage() {
   const [areas, setAreas] = useState<Area[]>([])
   const [i, setI] = useState(0)
   const [playing, setPlaying] = useState(false)
+  const [timerVersion, setTimerVersion] = useState(0)
+  const sideSwitch = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (sideSwitch.current) clearTimeout(sideSwitch.current) }, [])
+  const restartStretch = () => { if (sideSwitch.current) clearTimeout(sideSwitch.current); sideSwitch.current = null; setWaitingSwitch(false); setPlaying(false); setTimerVersion(version => version + 1) }
   // Keep the screen on while the session runs (Screen Wake Lock).
   useKeepAwake(playing)
   const [waitingSwitch, setWaitingSwitch] = useState(false)
@@ -157,7 +161,8 @@ export function StretchPage() {
     if (on('switchSides') && upcoming.stretch.id === step.stretch.id) {
       setWaitingSwitch(true)
       if (on('voice')) say('Switch sides')
-      setTimeout(() => setWaitingSwitch(false), 2500)
+      if (sideSwitch.current) clearTimeout(sideSwitch.current)
+      sideSwitch.current = setTimeout(() => setWaitingSwitch(false), 2500)
     } else if (on('voice')) say(`${upcoming.stretch.name}. ${upcoming.stretch.cue}`)
     if (!on('autoAdvance')) setPlaying(false)
   }
@@ -252,7 +257,7 @@ export function StretchPage() {
             <div className="st-timer">
               {on('circleTimer') ? (
                 <CountdownCircleTimer
-                  key={`${routine.id}-${i}`}
+                  key={`${routine.id}-${i}-${timerVersion}`}
                   isPlaying={playing && !waitingSwitch}
                   duration={secs}
                   size={170}
@@ -268,7 +273,7 @@ export function StretchPage() {
                   {({ remainingTime }) => <span className="st-remaining">{remainingTime}s</span>}
                 </CountdownCircleTimer>
               ) : (
-                <SimpleTimer key={`${routine.id}-${i}`} seconds={secs} playing={playing && !waitingSwitch} onDone={next} />
+                <SimpleTimer key={`${routine.id}-${i}-${timerVersion}`} seconds={secs} playing={playing && !waitingSwitch} onDone={next} />
               )}
             </div>
             <div className="iv-buttons">
@@ -279,6 +284,7 @@ export function StretchPage() {
                 <SkipForward size={16} />
               </button>
               <button type="button" className="studio-chip" disabled={i <= 0} onClick={() => { setI(index => Math.max(0, index - 1)); setPlaying(false); setWaitingSwitch(false) }}>Previous stretch</button>
+              <button type="button" className="studio-chip" onClick={restartStretch}>Restart this stretch</button>
             </div>
             {on('stiffness') && i === 0 && !playing && <Slider label="Stiffness now" value={before} min={0} max={10} compact onChange={setBefore} />}
           </>
