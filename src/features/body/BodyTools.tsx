@@ -18,7 +18,7 @@ export const BODY_PAGES: Record<string, { title: string; feature: string }> = {
   posture: { title: 'Posture', feature: 'postureGuard' },
 }
 
-export function BodyTools({ page, features }: { page: string; features: Record<string, boolean> }) {
+export function BodyTools({ page, features, onReward }: { page: string; features: Record<string, boolean>; onReward?: (reward: { id: string; damage: number; xp: number }) => void }) {
   const [open, setOpen] = useState(false)
   const [opening, setOpening] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
@@ -50,7 +50,7 @@ export function BodyTools({ page, features }: { page: string; features: Record<s
     {open && <div className="body-coach-backdrop"><dialog ref={dialog} className="body-coach-dialog" aria-label={`${meta.title} camera pose coach`} onCancel={event => { event.preventDefault(); if (document.fullscreenElement) { void document.exitFullscreen(); return }; setOpen(false) }}>
       <header><h2>{meta.title} · camera pose coach</h2><button type="button" className="body-tool-button" aria-label="Close camera pose coach" onClick={() => setOpen(false)}><X size={18} /> Close</button></header>
       <p>{practice?.label ?? meta.title}. Camera access starts only when you choose Start camera. Your video stays on this device.</p>
-      <Suspense fallback={<p role="status">Loading camera coach…</p>}><FormCoach initialExercise={selected && (!seated || RULES[selected].upper) ? selected : 'observe'} onLog={(liftId, reps, seconds) => logActivity('bodyCoach', { page, liftId, reps, seconds })} /></Suspense>
+      <Suspense fallback={<p role="status">Loading camera coach…</p>}><FormCoach onReward={onReward} sourceActivity={{ page, label: practice?.label ?? meta.title }} initialExercise={selected && (!seated || RULES[selected].upper) ? selected : 'observe'} onLog={(liftId, reps, seconds) => { logActivity('bodyCoach', { page, liftId, reps, seconds }); if (liftId !== 'pose-observation') practice?.log?.(liftId, reps, seconds) }} /></Suspense>
     </dialog></div>}
   </div>
 }

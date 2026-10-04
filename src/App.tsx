@@ -982,7 +982,7 @@ function App() {
                 <JournalContainer />
               </div>
             )}
-            <BodyTools key={active} page={active} features={settings.features} />
+            <BodyTools key={active} page={active} features={settings.features} onReward={reward => setData(d => awardCoachSet(d, reward))} />
             {(active === 'growth' && !settings.features.rpgSkillTree) ||
             (active === 'collectibles' && !settings.features.collectibles) ||
             (active === 'habits' && !settings.features.habitTracker) ||

@@ -51,7 +51,7 @@ function RepRing({ count, target, timed }: { count: number; target: number; time
   return <svg className="fc-ring" viewBox="0 0 180 180" role="img" aria-label={timed ? `${count} active seconds` : `${count} reps`}><g ref={group}><circle cx="90" cy="90" r="70" className="fc-ring-track" /><circle cx="90" cy="90" r="70" className="fc-ring-fill" strokeDasharray={`${Math.min(1, count / target) * circumference} ${circumference}`} transform="rotate(-90 90 90)" /><text x="90" y="100" textAnchor="middle" className="fc-count">{count}</text><text x="90" y="124" textAnchor="middle" className="fc-count-sub">{timed ? 'active seconds' : `of ${target}`}</text></g></svg>
 }
 
-export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialExercise }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: { id: string; damage: number; xp: number }) => void; bodyweight?: number; initialExercise?: Exercise }) {
+export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialExercise, sourceActivity }: { onLog: (liftId: string, reps: number, seconds?: number) => void; onFinish?: () => void; onReward?: (reward: { id: string; damage: number; xp: number }) => void; bodyweight?: number; initialExercise?: Exercise; sourceActivity?: { page: string; label: string } }) {
   const [options, setOptions] = useState(loadCoachOptions)
   useEffect(() => { try { localStorage.setItem('bloom-coach-settings-v1', JSON.stringify(options)) } catch { /* optional */ } }, [options])
   const [accessible, setAccessible] = useState(() => initialExercise && initialExercise !== 'observe' && RULES[initialExercise].upper ? true : preference())
@@ -178,6 +178,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     else {
       const m = motion.current, stats = counter.current.reps
       const session: CoachSession = { id: crypto.randomUUID(), exercise: exercise.current, at: Date.now(), seconds: m.seconds, reps: rule.timed ? 0 : count, score: exercise.current === 'observe' ? 0 : rule.timed ? flow.current.score ?? 0 : stats.reduce((sum, rep) => sum + rep.score, 0) / Math.max(1, stats.length), joules: m.joules, kcal: m.kcal, power: m.seconds ? m.joules / m.seconds : 0, peak: m.peak, leftWork: m.leftWork, rightWork: m.rightWork, leftAngle: jointAngles.left ?? 0, rightAngle: jointAngles.right ?? 0, range: ranges.current[exercise.current] ?? null, compensation: compensation.current.changed / Math.max(1, compensation.current.frames) }
+      if (sourceActivity) { session.sourcePage = sourceActivity.page.slice(0, 40); session.activity = sourceActivity.label.slice(0, 120) }
       if (options.ghost && exercise.current !== 'observe') { try { saveGhost(exercise.current, frames.current, session.score, session.power); setGhost(readGhost(exercise.current, ghostKind)) } catch { setErr('Ghost storage is full; set metrics are still logged.') } }
       if (options.haptics) wearableAlert.current('set')
       session.damage = options.rpg && exercise.current !== 'observe' ? Math.floor(m.joules / 10) : 0
