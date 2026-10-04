@@ -136,3 +136,8 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-motion-map{width:100%;height:100px}
 
 .fc-extension-cue{position:absolute;top:52px;left:8px;right:8px;border-radius:8px;padding:8px;background:#ffc857;color:#1b2019;font-size:11px}
+
+.fc{min-width:0;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere}
+.fc>* , .fc-stage>*{min-width:0}
+.fc-actions{min-width:0}.fc-actions>*{min-width:0;white-space:normal}
+@media(max-width:650px){.fc-library{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.fc-stage,.fc-side{grid-template-columns:minmax(0,1fr)}}
