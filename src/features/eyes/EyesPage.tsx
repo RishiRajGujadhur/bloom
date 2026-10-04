@@ -37,7 +37,7 @@ function chime(sound: boolean) {
 }
 
 /** Hand-drawn guide (rough.js) with a glowing dot that travels along it. */
-function Guide({ ex, t, speed }: { ex: Exercise; t: number; speed: number }) {
+function Guide({ ex, t, speed, color }: { ex: Exercise; t: number; speed: number; color: string }) {
   const svg = useRef<SVGSVGElement>(null)
   const track = useRef<SVGPathElement>(null)
   const [dot, setDot] = useState({ x: 300, y: 180 })
@@ -67,12 +67,12 @@ function Guide({ ex, t, speed }: { ex: Exercise; t: number; speed: number }) {
   return (
     <svg ref={svg} className="ey-guide" viewBox="0 0 600 360" aria-label={ex.name}>
       {ex.path && <path ref={track} d={ex.path} fill="none" stroke="none" />}
-      {ex.path && <circle cx={dot.x} cy={dot.y} r="16" className="ey-dot" />}
-      {ex.id === 'nearfar' && <circle cx="300" cy="180" r={20 + nearFar(t) * 120} className="ey-dot ey-nearfar" />}
+      {ex.path && <circle cx={dot.x} cy={dot.y} r="16" className="ey-dot" style={{ fill: color }} />}
+      {ex.id === 'nearfar' && <circle cx="300" cy="180" r={20 + nearFar(t) * 120} className="ey-dot ey-nearfar" style={{ fill: color }} />}
       {ex.id === 'blink' && (
         <g className="ey-eye" transform="translate(300 180)">
           <path d={closed ? 'M-110 0 Q0 30 110 0' : 'M-110 0 Q0 -90 110 0 Q0 90 -110 0 Z'} className="ey-lid" />
-          {!closed && <circle r="34" className="ey-iris" />}
+          {!closed && <circle r="34" className="ey-iris" style={{ fill: color }} />}
         </g>
       )}
       {ex.id === 'rule20' && <text x="300" y="330" textAnchor="middle" className="ey-hint">Look out of a window, far away</text>}
@@ -89,6 +89,7 @@ export function EyesPage() {
       writeStore(EYES_KEY, n)
       return n
     })
+  const [targetColor, setTargetColor] = useState(() => { const v = readStore('bloom-eye-target-color', '#a8ff60'); return /^#[0-9a-f]{6}$/i.test(v) ? v : '#a8ff60' })
   const [tab, setTab] = useState('practice')
   const [queue, setQueue] = useState<string[]>([])
   const [i, setI] = useState(0)
@@ -158,7 +159,7 @@ export function EyesPage() {
   const practice = () => (
     <div className="studio-split">
       <div ref={stage} className="studio-card ey-stage" data-dark={current.id === 'palming'}>
-        <Guide ex={current} t={t} speed={store.speed} />
+        <Guide ex={current} t={t} speed={store.speed} color={targetColor} />
       </div>
       <div className="studio-card rm-side">
         {queue.length > 1 && (
@@ -193,6 +194,7 @@ export function EyesPage() {
             </button>
           )}
         </div>
+        <label className="body-exact-field">High-contrast target colour<input type="color" aria-label="Eye guide target colour" value={targetColor} onChange={e => { setTargetColor(e.target.value); writeStore('bloom-eye-target-color', e.target.value) }} /></label>
         {on('followDot') && current.path && <Slider label="Dot speed" value={store.speed} min={0.4} max={2} step={0.1} unit="×" format={(v) => v.toFixed(1)} compact onChange={(v) => setStore((s) => ({ ...s, speed: v }))} />}
       </div>
     </div>
