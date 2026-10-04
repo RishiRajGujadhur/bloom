@@ -110,6 +110,7 @@ export function DaylightPage() {
       writeStore(DAYLIGHT_KEY, n)
       return n
     })
+  const [lastLight, setLastLight] = useState<{ date: string; minutes: number | null } | null>(null)
   const [now, setNow] = useState(new Date())
   const [locating, setLocating] = useState(false)
   const btn = useRef<HTMLButtonElement>(null)
@@ -139,7 +140,8 @@ export function DaylightPage() {
     )
   }
   const logLight = (m: number) => {
-    setStore((s) => ({ ...s, log: [...s.log.filter((l) => l.date !== today), { date: today, minutes: lightToday + m }].slice(-120) }))
+    setLastLight({ date: today, minutes: store.log.find(l => l.date === today)?.minutes ?? null })
+    setStore((s) => ({ ...s, log: [...s.log.filter((l) => l.date !== today), { date: today, minutes: (s.log.find(l => l.date === today)?.minutes ?? 0) + m }].slice(-120) }))
     if (lightToday < store.lightGoal && lightToday + m >= store.lightGoal) {
       burst(btn.current, 'stars')
       logActivity('daylight')
@@ -193,6 +195,7 @@ export function DaylightPage() {
             <p className="studio-empty">
               Best between {hm(pl.light[0])} and {hm(pl.light[1])}. Daylight anchors your body clock.
             </p>
+            {lastLight && <button type="button" className="studio-chip" onClick={() => { setStore(s => ({ ...s, log: [...s.log.filter(l => l.date !== lastLight.date), ...(lastLight.minutes === null ? [] : [{ date: lastLight.date, minutes: lastLight.minutes }])] })); setLastLight(null) }}>Undo last daylight entry</button>}
             <div className="yg-pose-chips">
               {[5, 10, 20].map((m) => (
                 <button key={m} ref={m === 10 ? btn : undefined} type="button" className="studio-chip" onClick={() => logLight(m)}>
