@@ -42,3 +42,10 @@ export function gestureTick(previous: GestureState, id: string | null, dt: numbe
   const elapsed = previous.id === id ? previous.elapsed + dt : dt
   return { state: { id, elapsed, latched: elapsed >= duration, away: 0 }, action: elapsed >= duration ? id : null, progress: Math.min(1, elapsed / duration) }
 }
+
+/** Border dead zones and conflicting hands never choose the first button arbitrarily. */
+export function gestureTarget(hands: { x: number; y: number }[], targets: { id: string; left: number; right: number; top: number; bottom: number }[]) {
+  const hits = new Set<string>()
+  for (const target of targets) if (hands.some(hand => Number.isFinite(hand.x) && Number.isFinite(hand.y) && hand.x >= target.left + 7 && hand.x <= target.right - 7 && hand.y >= target.top + 7 && hand.y <= target.bottom - 7)) hits.add(target.id)
+  return { id: hits.size === 1 ? [...hits][0] : null, ambiguous: hits.size > 1 }
+}

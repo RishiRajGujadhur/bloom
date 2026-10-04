@@ -7,6 +7,8 @@ import { prefersReducedMotion } from '../../utils/motion'
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
 export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false, activity }: { activity?: CombatMode; exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null)
+  const savedPhase = useRef(0)
+  useEffect(() => { savedPhase.current = 0 }, [exercise, activity, lineage])
   const [available, setAvailable] = useState(true)
   const [wireframe, setWireframe] = useState(false)
   const [angle, setAngle] = useState("front")
@@ -43,13 +45,13 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       const seatGeometry = new THREE.BoxGeometry(.8, .045, .55), seatMaterial = new THREE.MeshStandardMaterial({ color: '#375d55', transparent: true, opacity: .65 })
       if (RULES[exercise].upper) { const seat = new THREE.Mesh(seatGeometry, seatMaterial); seat.position.set(0, -.8, 0); group.add(seat) }
       const axis = new THREE.Vector3(0, 1, 0)
-      let renderedAt = 0, phaseTime = 0
+      let renderedAt = 0, phaseTime = savedPhase.current
       const loop = (now: number) => {
         if (cancelled) return
         if (document.hidden) { renderedAt = now; raf = requestAnimationFrame(loop); return }
         if (now - renderedAt < (battery ? 125 : 50)) { raf = requestAnimationFrame(loop); return }
         if (!paused && renderedAt) phaseTime += now - renderedAt
-        renderedAt = now
+        renderedAt = now; savedPhase.current = phaseTime
         const phase = prefersReducedMotion() ? .25 : phaseTime / (slow ? 8000 : 4000) % 1
         const pose = activity ? arcadeReferencePose(activity, phase, lineage) : referencePose(exercise, phase, lineage)
         setAngles(jointCallouts(pose))

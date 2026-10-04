@@ -8,7 +8,7 @@ import { Camera, Maximize, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CapsBadge } from '../../platform/CapsBadge'
 import { useKeepAwake } from '../../platform/presence'
 import { jointCallouts, BONES, RULES, RepCounter, alignment, referencePose, exerciseVisible, read, readUpper, personalRange, loadPersonalRanges, upperBaseline, upperVisible, UPPER_BONES, visible, type Exercise, type P, type Rep, type UpperBaseline, type Lineage } from './formModel'
-import { emptyGesture, emptyMotion, gestureTick, motionTick, type MotionState } from './coachMetrics'
+import { emptyGesture, emptyMotion, gestureTarget, gestureTick, motionTick, type MotionState } from './coachMetrics'
 import { COACH_OPTIONS, loadCoachOptions } from './coachSettings'
 import { analysisTick, emptyAnalysis, rhythmGrade, emptyFlow, flowTick, emptyBoxing, boxingTick, handForm, blockCue, emptyReaction, reactionTick, formXP, consistencyGrade, outputDrop } from './coachAnalysis'
 import { readCoachHistory, saveCoachSession, recoverySuggestion, coachMarkdown, type CoachSession } from './coachHistory'
@@ -69,6 +69,9 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   const [encouragement, setEncouragement] = useState(true)
   const [workoutPaused, setWorkoutPaused] = useState(false)
   const [controlPage, setControlPage] = useState(0)
+  const [compactControls, setCompactControls] = useState(false)
+  const controlsPerPage = compactControls ? 1 : 3
+  const controlPages = 6 / controlsPerPage
   const [finishPending, setFinishPending] = useState(false)
   const [holdSeconds, setHoldSeconds] = useState(() => { try { const value = Number(localStorage.getItem('bloom-coach-hold')); return [2, 2.8, 4, 5].includes(value) ? value : 2.8 } catch { return 2.8 } })
   const [controlSide, setControlSide] = useState<'left' | 'right'>(() => { try { return localStorage.getItem('bloom-coach-reach') === 'right' ? 'right' : 'left' } catch { return 'left' } })
@@ -161,7 +164,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
 
   useEffect(() => { counter.current.range = ranges.current[exercise.current] ?? null }, [])
   useEffect(() => {
-    const pause = () => { if (modeRef.current !== 'idle') actionRef.current.finish?.() }
+    const pause = () => { if (modeRef.current !== 'idle') actionRef.current.confirmFinish?.() }
     window.addEventListener('bloom-body-coach-open', pause)
     return () => window.removeEventListener('bloom-body-coach-open', pause)
   }, [])
@@ -262,7 +265,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
   }
   const requestFinish = () => { setFinishPending(true); setWorkoutPaused(true); setControlPage(0) }
   const continueWorkout = () => { setFinishPending(false); setWorkoutPaused(false) }
-  actionRef.current = { confirmFinish: finish, continueWorkout, previous: () => nextExercise(-1), next: () => nextExercise(1), log: logSet, finish: requestFinish, exit: exitFocus, fullscreen: enterFocus, routineNext: advanceRoutine, menuBack: () => setControlPage(value => Math.max(0, value - 1)), menuNext: () => setControlPage(value => Math.min(1, value + 1)) }
+  actionRef.current = { confirmFinish: finish, continueWorkout, previous: () => nextExercise(-1), next: () => nextExercise(1), log: logSet, finish: requestFinish, exit: exitFocus, fullscreen: enterFocus, routineNext: advanceRoutine, menuBack: () => setControlPage(value => Math.max(0, value - 1)), menuNext: () => setControlPage(value => Math.min(controlPages - 1, value + 1)) }
 
   const draw = (lm: P[], mirror: boolean) => {
     const c = canvas.current, g = c?.getContext('2d'); if (!c || !g) return
@@ -296,20 +299,16 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     if (options.autoFrame) { const bounds = frameBounds(lm, mirror); if (bounds) setFraming(bounds) }
     draw(lm, mirror)
     setJointAngles(jointCallouts(lm))
-    let hovered: string | null = null
+    let hovered: string | null = null, ambiguous = false
     if (gestures && mirror && canvas.current && panel.current) {
       const feed = canvas.current.getBoundingClientRect()
       const hands = [15, 16].filter((i) => visible(lm[i]) && (lm[i].visibility ?? 1) >= .7).map((i) => ({ x: feed.left + (1 - lm[i].x) * feed.width, y: feed.top + lm[i].y * feed.height }))
-      const hits = new Set<string>()
-      for (const button of panel.current.querySelectorAll<HTMLButtonElement>('[data-gesture]')) {
-        if (button.disabled) continue
-        const box = button.getBoundingClientRect()
-        if (hands.some((p) => p.x >= box.left + 7 && p.x <= box.right - 7 && p.y >= box.top + 7 && p.y <= box.bottom - 7)) { hits.add(button.dataset.gesture!) }
-      }
-      hovered = hits.size === 1 ? [...hits][0] : null
+      const targets = [...panel.current.querySelectorAll<HTMLButtonElement>('[data-gesture]')].filter(button => !button.disabled).map(button => { const box = button.getBoundingClientRect(); return { id: button.dataset.gesture!, left: box.left, right: box.right, top: box.top, bottom: box.bottom } })
+      const selection = gestureTarget(hands, targets)
+      hovered = selection.id; ambiguous = selection.ambiguous
     }
     actionRef.current.pauseWorkout = () => setWorkoutPaused(value => !value)
-    const dwell = gestureTick(gestureState.current, hovered, dt, holdSeconds)
+    const dwell = ambiguous ? { state: { ...gestureState.current, id: null, elapsed: 0, away: 0 }, action: null, progress: 0 } : gestureTick(gestureState.current, hovered, dt, holdSeconds)
     gestureState.current = dwell.state; setGesture({ id: hovered, progress: dwell.progress, latched: dwell.state.latched })
     if (dwell.action) { actionRef.current[dwell.action]?.(); return }
     const candidate = upperBaseline(lm)
@@ -327,7 +326,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     const aligned = alignment(lm, baseline.current); setBalance(aligned)
     const trackingValid = accessible ? upperVisible(lm) : exerciseVisible(exercise.current, lm)
     setTrackingPaused(!trackingValid)
-    if (workoutPaused || hovered || (accessible && !baseline.current) || !trackingValid) {
+    if (workoutPaused || hovered || ambiguous || (accessible && !baseline.current) || !trackingValid) {
       setFault(null)
       counter.current.phase = 'up'; hold.current.last = 0
       motion.current = { ...motion.current, points: null, left: 0, right: 0, arm: 0, watts: 0 }; setMetrics(motion.current)
@@ -475,6 +474,12 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
     raf.current = requestAnimationFrame(loop)
   }
   const referenceVisible = viewMode === "game" || showReference && (viewMode !== "advanced" || options.reference) && ex !== "observe"
+  useEffect(() => {
+    if (!canvas.current) return
+    const update = () => { const compact = canvas.current!.getBoundingClientRect().width < 330; setCompactControls(previous => { if (previous !== compact) setControlPage(0); return compact }) }
+    const observer = new ResizeObserver(update); observer.observe(canvas.current); update()
+    return () => observer.disconnect()
+  }, [])
   const control = (id: string, text: string, click: () => void) => <button type="button" data-gesture={id} onClick={() => { gestureState.current = { id, elapsed: 0, latched: true, away: 0 }; click() }} className={gesture.id === id ? 'fc-hovering' : ''} style={{ '--fc-dwell': `${gesture.id === id ? gesture.progress * 100 : 0}%` } as CSSProperties}>{text}{gesture.id === id && <svg className="fc-dwell-ring" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="#ffffff30" strokeWidth="3" /><circle cx="14" cy="14" r="11" fill="none" stroke="#5dffc0" strokeWidth="3" strokeDasharray={`${gesture.progress * 69.12} 69.12`} transform="rotate(-90 14 14)" /></svg>}{gesture.id === id && <small>{gesture.latched ? 'Move hand away' : `${Math.ceil(holdSeconds * (1 - gesture.progress))}s`}</small>}</button>
   const silentStatus = balance ? balance.alert ? 'Alignment changed from your baseline' : 'Near your calibrated baseline' : calibration < 1 ? 'Awaiting calibration' : 'Tracking unavailable'
   return <section ref={coachRoot} className={`fc fc-mode-${viewMode} ${options.dimming && background === 'black' ? 'fc-background-black' : ''}`} aria-label="Form coach">
@@ -501,7 +506,7 @@ export function FormCoach({ onLog, onFinish, onReward, bodyweight = 70, initialE
             {ready && (calibration >= 1 || !accessible) && useCountdown && countdown > 0 && <div className="fc-start-countdown" role="status" aria-label="Workout start countdown">{countdown}<small>Get comfortable · starting soon</small><button type="button" onClick={() => { countdownElapsed.current = 3; setCountdown(0) }}>Skip countdown</button></div>}
             {!focus && ready && options.extension && ['boxing', 'karate', 'kungFu'].includes(ex) && combat.deceleration > 2 && Math.max(jointAngles.left ?? 0, jointAngles.right ?? 0) > 175 && <span className="fc-extension-cue">Near full projected elbow extension during rapid slowdown</span>}
             {mode === 'loading' && <p className="fc-tip">Preparing your camera and tracking model…</p>}
-            {ready && <><div className={`fc-camera-controls fc-controls-${controlSide}`} aria-label="Hand-hover controls"><div className="fc-control-actions">{finishPending ? <>{control('continueWorkout', 'Keep training', continueWorkout)}{control('confirmFinish', 'Finish and save', finish)}</> : controlPage === 0 ? <>{control('pauseWorkout', workoutPaused ? 'Resume' : 'Pause', () => setWorkoutPaused(value => !value))}{control('log', 'Log set', logSet)}{control('finish', 'Finish', requestFinish)}</> : <>{control('previous', 'Previous', () => nextExercise(-1))}{control('next', 'Next workout', () => nextExercise(1))}{focus ? control('exit', 'Exit fullscreen', exitFocus) : control('fullscreen', 'Fullscreen', enterFocus)}</>}</div><nav hidden={finishPending} className="fc-control-navigation" aria-label="Camera action pages"><button type="button" data-gesture="menuBack" aria-label="Previous controls" disabled={controlPage === 0} onClick={() => setControlPage(0)}><ChevronLeft aria-hidden="true" /></button><small>{controlPage === 0 ? 'Set · 1 / 2' : 'Workout · 2 / 2'}</small><button type="button" data-gesture="menuNext" aria-label="More controls" disabled={controlPage === 1} onClick={() => setControlPage(1)}><ChevronRight aria-hidden="true" /></button></nav></div></>}
+            {ready && <><div className={`fc-camera-controls fc-controls-${controlSide} ${compactControls ? "fc-controls-compact" : ""}`} aria-label="Hand-hover controls"><div className="fc-control-actions">{finishPending ? <>{control('continueWorkout', 'Keep training', continueWorkout)}{control('confirmFinish', 'Finish and save', finish)}</> : [control('pauseWorkout', workoutPaused ? 'Resume' : 'Pause', () => setWorkoutPaused(value => !value)), control('log', 'Log set', logSet), control('finish', 'Finish', requestFinish), control('previous', 'Previous', () => nextExercise(-1)), control('next', 'Next workout', () => nextExercise(1)), focus ? control('exit', 'Exit fullscreen', exitFocus) : control('fullscreen', 'Fullscreen', enterFocus)].slice(controlPage * controlsPerPage, (controlPage + 1) * controlsPerPage).map((button, index) => <span className="fc-control-slot" key={`${controlPage}-${index}`}>{button}</span>)}</div><nav hidden={finishPending} className="fc-control-navigation" aria-label="Camera action pages"><button type="button" data-gesture="menuBack" aria-label="Previous controls" disabled={controlPage === 0} onClick={() => { gestureState.current = { id: "menuBack", elapsed: 0, latched: true, away: 0 }; setControlPage(value => Math.max(0, value - 1)) }}><ChevronLeft aria-hidden="true" /></button><small>{`${controlPage * controlsPerPage < 3 ? "Set" : "Workout"} · ${controlPage + 1} / ${controlPages}`}</small><button type="button" data-gesture="menuNext" aria-label="More controls" disabled={controlPage === controlPages - 1} onClick={() => { gestureState.current = { id: "menuNext", elapsed: 0, latched: true, away: 0 }; setControlPage(value => Math.min(controlPages - 1, value + 1)) }}><ChevronRight aria-hidden="true" /></button></nav></div></>}
           </div>
         </div>
         <aside className="fc-guide-column" aria-label="Workout guide and progress">{finishPending && <p className="fc-side-status" role="status">Finish this workout? Choose Keep training or Finish and save.</p>}{ready && <small className="fc-side-status">{label}</small>}{corrections && fault && <p className="fc-side-fault" role="status">{fault}</p>}{referenceVisible && <CoachReference activity={viewMode === 'game' ? gameActivity || undefined : undefined} exercise={ex === 'observe' ? 'seatedPress' : ex} anglesVisible={viewMode === 'advanced' && options.angles} lineage={lineage} paused={workoutPaused || options.autoPause && trackingPaused} battery={options.battery} />}<div className={`fc-workout-hud ${((RULES[ex].timed ? held : reps.length) >= target && ex !== 'observe') ? 'fc-goal-complete' : ''}`} role="status" aria-live="polite"><strong>{viewMode === "game" && gameActivity ? COMBAT_MODES.find(activity => activity.id === gameActivity)?.name : RULES[ex].name}</strong>{focus && encouragement && <span className="fc-encouragement">{fault ? "Reset gently. The next movement is a fresh start." : (RULES[ex].timed ? held : reps.length) >= target ? "Set complete. Take a comfortable breath." : ["Steady and comfortable.", "You are building consistency.", "Keep your own pace.", "Good effort. Stay within your comfortable range."][Math.floor((RULES[ex].timed ? held : reps.length) / 3) % 4]}</span>}<small>{mode === "idle" ? "Camera off" : mode === "loading" ? "Preparing camera" : mode === "demo" ? workoutPaused ? "Demo paused · no rewards" : "Demo · no rewards" : workoutPaused ? "Workout paused" : trackingPaused ? "Return to camera frame" : calibration < 1 ? "Calibrating your position" : "Your workout"}</small>{ex !== 'observe' && <><b>{RULES[ex].timed ? held : reps.length} / {target} {RULES[ex].timed ? 'seconds' : ex === 'boxing' ? 'air punches' : 'reps'}</b>{ex === 'boxing' && <small>{Object.entries(strikes.counts).map(([kind, count]) => `${kind}: ${count}`).join(' · ') || 'Extend and return each punch · either arm'}</small>}<progress aria-label="Set progress" value={Math.min(target, RULES[ex].timed ? held : reps.length)} max={target} /><span>{(RULES[ex].timed ? held : reps.length) >= target ? 'Set complete · Log set or Finish' : `${Math.max(0, target - (RULES[ex].timed ? held : reps.length))} remaining`}</span></>}</div> {focus && viewMode === 'advanced' && options.fullscreenMetrics && <div className="fc-floating-metrics">{RULES[ex].timed ? `${held}s active` : `${reps.length} reps`} · {Math.round(metrics.watts)} W est. · {metrics.joules.toFixed(1)} J est.</div>}</aside></div>
