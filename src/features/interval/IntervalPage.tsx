@@ -12,7 +12,7 @@ import { Rail, Slider, Stat, Studio, StudioScene, logActivity, readStore, writeS
 import { subOn } from '../subFeatures'
 import { burst } from '../../components/ui/celebrate'
 import { WORKOUT_KEY, type WorkoutStore } from '../workout/workoutModel'
-import { c25k, c25kProgram, calories, fmt, position, presets, segments, total, type Program } from './intervalModel'
+import { c25k, c25kProgram, calories, fmt, normalizeProgram, position, presets, segments, total, type Program } from './intervalModel'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './interval.css'
 
@@ -56,7 +56,7 @@ const say = (t: string) => {
 }
 
 export function IntervalPage() {
-  const [store, setStoreState] = useState<Store>(() => readStore(KEY, initial))
+  const [store, setStoreState] = useState<Store>(() => { const saved = readStore<Store>(KEY, initial); return { ...initial, ...saved, custom: normalizeProgram(saved.custom, initial.custom), saved: Array.isArray(saved.saved) ? saved.saved.slice(-50).map(p => normalizeProgram(p, initial.custom)) : [], c25kDone: Number.isFinite(saved.c25kDone) ? Math.max(0, Math.min(27, saved.c25kDone)) : 0 } })
   const setStore = (fn: (s: Store) => Store) =>
     setStoreState((c) => {
       const n = fn(c)
@@ -176,7 +176,7 @@ export function IntervalPage() {
   }
   const choose = (p: Program) => {
     reset()
-    setProgram(p)
+    setProgram(p.id.startsWith('c25k-') || presets.some(row => row === p) ? p : normalizeProgram(p, initial.custom))
     setStore(s => ({ ...s, selectedId: p.id }))
     setTab('run')
   }

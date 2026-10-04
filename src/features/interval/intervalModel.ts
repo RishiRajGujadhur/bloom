@@ -1,6 +1,12 @@
 export type Kind = 'warmup' | 'work' | 'rest' | 'cooldown'
 export type Segment = { kind: Kind; label: string; seconds: number; round?: number }
 export type Program = { id: string; name: string; emoji: string; work: number; rest: number; rounds: number; warmup: number; cooldown: number; workLabel?: string; restLabel?: string }
+export function normalizeProgram(value: unknown, fallback: Program): Program {
+  const row = value && typeof value === 'object' ? value as Record<string, unknown> : {}
+  const number = (key: keyof Program, min: number, max: number) => typeof row[key] === 'number' && Number.isFinite(row[key]) ? Math.round(Math.max(min, Math.min(max, row[key] as number))) : fallback[key] as number
+  const text = (key: 'id' | 'name' | 'emoji') => typeof row[key] === 'string' && row[key].trim() ? row[key].slice(0, key === 'id' ? 100 : 40) : fallback[key]
+  return { id: text('id'), name: text('name'), emoji: text('emoji'), work: number('work', 5, 300), rest: number('rest', 0, 180), rounds: number('rounds', 1, 30), warmup: number('warmup', 0, 600), cooldown: number('cooldown', 0, 600) }
+}
 
 export const presets: Program[] = [
   { id: 'tabata', name: 'Tabata', emoji: '⚡', work: 20, rest: 10, rounds: 8, warmup: 120, cooldown: 120 },
