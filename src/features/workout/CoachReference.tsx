@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { jointCallouts, BONES, referencePose, RULES, UPPER_BONES, type Exercise, type Lineage } from './formModel'
+import { arcadeReferencePose } from './arcadeReference'
+import { COMBAT_MODES, type CombatMode } from './cameraCombatModel'
 import { prefersReducedMotion } from '../../utils/motion'
 
 /** An illustrative 3D movement guide, not a body-shape or range-of-motion target. */
-export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false }: { exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
+export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang', paused = false, battery = false, activity }: { activity?: CombatMode; exercise: Exercise; anglesVisible?: boolean; lineage?: Lineage; paused?: boolean; battery?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const [available, setAvailable] = useState(true)
   const [angles, setAngles] = useState(() => jointCallouts(referencePose(exercise, 0, lineage)))
@@ -35,7 +37,8 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
         if (now - renderedAt < (battery ? 125 : 50)) { raf = requestAnimationFrame(loop); return }
         if (!paused && renderedAt) phaseTime += now - renderedAt
         renderedAt = now
-        const pose = referencePose(exercise, prefersReducedMotion() ? .25 : phaseTime / 4000 % 1, lineage)
+        const phase = prefersReducedMotion() ? .25 : phaseTime / 4000 % 1
+        const pose = activity ? arcadeReferencePose(activity, phase, lineage) : referencePose(exercise, phase, lineage)
         setAngles(jointCallouts(pose))
         if (RULES[exercise].upper) { pose.push({ x: (pose[11].x + pose[12].x) / 2, y: (pose[11].y + pose[12].y) / 2, z: 0 }, { x: .5, y: .69, z: 0 }) }
         const positions = pose.map((p) => new THREE.Vector3((p.x - .5) * 2.7, (.58 - p.y) * 2.7, (p.z ?? 0) * 2.7))
@@ -51,6 +54,6 @@ export function CoachReference({ exercise, anglesVisible = true, lineage = 'Yang
       raf = requestAnimationFrame(loop)
     }).catch(() => { if (!cancelled) setAvailable(false) })
     return () => { cancelled = true; cancelAnimationFrame(raf); release() }
-  }, [exercise, lineage, paused, battery])
-  return <div className="fc-reference"><span>3D movement reference</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Wrist L / R</dt><dd>{angles.leftWrist ?? '—'}° / {angles.rightWrist ?? '—'}°</dd></div>{!RULES[exercise].upper && <div><dt>Knee L / R</dt><dd>{angles.leftKnee ?? '—'}° / {angles.rightKnee ?? '—'}°</dd></div>}<div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
+  }, [exercise, lineage, paused, battery, activity])
+  return <div className="fc-reference"><span>{activity ? COMBAT_MODES.find(mode => mode.id === activity)?.name : "3D movement reference"}</span>{available ? <canvas ref={canvas} aria-label={`Illustrative ${RULES[exercise].name} movement`} /> : <p>3D preview unavailable. Use the exercise cue and demo.</p>}{anglesVisible && <dl className="fc-reference-angles"><div><dt>Left elbow</dt><dd>{angles.left}°</dd></div><div><dt>Right elbow</dt><dd>{angles.right}°</dd></div><div><dt>Wrist L / R</dt><dd>{angles.leftWrist ?? '—'}° / {angles.rightWrist ?? '—'}°</dd></div>{!RULES[exercise].upper && <div><dt>Knee L / R</dt><dd>{angles.leftKnee ?? '—'}° / {angles.rightKnee ?? '—'}°</dd></div>}<div><dt>Spine cue</dt><dd>Comfortably upright</dd></div></dl>}<small>{activity && <>{COMBAT_MODES.find(mode => mode.id === activity)?.cue} · </>}{exercise === 'taiChi' ? `${lineage}-inspired illustrative flow` : 'Illustrative motion'} · follow your own comfortable range.</small></div>
 }
