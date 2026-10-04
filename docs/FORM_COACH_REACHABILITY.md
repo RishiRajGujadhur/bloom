@@ -17,3 +17,5 @@ Each improvement is committed and pushed separately.
 - [x] 7. allow comfortable hand hold durations from two to five seconds
 
 - [x] 8. offer left or right reach zones without moving the camera subject
+
+- [x] 9. move workout name and rep progress beneath the side reference
