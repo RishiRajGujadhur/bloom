@@ -140,6 +140,7 @@ export function StretchPage() {
   const [after, setAfter] = useState<number | null>(null)
   const [afterDraft, setAfterDraft] = useState(3)
   const [finished, setFinished] = useState(false)
+  const checkInSaved = useRef(false)
   const card = useRef<HTMLDivElement>(null)
   const [desk, setDesk] = useState(() => readNudges()['desk-stretch'] ?? { every: 50, enabled: false })
   const list = useMemo(() => steps(routine.ids, on('switchSides')), [routine])
@@ -172,6 +173,7 @@ export function StretchPage() {
   }, [playing])
 
   const start = (r: (typeof routines)[number]) => {
+    checkInSaved.current = false
     setRoutine(r)
     setI(0)
     setFinished(false)
@@ -202,6 +204,8 @@ export function StretchPage() {
     return () => window.removeEventListener('keydown', onKey, true)
   }, [])
   const saveCheckIn = (a: number) => {
+    if (!finished || checkInSaved.current || !Number.isFinite(a) || a < 0 || a > 10) return
+    checkInSaved.current = true
     setAfter(a)
     setStore((s) => ({ ...s, sessions: [...s.sessions, { at: Date.now(), routine: routine.name, before, after: a }].slice(-100) }))
   }
@@ -240,7 +244,7 @@ export function StretchPage() {
                 </button>
               </>
             ) : (
-              <p>{after !== null ? `Stiffness ${store.sessions.at(-1)?.before} → ${after}. Nicely loosened.` : 'Your body thanks you.'}</p>
+              <p>{after !== null ? `Saved: stiffness ${store.sessions.at(-1)?.before} → ${after}.` : 'Your body thanks you.'}</p>
             )}
             <button type="button" className="studio-go" data-variant="quiet" onClick={() => start(routine)}>
               Again
