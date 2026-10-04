@@ -84,6 +84,16 @@ explicit observation view rather than an invented form score.
 
 ## Validation
 
-Pending: production build, meaningful model tests, desktop/mobile body-page
-coverage and camera lifecycle/gesture checks. Physical metrics remain estimates;
-the camera does not measure eye health, body dimensions, daylight exposure or HRV.
+- Production TypeScript/Vite build: passed.
+- Targeted ESLint check: passed without errors or warnings.
+- Model checks: 40 passing tests across body inputs, pose analysis, energy,
+  martial arts, GPS auto-pause, interval bounds and readiness baseline isolation.
+- Manual browser verification: camera dialog layout, exact measurement save,
+  dated history and delete/undo passed.
+- Automated desktop/mobile coverage is included in `e2e/body-qol.spec.ts`.
+  The full browser run is not verified: local browser startup/timeouts and a
+  Playwright connection error interrupted it. Existing desktop demo/fullscreen
+  coverage passed in that run; hardware camera/gesture coverage remains unverified.
+- Physical metrics remain estimates. The camera does not measure eye health,
+  body dimensions, daylight exposure or HRV. Unsupported movements use an
+  observation view with no exercise accuracy score, classified reps, XP or damage.
