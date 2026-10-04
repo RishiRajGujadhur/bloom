@@ -38,7 +38,7 @@ explicit observation view rather than an invented form score.
 
 - [x] 21. Return to the beginning of the previous timer segment.
 - [x] 22. Offer a cancellable visual preparation countdown.
-- [ ] 23. Keep skipped intervals distinct from fully completed training.
+- [x] 23. Keep skipped intervals distinct from fully completed training.
 - [ ] 24. Restore the last selected valid interval program.
 - [ ] 25. Validate and bound custom interval settings before use.
 

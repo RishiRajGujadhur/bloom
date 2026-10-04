@@ -18,7 +18,7 @@ import './interval.css'
 
 const on = (id: string) => subOn('intervalCoach', id)
 const KEY = 'bloom-intervals-v1'
-type Store = { custom: Program; saved?: Program[]; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number }[] }
+type Store = { custom: Program; saved?: Program[]; countdown?: boolean; c25kDone: number; weight: number; history: { at: number; name: string; seconds: number; kcal: number; skipped?: boolean }[] }
 const initial: Store = {
   custom: { id: 'custom', name: 'My intervals', emoji: '🎛️', work: 30, rest: 15, rounds: 8, warmup: 60, cooldown: 60 },
   c25kDone: 0,
@@ -68,6 +68,7 @@ export function IntervalPage() {
   const [saveName, setSaveName] = useState('')
   const [elapsed, setElapsed] = useState(0)
   const [running, setRunning] = useState(false)
+  const [skippedSeconds, setSkippedSeconds] = useState(0)
   const [prepareSeconds, setPrepareSeconds] = useState(0)
   const preparation = useRef<ReturnType<typeof setInterval> | null>(null)
   const cancelPreparation = () => { if (preparation.current) clearInterval(preparation.current); preparation.current = null; setPrepareSeconds(0) }
@@ -112,14 +113,15 @@ export function IntervalPage() {
     if (!done || !running) return
     timer.current?.stop()
     setRunning(false)
-    const kcal = calories(segs, length, store.weight)
+    const trainedSeconds = Math.max(0, length - skippedSeconds)
+    const kcal = calories(segs, length, store.weight) * trainedSeconds / Math.max(1, length)
     setStore((s) => ({
       ...s,
-      c25kDone: program.id.startsWith('c25k') ? s.c25kDone + 1 : s.c25kDone,
-      history: [...s.history, { at: Date.now(), name: program.name, seconds: length, kcal }].slice(-200),
+      c25kDone: !skippedSeconds && program.id.startsWith('c25k') ? s.c25kDone + 1 : s.c25kDone,
+      history: [...s.history, { at: Date.now(), name: program.name, seconds: trainedSeconds, kcal, skipped: skippedSeconds > 0 }].slice(-200),
     }))
-    logActivity('intervals', { name: program.name, seconds: length })
-    if (on('logWorkouts')) {
+    if (trainedSeconds > 0) logActivity('intervals', { name: program.name, seconds: trainedSeconds, skipped: skippedSeconds > 0 })
+    if (on('logWorkouts') && !skippedSeconds) {
       const w = readStore<WorkoutStore>(WORKOUT_KEY, { workouts: [], rest: 90, bodyweight: 70 })
       writeStore(WORKOUT_KEY, { ...w, workouts: [...w.workouts, { id: crypto.randomUUID(), name: program.name, templateId: 'intervals', startedAt: Date.now() - length * 1000, finishedAt: Date.now(), sets: [] }] })
     }
@@ -135,6 +137,7 @@ export function IntervalPage() {
   }, [frac])
 
   const toggle = () => {
+    cancelPreparation()
     const t = timer.current
     if (!t) return
     if (running) {
@@ -151,11 +154,13 @@ export function IntervalPage() {
     timer.current?.reset()
     timer.current?.stop()
     setElapsed(0)
+    setSkippedSeconds(0)
     setRunning(false)
     lastIndex.current = -1
   }
   const skip = () => {
     if (!pos) return
+    setSkippedSeconds(value => value + pos.left)
     const target = elapsed + pos.left
     timer.current?.stop()
     timer.current?.start({ precision: 'seconds', startValues: { seconds: target } })
@@ -258,9 +263,10 @@ export function IntervalPage() {
           <Stat value={fmt(elapsed)} label="elapsed" />
           <Stat value={fmt(Math.max(0, length - elapsed))} label="left" />
           {running && <Stat value={new Date(Date.now() + Math.max(0, length - elapsed) * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} label="finishes at" />}
-          {on('calories') && <Stat value={calories(segs, elapsed, store.weight)} label="kcal (estimate)" />}
+          {on('calories') && <Stat value={Math.round(calories(segs, elapsed, store.weight) * Math.max(0, elapsed - skippedSeconds) / Math.max(1, elapsed))} label="kcal (estimate)" />}
         </div>
         {on('calories') && <Slider label="Your weight" value={store.weight} min={40} max={150} unit="kg" compact onChange={(v) => setStore((s) => ({ ...s, weight: v }))} />}
+        {skippedSeconds > 0 && <p role="status" className="studio-empty">{Math.round(skippedSeconds)}s skipped · modified practice does not complete a Couch to 5K day or create a full workout record.</p>}
       </div>
     </div>
   )
