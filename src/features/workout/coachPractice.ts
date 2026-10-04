@@ -25,7 +25,7 @@ export function tempoTick(previous: TempoState, metric: number, at: number, down
   if (metric < state.min) { state.min = metric; state.turn = at }
   state.reached ||= metric < down
   if (state.phase === 'lift' && state.reached && metric > state.min + 4) state.phase = 'lower'
-  if (metric > up) {
+  if (metric > up && (state.phase === 'lower' || previous.metric !== null && metric > previous.metric + 1)) {
    if (state.phase === 'lower' && state.reached && state.turn > state.start) {
     const lift = (state.turn - state.start) / 1000, lower = (at - state.turn) / 1000
     const target = preset === '1:3' ? [1,3] : [2,2]
