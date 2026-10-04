@@ -482,6 +482,7 @@ export function ExercisePage() {
         </div>
       </div>
       <div className="studio-card ex-panel">
+        <p className="studio-empty" role="note">Animated guide · counts follow the demonstration, not your body. Use Camera pose coach for measured movement tracking.</p>
         <h3>
           <span aria-hidden="true">{pick.emoji}</span> {pick.name}
         </h3>
