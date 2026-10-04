@@ -20,3 +20,5 @@ These sources informed the choices of features; Bloom’s camera scores remain e
 - [x] 3. add camera-counted seated lateral raises and matching 3D guidance
 
 - [x] 4. add optional tempo grading and a reference that follows lift-return timing
+
+- [x] 5. gate camera scoring on visible joints and provide specific framing feedback

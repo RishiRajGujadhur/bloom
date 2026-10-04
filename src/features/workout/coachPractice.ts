@@ -1,4 +1,4 @@
-import { RULES, type Exercise } from './formModel'
+import { RULES, exerciseVisible, visible, type P, type Exercise } from './formModel'
 export function exerciseGuide(ex: Exercise) {
   const upper = RULES[ex].upper
   const camera = upper ? 'Position the camera near chest height with your head and both arms visible. Keep your usual seated support.' : ['pushup','plank','lunge'].includes(ex) ? 'Use a side view with the joints needed for this movement visible. Keep the device steady.' : 'Keep your hips, knees and ankles visible. A slight side angle can make depth easier to see.'
@@ -35,4 +35,14 @@ export function tempoTick(previous: TempoState, metric: number, at: number, down
   }
  }
  return { state, result }
+}
+
+export function poseReadiness(ex: Exercise, pose: P[], seated = false) {
+ const upper = seated || RULES[ex].upper
+ const sides = [[11,13,15,23,27],[12,14,16,24,28]]
+ const indices = upper ? [0,11,12,13,14,15,16] : ['squat','chairSquat','lunge'].includes(ex) ? [11,12,23,24,25,26,27,28] : (sides.find(side => (ex === 'plank' ? [side[0],side[3],side[4]] : side).every(i=>visible(pose[i]))) ?? sides[0]).filter(i=>ex !== 'plank' || [11,12,23,24,27,28].includes(i))
+ const seen=indices.filter(i=>visible(pose[i])), confidence=seen.length ? Math.round(seen.reduce((sum,i)=>sum+(pose[i].visibility ?? 1),0)/indices.length*100) : 0
+ if (seen.length !== indices.length || !exerciseVisible(upper ? 'observe' : ex,pose)) return { ready:false, confidence, message: upper ? 'Show your head and both arms. More light can help tracking.' : 'Keep the exercise joints visible; try the camera angle in the movement guide.' }
+ if(indices.some(i=>pose[i].x < .01 || pose[i].x > .99 || pose[i].y < .01 || pose[i].y > .99)) return { ready:false, confidence, message:'Move the camera a little farther back so the moving joints fit inside the picture.' }
+ return { ready:true, confidence, message: upper ? 'Upper-body joints visible' : 'Exercise joints visible' }
 }

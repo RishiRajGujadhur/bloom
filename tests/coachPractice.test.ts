@@ -29,3 +29,10 @@ test('tempo measures a full cycle and discards interrupted partial movements', (
  expect(last).not.toBeNull(); expect(last!.lift).toBeCloseTo(1,1); expect(last!.lower).toBeGreaterThan(2); expect(last!.score).toBeGreaterThan(85)
  const partial=tempoTick(emptyTempo(),180,100,110,160,'1:3'); const bent=tempoTick(partial.state,90,200,110,160,'1:3'); expect(tempoTick(bent.state,180,1500,110,160,'1:3').result).toBeNull()
 })
+
+import { poseReadiness } from '../src/features/workout/coachPractice'
+test('readiness ignores legs in seated mode but rejects off-picture wrists', () => {
+ const pose=upperPose('bicepCurl',0); expect(poseReadiness('bicepCurl',pose,true).ready).toBe(true)
+ pose[15].x=1.1; expect(poseReadiness('bicepCurl',pose,true).ready).toBe(false)
+ pose[15].x=.4; pose[15].visibility=.2; expect(poseReadiness('bicepCurl',pose,true).message).toContain('both arms')
+})

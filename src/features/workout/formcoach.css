@@ -197,3 +197,5 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-workout-selection{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}.fc .fc-workout-selection select{width:min(280px,100%);min-height:40px;padding:7px;border-radius:9px;background:#153e30;color:white;border:1px solid #6fcba5}.fc-reference-options summary,.fc-reference-angle-details summary{cursor:pointer;font-size:11px;padding:4px}.fc-reference-options label{margin-top:6px}.fc-reference-angle-details .fc-reference-angles{margin:6px 0}
 
 .fc-movement-guide{border:1px solid #426e5b;border-radius:10px;padding:7px;font-size:12px}.fc-movement-guide summary{cursor:pointer;font-weight:700}.fc-movement-guide p{margin:8px 0;color:#d7eddf;line-height:1.5}
+
+.fc-camera-readiness{font-size:11px;color:#bae6cd}.fc-camera-readiness.needs-adjustment{color:#ffdaad;border-left:3px solid #ffc27c;padding-left:8px}
