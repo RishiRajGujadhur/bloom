@@ -80,9 +80,13 @@ test('either-hand hovering changes exercises, logs one set, and finishes from fu
   expect(stored.workouts[0].sets[0].liftId).toBe('seatedtwist')
   await send(upperPose('seatedTwist', 0)); await page.waitForTimeout(1000)
   await hover('next', 16)
-  await expect(page.getByRole('radio', { name: 'Wheelchair Dips', exact: true })).toBeChecked({ timeout: 9000 })
+  await expect(page.getByRole('combobox', { name: 'Selected workout', exact: true })).toHaveValue('wheelchairDip', { timeout: 9000 })
   await send(upperPose('wheelchairDip', 0)); await page.waitForTimeout(1000)
   await page.getByRole('button', { name: 'Fullscreen workout' }).click()
+  await expect.poll(async () => {
+    const feed = (await page.locator('.fc-view').boundingBox())!, guide = (await page.locator('.fc-reference').boundingBox())!
+    return guide.x - feed.x - feed.width
+  }).toBeGreaterThan(-2)
   await hover('finish', 16)
   await expect(page.getByRole('button', { name: 'Start camera' })).toBeVisible({ timeout: 9000 })
   const finished = await page.evaluate(() => JSON.parse(localStorage.getItem('bloom-workouts-v1')!))
@@ -94,6 +98,7 @@ test('either-hand hovering changes exercises, logs one set, and finishes from fu
 
 test('personal calibration and visual preferences survive reload without saving demo workouts', async ({ page }, testInfo) => {
   await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
+  await page.getByText('Coach settings', { exact: true }).click()
   await page.getByRole('checkbox', { name: 'Master reference view', exact: true }).uncheck()
   await page.getByRole('checkbox', { name: 'Battery saver', exact: true }).check()
   await page.getByRole('button', { name: 'Watch the demo athlete' }).click()
@@ -102,6 +107,7 @@ test('personal calibration and visual preferences survive reload without saving 
   await expect(page.locator('.fc-range-calibration')).toContainText('Personal range saved', { timeout: 18000 })
   await page.getByRole('button', { name: 'Finish', exact: true }).click()
   await page.reload({ waitUntil: 'domcontentloaded' })
+  await page.getByText('Coach settings', { exact: true }).click()
   await expect(page.getByRole('checkbox', { name: 'Master reference view', exact: true })).not.toBeChecked()
   await expect(page.getByRole('checkbox', { name: 'Battery saver', exact: true })).toBeChecked()
   const range = await page.evaluate(() => JSON.parse(localStorage.getItem('bloom-coach-ranges-v1') ?? '{}').seatedTwist)
@@ -129,8 +135,11 @@ test('Basic defaults to essentials and fullscreen keeps the reference, count and
   const reference = page.locator('.fc-split .fc-reference'), hud = page.locator('.fc-workout-hud')
   await expect(reference).toBeVisible(); await expect(hud).toContainText('/ 10 reps')
   await expect(hud.getByRole('progressbar')).toBeVisible()
-  const cameraBox = (await page.locator('.fc-view').boundingBox())!, referenceBox = (await reference.boundingBox())!
-  expect(referenceBox.x).toBeGreaterThan(cameraBox.x + cameraBox.width - 2)
+  await expect.poll(async () => {
+    const camera = (await page.locator('.fc-view').boundingBox())!, guide = (await reference.boundingBox())!
+    return guide.x - camera.x - camera.width
+  }).toBeGreaterThan(-2)
+  const cameraBox = (await page.locator('.fc-view').boundingBox())!
   const controls = (await page.getByRole('button', { name: 'Log set', exact: true }).boundingBox())!
   expect(controls.x).toBeLessThan(cameraBox.x + cameraBox.width / 2)
   await page.getByRole('button', { name: 'Exit fullscreen' }).click()
