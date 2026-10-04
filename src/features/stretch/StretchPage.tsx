@@ -82,7 +82,7 @@ function BodyMap({ selected, onToggle, glow }: { selected: Area[]; onToggle?: (a
         <rect x="62" y="118" width="18" height="104" rx="9" />
       </g>
       {regions.map(([a, cx, cy, rx, ry], i) => (
-        <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} className="st-region" data-on={selected.includes(a) || glow === a} onClick={() => onToggle?.(a)} role={onToggle ? 'button' : undefined} aria-label={onToggle ? areaNames[a] : undefined} aria-pressed={onToggle ? selected.includes(a) : undefined}>
+        <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} className="st-region" data-on={selected.includes(a) || glow === a} onClick={() => onToggle?.(a)} tabIndex={onToggle ? 0 : undefined} onKeyDown={event => { if (onToggle && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onToggle(a) } }} role={onToggle ? 'button' : undefined} aria-label={onToggle ? areaNames[a] : undefined} aria-pressed={onToggle ? selected.includes(a) : undefined}>
           <title>{areaNames[a]}</title>
         </ellipse>
       ))}

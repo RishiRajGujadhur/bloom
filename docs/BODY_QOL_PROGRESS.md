@@ -52,7 +52,7 @@ explicit observation view rather than an invented form score.
 
 ## Stretch
 
-- [ ] 31. Operate body-map regions with keyboard Enter/Space.
+- [x] 31. Operate body-map regions with keyboard Enter/Space.
 - [ ] 32. Clear all selected body-map areas with one action.
 - [ ] 33. Return to the previous stretch while preserving the routine.
 - [ ] 34. Restart the current stretch without restarting the routine.
