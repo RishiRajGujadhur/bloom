@@ -536,7 +536,13 @@ export function BloomCompanion({
                   <small>
                     {turn.role === 'user' ? 'You' : 'Bloom'}
                     {turn.role === 'assistant' && (
-                      <button type="button" className="companion-copy" aria-label="Copy reply" title="Copy" onClick={(e) => { void navigator.clipboard?.writeText(turn.content); e.currentTarget.textContent = '✓' }}>
+                      <button type="button" className="companion-copy" aria-label="Copy reply" title="Copy" onClick={() => { void (async () => {
+                        try {
+                          if (!navigator.clipboard) throw new Error('Clipboard unavailable')
+                          await navigator.clipboard.writeText(turn.content)
+                          setNotice('Reply copied.')
+                        } catch { setNotice('Could not copy. Select the reply text and copy it manually.') }
+                      })() }}>
                         ⧉
                       </button>
                     )}

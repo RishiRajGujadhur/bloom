@@ -43,3 +43,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 034 — Expose local AI progress as human readable loading text. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 035 — Make loading stage changes polite screen reader announcements. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 036 — Identify local model timeout separately from other response failures. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 037 — Keep reply copy success and failures in React state. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
