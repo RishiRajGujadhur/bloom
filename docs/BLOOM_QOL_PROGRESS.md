@@ -161,3 +161,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 146 — Keep chat controls visible in Windows high contrast mode. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 147 — Make disabled controls distinguishable in high contrast mode. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 148 — Keep suggestion paging direction natural in right to left languages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 149 — Respect user text spacing without clipping action labels. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

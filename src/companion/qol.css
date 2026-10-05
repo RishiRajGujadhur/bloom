@@ -134,3 +134,5 @@
 @media (forced-colors: active) { .bc-panel button:disabled { color: GrayText; border-color: GrayText; opacity: 1; } }
 
 .choice-slider-control input { direction: ltr; } .choice-slider-items button { text-align: start; }
+
+.choice-slider-items button { height: auto; text-overflow: clip; overflow: visible; padding: 10px 8px; }
