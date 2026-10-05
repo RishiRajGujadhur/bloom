@@ -38,3 +38,5 @@
 .choice-slider-items small { display: block; font-size: 12px; font-weight: 400; margin-block-start: 4px; }
 
 .bc-panel .choice-slider-items .bg-chip:hover:not(:disabled) { transform: none; border-color: var(--accent-color); }
+
+.choice-slider-items button:active:not(:disabled) { filter: brightness(.92); }
