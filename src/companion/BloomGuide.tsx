@@ -207,6 +207,7 @@ export function BloomGuide({
             id: `${index}:${c.label}`, label: c.label, run: () => pick(c), disabled: typing,
           }))} />
       </div>
+      {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
       <p className="chat-scope" id="bloom-guide-scope">I can find pages, run shortcuts, and help you plan. Review changes to your tasks and spending.</p>
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>

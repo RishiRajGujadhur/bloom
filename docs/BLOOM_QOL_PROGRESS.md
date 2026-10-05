@@ -23,3 +23,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 014 — Retain sixty guide messages instead of only six. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 015 — Explain guide capabilities before commands are entered. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 016 — Associate guide input with its scope description. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 017 — Explain unmatched guide searches with an actionable hint. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
