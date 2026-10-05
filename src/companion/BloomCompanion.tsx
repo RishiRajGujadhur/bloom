@@ -224,8 +224,9 @@ export function BloomCompanion({
     },
     [],
   )
+  const followLatest = useRef(true)
   useEffect(() => {
-    feed.current?.scrollTo({ top: feed.current.scrollHeight })
+    if (followLatest.current) feed.current?.scrollTo({ top: feed.current.scrollHeight })
   }, [turns, busy, open])
 
   const stop = () => {
@@ -506,6 +507,10 @@ export function BloomCompanion({
             <div
               className="companion-feed"
               ref={feed}
+              onScroll={(event) => {
+                const el = event.currentTarget
+                followLatest.current = el.scrollHeight - el.scrollTop - el.clientHeight < 48
+              }}
               role="log"
               aria-label="Conversation with Bloom"
               aria-live="polite"
