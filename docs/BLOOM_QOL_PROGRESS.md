@@ -86,3 +86,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 077 — Keep mobile keyboard focus within the full screen chat. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 078 — Keep optional model downloads from failing silently when offline. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 079 — Bound programmatically submitted planning requests to the input limit. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 080 — Display typed guide messages literally instead of interpreting HTML. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
