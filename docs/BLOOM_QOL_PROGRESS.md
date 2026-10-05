@@ -75,3 +75,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 066 — Explain why planning is blocked by a data recovery alert. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 067 — Explain that stopped generation keeps the last submitted message. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 068 — Announce successful application of a daily plan. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 069 — Support touch swipes between suggestion pages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

@@ -1,16 +1,28 @@
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import './choiceSlider.css'
 
 export type SliderAction = { id: string; label: ReactNode; run: () => void; disabled?: boolean }
 
 /** Paging renders at most three suggestions, including for assistive technology. */
 export function ChoiceSlider({ actions, label = 'Choices' }: { actions: SliderAction[]; label?: string }) {
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
   const [position, setPosition] = useState(0)
   const pages = Math.max(1, Math.ceil(actions.length / 3))
   const page = Math.min(position, pages - 1)
   return (
     <div className="choice-slider" role="group" aria-label={label}>
-      <div className="choice-slider-items">
+      <div className="choice-slider-items" onTouchStart={(event) => {
+        const touch = event.touches[0]
+        touchStart.current = { x: touch.clientX, y: touch.clientY }
+      }} onTouchEnd={(event) => {
+        const start = touchStart.current
+        touchStart.current = null
+        const touch = event.changedTouches[0]
+        if (!start || !touch) return
+        const dx = touch.clientX - start.x
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(touch.clientY - start.y) * 1.5)
+          setPosition(Math.max(0, Math.min(pages - 1, page + (dx < 0 ? 1 : -1))))
+      }}>
         {actions.slice(page * 3, page * 3 + 3).map((action) => (
           <button key={action.id} type="button" className="bg-chip" disabled={action.disabled} onClick={action.run}>
             {action.label}
