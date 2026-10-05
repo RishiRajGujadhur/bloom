@@ -274,6 +274,7 @@ export function BloomCompanion({
     setIntent('plan')
   }
   const ask = async (input: string) => {
+    input = input.trim()
     if (!input.trim() || pending.current) return
     pending.current = true
     setBusy(true)

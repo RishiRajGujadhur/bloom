@@ -29,3 +29,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 020 — Prevent duplicate quiz responses during guide processing. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 021 — Keep planning composer ready for mobile send actions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 022 — Remove browser history suggestions from the planning input. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 023 — Trim planning requests before displaying or interpreting them. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
