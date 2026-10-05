@@ -58,3 +58,5 @@
 .bc-panel .companion-composer input { font-size: 16px; min-height: 48px; }
 
 .bc-panel .companion-composer button { min-width: 48px; min-height: 48px; }
+
+.bc-panel .companion-composer { position: sticky; bottom: 0; z-index: 1; background: var(--bg-surface); }

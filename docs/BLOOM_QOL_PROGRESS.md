@@ -123,3 +123,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 108 — Prevent mobile zoom while typing a guide request. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 109 — Prevent mobile zoom while typing a planning request. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 110 — Provide generous send and stop targets in the planning composer. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 111 — Keep the planning composer available while scrolling suggestions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
