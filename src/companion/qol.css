@@ -102,3 +102,5 @@
 .companion-plan > .text-button { min-height: 48px; text-align: start; }
 
 .companion-plan [role="status"] { border-inline-start: 3px solid var(--accent-color); padding-inline-start: 10px; font-size: 14px; }
+
+.chat-tools { border-block-start: 1px solid var(--border-color); padding-block-start: 6px; font-size: 14px; }

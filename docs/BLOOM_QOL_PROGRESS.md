@@ -145,3 +145,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 130 — Give plan apply and simplify actions generous tap targets. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 131 — Make the daily intentions navigation link easy to tap. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 132 — Show plan recovery warnings separately from task descriptions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 133 — Make transcript tool disclosures readable and discoverable. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
