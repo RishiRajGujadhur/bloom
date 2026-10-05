@@ -41,3 +41,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 032 — Associate the planning input with its character limit. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 033 — Report local AI progress with a bounded percentage. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 034 — Expose local AI progress as human readable loading text. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 035 — Make loading stage changes polite screen reader announcements. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

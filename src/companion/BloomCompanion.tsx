@@ -492,7 +492,7 @@ export function BloomCompanion({
               )}
             </details>
             {status === 'loading' && (
-              <div role="status">
+              <div role="status" aria-live="polite" aria-atomic="true">
                 <p>
                   {loadingStage ||
                     `Preparing local AI… ${Math.round(progress * 100)}%`}
