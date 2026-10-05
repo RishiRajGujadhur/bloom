@@ -44,3 +44,5 @@
 .choice-slider-items button:disabled { cursor: not-allowed; opacity: .6; }
 
 .bc-panel .bc-head-actions button { width: 48px; height: 48px; min-width: 48px; }
+
+.bc-head-actions button svg { flex-shrink: 0; }
