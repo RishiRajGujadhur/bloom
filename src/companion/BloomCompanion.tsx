@@ -501,6 +501,7 @@ export function BloomCompanion({
                   value={Math.max(0, Math.min(1, progress))}
                   max={1}
                   aria-label="Local AI loading"
+                  aria-valuetext={`${Math.round(Math.max(0, Math.min(1, progress)) * 100)}% downloaded`}
                 />
               </div>
             )}
