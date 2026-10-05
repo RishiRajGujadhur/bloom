@@ -25,6 +25,7 @@ import {
 import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import { BloomGuide } from './BloomGuide'
 import { ChoiceSlider } from './ChoiceSlider'
+import { readDraft, writeSession } from './chatSession'
 import './companion.css'
 import { useChatAppearance } from './chatAppearance'
 
@@ -205,7 +206,8 @@ export function BloomCompanion({
     const tw = gsap.fromTo(panel.current, docked ? { x: -40, opacity: 0 } : { scale: 0.85, opacity: 0, y: 16, transformOrigin: '0% 100%' }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.6)', clearProps: 'transform' })
     return () => void tw.progress(1)
   }, [open, docked])
-  const [text, setText] = useState('')
+  const [text, setText] = useState(() => readDraft('bloom-plan-draft'))
+  useEffect(() => writeSession('bloom-plan-draft', text), [text])
   const [turns, setTurns] = useState<Turn[]>([])
   const [proposal, setProposal] = useState<Proposal | null>(null)
   const [intent, setIntent] = useState<Intent['intent']>('chat')

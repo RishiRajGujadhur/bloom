@@ -58,3 +58,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 049 — Use Shift with resize arrows for larger width adjustments. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 050 — Offer a short fifteen minute planning prompt. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 051 — Offer reflection directly from the planning prompt slider. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 052 — Recover an unsent planning draft after a tab refresh. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
