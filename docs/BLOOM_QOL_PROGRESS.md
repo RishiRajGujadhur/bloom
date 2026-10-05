@@ -147,3 +147,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 132 — Show plan recovery warnings separately from task descriptions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 133 — Make transcript tool disclosures readable and discoverable. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 134 — Make conversation tools easy to open by touch. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 135 — Give transcript export and prompt edit tools comfortable targets. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
