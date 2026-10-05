@@ -207,6 +207,7 @@ export function BloomGuide({
             id: `${index}:${c.label}`, label: c.label, run: () => pick(c), disabled: typing,
           }))} />
       </div>
+      <p className="chat-scope" id="bloom-guide-scope">I can find pages, run shortcuts, and help you plan. Review changes to your tasks and spending.</p>
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>
         <input type="search" autoComplete="off" enterKeyHint="send" maxLength={1000} placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.nativeEvent.isComposing && void submit()} />

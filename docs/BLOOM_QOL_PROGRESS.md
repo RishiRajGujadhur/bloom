@@ -21,3 +21,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 012 — Label the guide conversation for screen readers. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 013 — Stop guide auto scrolling when reading older messages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 014 — Retain sixty guide messages instead of only six. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 015 — Explain guide capabilities before commands are entered. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
