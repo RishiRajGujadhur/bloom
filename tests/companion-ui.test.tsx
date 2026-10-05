@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { BloomCompanion } from '../src/companion/BloomCompanion'
+import { ChatAppearanceSettings } from '../src/companion/chatAppearance'
 import { defaults, taskSchema } from '../src/model'
 
 const mockLoad = jest.fn()
@@ -14,9 +15,29 @@ jest.mock('../src/companion/localAI', () => ({
 }))
 
 beforeEach(() => {
+  localStorage.removeItem('bloom-chat-avatar')
+  localStorage.removeItem('bloom-chat-follow-theme')
   mockLoad.mockReset()
   mockInterpret.mockReset()
   mockDispose.mockReset()
+})
+
+test('chat appearance changes the avatar and follows the app theme persistently', () => {
+  const view = mount()
+  const settings = render(<ChatAppearanceSettings />)
+  expect(screen.queryByText('Chat appearance')).not.toBeInTheDocument()
+  fireEvent.change(screen.getByLabelText('Chat avatar'), { target: { value: 'robot' } })
+  expect(screen.getByRole('img', { name: 'Bloom, your chat avatar' })).toBeVisible()
+  expect(localStorage.getItem('bloom-chat-avatar')).toBe('robot')
+  fireEvent.click(screen.getByLabelText('Use my app theme for Bloom chat'))
+  expect(screen.getByRole('region', { name: 'Talk to Bloom' })).toHaveClass('uses-app-theme')
+  settings.unmount()
+  view.unmount()
+  render(<ChatAppearanceSettings />)
+  mount()
+  expect(screen.getByLabelText('Chat avatar')).toHaveValue('robot')
+  expect(screen.getByLabelText('Use my app theme for Bloom chat')).toBeChecked()
+  expect(screen.getByRole('region', { name: 'Talk to Bloom' })).toHaveClass('uses-app-theme')
 })
 function mount() {
   const data = defaults()

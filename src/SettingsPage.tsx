@@ -115,6 +115,7 @@ import { pixelIconsOn, setPixelIcons } from './icons/pixelated'
 import { hamburgerNav, setHamburgerNav } from './components/layout/Sidebar'
 import { DISPLAY_TOGGLES, ShowMore, applyCustomCss, applyDisplayToggles, compactTitles, followSystemTheme, pageBanner, setCompactTitles, setFollowSystemTheme, setPageBanner } from './components/ui/Flow'
 import { AvatarPicker } from './components/ui/AvatarPicker'
+import { ChatAppearanceSettings } from './companion/chatAppearance'
 import { DataReset } from './settings/DataReset'
 import { StorageMeter } from './settings/StorageMeter'
 import { InstallApp } from './settings/InstallApp'
@@ -1556,6 +1557,7 @@ export function SettingsPage({
         <ConfigMarketplace settings={settings} setSettings={setSettings} theme={theme} setTheme={setTheme} parseSettings={parseSettings} />
         <ComfortCard />
         <AvatarPicker />
+        <ChatAppearanceSettings />
       </section>
 
       <section className={styles.card}>

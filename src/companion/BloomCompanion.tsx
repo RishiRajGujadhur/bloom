@@ -25,6 +25,7 @@ import {
 import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import { BloomGuide } from './BloomGuide'
 import './companion.css'
+import { useChatAppearance } from './chatAppearance'
 
 type Props = {
   data: AppData
@@ -125,6 +126,7 @@ export function BloomCompanion({
   initialMode?: 'guide' | 'plan'
 }) {
   const [mode, setMode] = useState<'guide' | 'plan'>(initialMode)
+  const { avatar, followTheme } = useChatAppearance()
   const [docked, setDockedState] = useState(() => {
     try {
       return localStorage.getItem('bloom-guide-docked') !== '0'
@@ -356,14 +358,15 @@ export function BloomCompanion({
           aria-label="Talk to Bloom"
           data-hint="Ask Bloom anything about this page"
         >
-          <BloomFace ref={launchFace} size={46} label="" waveOnMount={false} />
+          <BloomFace ref={launchFace} size={46} label="" waveOnMount={false}
+            variant={avatar === 'glass' || avatar === 'auto' ? undefined : avatar} />
           <span>Talk to Bloom</span>
         </button>
       )}
       {open && (
         <section
           ref={panel}
-          className={`bc-panel${docked ? ' is-docked' : ''}`}
+          className={`bc-panel${docked ? ' is-docked' : ''}${followTheme ? ' uses-app-theme' : ''}`}
           aria-label="Talk to Bloom"
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
@@ -405,6 +408,19 @@ export function BloomCompanion({
               </button>
             </div>
           </header>
+          <div className={`companion-orb-stage${busy ? ' is-thinking' : ''}`}>
+            {avatar === 'glass' ? (
+            <div className="companion-orb" role="img" aria-label="Bloom, your glowing assistant">
+              <span className="companion-orb-ribbon" />
+              <span className="companion-orb-ribbon ribbon-two" />
+              <span className="companion-orb-ribbon ribbon-three" />
+            </div>
+            ) : (
+              <BloomFace size={108} variant={avatar === 'auto' ? undefined : avatar}
+                mood={busy ? 'think' : 'idle'} label="Bloom, your chat avatar" />
+            )}
+            <span className="companion-orb-caption">YOUR SPACE TO BLOOM</span>
+          </div>
           {mode === 'guide' ? (
             <BloomGuide
               page={page}
