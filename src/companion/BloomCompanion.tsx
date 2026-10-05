@@ -555,6 +555,7 @@ export function BloomCompanion({
               <input
                 id="bloom-message"
                 enterKeyHint="send"
+                autoComplete="off"
                 placeholder="What would help today?"
                 maxLength={1000}
                 value={text}
