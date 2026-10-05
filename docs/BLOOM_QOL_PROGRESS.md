@@ -63,3 +63,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 054 — Recover the recent planning conversation within the same browser tab. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 055 — Recover guide history when switching modes or refreshing the tab. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 056 — Download a plain text transcript of the planning conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 057 — Download a plain text transcript of the guide conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

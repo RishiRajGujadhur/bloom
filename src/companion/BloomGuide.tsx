@@ -14,7 +14,7 @@ import { explain, nextHint, reveal, useQuiz } from './quizContext'
 import { burst } from '../components/ui/celebrate'
 import './guide.css'
 import { ChoiceSlider } from './ChoiceSlider'
-import { readDraft, writeSession, readConversation } from './chatSession'
+import { readDraft, writeSession, readConversation, exportConversation } from './chatSession'
 
 type Line = { id: number; from: 'bloom' | 'you'; text: string }
 /** Only the latest messages are kept, so long chats never slow the app down. */
@@ -213,6 +213,13 @@ export function BloomGuide({
           }))]} />
       </div>
       {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
+      <details className="chat-tools">
+        <summary>Conversation tools</summary>
+        <button type="button" onClick={() => {
+          try { exportConversation(lines.map((line) => ({ speaker: line.from === 'you' ? 'You' : 'Bloom', text: line.text })), 'bloom-guide') }
+          catch { say('Export unavailable. Select the conversation text to copy it.', choices) }
+        }}>Export conversation</button>
+      </details>
       <p className="chat-scope" id="bloom-guide-scope">I can find pages, run shortcuts, and help you plan. Review changes to your tasks and spending.</p>
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>
