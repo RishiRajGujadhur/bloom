@@ -116,3 +116,5 @@
 .bc-panel > .bloom-companion { overscroll-behavior-y: contain; scrollbar-gutter: stable; padding-inline-end: 4px; }
 
 .companion-feed { scrollbar-gutter: stable; overscroll-behavior-y: contain; }
+
+.bc-panel > .bg-guide { overflow-y: auto; overscroll-behavior-y: contain; grid-template-rows: minmax(100px, 1fr); grid-auto-rows: auto; }
