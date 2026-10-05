@@ -96,3 +96,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 081 — Make both conversations readable at a minimum sixteen pixel size. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 082 — Increase conversation line spacing for longer reading sessions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 083 — Constrain reply line lengths in wide panels. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 084 — Wrap long links and words in guide messages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

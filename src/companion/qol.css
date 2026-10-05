@@ -4,3 +4,5 @@
 .bc-panel .companion-message p, .bc-panel .cs-message__content { line-height: 1.65; }
 
 .bc-panel .companion-message, .bc-panel .cs-message__content { max-inline-size: 62ch; }
+
+.bc-panel .cs-message__content { overflow-wrap: anywhere; word-break: normal; }
