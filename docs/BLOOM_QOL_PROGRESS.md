@@ -79,3 +79,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 070 — Disable slider paging while all offered actions are processing. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 071 — Add a stop control to cancel pending guide replies. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 072 — Remove distracting perpetual orb movement while idle. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 073 — Link guide and planner tabs to their corresponding content panels. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

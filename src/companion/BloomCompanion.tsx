@@ -433,10 +433,10 @@ export function BloomCompanion({
               setMode(next)
               event.currentTarget.querySelector<HTMLButtonElement>(next === 'guide' ? '[aria-label="Guide me"]' : '[aria-label="Plan with Bloom"]')?.focus()
             }}>
-              <button type="button" role="tab" tabIndex={mode === 'guide' ? 0 : -1} aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>
+              <button type="button" id="bloom-guide-tab" aria-controls="bloom-guide-content" role="tab" tabIndex={mode === 'guide' ? 0 : -1} aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>
                 <Compass size={17} />
               </button>
-              <button type="button" role="tab" tabIndex={mode === 'plan' ? 0 : -1} aria-selected={mode === 'plan'} aria-pressed={mode === 'plan'} aria-label="Plan with Bloom" data-hint="Plan with Bloom" onClick={() => setMode('plan')}>
+              <button type="button" id="bloom-plan-tab" aria-controls="bloom-plan-content" role="tab" tabIndex={mode === 'plan' ? 0 : -1} aria-selected={mode === 'plan'} aria-pressed={mode === 'plan'} aria-label="Plan with Bloom" data-hint="Plan with Bloom" onClick={() => setMode('plan')}>
                 <CalendarClock size={17} />
               </button>
             </div>
@@ -475,7 +475,7 @@ export function BloomCompanion({
               onPlan={() => setMode('plan')}
             />
           ) : (
-          <div className="bloom-companion">
+          <div className="bloom-companion" id="bloom-plan-content" role="tabpanel" aria-labelledby="bloom-plan-tab">
             <div className="companion-identity">
               {data.rpg.companion !== 'none' ? (
                 <Sprite

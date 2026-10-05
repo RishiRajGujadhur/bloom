@@ -189,7 +189,7 @@ export function BloomGuide({
   }
   const results = query.trim() ? fuse.search(query).slice(0, 6).map((r) => r.item) : []
   return (
-    <div className="bg-guide" aria-busy={typing}>
+    <div className="bg-guide" id="bloom-guide-content" role="tabpanel" aria-labelledby="bloom-guide-tab" aria-busy={typing}>
       <div className="bg-guide-head">
         <BloomFace ref={face} size={72} label={`Bloom, your guide on ${names(page)}`} />
       </div>
