@@ -583,6 +583,7 @@ export function BloomCompanion({
                 </p>
               )}
             </div>
+            <details className="chat-tools"><summary>Conversation tools</summary>
             {turns.some((turn) => turn.role === 'user') && !busy && <button type="button" className="chat-edit" onClick={() => {
               setText(turns.filter((turn) => turn.role === 'user').at(-1)?.content ?? '')
               panel.current?.querySelector<HTMLInputElement>('#bloom-message')?.focus()
@@ -595,6 +596,7 @@ export function BloomCompanion({
               followLatest.current = true
               feed.current?.scrollTo({ top: feed.current.scrollHeight })
             }}>Jump to latest reply</button>}
+            </details>
             <ChoiceSlider label="Planning prompts" actions={[
               'I have 40 minutes', 'I’m tired today', 'Look back at my week', 'I have 15 minutes', 'Help me reflect on today',
             ].map((prompt) => ({ id: prompt, label: prompt, disabled: busy, run: () => void ask(prompt) }))} />

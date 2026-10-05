@@ -67,3 +67,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 058 — Undo an accidentally cleared planning conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 059 — Restart the guide from its current page without refreshing the app. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 060 — Offer editing of the most recent planning prompt. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 061 — Make planning transcript tools available through progressive disclosure. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
