@@ -34,3 +34,5 @@
 .choice-slider-items { touch-action: pan-y; }
 
 .choice-slider-items { align-items: stretch; }
+
+.choice-slider-items small { display: block; font-size: 12px; font-weight: 400; margin-block-start: 4px; }
