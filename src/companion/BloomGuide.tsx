@@ -14,6 +14,7 @@ import { explain, nextHint, reveal, useQuiz } from './quizContext'
 import { burst } from '../components/ui/celebrate'
 import './guide.css'
 import { ChoiceSlider } from './ChoiceSlider'
+import { readDraft, writeSession } from './chatSession'
 
 type Line = { id: number; from: 'bloom' | 'you'; text: string }
 /** Only the latest messages are kept, so long chats never slow the app down. */
@@ -61,7 +62,8 @@ export function BloomGuide({
   const [lines, setLines] = useState<Line[]>(() => [{ id: ++lineId, from: 'bloom', text: start.say }])
   const [choices, setChoices] = useState<Choice[]>(() => withNav(start.choices))
   const [typing, setTyping] = useState(false)
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(() => readDraft('bloom-guide-draft'))
+  useEffect(() => writeSession('bloom-guide-draft', query), [query])
   const face = useRef<BloomFaceHandle>(null)
   const chips = useRef<HTMLDivElement>(null)
   const timer = useRef(0)
