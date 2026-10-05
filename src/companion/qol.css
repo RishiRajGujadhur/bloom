@@ -82,3 +82,5 @@
 .companion-ai-options[open] { background: var(--bg-primary); }
 
 .companion-ai-options button { min-height: 48px; white-space: normal; }
+
+.bloom-companion progress { display: block; width: 100%; accent-color: var(--accent-color); }
