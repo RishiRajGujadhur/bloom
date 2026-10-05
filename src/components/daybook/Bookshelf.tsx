@@ -2,21 +2,15 @@ import { useId, type CSSProperties } from 'react'
 import { subOn } from '../../features/subFeatures'
 import type { JournalEntry, JournalMode } from './types'
 import './bookshelf.css'
-
-export const journalColors: Record<string, string> = {
-  planning: '#8f684c',
-  reflection: '#755766',
-  vision: '#4d686b',
-  gamified: '#597153',
-}
+import { journalColor } from './journalColors'
 
 export function JournalCover({
   title,
-  category,
+  journalId,
   count,
 }: {
   title: string
-  category: string
+  journalId: string
   count: number
 }) {
   const gradient = useId()
@@ -25,7 +19,7 @@ export function JournalCover({
       className="journal-cover"
       style={
         {
-          '--journal-cover': journalColors[category] ?? '#597153',
+          '--journal-cover': journalColor(journalId),
         } as CSSProperties
       }
     >
@@ -101,7 +95,7 @@ export function Bookshelf({
               <span className="journal-book-pages" aria-hidden="true" />
               <JournalCover
                 title={mode?.title ?? latest.modeTitle}
-                category={mode?.category ?? 'reflection'}
+                journalId={modeId}
                 count={entries.length}
               />
             </button>

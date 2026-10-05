@@ -16,7 +16,8 @@ import {
 } from 'lucide-react'
 import { prefersReducedMotion } from '../../utils/motion'
 import { journalText } from '../../search/db'
-import { JournalCover, journalColors } from './Bookshelf'
+import { JournalCover } from './Bookshelf'
+import { journalColor } from './journalColors'
 import type { JournalEntry, JournalMode } from './types'
 
 export function JournalReader({
@@ -144,8 +145,7 @@ export function JournalReader({
       }}
       style={
         {
-          '--journal-cover':
-            journalColors[mode?.category ?? 'reflection'] ?? '#597153',
+          '--journal-cover': journalColor(selected.modeId),
         } as CSSProperties
       }
     >
@@ -171,7 +171,7 @@ export function JournalReader({
           <span className="journal-reader-cover">
             <JournalCover
               title={selected.modeTitle}
-              category={mode?.category ?? 'reflection'}
+              journalId={selected.modeId}
               count={entries.length}
             />
           </span>

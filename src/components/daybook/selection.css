@@ -1,0 +1,227 @@
+.daybook [data-category='planning'] {
+  --choice-color: #8d8068;
+  --choice-tilt: -2deg;
+}
+.daybook [data-category='reflection'] {
+  --choice-color: #947d87;
+  --choice-tilt: 1.5deg;
+}
+.daybook [data-category='vision'] {
+  --choice-color: #5e7e84;
+  --choice-tilt: -1deg;
+}
+.daybook [data-category='gamified'] {
+  --choice-color: #758264;
+  --choice-tilt: 2deg;
+}
+.daybook-selection-heading {
+  margin: 22px 0 30px;
+}
+.journal-direction .daybook-selection-heading h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 400;
+  margin: 10px 0;
+}
+.daybook-selection-heading p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.daybook .journal-direction .choice-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding: 8px 4px 20px;
+}
+.daybook .direction-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+  min-height: 260px;
+  padding: 23px 20px;
+  border: 1px solid color-mix(in srgb, var(--choice-color) 70%, transparent);
+  border-radius: 18px;
+  background: var(--choice-color);
+  color: #fff7e9;
+  transform: rotate(var(--choice-tilt));
+  box-shadow:
+    0 10px 20px #0000000c,
+    inset 0 1px 0 #ffffff30;
+  transition:
+    transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 350ms;
+  overflow: hidden;
+}
+.daybook .direction-card::before,
+.daybook.daybook-wizard .daybook-mode::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg, #ffffff06 1px, transparent 1px),
+    linear-gradient(#ffffff06 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+.daybook .direction-copy {
+  display: grid;
+  gap: 10px;
+}
+.daybook .direction-copy strong {
+  color: inherit;
+  font-family: Georgia, serif;
+  font-size: 25px;
+  font-weight: 400;
+}
+.daybook .direction-copy small {
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 19ch;
+  opacity: 0.9;
+}
+.daybook .direction-card > svg:last-child {
+  position: absolute;
+  right: 18px;
+  bottom: 20px;
+  width: 17px;
+}
+.daybook .daybook-pixel-art {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  fill: currentColor;
+  overflow: visible;
+}
+.daybook-pixel-art rect {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.daybook :is(.direction-card, .daybook-mode):is(:hover, :focus-visible) {
+  transform: translateY(-8px) rotate(0deg);
+  box-shadow: 0 18px 28px #00000018;
+}
+.daybook
+  :is(.direction-card, .daybook-mode):is(:hover, :focus-visible)
+  .daybook-pixel-art
+  rect {
+  animation: daybook-pixels 950ms steps(4, end) var(--pixel-delay) infinite
+    alternate;
+}
+@keyframes daybook-pixels {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(var(--pixel-shift), -6px) scale(0.65);
+    opacity: 0.45;
+  }
+  65% {
+    transform: translate(calc(var(--pixel-shift) * -1), 4px);
+    opacity: 0.8;
+  }
+}
+.daybook.daybook-wizard .daybook-mode {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+  padding: 22px;
+  border-radius: 18px;
+  gap: 20px;
+  background: color-mix(in srgb, var(--choice-color) 12%, var(--bg-surface));
+  border-color: color-mix(
+    in srgb,
+    var(--choice-color) 35%,
+    var(--border-color)
+  );
+  transition:
+    transform 300ms,
+    box-shadow 300ms;
+}
+.daybook.daybook-wizard .daybook-mode .daybook-pixel-art {
+  width: 52px;
+  height: 52px;
+  color: var(--choice-color);
+}
+.daybook.daybook-wizard .daybook-mode-copy strong {
+  font-size: 17px;
+  color: var(--text-primary);
+}
+.daybook.daybook-wizard .daybook-mode-copy small {
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.daybook.daybook-wizard .daybook-mode-copy em {
+  font-size: 11px;
+  margin-top: 6px;
+}
+.daybook.daybook-wizard .daybook-heading p,
+.daybook.daybook-wizard .daybook-kicker {
+  display: block;
+}
+.daybook-view {
+  view-transition-name: bloom-daybook;
+  animation: daybook-view-enter 420ms ease both;
+}
+::view-transition-old(bloom-daybook) {
+  animation: daybook-view-out 180ms ease both;
+}
+::view-transition-new(bloom-daybook) {
+  animation: daybook-view-enter 300ms ease 120ms both;
+}
+@keyframes daybook-view-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@keyframes daybook-view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 760px) {
+  .daybook .journal-direction .choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .daybook .direction-card {
+    min-height: 235px;
+    padding: 20px 16px;
+  }
+}
+@media (max-width: 520px) {
+  .daybook .daybook-grid {
+    grid-template-columns: 1fr;
+  }
+  .daybook.daybook-wizard .daybook-mode {
+    min-height: 130px;
+    padding: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .daybook-view,
+  .daybook .daybook-pixel-art rect {
+    animation: none !important;
+  }
+  .daybook :is(.direction-card, .daybook-mode) {
+    transition: none;
+    transform: none !important;
+  }
+}
+html[data-reduce-motion='true'] .daybook-view,
+html[data-reduce-motion='true'] .daybook .daybook-pixel-art rect {
+  animation: none !important;
+}
+html[data-reduce-motion='true'] .daybook :is(.direction-card, .daybook-mode) {
+  transition: none;
+  transform: none !important;
+}
