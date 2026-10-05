@@ -406,7 +406,13 @@ export function BloomCompanion({
             }}
           />
           <header className="bc-head">
-            <div className="bc-head-actions" role="tablist" aria-label="Bloom mode">
+            <div className="bc-head-actions" role="tablist" aria-label="Bloom mode" onKeyDown={(event) => {
+              if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+              event.preventDefault()
+              const next = event.key === 'Home' ? 'guide' : event.key === 'End' ? 'plan' : mode === 'guide' ? 'plan' : 'guide'
+              setMode(next)
+              event.currentTarget.querySelector<HTMLButtonElement>(next === 'guide' ? '[aria-label="Guide me"]' : '[aria-label="Plan with Bloom"]')?.focus()
+            }}>
               <button type="button" role="tab" aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>
                 <Compass size={17} />
               </button>

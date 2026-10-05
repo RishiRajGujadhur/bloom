@@ -49,3 +49,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 040 — Restore focus to the launcher after the chat closes. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 041 — Connect the launcher to the chat panel for screen readers. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 042 — Give the persistent chat panel a stable accessible identifier. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 043 — Use arrow keys to switch guide and planning tabs. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
