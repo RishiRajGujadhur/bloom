@@ -126,3 +126,5 @@
 @media (min-width: 601px) and (max-width: 900px) { html .bc-panel.is-docked { left: 0; right: 0; width: 100%; max-height: 85dvh; } }
 
 .bc-panel .companion-feed, .bc-panel .chat-tools { padding: 5px; }
+
+@media (prefers-reduced-motion: reduce) { .bc-panel *, .bc-panel *::before, .bc-panel *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
