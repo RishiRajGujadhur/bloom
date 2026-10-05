@@ -59,7 +59,7 @@ function setPanelWidth(px: number | null) {
 }
 try {
   const saved = Number(localStorage.getItem(WIDTH_KEY))
-  if (saved) document.documentElement.style.setProperty('--bc-width', `${saved}px`)
+  if (Number.isFinite(saved) && saved >= 300) setPanelWidth(saved)
 } catch {
   /* default width */
 }
