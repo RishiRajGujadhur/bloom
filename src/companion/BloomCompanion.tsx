@@ -27,6 +27,7 @@ import { BloomGuide } from './BloomGuide'
 import { ChoiceSlider } from './ChoiceSlider'
 import { readDraft, writeSession, readConversation, exportConversation } from './chatSession'
 import './companion.css'
+import './qol.css'
 import { useChatAppearance } from './chatAppearance'
 
 type Props = {
