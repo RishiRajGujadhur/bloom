@@ -127,6 +127,13 @@ export function BloomCompanion({
   extra?: { id: string; label: string; icon?: string; run: () => void }[]
   initialMode?: 'guide' | 'plan'
 }) {
+  const [online, setOnline] = useState(() => navigator.onLine)
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine)
+    window.addEventListener('online', update)
+    window.addEventListener('offline', update)
+    return () => { window.removeEventListener('online', update); window.removeEventListener('offline', update) }
+  }, [])
   const [mode, setMode] = useState<'guide' | 'plan'>(initialMode)
   const { avatar, followTheme } = useChatAppearance()
   const [docked, setDockedState] = useState(() => {
@@ -439,6 +446,7 @@ export function BloomCompanion({
               </button>
             </div>
           </header>
+          {!online && <p className="chat-offline" role="status">You’re offline. Page guidance and lightweight planning still work; a new AI download needs a connection.</p>}
           <div className={`companion-orb-stage${busy ? ' is-thinking' : ''}`}>
             {avatar === 'glass' ? (
             <div className="companion-orb" role="img" aria-label="Bloom, your glowing assistant">

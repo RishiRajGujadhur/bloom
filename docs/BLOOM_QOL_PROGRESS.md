@@ -69,3 +69,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 060 — Offer editing of the most recent planning prompt. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 061 — Make planning transcript tools available through progressive disclosure. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 062 — Offer help examples from guide conversation tools. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 063 — Show connection status while keeping local commands available. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
