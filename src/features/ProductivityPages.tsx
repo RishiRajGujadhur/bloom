@@ -2,7 +2,6 @@ import { useTabTitle } from '../utils/useTabTitle'
 import { prefersReducedMotion } from '../utils/motion'
 import { launchImpact } from './impact/ImpactLayer'
 import { taskWeight } from './impact/impactModel'
-import { burst } from '../components/ui/celebrate'
 import { loadSettings } from '../SettingsPage'
 import { subOn } from './subFeatures'
 import { TodosQuick } from './quick/TodosQuick'
@@ -21,6 +20,8 @@ import {
   type SetStateAction,
 } from 'react'
 import gsap from 'gsap'
+import { motion } from 'framer-motion'
+import { HoldToDelete } from './todos/HoldToDelete'
 import './waterdo.css'
 import './todos/quickTask.css'
 import './todos/workspace.css'
@@ -36,7 +37,7 @@ import {
   Tag,
   X,
 } from 'lucide-react'
-import type { AppData } from '../model'
+import type { AppData, Todo } from '../model'
 import { dayKey, id } from '../model'
 import { Sprite } from '../rpg/Sprite'
 import {
@@ -273,9 +274,10 @@ export function TodoPage({ data, setData }: Props) {
     'none' | 'daily' | 'weekly' | 'monthly'
   >('none')
   const [showOptions, setShowOptions] = useState(false)
-  const [filter, setFilterState] = useState(
-    () => localStorage.getItem('bloom-todo-filter') || 'open',
-  )
+  const [filter, setFilterState] = useState(() => {
+    const saved = localStorage.getItem('bloom-todo-filter')
+    return saved || 'all'
+  })
   const setFilter = (f: string) => {
     setFilterState(f)
     try {
@@ -302,6 +304,43 @@ export function TodoPage({ data, setData }: Props) {
     title: string
     completedAt: number
   } | null>(null)
+  const [completing, setCompleting] = useState<Set<string>>(new Set())
+  const completionTimers = useRef(
+    new Map<string, ReturnType<typeof setTimeout>>(),
+  )
+  const [undoDeletion, setUndoDeletion] = useState<{
+    task: Todo
+    index: number
+  } | null>(null)
+  useEffect(() => {
+    const timers = completionTimers.current
+    return () => {
+      timers.forEach(clearTimeout)
+      timers.clear()
+    }
+  }, [])
+  useEffect(() => {
+    if (!undoDeletion) return
+    const timer = setTimeout(() => setUndoDeletion(null), 8000)
+    return () => clearTimeout(timer)
+  }, [undoDeletion])
+  const animateCompletion = (taskId: string) => {
+    if (prefersReducedMotion()) return
+    const previous = completionTimers.current.get(taskId)
+    if (previous) clearTimeout(previous)
+    setCompleting((current) => new Set(current).add(taskId))
+    completionTimers.current.set(
+      taskId,
+      setTimeout(() => {
+        setCompleting((current) => {
+          const next = new Set(current)
+          next.delete(taskId)
+          return next
+        })
+        completionTimers.current.delete(taskId)
+      }, 550),
+    )
+  }
   const parseTags = (value: string) =>
     [
       ...new Set(
@@ -367,6 +406,7 @@ export function TodoPage({ data, setData }: Props) {
   const allTags = [...new Set(data.todos.flatMap((task) => task.tags))].sort()
   const priorityOrder = { P1: 1, P2: 2, P3: 3, P4: 4 }
   const filterCounts = {
+    all: data.todos.length,
     open: data.todos.filter((task) => !task.done).length,
     today: data.todos.filter((task) => !task.done && task.due <= dayKey())
       .length,
@@ -379,15 +419,17 @@ export function TodoPage({ data, setData }: Props) {
   const tasks = data.todos
     .filter((task) => {
       const matchesStatus =
-        filter === 'done'
-          ? task.done
-          : filter === 'today'
-            ? !task.done && task.due <= dayKey()
-            : filter === 'soon'
-              ? !task.done &&
-                task.due > dayKey() &&
-                task.due <= addDays(dayKey(), 7)
-              : !task.done
+        filter === 'all'
+          ? true
+          : filter === 'done'
+            ? task.done
+            : filter === 'today'
+              ? !task.done && task.due <= dayKey()
+              : filter === 'soon'
+                ? !task.done &&
+                  task.due > dayKey() &&
+                  task.due <= addDays(dayKey(), 7)
+                : !task.done
       return (
         matchesStatus &&
         (!taskQuery.trim() ||
@@ -399,6 +441,10 @@ export function TodoPage({ data, setData }: Props) {
       )
     })
     .sort((a, b) => {
+      const completedOrder =
+        Number(a.done && !completing.has(a.id)) -
+        Number(b.done && !completing.has(b.id))
+      if (completedOrder) return completedOrder
       if (proMode && taskSort === 'due')
         return (
           a.due.localeCompare(b.due) ||
@@ -412,8 +458,7 @@ export function TodoPage({ data, setData }: Props) {
       if (proMode && taskSort === 'created')
         return planningOf(a).order - planningOf(b).order
       return (
-        Number(!a.done && b.due < dayKey()) -
-          Number(!b.done && a.due < dayKey()) ||
+        Number(b.due < dayKey()) - Number(a.due < dayKey()) ||
         priorityOrder[a.priority] - priorityOrder[b.priority] ||
         a.due.localeCompare(b.due)
       )
@@ -625,6 +670,7 @@ export function TodoPage({ data, setData }: Props) {
           aria-label="Task status filters"
         >
           {[
+            { id: 'all', label: 'All tasks' },
             { id: 'open', label: 'Open' },
             { id: 'today', label: 'Due today' },
             { id: 'soon', label: 'Due soon' },
@@ -641,12 +687,12 @@ export function TodoPage({ data, setData }: Props) {
               )
             </button>
           ))}
-          {(taskQuery || filter !== 'open') && (
+          {(taskQuery || filter !== 'all') && (
             <button
               type="button"
               className="quiet-button"
               onClick={() => {
-                setFilter('open')
+                setFilter('all')
                 setTaskQuery('')
               }}
             >
@@ -914,13 +960,17 @@ export function TodoPage({ data, setData }: Props) {
           ).length
           const open = expanded === task.id
           return (
-            <li
+            <motion.li
+              layout={!prefersReducedMotion()}
+              transition={{
+                layout: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+              }}
               key={task.id}
-              className={`task-item priority-${task.priority.toLowerCase()}`}
+              className={`task-item priority-${task.priority.toLowerCase()}${task.done ? ' is-completed' : ''}${completing.has(task.id) ? ' is-completing' : ''}`}
             >
               <div className="task-row">
                 <button
-                  className={`task-check ${task.done ? 'done' : ''} ${proMode && waterDo ? 'waterdo-bubble' : ''}`}
+                  className={`task-check todo-animated-check ${task.done ? 'done' : ''} ${proMode && waterDo ? 'waterdo-bubble' : ''}`}
                   aria-label={`${task.done ? 'Reopen' : 'Complete'} ${task.title}`}
                   aria-pressed={task.done}
                   disabled={
@@ -970,12 +1020,13 @@ export function TodoPage({ data, setData }: Props) {
                         weight,
                       })
                     ) {
-                      // The physics body takes over; skip the small burst.
-                    } else if (!task.done) burst(event.currentTarget)
+                      // Optional physics effects accompany checkbox completion.
+                    }
                     if (task.done) {
                       setUndoCompletion(null)
                       setData((current) => toggleTodo(current, task.id))
                     } else {
+                      animateCompletion(task.id)
                       const completedAt = Date.now()
                       setUndoCompletion({
                         id: task.id,
@@ -999,7 +1050,25 @@ export function TodoPage({ data, setData }: Props) {
                       <path d="M8 11c1-3 3-5 6-5" />
                     </svg>
                   ) : (
-                    <Check size={18} />
+                    <svg
+                      className="todo-check-svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        className="todo-check-ring"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                      />
+                      <path
+                        className="todo-check-tick"
+                        d="m7.5 12 3 3 6-6"
+                        pathLength="1"
+                      />
+                    </svg>
                   )}
                 </button>
                 {editing === task.id ? (
@@ -1154,7 +1223,7 @@ export function TodoPage({ data, setData }: Props) {
                             ?.click()
                         }}
                       >
-                        {task.title}
+                        <span className="todo-task-title">{task.title}</span>
                       </strong>
                     </div>
                     <div className="task-meta">
@@ -1258,6 +1327,26 @@ export function TodoPage({ data, setData }: Props) {
                     <Pencil size={16} />
                   </button>
                 )}
+                <HoldToDelete
+                  title={task.title}
+                  onDelete={() => {
+                    setUndoCompletion(null)
+                    setUndoDeletion({
+                      task,
+                      index: data.todos.findIndex(
+                        (item) => item.id === task.id,
+                      ),
+                    })
+                    setData((current) => ({
+                      ...current,
+                      todos: current.todos.filter(
+                        (item) => item.id !== task.id,
+                      ),
+                    }))
+                    if (editing === task.id) setEditing(null)
+                    if (expanded === task.id) setExpanded(null)
+                  }}
+                />
               </div>
               {proMode && (
                 <>
@@ -1354,10 +1443,36 @@ export function TodoPage({ data, setData }: Props) {
                   )}
                 </>
               )}
-            </li>
+            </motion.li>
           )
         })}
       </ShowMore>
+      {undoDeletion && (
+        <p className="todo-undo" role="status">
+          Deleted “{undoDeletion.task.title}”.
+          <button
+            type="button"
+            onClick={() => {
+              setData((current) => {
+                if (
+                  current.todos.some((task) => task.id === undoDeletion.task.id)
+                )
+                  return current
+                const todos = [...current.todos]
+                todos.splice(
+                  Math.min(undoDeletion.index, todos.length),
+                  0,
+                  undoDeletion.task,
+                )
+                return { ...current, todos }
+              })
+              setUndoDeletion(null)
+            }}
+          >
+            Undo
+          </button>
+        </p>
+      )}
       {undoCompletion && (
         <p className="todo-undo" role="status">
           Completed “{undoCompletion.title}”.

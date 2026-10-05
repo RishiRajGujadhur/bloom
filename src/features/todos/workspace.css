@@ -172,6 +172,157 @@
   outline: 2px solid var(--accent-color);
   outline-offset: 3px;
 }
+
+/* Circular fill, drawn tick, then the title strike and row movement. */
+#todo-page .todo-animated-check:not(.waterdo-bubble) {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  padding: 8px;
+  color: var(--text-secondary);
+}
+#todo-page .todo-check-ring {
+  fill: transparent;
+  stroke: var(--border-color);
+  stroke-width: 1;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease;
+}
+#todo-page .todo-check-tick {
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 220ms ease;
+}
+#todo-page .done .todo-check-ring {
+  fill: #f36a2d;
+  stroke: #f36a2d;
+}
+#todo-page .done .todo-check-tick {
+  stroke-dashoffset: 0;
+}
+#todo-page .is-completing .todo-check-svg {
+  animation: todo-check-pop 350ms ease both;
+}
+#todo-page .is-completing .todo-check-tick {
+  animation: todo-check-draw 220ms 100ms ease both;
+}
+#todo-page .todo-task-title {
+  background: linear-gradient(currentColor, currentColor) left center / 0% 1px
+    no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: color 200ms ease;
+}
+#todo-page .is-completed .todo-task-title {
+  background-size: 100% 1px;
+  color: var(--text-secondary);
+}
+#todo-page .is-completing .todo-task-title {
+  animation: todo-title-strike 260ms 160ms ease both;
+}
+#todo-page .is-completed .task-meta {
+  opacity: 0.65;
+}
+@keyframes todo-check-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.82);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes todo-check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes todo-title-strike {
+  from {
+    background-size: 0% 1px;
+  }
+  to {
+    background-size: 100% 1px;
+  }
+}
+
+#todo-page .hold-delete {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-secondary) 7%, var(--bg-surface));
+  color: var(--text-secondary);
+  min-height: 40px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+#todo-page .hold-delete-label,
+#todo-page .hold-delete-fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+#todo-page .hold-delete-fill {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #f4738e 30%, var(--bg-surface));
+  color: #c42c4d;
+  clip-path: inset(0 100% 0 0);
+}
+#todo-page .hold-delete.is-holding .hold-delete-fill {
+  animation: todo-delete-fill 1600ms linear forwards;
+  /* Progress conveys the required hold duration, even with reduced motion. */
+  animation-duration: 1600ms !important;
+}
+#todo-page .hold-delete.is-deleted {
+  background: color-mix(in srgb, #f4738e 30%, var(--bg-surface));
+  color: #c42c4d;
+}
+@keyframes todo-delete-fill {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #todo-page .todo-check-svg,
+  #todo-page .todo-check-tick,
+  #todo-page .todo-task-title {
+    animation: none;
+    transition: none;
+  }
+}
+html[data-reduce-motion='true'] #todo-page .todo-check-svg,
+html[data-reduce-motion='true'] #todo-page .todo-check-tick,
+html[data-reduce-motion='true'] #todo-page .todo-task-title {
+  animation: none;
+  transition: none;
+}
 @media (max-width: 600px) {
   #todo-page .todo-heading {
     align-items: flex-start;
