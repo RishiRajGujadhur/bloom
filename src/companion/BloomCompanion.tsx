@@ -524,8 +524,8 @@ export function BloomCompanion({
               )}
               {!turns.length && (
                 <p className="companion-welcome">
-                  Welcome back. We can start with whatever feels manageable
-                  today.
+                  I can plan a short session, reflect with you, or review your recorded week.
+                  Plans are suggestions; you choose whether to apply them.
                 </p>
               )}
               {turns.map((turn, index) => (

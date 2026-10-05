@@ -36,3 +36,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 027 — Only follow new planner messages when the reader is near the bottom. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 028 — Offer a direct way to jump back to the latest planner reply. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 029 — Keep multiline replies readable as separate paragraphs. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 030 — Explain planner capabilities in the empty conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
