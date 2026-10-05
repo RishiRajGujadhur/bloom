@@ -39,11 +39,21 @@ type Props = {
 type Turn = { role: 'user' | 'assistant'; content: string }
 
 const WIDTH_KEY = 'bloom-companion-width'
+function announcePanelWidth(px?: number) {
+  document.querySelectorAll<HTMLElement>('.bc-resize').forEach((handle) => {
+    const owner = handle.closest<HTMLElement>('.bc-panel')
+    const width = px ?? (owner ? Number.parseFloat(getComputedStyle(owner).width) : 380)
+    const value = Number.isFinite(width) && width > 0 ? Math.round(width) : 380
+    handle.setAttribute('aria-valuenow', String(value))
+    handle.setAttribute('aria-valuetext', `${value} pixels wide`)
+  })
+}
 /** Sets (and remembers) the Bloom panel width; null goes back to the default. */
 function setPanelWidth(px: number | null) {
   const root = document.documentElement
   if (px === null) {
     root.style.removeProperty('--bc-width')
+    announcePanelWidth()
     try {
       localStorage.removeItem(WIDTH_KEY)
     } catch {
@@ -53,6 +63,7 @@ function setPanelWidth(px: number | null) {
   }
   const w = Math.round(Math.min(Math.max(px, 300), Math.min(760, window.innerWidth * 0.7)))
   root.style.setProperty('--bc-width', `${w}px`)
+  announcePanelWidth(w)
   try {
     localStorage.setItem(WIDTH_KEY, String(w))
   } catch {
@@ -382,6 +393,7 @@ export function BloomCompanion({
     setBusy(false)
   }
   const stale = proposal && !proposalIsCurrent(data, proposal)
+  const widthHint = Number.parseFloat(document.documentElement.style.getPropertyValue('--bc-width')) || (docked ? 380 : 400)
   const visit = (page: NavKey) => {
     onClose()
     navigate(page)
@@ -440,6 +452,8 @@ export function BloomCompanion({
             aria-orientation="vertical"
             aria-valuemin={300}
             aria-valuemax={760}
+            aria-valuenow={widthHint}
+            aria-valuetext={`${widthHint} pixels wide`}
             aria-label="Resize Bloom panel (arrow keys; double-click to reset)"
             tabIndex={0}
             onPointerDown={startResize}
@@ -461,10 +475,10 @@ export function BloomCompanion({
               setMode(next)
               event.currentTarget.querySelector<HTMLButtonElement>(next === 'guide' ? '[aria-label="Guide me"]' : '[aria-label="Plan with Bloom"]')?.focus()
             }}>
-              <button type="button" id="bloom-guide-tab" aria-controls="bloom-guide-content" role="tab" tabIndex={mode === 'guide' ? 0 : -1} aria-selected={mode === 'guide'} aria-pressed={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>
+              <button type="button" id="bloom-guide-tab" aria-controls="bloom-guide-content" role="tab" tabIndex={mode === 'guide' ? 0 : -1} aria-selected={mode === 'guide'} aria-label="Guide me" data-hint="Guide me" onClick={() => setMode('guide')}>
                 <Compass size={17} />
               </button>
-              <button type="button" id="bloom-plan-tab" aria-controls="bloom-plan-content" role="tab" tabIndex={mode === 'plan' ? 0 : -1} aria-selected={mode === 'plan'} aria-pressed={mode === 'plan'} aria-label="Plan with Bloom" data-hint="Plan with Bloom" onClick={() => setMode('plan')}>
+              <button type="button" id="bloom-plan-tab" aria-controls="bloom-plan-content" role="tab" tabIndex={mode === 'plan' ? 0 : -1} aria-selected={mode === 'plan'} aria-label="Plan with Bloom" data-hint="Plan with Bloom" onClick={() => setMode('plan')}>
                 <CalendarClock size={17} />
               </button>
             </div>
@@ -491,6 +505,8 @@ export function BloomCompanion({
             )}
             <span className="companion-orb-caption">YOUR SPACE TO BLOOM</span>
           </div>
+          <div hidden id={mode === 'guide' ? 'bloom-plan-content' : 'bloom-guide-content'} role="tabpanel"
+            aria-labelledby={mode === 'guide' ? 'bloom-plan-tab' : 'bloom-guide-tab'} />
           {mode === 'guide' ? (
             <BloomGuide
               page={page}

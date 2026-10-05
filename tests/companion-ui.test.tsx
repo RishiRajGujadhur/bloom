@@ -29,6 +29,22 @@ test('planning suggestions stay capped at three and can be paged', () => {
   expect(slider.querySelectorAll('button')).toHaveLength(3)
 })
 
+test('mode controls have valid tab semantics and resize values follow keyboard changes', () => {
+  mount()
+  const panel = screen.getByRole('region', { name: 'Talk to Bloom' })
+  for (const tab of screen.getAllByRole('tab')) {
+    expect(tab).not.toHaveAttribute('aria-pressed')
+    expect(document.getElementById(tab.getAttribute('aria-controls')!)).not.toBeNull()
+  }
+  jest.spyOn(panel, 'getBoundingClientRect').mockReturnValue({ width: 380 } as DOMRect)
+  const resize = screen.getByRole('separator')
+  fireEvent.keyDown(resize, { key: 'ArrowRight' })
+  expect(resize).toHaveAttribute('aria-valuenow', '404')
+  expect(resize).toHaveAttribute('aria-valuetext', '404 pixels wide')
+  fireEvent.keyDown(resize, { key: 'Home' })
+  expect(document.documentElement.style.getPropertyValue('--bc-width')).toBe('')
+})
+
 test('draft and conversation recover after remount, and clear can be undone', () => {
   const view = mount()
   fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))

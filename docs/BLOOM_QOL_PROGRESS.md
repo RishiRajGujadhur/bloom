@@ -1,6 +1,6 @@
 # Bloom chatbot quality of life improvements
 
-Target: 150 individually committed and pushed improvements.
+Completed: 150 individually committed and pushed improvements on 2026-10-06.
 Existing appearance changes were tested and pushed first in `1fdbb76`.
 Each numbered entry describes a user-facing change, with validation recorded alongside it.
 Suggested features are applied where they fit Bloom's local guide and planner; no fabricated AI confidence or source claims.
@@ -8,8 +8,21 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 ## Validation checkpoints
 
 - Improvements 001–020: full TypeScript project check; 12 focused tests passed.
-- Improvements 001–080: 31 tests passed across guide, planner, command, slider, and session recovery suites; focused lint passed. Browser verification is pending a stable final checkpoint.
+- Improvements 001–080: 31 tests passed across guide, planner, command, slider, and session recovery suites; focused lint passed.
 - Every later styling improvement also receives a strict CSS parser check before its commit and push.
+
+## Final verification
+
+- 34 distinct focused tests passed, including the final tab semantics and live resize-value regression.
+- 14 desktop/mobile browser cases passed; two desktop cases were intentionally skipped because they require mobile viewports.
+- Full TypeScript project check, focused lint, CSS parsing, and production build passed. The build still reports third-party bundle/chunk warnings.
+- Scoped automated accessibility scans reported zero violations for the guide in desktop, mobile, short-mobile, and app-theme layouts.
+- Visual review confirmed three suggestions at a time, no horizontal panel overflow, and visible composers at 390 × 844 and 390 × 500.
+- Final review corrected tab attributes, resize announcements, short-screen composer positioning, and resize-handle overflow.
+
+Review screenshots: [desktop](screenshots/bloom-qol-desktop.png) · [mobile](screenshots/bloom-qol-mobile.png).
+
+Recovery is tab-local; avatar and theme preferences remain device-local. Conversation tools provide export, prompt editing, and recovery actions without loading the optional AI model.
 
 ## Completed
 

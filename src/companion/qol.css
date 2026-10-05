@@ -138,3 +138,19 @@
 .choice-slider-items button { height: auto; text-overflow: clip; overflow: visible; padding: 10px 8px; }
 
 .companion-orb-stage { overflow: hidden; }
+
+/* Final browser audit: preserve resize access without adding scroll overflow. */
+.bc-panel .bc-resize { right: 0; }
+html[data-bloom-right] .bc-panel:not(.is-docked) .bc-resize { left: 0; right: auto; }
+.bc-panel .bg-guide-search { position: sticky; bottom: 0; z-index: 2; background: var(--bg-surface); }
+.bc-panel:not(.uses-app-theme) .companion-composer { background: var(--bg-surface); }
+.bc-panel:not(.is-docked) { height: min(760px, calc(100dvh - 170px)); }
+@media (max-width: 600px) {
+  html .bc-panel:not(.is-docked) { height: var(--bc-viewport-height, 100dvh); }
+}
+html[data-reduce-motion='true'] .bc-panel *,
+html[data-reduce-motion='true'] .bc-panel *::before,
+html[data-reduce-motion='true'] .bc-panel *::after {
+  animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important; scroll-behavior: auto !important;
+}

@@ -35,6 +35,7 @@ test('companion previews and applies a plan once, surviving reload', async ({
     page.getByText('A small next step', { exact: true }),
   ).toHaveCount(1)
   await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
+  await dialog.getByRole('tab', { name: 'Plan with Bloom', exact: true }).click()
   await dialog
     .getByRole('button', { name: 'I have 40 minutes', exact: true })
     .click()
