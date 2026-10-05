@@ -31,3 +31,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 022 — Remove browser history suggestions from the planning input. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 023 — Trim planning requests before displaying or interpreting them. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 024 — Allow correction of a prompt after stopping generation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 025 — Name the stop action explicitly for assistive technology. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

@@ -576,6 +576,7 @@ export function BloomCompanion({
                   type="button"
                   className="feature-secondary"
                   onClick={stop}
+                  aria-label="Stop generating"
                 >
                   Stop
                 </button>
