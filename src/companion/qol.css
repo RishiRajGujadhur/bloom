@@ -78,3 +78,5 @@
 .bc-panel .companion-ai-options p { font-size: 14px; line-height: 1.6; }
 
 .bc-panel .companion-ai-options summary { min-height: 48px; font-size: 14px; }
+
+.companion-ai-options[open] { background: var(--bg-primary); }

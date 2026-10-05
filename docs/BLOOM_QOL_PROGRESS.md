@@ -133,3 +133,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 118 — Distinguish offline information from conversation content. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 119 — Make optional model disclosures readable. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 120 — Make the optional model disclosure easy to open. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 121 — Separate expanded model settings from their toggle. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
