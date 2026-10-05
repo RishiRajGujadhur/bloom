@@ -110,3 +110,5 @@
 .chat-tools button, .chat-undo, .chat-stop { min-height: 48px; padding: 8px 12px; font: inherit; color: inherit; border: 1px solid var(--border-strong); background: var(--bg-surface); border-radius: 10px; margin: 4px; }
 
 .bc-panel .companion-copy { min-width: 48px; min-height: 48px; padding: 8px; font-size: 18px; border-radius: 8px; }
+
+.bc-panel .companion-clear { min-height: 48px; font-size: 14px; padding: 8px 12px; }

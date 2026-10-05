@@ -149,3 +149,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 134 — Make conversation tools easy to open by touch. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 135 — Give transcript export and prompt edit tools comfortable targets. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 136 — Make reply copy controls comfortable to tap. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 137 — Make conversation clear controls visible and easy to select. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
