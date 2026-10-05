@@ -144,6 +144,12 @@ export function BloomCompanion({
     }
   }
   const panel = useRef<HTMLElement>(null)
+  const wasOpen = useRef(false)
+  useEffect(() => {
+    if (open) panel.current?.querySelector<HTMLButtonElement>('[aria-label="Close Bloom"]')?.focus()
+    else if (wasOpen.current) document.querySelector<HTMLButtonElement>('.bloom-companion-launch')?.focus()
+    wasOpen.current = open
+  }, [open])
   // Pages where you've hidden the floating Bloom button (right-click it).
   const [hiddenOn, setHiddenOn] = useState<string[]>(() => {
     try {
