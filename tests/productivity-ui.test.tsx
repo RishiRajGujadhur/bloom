@@ -30,7 +30,7 @@ test('accepting a challenge creates visible tasks and a goal, which survive relo
   view.unmount()
   render(<App />)
   fireEvent.click(
-    screen.getByRole('button', { name: 'Completed', exact: true }),
+    screen.getByRole('button', { name: /Completed/, exact: false }),
   )
   expect(screen.getByText('Choose one small habit')).toBeInTheDocument()
   expect(
@@ -40,6 +40,7 @@ test('accepting a challenge creates visible tasks and a goal, which survive relo
 test('a task supports priorities, tags, recurrence, and an actionable checklist', () => {
   render(<App />)
   fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true }))
+  fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true }))
   fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
     target: { value: 'Prepare the presentation' },
   })
@@ -98,4 +99,34 @@ test('Daybook reveals one category and one prompt at a time', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Next', exact: true }))
   expect(screen.getAllByRole('textbox')).toHaveLength(1)
   expect(screen.getByText(/Prompt 2 of/)).toBeInTheDocument()
+})
+
+test('todos default to simple and remember Pro without losing tasks', () => {
+  const view = render(<App />)
+  fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true }))
+  expect(
+    screen.getByRole('button', { name: 'Simple', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true')
+  expect(screen.queryByText('Planning workspace')).not.toBeInTheDocument()
+  fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
+    target: { value: 'Take a walk' },
+  })
+  fireEvent.click(screen.getByRole('button', { name: /^Add$/ }))
+  expect(
+    screen.queryByRole('button', { name: 'Add steps' }),
+  ).not.toBeInTheDocument()
+  fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true }))
+  expect(screen.getByText('Planning workspace')).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: 'Add steps' })).toBeInTheDocument()
+  view.unmount()
+  render(<App />)
+  fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true }))
+  expect(
+    screen.getByRole('button', { name: 'Pro', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true')
+  fireEvent.click(screen.getByRole('button', { name: 'Simple', exact: true }))
+  expect(screen.getByText('Take a walk')).toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'Add steps' }),
+  ).not.toBeInTheDocument()
 })

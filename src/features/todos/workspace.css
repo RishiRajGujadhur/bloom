@@ -1,0 +1,200 @@
+#todo-page.todo-redesign {
+  max-width: 960px;
+  padding: 8px 0 32px;
+}
+#todo-page .todo-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+#todo-page .todo-heading h2 {
+  margin: 6px 0;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.035em;
+}
+#todo-page .todo-heading p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+#todo-page .todo-heading .eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--accent-color);
+}
+#todo-page .todo-mode {
+  display: flex;
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-surface);
+}
+#todo-page .todo-mode button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+#todo-page .todo-mode button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+#todo-page .todo-overview {
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--border-color);
+  margin-bottom: 20px;
+}
+#todo-page .todo-overview button {
+  border: 0;
+  border-radius: 0;
+  background: var(--bg-surface);
+  box-shadow: none;
+  transform: none;
+  padding: 16px 20px;
+}
+#todo-page .todo-overview button[aria-pressed='true'] {
+  background: var(--accent-soft);
+}
+#todo-page .task-composer {
+  background: var(--bg-surface);
+  padding: 20px;
+  box-shadow: none;
+}
+#todo-page .task-composer::before {
+  display: none;
+}
+#todo-page .task-add {
+  flex-wrap: wrap;
+}
+#todo-page .task-add input {
+  flex: 1 1 240px;
+}
+#todo-page .task-add button {
+  min-height: 44px;
+}
+#todo-page .filter-chips {
+  margin-top: 20px;
+  gap: 6px;
+}
+#todo-page .todo-search {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px;
+}
+#todo-page .task-list {
+  margin-top: 20px;
+}
+#todo-page .task-item {
+  background: var(--bg-surface);
+  border-radius: 14px;
+  box-shadow: none;
+  margin-bottom: 8px;
+  padding: 16px;
+}
+#todo-page.is-simple .task-item {
+  border-left-color: transparent;
+}
+#todo-page .task-row {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+#todo-page .task-copy {
+  flex-basis: 160px;
+}
+#todo-page .task-meta {
+  margin-top: 6px;
+}
+#todo-page .task-edit {
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+#todo-page .task-edit input {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#todo-page .todo-planning-panel {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: var(--bg-surface);
+}
+#todo-page .todo-planning-panel summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+#todo-page .todo-planning-panel summary span {
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-left: 12px;
+}
+#todo-page .todo-view-tools,
+#todo-page .todo-list-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+#todo-page .overdue-bar {
+  flex-wrap: wrap;
+  padding: 12px;
+}
+#todo-page .overdue-bar button {
+  min-height: 36px;
+}
+#todo-page .todo-undo {
+  position: sticky;
+  bottom: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px 18px;
+  z-index: 2;
+}
+#todo-page button:focus-visible,
+#todo-page summary:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  #todo-page .todo-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+  #todo-page .todo-mode {
+    align-self: stretch;
+  }
+  #todo-page .todo-mode button {
+    flex: 1;
+  }
+  #todo-page .todo-overview button {
+    padding: 12px;
+  }
+  #todo-page .task-composer {
+    padding: 14px;
+  }
+  #todo-page .task-add input {
+    flex-basis: 100%;
+  }
+  #todo-page .todo-planning-panel summary span {
+    display: block;
+    margin: 6px 0;
+  }
+}
