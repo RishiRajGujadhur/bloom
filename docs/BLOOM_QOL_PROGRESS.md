@@ -115,3 +115,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 100 — Avoid exaggerated jumping when hovering suggestions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 101 — Give enabled suggestions a tactile pressed state. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 102 — Make disabled suggestions visibly noninteractive. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 103 — Provide forty eight pixel header control targets. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
