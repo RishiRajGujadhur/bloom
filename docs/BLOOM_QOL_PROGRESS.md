@@ -112,3 +112,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 097 — Keep swipe gestures from interfering with vertical reading. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 098 — Keep every suggestion card equal in height. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 099 — Make matching page sections visually subordinate to titles. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 100 — Avoid exaggerated jumping when hovering suggestions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
