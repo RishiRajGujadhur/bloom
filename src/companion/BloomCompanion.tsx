@@ -406,7 +406,7 @@ export function BloomCompanion({
               e.preventDefault()
               const w = panel.current?.getBoundingClientRect().width ?? 380
               const fromRight = document.documentElement.hasAttribute('data-bloom-right') && !docked
-              setPanelWidth(w + (e.key === 'ArrowRight' ? 24 : -24) * (fromRight ? -1 : 1))
+              setPanelWidth(w + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 80 : 24) * (fromRight ? -1 : 1))
             }}
           />
           <header className="bc-head">
