@@ -118,3 +118,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 103 — Provide forty eight pixel header control targets. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 104 — Keep icon artwork from shrinking inside header controls. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 105 — Use theme aware keyboard focus rings across chat controls. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 106 — Add a visible keyboard focus ring to the chat launcher. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
