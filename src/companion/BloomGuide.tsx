@@ -215,6 +215,7 @@ export function BloomGuide({
       {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
       <details className="chat-tools">
         <summary>Conversation tools</summary>
+        <button type="button" disabled={typing} onClick={() => { setLines([{ id: ++lineId, from: 'bloom', text: start.say }]); setChoices(withNav(start.choices)); setQuery('') }}>Restart this page guide</button>
         <button type="button" onClick={() => {
           try { exportConversation(lines.map((line) => ({ speaker: line.from === 'you' ? 'You' : 'Bloom', text: line.text })), 'bloom-guide') }
           catch { say('Export unavailable. Select the conversation text to copy it.', choices) }

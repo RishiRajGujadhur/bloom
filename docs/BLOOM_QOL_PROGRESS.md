@@ -65,3 +65,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 056 — Download a plain text transcript of the planning conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 057 — Download a plain text transcript of the guide conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 058 — Undo an accidentally cleared planning conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 059 — Restart the guide from its current page without refreshing the app. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
