@@ -11,6 +11,7 @@ test('the guide offers page-specific choices and can navigate', () => {
   expect(screen.getByRole('button', { name: 'Take the IQ-style test' })).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Which game should I play?' }))
   act(() => void jest.advanceTimersByTime(700))
+  fireEvent.change(screen.getByRole('slider', { name: 'Browse choices' }), { target: { value: '1' } })
   expect(screen.getByRole('button', { name: 'Empathy (EQ)' })).toBeInTheDocument()
   fireEvent.change(screen.getByPlaceholderText(/Ask Bloom/), { target: { value: 'focus' } })
   fireEvent.click(screen.getByRole('button', { name: 'Focus Today' }))

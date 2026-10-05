@@ -13,6 +13,7 @@ import type { AppData } from '../model'
 import { explain, nextHint, reveal, useQuiz } from './quizContext'
 import { burst } from '../components/ui/celebrate'
 import './guide.css'
+import { ChoiceSlider } from './ChoiceSlider'
 
 type Line = { id: number; from: 'bloom' | 'you'; text: string }
 /** Only the latest messages are kept, so long chats never slow the app down. */
@@ -195,18 +196,15 @@ export function BloomGuide({
           <button type="button" className="bg-chip ghost" onClick={() => quizHelp('Show the answer', reveal)}>Answer</button>
         </div>
       )}
-      <div ref={chips} className="bg-guide-chips" role="group" aria-label={results.length ? 'Matching pages' : 'Choices'}>
-        {results.length
-          ? results.map((r) => (
-              <button key={r.key} type="button" className="bg-chip ghost" onClick={() => { setQuery(''); pick({ label: r.title, go: r.key }) }}>
-                {r.title} <small>{r.section}</small>
-              </button>
-            ))
-          : choices.map((c) => (
-              <button key={c.label} type="button" className="bg-chip" onClick={() => pick(c)} disabled={typing}>
-                {c.label}
-              </button>
-            ))}
+      <div ref={chips}>
+        <ChoiceSlider key={results.length ? `search:${query}` : choices.map((c) => c.label).join('|')}
+          label={results.length ? 'Matching pages' : 'Choices'}
+          actions={results.length ? results.map((r) => ({
+            id: r.key, label: <>{r.title} <small>{r.section}</small></>,
+            run: () => { setQuery(''); pick({ label: r.title, go: r.key }) }, disabled: typing,
+          })) : choices.map((c, index) => ({
+            id: `${index}:${c.label}`, label: c.label, run: () => pick(c), disabled: typing,
+          }))} />
       </div>
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>

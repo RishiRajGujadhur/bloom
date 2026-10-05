@@ -1,0 +1,10 @@
+# Bloom chatbot quality of life improvements
+
+Target: 150 individually committed and pushed improvements.
+Existing appearance changes were tested and pushed first in `1fdbb76`.
+Each numbered entry describes a user-facing change, with validation recorded alongside it.
+Suggested features are applied where they fit Bloom's local guide and planner; no fabricated AI confidence or source claims.
+
+## Completed
+
+- [x] 001 — Three-choice slider for guide suggestions and page search, with a native range control and no hidden focusable action buttons. Validation: slider component and guide tests.
