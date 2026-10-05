@@ -38,3 +38,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 029 — Keep multiline replies readable as separate paragraphs. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 030 — Explain planner capabilities in the empty conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 031 — Show a live planning input character count. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 032 — Associate the planning input with its character limit. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

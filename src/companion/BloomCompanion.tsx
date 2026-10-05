@@ -568,6 +568,7 @@ export function BloomCompanion({
               </label>
               <input
                 id="bloom-message"
+                aria-describedby="bloom-message-count"
                 enterKeyHint="send"
                 autoComplete="off"
                 placeholder="What would help today?"
