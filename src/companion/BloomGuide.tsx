@@ -17,7 +17,7 @@ import { ChoiceSlider } from './ChoiceSlider'
 
 type Line = { id: number; from: 'bloom' | 'you'; text: string }
 /** Only the latest messages are kept, so long chats never slow the app down. */
-const MAX_LINES = 6
+const MAX_LINES = 60
 let lineId = 0
 const trim = (l: Line[]) => l.slice(-MAX_LINES)
 
