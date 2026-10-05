@@ -583,6 +583,10 @@ export function BloomCompanion({
                 </p>
               )}
             </div>
+            {turns.some((turn) => turn.role === 'user') && !busy && <button type="button" className="chat-edit" onClick={() => {
+              setText(turns.filter((turn) => turn.role === 'user').at(-1)?.content ?? '')
+              panel.current?.querySelector<HTMLInputElement>('#bloom-message')?.focus()
+            }}>Edit last prompt</button>}
             {turns.length > 0 && <button type="button" className="chat-export" onClick={() => {
               try { exportConversation(turns.map((turn) => ({ speaker: turn.role === 'user' ? 'You' : 'Bloom', text: turn.content })), 'bloom-plan'); setNotice('Conversation exported.') }
               catch { setNotice('Export unavailable. You can copy individual replies.') }
