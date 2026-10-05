@@ -627,6 +627,7 @@ export function BloomCompanion({
                 maxLength={1000}
                 value={text}
                 onChange={(event) => setText(event.target.value)}
+                onKeyDown={(event) => { if (event.key === 'Enter' && event.nativeEvent.isComposing) event.preventDefault() }}
               />
               <button
                 className="feature-primary"
