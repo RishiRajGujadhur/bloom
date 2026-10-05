@@ -136,3 +136,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 121 — Separate expanded model settings from their toggle. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 122 — Make model download and memory controls easy to tap. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 123 — Keep download progress meters within the panel width. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 124 — Give planning time and energy labels readable typography. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
