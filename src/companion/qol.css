@@ -16,3 +16,5 @@
 .bc-panel .companion-message p + p { margin-block-start: 1em; }
 
 .bc-panel .companion-welcome { font-size: 16px; line-height: 1.65; }
+
+.bc-panel .chat-scope { font-size: 14px; line-height: 1.5; color: var(--text-secondary); margin: 0; }
