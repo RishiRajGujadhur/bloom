@@ -219,6 +219,7 @@ export function BloomGuide({
           }))]} />
       </div>
       {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
+      {typing && <button type="button" className="chat-stop" onClick={() => { window.clearTimeout(timer.current); setTyping(false) }}>Stop reply</button>}
       <details className="chat-tools">
         <summary>Conversation tools</summary>
         <button type="button" disabled={typing} onClick={() => say('Try “add todo call mum”, “spent 5 on coffee”, “hint”, or a page name. Your guide uses local commands, so specific short requests work best.', root)}>Show command examples</button>
