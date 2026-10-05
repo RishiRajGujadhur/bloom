@@ -86,3 +86,5 @@
 .bloom-companion progress { display: block; width: 100%; accent-color: var(--accent-color); }
 
 .bc-panel .companion-plan-controls label { font-size: 14px; }
+
+.bc-panel .companion-plan-controls select { font-size: 16px; min-height: 48px; }
