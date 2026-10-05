@@ -33,7 +33,7 @@ export function ChoiceSlider({ actions, label = 'Choices' }: { actions: SliderAc
         <label className="choice-slider-control">
           <span role="status" aria-live="polite" aria-atomic="true">Suggestions {page * 3 + 1}–{Math.min(page * 3 + 3, actions.length)} of {actions.length}</span>
           <small>Slide or use arrow keys for more choices</small>
-          <input type="range" min={0} max={pages - 1} step={1} value={page}
+          <input type="range" disabled={actions.length > 0 && actions.every((action) => action.disabled)} min={0} max={pages - 1} step={1} value={page}
             aria-label={`Browse ${label.toLowerCase()}`} aria-valuetext={`Page ${page + 1} of ${pages}; suggestions ${page * 3 + 1} to ${Math.min(page * 3 + 3, actions.length)}`} onChange={(event) => setPosition(Number(event.target.value))} />
         </label>
       )}
