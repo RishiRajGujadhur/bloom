@@ -607,6 +607,7 @@ export function BloomCompanion({
             {notice && (
               <p role="status" className="companion-notice">
                 {notice}
+                <button type="button" className="chat-dismiss" aria-label="Dismiss notice" onClick={() => setNotice('')}>×</button>
               </p>
             )}
             {proposal && (
