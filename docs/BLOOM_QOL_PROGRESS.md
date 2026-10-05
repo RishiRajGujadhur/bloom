@@ -105,3 +105,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 090 — Make contextual scope descriptions readable and compact. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 091 — Separate unmatched search hints from conversational replies. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 092 — Make suggested action text readable on narrow cards. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 093 — Provide forty eight pixel tap targets for suggestion buttons. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

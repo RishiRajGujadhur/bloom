@@ -22,3 +22,5 @@
 .bc-panel .chat-search-status { font-size: 14px; line-height: 1.5; padding: 8px 12px; border-inline-start: 3px solid var(--accent-color); margin: 0; }
 
 .bc-panel .choice-slider-items button { font-size: 14px; line-height: 1.4; }
+
+.choice-slider-items button { min-height: 48px; }
