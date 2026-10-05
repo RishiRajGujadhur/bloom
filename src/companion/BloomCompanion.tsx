@@ -25,7 +25,7 @@ import {
 import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import { BloomGuide } from './BloomGuide'
 import { ChoiceSlider } from './ChoiceSlider'
-import { readDraft, writeSession, readConversation } from './chatSession'
+import { readDraft, writeSession, readConversation, exportConversation } from './chatSession'
 import './companion.css'
 import { useChatAppearance } from './chatAppearance'
 
@@ -581,6 +581,10 @@ export function BloomCompanion({
                 </p>
               )}
             </div>
+            {turns.length > 0 && <button type="button" className="chat-export" onClick={() => {
+              try { exportConversation(turns.map((turn) => ({ speaker: turn.role === 'user' ? 'You' : 'Bloom', text: turn.content })), 'bloom-plan'); setNotice('Conversation exported.') }
+              catch { setNotice('Export unavailable. You can copy individual replies.') }
+            }}>Export conversation</button>}
             {turns.length > 0 && <button type="button" className="chat-latest" onClick={() => {
               followLatest.current = true
               feed.current?.scrollTo({ top: feed.current.scrollHeight })
