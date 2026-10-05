@@ -15,11 +15,55 @@ jest.mock('../src/companion/localAI', () => ({
 }))
 
 beforeEach(() => {
+  sessionStorage.clear()
   localStorage.removeItem('bloom-chat-avatar')
   localStorage.removeItem('bloom-chat-follow-theme')
   mockLoad.mockReset()
   mockInterpret.mockReset()
   mockDispose.mockReset()
+})
+
+test('planning suggestions stay capped at three and can be paged', () => {
+  mount()
+  const slider = screen.getByRole('group', { name: 'Planning prompts' })
+  expect(slider.querySelectorAll('button')).toHaveLength(3)
+})
+
+test('draft and conversation recover after remount, and clear can be undone', () => {
+  const view = mount()
+  fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))
+  fireEvent.change(screen.getByLabelText('Message Bloom'), { target: { value: 'An unsent thought' } })
+  view.unmount()
+  mount()
+  expect(screen.getByLabelText('Message Bloom')).toHaveValue('An unsent thought')
+  expect(screen.getByRole('log')).toHaveTextContent('I have 40 minutes')
+  fireEvent.click(screen.getByRole('button', { name: 'Clear conversation' }))
+  expect(screen.getByRole('log')).not.toHaveTextContent('I have 40 minutes')
+  fireEvent.click(screen.getByRole('button', { name: 'Undo clear conversation' }))
+  expect(screen.getByRole('log')).toHaveTextContent('I have 40 minutes')
+})
+
+test('copy failure offers a manual recovery path', async () => {
+  mount()
+  fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))
+  fireEvent.click(screen.getByRole('button', { name: /Copy Bloom reply/ }))
+  await screen.findByText('Could not copy. Select the reply text and copy it manually.')
+})
+
+test('stopping generation preserves a newly typed draft and ignores the late reply', async () => {
+  let finish!: (value: unknown) => void
+  mockLoad.mockResolvedValue(undefined)
+  mockInterpret.mockImplementation(() => new Promise((resolve) => { finish = resolve }))
+  mount()
+  fireEvent.click(screen.getByText('Try private, local AI'))
+  fireEvent.click(screen.getByRole('button', { name: 'Download & enable local AI' }))
+  await screen.findByText('Local AI · running on this device')
+  fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))
+  fireEvent.change(screen.getByLabelText('Message Bloom'), { target: { value: 'My next question' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Stop generating' }))
+  expect(screen.getByLabelText('Message Bloom')).toHaveValue('My next question')
+  finish({ intent: 'chat', minutes: 40, energy: 'medium', message: 'Late reply' })
+  await waitFor(() => expect(screen.queryByText('Late reply')).toBeNull())
 })
 
 test('chat appearance changes the avatar and follows the app theme persistently', () => {

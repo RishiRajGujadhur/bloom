@@ -21,3 +21,16 @@ test('clamps the page when fewer choices become available', () => {
   expect(screen.getAllByRole('button')).toHaveLength(2)
   expect(screen.queryByRole('slider')).toBeNull()
 })
+
+test('horizontal swipes page choices and disabled choices cannot be swiped', () => {
+  const actions = Array.from({ length: 7 }, (_, i) => ({ id: String(i), label: `Action ${i}`, run: jest.fn() }))
+  const view = render(<ChoiceSlider actions={actions} />)
+  const items = view.container.querySelector('.choice-slider-items')!
+  fireEvent.touchStart(items, { touches: [{ clientX: 200, clientY: 20 }] })
+  fireEvent.touchEnd(items, { changedTouches: [{ clientX: 100, clientY: 22 }] })
+  expect(screen.getByRole('slider')).toHaveValue('1')
+  view.rerender(<ChoiceSlider actions={actions.map((action) => ({ ...action, disabled: true }))} />)
+  fireEvent.touchStart(items, { touches: [{ clientX: 200, clientY: 20 }] })
+  fireEvent.touchEnd(items, { changedTouches: [{ clientX: 100, clientY: 22 }] })
+  expect(screen.getByRole('slider')).toHaveValue('1')
+})

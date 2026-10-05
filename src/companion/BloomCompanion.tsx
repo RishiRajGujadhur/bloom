@@ -275,7 +275,7 @@ export function BloomCompanion({
     pending.current = false
     setBusy(false)
     if (wasPending) {
-      setText(turns.filter((turn) => turn.role === 'user').at(-1)?.content ?? '')
+      setText((draft) => draft || turns.filter((turn) => turn.role === 'user').at(-1)?.content || '')
       setNotice('Response stopped. You can edit your last message and send it again.')
     }
     setStatus('off')

@@ -5,6 +5,12 @@ Existing appearance changes were tested and pushed first in `1fdbb76`.
 Each numbered entry describes a user-facing change, with validation recorded alongside it.
 Suggested features are applied where they fit Bloom's local guide and planner; no fabricated AI confidence or source claims.
 
+## Validation checkpoints
+
+- Improvements 001–020: full TypeScript project check; 12 focused tests passed.
+- Improvements 001–080: 31 tests passed across guide, planner, command, slider, and session recovery suites; focused lint passed. Browser verification is pending a stable final checkpoint.
+- Every later styling improvement also receives a strict CSS parser check before its commit and push.
+
 ## Completed
 
 - [x] 001 — Three-choice slider for guide suggestions and page search, with a native range control and no hidden focusable action buttons. Validation: slider component and guide tests.
