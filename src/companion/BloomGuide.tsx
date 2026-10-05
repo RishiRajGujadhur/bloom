@@ -73,6 +73,8 @@ export function BloomGuide({
   const face = useRef<BloomFaceHandle>(null)
   const chips = useRef<HTMLDivElement>(null)
   const timer = useRef(0)
+  const submitting = useRef(false)
+  const commandRevision = useRef(0)
 
   const pages = useMemo(() => navSections.flatMap((s) => s.keys.filter(enabled).map((k) => ({ key: k, title: names(k), section: s.label }))), [enabled, names])
   const fuse = useMemo(() => new Fuse(pages, { keys: ['title', 'key', 'section'], threshold: 0.4 }), [pages])
@@ -88,7 +90,7 @@ export function BloomGuide({
       after?.()
     }, 550)
   }
-  useEffect(() => () => window.clearTimeout(timer.current), [])
+  useEffect(() => () => { window.clearTimeout(timer.current); commandRevision.current++ }, [])
   // Staying open across pages: Bloom greets each new page in the same chat.
   const lastPage = useRef(page)
   useEffect(() => {
@@ -137,7 +139,9 @@ export function BloomGuide({
     if (c.action) {
       const a = [...currentPageActions(), ...extra].find((x) => x.id === c.action)
       if (a) {
-        a.run()
+        try { a.run() } catch {
+          return say('That shortcut could not finish. Try the action directly on the page.', root)
+        }
         face.current?.react('excited')
       }
       return say(a ? (c.reply ?? 'Done!') : 'That isn’t available right now — it may be switched off in Settings.', root)
@@ -155,16 +159,23 @@ export function BloomGuide({
   /** Typed messages: try a command first (expenses, todos, hints…), then page search. */
   const submit = async () => {
     const text = query.trim()
-    if (!text || typing) return
+    if (!text || typing || submitting.current) return
+    submitting.current = true
+    setTyping(true)
+    const currentRevision = commandRevision.current
     // Loaded on first use so money / course code stays out of the main bundle.
     let res: import('./chatCommands').CommandResult
     try {
       const { runCommand } = await import('./chatCommands')
+      if (currentRevision !== commandRevision.current) return
       res = runCommand(text, { data, setData, navigate, clear: () => setLines([]) })
     } catch {
+      if (currentRevision !== commandRevision.current) return
+      submitting.current = false
       say('That command could not finish. Your input is still here; check it and try again.', root2)
       return
     }
+    submitting.current = false
     if (res) {
       setQuery('')
       setLines((l) => trim([...l, { id: ++lineId, from: 'you', text }]))
@@ -219,7 +230,7 @@ export function BloomGuide({
           }))]} />
       </div>
       {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
-      {typing && <button type="button" className="chat-stop" onClick={() => { window.clearTimeout(timer.current); setTyping(false) }}>Stop reply</button>}
+      {typing && <button type="button" className="chat-stop" onClick={() => { window.clearTimeout(timer.current); commandRevision.current++; submitting.current = false; setTyping(false) }}>Stop reply</button>}
       <details className="chat-tools">
         <summary>Conversation tools</summary>
         <button type="button" disabled={typing} onClick={() => say('Try “add todo call mum”, “spent 5 on coffee”, “hint”, or a page name. Your guide uses local commands, so specific short requests work best.', root)}>Show command examples</button>

@@ -161,6 +161,16 @@ export function BloomCompanion({
     return () => { document.body.style.overflow = previous; media.removeEventListener('change', sync) }
   }, [open])
   const panel = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = panel.current
+    if (!open || !el) return
+    const viewport = window.visualViewport
+    const sync = () => el.style.setProperty('--bc-viewport-height', `${viewport?.height ?? window.innerHeight}px`)
+    sync()
+    viewport?.addEventListener('resize', sync)
+    window.addEventListener('resize', sync)
+    return () => { viewport?.removeEventListener('resize', sync); window.removeEventListener('resize', sync); el.style.removeProperty('--bc-viewport-height') }
+  }, [open])
   const wasOpen = useRef(false)
   useEffect(() => {
     if (open) panel.current?.querySelector<HTMLButtonElement>('[aria-label="Close Bloom"]')?.focus()
@@ -526,7 +536,7 @@ export function BloomCompanion({
                 several hundred MB from Hugging Face and the WebLLM model host.
                 Requires a compatible WebGPU device and available memory.
                 Messages stay on this device. Drafts and the recent conversation are
-                recovered in this browser tab; closing the tab clears that recovery.
+                recovered in this browser tab. Recovery is limited to this tab.
               </p>
               <p>
                 Bloom shares this conversation and activity totals with the

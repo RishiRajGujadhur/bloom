@@ -12,17 +12,19 @@ export function ChoiceSlider({ actions, label = 'Choices' }: { actions: SliderAc
   return (
     <div className="choice-slider" role="group" aria-label={label}>
       <div className="choice-slider-items" onTouchStart={(event) => {
+        if (actions.every((action) => action.disabled)) return
         const touch = event.touches[0]
+        if (!touch) return
         touchStart.current = { x: touch.clientX, y: touch.clientY }
       }} onTouchEnd={(event) => {
         const start = touchStart.current
         touchStart.current = null
         const touch = event.changedTouches[0]
-        if (!start || !touch) return
+        if (!start || !touch || actions.every((action) => action.disabled)) return
         const dx = touch.clientX - start.x
         if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(touch.clientY - start.y) * 1.5)
           setPosition(Math.max(0, Math.min(pages - 1, page + (dx < 0 ? 1 : -1))))
-      }}>
+      }} onTouchCancel={() => { touchStart.current = null }}>
         {actions.slice(page * 3, page * 3 + 3).map((action) => (
           <button key={action.id} type="button" className="bg-chip" disabled={action.disabled} onClick={action.run}>
             {action.label}
