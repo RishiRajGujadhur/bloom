@@ -120,3 +120,5 @@
 .bc-panel > .bg-guide { overflow-y: auto; overscroll-behavior-y: contain; grid-template-rows: minmax(100px, 1fr); grid-auto-rows: auto; }
 
 @media (max-height: 550px) { .bc-panel .companion-orb-stage { display: none; } .bc-panel { gap: 6px; } }
+
+@media (max-width: 600px) { .bc-panel .companion-orb-stage { padding: 4px 0; gap: 4px; } .bc-panel .companion-orb, .bc-panel .companion-orb-stage > .bloom-face { width: 48px; height: 48px; } .bc-panel .companion-orb-caption { display: none; } }
