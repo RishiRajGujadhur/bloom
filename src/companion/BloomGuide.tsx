@@ -209,7 +209,7 @@ export function BloomGuide({
       </div>
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>
-        <input type="search" maxLength={1000} placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.nativeEvent.isComposing && void submit()} />
+        <input type="search" enterKeyHint="send" maxLength={1000} placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.nativeEvent.isComposing && void submit()} />
       </label>
     </div>
   )
