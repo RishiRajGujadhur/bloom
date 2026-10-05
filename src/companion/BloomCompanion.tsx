@@ -536,7 +536,7 @@ export function BloomCompanion({
                   <small>
                     {turn.role === 'user' ? 'You' : 'Bloom'}
                     {turn.role === 'assistant' && (
-                      <button type="button" className="companion-copy" aria-label="Copy reply" title="Copy" onClick={() => { void (async () => {
+                      <button type="button" className="companion-copy" aria-label={`Copy Bloom reply ${index + 1}`} title="Copy" onClick={() => { void (async () => {
                         try {
                           if (!navigator.clipboard) throw new Error('Clipboard unavailable')
                           await navigator.clipboard.writeText(turn.content)
