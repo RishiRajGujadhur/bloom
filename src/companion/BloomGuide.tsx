@@ -181,7 +181,7 @@ export function BloomGuide({
       <div className="bg-guide-chat">
         <MainContainer>
           <ChatContainer>
-            <MessageList typingIndicator={typing ? <TypingIndicator content="Bloom is typing" /> : undefined}>
+            <MessageList aria-label="Conversation with Bloom guide" typingIndicator={typing ? <TypingIndicator content="Bloom is typing" /> : undefined}>
               {lines.map((l) => (
                 <Message key={l.id} model={{ message: l.text, sender: l.from, direction: l.from === 'you' ? 'outgoing' : 'incoming', position: 'single' }} />
               ))}
