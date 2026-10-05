@@ -110,3 +110,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 095 — Make slider page descriptions easy to read. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 096 — Use a distinct visible focus ring on slider controls. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 097 — Keep swipe gestures from interfering with vertical reading. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 098 — Keep every suggestion card equal in height. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
