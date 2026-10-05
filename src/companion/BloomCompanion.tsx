@@ -509,6 +509,8 @@ export function BloomCompanion({
               role="log"
               aria-label="Conversation with Bloom"
               aria-live="polite"
+              aria-relevant="additions text"
+              aria-busy={busy}
             >
               {turns.length > 0 && !busy && (
                 <button type="button" className="companion-clear" onClick={() => setTurns([])}>
