@@ -14,7 +14,7 @@ import { explain, nextHint, reveal, useQuiz } from './quizContext'
 import { burst } from '../components/ui/celebrate'
 import './guide.css'
 import { ChoiceSlider } from './ChoiceSlider'
-import { readDraft, writeSession } from './chatSession'
+import { readDraft, writeSession, readConversation } from './chatSession'
 
 type Line = { id: number; from: 'bloom' | 'you'; text: string }
 /** Only the latest messages are kept, so long chats never slow the app down. */
@@ -59,7 +59,13 @@ export function BloomGuide({
     return [...list, ...extra]
   }
   const start = guideFor(page, names)
-  const [lines, setLines] = useState<Line[]>(() => [{ id: ++lineId, from: 'bloom', text: start.say }])
+  const [lines, setLines] = useState<Line[]>(() => {
+    const recovered = readConversation('bloom-guide-lines', (v): v is Line =>
+      !!v && typeof v === 'object' && 'from' in v && (v.from === 'bloom' || v.from === 'you') &&
+      'text' in v && typeof v.text === 'string' && v.text.length <= 20000)
+    return recovered.length ? recovered.map((line) => ({ ...line, id: ++lineId })) : [{ id: ++lineId, from: 'bloom', text: start.say }]
+  })
+  useEffect(() => writeSession('bloom-guide-lines', JSON.stringify(lines)), [lines])
   const [choices, setChoices] = useState<Choice[]>(() => withNav(start.choices))
   const [typing, setTyping] = useState(false)
   const [query, setQuery] = useState(() => readDraft('bloom-guide-draft'))

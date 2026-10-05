@@ -61,3 +61,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 052 — Recover an unsent planning draft after a tab refresh. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 053 — Recover an unsent guide draft after a tab refresh. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 054 — Recover the recent planning conversation within the same browser tab. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 055 — Recover guide history when switching modes or refreshing the tab. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
