@@ -60,3 +60,5 @@
 .bc-panel .companion-composer button { min-width: 48px; min-height: 48px; }
 
 .bc-panel .companion-composer { position: sticky; bottom: 0; z-index: 1; background: var(--bg-surface); }
+
+.chat-character-count { text-align: end; font-size: 12px; color: var(--text-secondary); }
