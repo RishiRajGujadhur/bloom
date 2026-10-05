@@ -114,3 +114,5 @@
 .bc-panel .companion-clear { min-height: 48px; font-size: 14px; padding: 8px 12px; }
 
 .bc-panel > .bloom-companion { overscroll-behavior-y: contain; scrollbar-gutter: stable; padding-inline-end: 4px; }
+
+.companion-feed { scrollbar-gutter: stable; overscroll-behavior-y: contain; }
