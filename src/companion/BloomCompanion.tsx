@@ -25,7 +25,7 @@ import {
 import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import { BloomGuide } from './BloomGuide'
 import { ChoiceSlider } from './ChoiceSlider'
-import { readDraft, writeSession } from './chatSession'
+import { readDraft, writeSession, readConversation } from './chatSession'
 import './companion.css'
 import { useChatAppearance } from './chatAppearance'
 
@@ -208,7 +208,10 @@ export function BloomCompanion({
   }, [open, docked])
   const [text, setText] = useState(() => readDraft('bloom-plan-draft'))
   useEffect(() => writeSession('bloom-plan-draft', text), [text])
-  const [turns, setTurns] = useState<Turn[]>([])
+  const [turns, setTurns] = useState<Turn[]>(() => readConversation('bloom-plan-turns', (v): v is Turn =>
+    !!v && typeof v === 'object' && 'role' in v && (v.role === 'user' || v.role === 'assistant') &&
+    'content' in v && typeof v.content === 'string' && v.content.length <= 20000))
+  useEffect(() => writeSession('bloom-plan-turns', JSON.stringify(turns)), [turns])
   const [proposal, setProposal] = useState<Proposal | null>(null)
   const [intent, setIntent] = useState<Intent['intent']>('chat')
   const [minutes, setMinutes] = useState(40)
@@ -493,8 +496,8 @@ export function BloomCompanion({
                 Optional Qwen 0.5B model via WebLLM. The first use downloads
                 several hundred MB from Hugging Face and the WebLLM model host.
                 Requires a compatible WebGPU device and available memory.
-                Messages stay on this device; this chat is kept only until
-                refresh.
+                Messages stay on this device. Drafts and the recent conversation are
+                recovered in this browser tab; closing the tab clears that recovery.
               </p>
               <p>
                 Bloom shares this conversation and activity totals with the
