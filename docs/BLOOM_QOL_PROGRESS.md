@@ -47,3 +47,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 038 — Give each planner reply copy button a unique accessible name. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 039 — Dismiss planner notices without clearing the conversation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 040 — Restore focus to the launcher after the chat closes. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 041 — Connect the launcher to the chat panel for screen readers. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

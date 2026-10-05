@@ -366,6 +366,7 @@ export function BloomCompanion({
           }}
           className="bloom-companion-launch has-face"
           aria-expanded={open}
+          aria-controls="bloom-chat-panel"
           onClick={open ? onClose : onOpen}
           onPointerEnter={() => launchFace.current?.react('excited')}
           aria-label="Talk to Bloom"
