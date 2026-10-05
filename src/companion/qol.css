@@ -50,3 +50,5 @@
 .bc-panel :is(button, input, select, summary):focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; }
 
 .bloom-companion-launch:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 4px; }
+
+.bloom-companion-launch { min-height: 56px; font-size: 14px; }
