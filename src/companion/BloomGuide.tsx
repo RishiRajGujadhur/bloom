@@ -157,8 +157,14 @@ export function BloomGuide({
     const text = query.trim()
     if (!text || typing) return
     // Loaded on first use so money / course code stays out of the main bundle.
-    const { runCommand } = await import('./chatCommands')
-    const res = runCommand(text, { data, setData, navigate, clear: () => setLines([]) })
+    let res: import('./chatCommands').CommandResult
+    try {
+      const { runCommand } = await import('./chatCommands')
+      res = runCommand(text, { data, setData, navigate, clear: () => setLines([]) })
+    } catch {
+      say('That command could not finish. Your input is still here; check it and try again.', root2)
+      return
+    }
     if (res) {
       setQuery('')
       setLines((l) => trim([...l, { id: ++lineId, from: 'you', text }]))
