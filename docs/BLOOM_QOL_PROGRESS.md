@@ -158,3 +158,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 143 — Keep docked chat usable at increased browser zoom. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 144 — Protect conversation focus rings from scroll clipping. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 145 — Respect reduced motion across guide chips and typing indicators. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 146 — Keep chat controls visible in Windows high contrast mode. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
