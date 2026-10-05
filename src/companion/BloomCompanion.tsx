@@ -380,6 +380,7 @@ export function BloomCompanion({
       {open && (
         <section
           ref={panel}
+          id="bloom-chat-panel"
           className={`bc-panel${docked ? ' is-docked' : ''}${followTheme ? ' uses-app-theme' : ''}`}
           aria-label="Talk to Bloom"
           onKeyDown={(e) => {
