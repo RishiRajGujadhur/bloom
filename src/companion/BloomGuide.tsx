@@ -189,23 +189,19 @@ export function BloomGuide({
           </ChatContainer>
         </MainContainer>
       </div>
-      {quiz && (
-        <div className="bg-quiz" role="group" aria-label="Quiz help">
-          <span>🧩 Stuck?</span>
-          <button type="button" className="bg-chip" onClick={() => quizHelp('Give me a hint', nextHint)}>💡 Hint</button>
-          <button type="button" className="bg-chip" onClick={() => quizHelp('Explain it', explain)}>📘 Explain</button>
-          <button type="button" className="bg-chip ghost" onClick={() => quizHelp('Show the answer', reveal)}>Answer</button>
-        </div>
-      )}
       <div ref={chips}>
         <ChoiceSlider key={results.length ? `search:${query}` : choices.map((c) => c.label).join('|')}
           label={results.length ? 'Matching pages' : 'Choices'}
           actions={results.length ? results.map((r) => ({
             id: r.key, label: <>{r.title} <small>{r.section}</small></>,
             run: () => { setQuery(''); pick({ label: r.title, go: r.key }) }, disabled: typing,
-          })) : choices.map((c, index) => ({
+          })) : [...(quiz ? [
+            { id: 'quiz-hint', label: 'Hint', run: () => quizHelp('Give me a hint', nextHint), disabled: typing },
+            { id: 'quiz-explain', label: 'Explain', run: () => quizHelp('Explain it', explain), disabled: typing },
+            { id: 'quiz-answer', label: 'Answer', run: () => quizHelp('Show the answer', reveal), disabled: typing },
+          ] : []), ...choices.map((c, index) => ({
             id: `${index}:${c.label}`, label: c.label, run: () => pick(c), disabled: typing,
-          }))} />
+          }))]} />
       </div>
       {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
       <p className="chat-scope" id="bloom-guide-scope">I can find pages, run shortcuts, and help you plan. Review changes to your tasks and spending.</p>
