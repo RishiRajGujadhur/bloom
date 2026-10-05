@@ -151,6 +151,15 @@ export function BloomCompanion({
       /* optional */
     }
   }
+  useEffect(() => {
+    if (!open) return
+    const media = window.matchMedia('(max-width: 600px)')
+    const previous = document.body.style.overflow
+    const sync = () => { document.body.style.overflow = media.matches ? 'hidden' : previous }
+    sync()
+    media.addEventListener('change', sync)
+    return () => { document.body.style.overflow = previous; media.removeEventListener('change', sync) }
+  }, [open])
   const panel = useRef<HTMLElement>(null)
   const wasOpen = useRef(false)
   useEffect(() => {
