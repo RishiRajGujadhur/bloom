@@ -112,3 +112,5 @@
 .bc-panel .companion-copy { min-width: 48px; min-height: 48px; padding: 8px; font-size: 18px; border-radius: 8px; }
 
 .bc-panel .companion-clear { min-height: 48px; font-size: 14px; padding: 8px 12px; }
+
+.bc-panel > .bloom-companion { overscroll-behavior-y: contain; scrollbar-gutter: stable; padding-inline-end: 4px; }
