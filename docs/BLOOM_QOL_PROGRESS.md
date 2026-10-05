@@ -125,3 +125,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 110 — Provide generous send and stop targets in the planning composer. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 111 — Keep the planning composer available while scrolling suggestions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 112 — Make the planning character count unobtrusive and readable. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 113 — Keep the guide composer clear of the suggestions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
