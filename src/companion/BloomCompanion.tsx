@@ -232,8 +232,10 @@ export function BloomCompanion({
     revision.current++
     ai.current?.dispose()
     ai.current = null
+    const wasPending = pending.current
     pending.current = false
     setBusy(false)
+    if (wasPending) setText(turns.filter((turn) => turn.role === 'user').at(-1)?.content ?? '')
     setStatus('off')
   }
   const enable = async () => {
