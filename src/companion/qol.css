@@ -56,3 +56,5 @@
 .bc-panel .bg-guide-search input { font-size: 16px; min-height: 48px; }
 
 .bc-panel .companion-composer input { font-size: 16px; min-height: 48px; }
+
+.bc-panel .companion-composer button { min-width: 48px; min-height: 48px; }
