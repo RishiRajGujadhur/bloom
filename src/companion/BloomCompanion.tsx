@@ -24,6 +24,7 @@ import {
 } from './planner'
 import { BloomFace, type BloomFaceHandle } from '../components/ui/BloomFace'
 import { BloomGuide } from './BloomGuide'
+import { ChoiceSlider } from './ChoiceSlider'
 import './companion.css'
 import { useChatAppearance } from './chatAppearance'
 
@@ -538,21 +539,9 @@ export function BloomCompanion({
                 </p>
               )}
             </div>
-            <div className="companion-prompts">
-              {[
-                'I have 40 minutes',
-                'I’m tired today',
-                'Look back at my week',
-              ].map((prompt) => (
-                <button
-                  key={prompt}
-                  disabled={busy}
-                  onClick={() => void ask(prompt)}
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
+            <ChoiceSlider label="Planning prompts" actions={[
+              'I have 40 minutes', 'I’m tired today', 'Look back at my week',
+            ].map((prompt) => ({ id: prompt, label: prompt, disabled: busy, run: () => void ask(prompt) }))} />
             <form
               className="companion-composer"
               onSubmit={(event) => {

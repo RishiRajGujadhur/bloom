@@ -8,3 +8,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 ## Completed
 
 - [x] 001 — Three-choice slider for guide suggestions and page search, with a native range control and no hidden focusable action buttons. Validation: slider component and guide tests.
+- [x] 002 — Use the same three-choice slider for planner quick replies. Validation: TypeScript project check and diff check.
