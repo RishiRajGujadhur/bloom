@@ -76,3 +76,5 @@
 .chat-offline { flex-shrink: 0; margin: 0; padding: 10px; font-size: 14px; line-height: 1.5; border: 1px dashed var(--border-strong); border-radius: 10px; }
 
 .bc-panel .companion-ai-options p { font-size: 14px; line-height: 1.6; }
+
+.bc-panel .companion-ai-options summary { min-height: 48px; font-size: 14px; }
