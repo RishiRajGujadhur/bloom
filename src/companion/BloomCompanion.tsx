@@ -394,6 +394,8 @@ export function BloomCompanion({
             className="bc-resize"
             role="separator"
             aria-orientation="vertical"
+            aria-valuemin={300}
+            aria-valuemax={760}
             aria-label="Resize Bloom panel (arrow keys; double-click to reset)"
             tabIndex={0}
             onPointerDown={startResize}
