@@ -20,6 +20,7 @@ import { AdaptiveEditor } from './AdaptiveEditor'
 import { JournalLibrary } from './JournalLibrary'
 import { DaybookQuick } from '../../features/quick/DaybookQuick'
 import { Bookshelf } from './Bookshelf'
+import { JournalReader } from './JournalReader'
 import { usePageActions } from '../ui/PageMenu'
 import { SemanticSearch } from './SemanticSearch'
 import './daybook.css'
@@ -33,19 +34,35 @@ export function JournalContainer() {
   const [category, setCategory] = useState<JournalCategory | null>(null)
   const [browse, setBrowse] = useState(false)
   const [selected, setSelected] = useState<JournalMode | null>(null)
+  const [viewing, setViewing] = useState<{
+    id: string
+    source?: DOMRect
+  } | null>(null)
   const [lastModeId, setLastModeId] = useState<string | null>(() => {
-    try { return localStorage.getItem('bloom-daybook-last-mode') } catch { return null }
+    try {
+      return localStorage.getItem('bloom-daybook-last-mode')
+    } catch {
+      return null
+    }
   })
   const [storageError, setStorageError] = useState('')
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [revealed, setRevealed] = useState<string | null>(null)
   const [pageSearch, setPageSearch] = useState('')
   const [sort, setSort] = useState(() => {
-    try { return localStorage.getItem('bloom-daybook-sort') ?? 'edited' } catch { return 'edited' }
+    try {
+      return localStorage.getItem('bloom-daybook-sort') ?? 'edited'
+    } catch {
+      return 'edited'
+    }
   })
   const changeSort = (v: string) => {
     setSort(v)
-    try { localStorage.setItem('bloom-daybook-sort', v) } catch { /* optional */ }
+    try {
+      localStorage.setItem('bloom-daybook-sort', v)
+    } catch {
+      /* optional */
+    }
   }
   const [initial] = useState(() => {
     try {
@@ -78,15 +95,16 @@ export function JournalContainer() {
     entriesRef.current = entries
   }, [entries])
   const recentPages = useMemo(
-    () =>
-      [...entries].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
+    () => [...entries].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
     [entries],
   )
   const visiblePages = useMemo(() => {
     const query = pageSearch.trim().toLocaleLowerCase()
     if (!query) return recentPages
     return recentPages.filter((page) =>
-      `${page.modeTitle} ${journalText(page.content)}`.toLocaleLowerCase().includes(query),
+      `${page.modeTitle} ${journalText(page.content)}`
+        .toLocaleLowerCase()
+        .includes(query),
     )
   }, [pageSearch, recentPages])
   const language = i18n.resolvedLanguage ?? 'en'
@@ -94,7 +112,8 @@ export function JournalContainer() {
   // The page types you write most, for one-tap fresh pages.
   const favouriteModes = useMemo(() => {
     const counts = new Map<string, number>()
-    for (const e of entries) counts.set(e.modeId, (counts.get(e.modeId) ?? 0) + 1)
+    for (const e of entries)
+      counts.set(e.modeId, (counts.get(e.modeId) ?? 0) + 1)
     return [...counts.entries()]
       .sort((a, b) => b[1] - a[1])
       .map(([id]) => modes.find((m) => m.id === id))
@@ -123,27 +142,40 @@ export function JournalContainer() {
       return updated
     })
     if (close) {
-      if (loadSettings().features.placesMap && subOn('placesMap', 'daybookCapture')) capturePlace('daybook', null, { ref: next.id, label: next.modeTitle })
+      if (
+        loadSettings().features.placesMap &&
+        subOn('placesMap', 'daybookCapture')
+      )
+        capturePlace('daybook', null, { ref: next.id, label: next.modeTitle })
       setSelected(null)
       setEntryId(null)
     } else setEntryId(next.id)
   }
   // A page from at least a week ago (not private), picked once per visit.
   const [memoryId] = useState(() => {
-    const old = initial.entries.filter((e) => !e.private && Date.now() - new Date(e.updatedAt).getTime() > 7 * 864e5 && journalText(e.content).trim().length > 20)
+    const old = initial.entries.filter(
+      (e) =>
+        !e.private &&
+        Date.now() - new Date(e.updatedAt).getTime() > 7 * 864e5 &&
+        journalText(e.content).trim().length > 20,
+    )
     return old.length ? old[Math.floor(Math.random() * old.length)].id : null
   })
   const memory = entries.find((e) => e.id === memoryId) ?? null
   const monthWords = useMemo(() => {
     const month = new Date().toISOString().slice(0, 7)
-    return entries.filter((e) => e.createdAt.startsWith(month)).reduce((n, e) => {
-      const text = journalText(e.content).trim()
-      return n + (text ? text.split(/\s+/).length : 0)
-    }, 0)
+    return entries
+      .filter((e) => e.createdAt.startsWith(month))
+      .reduce((n, e) => {
+        const text = journalText(e.content).trim()
+        return n + (text ? text.split(/\s+/).length : 0)
+      }, 0)
   }, [entries])
   // Longest run of consecutive days with a page.
   const bestStreak = useMemo(() => {
-    const days = [...new Set(entries.map((e) => e.createdAt.slice(0, 10)))].sort()
+    const days = [
+      ...new Set(entries.map((e) => e.createdAt.slice(0, 10))),
+    ].sort()
     let best = 0
     let run = 0
     let prev = ''
@@ -176,13 +208,21 @@ export function JournalContainer() {
     const t = setTimeout(() => setUndoPage(null), 8000)
     return () => clearTimeout(t)
   }, [undoPage])
-  const openPage = (page: JournalEntry) => {
+  const openPage = (page: JournalEntry, source?: HTMLElement) => {
+    setViewing({ id: page.id, source: source?.getBoundingClientRect() })
+  }
+  const editPage = (page: JournalEntry) => {
+    setViewing(null)
     const mode = modes.find((m) => m.id === page.modeId) ?? {
       ...modes[0],
       id: page.modeId,
       title: page.modeTitle,
     }
-    try { localStorage.setItem('bloom-daybook-last-mode', mode.id) } catch { /* optional */ }
+    try {
+      localStorage.setItem('bloom-daybook-last-mode', mode.id)
+    } catch {
+      /* optional */
+    }
     setLastModeId(mode.id)
     setSession((s) => s + 1)
     setEntryId(page.id)
@@ -190,7 +230,11 @@ export function JournalContainer() {
   }
   const startPage = (mode: JournalMode | null) => {
     if (mode) {
-      try { localStorage.setItem('bloom-daybook-last-mode', mode.id) } catch { /* optional */ }
+      try {
+        localStorage.setItem('bloom-daybook-last-mode', mode.id)
+      } catch {
+        /* optional */
+      }
       setLastModeId(mode.id)
     }
     setSession((s) => s + 1)
@@ -204,15 +248,19 @@ export function JournalContainer() {
       if (!id) return
       const page = entriesRef.current.find((item) => item.id === id)
       const mode = modes.find((m) => m.id === (page?.modeId ?? id))
-      if (!mode) return
+      if (!mode && !page) return
       try {
         sessionStorage.removeItem(OPEN_DAYBOOK_EVENT)
       } catch {
         /* nothing to clear */
       }
+      if (page) {
+        setViewing({ id: page.id })
+        return
+      }
       setSession((s) => s + 1)
-      setEntryId(page?.id ?? null)
-      setSelected(mode)
+      setEntryId(null)
+      if (mode) setSelected(mode)
     }
     try {
       open(sessionStorage.getItem(OPEN_DAYBOOK_EVENT))
@@ -234,16 +282,46 @@ export function JournalContainer() {
     { key: 'gamified', label: 'Explore', Icon: Sparkles },
   ] as const
   usePageActions([
-    { id: 'daybook-browse', label: 'Browse every page type', icon: '📚', run: () => setBrowse(true) },
-    ...(recentPages[0] ? [{ id: 'daybook-continue', label: `Continue “${recentPages[0].modeTitle}”`, icon: '✍️', run: () => openPage(recentPages[0]) }] : []),
+    {
+      id: 'daybook-browse',
+      label: 'Browse every page type',
+      icon: '📚',
+      run: () => setBrowse(true),
+    },
+    ...(recentPages[0]
+      ? [
+          {
+            id: 'daybook-continue',
+            label: `Read “${recentPages[0].modeTitle}”`,
+            icon: '✍️',
+            run: () => openPage(recentPages[0]),
+          },
+        ]
+      : []),
   ])
   return (
     <section
       className={`card daybook daybook-wizard mx-auto w-full rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6 ${selected ? 'is-writing max-w-[1180px]' : 'max-w-5xl'}`}
       id="daybook"
     >
+      {viewing && (
+        <JournalReader
+          key={viewing.id}
+          pages={entries}
+          modes={modes}
+          entryId={viewing.id}
+          source={viewing.source}
+          language={language}
+          onClose={() => setViewing(null)}
+          onEdit={editPage}
+        />
+      )}
       <div className="daybook-container">
-        <ol className="wizard-steps" aria-label="Journal steps" hidden={Boolean(selected)}>
+        <ol
+          className="wizard-steps"
+          aria-label="Journal steps"
+          hidden={Boolean(selected)}
+        >
           {['Choose a direction', 'Pick a page', 'Write'].map(
             (label, index) => (
               <li
@@ -263,7 +341,14 @@ export function JournalContainer() {
         {undoPage && (
           <p className="daybook-undo" role="status">
             Deleted “{undoPage.modeTitle}”.{' '}
-            <button type="button" onClick={() => { persist(undoPage, false); setEntryId(null); setUndoPage(null) }}>
+            <button
+              type="button"
+              onClick={() => {
+                persist(undoPage, false)
+                setEntryId(null)
+                setUndoPage(null)
+              }}
+            >
               Undo
             </button>
           </p>
@@ -304,7 +389,11 @@ export function JournalContainer() {
           <div className="journal-direction">
             <DaybookQuick modes={modes} onSelect={startPage} />
             {favouriteModes.length > 0 && (
-              <div className="daybook-favs" role="group" aria-label="Your usual page types">
+              <div
+                className="daybook-favs"
+                role="group"
+                aria-label="Your usual page types"
+              >
                 <span>Start a fresh</span>
                 {favouriteModes.map((m) => (
                   <button key={m.id} type="button" onClick={() => startPage(m)}>
@@ -313,16 +402,30 @@ export function JournalContainer() {
                 ))}
               </div>
             )}
-            {lastModeId && !selected && (() => { const lastMode = modes.find((m) => m.id === lastModeId); return lastMode ? (
-              <button type="button" className="quiet-button" onClick={() => startPage(lastMode)}>
-                Resume last mode · {lastMode.title}
-              </button>
-            ) : null })()}
-            {subOn('daybookModes', 'bookshelf') && <Bookshelf pages={recentPages} modes={modes} onEdit={openPage} language={language} />}
+            {lastModeId &&
+              !selected &&
+              (() => {
+                const lastMode = modes.find((m) => m.id === lastModeId)
+                return lastMode ? (
+                  <button
+                    type="button"
+                    className="quiet-button"
+                    onClick={() => startPage(lastMode)}
+                  >
+                    Resume last mode · {lastMode.title}
+                  </button>
+                ) : null
+              })()}
+            {subOn('daybookModes', 'bookshelf') && (
+              <Bookshelf pages={recentPages} modes={modes} onOpen={openPage} />
+            )}
             {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
               <label className="daybook-sort">
                 Sort pages
-                <select value={sort} onChange={(e) => changeSort(e.target.value)}>
+                <select
+                  value={sort}
+                  onChange={(e) => changeSort(e.target.value)}
+                >
                   <option value="edited">Last edited</option>
                   <option value="created">Newest first</option>
                   <option value="oldest">Oldest first</option>
@@ -331,9 +434,17 @@ export function JournalContainer() {
               </label>
             )}
             {memory && (
-              <button type="button" className="daybook-memory" onClick={() => openPage(memory)}>
+              <button
+                type="button"
+                className="daybook-memory"
+                onClick={() => openPage(memory)}
+              >
                 <small>
-                  ✦ From {Math.round((Date.now() - new Date(memory.updatedAt).getTime()) / 864e5)} days ago · {memory.modeTitle}
+                  ✦ From{' '}
+                  {Math.round(
+                    (Date.now() - new Date(memory.updatedAt).getTime()) / 864e5,
+                  )}{' '}
+                  days ago · {memory.modeTitle}
                 </small>
                 <span>{journalText(memory.content).trim().slice(0, 200)}</span>
               </button>
@@ -356,89 +467,178 @@ export function JournalContainer() {
                   )}
                 </label>
                 {visiblePages.length > 0 ? (
-              <Carousel label="Your pages" title={`Your pages · ${visiblePages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}>
-                {[...visiblePages].sort((a, b) =>
-                  sort === 'created' ? b.createdAt.localeCompare(a.createdAt)
-                  : sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt)
-                  : sort === 'title' ? a.modeTitle.localeCompare(b.modeTitle)
-                  : 0,
-                ).sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned))).map((page) => {
-                  const text = journalText(page.content).trim()
-                  const words = text ? text.split(/\s+/).length : 0
-                  return (
-                    <div key={page.id} className="daybook-page-wrap">
-                    <button
-                      type="button"
-                      className={`daybook-page-card${page.private && revealed !== page.id ? ' is-private' : ''}`}
-                      onClick={() => {
-                        if (page.private && revealed !== page.id) setRevealed(page.id)
-                        else openPage(page)
-                      }}
-                    >
-                      <span className="daybook-page-date">
-                        {new Date(page.updatedAt).toLocaleDateString(language, {
-                          weekday: 'short',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: '2-digit',
-                        })}
-                        {page.pinned && ' · 📌'}
-                      </span>
-                      <strong>{page.mood && <span aria-label="Mood">{page.mood} </span>}{page.modeTitle}</strong>
-                      <span className="daybook-page-preview">
-                        {text.slice(0, 160) || 'Empty page'}
-                      </span>
-                      {page.flow && subOn('flowTopography', 'thumbnails') && (
-                        <FlowMountain fp={page.flow} compact label="Writing flow" />
-                      )}
-                      <small>
-                        {words} {words === 1 ? 'word' : 'words'}
-                      </small>
-                    </button>
-                    <div className="daybook-page-tools">
-                      <button type="button" aria-label={`Duplicate ${page.modeTitle}`} title="Duplicate this page" onClick={() => {
-                        const now = new Date().toISOString()
-                        persist({ ...page, id: crypto.randomUUID(), modeTitle: `${page.modeTitle} (copy)`, createdAt: now, updatedAt: now, flow: undefined }, false)
-                      }}>
-                        ⧉
-                      </button>
-                      <button type="button" aria-label={`${page.private ? 'Show' : 'Hide'} ${page.modeTitle} preview on the home screen`} title={page.private ? 'Show on the home screen' : 'Blur on the home screen'} aria-pressed={Boolean(page.private)} onClick={() => persist({ ...page, private: !page.private }, false)}>
-                        {page.private ? '🔒' : '🔓'}
-                      </button>
-                      <button type="button" aria-label={`${page.pinned ? 'Unpin' : 'Pin'} ${page.modeTitle}`} title={page.pinned ? 'Unpin' : 'Pin to the front'} aria-pressed={Boolean(page.pinned)} onClick={() => persist({ ...page, pinned: !page.pinned }, false)}>
-                        📌
-                      </button>
-                      <button type="button" aria-label={`Copy text from ${page.modeTitle}`} title="Copy the text" onClick={(e) => { void navigator.clipboard?.writeText(text); e.currentTarget.textContent = '✓' }}>
-                        📋
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Download ${page.modeTitle} as Markdown`}
-                        title="Download as Markdown"
-                        onClick={() => {
-                          const md = `# ${page.modeTitle}\n\n_${new Date(page.createdAt).toLocaleDateString(language, { dateStyle: 'full' })}${page.mood ? ` · ${page.mood}` : ''}_\n\n${text}\n`
-                          const a = document.createElement('a')
-                          a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }))
-                          a.download = `${page.modeTitle.replace(/[^\w-]+/g, '-')}-${page.createdAt.slice(0, 10)}.md`
-                          a.click()
-                          setTimeout(() => URL.revokeObjectURL(a.href), 1000)
-                        }}
-                      >
-                        ⬇
-                      </button>
-                      <button type="button" aria-label={`Delete ${page.modeTitle}`} title="Delete this page" onClick={() => removePage(page)}>
-                        🗑
-                      </button>
-                    </div>
-                    </div>
-                  )
-                })}
-              </Carousel>
+                  <Carousel
+                    label="Your pages"
+                    title={`Your pages · ${visiblePages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}
+                  >
+                    {[...visiblePages]
+                      .sort((a, b) =>
+                        sort === 'created'
+                          ? b.createdAt.localeCompare(a.createdAt)
+                          : sort === 'oldest'
+                            ? a.createdAt.localeCompare(b.createdAt)
+                            : sort === 'title'
+                              ? a.modeTitle.localeCompare(b.modeTitle)
+                              : 0,
+                      )
+                      .sort(
+                        (a, b) =>
+                          Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)),
+                      )
+                      .map((page) => {
+                        const text = journalText(page.content).trim()
+                        const words = text ? text.split(/\s+/).length : 0
+                        return (
+                          <div key={page.id} className="daybook-page-wrap">
+                            <button
+                              type="button"
+                              className={`daybook-page-card${page.private && revealed !== page.id ? ' is-private' : ''}`}
+                              onClick={(event) => {
+                                if (page.private && revealed !== page.id)
+                                  setRevealed(page.id)
+                                else openPage(page, event.currentTarget)
+                              }}
+                            >
+                              <span className="daybook-page-date">
+                                {new Date(page.updatedAt).toLocaleDateString(
+                                  language,
+                                  {
+                                    weekday: 'short',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                  },
+                                )}
+                                {page.pinned && ' · 📌'}
+                              </span>
+                              <strong>
+                                {page.mood && (
+                                  <span aria-label="Mood">{page.mood} </span>
+                                )}
+                                {page.modeTitle}
+                              </strong>
+                              <span className="daybook-page-preview">
+                                {text.slice(0, 160) || 'Empty page'}
+                              </span>
+                              {page.flow &&
+                                subOn('flowTopography', 'thumbnails') && (
+                                  <FlowMountain
+                                    fp={page.flow}
+                                    compact
+                                    label="Writing flow"
+                                  />
+                                )}
+                              <small>
+                                {words} {words === 1 ? 'word' : 'words'}
+                              </small>
+                            </button>
+                            <div className="daybook-page-tools">
+                              <button
+                                type="button"
+                                aria-label={`Duplicate ${page.modeTitle}`}
+                                title="Duplicate this page"
+                                onClick={() => {
+                                  const now = new Date().toISOString()
+                                  persist(
+                                    {
+                                      ...page,
+                                      id: crypto.randomUUID(),
+                                      modeTitle: `${page.modeTitle} (copy)`,
+                                      createdAt: now,
+                                      updatedAt: now,
+                                      flow: undefined,
+                                    },
+                                    false,
+                                  )
+                                }}
+                              >
+                                ⧉
+                              </button>
+                              <button
+                                type="button"
+                                aria-label={`${page.private ? 'Show' : 'Hide'} ${page.modeTitle} preview on the home screen`}
+                                title={
+                                  page.private
+                                    ? 'Show on the home screen'
+                                    : 'Blur on the home screen'
+                                }
+                                aria-pressed={Boolean(page.private)}
+                                onClick={() =>
+                                  persist(
+                                    { ...page, private: !page.private },
+                                    false,
+                                  )
+                                }
+                              >
+                                {page.private ? '🔒' : '🔓'}
+                              </button>
+                              <button
+                                type="button"
+                                aria-label={`${page.pinned ? 'Unpin' : 'Pin'} ${page.modeTitle}`}
+                                title={
+                                  page.pinned ? 'Unpin' : 'Pin to the front'
+                                }
+                                aria-pressed={Boolean(page.pinned)}
+                                onClick={() =>
+                                  persist(
+                                    { ...page, pinned: !page.pinned },
+                                    false,
+                                  )
+                                }
+                              >
+                                📌
+                              </button>
+                              <button
+                                type="button"
+                                aria-label={`Copy text from ${page.modeTitle}`}
+                                title="Copy the text"
+                                onClick={(e) => {
+                                  void navigator.clipboard?.writeText(text)
+                                  e.currentTarget.textContent = '✓'
+                                }}
+                              >
+                                📋
+                              </button>
+                              <button
+                                type="button"
+                                aria-label={`Download ${page.modeTitle} as Markdown`}
+                                title="Download as Markdown"
+                                onClick={() => {
+                                  const md = `# ${page.modeTitle}\n\n_${new Date(page.createdAt).toLocaleDateString(language, { dateStyle: 'full' })}${page.mood ? ` · ${page.mood}` : ''}_\n\n${text}\n`
+                                  const a = document.createElement('a')
+                                  a.href = URL.createObjectURL(
+                                    new Blob([md], { type: 'text/markdown' }),
+                                  )
+                                  a.download = `${page.modeTitle.replace(/[^\w-]+/g, '-')}-${page.createdAt.slice(0, 10)}.md`
+                                  a.click()
+                                  setTimeout(
+                                    () => URL.revokeObjectURL(a.href),
+                                    1000,
+                                  )
+                                }}
+                              >
+                                ⬇
+                              </button>
+                              <button
+                                type="button"
+                                aria-label={`Delete ${page.modeTitle}`}
+                                title="Delete this page"
+                                onClick={() => removePage(page)}
+                              >
+                                🗑
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                  </Carousel>
                 ) : (
                   <p className="daybook-search-empty" role="status">
                     No saved pages match “{pageSearch}”.
-                    <button type="button" onClick={() => setPageSearch('')}>Clear search</button>
+                    <button type="button" onClick={() => setPageSearch('')}>
+                      Clear search
+                    </button>
                   </p>
                 )}
               </>
