@@ -108,6 +108,7 @@ export function BloomGuide({
   const pageChoices = (p: string) => [...guideFor(p, names).choices, ...root.filter((r) => r.next !== '__page')]
 
   const pick = (c: Choice) => {
+    if (typing) return
     setLines((l) => trim([...l, { id: ++lineId, from: 'you', text: c.label }]))
     face.current?.react('cheer')
     if (c.next === '__tour') return say('Let me show you around — follow the highlights.', root, () => window.dispatchEvent(new Event('bloom:tour')))
