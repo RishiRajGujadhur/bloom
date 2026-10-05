@@ -107,3 +107,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 092 — Make suggested action text readable on narrow cards. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 093 — Provide forty eight pixel tap targets for suggestion buttons. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 094 — Give slider controls a generous touch area. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 095 — Make slider page descriptions easy to read. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

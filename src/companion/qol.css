@@ -26,3 +26,5 @@
 .choice-slider-items button { min-height: 48px; }
 
 .choice-slider-control input[type="range"] { min-height: 48px; margin: 0; cursor: pointer; }
+
+.choice-slider-control { font-size: 14px; line-height: 1.5; }
