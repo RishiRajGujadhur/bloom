@@ -549,6 +549,10 @@ export function BloomCompanion({
                 </p>
               )}
             </div>
+            {turns.length > 0 && <button type="button" className="chat-latest" onClick={() => {
+              followLatest.current = true
+              feed.current?.scrollTo({ top: feed.current.scrollHeight })
+            }}>Jump to latest reply</button>}
             <ChoiceSlider label="Planning prompts" actions={[
               'I have 40 minutes', 'I’m tired today', 'Look back at my week',
             ].map((prompt) => ({ id: prompt, label: prompt, disabled: busy, run: () => void ask(prompt) }))} />
