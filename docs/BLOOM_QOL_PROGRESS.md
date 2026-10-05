@@ -81,3 +81,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 072 — Remove distracting perpetual orb movement while idle. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 073 — Link guide and planner tabs to their corresponding content panels. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 074 — Keep focused guide suggestions visible after paging. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 075 — Give narrow screens a dedicated full screen chat layout. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

@@ -558,3 +558,11 @@ html[data-bloom-motion='paused'] .companion-orb { animation: none; }
 @media (max-height: 700px), (max-width: 600px) {
   .bc-panel .companion-orb-stage > .bloom-face { width: 72px; height: 72px; }
 }
+
+@media (max-width: 600px) {
+  html .bc-panel:not(.is-docked), html .bc-panel.is-docked, html[data-bloom-right] .bc-panel:not(.is-docked) {
+    inset: 0; width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    z-index: 90;
+  }
+}
