@@ -581,7 +581,7 @@ export function BloomCompanion({
               feed.current?.scrollTo({ top: feed.current.scrollHeight })
             }}>Jump to latest reply</button>}
             <ChoiceSlider label="Planning prompts" actions={[
-              'I have 40 minutes', 'I’m tired today', 'Look back at my week',
+              'I have 40 minutes', 'I’m tired today', 'Look back at my week', 'I have 15 minutes',
             ].map((prompt) => ({ id: prompt, label: prompt, disabled: busy, run: () => void ask(prompt) }))} />
             <form
               className="companion-composer"
