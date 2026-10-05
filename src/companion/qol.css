@@ -124,3 +124,5 @@
 @media (max-width: 600px) { .bc-panel .companion-orb-stage { padding: 4px 0; gap: 4px; } .bc-panel .companion-orb, .bc-panel .companion-orb-stage > .bloom-face { width: 48px; height: 48px; } .bc-panel .companion-orb-caption { display: none; } }
 
 @media (min-width: 601px) and (max-width: 900px) { html .bc-panel.is-docked { left: 0; right: 0; width: 100%; max-height: 85dvh; } }
+
+.bc-panel .companion-feed, .bc-panel .chat-tools { padding: 5px; }

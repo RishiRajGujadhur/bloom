@@ -156,3 +156,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 141 — Recover reading space on short or landscape screens. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 142 — Reduce avatar decoration on mobile to prioritize messages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 143 — Keep docked chat usable at increased browser zoom. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 144 — Protect conversation focus rings from scroll clipping. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
