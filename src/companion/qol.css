@@ -72,3 +72,5 @@
 .bc-panel .companion-notice { border-inline-start: 3px solid var(--accent-color); font-size: 14px; line-height: 1.6; display: flex; align-items: start; gap: 8px; }
 
 .chat-dismiss { min-width: 48px; min-height: 48px; margin-inline-start: auto; background: transparent; border: 1px solid var(--border-color); color: inherit; border-radius: 10px; font-size: 20px; }
+
+.chat-offline { flex-shrink: 0; margin: 0; padding: 10px; font-size: 14px; line-height: 1.5; border: 1px dashed var(--border-strong); border-radius: 10px; }
