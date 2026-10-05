@@ -66,3 +66,5 @@
 .bg-guide-search { display: block; padding-block-start: 4px; }
 
 .bc-panel .bg-guide-search input::placeholder { color: var(--text-secondary); opacity: 1; }
+
+.bc-panel .companion-composer input::placeholder { color: var(--text-secondary); opacity: 1; }

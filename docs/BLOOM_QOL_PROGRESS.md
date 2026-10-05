@@ -127,3 +127,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 112 — Make the planning character count unobtrusive and readable. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 113 — Keep the guide composer clear of the suggestions. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 114 — Give guide input placeholders readable contrast. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 115 — Give planning input placeholders readable contrast. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
