@@ -6,3 +6,5 @@
 .bc-panel .companion-message, .bc-panel .cs-message__content { max-inline-size: 62ch; }
 
 .bc-panel .cs-message__content { overflow-wrap: anywhere; word-break: normal; }
+
+.bc-panel .cs-message__content { white-space: pre-wrap; }
