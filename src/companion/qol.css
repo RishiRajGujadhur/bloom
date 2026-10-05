@@ -8,3 +8,5 @@
 .bc-panel .cs-message__content { overflow-wrap: anywhere; word-break: normal; }
 
 .bc-panel .cs-message__content { white-space: pre-wrap; }
+
+.bc-panel .companion-message.assistant { align-self: flex-start; }

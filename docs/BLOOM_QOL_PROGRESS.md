@@ -98,3 +98,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 083 — Constrain reply line lengths in wide panels. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 084 — Wrap long links and words in guide messages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 085 — Preserve paragraph breaks in guide replies. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 086 — Keep assistant messages visibly aligned to the conversation start. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
