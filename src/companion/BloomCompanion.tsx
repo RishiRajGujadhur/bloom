@@ -409,6 +409,13 @@ export function BloomCompanion({
           className={`bc-panel${docked ? ' is-docked' : ''}${followTheme ? ' uses-app-theme' : ''}`}
           aria-label="Talk to Bloom"
           onKeyDown={(e) => {
+            if (e.key === 'Tab' && window.matchMedia('(max-width: 600px)').matches) {
+              const items = [...e.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select, summary, [tabindex="0"]')]
+                .filter((el) => el.getClientRects().length > 0 && (!el.closest('details:not([open])') || el.tagName === 'SUMMARY'))
+              const first = items[0], last = items.at(-1)
+              if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus() }
+              else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus() }
+            }
             if (e.key === 'Escape') {
               e.stopPropagation()
               onClose()
