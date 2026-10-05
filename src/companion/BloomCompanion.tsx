@@ -401,6 +401,7 @@ export function BloomCompanion({
             onPointerDown={startResize}
             onDoubleClick={() => setPanelWidth(null)}
             onKeyDown={(e) => {
+              if (e.key === 'Home') { e.preventDefault(); setPanelWidth(null); return }
               if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
               e.preventDefault()
               const w = panel.current?.getBoundingClientRect().width ?? 380

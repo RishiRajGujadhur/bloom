@@ -52,3 +52,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 043 — Use arrow keys to switch guide and planning tabs. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 044 — Keep only the active mode tab in the keyboard tab order. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 045 — Describe resize limits to keyboard users. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 046 — Reset the panel width from the keyboard with Home. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
