@@ -593,6 +593,7 @@ export function BloomCompanion({
                 </button>
               )}
             </form>
+            <small className="chat-character-count" id="bloom-message-count" aria-live="off">{text.length}/1000 characters</small>
             {notice && (
               <p role="status" className="companion-notice">
                 {notice}
