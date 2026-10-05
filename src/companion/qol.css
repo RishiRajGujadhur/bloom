@@ -30,3 +30,5 @@
 .choice-slider-control { font-size: 14px; line-height: 1.5; }
 
 .choice-slider input:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; border-radius: 8px; }
+
+.choice-slider-items { touch-action: pan-y; }
