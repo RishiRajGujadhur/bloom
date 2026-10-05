@@ -311,7 +311,9 @@ export function BloomCompanion({
         ai.current = null
         setStatus('off')
         setNotice(
-          'Local AI could not finish this response. Bloom used the lightweight planner instead.',
+          error instanceof Error && /too long|timeout/i.test(error.message)
+            ? 'Local AI took too long. Bloom used the lightweight planner instead; try a shorter request.'
+            : 'Local AI could not finish this response. Bloom used the lightweight planner instead.',
         )
       }
     }
