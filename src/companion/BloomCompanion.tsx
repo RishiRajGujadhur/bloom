@@ -498,7 +498,7 @@ export function BloomCompanion({
                     `Preparing local AI… ${Math.round(progress * 100)}%`}
                 </p>
                 <progress
-                  value={progress}
+                  value={Math.max(0, Math.min(1, progress))}
                   max={1}
                   aria-label="Local AI loading"
                 />
