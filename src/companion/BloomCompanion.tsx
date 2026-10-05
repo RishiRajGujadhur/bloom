@@ -776,7 +776,7 @@ export function BloomCompanion({
                 </button>
                 {blocked && (
                   <p role="status">
-                    Resolve the data recovery alert before applying a plan.
+                    Resolve the data recovery alert before applying a plan. You can still adjust or review this suggestion.
                   </p>
                 )}
               </section>

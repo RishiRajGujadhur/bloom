@@ -72,3 +72,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 063 — Show connection status while keeping local commands available. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 064 — Preserve typed guide input when a command fails. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 065 — Disable planner submission while composing an IME character. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 066 — Explain why planning is blocked by a data recovery alert. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
