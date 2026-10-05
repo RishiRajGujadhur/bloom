@@ -538,7 +538,7 @@ export function BloomCompanion({
                       </button>
                     )}
                   </small>
-                  <p>{turn.content}</p>
+                  {turn.content.split(/\n\s*\n/).map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}
                 </div>
               ))}
               {busy && (
