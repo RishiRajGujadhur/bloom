@@ -212,6 +212,7 @@ export function BloomCompanion({
     !!v && typeof v === 'object' && 'role' in v && (v.role === 'user' || v.role === 'assistant') &&
     'content' in v && typeof v.content === 'string' && v.content.length <= 20000))
   useEffect(() => writeSession('bloom-plan-turns', JSON.stringify(turns)), [turns])
+  const [clearedTurns, setClearedTurns] = useState<Turn[]>([])
   const [proposal, setProposal] = useState<Proposal | null>(null)
   const [intent, setIntent] = useState<Intent['intent']>('chat')
   const [minutes, setMinutes] = useState(40)
@@ -544,10 +545,11 @@ export function BloomCompanion({
               aria-busy={busy}
             >
               {turns.length > 0 && !busy && (
-                <button type="button" className="companion-clear" onClick={() => setTurns([])}>
+                <button type="button" className="companion-clear" onClick={() => { setClearedTurns(turns); setTurns([]) }}>
                   Clear conversation
                 </button>
               )}
+              {!turns.length && clearedTurns.length > 0 && <button type="button" className="chat-undo" onClick={() => { setTurns(clearedTurns); setClearedTurns([]) }}>Undo clear conversation</button>}
               {!turns.length && (
                 <p className="companion-welcome">
                   I can plan a short session, reflect with you, or review your recorded week.
