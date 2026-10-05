@@ -2,3 +2,5 @@
 .bc-panel .companion-message p, .bc-panel .cs-message__content { font-size: 16px; }
 
 .bc-panel .companion-message p, .bc-panel .cs-message__content { line-height: 1.65; }
+
+.bc-panel .companion-message, .bc-panel .cs-message__content { max-inline-size: 62ch; }
