@@ -147,7 +147,7 @@ export function BloomGuide({
   /** Typed messages: try a command first (expenses, todos, hints…), then page search. */
   const submit = async () => {
     const text = query.trim()
-    if (!text) return
+    if (!text || typing) return
     // Loaded on first use so money / course code stays out of the main bundle.
     const { runCommand } = await import('./chatCommands')
     const res = runCommand(text, { data, setData, navigate, clear: () => setLines([]) })
