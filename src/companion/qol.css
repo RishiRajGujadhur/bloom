@@ -98,3 +98,5 @@
 .bc-panel .companion-plan-note { font-size: 14px; line-height: 1.6; }
 
 .companion-plan-actions button { min-height: 48px; white-space: normal; }
+
+.companion-plan > .text-button { min-height: 48px; text-align: start; }
