@@ -96,3 +96,5 @@
 .bc-panel .companion-plan li strong { font-size: 14px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
 .bc-panel .companion-plan-note { font-size: 14px; line-height: 1.6; }
+
+.companion-plan-actions button { min-height: 48px; white-space: normal; }

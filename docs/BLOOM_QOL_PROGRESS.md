@@ -142,3 +142,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 127 — Make suggested task titles comfortable to read. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 128 — Keep task duration labels legible without truncation. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 129 — Make plan rationale readable before applying changes. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 130 — Give plan apply and simplify actions generous tap targets. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
