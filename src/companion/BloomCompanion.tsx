@@ -271,6 +271,7 @@ export function BloomCompanion({
     setStatus('off')
   }
   const enable = async () => {
+    if (!navigator.onLine) { setNotice('Connect to the internet to download local AI. The lightweight planner is ready now.'); return }
     stop()
     const current = revision.current
     setStatus('loading')
