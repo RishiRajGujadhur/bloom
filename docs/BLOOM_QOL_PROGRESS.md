@@ -139,3 +139,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 124 — Give planning time and energy labels readable typography. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 125 — Make planning selects mobile friendly without browser zoom. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 126 — Wrap narrow planning controls into usable full width rows. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 127 — Make suggested task titles comfortable to read. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
