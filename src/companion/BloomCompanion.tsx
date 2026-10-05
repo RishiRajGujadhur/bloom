@@ -746,6 +746,7 @@ export function BloomCompanion({
                     onClick={() => {
                       setData((current) => applyProposal(current, proposal))
                       setApplied(true)
+                      setNotice('Plan added to today’s intentions. Open daily intentions to review it.')
                     }}
                   >
                     {applied
