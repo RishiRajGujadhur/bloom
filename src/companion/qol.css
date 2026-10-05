@@ -88,3 +88,5 @@
 .bc-panel .companion-plan-controls label { font-size: 14px; }
 
 .bc-panel .companion-plan-controls select { font-size: 16px; min-height: 48px; }
+
+.companion-plan-controls label { min-width: min(100%, 150px); }
