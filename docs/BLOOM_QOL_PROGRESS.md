@@ -11,3 +11,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 002 — Use the same three-choice slider for planner quick replies. Validation: TypeScript project check and diff check.
 - [x] 003 — Announce suggestion positions with meaningful slider values. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 004 — Announce the visible suggestion range after paging. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 005 — Keep slider position text clear for keyboard and touch users. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
