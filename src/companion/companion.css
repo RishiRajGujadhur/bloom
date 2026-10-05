@@ -457,7 +457,7 @@ html[data-bloom-right] .bc-panel:not(.is-docked) .bc-resize { right: auto; left:
   border: 1px solid #7dccff65;
   background: radial-gradient(circle at 30% 20%, #d6f5ffb3, #3599ed77 25%, #082f7955 58%, #03102c 85%);
   box-shadow: inset 3px 5px 12px #8cdfff80, inset -8px -10px 20px #020b28, 0 0 28px #238dff66, 0 0 65px #138aff33;
-  animation: companion-orb-float 7s ease-in-out infinite;
+  animation: companion-orb-float 700ms ease-out 1;
 }
 .companion-orb::after {
   content: '';
