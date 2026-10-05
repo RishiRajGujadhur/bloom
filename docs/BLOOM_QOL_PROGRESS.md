@@ -26,3 +26,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 017 — Explain unmatched guide searches with an actionable hint. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 018 — Expose guide processing state to assistive technology. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 019 — Include quiz help in the same capped suggestion slider. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 020 — Prevent duplicate quiz responses during guide processing. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.

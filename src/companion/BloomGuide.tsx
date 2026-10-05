@@ -168,6 +168,7 @@ export function BloomGuide({
     say('I didn’t catch that. Try “spent 5 on coffee”, “add todo …”, “hint”, or a page name — or type “help”.', root2)
   }
   const quizHelp = (label: string, fn: () => string) => {
+    if (typing) return
     setLines((l) => trim([...l, { id: ++lineId, from: 'you', text: label }]))
     face.current?.react('think')
     say(fn(), root2)
