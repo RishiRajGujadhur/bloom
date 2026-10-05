@@ -132,3 +132,5 @@
 @media (forced-colors: active) { .bc-panel :is(button, input, select, summary) { border: 1px solid ButtonText; } .bc-panel:not(.uses-app-theme), .bc-panel.uses-app-theme { border: 1px solid CanvasText; background: Canvas; color: CanvasText; box-shadow: none; } }
 
 @media (forced-colors: active) { .bc-panel button:disabled { color: GrayText; border-color: GrayText; opacity: 1; } }
+
+.choice-slider-control input { direction: ltr; } .choice-slider-items button { text-align: start; }
