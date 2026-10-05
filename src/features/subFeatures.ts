@@ -3,13 +3,15 @@ import { SETTINGS_STORAGE_KEY } from '../settingsKey'
 
 /**
  * Sub-features: every feature exposes 2+ finer options in Settings. They are
- * stored as `sub["feature.option"]`; a missing entry means "on", so new
- * options appear enabled without migrating anyone's saved settings.
+ * stored as `sub["feature.option"]`; missing entries use the option's
+ * default (normally on), without migrating saved settings.
  */
 export type SubFeature = {
   id: string
   title: string
   description: string
+  /** Used when no explicit preference has been saved. */
+  defaultOn?: boolean
   /** Works even when its feature's main switch is off (shown as such in Settings). */
   independent?: boolean
 }
@@ -304,6 +306,7 @@ export const subFeatures: Record<keyof FeatureFlags, SubFeature[]> = {
     { id: 'attackNote', title: 'Attack feedback', description: 'Message after an attack.' },
   ],
   daybookModes: [
+    { id: 'savedJournals', title: 'Saved journals on home', description: 'Show your books, recent pages and shortcuts on the Daybook selection page. Your writing is kept when hidden.', defaultOn: false },
     { id: 'autosave', title: 'Autosave', description: 'Save pages as you type.' },
     { id: 'focusWriting', title: 'Focus writing', description: 'Hide everything but the page.' },
     { id: 'pages', title: 'Your pages slider', description: 'Recent pages on the Daybook home.' },
@@ -1180,12 +1183,12 @@ function read() {
   return cache
 }
 
-/** True unless the user switched this option (or its parent feature) off. */
+/** Resolve the saved preference or default, respecting the parent switch. */
 export function subOn(feature: keyof FeatureFlags, id: string, options?: { ignoreParent?: boolean }) {
   const { sub, features } = read()
   const independent = options?.ignoreParent || subFeatures[feature]?.some((o) => o.id === id && o.independent)
   if (!independent && features[feature] === false) return false
-  return sub[`${feature}.${id}`] !== false
+  return sub[`${feature}.${id}`] ?? subFeatures[feature]?.find((option) => option.id === id)?.defaultOn ?? true
 }
 
 /**

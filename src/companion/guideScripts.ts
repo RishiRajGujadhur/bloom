@@ -78,9 +78,9 @@ export const pageGuides: Record<string, GuideNode> = {
   daybook: {
     say: 'Your Daybook. Not sure what to write? I can pick a page for you.',
     choices: [
-      { label: 'Suggest a page', reply: 'Tap how you feel in “Not sure what to write?” and swipe through pages that fit.' },
+      { label: 'Not sure what to write?', reply: 'I’ve opened some writing suggestions. Tap how you feel and swipe through pages that fit.', action: 'daybook-suggest' },
       { label: 'Continue my last page', reply: 'Opening your latest page.', action: 'daybook-continue' },
-      { label: 'Read my books', reply: 'Your journal types are books on the shelf — tap one to flip through your entries.' },
+      { label: 'Read my books', reply: 'Enable Saved journals on home in Settings → Daybook sub-options to see your books and saved pages.' },
       { label: 'Save an insight', reply: 'Highlight a sentence, right-click and choose “Save as epiphany”.' },
     ],
   },

@@ -9,13 +9,32 @@ import './swipe.css'
  * The same low-friction panel on every page: a collapsible card holding a
  * swipe deck and/or guided mood. Open state is remembered per feature.
  */
-export function QuickPanel({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+export function QuickPanel({
+  id,
+  title,
+  children,
+  initialOpen,
+}: {
+  id: string
+  title: string
+  children: ReactNode
+  initialOpen?: boolean
+}) {
   const key = 'bloom-quick-open-v1'
-  const [open, setOpen] = useState(() => readStore<Record<string, boolean>>(key, {})[id] ?? false)
+  const [open, setOpen] = useState(
+    () =>
+      initialOpen ?? readStore<Record<string, boolean>>(key, {})[id] ?? false,
+  )
   const body = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     if (!open || !body.current || prefersReducedMotion()) return
-    const tw = gsap.from(body.current, { height: 0, opacity: 0, duration: 0.35, ease: 'power2.out', clearProps: 'height' })
+    const tw = gsap.from(body.current, {
+      height: 0,
+      opacity: 0,
+      duration: 0.35,
+      ease: 'power2.out',
+      clearProps: 'height',
+    })
     return () => void tw.revert()
   }, [open])
   return (
@@ -27,11 +46,18 @@ export function QuickPanel({ id, title, children }: { id: string; title: string;
         onClick={() => {
           const next = !open
           setOpen(next)
-          writeStore(key, { ...readStore<Record<string, boolean>>(key, {}), [id]: next })
+          writeStore(key, {
+            ...readStore<Record<string, boolean>>(key, {}),
+            [id]: next,
+          })
         }}
       >
         <Sparkles size={15} aria-hidden="true" /> {title}
-        <ChevronDown size={16} className="quick-panel-chev" aria-hidden="true" />
+        <ChevronDown
+          size={16}
+          className="quick-panel-chev"
+          aria-hidden="true"
+        />
       </button>
       {open && (
         <div ref={body} className="quick-panel-body">
@@ -43,16 +69,25 @@ export function QuickPanel({ id, title, children }: { id: string; title: string;
 }
 
 /** One shared log of guided moods from every feature (feeds Mood insights). */
-export type MoodLogEntry = { feature: string; mood: string; at: number; note?: string }
+export type MoodLogEntry = {
+  feature: string
+  mood: string
+  at: number
+  note?: string
+}
 export const MOOD_LOG_KEY = 'bloom-guided-mood-log-v1'
 export const readMoodLog = (): MoodLogEntry[] => {
   const v = readStore<unknown>(MOOD_LOG_KEY, [])
   return Array.isArray(v) ? (v as MoodLogEntry[]) : []
 }
 export function logMood(feature: string, mood: string, note?: string) {
-  const next = [...readMoodLog(), { feature, mood, at: Date.now(), note }].slice(-500)
+  const next = [
+    ...readMoodLog(),
+    { feature, mood, at: Date.now(), note },
+  ].slice(-500)
   writeStore(MOOD_LOG_KEY, next)
   return next
 }
 export const lastMood = (feature?: string) =>
-  [...readMoodLog()].reverse().find((e) => !feature || e.feature === feature)?.mood ?? null
+  [...readMoodLog()].reverse().find((e) => !feature || e.feature === feature)
+    ?.mood ?? null

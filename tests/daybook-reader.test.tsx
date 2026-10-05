@@ -9,6 +9,10 @@ import { journalModes } from '../src/components/daybook/mockData'
 import { OPEN_DAYBOOK_EVENT } from '../src/components/layout/CommandPalette'
 import { prefersReducedMotion } from '../src/utils/motion'
 import type { JournalEntry } from '../src/components/daybook/types'
+import { SETTINGS_STORAGE_KEY } from '../src/settingsKey'
+import { currentPageActions } from '../src/components/ui/PageMenu'
+import { journalPixelPatterns } from '../src/components/daybook/PixelArt'
+import { subOn } from '../src/features/subFeatures'
 
 jest.mock('../src/utils/motion', () => ({
   prefersReducedMotion: jest.fn(() => false),
@@ -161,6 +165,10 @@ test('reduced motion closes immediately and a single saved page has no navigatio
 })
 
 test('reading saved writing does not autosave; Edit reopens its original document', () => {
+  localStorage.setItem(
+    SETTINGS_STORAGE_KEY,
+    JSON.stringify({ sub: { 'daybookModes.savedJournals': true } }),
+  )
   localStorage.setItem(DAYBOOK_STORAGE_KEY, JSON.stringify([newer]))
   const original = localStorage.getItem(DAYBOOK_STORAGE_KEY)
   render(<JournalContainer />)
@@ -182,6 +190,10 @@ test('reading saved writing does not autosave; Edit reopens its original documen
 
 test('private cards require reveal before opening the reader', () => {
   localStorage.setItem(
+    SETTINGS_STORAGE_KEY,
+    JSON.stringify({ sub: { 'daybookModes.savedJournals': true } }),
+  )
+  localStorage.setItem(
     DAYBOOK_STORAGE_KEY,
     JSON.stringify([{ ...newer, private: true }]),
   )
@@ -193,6 +205,65 @@ test('private cards require reveal before opening the reader', () => {
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   fireEvent.click(card)
   expect(screen.getByRole('dialog')).toBeInTheDocument()
+})
+
+test('saved home collections are unmounted by default without deleting writing', () => {
+  const original = JSON.stringify([newer])
+  localStorage.setItem(DAYBOOK_STORAGE_KEY, original)
+  const { container, unmount } = render(<JournalContainer />)
+  expect(subOn('daybookModes', 'savedJournals')).toBe(false)
+  expect(container.querySelector('.journal-shelf')).toBeNull()
+  expect(container.querySelector('.daybook-page-card')).toBeNull()
+  expect(localStorage.getItem(DAYBOOK_STORAGE_KEY)).toBe(original)
+  unmount()
+  localStorage.setItem(
+    SETTINGS_STORAGE_KEY,
+    JSON.stringify({ sub: { 'daybookModes.savedJournals': true } }),
+  )
+  render(<JournalContainer />)
+  expect(
+    screen.getByRole('button', { name: /Open Bullet Journal.*1 saved page/ }),
+  ).toBeInTheDocument()
+})
+
+test('Bloom opens the hidden writing suggestions with their contents expanded', () => {
+  render(<JournalContainer />)
+  expect(
+    screen.queryByRole('button', { name: 'Not sure what to write?' }),
+  ).not.toBeInTheDocument()
+  act(() =>
+    currentPageActions()
+      .find((action) => action.id === 'daybook-suggest')!
+      .run(),
+  )
+  expect(
+    screen.getByRole('button', { name: 'Not sure what to write?' }),
+  ).toHaveAttribute('aria-expanded', 'true')
+  expect(
+    screen.getByText("How are you? We'll suggest a page."),
+  ).toBeInTheDocument()
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Not sure what to write?' }),
+  )
+  expect(
+    screen.getByRole('button', { name: 'Not sure what to write?' }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  act(() =>
+    currentPageActions()
+      .find((action) => action.id === 'daybook-suggest')!
+      .run(),
+  )
+  expect(
+    screen.getByRole('button', { name: 'Not sure what to write?' }),
+  ).toHaveAttribute('aria-expanded', 'true')
+})
+
+test('every journal has a distinct pixel icon', () => {
+  const icons = journalModes.map((mode) =>
+    journalPixelPatterns[mode.id]?.join('/'),
+  )
+  expect(icons.every(Boolean)).toBe(true)
+  expect(new Set(icons).size).toBe(journalModes.length)
 })
 
 test('command search opens the saved reader, including entries from old modes', () => {

@@ -1208,7 +1208,7 @@ function OptionList({
   setSub: (sub: Record<string, boolean>) => void
 }) {
   const hit = query.trim() ? options.filter((o) => matches(o.title, query)) : []
-  const onCount = options.filter((o) => sub[`${prefix}.${o.id}`] !== false).length
+  const onCount = options.filter((o) => (sub[`${prefix}.${o.id}`] ?? o.defaultOn ?? true)).length
   const setAll = (value: boolean | null) =>
     setSub({
       ...Object.fromEntries(Object.entries(sub).filter(([k]) => !k.startsWith(`${prefix}.`))),
@@ -1228,7 +1228,7 @@ function OptionList({
       <ul>
         {options.map((option) => {
           const id = `${prefix}.${option.id}`
-          const on = sub[id] !== false
+          const on = sub[id] ?? option.defaultOn ?? true
           const live = parentOn || !!option.independent
           return (
             <li key={option.id} data-hit={hit.includes(option) || undefined}>

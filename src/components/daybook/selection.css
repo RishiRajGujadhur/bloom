@@ -64,6 +64,16 @@
     linear-gradient(#ffffff06 1px, transparent 1px);
   background-size: 12px 12px;
 }
+.app-shell .daybook .direction-card:is(:hover, :focus-visible) {
+  background: var(--choice-color);
+  color: #fff7e9;
+  filter: none;
+  border-color: color-mix(in srgb, var(--choice-color) 70%, transparent);
+}
+.app-shell .daybook.daybook-wizard .daybook-mode:is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--choice-color) 16%, var(--bg-surface));
+  filter: none;
+}
 .daybook .direction-copy {
   display: grid;
   gap: 10px;

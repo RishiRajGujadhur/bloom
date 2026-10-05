@@ -93,7 +93,7 @@ export function JournalLibrary({
                     key={mode.id}
                     onClick={() => onSelect(mode)}
                   >
-                    <PixelArt category={mode.category} />
+                    <PixelArt category={mode.category} journalId={mode.id} />
                     <span className="daybook-mode-copy">
                       <strong>{mode.title}</strong>
                       <small>{mode.description}</small>

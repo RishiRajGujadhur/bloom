@@ -20,6 +20,7 @@ import './daybook.css'
 import './selection.css'
 import { PixelArt } from './PixelArt'
 import { changeDaybookView } from './transition'
+import { prefersReducedMotion } from '../../utils/motion'
 import { FlowMountain } from '../../features/flow/FlowMountain'
 import { capturePlace } from '../../features/places/placesStore'
 import { loadSettings } from '../../SettingsPage'
@@ -34,6 +35,17 @@ export function JournalContainer() {
     id: string
     source?: DOMRect
   } | null>(null)
+  const [suggestionsOpen, setSuggestionsOpen] = useState(0)
+  const suggestionsRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (suggestionsOpen && !selected && !category && !browse) {
+      suggestionsRef.current?.scrollIntoView?.({
+        block: 'center',
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      })
+      suggestionsRef.current?.focus({ preventScroll: true })
+    }
+  }, [suggestionsOpen, selected, category, browse])
   const [lastModeId, setLastModeId] = useState<string | null>(() => {
     try {
       return localStorage.getItem('bloom-daybook-last-mode')
@@ -297,24 +309,39 @@ export function JournalContainer() {
       description: 'Follow a prompt somewhere new.',
     },
   ] as const
-  usePageActions([
-    {
-      id: 'daybook-browse',
-      label: 'Browse every page type',
-      icon: '📚',
-      run: () => setBrowse(true),
-    },
-    ...(recentPages[0]
-      ? [
-          {
-            id: 'daybook-continue',
-            label: `Read “${recentPages[0].modeTitle}”`,
-            icon: '✍️',
-            run: () => openPage(recentPages[0]),
-          },
-        ]
-      : []),
-  ])
+  usePageActions(
+    [
+      {
+        id: 'daybook-suggest',
+        label: 'Not sure what to write?',
+        icon: '✨',
+        run: () => {
+          changeDaybookView(() => {
+            setSelected(null)
+            setCategory(null)
+            setBrowse(false)
+            setSuggestionsOpen((request) => request + 1)
+          })
+        },
+      },
+      {
+        id: 'daybook-browse',
+        label: 'Browse every page type',
+        icon: '📚',
+        run: () => setBrowse(true),
+      },
+      ...(recentPages[0]
+        ? [
+            {
+              id: 'daybook-continue',
+              label: `Read “${recentPages[0].modeTitle}”`,
+              icon: '✍️',
+              run: () => openPage(recentPages[0]),
+            },
+          ]
+        : []),
+    ].filter((action) => action.id !== 'daybook-suggest' || !selected),
+  )
   return (
     <section
       className={`card daybook daybook-wizard mx-auto w-full rounded-ui-lg border border-ui-border bg-surface p-4 sm:p-6 ${selected ? 'is-writing max-w-[1180px]' : 'max-w-5xl'}`}
@@ -434,271 +461,306 @@ export function JournalContainer() {
                   </button>
                 ))}
               </div>
-              <DaybookQuick modes={modes} onSelect={startPage} />
-              {favouriteModes.length > 0 && (
+              {Boolean(suggestionsOpen) && (
                 <div
-                  className="daybook-favs"
-                  role="group"
-                  aria-label="Your usual page types"
+                  ref={suggestionsRef}
+                  tabIndex={-1}
+                  aria-label="Writing suggestions"
                 >
-                  <span>Start a fresh</span>
-                  {favouriteModes.map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => startPage(m)}
-                    >
-                      {m.icon} {m.title}
-                    </button>
-                  ))}
+                  <DaybookQuick
+                    key={suggestionsOpen}
+                    modes={modes}
+                    onSelect={startPage}
+                    initialOpen
+                  />
                 </div>
               )}
-              {lastModeId &&
-                !selected &&
-                (() => {
-                  const lastMode = modes.find((m) => m.id === lastModeId)
-                  return lastMode ? (
+              {subOn('daybookModes', 'savedJournals') && (
+                <>
+                  {favouriteModes.length > 0 && (
+                    <div
+                      className="daybook-favs"
+                      role="group"
+                      aria-label="Your usual page types"
+                    >
+                      <span>Start a fresh</span>
+                      {favouriteModes.map((m) => (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => startPage(m)}
+                        >
+                          {m.icon} {m.title}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {lastModeId &&
+                    !selected &&
+                    (() => {
+                      const lastMode = modes.find((m) => m.id === lastModeId)
+                      return lastMode ? (
+                        <button
+                          type="button"
+                          className="quiet-button"
+                          onClick={() => startPage(lastMode)}
+                        >
+                          Resume last mode · {lastMode.title}
+                        </button>
+                      ) : null
+                    })()}
+                  {subOn('daybookModes', 'bookshelf') && (
+                    <Bookshelf
+                      pages={recentPages}
+                      modes={modes}
+                      onOpen={openPage}
+                    />
+                  )}
+                  {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
+                    <label className="daybook-sort">
+                      Sort pages
+                      <select
+                        value={sort}
+                        onChange={(e) => changeSort(e.target.value)}
+                      >
+                        <option value="edited">Last edited</option>
+                        <option value="created">Newest first</option>
+                        <option value="oldest">Oldest first</option>
+                        <option value="title">By page type</option>
+                      </select>
+                    </label>
+                  )}
+                  {memory && (
                     <button
                       type="button"
-                      className="quiet-button"
-                      onClick={() => startPage(lastMode)}
+                      className="daybook-memory"
+                      onClick={() => openPage(memory)}
                     >
-                      Resume last mode · {lastMode.title}
+                      <small>
+                        ✦ From{' '}
+                        {Math.round(
+                          (Date.now() - new Date(memory.updatedAt).getTime()) /
+                            864e5,
+                        )}{' '}
+                        days ago · {memory.modeTitle}
+                      </small>
+                      <span>
+                        {journalText(memory.content).trim().slice(0, 200)}
+                      </span>
                     </button>
-                  ) : null
-                })()}
-              {subOn('daybookModes', 'bookshelf') && (
-                <Bookshelf
-                  pages={recentPages}
-                  modes={modes}
-                  onOpen={openPage}
-                />
-              )}
-              {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
-                <label className="daybook-sort">
-                  Sort pages
-                  <select
-                    value={sort}
-                    onChange={(e) => changeSort(e.target.value)}
-                  >
-                    <option value="edited">Last edited</option>
-                    <option value="created">Newest first</option>
-                    <option value="oldest">Oldest first</option>
-                    <option value="title">By page type</option>
-                  </select>
-                </label>
-              )}
-              {memory && (
-                <button
-                  type="button"
-                  className="daybook-memory"
-                  onClick={() => openPage(memory)}
-                >
-                  <small>
-                    ✦ From{' '}
-                    {Math.round(
-                      (Date.now() - new Date(memory.updatedAt).getTime()) /
-                        864e5,
-                    )}{' '}
-                    days ago · {memory.modeTitle}
-                  </small>
-                  <span>
-                    {journalText(memory.content).trim().slice(0, 200)}
-                  </span>
-                </button>
-              )}
-              {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
-                <>
-                  <label className="daybook-search">
-                    <BookOpen size={16} aria-hidden="true" />
-                    <input
-                      type="search"
-                      aria-label="Search saved Daybook pages"
-                      placeholder="Search page types or writing…"
-                      value={pageSearch}
-                      onChange={(event) => setPageSearch(event.target.value)}
-                    />
-                    {pageSearch && (
-                      <button type="button" onClick={() => setPageSearch('')}>
-                        Clear
-                      </button>
-                    )}
-                  </label>
-                  {visiblePages.length > 0 ? (
-                    <Carousel
-                      label="Your pages"
-                      title={`Your pages · ${visiblePages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}
-                    >
-                      {[...visiblePages]
-                        .sort((a, b) =>
-                          sort === 'created'
-                            ? b.createdAt.localeCompare(a.createdAt)
-                            : sort === 'oldest'
-                              ? a.createdAt.localeCompare(b.createdAt)
-                              : sort === 'title'
-                                ? a.modeTitle.localeCompare(b.modeTitle)
-                                : 0,
-                        )
-                        .sort(
-                          (a, b) =>
-                            Number(Boolean(b.pinned)) -
-                            Number(Boolean(a.pinned)),
-                        )
-                        .map((page) => {
-                          const text = journalText(page.content).trim()
-                          const words = text ? text.split(/\s+/).length : 0
-                          return (
-                            <div key={page.id} className="daybook-page-wrap">
-                              <button
-                                type="button"
-                                className={`daybook-page-card${page.private && revealed !== page.id ? ' is-private' : ''}`}
-                                onClick={(event) => {
-                                  if (page.private && revealed !== page.id)
-                                    setRevealed(page.id)
-                                  else openPage(page, event.currentTarget)
-                                }}
-                              >
-                                <span className="daybook-page-date">
-                                  {new Date(page.updatedAt).toLocaleDateString(
-                                    language,
-                                    {
-                                      weekday: 'short',
-                                      month: 'short',
-                                      day: 'numeric',
-                                      hour: 'numeric',
-                                      minute: '2-digit',
-                                    },
-                                  )}
-                                  {page.pinned && ' · 📌'}
-                                </span>
-                                <strong>
-                                  {page.mood && (
-                                    <span aria-label="Mood">{page.mood} </span>
-                                  )}
-                                  {page.modeTitle}
-                                </strong>
-                                <span className="daybook-page-preview">
-                                  {text.slice(0, 160) || 'Empty page'}
-                                </span>
-                                {page.flow &&
-                                  subOn('flowTopography', 'thumbnails') && (
-                                    <FlowMountain
-                                      fp={page.flow}
-                                      compact
-                                      label="Writing flow"
-                                    />
-                                  )}
-                                <small>
-                                  {words} {words === 1 ? 'word' : 'words'}
-                                </small>
-                              </button>
-                              <div className="daybook-page-tools">
-                                <button
-                                  type="button"
-                                  aria-label={`Duplicate ${page.modeTitle}`}
-                                  title="Duplicate this page"
-                                  onClick={() => {
-                                    const now = new Date().toISOString()
-                                    persist(
-                                      {
-                                        ...page,
-                                        id: crypto.randomUUID(),
-                                        modeTitle: `${page.modeTitle} (copy)`,
-                                        createdAt: now,
-                                        updatedAt: now,
-                                        flow: undefined,
-                                      },
-                                      false,
-                                    )
-                                  }}
+                  )}
+                  {recentPages.length > 0 && subOn('daybookModes', 'pages') && (
+                    <>
+                      <label className="daybook-search">
+                        <BookOpen size={16} aria-hidden="true" />
+                        <input
+                          type="search"
+                          aria-label="Search saved Daybook pages"
+                          placeholder="Search page types or writing…"
+                          value={pageSearch}
+                          onChange={(event) =>
+                            setPageSearch(event.target.value)
+                          }
+                        />
+                        {pageSearch && (
+                          <button
+                            type="button"
+                            onClick={() => setPageSearch('')}
+                          >
+                            Clear
+                          </button>
+                        )}
+                      </label>
+                      {visiblePages.length > 0 ? (
+                        <Carousel
+                          label="Your pages"
+                          title={`Your pages · ${visiblePages.length}${monthWords ? ` · ${monthWords.toLocaleString()} words this month` : ''}${bestStreak > 1 ? ` · best streak ${bestStreak} days` : ''}`}
+                        >
+                          {[...visiblePages]
+                            .sort((a, b) =>
+                              sort === 'created'
+                                ? b.createdAt.localeCompare(a.createdAt)
+                                : sort === 'oldest'
+                                  ? a.createdAt.localeCompare(b.createdAt)
+                                  : sort === 'title'
+                                    ? a.modeTitle.localeCompare(b.modeTitle)
+                                    : 0,
+                            )
+                            .sort(
+                              (a, b) =>
+                                Number(Boolean(b.pinned)) -
+                                Number(Boolean(a.pinned)),
+                            )
+                            .map((page) => {
+                              const text = journalText(page.content).trim()
+                              const words = text ? text.split(/\s+/).length : 0
+                              return (
+                                <div
+                                  key={page.id}
+                                  className="daybook-page-wrap"
                                 >
-                                  ⧉
-                                </button>
-                                <button
-                                  type="button"
-                                  aria-label={`${page.private ? 'Show' : 'Hide'} ${page.modeTitle} preview on the home screen`}
-                                  title={
-                                    page.private
-                                      ? 'Show on the home screen'
-                                      : 'Blur on the home screen'
-                                  }
-                                  aria-pressed={Boolean(page.private)}
-                                  onClick={() =>
-                                    persist(
-                                      { ...page, private: !page.private },
-                                      false,
-                                    )
-                                  }
-                                >
-                                  {page.private ? '🔒' : '🔓'}
-                                </button>
-                                <button
-                                  type="button"
-                                  aria-label={`${page.pinned ? 'Unpin' : 'Pin'} ${page.modeTitle}`}
-                                  title={
-                                    page.pinned ? 'Unpin' : 'Pin to the front'
-                                  }
-                                  aria-pressed={Boolean(page.pinned)}
-                                  onClick={() =>
-                                    persist(
-                                      { ...page, pinned: !page.pinned },
-                                      false,
-                                    )
-                                  }
-                                >
-                                  📌
-                                </button>
-                                <button
-                                  type="button"
-                                  aria-label={`Copy text from ${page.modeTitle}`}
-                                  title="Copy the text"
-                                  onClick={(e) => {
-                                    void navigator.clipboard?.writeText(text)
-                                    e.currentTarget.textContent = '✓'
-                                  }}
-                                >
-                                  📋
-                                </button>
-                                <button
-                                  type="button"
-                                  aria-label={`Download ${page.modeTitle} as Markdown`}
-                                  title="Download as Markdown"
-                                  onClick={() => {
-                                    const md = `# ${page.modeTitle}\n\n_${new Date(page.createdAt).toLocaleDateString(language, { dateStyle: 'full' })}${page.mood ? ` · ${page.mood}` : ''}_\n\n${text}\n`
-                                    const a = document.createElement('a')
-                                    a.href = URL.createObjectURL(
-                                      new Blob([md], { type: 'text/markdown' }),
-                                    )
-                                    a.download = `${page.modeTitle.replace(/[^\w-]+/g, '-')}-${page.createdAt.slice(0, 10)}.md`
-                                    a.click()
-                                    setTimeout(
-                                      () => URL.revokeObjectURL(a.href),
-                                      1000,
-                                    )
-                                  }}
-                                >
-                                  ⬇
-                                </button>
-                                <button
-                                  type="button"
-                                  aria-label={`Delete ${page.modeTitle}`}
-                                  title="Delete this page"
-                                  onClick={() => removePage(page)}
-                                >
-                                  🗑
-                                </button>
-                              </div>
-                            </div>
-                          )
-                        })}
-                    </Carousel>
-                  ) : (
-                    <p className="daybook-search-empty" role="status">
-                      No saved pages match “{pageSearch}”.
-                      <button type="button" onClick={() => setPageSearch('')}>
-                        Clear search
-                      </button>
-                    </p>
+                                  <button
+                                    type="button"
+                                    className={`daybook-page-card${page.private && revealed !== page.id ? ' is-private' : ''}`}
+                                    onClick={(event) => {
+                                      if (page.private && revealed !== page.id)
+                                        setRevealed(page.id)
+                                      else openPage(page, event.currentTarget)
+                                    }}
+                                  >
+                                    <span className="daybook-page-date">
+                                      {new Date(
+                                        page.updatedAt,
+                                      ).toLocaleDateString(language, {
+                                        weekday: 'short',
+                                        month: 'short',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                      })}
+                                      {page.pinned && ' · 📌'}
+                                    </span>
+                                    <strong>
+                                      {page.mood && (
+                                        <span aria-label="Mood">
+                                          {page.mood}{' '}
+                                        </span>
+                                      )}
+                                      {page.modeTitle}
+                                    </strong>
+                                    <span className="daybook-page-preview">
+                                      {text.slice(0, 160) || 'Empty page'}
+                                    </span>
+                                    {page.flow &&
+                                      subOn('flowTopography', 'thumbnails') && (
+                                        <FlowMountain
+                                          fp={page.flow}
+                                          compact
+                                          label="Writing flow"
+                                        />
+                                      )}
+                                    <small>
+                                      {words} {words === 1 ? 'word' : 'words'}
+                                    </small>
+                                  </button>
+                                  <div className="daybook-page-tools">
+                                    <button
+                                      type="button"
+                                      aria-label={`Duplicate ${page.modeTitle}`}
+                                      title="Duplicate this page"
+                                      onClick={() => {
+                                        const now = new Date().toISOString()
+                                        persist(
+                                          {
+                                            ...page,
+                                            id: crypto.randomUUID(),
+                                            modeTitle: `${page.modeTitle} (copy)`,
+                                            createdAt: now,
+                                            updatedAt: now,
+                                            flow: undefined,
+                                          },
+                                          false,
+                                        )
+                                      }}
+                                    >
+                                      ⧉
+                                    </button>
+                                    <button
+                                      type="button"
+                                      aria-label={`${page.private ? 'Show' : 'Hide'} ${page.modeTitle} preview on the home screen`}
+                                      title={
+                                        page.private
+                                          ? 'Show on the home screen'
+                                          : 'Blur on the home screen'
+                                      }
+                                      aria-pressed={Boolean(page.private)}
+                                      onClick={() =>
+                                        persist(
+                                          { ...page, private: !page.private },
+                                          false,
+                                        )
+                                      }
+                                    >
+                                      {page.private ? '🔒' : '🔓'}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      aria-label={`${page.pinned ? 'Unpin' : 'Pin'} ${page.modeTitle}`}
+                                      title={
+                                        page.pinned
+                                          ? 'Unpin'
+                                          : 'Pin to the front'
+                                      }
+                                      aria-pressed={Boolean(page.pinned)}
+                                      onClick={() =>
+                                        persist(
+                                          { ...page, pinned: !page.pinned },
+                                          false,
+                                        )
+                                      }
+                                    >
+                                      📌
+                                    </button>
+                                    <button
+                                      type="button"
+                                      aria-label={`Copy text from ${page.modeTitle}`}
+                                      title="Copy the text"
+                                      onClick={(e) => {
+                                        void navigator.clipboard?.writeText(
+                                          text,
+                                        )
+                                        e.currentTarget.textContent = '✓'
+                                      }}
+                                    >
+                                      📋
+                                    </button>
+                                    <button
+                                      type="button"
+                                      aria-label={`Download ${page.modeTitle} as Markdown`}
+                                      title="Download as Markdown"
+                                      onClick={() => {
+                                        const md = `# ${page.modeTitle}\n\n_${new Date(page.createdAt).toLocaleDateString(language, { dateStyle: 'full' })}${page.mood ? ` · ${page.mood}` : ''}_\n\n${text}\n`
+                                        const a = document.createElement('a')
+                                        a.href = URL.createObjectURL(
+                                          new Blob([md], {
+                                            type: 'text/markdown',
+                                          }),
+                                        )
+                                        a.download = `${page.modeTitle.replace(/[^\w-]+/g, '-')}-${page.createdAt.slice(0, 10)}.md`
+                                        a.click()
+                                        setTimeout(
+                                          () => URL.revokeObjectURL(a.href),
+                                          1000,
+                                        )
+                                      }}
+                                    >
+                                      ⬇
+                                    </button>
+                                    <button
+                                      type="button"
+                                      aria-label={`Delete ${page.modeTitle}`}
+                                      title="Delete this page"
+                                      onClick={() => removePage(page)}
+                                    >
+                                      🗑
+                                    </button>
+                                  </div>
+                                </div>
+                              )
+                            })}
+                        </Carousel>
+                      ) : (
+                        <p className="daybook-search-empty" role="status">
+                          No saved pages match “{pageSearch}”.
+                          <button
+                            type="button"
+                            onClick={() => setPageSearch('')}
+                          >
+                            Clear search
+                          </button>
+                        </p>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -709,15 +771,17 @@ export function JournalContainer() {
                 >
                   Browse all pages
                 </button>
-                <button
-                  className="quiet-button"
-                  aria-expanded={libraryOpen}
-                  onClick={() => setLibraryOpen(!libraryOpen)}
-                >
-                  Search pages
-                </button>
+                {subOn('daybookModes', 'savedJournals') && (
+                  <button
+                    className="quiet-button"
+                    aria-expanded={libraryOpen}
+                    onClick={() => setLibraryOpen(!libraryOpen)}
+                  >
+                    Search pages
+                  </button>
+                )}
               </div>
-              {libraryOpen && (
+              {subOn('daybookModes', 'savedJournals') && libraryOpen && (
                 <SemanticSearch
                   entries={entries}
                   onOpen={(id) => {
