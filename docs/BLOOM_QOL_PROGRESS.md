@@ -103,3 +103,4 @@ Suggested features are applied where they fit Bloom's local guide and planner; n
 - [x] 088 — Separate response paragraphs without a wall of text. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 089 — Give welcome text the same readable size as messages. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
 - [x] 090 — Make contextual scope descriptions readable and compact. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
+- [x] 091 — Separate unmatched search hints from conversational replies. Validation: TypeScript syntax and diff checks; broader checks at checkpoints below.
