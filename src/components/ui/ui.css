@@ -518,3 +518,6 @@
 
 /* UX 012: Keep popup menus within narrow viewport edges. */
 .ui-menu { max-width: calc(100vw - 32px); }
+
+/* UX 013: Keep long menu group labels within their popup. */
+.ui-menu-label { overflow-wrap: anywhere; }
