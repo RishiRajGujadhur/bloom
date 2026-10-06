@@ -10,6 +10,7 @@ import './galaxy.css'
 import { GalaxyGlyph } from './GalaxyGlyph'
 import { frameThrottle } from '../../utils/frameThrottle'
 import { textOnColor } from '../../utils/textContrast'
+import { usePageMode } from '../ui/PageMode'
 
 /**
  * The shared page shell for Bloom's studios (exercise, sounds, meditation…):
@@ -42,7 +43,8 @@ export function Studio({
   tab?: string
   onTab?: (id: string) => void
 }) {
-  const visible = tabs.filter(Boolean)
+  const { mode } = usePageMode()
+  const visible = mode === 'basic' ? tabs.filter(Boolean).slice(0, 1) : tabs.filter(Boolean)
   // Each page remembers its last tab (QoL #20).
   const tabKey = `bloom-tab-${name}`
   const remembered = (() => { try { return localStorage.getItem(tabKey) } catch { return null } })()
@@ -296,6 +298,8 @@ export function Rail({ children, label }: { children: ReactNode; label: string }
 
 /** Segmented choice (radio group) with a sliding highlight. */
 export function Segmented<T extends string>({ value, options, onChange, label }: { value: T; options: { id: T; label: string }[]; onChange: (v: T) => void; label: string }) {
+  const { mode } = usePageMode()
+  if (mode === 'basic' && options.length > 3) return <label className="basic-choice">{label}<select value={value} onChange={event => onChange(event.target.value as T)}>{options.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
   return (
     <div className="studio-seg" role="radiogroup" aria-label={label}>
       {options.map((o) => (

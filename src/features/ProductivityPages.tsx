@@ -1,3 +1,4 @@
+import { usePageModeState } from '../components/ui/PageMode'
 import { useTabTitle } from '../utils/useTabTitle'
 import { prefersReducedMotion } from '../utils/motion'
 import { launchImpact } from './impact/ImpactLayer'
@@ -224,24 +225,14 @@ export function ChallengesPage({
 import { addDays, parseQuickTask, splitLines } from './todos/quickTask'
 
 export function TodoPage({ data, setData }: Props) {
-  const [proMode, setProMode] = useState(() => {
-    try {
-      return localStorage.getItem('bloom-todo-mode') === 'pro'
-    } catch {
-      return false
-    }
-  })
+  const pageMode = usePageModeState('todos')
+  const proMode = pageMode.mode === 'advanced'
   const changeMode = (pro: boolean) => {
-    setProMode(pro)
+    pageMode.setMode(pro ? 'advanced' : 'basic')
     setTagFilter('all')
     setPerspective({ ...emptyPerspective })
     setEditing(null)
     setExpanded(null)
-    try {
-      localStorage.setItem('bloom-todo-mode', pro ? 'pro' : 'simple')
-    } catch {
-      /* optional preference */
-    }
   }
   const composerRef = useRef<HTMLInputElement>(null)
   const [waterDo, setWaterDo] = useState(
@@ -526,20 +517,20 @@ export function TodoPage({ data, setData }: Props) {
               : 'One clear list. One thing at a time.'}
           </p>
         </div>
-        <div className="todo-mode" role="group" aria-label="Todo mode">
+        <div className="todo-mode" role="group" aria-label="Page mode">
           <button
             type="button"
             aria-pressed={!proMode}
             onClick={() => changeMode(false)}
           >
-            Simple
+            Basic
           </button>
           <button
             type="button"
             aria-pressed={proMode}
             onClick={() => changeMode(true)}
           >
-            <SlidersHorizontal size={15} /> Pro
+            <SlidersHorizontal size={15} /> Advanced
           </button>
         </div>
       </header>

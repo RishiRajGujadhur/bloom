@@ -40,7 +40,7 @@ test('accepting a challenge creates visible tasks and a goal, which survive relo
 test('a task supports priorities, tags, recurrence, and an actionable checklist', async () => {
   await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true })) })
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
     target: { value: 'Prepare the presentation' },
   })
@@ -105,7 +105,7 @@ test('todos default to simple and remember Pro without losing tasks', async () =
   const view = await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true })) })
   expect(
-    screen.getByRole('button', { name: 'Simple', exact: true }),
+    screen.getByRole('button', { name: 'Basic', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true')
   expect(screen.queryByText('Planning workspace')).not.toBeInTheDocument()
   fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
@@ -115,16 +115,16 @@ test('todos default to simple and remember Pro without losing tasks', async () =
   expect(
     screen.queryByRole('button', { name: 'Add steps' }),
   ).not.toBeInTheDocument()
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   expect(screen.getByText('Planning workspace')).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Add steps' })).toBeInTheDocument()
   view.unmount()
   await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true })) })
   expect(
-    screen.getByRole('button', { name: 'Pro', exact: true }),
+    screen.getByRole('button', { name: 'Advanced', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true')
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Simple', exact: true })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Basic', exact: true })) })
   expect(screen.getByText('Take a walk')).toBeInTheDocument()
   expect(
     screen.queryByRole('button', { name: 'Add steps' }),

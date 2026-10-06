@@ -80,7 +80,7 @@ test('Pro sorting keeps completed tasks last and search still finds them', () =>
   add('Second task')
   fireEvent.click(screen.getByRole('button', { name: 'Complete First task' }))
   act(() => jest.advanceTimersByTime(550))
-  fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true }))
+  fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true }))
   fireEvent.change(screen.getByLabelText('Sort tasks'), {
     target: { value: 'due' },
   })

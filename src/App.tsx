@@ -107,6 +107,7 @@ import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
 import { PageBoundary } from './components/ui/PageBoundary'
+import { PageModeContext, PageModeSwitch, usePageModeState } from './components/ui/PageMode'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
 const EpiphaniesPage = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphaniesPage })))
 const EpiphanyGate = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphanyGate })))
@@ -475,6 +476,7 @@ function App() {
     return page
   })
   // Bloom's panel reopens if you left it open.
+  const pageMode = usePageModeState(active)
   const [companionOpen, setCompanionOpen] = useState(() => localStorage.getItem('bloom-companion-open') === '1')
   useEffect(() => {
     try {
@@ -866,7 +868,8 @@ function App() {
         {!settings.reducedMotion && <GsapControls />}
         {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
         <PageMenu page={active} common={menuCommon}>
-        <main id="overview" className="min-w-0 flex-1">
+        <PageModeContext.Provider value={pageMode}>
+        <main id="overview" className="min-w-0 flex-1" data-page-mode={pageMode.mode}>
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
             <span className="wco-title" aria-hidden="true">Bloom{pageLabel ? <b>{pageLabel}</b> : null}</span>
             <SearchTrigger onOpen={() => setPaletteOpen(true)} />
@@ -919,7 +922,7 @@ function App() {
             <BloomHeading
               title={pageDetails[active].title}
               page={active}
-              lead={active !== 'overview' ? <><LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} />{(active === 'focus' || active === 'breathe') && <button type="button" className="quiet-button" onClick={() => window.open(`${window.location.origin}${window.location.pathname}#${active}`, '_blank', 'noopener')}>Open {pageDetails[active].title} in a new window ↗</button>}</> : undefined}
+              lead={pageMode.mode === 'advanced' && active !== 'overview' ? <><LinkRail page={active} names={{ ...Object.fromEntries(Object.entries(pageDetails).map(([k, v]) => [k, v.title])), overview: 'Home' }} enabled={pageEnabled} />{(active === 'focus' || active === 'breathe') && <button type="button" className="quiet-button" onClick={() => window.open(`${window.location.origin}${window.location.pathname}#${active}`, '_blank', 'noopener')}>Open {pageDetails[active].title} in a new window ↗</button>}</> : undefined}
               actions={
                 active === 'overview' ? (
                   <>
@@ -943,7 +946,8 @@ function App() {
             >
               <FeatureGuide page={active} />
             </BloomHeading>
-            {settings.features.rpgSkillTree && active !== 'overview' && (
+            {active !== 'todos' && <PageModeSwitch />}
+            {pageMode.mode === 'advanced' && settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}
                 setData={setData}
@@ -1383,7 +1387,7 @@ function App() {
             ) : active === 'growth' ? (
               <RpgDashboard
                 constellation={
-                  settings.features.skillConstellation && hasWebGL() ? (
+                  pageMode.mode === 'advanced' && settings.features.skillConstellation && hasWebGL() ? (
                     <Suspense fallback={null}>
                       <SkillConstellation rpg={data.rpg} />
                     </Suspense>
@@ -1865,6 +1869,7 @@ function App() {
             </PageBoundary>
           </div>
         </main>
+        </PageModeContext.Provider>
         </PageMenu>
         {settings.features.drawnAchievements && <AchievementHost />}
         {settings.features.impactTasks && <ImpactLayer setData={setData} />}

@@ -1,3 +1,4 @@
+import { AdvancedSection } from './components/ui/PageMode'
 import { Disclosure } from './components/BloomExperience'
 import { ComfortCard, SettingsSearch } from './components/settings/ComfortCard'
 import { useRef, useState } from 'react'
@@ -960,7 +961,7 @@ export function SettingsPage({
       }}
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
-      <SettingsSearch root={settingsRoot} />
+      <AdvancedSection><SettingsSearch root={settingsRoot} />
       <nav className="settings-jump" aria-label="Settings sections">
         {[
           ['features-heading', 'Features'],
@@ -982,8 +983,9 @@ export function SettingsPage({
             ↓ {label}
           </button>
         ))}
-      </nav>
+      </nav></AdvancedSection>
 
+      <AdvancedSection>
       <section className={styles.card} aria-labelledby="features-heading">
         <div className={styles.cardHeader}>
           <h2 id="features-heading" className={styles.sectionTitle}>
@@ -1156,7 +1158,8 @@ export function SettingsPage({
         )}
       </section>
 
-      <NavigationCard reducedMotion={settings.reducedMotion === true} setReducedMotion={(enabled) => setSettings((current) => ({ ...current, reducedMotion: enabled }))} />
+      </AdvancedSection>
+      <AdvancedSection><NavigationCard reducedMotion={settings.reducedMotion === true} setReducedMotion={(enabled) => setSettings((current) => ({ ...current, reducedMotion: enabled }))} /></AdvancedSection>
 
       <section
         className={styles.card}
@@ -1170,14 +1173,14 @@ export function SettingsPage({
         <ThemeMarketplace theme={theme} setTheme={setTheme} />
         <ConfigMarketplace settings={settings} setSettings={setSettings} theme={theme} setTheme={setTheme} parseSettings={parseSettings} />
         <ComfortCard />
-        <AvatarPicker />
-        <ChatAppearanceSettings />
+        <AdvancedSection><AvatarPicker />
+        <ChatAppearanceSettings /></AdvancedSection>
       </section>
 
       <section className={styles.card}>
         <InstallApp />
       </section>
-      {trash && (
+      <AdvancedSection>{trash && (
         <section className={styles.card} aria-labelledby="trash-heading">
           <h2 id="trash-heading" className={styles.sectionTitle}>🗑 Trash</h2>
           {trash}
@@ -1265,6 +1268,7 @@ export function SettingsPage({
           )}
         </section>
       </Disclosure>
+      </AdvancedSection>
     </div>
   )
 }

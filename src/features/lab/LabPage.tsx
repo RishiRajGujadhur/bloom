@@ -45,7 +45,7 @@ function Heatmap({ m, onPick, pick }: { m: ReturnType<typeof matrix>; onPick: (a
     return () => void t.progress(1).kill()
   }, [])
   return (
-    <div className="lab-heat" ref={root} role="grid" aria-label="Correlation matrix" style={{ gridTemplateColumns: `110px repeat(${metrics.length}, minmax(0, 1fr))` }}>
+    <div className="lab-heat" ref={root} role="grid" tabIndex={0} aria-label="Correlation matrix" style={{ gridTemplateColumns: `110px repeat(${metrics.length}, minmax(0, 1fr))` }}>
       <div role="row" style={{ display: 'contents' }}>
       <span role="columnheader" aria-label="Metric" />
       {metrics.map((c) => (

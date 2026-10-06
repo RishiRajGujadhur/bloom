@@ -1,3 +1,4 @@
+import { AdvancedSection, usePageMode } from '../components/ui/PageMode'
 import { useTabTitle } from '../utils/useTabTitle'
 import { PixelSprite } from './juice/PixelJuice'
 import { pickSprite } from './juice/sprites'
@@ -65,6 +66,7 @@ export function HabitsPage({
   /** Show the reminder bell on habit and routine cards. */
   reminders?: boolean
 }) {
+  const { mode } = usePageMode()
   const [tab, setTab] = useState('habits')
   const [habit, setHabit] = useState<Habit | null>(null)
   const [routine, setRoutine] = useState<Routine | null>(null)
@@ -276,7 +278,7 @@ export function HabitsPage({
       <p role="status" className="habit-message">
         {message}
       </p>
-      {tab === 'habits' && subOn('habitTracker', 'calendar') && <HabitCalendar data={data} setData={setData} today={today} />}
+      <AdvancedSection>{tab === 'habits' && subOn('habitTracker', 'calendar') && <HabitCalendar data={data} setData={setData} today={today} />}</AdvancedSection>
       {run && (
         <section className="routine-player" aria-label="Active routine">
           <div>
@@ -381,12 +383,14 @@ export function HabitsPage({
               <span>Total check-ins</span>
             </div>
           </div>
+          <AdvancedSection>
           <HabitsQuick data={data} setData={setData} today={today} />
           <StickerBook data={data} setData={setData} today={today} />
+          </AdvancedSection>
           {!data.habits.length && (
             <p>No habits yet. Start with one small daily commitment.</p>
           )}
-          <div className="hx-bar">
+          <AdvancedSection><div className="hx-bar">
             <div className="hx-seg" role="radiogroup" aria-label="Show habits">
               {([['all', 'All'], ['left', 'Left today'], ['done', 'Done'], ['archived', `Archived (${extras.archived.filter((id) => data.habits.some((h) => h.id === id)).length})`]] as const).map(([v, label]) => (
                 <button key={v} type="button" role="radio" aria-checked={habitView === v} className={habitView === v ? 'on' : ''} onClick={() => setHabitView(v)}>{label}</button>
@@ -421,7 +425,7 @@ export function HabitsPage({
                 ✓ Mark yesterday done for {missedYesterday.length === 1 ? `“${missedYesterday[0].title}”` : `all ${missedYesterday.length}`}
               </button>
             )}
-          </div>
+          </div></AdvancedSection>
           {reminders && subOn('reminders', 'habits') && <UpcomingReminders items={active.map((h) => ({ id: h.id, title: h.title, open: !h.dates.includes(today) }))} />}
           <CardRail label="Your habits">
             {shown.map((h, index) => {
@@ -444,7 +448,7 @@ export function HabitsPage({
                       <h2>{h.title}</h2>
                       <p>{h.detail || 'Daily practice'}</p>
                     </div>
-                    <div className="habit-actions">
+                    <AdvancedSection><div className="habit-actions">
                       {reminders && subOn('reminders', 'habits') && <ReminderButton id={h.id} title={h.title} />}
                       {habitView !== 'archived' && <>
                         <button className="icon-button hx-mini" title="Move earlier" aria-label={`Move ${h.title} earlier`} disabled={ids[0] === h.id} onClick={() => setExtras((x) => ({ ...x, order: move(ids, h.id, -1) }))}><ChevronLeft size={16} /></button>
@@ -468,9 +472,9 @@ export function HabitsPage({
                       >
                         <Trash2 size={16} />
                       </button>
-                    </div>
+                    </div></AdvancedSection>
                   </header>
-                  {subOn('habitTracker', 'grid') && (<>
+                  {mode === 'advanced' && subOn('habitTracker', 'grid') && (<>
                   <div className="habit-grid-caption">
                     <span>
                       {new Date(`${days[0]}T12:00:00`).toLocaleDateString(
@@ -579,7 +583,7 @@ export function HabitsPage({
                       <span className="routine-period">{r.period}</span>
                       <h2>{r.title}</h2>
                     </div>
-                    <div className="habit-actions">
+                    <AdvancedSection><div className="habit-actions">
                       {reminders && subOn('reminders', 'routines') && <ReminderButton id={r.id} title={r.title} />}
                       <button
                         className="icon-button"
@@ -599,7 +603,7 @@ export function HabitsPage({
                       >
                         <Trash2 size={16} />
                       </button>
-                    </div>
+                    </div></AdvancedSection>
                   </header>
                   <p>
                     {r.days.length === 7

@@ -1,3 +1,4 @@
+import { usePageMode } from '../components/ui/PageMode'
 import { useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -61,7 +62,8 @@ export function RpgDashboard({
   constellation?: ReactNode
 }) {
   const { t } = useTranslation(undefined, { i18n })
-  const [growthTab, setGrowthTab] = useState<'avatar' | 'skills' | 'rewards'>(
+  const { mode } = usePageMode()
+  const [selectedGrowthTab, setGrowthTab] = useState<'avatar' | 'skills' | 'rewards'>(
     'avatar',
   )
   const [skillView, setSkillViewState] = useState<'tree' | 'constellation'>(() => readStore('bloom-growth-skill-view-v1', 'tree'))
@@ -69,6 +71,7 @@ export function RpgDashboard({
     setSkillViewState(v)
     writeStore('bloom-growth-skill-view-v1', v)
   }
+  const growthTab = mode === 'basic' ? 'avatar' : selectedGrowthTab
   const showConstellation = compact && growthTab === 'skills' && !!constellation && skillView === 'constellation'
   const [clock, setClock] = useState(Date.now)
   const [showRules, setShowRules] = useState(false)
@@ -197,7 +200,7 @@ export function RpgDashboard({
       </div>
       {compact && (
         <div className="segmented growth-tabs" aria-label="Growth areas">
-          {(['avatar', 'skills', 'rewards'] as const).map((tab) => (
+          {(['avatar', 'skills', 'rewards'] as const).filter(tab => mode === 'advanced' || tab === 'avatar').map((tab) => (
             <button
               key={tab}
               aria-pressed={growthTab === tab}
