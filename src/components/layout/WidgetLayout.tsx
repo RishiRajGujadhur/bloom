@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type HTMLAttributes, type ReactNode, type RefObject } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type HTMLAttributes, type PointerEvent as ReactPointerEvent, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import './widgetLayout.css'
 
@@ -29,6 +29,11 @@ function readLayout(raw: string): Record<string, WidgetSize> {
 function useWidgetSize(id: string) {
   const raw = useSyncExternalStore(subscribe, snapshot, () => '{}')
   const size = useMemo(() => normalizeWidgetSize(readLayout(raw)[id]), [raw, id])
+  useEffect(() => {
+    if (size.collapsed || (!size.width && !size.height)) return
+    const frame = requestAnimationFrame(() => window.dispatchEvent(new Event('resize')))
+    return () => cancelAnimationFrame(frame)
+  }, [size.width, size.height, size.collapsed])
   const setSize = (next: WidgetSize) => {
     const saved = readLayout(snapshot())
     saved[id] = normalizeWidgetSize(next)
@@ -46,39 +51,41 @@ const sizeStyle = (size: WidgetSize): CSSProperties => ({
 function WidgetTools({ title, target, size, setSize, editing }: {
   title: string; target: () => HTMLElement | null; size: WidgetSize; setSize: (size: WidgetSize) => void; editing: boolean
 }) {
-  const drag = useRef<{ x: number; y: number; width: number; height: number } | null>(null)
+  const drag = useRef<{ x: number; y: number; width: number; height: number; edge: string } | null>(null)
   const resize = (width: number, height: number) => {
     const element = target()
     const available = element?.parentElement?.clientWidth || window.innerWidth
     setSize({ width: Math.min(available, width), height, collapsed: false })
   }
+  const startDrag = (event: ReactPointerEvent<HTMLElement>, edge: string) => {
+    if (event.button !== 0) return
+    const bounds = target()?.getBoundingClientRect()
+    if (!bounds) return
+    drag.current = { x: event.clientX, y: event.clientY, width: bounds.width, height: bounds.height, edge }
+    event.currentTarget.setPointerCapture(event.pointerId)
+    event.preventDefault()
+  }
+  const moveDrag = (event: ReactPointerEvent<HTMLElement>) => {
+    const start = drag.current
+    if (!start) return
+    const dx = event.clientX - start.x
+    const dy = event.clientY - start.y
+    resize(start.width + (start.edge.includes('e') ? dx : start.edge.includes('w') ? -dx : 0), start.height + (start.edge.includes('s') ? dy : start.edge.includes('n') ? -dy : 0))
+  }
+  const endDrag = () => { drag.current = null }
   return <>
     {(editing || size.collapsed) && <div className="widget-layout-tools">
       <strong>{title}</strong>
       <button type="button" aria-label={`${size.collapsed ? 'Expand' : 'Collapse'} ${title}`} aria-expanded={!size.collapsed} onClick={() => setSize({ ...size, collapsed: !size.collapsed })}>{size.collapsed ? 'Expand' : 'Collapse'}</button>
-      {editing && <details className="widget-size-menu">
-        <summary aria-label={`Size ${title}`}>Size</summary>
-        <div className="widget-size-options">
-          <button type="button" onClick={() => setSize({ width: 320, height: 440 })}>Mobile size</button>
-          <button type="button" onClick={() => setSize({ width: 480 })}>Comfortable</button>
-          <button type="button" onClick={() => setSize({})}>Fill available space</button>
-          <label>Width <input type="range" aria-label={`Width of ${title}`} min="280" max="1800" step="20" value={size.width ?? Math.round(target()?.getBoundingClientRect().width ?? 480)} onChange={event => setSize({ ...size, width: Number(event.target.value) })} /></label>
-          <label>Height <input type="range" aria-label={`Height of ${title}`} min="160" max="1200" step="20" value={size.height ?? Math.round(target()?.getBoundingClientRect().height ?? 440)} onChange={event => setSize({ ...size, height: Number(event.target.value) })} /></label>
-          <button type="button" onClick={() => setSize({ ...size, height: undefined })}>Fit content height</button>
-        </div>
-      </details>}
+      {editing && <button type="button" aria-label={`Reset size of ${title}`} onClick={() => setSize({})}>Reset size</button>}
     </div>}
-    {editing && !size.collapsed && <button type="button" className="widget-resize-handle" aria-label={`Resize ${title}`} title="Drag to resize. Arrow keys resize; Shift makes smaller changes. Home resets."
-      onPointerDown={event => {
-        if (event.button !== 0) return
-        const bounds = target()?.getBoundingClientRect()
-        if (!bounds) return
-        drag.current = { x: event.clientX, y: event.clientY, width: bounds.width, height: bounds.height }
-        event.currentTarget.setPointerCapture(event.pointerId)
-        event.preventDefault()
-      }}
-      onPointerMove={event => { const start = drag.current; if (start) resize(start.width + event.clientX - start.x, start.height + event.clientY - start.y) }}
-      onPointerUp={() => { drag.current = null }} onPointerCancel={() => { drag.current = null }} onLostPointerCapture={() => { drag.current = null }}
+    {!size.collapsed && <>
+    {['n', 's', 'e', 'w', 'ne', 'nw', 'sw'].map(edge => <div key={edge} className="widget-resize-edge" data-edge={edge} aria-hidden="true" onPointerDown={event => startDrag(event, edge)} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={endDrag} />)}
+    <button type="button" className="widget-resize-handle" aria-label={`Resize ${title}`} title="Drag this corner or any edge to resize. Double-click or Home resets. Arrow keys resize; Shift makes smaller changes."
+      onDoubleClick={() => setSize({})}
+      onPointerDown={event => startDrag(event, 'se')}
+      onPointerMove={moveDrag}
+      onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={endDrag}
       onKeyDown={event => {
         if (event.key === 'Home') { event.preventDefault(); setSize({}); return }
         if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return
@@ -87,7 +94,7 @@ function WidgetTools({ title, target, size, setSize, editing }: {
         if (!bounds) return
         const step = event.shiftKey ? 8 : 32
         resize(bounds.width + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0), bounds.height + (event.key === 'ArrowDown' ? step : event.key === 'ArrowUp' ? -step : 0))
-      }}>↘</button>}
+      }}>↘</button></>}
   </>
 }
 
@@ -136,22 +143,26 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
     host.dataset.compactLayout = 'true'
     let frame = 0
     const groups = new Set<HTMLElement>()
+    const selector = 'section, .card, .studio-card, .task-workspace, .habit-calendar'
     const scan = () => {
-      const candidates = [...host.querySelectorAll<HTMLElement>('section, .card, .studio-card, .task-workspace, .habit-calendar')].filter(element =>
+      const candidates = [...host.querySelectorAll<HTMLElement>(selector)].filter(element =>
         !element.closest('[data-managed-widget], .widget-board, dialog, [role="dialog"], .task-item, .habit-card, nav, .widget-layout-tools') &&
         (element.querySelector('h2, h3') || element.getAttribute('aria-label')),
       )
       const leaves = candidates.filter(element => !candidates.some(other => other !== element && element.contains(other)))
       if (!leaves.length) {
-        const studio = host.querySelector<HTMLElement>('.studio')
-        if (studio) leaves.push(studio)
+        const feature = host.querySelector<HTMLElement>('.studio') ?? [...host.children].find(element =>
+          element instanceof HTMLElement && !element.matches('.bloom-heading, .overview-bar, .page-mode-bar, .page-layout-controls, .widget-board, nav, [role="status"], [hidden]') &&
+          !!element.querySelector('button, input, canvas, [role="grid"]'),
+        ) as HTMLElement | undefined
+        if (feature) leaves.push(feature)
       }
       const counts = new Map<string, number>()
       const next = leaves.map(element => {
         const identity = element.id || element.classList[0] || element.tagName.toLowerCase()
         const number = counts.get(identity) ?? 0
         counts.set(identity, number + 1)
-        const title = element.getAttribute('aria-label') || element.querySelector('h2, h3')?.textContent?.trim() || 'Workspace'
+        const title = element.getAttribute('aria-label') || element.querySelector('h2, h3')?.textContent?.trim() || host.querySelector('#page-heading')?.textContent?.trim() || 'Workspace'
         return { element, id: `${page}:${identity}:${number}`, title }
       })
       for (const element of groups) element.removeAttribute('data-widget-group')
@@ -165,7 +176,12 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
       setSections(previous => previous.length === next.length && previous.every((item, index) => item.element === next[index].element && item.title === next[index].title && item.id === next[index].id) ? previous : next)
     }
     const observer = new MutationObserver(records => {
-      if (records.every(record => (record.target as Element).closest?.('.widget-layout-tools'))) return
+      // Animated SVGs and task text change frequently. Only rediscover when
+      // section boundaries or a top-level lazy page are added or removed.
+      if (!records.some(record => record.target === host || [...record.addedNodes, ...record.removedNodes].some(node =>
+        node instanceof Element && !node.closest('.widget-layout-tools') &&
+        (node.matches(`${selector}, .studio`) || node.querySelector(`${selector}, .studio`)),
+      ))) return
       cancelAnimationFrame(frame); frame = requestAnimationFrame(scan)
     })
     observer.observe(host, { childList: true, subtree: true })
@@ -183,7 +199,7 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
     <div className="page-layout-controls">
       <button type="button" aria-pressed={editing} onClick={() => setEditing(value => !value)}>{editing ? 'Done arranging' : 'Arrange layout'}</button>
       {sections.length > 1 && <label>View <select aria-label="Visible section" value={selected} onChange={event => setFocus(event.target.value)}><option value="">All sections</option>{sections.map(section => <option key={section.id} value={section.id}>{section.title}</option>)}</select></label>}
-      {editing && <span>Drag corners, use arrow keys, or choose a size. Changes save automatically.</span>}
+      {editing && <span>Drag any edge or corner to resize. Changes save automatically.</span>}
     </div>
     {sections.map(section => <SectionWidget key={section.id} section={section} editing={editing} focused={selected === section.id} />)}
   </>

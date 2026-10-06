@@ -449,6 +449,7 @@ function readPageAloud() {
 
 function App() {
   const widgetRoot = useRef<HTMLDivElement>(null)
+  const embeddedWidget = new URLSearchParams(window.location.search).get('widget') === '1'
   useEffect(() => { if (!prefersReducedMotion()) return idleTask(initHoudini) }, [])
   useEffect(pauseGsapWhenHidden, [])
   const { t } = useTranslation(undefined, { i18n })
@@ -822,7 +823,7 @@ function App() {
   return (
     <MotionConfig reducedMotion={settings.reducedMotion ? 'always' : 'user'}>
       <div
-        className="app-shell min-h-dvh bg-page font-app text-foreground"
+        className={`app-shell min-h-dvh bg-page font-app text-foreground${embeddedWidget ? ' is-embedded-widget' : ''}`}
         data-palette={data.rpg.palette}
       >
         <a
@@ -835,7 +836,7 @@ function App() {
         >
           {t('ui.skipToDashboard')}
         </a>
-        <Sidebar
+        {!embeddedWidget && <Sidebar
           active={active}
           onNavigate={jump}
           flags={settings.features}
@@ -845,7 +846,7 @@ function App() {
             setUndoDisable({ flag, title })
             if (key === active) jump('overview')
           }}
-        />
+        />}
         {undoDisable && (
           <div className="nav-undo" role="status">
             <span>“{undoDisable.title}” is turned off.</span>
@@ -853,6 +854,7 @@ function App() {
             <button type="button" aria-label="Dismiss" onClick={() => setUndoDisable(null)}>✕</button>
           </div>
         )}
+        {!embeddedWidget && <>
         {settings.features.pointerFx && <PointerFx page={active} />}
 
         <MatrixRain />
@@ -868,7 +870,8 @@ function App() {
         {settings.features.placesMap && <PlaceWatcher data={data} setData={setData} today={today} />}
         <HoverHints />
         {!settings.reducedMotion && <GsapControls />}
-        {welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
+        </>}
+        {!embeddedWidget && welcome && <WelcomeFlow onFinish={finishWelcome} onSkip={() => finishWelcome(null)} preview={welcomePreview} />}
         <PageMenu page={active} common={menuCommon}>
         <PageModeContext.Provider value={pageMode}>
         <main id="overview" className="min-w-0 flex-1" data-page-mode={pageMode.mode}>
@@ -891,6 +894,7 @@ function App() {
           </header>
           <div
             ref={widgetRoot}
+            data-compact-layout={embeddedWidget || undefined}
             className={`page-content feature-page page-${active}${simpleHome ? ' is-simple-home' : ''} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
           >
             <PageBoundary key={active} onHome={() => jump('overview' as never)}>
@@ -950,7 +954,7 @@ function App() {
               <FeatureGuide page={active} />
             </BloomHeading>
             {active !== 'todos' && <PageModeSwitch />}
-            <PageLayout page={active} root={widgetRoot} />
+            {!embeddedWidget && <PageLayout page={active} root={widgetRoot} />}
             {pageMode.mode === 'advanced' && settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}
@@ -1510,7 +1514,7 @@ function App() {
                     />
                   )}
                   {active === 'overview' && <TodayGlance data={data} today={today} onNavigate={jump} />}
-                  {active === 'overview' && <WidgetBoard onNavigate={jump} enabled={pageEnabled} data={data} today={today} setData={setData} />}
+                  {active === 'overview' && !embeddedWidget && <WidgetBoard onNavigate={jump} enabled={pageEnabled} data={data} today={today} setData={setData} />}
                   {active === 'overview' && modules.stats && !simpleHome && (
                     <>
                       <StatsRow data={data} today={today} onNavigate={jump} />
@@ -1880,7 +1884,7 @@ function App() {
         {settings.features.pixelJuice && <JuiceLayer />}
         {settings.features.bloomCore && <CoreEngine data={data} today={today} />}
         {settings.features.bloomCore && <MomentHost />}
-        <NudgeHost onNavigate={jump} />
+        {!embeddedWidget && <NudgeHost onNavigate={jump} />}
         {settings.features.digitalWellbeing && (
           <Suspense fallback={null}>
             <ScreenTracker />
@@ -1916,7 +1920,7 @@ function App() {
           onCommand={runCommand}
         />
         </Suspense>}
-        <BloomCompanion
+        {!embeddedWidget && <BloomCompanion
           data={data}
           setData={setData}
           blocked={blocked}
@@ -1928,7 +1932,7 @@ function App() {
           extra={menuCommon}
           onOpen={() => setCompanionOpen(true)}
           onClose={() => setCompanionOpen(false)}
-        />
+        />}
       </div>
       {modal === 'habit' && (
         <Modal title={t('ui.plantHabit')} onClose={() => setModal(null)}>

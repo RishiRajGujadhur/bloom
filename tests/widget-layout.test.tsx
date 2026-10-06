@@ -12,7 +12,8 @@ test('invalid persisted sizes cannot force a widget outside its supported range'
 test('sizing persists and collapsing keeps the existing draft mounted', () => {
   const view = render(<WidgetFrame id="task" title="Tasks" editing><input aria-label="Draft" defaultValue="" /></WidgetFrame>)
   fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Keep my draft' } })
-  fireEvent.click(screen.getByText('Mobile size'))
+  jest.spyOn(screen.getByRole('article'), 'getBoundingClientRect').mockReturnValue({ width: 352, height: 440 } as DOMRect)
+  fireEvent.keyDown(screen.getByRole('button', { name: 'Resize Tasks' }), { key: 'ArrowLeft' })
   expect(screen.getByRole('article')).toHaveStyle('--widget-width: 320px')
   fireEvent.click(screen.getByRole('button', { name: 'Collapse Tasks' }))
   expect(screen.getByLabelText('Draft')).toHaveValue('Keep my draft')

@@ -52,11 +52,11 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
             const form = event.currentTarget
             const title = String(new FormData(form).get('task') ?? '').trim()
             if (!title) return
-            const task = taskSchema.parse({ id: id(), title, done: false, due: null, challengeId: null })
-            setData(current => ({ ...current, todos: [...current.todos, task] }))
+            const task = taskSchema.parse({ id: id(), title, done: false, due: '', challengeId: null })
+            setData(current => ({ ...current, todos: [task, ...current.todos] }))
             form.reset()
           }}>
-            <input name="task" aria-label="New widget task" placeholder="Add a task" maxLength={300} required />
+            <input name="task" aria-label="New widget task" placeholder="Add a task" maxLength={150} required />
             <button type="submit">Add</button>
           </form>
           {pending.slice(0, 4).map((task) => (

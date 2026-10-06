@@ -70,6 +70,7 @@ export function WidgetBoard({
   const [query, setQuery] = useState('')
   const [dragging, setDragging] = useState<NavKey | null>(null)
   const [pageIndex, setPageIndex] = useState(0)
+  const [embedded, setEmbedded] = useState<NavKey | null>(null)
   useEffect(() => {
     try {
       localStorage.setItem(WIDGET_KEY, JSON.stringify(widgets))
@@ -210,7 +211,8 @@ export function WidgetBoard({
               <span>{pageDetails[widget.page].description}</span>
               <small>Open feature →</small>
             </button>
-            <WidgetPreview page={widget.page} data={data} today={today} setData={setData} />
+            {embedded === widget.page ? <iframe className="widget-embedded-frame" title={`${pageDetails[widget.page].title} widget`} src={`${window.location.pathname}?widget=1#${widget.page}`} /> : <WidgetPreview page={widget.page} data={data} today={today} setData={setData} />}
+            <button type="button" className="widget-embed-toggle" aria-expanded={embedded === widget.page} onClick={() => setEmbedded(embedded === widget.page ? null : widget.page)}>{embedded === widget.page ? 'Show quick view' : 'Use feature here'}</button>
             {editing && (
               <div className="widget-actions">
                 <button

@@ -176,5 +176,8 @@
 .widget-task-composer input { flex:1 1 140px; min-width:0; width:100%; padding:8px; color:var(--text-primary); background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; font:inherit; }
 .widget-task-composer button,.widget-pager button { min-height:36px; padding:6px 10px; color:var(--text-primary); background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; font:inherit; cursor:pointer; }
 .widget-pager { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.widget-embedded-frame { display:block; width:100%; height:420px; border:1px solid var(--border-color); border-radius:8px; margin-top:8px; background:var(--bg-surface); }
+.widget-card[data-widget-sized] .widget-embedded-frame { height:max(160px,calc(var(--widget-height) - 190px)); }
+.widget-embed-toggle { margin-top:8px; min-height:36px; padding:6px 10px; font:inherit; color:var(--text-primary); border:1px solid var(--border-color); background:var(--bg-surface); border-radius:8px; cursor:pointer; }
 .widget-preview label { white-space:normal; overflow-wrap:anywhere; min-height:32px; }
 @media(max-width:600px) { .widget-task-composer button,.widget-pager button { min-height:44px; } }
