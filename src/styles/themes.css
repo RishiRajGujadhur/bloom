@@ -226,11 +226,11 @@ html[data-mode='light'] {
   );
   --card-hover: color-mix(in oklab, var(--bg-surface) 92%, var(--text-primary));
 
-  --success: #4c8064;
+  --success: #356348;
   --success-soft: color-mix(in oklab, var(--success) 10%, var(--bg-primary));
   --warning: #966a29;
   --warning-soft: color-mix(in oklab, var(--warning) 12%, var(--bg-primary));
-  --danger: #b66076;
+  --danger: #a4435c;
   --danger-soft: color-mix(in oklab, var(--danger) 12%, var(--bg-primary));
 
   --shadow-color: rgb(49 32 63 / 21%);
