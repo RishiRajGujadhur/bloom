@@ -4,6 +4,10 @@ All 83 routes share the delivery, build and application-shell safeguards below. 
 
 ## Measurements and reproduction
 
+The final build's complete startup graph contains 2,532,355 bytes of JavaScript (44.4% below the 4,550,996-byte baseline) and 358,971 bytes of CSS (38.4% below 582,738). [The per-page matrix](performance-pages.md) records both viewports for all 83 routes. All 166 snapshots completed without runtime errors, audio downloads before Play, or Lottie player downloads before interaction.
+
+Validation: production build with TypeScript passed; server delivery tests passed (2 tests); final regression tests passed (8 suites, 25 tests); offline shell/visited-route reloads passed; 11 warm route transitions passed. ESLint has zero errors and five existing warnings. The earlier full test run passed 150 of 152 suites; its two failures were repaired and pass in the final regression run. A second full-suite run was not performed.
+
 - `performance-baseline.json`: original production static entry graph.
 - `performance-build.json`: final production static entry graph, including shared imports and CSS, with raw and compressed bytes and enforced budgets.
 - `performance-pages.json`: desktop and mobile snapshots for every route, all features enabled. Fresh document per route with a shared warm browser HTTP cache; service workers disabled to isolate network delivery. These are lab observations, not field Core Web Vitals or Lighthouse scores.

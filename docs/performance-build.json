@@ -1,0 +1,206 @@
+{
+  "jsBytes": 2532355,
+  "cssBytes": 358971,
+  "baselineJsBytes": 4550996,
+  "baselineCssBytes": 582738,
+  "jsReductionPercent": 44.4,
+  "cssReductionPercent": 38.4,
+  "budgets": {
+    "jsBytes": 3145728,
+    "cssBytes": 460800
+  },
+  "assets": [
+    {
+      "file": "assets/index-BvO-P2ti.js",
+      "bytes": 1735263,
+      "gzip": 545222,
+      "brotli": 545083
+    },
+    {
+      "file": "assets/index-DE9-t5mT.css",
+      "bytes": 333882,
+      "gzip": 62225,
+      "brotli": 65141
+    },
+    {
+      "file": "assets/rolldown-runtime-C0FnF6B9.js",
+      "bytes": 1291,
+      "gzip": 710,
+      "brotli": 696
+    },
+    {
+      "file": "assets/react-DiVRNtpo.js",
+      "bytes": 7876,
+      "gzip": 3007,
+      "brotli": 3048
+    },
+    {
+      "file": "assets/jsx-runtime-BdxMnOeJ.js",
+      "bytes": 435,
+      "gzip": 304,
+      "brotli": 291
+    },
+    {
+      "file": "assets/react-dom-DsHJ3LPU.js",
+      "bytes": 3900,
+      "gzip": 1413,
+      "brotli": 1423
+    },
+    {
+      "file": "assets/i18n-CyDKfnZb.js",
+      "bytes": 124239,
+      "gzip": 45743,
+      "brotli": 44709
+    },
+    {
+      "file": "assets/motion-Ci-J2zwC.js",
+      "bytes": 178,
+      "gzip": 150,
+      "brotli": 133
+    },
+    {
+      "file": "assets/lucidePixel-DPI52k2-.js",
+      "bytes": 88605,
+      "gzip": 25200,
+      "brotli": 24997
+    },
+    {
+      "file": "assets/activity-W9Op2vBU.js",
+      "bytes": 270,
+      "gzip": 222,
+      "brotli": 211
+    },
+    {
+      "file": "assets/gsap-CvDoa17S.js",
+      "bytes": 69582,
+      "gzip": 27051,
+      "brotli": 28053
+    },
+    {
+      "file": "assets/Studio-Dx5KB4aC.js",
+      "bytes": 17929,
+      "gzip": 6872,
+      "brotli": 7120
+    },
+    {
+      "file": "assets/Studio-BnnvYUSq.css",
+      "bytes": 22047,
+      "gzip": 4960,
+      "brotli": 5019
+    },
+    {
+      "file": "assets/MatrixRain-D4S74J5G.js",
+      "bytes": 1224,
+      "gzip": 706,
+      "brotli": 696
+    },
+    {
+      "file": "assets/offscreen-CXo3BPiB.js",
+      "bytes": 1918,
+      "gzip": 959,
+      "brotli": 912
+    },
+    {
+      "file": "assets/preload-helper-BZ1Pz5am.js",
+      "bytes": 1218,
+      "gzip": 688,
+      "brotli": 645
+    },
+    {
+      "file": "assets/dates-BOGG5A0_.js",
+      "bytes": 227,
+      "gzip": 173,
+      "brotli": 152
+    },
+    {
+      "file": "assets/subFeatures-NW7WufuZ.js",
+      "bytes": 83888,
+      "gzip": 26914,
+      "brotli": 27937
+    },
+    {
+      "file": "assets/schemas-Cmj73FYR.js",
+      "bytes": 95651,
+      "gzip": 26686,
+      "brotli": 27153
+    },
+    {
+      "file": "assets/dist-DBBK9fns.js",
+      "bytes": 43474,
+      "gzip": 15601,
+      "brotli": 15827
+    },
+    {
+      "file": "assets/tslib.es6-DBL_t5aq.js",
+      "bytes": 1856,
+      "gzip": 830,
+      "brotli": 822
+    },
+    {
+      "file": "assets/appSettings-Cs3Zl4Zi.js",
+      "bytes": 3788,
+      "gzip": 1643,
+      "brotli": 1569
+    },
+    {
+      "file": "assets/disabledHistory-COXyDAqv.js",
+      "bytes": 469,
+      "gzip": 327,
+      "brotli": 305
+    },
+    {
+      "file": "assets/main-B6xdrynX.js",
+      "bytes": 261,
+      "gzip": 193,
+      "brotli": 172
+    },
+    {
+      "file": "assets/moneyModel-CVCwfakp.js",
+      "bytes": 28058,
+      "gzip": 10607,
+      "brotli": 10840
+    },
+    {
+      "file": "assets/format-aW9tARex.js",
+      "bytes": 19340,
+      "gzip": 5529,
+      "brotli": 5604
+    },
+    {
+      "file": "assets/esm-CAn4PvtD.js",
+      "bytes": 44638,
+      "gzip": 12961,
+      "brotli": 13455
+    },
+    {
+      "file": "assets/driver-bNxpnBZh.js",
+      "bytes": 25347,
+      "gzip": 7189,
+      "brotli": 7377
+    },
+    {
+      "file": "assets/driver-CTZuBZOi.css",
+      "bytes": 3042,
+      "gzip": 974,
+      "brotli": 896
+    },
+    {
+      "file": "assets/proxy-MvK83Gyn.js",
+      "bytes": 120496,
+      "gzip": 38725,
+      "brotli": 40119
+    },
+    {
+      "file": "assets/reduced-motion-2fDGfAC9.js",
+      "bytes": 271,
+      "gzip": 199,
+      "brotli": 174
+    },
+    {
+      "file": "assets/confetti.module-_kxxSlzM.js",
+      "bytes": 10663,
+      "gzip": 4244,
+      "brotli": 4341
+    }
+  ]
+}
