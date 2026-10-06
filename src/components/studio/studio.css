@@ -343,8 +343,8 @@
 .studio-rail-arrows button {
   display: inline-grid;
   place-items: center;
-  min-width: 34px;
-  height: 34px;
+  min-width: 44px;
+  height: 44px;
   padding: 0 10px;
   border: 1px solid var(--border-color);
   border-radius: 999px;
@@ -354,6 +354,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 44px;
 }
 .studio-rail-arrows button:disabled {
   opacity: 0.35;

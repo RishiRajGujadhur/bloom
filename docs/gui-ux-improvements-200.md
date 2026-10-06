@@ -88,3 +88,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 82 | Enlarge controls to a 44px touch target in shortcuts (.kb-sheet header button) | `src/components/layout/shortcuts.css` |
 | 83 | Enlarge controls to a 44px touch target in studio (.studio-tabs button) | `src/components/studio/studio.css` |
 | 84 | Enlarge controls to a 44px touch target in studio (.studio-seg button, .studio-chip) | `src/components/studio/studio.css` |
+| 85 | Enlarge controls to a 44px touch target in studio (.studio-rail-arrows button) | `src/components/studio/studio.css` |
