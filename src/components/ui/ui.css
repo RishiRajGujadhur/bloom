@@ -310,8 +310,8 @@
 .ui-carousel-nav button {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
   background: var(--bg-surface);
@@ -321,6 +321,8 @@
     transform 150ms ease,
     background 150ms ease,
     opacity 150ms ease;
+  min-width: 44px;
+  min-height: 44px;
 }
 .ui-carousel-nav button:hover:not(:disabled) {
   background: color-mix(in oklab, var(--accent-color) 10%, var(--bg-surface));

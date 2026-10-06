@@ -91,3 +91,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 85 | Enlarge controls to a 44px touch target in studio (.studio-rail-arrows button) | `src/components/studio/studio.css` |
 | 86 | Enlarge controls to a 44px touch target in ui (.ui-menu-item) | `src/components/ui/ui.css` |
 | 87 | Enlarge controls to a 44px touch target in ui (.ui-select) | `src/components/ui/ui.css` |
+| 88 | Enlarge controls to a 44px touch target in ui (.ui-carousel-nav button) | `src/components/ui/ui.css` |
