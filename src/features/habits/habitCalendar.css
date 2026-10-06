@@ -5,7 +5,7 @@
 .habit-calendar-toolbar { justify-content: space-between; padding: 14px 16px; gap: 12px; flex-wrap: wrap; }
 .habit-calendar-nav h2 { margin: 0 0 0 8px; font-size: clamp(18px, 2vw, 23px); font-weight: 600; white-space: nowrap; }
 .habit-calendar-toolbar .icon-button { width: 44px; height: 44px; padding: 5px; min-width: 44px; min-height: 44px; }
-.habit-calendar-view { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 12px; }
+.habit-calendar-view { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: max(14px, 1rem); }
 .habit-calendar-today { border: 0; border-radius: 8px; background: var(--text-primary); color: var(--bg-surface); padding: 9px 14px; cursor: pointer; font-size: 12px; }
 .habit-calendar-scroll { overflow-x: auto; }
 .habit-calendar-days, .habit-calendar-grid { min-width: 625px; display: grid; grid-template-columns: 54px minmax(0, 1fr); }
