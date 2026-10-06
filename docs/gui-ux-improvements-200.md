@@ -176,3 +176,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 170 | Improve small text readability in impact (.impact-hint) | `src/features/impact/impact.css` |
 | 171 | Improve small text readability in ink (.ink-prompt) | `src/features/ink/ink.css` |
 | 172 | Improve small text readability in interval (.iv-weeks span) | `src/features/interval/interval.css` |
+| 173 | Improve small text readability in journey (.journey-day) | `src/features/journey/journey.css` |
