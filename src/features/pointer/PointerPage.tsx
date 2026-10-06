@@ -39,7 +39,7 @@ export function PointerPage() {
             {(Object.keys(shapeNames) as Shape[]).map((s) => (
               <button key={s} type="button" className="pt-option" aria-pressed={p.shape === s} onClick={() => set({ shape: s })}>
                 <span className="pt-swatch" style={{ cursor: cursorCss(s, p.color, p.size) || 'auto' }}>
-                  {s === 'system' ? <MousePointer2 size={22} /> : <img alt="" src={cursorCss(s, p.color, 1.6).match(/url\("(.*)"\)/)?.[1]} />}
+                  {s === 'system' ? <MousePointer2 size={22} /> : <img alt="" width={38} height={38} decoding="async" src={cursorCss(s, p.color, 1.6).match(/url\("(.*)"\)/)?.[1]} />}
                 </span>
                 {shapeNames[s]}
               </button>
