@@ -201,3 +201,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 195 | Improve small text readability in voice (.voice-meta) | `src/features/voice/voice.css` |
 | 196 | Improve small text readability in wellbeing (.wb-week small) | `src/features/wellbeing/wellbeing.css` |
 | 197 | Improve small text readability in workout (.wo-history ul) | `src/features/workout/workout.css` |
+| 198 | Improve small text readability in world (.world-eyebrow) | `src/features/world/world.css` |
