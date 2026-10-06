@@ -287,6 +287,7 @@ export function getStoredTheme(): ThemeSettings {
   if (raw) {
     try {
       const parsed = JSON.parse(raw) as Partial<ThemeSettings>
+      const customColors = safeColors(parsed.customColors)
       return {
         themeId: isKnownTheme(parsed.themeId)
           ? parsed.themeId
@@ -296,7 +297,7 @@ export function getStoredTheme(): ThemeSettings {
           ? { customAccent: parsed.customAccent }
           : {}),
         ...(isFamily(parsed.localFont) ? { localFont: parsed.localFont } : {}),
-        customColors: safeColors(parsed.customColors),
+        ...(Object.keys(customColors).length ? { customColors } : {}),
       }
     } catch {
       // fall through to legacy migration / defaults
@@ -361,6 +362,7 @@ export function applyTheme(settings: ThemeSettings): void {
   const colors = safeColors(settings.customColors)
   for (const token of COLOR_TOKENS) {
     if (colors[token]) root.style.setProperty(token, colors[token])
+    else if (token === '--accent-color' && isHexColor(settings.customAccent)) continue
     else root.style.removeProperty(token)
   }
 
@@ -371,7 +373,7 @@ export function applyTheme(settings: ThemeSettings): void {
     const persisted: ThemeSettings = {
       ...base,
       ...(local ? { localFont: local } : {}),
-      customColors: colors,
+      ...(Object.keys(colors).length ? { customColors: colors } : {}),
     }
     localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(persisted))
   } catch {
