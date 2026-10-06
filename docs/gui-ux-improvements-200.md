@@ -190,3 +190,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 184 | Improve small text readability in release (.release-card small) | `src/features/release/release.css` |
 | 185 | Improve small text readability in reminders (.reminder-pop-actions button) | `src/features/reminders/reminders.css` |
 | 186 | Improve small text readability in rewards (.streak-petals) | `src/features/rewards/rewards.css` |
+| 187 | Improve small text readability in shop (.shop-price) | `src/features/rewards/shop.css` |
