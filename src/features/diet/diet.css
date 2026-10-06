@@ -338,7 +338,7 @@
   background: var(--bg-surface);
 }
 .diet-tabs button {
-  min-height: 38px;
+  min-height: 44px;
   padding: 6px 18px;
   border: 0;
   border-radius: 99px;
@@ -348,6 +348,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 200ms ease, color 200ms ease;
+  min-width: 44px;
 }
 .diet-tabs button[aria-selected='true'] {
   background: #6bbf7a;
