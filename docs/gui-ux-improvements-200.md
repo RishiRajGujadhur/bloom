@@ -83,3 +83,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 77 | Improve small text readability in shared menus (.streak-pill) | `src/styles/shared-ui.css` |
 | 78 | Enlarge controls to a 44px touch target in titlebar (.topbar :is(button, [role='button'], .search-trigger, input)) | `src/styles/titlebar.css` |
 | 79 | Enlarge controls to a 44px touch target in bookshelf (.journal-reader-controls button) | `src/components/daybook/bookshelf.css` |
+| 80 | Enlarge controls to a 44px touch target in editor.module (.toolbar button) | `src/components/daybook/editor.module.css` |
