@@ -10,3 +10,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 4 | Keep invalid-field feedback visible while correcting an entry | `src/index.css` |
 | 5 | Allow grouped forms to shrink inside narrow cards | `src/index.css` |
 | 6 | Wrap long form section labels without horizontal overflow | `src/index.css` |
+| 7 | Make native select text follow the chosen app font | `src/index.css` |
