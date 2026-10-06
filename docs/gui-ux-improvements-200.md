@@ -72,3 +72,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 66 | Enlarge controls to a 44px touch target in index (.icon-button, .studio-chip, .quiet-button) | `src/index.css` |
 | 67 | Enlarge controls to a 44px touch target in settings.module (.categoryActions button) | `src/settings.module.css` |
 | 68 | Enlarge controls to a 44px touch target in companion (.bc-head-actions button) | `src/companion/companion.css` |
+| 69 | Enlarge controls to a 44px touch target in bloom-experience (.bloom-rail-toolbar button) | `src/components/bloom-experience.css` |
