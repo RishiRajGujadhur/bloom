@@ -135,3 +135,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 129 | Improve small text readability in planning (.planning-fields label, .planning-form label, .perspective-picker, .calendar-capacity label) | `src/features/planning.css` |
 | 130 | Improve small text readability in urge (.urge-progress li) | `src/features/urge.css` |
 | 131 | Improve small text readability in urgeClock (.urge-record) | `src/features/urgeClock.css` |
+| 132 | Improve small text readability in constellation (.constellation-head span) | `src/rpg/constellation.css` |
