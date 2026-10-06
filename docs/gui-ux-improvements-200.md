@@ -117,3 +117,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 111 | Enlarge controls to a 44px touch target in workspace (#todo-page .todo-mode button) | `src/features/todos/workspace.css` |
 | 112 | Enlarge controls to a 44px touch target in workspace (#todo-page .overdue-bar button) | `src/features/todos/workspace.css` |
 | 113 | Enlarge controls to a 44px touch target in wellbeing (.wb-chips button) | `src/features/wellbeing/wellbeing.css` |
+| 114 | Enlarge controls to a 44px touch target in coachBattle (.cb-menu select,.cb-menu button) | `src/features/workout/coachBattle.css` |
