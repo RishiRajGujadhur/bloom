@@ -161,3 +161,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 155 | Improve small text readability in collectibles (.collectible-eyebrow) | `src/features/collectibles/collectibles.css` |
 | 156 | Improve small text readability in garage (.garage-pad-label) | `src/features/collectibles/garage.css` |
 | 157 | Improve small text readability in core (.now-kicker) | `src/features/core/core.css` |
+| 158 | Improve small text readability in dailyFlow (.df-ring > span) | `src/features/dailyFlow/dailyFlow.css` |
