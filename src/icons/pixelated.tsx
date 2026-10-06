@@ -24,9 +24,22 @@ export function setPixelIcons(on: boolean) {
   document.documentElement.toggleAttribute('data-pixel-icons', on)
   window.dispatchEvent(new Event(EVENT))
 }
-const subscribe = (l: () => void) => {
-  window.addEventListener(EVENT, l)
-  return () => window.removeEventListener(EVENT, l)
+const listeners = new Set<() => void>()
+const notify = () => listeners.forEach(listener => listener())
+const onStorage = (event: StorageEvent) => { if (event.key === KEY || event.key === null) notify() }
+const subscribe = (listener: () => void) => {
+  if (!listeners.size) {
+    window.addEventListener(EVENT, notify)
+    window.addEventListener('storage', onStorage)
+  }
+  listeners.add(listener)
+  return () => {
+    listeners.delete(listener)
+    if (!listeners.size) {
+      window.removeEventListener(EVENT, notify)
+      window.removeEventListener('storage', onStorage)
+    }
+  }
 }
 const usePixel = () => useSyncExternalStore(subscribe, pixelIconsOn, () => false)
 

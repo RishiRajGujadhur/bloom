@@ -5,6 +5,7 @@ import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { readStore, writeStore } from '../studio/Studio'
 import { subOn } from '../../features/subFeatures'
 import { emblems } from './PageEmblem'
+import { frameThrottle } from '../../utils/frameThrottle'
 import './flow.css'
 
 const reduced = prefersReducedMotion
@@ -62,12 +63,15 @@ export function LinkRail({ page, names, enabled = () => true }: { page: string; 
   useEffect(() => {
     const node = row.current
     if (!node) return
-    const update = () => setEdges({ start: node.scrollLeft <= 2, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 2, scrollable: node.scrollWidth > node.clientWidth + 2 })
+    const update = frameThrottle(() => {
+      const next = { start: node.scrollLeft <= 2, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 2, scrollable: node.scrollWidth > node.clientWidth + 2 }
+      setEdges(current => current.start === next.start && current.end === next.end && current.scrollable === next.scrollable ? current : next)
+    })
     update()
     node.addEventListener('scroll', update, { passive: true })
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null
     observer?.observe(node)
-    return () => { node.removeEventListener('scroll', update); observer?.disconnect() }
+    return () => { update.cancel(); node.removeEventListener('scroll', update); observer?.disconnect() }
   }, [page, links?.length])
   const move = (direction: number) => row.current?.scrollBy({ left: direction * row.current.clientWidth * .75, behavior: reduced() ? 'auto' : 'smooth' })
   useLayoutEffect(() => {

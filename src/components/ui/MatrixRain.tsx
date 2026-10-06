@@ -4,10 +4,18 @@ import { mountScene } from '../../platform/offscreen'
 import MatrixWorker from './matrixWorker?worker'
 
 /** The active theme id, live (reads html[data-theme]). */
-const subscribe = (l: () => void) => {
-  const mo = new MutationObserver(l)
-  mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-  return () => mo.disconnect()
+const themeListeners = new Set<() => void>()
+let themeObserver: MutationObserver | null = null
+const subscribe = (listener: () => void) => {
+  themeListeners.add(listener)
+  if (!themeObserver) {
+    themeObserver = new MutationObserver(() => themeListeners.forEach(notify => notify()))
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+  }
+  return () => {
+    themeListeners.delete(listener)
+    if (!themeListeners.size) { themeObserver?.disconnect(); themeObserver = null }
+  }
 }
 export const useThemeId = () => useSyncExternalStore(subscribe, () => document.documentElement.dataset.theme ?? '', () => '')
 export const useMatrix = () => useThemeId() === 'matrix'
