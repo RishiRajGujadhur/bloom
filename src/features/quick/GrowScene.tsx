@@ -2,6 +2,7 @@ import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 import { createNoise2D } from 'simplex-noise'
+import { FocusTree } from './FocusTree'
 
 /**
  * Focus grow scenes: SVG worlds that fill in as a session progresses. Each
@@ -124,6 +125,7 @@ export function GrowScene({ scene, progress, extra = 0 }: { scene: SceneId; prog
     return () => void tw.progress(1)
   }, [shown])
   const [top, bottom] = skies[scene] ?? skies.tree
+  if (scene === 'tree') return <FocusTree progress={progress} extra={extra} />
   return (
     <svg className="grow-scene" viewBox="0 0 200 150" role="img" aria-label={`${scenes.find((s) => s.id === scene)?.name}: ${shown} of ${count} grown`}>
       <defs>
@@ -133,7 +135,6 @@ export function GrowScene({ scene, progress, extra = 0 }: { scene: SceneId; prog
         </linearGradient>
       </defs>
       <rect width="200" height="150" rx="14" fill={`url(#sky-${scene})`} />
-      {scene === 'tree' && <path d="M96 140 V70 M100 140 V64 M104 140 V72" stroke="#795548" strokeWidth="6" strokeLinecap="round" />}
       {scene === 'treasure' && <path d="M70 140 h60 v-22 q-30 -18 -60 0z" fill="#8d6e63" stroke="#5d4037" strokeWidth="2" />}
       <g ref={root}>
         {list.map((p, i) => (

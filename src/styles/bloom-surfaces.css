@@ -39,6 +39,13 @@
 .bc-panel.uses-app-theme .companion-message { border: 1px solid var(--border-color); background: var(--bg-primary); }
 .bc-panel.uses-app-theme .companion-message.user { background: var(--accent-soft); }
 .bc-panel.uses-app-theme .companion-ai-options { background: var(--bg-primary); border-color: var(--border-color); }
+.bc-panel.uses-app-theme .companion-orb::after {
+  border-top-color: color-mix(in srgb, var(--accent-color) 35%, var(--bg-surface));
+  filter: drop-shadow(0 0 5px var(--accent-color));
+}
+.bc-panel.uses-app-theme :is(.bc-head-actions button[aria-selected='true'], .cs-message--outgoing .cs-message__content) {
+  color: var(--text-on-accent, var(--bg-primary));
+}
 html,
 body,
 body * {

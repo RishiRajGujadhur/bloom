@@ -1,0 +1,9 @@
+.focus-tree.grow-scene { position: relative; isolation: isolate; width: 100%; max-width: 440px; aspect-ratio: 5 / 4; margin: 0 auto; }
+.focus-tree-art, .focus-tree-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.focus-tree-canvas { opacity: 0; }
+.focus-tree[data-rendered='true'] .focus-tree-canvas { opacity: 1; }
+.focus-tree[data-rendered='true'] .focus-tree-fallback { visibility: hidden; }
+.focus-tree-caption { position: absolute; bottom: 0; left: 0; right: 0; font-size: 11px; letter-spacing: .08em; color: var(--text-secondary); }
+.focus-room { background: radial-gradient(ellipse at 50% 12%, color-mix(in srgb, var(--accent-soft) 40%, transparent), transparent 55%), var(--bg-surface); }
+.focus-room .focus-countdown { letter-spacing: -.04em; }
+.fd-tile .focus-tree { max-width: 100%; }

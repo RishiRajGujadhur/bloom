@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-06T16:26:28.297Z",
+  "capturedAt": "2026-10-06T16:44:19.766Z",
   "browser": "153.0.8010.12",
   "viewport": {
     "width": 1440,
@@ -10,11 +10,6 @@
       "file": "overview.png",
       "route": "#overview",
       "caption": "The current dashboard and shared section navigation."
-    },
-    {
-      "file": "focus.png",
-      "route": "#focus",
-      "caption": "Focus sessions in the current Bloom interface."
     },
     {
       "file": "webcam-workout.png",
@@ -45,6 +40,11 @@
       "file": "code-city.png",
       "route": "#code-city",
       "caption": "Built-in sample repository rendered as a city; no personal repository opened."
+    },
+    {
+      "file": "focus.png",
+      "route": "#focus",
+      "caption": "Focus sessions in the current Bloom interface."
     },
     {
       "file": "local-ai.png",

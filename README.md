@@ -84,6 +84,10 @@ Source: [Code City](src/features/codecity/CodeCityPage.tsx), [Git reader](src/fe
 
 Long pages share up/down arrows and a section menu. Wheel, touch, and keyboard scrolling remain available. Motion respects reduced-motion preferences.
 
+The focus garden combines a Three.js blossom tree, GSAP growth transitions, and SVG artwork with a fallback for devices without WebGL. Petals drift and branches sway while a session grows; animation pauses offscreen and follows motion settings. Bloom chat uses the app theme by default, shares common button styles, and leaves section arrows clear of its panel.
+
+Garden design references: [Focus Tree blossom garden](https://www.pinterest.com/pin/690176711698423403/) and [K Bank Money Tree motion study](https://www.behance.net/gallery/207011093/K-Bank-Money-Tree-Grow-Your-Wealth). All garden geometry and SVG artwork are generated locally.
+
 ## Development
 
 ```powershell
