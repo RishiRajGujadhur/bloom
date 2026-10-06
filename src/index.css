@@ -272,3 +272,6 @@ html[data-tab-hidden] *, html[data-tab-hidden] *::before, html[data-tab-hidden] 
 .cmdk-kbd { margin-left: auto; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border-color); font: 600 11px/1.5 ui-monospace, monospace; opacity: .75; white-space: nowrap; }
 .pre-copy { position: absolute; top: 6px; right: 6px; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: inherit; font: 600 11px/1.5 system-ui, sans-serif; opacity: 0; transition: opacity .15s; cursor: pointer; }
 pre:hover > .pre-copy, .pre-copy:focus-visible { opacity: 1; }
+
+/* UX 001: Make the skip-navigation link legible in light and dark themes. */
+.skip-link { background: var(--bg-surface); color: var(--text-primary); border: 2px solid var(--focus-ring); }
