@@ -223,7 +223,7 @@
 .en-shop li span:nth-child(2) { display: grid; }
 .en-shop small { color: var(--text-muted); }
 .en-shop-emoji { font-size: 1.8rem; }
-.en-badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+.en-badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 110px), 1fr)); gap: 8px; }
 .en-badge { display: grid; justify-items: center; gap: 2px; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--border-color); text-align: center; filter: grayscale(1); opacity: 0.55; }
 .en-badge.got { filter: none; opacity: 1; border-color: #ffc800; }
 .en-badge span { font-size: 1.8rem; }
