@@ -163,3 +163,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 157 | Improve small text readability in core (.now-kicker) | `src/features/core/core.css` |
 | 158 | Improve small text readability in dailyFlow (.df-ring > span) | `src/features/dailyFlow/dailyFlow.css` |
 | 159 | Improve small text readability in diet (.diet-plate-label) | `src/features/diet/diet.css` |
+| 160 | Improve small text readability in energy (.energy-note) | `src/features/energy/energy.css` |
