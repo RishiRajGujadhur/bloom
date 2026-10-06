@@ -1,3 +1,4 @@
+import { Autocomplete } from '../../components/ui/Autocomplete'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -354,21 +355,17 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           </div>
         )}
         <form className="diet-form" onSubmit={submit}>
-          <input
-            aria-label="What did you eat?"
+          <Autocomplete
+            label="What did you eat?"
             placeholder="What did you eat?"
-            list="diet-known-foods"
+            options={[...new Set([...usuals.map((f) => f.name), ...foodLibrary.map((f) => f.name)])]}
             value={form.name}
-            onChange={(e) => {
-              const name = e.target.value
+            onValueChange={(name) => {
               // Picking a known food fills in its numbers.
               const known = [...usuals, ...foodLibrary].find((f) => f.name.toLowerCase() === name.trim().toLowerCase())
               setForm(known && !form.kcal ? { name, kcal: String(known.kcal), protein: String(known.protein), carbs: String(known.carbs), fat: String(known.fat) } : { ...form, name })
             }}
           />
-          <datalist id="diet-known-foods">
-            {[...new Set([...usuals.map((f) => f.name), ...foodLibrary.map((f) => f.name)])].map((n) => <option key={n} value={n} />)}
-          </datalist>
           {(['kcal', 'protein', 'carbs', 'fat'] as const)
             .filter((k) => k === 'kcal' || subOn('dietTracker', 'macros'))
             .map((k) => (

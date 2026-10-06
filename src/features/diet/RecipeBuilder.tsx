@@ -255,7 +255,7 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
             {subOn('recipeBuilder', 'cookLoss') && (
               <>
                 <label className="rb-toggle">
-                  <Checkbox  checked={cooked} onCheckedChange={(checked) => setCooked(checked)} /> Cooked (apply yield)
+                  <Checkbox checked={cooked} onCheckedChange={(checked) => setCooked(checked)} /> Cooked (apply yield)
                 </label>
                 {cooked && (
                   <label className="rb-measured">

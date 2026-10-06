@@ -1,26 +1,32 @@
 {
-  "jsBytes": 2556163,
-  "cssBytes": 379119,
+  "jsBytes": 2572109,
+  "cssBytes": 384641,
   "baselineJsBytes": 4550996,
   "baselineCssBytes": 582738,
-  "jsReductionPercent": 43.8,
-  "cssReductionPercent": 34.9,
+  "jsReductionPercent": 43.5,
+  "cssReductionPercent": 34,
   "budgets": {
     "jsBytes": 3145728,
     "cssBytes": 460800
   },
   "assets": [
     {
-      "file": "assets/index-DEJfqBhu.js",
-      "bytes": 1767385,
-      "gzip": 555434,
-      "brotli": 555088
+      "file": "assets/index-z_zk_5sq.js",
+      "bytes": 1739000,
+      "gzip": 547039,
+      "brotli": 546804
     },
     {
-      "file": "assets/index-BC5DXlwm.css",
-      "bytes": 352399,
-      "gzip": 65944,
-      "brotli": 68746
+      "file": "assets/index-D69JgS6t.css",
+      "bytes": 345555,
+      "gzip": 64441,
+      "brotli": 67339
+    },
+    {
+      "file": "assets/ui-CMXKK21y.css",
+      "bytes": 12291,
+      "gzip": 3011,
+      "brotli": 3096
     },
     {
       "file": "assets/rolldown-runtime-C0FnF6B9.js",
@@ -53,10 +59,28 @@
       "brotli": 44709
     },
     {
-      "file": "assets/motion-Ci-J2zwC.js",
-      "bytes": 178,
-      "gzip": 150,
-      "brotli": 133
+      "file": "assets/DropdownSelect-f9wCE-Bd.js",
+      "bytes": 20745,
+      "gzip": 7286,
+      "brotli": 7445
+    },
+    {
+      "file": "assets/dist-CWF-eX24.js",
+      "bytes": 4890,
+      "gzip": 1976,
+      "brotli": 1967
+    },
+    {
+      "file": "assets/Combination-zvGEsJHL.js",
+      "bytes": 62128,
+      "gzip": 21787,
+      "brotli": 22257
+    },
+    {
+      "file": "assets/tslib.es6-DBL_t5aq.js",
+      "bytes": 1856,
+      "gzip": 830,
+      "brotli": 822
     },
     {
       "file": "assets/lucidePixel-DPI52k2-.js",
@@ -71,22 +95,28 @@
       "brotli": 211
     },
     {
+      "file": "assets/motion-Ci-J2zwC.js",
+      "bytes": 178,
+      "gzip": 150,
+      "brotli": 133
+    },
+    {
       "file": "assets/gsap-CvDoa17S.js",
       "bytes": 69582,
       "gzip": 27051,
       "brotli": 28053
     },
     {
-      "file": "assets/Studio-BDzyMMQx.js",
-      "bytes": 20278,
-      "gzip": 7708,
-      "brotli": 7986
+      "file": "assets/Studio-Dh8lyque.js",
+      "bytes": 20320,
+      "gzip": 7729,
+      "brotli": 7892
     },
     {
-      "file": "assets/Studio-Cr5Z8nX5.css",
-      "bytes": 23678,
-      "gzip": 5265,
-      "brotli": 5396
+      "file": "assets/Studio-jpidNyaT.css",
+      "bytes": 23753,
+      "gzip": 5278,
+      "brotli": 5426
     },
     {
       "file": "assets/MatrixRain-D4S74J5G.js",
@@ -123,18 +153,6 @@
       "bytes": 95651,
       "gzip": 26686,
       "brotli": 27153
-    },
-    {
-      "file": "assets/dist-DBBK9fns.js",
-      "bytes": 43474,
-      "gzip": 15601,
-      "brotli": 15827
-    },
-    {
-      "file": "assets/tslib.es6-DBL_t5aq.js",
-      "bytes": 1856,
-      "gzip": 830,
-      "brotli": 822
     },
     {
       "file": "assets/appSettings-Cs3Zl4Zi.js",

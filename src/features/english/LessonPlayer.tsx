@@ -178,7 +178,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
         {theme?.cast[0] && <BloomFace ref={buddy} variant={theme.cast[0].face} size={44} follow={false} waveOnMount={false} label={theme.cast[0].name} />}
         <span className="en-hearts" aria-label={`${hearts} hearts`}><Heart size={18} fill="currentColor" /> {hearts}</span>
         <label className="en-motion-setting">
-          <Checkbox  checked={reducedAnimations} onCheckedChange={(checked) => setReducedAnimations(checked)} />
+          <Checkbox checked={reducedAnimations} onCheckedChange={(checked) => setReducedAnimations(checked)} />
           Reduce animations
         </label>
       </div>

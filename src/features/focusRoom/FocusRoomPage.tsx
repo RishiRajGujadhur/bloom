@@ -122,7 +122,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
       )}
       <div className="room-controls">
         <label className="room-quiet-toggle">
-          <Checkbox  checked={quietScene} onCheckedChange={(checked) => setQuietScene(checked)} />
+          <Checkbox checked={quietScene} onCheckedChange={(checked) => setQuietScene(checked)} />
           Quiet scene
         </label>
         <div className="wb-chips" role="radiogroup" aria-label="Session length">

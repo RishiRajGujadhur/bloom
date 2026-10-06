@@ -5,6 +5,7 @@ import ts from 'typescript'
 const violations = []
 let pickers = 0
 let checkboxes = 0
+let autocompletes = 0
 function inspect(directory) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name)
@@ -25,6 +26,7 @@ function inspect(directory) {
         const tag = node.tagName.getText(source)
         if (tag === 'DropdownSelect') pickers++
         if (tag === 'Checkbox') checkboxes++
+        if (tag === 'Autocomplete') autocompletes++
         const nativeCheckbox =
           tag === 'input' &&
           node.attributes.properties.some(
@@ -38,7 +40,11 @@ function inspect(directory) {
         const formBridge =
           relative('src', path).replaceAll('\\', '/') ===
           'components/ui/DropdownSelect.tsx'
-        if ((tag === 'select' && !formBridge) || nativeCheckbox) {
+        if (
+          (tag === 'select' && !formBridge) ||
+          tag === 'datalist' ||
+          nativeCheckbox
+        ) {
           const line =
             source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1
           violations.push(`${path}:${line}: use the shared Radix control`)
@@ -55,6 +61,6 @@ if (violations.length) {
   process.exitCode = 1
 } else {
   console.log(
-    `Shared Radix controls verified: ${pickers} dropdowns, ${checkboxes} checkboxes.`,
+    `Shared React controls verified: ${pickers} dropdowns, ${checkboxes} checkboxes, ${autocompletes} autocompletes.`,
   )
 }

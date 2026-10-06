@@ -148,7 +148,7 @@ export function TaskPlanningFields({
       </label>
       <label className="planning-check">
         <Checkbox
-          
+
           checked={value.deepWork}
           onCheckedChange={(checked) => change({ deepWork: checked })}
         />

@@ -69,3 +69,13 @@ The earlier desktop baseline remains in [standards-desktop.json](standards-deskt
 - Fixed a test-only JSDOM selector recursion for unsupported fullscreen matching.
 - Validation: 36 targeted tests passed on the rerun; the other four affected suites passed previously. TypeScript and shared-control lint passed. Production performance budgets and all 636 emitted JavaScript files passed ECMAScript 2023 validation.
 - Browser verification: all 83 feature choices appear in the Radix menu; keyboard Space hides and restores the Soundscape button.
+
+## Complete library control audit — 2026-10-07
+
+- Replaced Nourish's final native datalist with the installed Radix Popover and cmdk libraries; no additional autocomplete dependency.
+- Preserved free-text food entries, known-food nutrition autofill, keyboard suggestions, Escape dismissal, pointer focus, and normal form submission.
+- Added three autocomplete regression tests and extended the CI guard to reject native datalists.
+- Shared source audit now reports 119 picker uses, 62 checkboxes, and one autocomplete. Coding lesson HTML examples are intentionally excluded.
+- Validation: all 60 unique targeted tests passed across the migration; shared-control lint and whitespace checks passed. Desktop and 375px mobile picker previews, settings persistence, and native-dialog portals were checked.
+- Final production build and TypeScript passed; JavaScript 2,572,109 bytes and CSS 384,641 bytes remain within the configured budgets.
+- Final ECMAScript scan passed for all 637 emitted JavaScript files.

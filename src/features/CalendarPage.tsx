@@ -446,7 +446,7 @@ export function CalendarPage({ data, setData }: Props) {
           </div>
           <label className="planning-check">
             <Checkbox
-              
+
               checked={includeScheduled}
               onCheckedChange={(checked) => setIncludeScheduled(checked)}
             />
@@ -795,7 +795,7 @@ export function CalendarPage({ data, setData }: Props) {
             </label>
             <label className="planning-check">
               <Checkbox
-                
+
                 checked={draft.deepWork}
                 onCheckedChange={(checked) =>
                   setDraft({ ...draft, deepWork: checked })

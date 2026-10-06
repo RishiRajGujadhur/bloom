@@ -43,7 +43,7 @@ export function ChatAppearanceSettings() {
         </DropdownSelect>
       </label>
       <label className="chat-theme-option">
-        <Checkbox  checked={followTheme}
+        <Checkbox checked={followTheme}
           onCheckedChange={(checked) => save('bloom-chat-follow-theme', checked ? '1' : '0')} />
         Use my app theme for Bloom chat
       </label>

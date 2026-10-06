@@ -154,11 +154,11 @@ export function SoundLab({ memo, onApply, onRestore }: { memo: VoiceMemo; onAppl
         <div className="sl-side bloom-start-stack">
           <fieldset className="sl-opts">
             <legend>Cleaning</legend>
-            <label><Checkbox  checked={opts.ai} onCheckedChange={(checked) => setOpts({ ...opts, ai: checked })} /> AI voice isolation <small>RNNoise neural net</small></label>
-            <label><Checkbox  checked={opts.gate} onCheckedChange={(checked) => setOpts({ ...opts, gate: checked })} /> Spectral gate <small>SIMD FFT, learns the hiss</small></label>
+            <label><Checkbox checked={opts.ai} onCheckedChange={(checked) => setOpts({ ...opts, ai: checked })} /> AI voice isolation <small>RNNoise neural net</small></label>
+            <label><Checkbox checked={opts.gate} onCheckedChange={(checked) => setOpts({ ...opts, gate: checked })} /> Spectral gate <small>SIMD FFT, learns the hiss</small></label>
             <label className="sl-range">Strength <input type="range" min={0.2} max={1} step={0.05} value={opts.strength} onChange={(e) => setOpts({ ...opts, strength: Number(e.target.value) })} /> <b>{Math.round(opts.strength * 100)}%</b></label>
-            <label><Checkbox  checked={opts.level} onCheckedChange={(checked) => setOpts({ ...opts, level: checked })} /> Level the voice</label>
-            <label><Checkbox  checked={opts.trim} onCheckedChange={(checked) => setOpts({ ...opts, trim: checked })} /> Trim long pauses</label>
+            <label><Checkbox checked={opts.level} onCheckedChange={(checked) => setOpts({ ...opts, level: checked })} /> Level the voice</label>
+            <label><Checkbox checked={opts.trim} onCheckedChange={(checked) => setOpts({ ...opts, trim: checked })} /> Trim long pauses</label>
           </fieldset>
           <button type="button" className="sl-cta" onClick={() => void run()} disabled={!before || !!busy || (!opts.ai && !opts.gate && !opts.level && !opts.trim)}>{busy ? 'Cleaning…' : res ? 'Clean again' : '✨ Clean it'}</button>
           {res && (

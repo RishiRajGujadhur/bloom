@@ -592,3 +592,14 @@ button.ui-checkbox[data-bloom-checkbox]:hover:not(:disabled) { background: color
   button.ui-checkbox[data-bloom-checkbox][data-state='checked']::before { background: Highlight; border-color: Highlight; }
   button.ui-checkbox[data-bloom-checkbox] .ui-checkbox-indicator { color: HighlightText; }
 }
+.ui-autocomplete { min-width: 0; }
+.ui-autocomplete input { width: 100%; box-sizing: border-box; }
+.ui-autocomplete-menu {
+  z-index: 1400;
+  min-width: var(--radix-popover-trigger-width);
+  max-width: calc(100vw - 24px);
+  max-height: min(320px, var(--radix-popover-content-available-height));
+}
+.ui-autocomplete-menu [cmdk-list] { overflow: auto; overscroll-behavior: contain; }
+.ui-autocomplete-menu [cmdk-item][data-selected='true'] { background: var(--accent-soft); color: var(--text-primary); }
+.ui-autocomplete-empty { padding: 10px 12px; font-size: .875rem; color: var(--text-secondary); }

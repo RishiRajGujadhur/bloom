@@ -381,7 +381,7 @@ export function ExercisePage() {
         {on('wheelchair') && (
           <label>
             <Checkbox
-              
+
               checked={!!prefs.wheelchair}
               onCheckedChange={(checked) => {
                 setBodySeated(checked)

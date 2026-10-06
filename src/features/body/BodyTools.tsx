@@ -48,8 +48,8 @@ export function BodyTools({ page, features, onReward }: { page: string; features
   if (!meta || !features[meta.feature]) return null
   return <div className="body-tools">
     <button ref={trigger} type="button" disabled={opening} className="body-tool-button" onClick={() => void openCoach()}><Camera size={16} /> {opening ? 'Preparing camera coach…' : 'Camera pose coach'}</button>
-    <label className="body-tool-preference"><Checkbox  checked={seated} onCheckedChange={checked => setBodySeated(checked)} /> Seated / wheelchair mode</label>
-    <label className="body-tool-preference"><Checkbox  checked={silent} onCheckedChange={checked => setBodySilent(checked)} /> Silent body cues</label>
+    <label className="body-tool-preference"><Checkbox checked={seated} onCheckedChange={checked => setBodySeated(checked)} /> Seated / wheelchair mode</label>
+    <label className="body-tool-preference"><Checkbox checked={silent} onCheckedChange={checked => setBodySilent(checked)} /> Silent body cues</label>
     <BodyPracticeNote key={page} page={page} title={meta.title} />
     {open && <div className="body-coach-backdrop"><dialog ref={dialog} className="body-coach-dialog" aria-label={`${meta.title} camera pose coach`} onCancel={event => { event.preventDefault(); if (document.fullscreenElement) { void document.exitFullscreen(); return }; setOpen(false) }}>
       <header><h2>{meta.title} · camera pose coach</h2><button type="button" className="body-tool-button" aria-label="Close camera pose coach" onClick={() => setOpen(false)}><X size={18} /> Close</button></header>

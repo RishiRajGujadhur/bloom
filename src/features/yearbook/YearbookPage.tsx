@@ -135,7 +135,7 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
             .map((key) => (
             <label key={key} className="yearbook-check">
               <Checkbox
-                
+
                 checked={chapters[key]}
                 onCheckedChange={() => setChapters((c) => ({ ...c, [key]: !c[key] }))}
               />

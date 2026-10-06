@@ -486,7 +486,7 @@ export function RpgDashboard({
                         {priorities.map((p) => (
                           <label key={p.id}>
                             <Checkbox
-                              
+
                               checked={selection.includes(p.id)}
                               disabled={
                                 !selection.includes(p.id) &&

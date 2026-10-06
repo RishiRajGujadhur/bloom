@@ -303,7 +303,7 @@
   .diet-form {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .diet-form input:first-child {
+  .diet-form > :is(input:first-child, .ui-autocomplete) {
     grid-column: 1 / -1;
   }
   .diet-macros {

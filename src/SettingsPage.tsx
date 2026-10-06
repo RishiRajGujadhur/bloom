@@ -291,7 +291,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Use fewer animations throughout Bloom. This also helps slower phones and computers.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <Checkbox  checked={reducedMotion} onCheckedChange={(checked) => setReducedMotion(checked)} aria-label="Reduce motion" />
+          <Checkbox checked={reducedMotion} onCheckedChange={(checked) => setReducedMotion(checked)} aria-label="Reduce motion" />
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
@@ -302,7 +302,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={hamburger}
             onCheckedChange={(checked) => {
               setHamburger(checked)
@@ -320,7 +320,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={compact}
             onCheckedChange={(checked) => {
               setCompact(checked)
@@ -339,7 +339,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           </span>
           <span className={styles.switch} data-size="small">
             <Checkbox
-              
+
               defaultChecked={document.documentElement.hasAttribute(t.attr)}
               onCheckedChange={(checked) => {
                 try {
@@ -535,7 +535,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={contrast}
             onCheckedChange={(checked) => {
               setContrast(checked)
@@ -558,7 +558,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={dense}
             onCheckedChange={(checked) => {
               setDense(checked)
@@ -581,7 +581,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             defaultChecked={document.documentElement.hasAttribute('data-bloom-right')}
             onCheckedChange={(checked) => {
               try {
@@ -603,7 +603,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             defaultChecked={(() => {
               try {
                 return localStorage.getItem('bloom-private-notifications') === '1'
@@ -753,7 +753,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={followSys}
             onCheckedChange={(checked) => {
               setFollowSys(checked)
@@ -771,7 +771,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={banner}
             onCheckedChange={(checked) => {
               setBanner(checked)
@@ -789,7 +789,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         </span>
         <span className={styles.switch} data-size="small">
           <Checkbox
-            
+
             checked={pixel}
             onCheckedChange={(checked) => {
               setPixel(checked)
@@ -862,7 +862,7 @@ function OptionList({
                 </span>
                 <span className={styles.switch} data-size="small">
                   <Checkbox
-                    
+
                     checked={on && live}
                     disabled={!live}
                     onCheckedChange={() => setSub({ ...sub, [id]: !on })}
@@ -1103,7 +1103,7 @@ export function SettingsPage({
                 </span>
                 <span className={styles.switch}>
                   <Checkbox
-                    
+
                     checked={settings.features[key]}
                     onCheckedChange={() => handleToggleFeature(key)}
                     aria-label={t('settings.enableFeature', { title })}

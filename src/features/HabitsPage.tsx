@@ -813,7 +813,7 @@ export function HabitsPage({
                 {weekdays.map((day, i) => (
                   <label key={day}>
                     <Checkbox
-                      
+
                       checked={routine.days.includes(i)}
                       onCheckedChange={() =>
                         setRoutine({

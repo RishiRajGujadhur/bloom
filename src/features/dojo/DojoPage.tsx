@@ -168,7 +168,7 @@ export function DojoPage() {
         <button type="button" className="studio-chip" onClick={() => { setSearch(''); setKind('all'); save({ styles: start.styles }) }}>Clear technique filters</button>
         {on('seated') && (
           <label>
-            <Checkbox  checked={s.seated} onCheckedChange={(checked) => { setBodySeated(checked); save({ seated: checked }) }} /> Seated / wheelchair dojo
+            <Checkbox checked={s.seated} onCheckedChange={(checked) => { setBodySeated(checked); save({ seated: checked }) }} /> Seated / wheelchair dojo
           </label>
         )}
         {on('styleFilter') && (
@@ -221,12 +221,12 @@ export function DojoPage() {
         <button type="button" className="studio-btn" onClick={() => setCount(0)}>Reset</button>
         {on('southpaw') && (
           <label>
-            <Checkbox  checked={s.southpaw} onCheckedChange={(checked) => save({ southpaw: checked })} /> Southpaw / mirror
+            <Checkbox checked={s.southpaw} onCheckedChange={(checked) => save({ southpaw: checked })} /> Southpaw / mirror
           </label>
         )}
         {on('voice') && (
           <label>
-            <Checkbox  checked={s.voice} onCheckedChange={(checked) => save({ voice: checked })} /> Voice
+            <Checkbox checked={s.voice} onCheckedChange={(checked) => save({ voice: checked })} /> Voice
           </label>
         )}
       </div>

@@ -309,7 +309,7 @@ export function FocusPage({
                 ))}
             </DropdownSelect>
             <label className="strict-option">
-              <Checkbox  checked={awayOn} onCheckedChange={(checked) => { setAwayOn(checked); writeStore('bloom-focus-away', checked) }} />{' '}
+              <Checkbox checked={awayOn} onCheckedChange={(checked) => { setAwayOn(checked); writeStore('bloom-focus-away', checked) }} />{' '}
               Pause when I step away{' '}
               <small>
                 {osIdle ? 'Uses your computer’s idle and screen-lock state.' : 'Watches this page for activity.'}{' '}
@@ -318,7 +318,7 @@ export function FocusPage({
             </label>
             <label className="strict-option">
               <Checkbox
-                
+
                 checked={quest.strict}
                 onCheckedChange={(checked) => update({ strict: checked })}
               />{' '}

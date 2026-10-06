@@ -33,7 +33,7 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
           {data.habits.slice(0, 2).map((habit) => (
             <label key={habit.id}>
               <Checkbox
-                
+
                 checked={habit.dates.includes(today)}
                 onCheckedChange={() =>
                   setData((current) => toggleHabit(current, habit.id, today))
@@ -63,7 +63,7 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
           {pending.slice(0, 4).map((task) => (
             <label key={task.id}>
               <Checkbox
-                
+
                 checked={false}
                 onCheckedChange={() =>
                   setData((current) => ({
@@ -96,7 +96,7 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
             .map((plan) => (
               <label key={plan.id}>
                 <Checkbox
-                  
+
                   checked={false}
                   onCheckedChange={() =>
                     setData((current) => ({
