@@ -175,3 +175,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 169 | Improve small text readability in habitCalendar (.habit-calendar-view) | `src/features/habits/habitCalendar.css` |
 | 170 | Improve small text readability in impact (.impact-hint) | `src/features/impact/impact.css` |
 | 171 | Improve small text readability in ink (.ink-prompt) | `src/features/ink/ink.css` |
+| 172 | Improve small text readability in interval (.iv-weeks span) | `src/features/interval/interval.css` |
