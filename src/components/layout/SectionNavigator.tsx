@@ -11,9 +11,10 @@ type Navigation = {
   next: number
   canUp: boolean
   canDown: boolean
+  maximum: number
 }
 
-const empty: Navigation = { sections: [], previous: -1, next: -1, canUp: false, canDown: false }
+const empty: Navigation = { sections: [], previous: -1, next: -1, canUp: false, canDown: false, maximum: 0 }
 const topInset = () => {
   const bar = document.querySelector<HTMLElement>('.topbar')
   if (!bar) return 20
@@ -68,15 +69,18 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
       const next = ordered.findIndex(item => item.top > inset + 24)
       const previous = ordered.findLastIndex(item => item.top < inset - 24)
       const scroller = document.scrollingElement
-      const maximum = Math.max(0, (scroller?.scrollHeight ?? 0) - Math.max(scroller?.clientHeight ?? 0, window.innerHeight))
+      const meaningful = [...content.querySelectorAll<HTMLElement>('h2, h3, h4, p, button, input, textarea, select, canvas, img, svg, video, iframe, table, li, pre, [contenteditable="true"], [role="grid"]')]
+        .filter(node => node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden' && !node.closest('.widget-resize-handle, .widget-resize-edge, .widget-layout-tools, [hidden]'))
+      const contentEnd = Math.max(0, ...meaningful.map(node => node.getBoundingClientRect().bottom + window.scrollY))
+      const maximum = Math.max(0, Math.min(scroller?.scrollHeight ?? 0, contentEnd) - window.innerHeight)
       const scrollTop = scroller?.scrollTop ?? window.scrollY
       const canUp = scrollTop > 2
       const canDown = scrollTop < maximum - 2
       const sorted = ordered.map(item => item.section)
       setNavigation(current => {
         const sameSections = current.sections.length === sorted.length && current.sections.every((section, index) => section.node === sorted[index].node && section.label === sorted[index].label)
-        if (sameSections && current.previous === previous && current.next === next && current.canUp === canUp && current.canDown === canDown) return current
-        return { sections: sorted, previous, next, canUp, canDown }
+        if (sameSections && current.previous === previous && current.next === next && current.canUp === canUp && current.canDown === canDown && current.maximum === maximum) return current
+        return { sections: sorted, previous, next, canUp, canDown, maximum }
       })
     })
     update()
@@ -106,7 +110,7 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
     const top = section
       ? window.scrollY + section.node.getBoundingClientRect().top - topInset()
       : direction < 0 ? 0 : window.scrollY + window.innerHeight * 0.75
-    window.scrollTo({ top: Math.max(0, top), behavior: prefersReducedMotion() || document.documentElement.dataset.bloomMotion === 'paused' ? 'instant' : 'smooth' })
+    window.scrollTo({ top: Math.max(0, Math.min(navigation.maximum, top)), behavior: prefersReducedMotion() || document.documentElement.dataset.bloomMotion === 'paused' ? 'instant' : 'smooth' })
   }
   const move = (direction: number) => {
     // Re-read positions at activation, including clicks immediately after a menu jump.

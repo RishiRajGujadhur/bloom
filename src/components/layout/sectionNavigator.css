@@ -61,14 +61,13 @@ html, body { overflow-x: clip; }
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
-/* Leave the final section clear of the floating controls. */
-.app-shell .page-content { padding-bottom: max(110px, calc(env(safe-area-inset-bottom) + 92px)); }
+/* Floating navigation must not manufacture an empty scroll destination. */
+.app-shell .page-content { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 @media (max-width: 720px) {
   .section-navigator {
     bottom: calc(max(18px, env(safe-area-inset-bottom)) + 72px);
     width: min(360px, calc(100vw - 32px));
   }
-  .app-shell .page-content { padding-bottom: max(170px, calc(env(safe-area-inset-bottom) + 152px)); }
 }
 @media (prefers-reduced-motion: reduce) {
   .section-navigator button { transition: none; }
