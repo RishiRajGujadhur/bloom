@@ -71,7 +71,7 @@
   min-width: 44px;
 }
 .studio-tabs button[aria-selected='true'] {
-  color: #fff;
+  color: var(--studio-text, #fff);
 }
 .studio-tab-ink {
   position: absolute;
@@ -190,7 +190,7 @@
 .studio-chip[aria-pressed='true'] {
   background: var(--studio);
   border-color: var(--studio);
-  color: #fff;
+  color: var(--studio-text, #fff);
 }
 .studio-go {
   display: inline-flex;
@@ -202,7 +202,7 @@
   border: 0;
   border-radius: 99px;
   background: var(--studio);
-  color: #fff;
+  color: var(--studio-text, #fff);
   font: inherit;
   font-size: 16px;
   font-weight: 700;

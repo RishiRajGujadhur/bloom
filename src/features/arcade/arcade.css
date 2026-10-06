@@ -54,7 +54,7 @@
 .ar-filters input { flex: 1 1 200px; max-width: 280px; padding: 8px 14px; border-radius: 999px; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); background: transparent; color: inherit; }
 .ar-filters [role='radiogroup'] { display: flex; flex-wrap: wrap; gap: 6px; }
 .ar-filters button { border: 1px solid color-mix(in srgb, currentColor 22%, transparent); background: transparent; color: inherit; padding: 5px 12px; border-radius: 999px; cursor: pointer; font-size: 0.82rem; }
-.ar-filters button.on { background: var(--accent, #e76f51); color: #fff; border-color: transparent; }
+.ar-filters button.on { background: var(--accent-color); color: var(--text-on-accent); border-color: transparent; }
 .rr-host canvas { display: block; margin: 0 auto; height: min(72vh, 640px) !important; width: auto !important; aspect-ratio: 520 / 640; touch-action: none; }
 .gr-bubble { background: #fff; border: 2px solid #67e8f9; border-radius: 16px; padding: 8px 12px; font: 600 13px/1.3 system-ui, sans-serif; color: #164e63; text-align: center; box-shadow: 0 4px 12px #0001; }
 .gr-note { font: 12px/1.2 'Segoe Print', 'Comic Sans MS', cursive; color: #713f12; border-bottom: 1px dashed #eab308; padding: 2px 0; }
@@ -70,8 +70,8 @@
 .ar-card { content-visibility: auto; contain-intrinsic-size: auto 190px; }
 .ar-wrap { position: relative; content-visibility: auto; contain-intrinsic-size: auto 190px; }
 .ar-wrap .ar-card { width: 100%; height: 100%; content-visibility: visible; }
-.ar-fav { position: absolute; top: 8px; right: 10px; border: 0; background: none; cursor: pointer; font-size: 16px; color: #d4a017; opacity: 0.5; }
-.ar-fav[aria-pressed='true'], .ar-wrap:hover .ar-fav { opacity: 1; }
+.ar-fav { min-width: 28px; min-height: 28px; position: absolute; top: 8px; right: 10px; border: 0; background: none; cursor: pointer; font-size: 16px; color: #d4a017; opacity: 0.5; }
+.ar-fav[aria-pressed='true'], .ar-wrap:hover .ar-fav { min-width: 28px; min-height: 28px; opacity: 1; }
 .ar-recent .ar-recent-clear { border: 0; background: none; color: var(--text-muted); }
 .ar-shell:fullscreen { background: var(--bg-primary); padding: 16px; overflow: auto; display: flex; flex-direction: column; }
 .ar-shell:fullscreen .ar-stage { flex: 1; }

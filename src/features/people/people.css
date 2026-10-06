@@ -20,7 +20,7 @@
 .pg-card label { display: grid; gap: 4px; font-weight: 700; font-size: 0.9rem; }
 .pg-row { display: flex; gap: 6px; }
 .pg-emoji { width: 64px; }
-.pg-cta { border: 0; border-radius: 12px; padding: 9px 16px; background: #58cc02; color: #fff; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #3f8a02; }
+.pg-cta { border: 0; border-radius: 12px; padding: 9px 16px; background: #58cc02; color: #143200; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #3f8a02; }
 .pg-ghost { border: 1px solid var(--border-color); border-radius: 12px; padding: 7px 12px; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .pg-sugg { display: grid; text-align: left; border: 0; border-radius: 12px; padding: 8px 10px; background: color-mix(in srgb, #ffc800 12%, var(--bg-surface)); color: inherit; font: inherit; font-weight: 800; cursor: pointer; }
 .pg-sugg small { font-weight: 500; color: var(--text-secondary); }
@@ -29,7 +29,7 @@ html[data-theme='matrix'] .pg-garden-wrap { background: linear-gradient(180deg, 
 .pg-plant { transform: none !important; }
 .pg-view { display: inline-flex; border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; }
 .pg-view button { border: 0; background: transparent; padding: 7px 12px; font: 800 0.85rem 'Manrope', sans-serif; color: inherit; cursor: pointer; }
-.pg-view button.on { background: #58cc02; color: #fff; }
+.pg-view button.on { background: #58cc02; color: #143200; }
 .pg-city { display: flex; gap: 6px; align-items: end; }
 .pg-city label { flex: 1; }
 .pg-citymsg { color: var(--text-secondary); }

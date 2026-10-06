@@ -167,7 +167,7 @@ export function TaiChiPage() {
         </div>
 
         <div className="tc-ground">
-          <div className="tc-meter" aria-label={`Grounding ${Math.round(grounding * 100)}%`}>
+          <div className="tc-meter" role="meter" aria-label="Grounding" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(grounding * 100)}>
             <span style={{ height: `${Math.max(4, grounding * 100)}%` }} />
           </div>
           <div className="tc-ground-info bloom-stack">

@@ -229,7 +229,7 @@ export function TypingPage() {
           {li + 1 < lessons.length && <button type="button" className="ty-cta ghost" onClick={() => setLi(li + 1)}>Next lesson →</button>}
         </div>
       ) : (
-        <p className="ty-hint">Type the highlighted letter with your <strong style={{ color: fingerColors[finger[next] ?? 8] }}>{fingerNames[finger[next] ?? 8]}</strong>. Just start typing.</p>
+        <p className="ty-hint">Type the highlighted letter with your <strong>{fingerNames[finger[next] ?? 8]}</strong>. Just start typing.</p>
       )}
       <div className="ty-bottom">
         <Keyboard next={next} flash={flash} />

@@ -28,7 +28,7 @@
 @media (max-width: 900px) { .rd-foot { grid-template-columns: 1fr 1fr; } .rd-page { height: auto; } }
 .rd-speed { display: grid; gap: 4px; font-weight: 800; }
 .rd-speed input { accent-color: #8f7ae5; }
-.rd-cta { border: 0; border-radius: 14px; padding: 12px 22px; background: #8f7ae5; color: #fff; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #5b48b0; }
+.rd-cta { border: 0; border-radius: 14px; padding: 12px 22px; background: #8f7ae5; color: #160b36; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #5b48b0; }
 .rd-cta:disabled { opacity: 0.5; }
 .rd-progress { font: 700 0.9rem 'Fira Code', monospace; color: var(--text-muted); }
 .rd-chart { height: 70px; }

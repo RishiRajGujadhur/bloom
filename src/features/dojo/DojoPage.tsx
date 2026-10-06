@@ -96,7 +96,7 @@ function Belt({ reps }: { reps: number }) {
         <strong ref={label}>{belt.name} belt</strong>
         <small>{next ? `${next.at - reps} techniques to ${next.name}` : 'Black belt — keep the white-belt mind.'}</small>
       </p>
-      <div className="dojo-belt-bar" aria-label={`${Math.round(progress * 100)}% to next belt`}>
+      <div className="dojo-belt-bar" role="progressbar" aria-label="Progress to next belt" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
         <i style={{ width: `${progress * 100}%`, background: next?.color ?? belt.color }} />
       </div>
     </div>

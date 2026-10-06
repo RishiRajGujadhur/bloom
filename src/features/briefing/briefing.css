@@ -32,6 +32,6 @@
 .br-script li { padding: 6px 10px; border-radius: 10px; line-height: 1.5; color: var(--text-secondary); transition: background 0.3s, color 0.3s; }
 .br-script li.now { background: color-mix(in srgb, #ff8a3d 18%, transparent); color: var(--text-primary); font-weight: 700; }
 .br-script li.past { opacity: 0.6; }
-.br-seg { display: block; margin-top: 6px; font: 800 0.7rem 'Manrope', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: #ff8a3d; }
+.br-seg { display: block; margin-top: 6px; font: 800 0.7rem 'Manrope', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color); }
 @media (prefers-reduced-motion: reduce) { .br-onair.on { animation: none; } }
 html[data-theme='matrix'] .br-radio { background: #030a05; }

@@ -830,14 +830,13 @@ export function GratitudePage() {
           {gratStreak > 1 ? ` · 🔥 ${gratStreak}-day streak` : ''}
         </p>
       )}
-      <div className="wb-jar-shelf" role="tablist" aria-label="Your jars">
+      <div className="wb-jar-shelf" role="group" aria-label="Your jars">
         {jars.map((j) => {
           const count = entries.filter((e) => (e.jarId ?? 'moments') === j.id).length
           return (
             <button
               key={j.id}
-              role="tab"
-              aria-selected={j.id === jar.id}
+              aria-pressed={j.id === jar.id}
               className="wb-mini-jar"
               style={{ ['--jar' as string]: j.color, ['--fill' as string]: `${fill(count)}%` }}
               onClick={() => setJarId(j.id)}

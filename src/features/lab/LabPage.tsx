@@ -46,12 +46,14 @@ function Heatmap({ m, onPick, pick }: { m: ReturnType<typeof matrix>; onPick: (a
   }, [])
   return (
     <div className="lab-heat" ref={root} role="grid" aria-label="Correlation matrix" style={{ gridTemplateColumns: `110px repeat(${metrics.length}, minmax(0, 1fr))` }}>
-      <span />
+      <div role="row" style={{ display: 'contents' }}>
+      <span role="columnheader" aria-label="Metric" />
       {metrics.map((c) => (
         <span key={c.id} className="lab-col" role="columnheader">
           {c.label}
         </span>
       ))}
+      </div>
       {metrics.map((row, i) => (
         <div key={row.id} role="row" style={{ display: 'contents' }}>
           <span className="lab-row" role="rowheader">

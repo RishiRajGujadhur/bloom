@@ -91,7 +91,7 @@ export const THEMES: ThemeDefinition[] = [
     mode: 'light',
     bg: '#fbf6f1',
     surface: '#fffdfb',
-    accent: '#ad4e2c',
+    accent: '#9b4123',
   },
   {
     id: 'bloom-dark',

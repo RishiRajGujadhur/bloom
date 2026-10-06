@@ -75,7 +75,7 @@ export function LearningMap({ store, onStart, onPractice, onSpeak }: {
           <span>{unitThemes[unit.id]?.place ?? 'Your next chapter'}</span>
           <h3>{unit.title}</h3>
           <button type="button" className="en-map-play" aria-label={`Start ${unit.title} lesson ${progress < LESSONS_PER_UNIT ? progress + 1 : 1}`} onClick={() => onStart(selected)}><Play size={28} fill="currentColor" /></button>
-          <div className="en-map-progress" aria-label={`${progress} of ${LESSONS_PER_UNIT} lessons completed`}>{Array.from({ length: LESSONS_PER_UNIT }, (_, i) => <i key={i} className={i < progress ? 'done' : ''} />)}</div>
+          <div className="en-map-progress" role="progressbar" aria-label="Lessons completed" aria-valuemin={0} aria-valuemax={LESSONS_PER_UNIT} aria-valuenow={progress}>{Array.from({ length: LESSONS_PER_UNIT }, (_, i) => <i key={i} className={i < progress ? 'done' : ''} />)}</div>
         </div>
       </div>
       <label className="en-course-select">Explore your course<select className="studio-input" value={selected} onChange={(event) => { setSelected(Number(event.target.value)); setNotice('') }} aria-label="Choose a unit">{units.map((u, i) => <option key={u.id} value={i} disabled={!unitUnlocked(store, i)}>{i + 1}. {u.title}{!unitUnlocked(store, i) ? ' · Locked' : ''}</option>)}</select></label>

@@ -135,9 +135,9 @@ export function ShopPage({ onVisitWorld }: { onVisitWorld?: () => void }) {
           )}
         </div>
       </div>
-      <div className="filter-chips" role="tablist" aria-label="Shop category">
+      <div className="filter-chips" role="group" aria-label="Shop category">
         {kinds.map((k) => (
-          <button key={k.id} role="tab" aria-selected={kind === k.id} onClick={() => setKind(k.id)}>
+          <button key={k.id} aria-pressed={kind === k.id} onClick={() => setKind(k.id)}>
             {k.label}
           </button>
         ))}

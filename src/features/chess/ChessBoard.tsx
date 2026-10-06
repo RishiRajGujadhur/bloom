@@ -26,6 +26,7 @@ export function ChessBoard({ position, targets = [], selected, onSelect, onMove,
   const svg = useRef<SVGSVGElement>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const [dragging, setDragging] = useState<string | null>(null)
+  const [focusedSquare, setFocusedSquare] = useState('a1')
   const xy = (s: string) => {
     const [f, r] = fr(s)
     return flipped ? [(7 - f) * S, r * S] : [f * S, (7 - r) * S]
@@ -108,19 +109,31 @@ export function ChessBoard({ position, targets = [], selected, onSelect, onMove,
         <defs>
           <radialGradient id="cb-check"><stop offset="0" stopColor="#ff4b4b" /><stop offset="1" stopColor="#ff4b4b00" /></radialGradient>
         </defs>
-        {ranks.map((r) =>
+        {ranks.map((r) => <g role="row" key={r}>
+          {
           ranks.map((f) => {
             const s = sq(f, r)
             const [x, y] = xy(s)
             const dark = (f + r) % 2 === 0
             const isLast = lastMove && (lastMove.from === s || lastMove.to === s)
             return (
-              <g key={s} role="gridcell" aria-label={`${s}${position[s] ? ` ${position[s]}` : ''}`} onClick={() => click(s)}>
+              <g key={s} role="gridcell" data-square={s} tabIndex={focusedSquare === s ? 0 : -1} aria-label={`${s}${position[s] ? ` ${position[s]}` : ''}`} onFocus={() => setFocusedSquare(s)} onClick={() => click(s)} onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); click(s); return }
+                const steps: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }
+                const step = steps[event.key]
+                if (!step) return
+                event.preventDefault()
+                const direction = flipped ? -1 : 1
+                const file = Math.max(0, Math.min(7, f + step[0] * direction))
+                const rank = Math.max(0, Math.min(7, r + step[1] * direction))
+                svg.current?.querySelector<SVGGElement>(`[data-square="${sq(file, rank)}"]`)?.focus()
+              }}>
                 <rect x={x} y={y} width={S} height={S} className={`cb-sq ${dark ? 'dark' : 'light'} ${isLast ? 'last' : ''} ${selected === s ? 'sel' : ''}`} />
                 {check === s && <circle cx={x + S / 2} cy={y + S / 2} r={S * 0.55} fill="url(#cb-check)" />}
               </g>
             )
-          }),
+          })}
+          </g>
         )}
         {/* coordinates */}
         {ranks.map((i) => (

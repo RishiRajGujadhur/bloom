@@ -10,7 +10,7 @@
   gap: 4px;
 }
 .en-stat.flame { color: #ff9600; }
-.en-stat.gem { color: #1cb0f6; }
+.en-stat.gem { color: var(--accent-color); }
 .en-stat.heart { color: #ff4b4b; }
 .en-stat.xp { color: #ffc800; }
 

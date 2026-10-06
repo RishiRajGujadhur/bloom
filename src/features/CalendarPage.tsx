@@ -48,6 +48,20 @@ export function CalendarPage({ data, setData }: Props) {
   // Full screen: the browser Fullscreen API when available, otherwise a
   // fixed overlay. Esc (or the button) returns to the normal layout.
   const workspace = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const root = workspace.current
+    if (!root) return
+    const makeScrollable = () => root.querySelectorAll<HTMLElement>('.fc-scroller').forEach(scroller => {
+      scroller.tabIndex = 0
+      scroller.setAttribute('role', 'region')
+      scroller.setAttribute('aria-label', 'Calendar schedule')
+    })
+    // FullCalendar creates/replaces its scrollers after datesSet has fired.
+    const observer = new MutationObserver(makeScrollable)
+    observer.observe(root, { childList: true, subtree: true })
+    makeScrollable()
+    return () => observer.disconnect()
+  }, [])
   const [fullscreen, setFullscreen] = useState(false)
   useEffect(() => {
     const sync = () => {

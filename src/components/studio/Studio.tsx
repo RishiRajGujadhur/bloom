@@ -9,6 +9,7 @@ import './shared.css'
 import './galaxy.css'
 import { GalaxyGlyph } from './GalaxyGlyph'
 import { frameThrottle } from '../../utils/frameThrottle'
+import { textOnColor } from '../../utils/textContrast'
 
 /**
  * The shared page shell for Bloom's studios (exercise, sounds, meditation…):
@@ -103,7 +104,7 @@ export function Studio({
   }
 
   return (
-    <div className="studio" style={{ ['--studio' as string]: accent } as CSSProperties} data-studio={name}>
+    <div className="studio" style={{ '--studio': accent, '--studio-text': textOnColor(accent) } as CSSProperties} data-studio={name}>
       {scene && (
         <div className="studio-scene" aria-hidden="true">
           <StudioNameContext.Provider value={name}>{scene}</StudioNameContext.Provider>
@@ -278,7 +279,7 @@ export function Rail({ children, label }: { children: ReactNode; label: string }
       <div
         ref={track}
         className={`studio-rail${all ? ' is-all' : ''}`}
-        role="list"
+        role="group"
         aria-label={label}
         tabIndex={0}
         onKeyDown={(e) => {
