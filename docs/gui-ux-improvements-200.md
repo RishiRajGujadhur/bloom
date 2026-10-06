@@ -200,3 +200,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 194 | Improve small text readability in workspace (#todo-page .todo-heading .eyebrow) | `src/features/todos/workspace.css` |
 | 195 | Improve small text readability in voice (.voice-meta) | `src/features/voice/voice.css` |
 | 196 | Improve small text readability in wellbeing (.wb-week small) | `src/features/wellbeing/wellbeing.css` |
+| 197 | Improve small text readability in workout (.wo-history ul) | `src/features/workout/workout.css` |
