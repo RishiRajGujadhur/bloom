@@ -184,3 +184,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 178 | Improve small text readability in monk (.monk-foot) | `src/features/monk/monk.css` |
 | 179 | Improve small text readability in palace (.palace-hud .ov-secondary) | `src/features/palace/palace.css` |
 | 180 | Improve small text readability in shared menus (.app-shell .sidebar nav button.nav-group) | `src/styles/shared-ui.css` |
+| 181 | Improve small text readability in piano (.pn-midi) | `src/features/piano/piano.css` |
