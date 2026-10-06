@@ -1,0 +1,849 @@
+{
+  "date": "2026-10-06",
+  "baseURL": "http://localhost:5180",
+  "mode": "basic",
+  "profile": "desktop",
+  "results": [
+    {
+      "route": "collectibles",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "calendar",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "todos",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "challenges",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "focus",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "growth",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "overview",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "habits",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "journal",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "daybook",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "planning",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "settings",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "vision-board",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "urges",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "world",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "breathe",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mood",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "gratitude",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "sleep",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "shop",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "release",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "focus-room",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "explore",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "yearbook",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "palace",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "journey",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "places",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "posture",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "epiphanies",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "diet",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "monk",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "voice",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "energy",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "lab",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "taichi",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "arcade",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "code-city",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "briefing",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "readiness",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "people",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "decide",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "reader",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "cpr",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "globe",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "sign",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "tuner",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "piano",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "typing",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "sky",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "weeks",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "chess",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "code",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "joys",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "english",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "money",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "street",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "pointer",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "dojo",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "affirm",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "daylight",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "eyes",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "screen",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "routines",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "roadmap",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "games",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "cards",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mindmaps",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mirror",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "ink",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mala",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "breathwork",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "meditate",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mixer",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "sounds",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "fasting",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "scan",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "body",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "run",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "stretch",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "yoga",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "intervals",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "workouts",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "exercises",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    }
+  ],
+  "recheck": {
+    "date": "2026-10-06",
+    "baseURL": "http://127.0.0.1:5180",
+    "routes": [
+      "todos",
+      "overview",
+      "vision-board",
+      "mala"
+    ],
+    "reason": "Final production verification after shared resizing fixes"
+  }
+}

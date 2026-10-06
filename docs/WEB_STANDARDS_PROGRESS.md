@@ -38,7 +38,7 @@ Production JavaScript passed ES2023 parsing (636 files). The startup dependency 
 
 Basic mode retains essential workflows. Advanced reveals extra Studio workspaces, bulk habit controls/history/calendar, Growth rewards and skills, detailed wellbeing controls, feature configuration, marketplaces and maintenance. Preferences persist independently per page; existing Todo Pro preferences migrate to Advanced. Optional scenes and advanced sections do not mount in Basic mode.
 
-Pull requests run the standards workflow's four accessibility combinations, open-chat/keyboard/scaling/mode browser cases, ECMAScript parsing, startup budgets and Jest. Reports are retained as CI artifacts. The PR template also asks for manual keyboard, zoom/reflow, content-alternative and announcement review. Making these checks mandatory for merging still depends on repository branch-protection settings.
+Pull requests now run six accessibility combinations: desktop, mobile and 320px reflow, each in Basic and Advanced mode. Browser cases include chat, keyboard, scaling, page modes, direct widget resizing, saved drafts and inline Todo data sharing. ECMAScript parsing, startup budgets and Jest remain enforced. Reports are retained as CI artifacts. The PR template also asks for manual keyboard, zoom/reflow, content-alternative and announcement review. Making these checks mandatory for merging still depends on repository branch-protection settings.
 
 ## Standards and limits
 

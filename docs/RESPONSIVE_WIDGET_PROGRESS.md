@@ -10,7 +10,7 @@
 - [x] Existing home widgets use the same sizing system and paginate long collections.
 - [x] Home Todo widget supports adding and completing tasks against existing app data.
 - [x] Use feature here opens the existing full feature inside a widget on demand, with shared cross-document data synchronization.
-- [ ] Finish desktop/mobile layout and accessibility verification.
+- [x] Finish desktop/mobile layout and accessibility verification.
 
 Drag any section's edges or corners directly, like resizing a desktop window. No size menu or arrange mode is needed. The bottom corner is also keyboard accessible: arrow keys resize it, Shift uses smaller steps, and Home resets. **Arrange layout** exposes collapse and reset controls; **Customize widgets** also exposes home widget order and removal. Custom dimensions and collapse state persist locally per widget.
 
@@ -18,4 +18,14 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 
 ## Verification
 
-Pending final build, interaction tests, responsive route audits and automated WCAG checks. Automated accessibility checks do not certify full WCAG conformance.
+TypeScript, production build and focused lint passed. All 17 regression tests passed across the shared layout, page modes and Todo interactions. All 21 production browser cases passed at desktop, 390px mobile and 320px reflow widths, covering direct dragging, keyboard resizing, collapse/draft preservation, saved dimensions, focus view and inline full-feature Todo data sharing.
+
+Route audits cover 83 pages in each of desktop Basic, 320px Basic and 320px Advanced modes (249 checks). Shared fixes and initially delayed routes were rechecked against the final production build. Reports record those rechecks:
+
+- [Desktop Basic](widgets-desktop-basic.json)
+- [320px Basic](widgets-reflow-basic.json)
+- [320px Advanced](widgets-reflow-advanced.json)
+
+All reports contain zero runtime errors, automated WCAG violations, duplicate IDs, nested links/buttons or page horizontal overflow. CI now checks desktop/mobile/reflow in both modes and includes widget interaction tests. Automated accessibility checks do not certify full WCAG conformance.
+
+All 634 emitted JavaScript files passed ECMAScript 2023 syntax validation. Startup assets remain within the existing budgets: 2,545,340 JavaScript bytes and 371,795 CSS bytes. Multiple full features can stay open independently inside home widgets; full apps load only when requested.

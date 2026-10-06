@@ -1,26 +1,26 @@
 {
-  "jsBytes": 2535576,
-  "cssBytes": 362783,
+  "jsBytes": 2545340,
+  "cssBytes": 371795,
   "baselineJsBytes": 4550996,
   "baselineCssBytes": 582738,
-  "jsReductionPercent": 44.3,
-  "cssReductionPercent": 37.7,
+  "jsReductionPercent": 44.1,
+  "cssReductionPercent": 36.2,
   "budgets": {
     "jsBytes": 3145728,
     "cssBytes": 460800
   },
   "assets": [
     {
-      "file": "assets/index-KA6WHNXY.js",
-      "bytes": 1736135,
-      "gzip": 545598,
-      "brotli": 545580
+      "file": "assets/index-BD5ZS891.js",
+      "bytes": 1745899,
+      "gzip": 548837,
+      "brotli": 548389
     },
     {
-      "file": "assets/index-CWPkna8-.css",
-      "bytes": 336382,
-      "gzip": 62769,
-      "brotli": 65632
+      "file": "assets/index-DspDM1Ub.css",
+      "bytes": 345394,
+      "gzip": 64595,
+      "brotli": 67454
     },
     {
       "file": "assets/rolldown-runtime-C0FnF6B9.js",
