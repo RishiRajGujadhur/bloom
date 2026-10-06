@@ -15,7 +15,7 @@
 .rl-lane-fill { fill: #4ade80; transition: width 0.2s linear; }
 .rl-lane-fill.on { filter: drop-shadow(0 0 6px #4ade80); }
 .rl-drop { display: grid; place-items: center; min-height: 160px; padding: 20px; border: 2px dashed #ffffff30; border-radius: 18px; color: #9fb4c9; font-weight: 700; text-align: center; }
-.rl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; position: relative; z-index: 1; }
+.rl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; position: relative; z-index: 1; }
 .rl-card { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 18px; background: #ffffff08; border: 1px solid #ffffff1a; }
 .rl-card.added { border-color: #4ade8066; }
 .rl-img { position: relative; align-self: start; border-radius: 10px; overflow: hidden; background: #fff; }
