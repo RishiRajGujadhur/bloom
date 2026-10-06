@@ -619,7 +619,7 @@ html[data-compact-sidebar='true'] .app-shell .sidebar nav button {
 }
 .filter-chips button {
   position: relative;
-  min-height: 38px;
+  min-height: 44px;
   padding: 7px 16px;
   border-radius: 999px;
   border: 1px solid var(--border-color);
@@ -636,6 +636,7 @@ html[data-compact-sidebar='true'] .app-shell .sidebar nav button {
     color 180ms ease,
     border-color 180ms ease,
     box-shadow 180ms ease;
+  min-width: 44px;
 }
 .filter-chips button::before {
   content: '';
