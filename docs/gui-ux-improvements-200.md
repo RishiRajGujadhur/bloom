@@ -95,3 +95,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 89 | Enlarge controls to a 44px touch target in collectibles (.collectible-card > button) | `src/features/collectibles/collectibles.css` |
 | 90 | Enlarge controls to a 44px touch target in diet (.diet-kinds button, .diet-feel button, .diet-library button) | `src/features/diet/diet.css` |
 | 91 | Enlarge controls to a 44px touch target in diet (.diet-tabs button) | `src/features/diet/diet.css` |
+| 92 | Enlarge controls to a 44px touch target in diet (.rb-servings button) | `src/features/diet/diet.css` |

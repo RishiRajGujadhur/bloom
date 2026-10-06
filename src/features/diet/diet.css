@@ -678,13 +678,15 @@
 .rb-servings button {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
   background: var(--bg-surface);
   color: var(--text-primary);
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 .rb-toggle {
   display: inline-flex;
