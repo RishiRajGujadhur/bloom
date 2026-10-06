@@ -157,7 +157,8 @@
   padding: 12px;
 }
 #todo-page .overdue-bar button {
-  min-height: 36px;
+  min-height: 44px;
+  min-width: 44px;
 }
 #todo-page .todo-undo {
   position: sticky;
