@@ -2247,7 +2247,7 @@ html[data-mode='dark'] .focus-editor input {
 .pending-media,
 .journal-media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
   gap: 10px;
 }
 .pending-media > div {
