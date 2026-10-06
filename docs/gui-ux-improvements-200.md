@@ -195,3 +195,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 189 | Improve small text readability in scan (.sc-grade small) | `src/features/scan/scan.css` |
 | 190 | Improve small text readability in showcase (.dd-hour) | `src/features/showcase/showcase.css` |
 | 191 | Improve small text readability in sleep (.sleep-stat small) | `src/features/sleep/sleep.css` |
+| 192 | Improve small text readability in taichi (.tc-privacy) | `src/features/taichi/taichi.css` |
