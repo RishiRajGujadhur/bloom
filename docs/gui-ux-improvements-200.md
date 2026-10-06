@@ -13,3 +13,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 7 | Make native select text follow the chosen app font | `src/index.css` |
 | 8 | Communicate disabled form controls consistently | `src/index.css` |
 | 9 | Connect native choice controls to the selected accent theme | `src/index.css` |
+| 10 | Expose keyboard focus on expandable sections | `src/index.css` |

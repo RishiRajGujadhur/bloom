@@ -299,3 +299,6 @@ select:disabled, input:disabled, textarea:disabled { cursor: not-allowed; opacit
 
 /* UX 009: Connect native choice controls to the selected accent theme. */
 input[type="checkbox"], input[type="radio"] { accent-color: var(--accent-color); }
+
+/* UX 010: Expose keyboard focus on expandable sections. */
+summary:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 4px; border-radius: 4px; }
