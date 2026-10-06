@@ -146,3 +146,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 140 | Improve small text readability in guide (.bloom-guide .driver-popover-progress-text) | `src/components/layout/guide.css` |
 | 141 | Improve small text readability in navContext (.nav-recent::before) | `src/components/layout/navContext.css` |
 | 142 | Improve small text readability in Sidebar.module (.collapseToggle) | `src/components/layout/Sidebar.module.css` |
+| 143 | Improve small text readability in writingAssist (.offline-pill) | `src/components/layout/writingAssist.css` |
