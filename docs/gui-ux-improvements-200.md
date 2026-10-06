@@ -21,3 +21,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 15 | Let semantic-search status and its action wrap cleanly | `src/components/ui/ui.css` |
 | 16 | Wrap long unbroken journal content in search previews | `src/components/ui/ui.css` |
 | 17 | Fit dialogs inside the visible viewport, including mobile keyboards | `src/App.css` |
+| 18 | Keep long dialogs scrollable without scrolling the background | `src/App.css` |

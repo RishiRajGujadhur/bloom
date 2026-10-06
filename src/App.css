@@ -2701,3 +2701,6 @@ html[data-nav='hamburger'] .topbar-tools {
 
 /* UX 017: Fit dialogs inside the visible viewport, including mobile keyboards. */
 .modal { max-width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); }
+
+/* UX 018: Keep long dialogs scrollable without scrolling the background. */
+.modal { overflow-y: auto; overscroll-behavior: contain; }
