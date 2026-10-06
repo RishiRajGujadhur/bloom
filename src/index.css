@@ -275,3 +275,6 @@ pre:hover > .pre-copy, .pre-copy:focus-visible { opacity: 1; }
 
 /* UX 001: Make the skip-navigation link legible in light and dark themes. */
 .skip-link { background: var(--bg-surface); color: var(--text-primary); border: 2px solid var(--focus-ring); }
+
+/* UX 002: Give all native form fields a visible keyboard focus ring. */
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
