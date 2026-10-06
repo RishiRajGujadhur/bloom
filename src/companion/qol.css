@@ -1,5 +1,5 @@
 /* Focused chat accessibility and responsive refinements. */
-.bc-panel .companion-message p, .bc-panel .cs-message__content { font-size: 16px; }
+.bc-panel .companion-message p, .bc-panel .cs-message__content { font-size: 0.875rem; }
 
 .bc-panel .companion-message p, .bc-panel .cs-message__content { line-height: 1.65; }
 
@@ -11,23 +11,23 @@
 
 .bc-panel .companion-message.assistant { align-self: flex-start; }
 
-.bc-panel .companion-message small { font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.bc-panel .companion-message small { font-size: 0.875rem; display: flex; align-items: center; gap: 8px; }
 
 .bc-panel .companion-message p + p { margin-block-start: 1em; }
 
-.bc-panel .companion-welcome { font-size: 16px; line-height: 1.65; }
+.bc-panel .companion-welcome { font-size: 0.875rem; line-height: 1.65; }
 
-.bc-panel .chat-scope { font-size: 14px; line-height: 1.5; color: var(--text-secondary); margin: 0; }
+.bc-panel .chat-scope { font-size: 0.875rem; line-height: 1.5; color: var(--text-secondary); margin: 0; }
 
-.bc-panel .chat-search-status { font-size: 14px; line-height: 1.5; padding: 8px 12px; border-inline-start: 3px solid var(--accent-color); margin: 0; }
+.bc-panel .chat-search-status { font-size: 0.875rem; line-height: 1.5; padding: 8px 12px; border-inline-start: 3px solid var(--accent-color); margin: 0; }
 
-.bc-panel .choice-slider-items button { font-size: 14px; line-height: 1.4; }
+.bc-panel .choice-slider-items button { font-size: 0.875rem; line-height: 1.4; }
 
 .choice-slider-items button { min-height: 48px; }
 
 .choice-slider-control input[type="range"] { min-height: 48px; margin: 0; cursor: pointer; }
 
-.choice-slider-control { font-size: 14px; line-height: 1.5; }
+.choice-slider-control { font-size: 0.875rem; line-height: 1.5; }
 
 .choice-slider input:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; border-radius: 8px; }
 
@@ -35,7 +35,7 @@
 
 .choice-slider-items { align-items: stretch; }
 
-.choice-slider-items small { display: block; font-size: max(14px, 1rem); font-weight: 400; margin-block-start: 4px; }
+.choice-slider-items small { display: block; font-size: 0.8125rem; font-weight: 400; margin-block-start: 4px; }
 
 .bc-panel .choice-slider-items .bg-chip:hover:not(:disabled) { transform: none; border-color: var(--accent-color); }
 
@@ -51,11 +51,11 @@
 
 .bloom-companion-launch:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 4px; }
 
-.bloom-companion-launch { min-height: 56px; font-size: 14px; }
+.bloom-companion-launch { min-height: 56px; font-size: 0.875rem; }
 
-.bc-panel .bg-guide-search input { font-size: 16px; min-height: 48px; }
+.bc-panel .bg-guide-search input { font-size: 1rem; min-height: 48px; }
 
-.bc-panel .companion-composer input { font-size: 16px; min-height: 48px; }
+.bc-panel .companion-composer input { font-size: 1rem; min-height: 48px; }
 
 .bc-panel .companion-composer button { min-width: 48px; min-height: 48px; }
 
@@ -69,15 +69,15 @@
 
 .bc-panel .companion-composer input::placeholder { color: var(--text-secondary); opacity: 1; }
 
-.bc-panel .companion-notice { border-inline-start: 3px solid var(--accent-color); font-size: 14px; line-height: 1.6; display: flex; align-items: start; gap: 8px; }
+.bc-panel .companion-notice { border-inline-start: 3px solid var(--accent-color); font-size: 0.875rem; line-height: 1.6; display: flex; align-items: start; gap: 8px; }
 
 .chat-dismiss { min-width: 48px; min-height: 48px; margin-inline-start: auto; background: transparent; border: 1px solid var(--border-color); color: inherit; border-radius: 10px; font-size: 20px; }
 
-.chat-offline { flex-shrink: 0; margin: 0; padding: 10px; font-size: 14px; line-height: 1.5; border: 1px dashed var(--border-strong); border-radius: 10px; }
+.chat-offline { flex-shrink: 0; margin: 0; padding: 10px; font-size: 0.875rem; line-height: 1.5; border: 1px dashed var(--border-strong); border-radius: 10px; }
 
-.bc-panel .companion-ai-options p { font-size: 14px; line-height: 1.6; }
+.bc-panel .companion-ai-options p { font-size: 0.875rem; line-height: 1.6; }
 
-.bc-panel .companion-ai-options summary { min-height: 48px; font-size: 14px; }
+.bc-panel .companion-ai-options summary { min-height: 48px; font-size: 0.875rem; }
 
 .companion-ai-options[open] { background: var(--bg-primary); }
 
@@ -85,25 +85,25 @@
 
 .bloom-companion progress { display: block; width: 100%; accent-color: var(--accent-color); }
 
-.bc-panel .companion-plan-controls label { font-size: 14px; }
+.bc-panel .companion-plan-controls label { font-size: 0.875rem; }
 
-.bc-panel .companion-plan-controls select { font-size: 16px; min-height: 48px; }
+.bc-panel .companion-plan-controls select { font-size: 1rem; min-height: 48px; }
 
 .companion-plan-controls label { min-width: min(100%, 150px); }
 
-.bc-panel .companion-plan li { font-size: 16px; line-height: 1.5; }
+.bc-panel .companion-plan li { font-size: 0.875rem; line-height: 1.5; }
 
-.bc-panel .companion-plan li strong { font-size: 14px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.bc-panel .companion-plan li strong { font-size: 0.875rem; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
-.bc-panel .companion-plan-note { font-size: 14px; line-height: 1.6; }
+.bc-panel .companion-plan-note { font-size: 0.875rem; line-height: 1.6; }
 
 .companion-plan-actions button { min-height: 48px; white-space: normal; }
 
 .companion-plan > .text-button { min-height: 48px; text-align: start; }
 
-.companion-plan [role="status"] { border-inline-start: 3px solid var(--accent-color); padding-inline-start: 10px; font-size: 14px; }
+.companion-plan [role="status"] { border-inline-start: 3px solid var(--accent-color); padding-inline-start: 10px; font-size: 0.875rem; }
 
-.chat-tools { border-block-start: 1px solid var(--border-color); padding-block-start: 6px; font-size: 14px; }
+.chat-tools { border-block-start: 1px solid var(--border-color); padding-block-start: 6px; font-size: 0.875rem; }
 
 .chat-tools summary { cursor: pointer; min-height: 48px; display: list-item; align-content: center; }
 
@@ -111,7 +111,7 @@
 
 .bc-panel .companion-copy { min-width: 48px; min-height: 48px; padding: 8px; font-size: 18px; border-radius: 8px; }
 
-.bc-panel .companion-clear { min-height: 48px; font-size: 14px; padding: 8px 12px; }
+.bc-panel .companion-clear { min-height: 48px; font-size: 0.875rem; padding: 8px 12px; }
 
 .bc-panel > .bloom-companion { overscroll-behavior-y: contain; scrollbar-gutter: stable; padding-inline-end: 4px; }
 
@@ -154,3 +154,9 @@ html[data-reduce-motion='true'] .bc-panel *::after {
   animation-duration: .01ms !important; animation-iteration-count: 1 !important;
   transition-duration: .01ms !important; scroll-behavior: auto !important;
 }
+
+/* Keep chat compact while respecting the user's root text size. */
+.bc-panel { font-size: 0.875rem; }
+.bc-panel:not(.uses-app-theme) .companion-identity strong { font-size: 1.125rem; }
+.bc-panel .bc-head h3 { font-size: 1rem; }
+html[data-theme='matrix'] .bc-panel .cs-message__content { font-size: 0.875rem; font-family: var(--font-body, system-ui, sans-serif); }
