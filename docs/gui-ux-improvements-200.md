@@ -14,3 +14,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 8 | Communicate disabled form controls consistently | `src/index.css` |
 | 9 | Connect native choice controls to the selected accent theme | `src/index.css` |
 | 10 | Expose keyboard focus on expandable sections | `src/index.css` |
+| 11 | Prevent scrolling a menu from moving the page underneath | `src/components/ui/ui.css` |
