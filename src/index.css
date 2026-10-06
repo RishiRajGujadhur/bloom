@@ -296,3 +296,6 @@ select { font: inherit; color: var(--text-primary); }
 
 /* UX 008: Communicate disabled form controls consistently. */
 select:disabled, input:disabled, textarea:disabled { cursor: not-allowed; opacity: 0.65; }
+
+/* UX 009: Connect native choice controls to the selected accent theme. */
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent-color); }
