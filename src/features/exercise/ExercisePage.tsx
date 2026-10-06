@@ -41,7 +41,12 @@ import {
   type Muscle,
 } from './exercises'
 import './exercise.css'
-import { areaNames, filterLibrary, library as allMoves, positionNames } from './moves'
+import {
+  areaNames,
+  filterLibrary,
+  library as allMoves,
+  positionNames,
+} from './moves'
 import { Programs } from './Programs'
 import type { Area, Position } from './exercises'
 
@@ -66,11 +71,16 @@ const defaults: Prefs = {
 
 const on = (id: string) => subOn('exerciseGuides', id)
 const FILTER_KEY = 'bloom-exercise-filters-v1'
-function savedFilter<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
+function savedFilter<T extends string>(
+  key: string,
+  allowed: readonly T[],
+  fallback: T,
+): T {
   const saved = readStore<Record<string, unknown>>(FILTER_KEY, {})[key]
-  return typeof saved === 'string' && allowed.includes(saved as T) ? saved as T : fallback
+  return typeof saved === 'string' && allowed.includes(saved as T)
+    ? (saved as T)
+    : fallback
 }
-
 
 function click(high: boolean) {
   if (bodySilent()) return
@@ -146,13 +156,33 @@ export function ExercisePage() {
       return next
     })
   const seatedMode = useBodySeated()
-  const [search, setSearch] = useState(() => { const saved = readStore<Record<string, unknown>>(FILTER_KEY, {}).search; return typeof saved === 'string' ? saved.slice(0, 100) : '' })
-  const [area, setArea] = useState<Area | 'all'>(() => savedFilter('area', ['all', ...Object.keys(areaNames)] as (Area | 'all')[], 'all'))
-  const [position, setPosition] = useState<Position | 'all'>(() => savedFilter('position', ['all', ...Object.keys(positionNames)] as (Position | 'all')[], 'all'))
-  const everything = on('moreMoves') ? allMoves : [...exercises, ...seatedExercises]
+  const [search, setSearch] = useState(() => {
+    const saved = readStore<Record<string, unknown>>(FILTER_KEY, {}).search
+    return typeof saved === 'string' ? saved.slice(0, 100) : ''
+  })
+  const [area, setArea] = useState<Area | 'all'>(() =>
+    savedFilter(
+      'area',
+      ['all', ...Object.keys(areaNames)] as (Area | 'all')[],
+      'all',
+    ),
+  )
+  const [position, setPosition] = useState<Position | 'all'>(() =>
+    savedFilter(
+      'position',
+      ['all', ...Object.keys(positionNames)] as (Position | 'all')[],
+      'all',
+    ),
+  )
+  const everything = on('moreMoves')
+    ? allMoves
+    : [...exercises, ...seatedExercises]
   const available = filterLibrary(
     prefs.wheelchair ? everything.filter((e) => e.wheelchair) : everything,
-    { area: on('areaFilter') ? area : 'all', position: on('positionFilter') && !prefs.wheelchair ? position : 'all' },
+    {
+      area: on('areaFilter') ? area : 'all',
+      position: on('positionFilter') && !prefs.wheelchair ? position : 'all',
+    },
   )
   const [tab, setTab] = useState('library')
   const [pick, setPickState] = useState<Exercise>(() => {
@@ -160,26 +190,52 @@ export function ExercisePage() {
       const id = localStorage.getItem('bloom-exercise-pick')
       const found = everything.find((e) => e.id === id)
       if (found && (!prefs.wheelchair || found.wheelchair)) return found
-    } catch { /* optional */ }
+    } catch {
+      /* optional */
+    }
     return prefs.wheelchair ? seatedExercises[0] : exercises[0]
   })
   const setPick = (e: Exercise) => {
     setPickState(e)
-    try { localStorage.setItem('bloom-exercise-pick', e.id) } catch { /* optional */ }
+    try {
+      localStorage.setItem('bloom-exercise-pick', e.id)
+    } catch {
+      /* optional */
+    }
   }
   useEffect(() => {
     if (!!prefs.wheelchair === seatedMode) return
-    setPrefs({ wheelchair: seatedMode }); setPlaying(false); setCount(0)
+    setPrefs({ wheelchair: seatedMode })
+    setPlaying(false)
+    setCount(0)
     if (seatedMode && !pick.wheelchair) setPick(seatedExercises[0])
     // eslint-disable-next-line react-hooks/exhaustive-deps -- shared preference changes
   }, [seatedMode])
-  const [muscle, setMuscle] = useState<Muscle | 'all'>(() => savedFilter('muscle', ['all', ...Object.keys(muscleNames)] as (Muscle | 'all')[], 'all'))
+  const [muscle, setMuscle] = useState<Muscle | 'all'>(() =>
+    savedFilter(
+      'muscle',
+      ['all', ...Object.keys(muscleNames)] as (Muscle | 'all')[],
+      'all',
+    ),
+  )
   const [equipment, setEquipment] = useState<Exercise['equipment'] | 'all'>(
     () => savedFilter('equipment', ['all', 'none', 'dumbbells', 'wall'], 'all'),
   )
   const [level, setLevel] = useState<Exercise['level'] | 'all'>('all')
-  const [favOnly, setFavOnly] = useState(() => readStore<Record<string, unknown>>(FILTER_KEY, {}).favOnly === true)
-  useEffect(() => { writeStore(FILTER_KEY, { search, area, position, muscle, equipment, level, favOnly }) }, [search, area, position, muscle, equipment, level, favOnly])
+  const [favOnly, setFavOnly] = useState(
+    () => readStore<Record<string, unknown>>(FILTER_KEY, {}).favOnly === true,
+  )
+  useEffect(() => {
+    writeStore(FILTER_KEY, {
+      search,
+      area,
+      position,
+      muscle,
+      equipment,
+      level,
+      favOnly,
+    })
+  }, [search, area, position, muscle, equipment, level, favOnly])
   const [playing, setPlaying] = useState(false)
   const [count, setCount] = useState(0)
   const [phase, setPhase] = useState<'down' | 'up'>('down')
@@ -198,10 +254,29 @@ export function ExercisePage() {
         .search(search)
         .map((r) => r.item)
     : filtered
+  // Filtering covers the full library; only a bounded card window is mounted.
+  const windowKey = JSON.stringify(list.map((e) => e.id))
+  const [libraryWindow, setLibraryWindow] = useState({ key: '', page: 0 })
+  const libraryPage = libraryWindow.key === windowKey ? libraryWindow.page : 0
+  const pageSize = 12
+  const visibleExercises = list.slice(
+    libraryPage * pageSize,
+    (libraryPage + 1) * pageSize,
+  )
   useBodyPractice('exercises', pick.id, pick.name, () => setPlaying(false))
   const speed = on('slowMo') ? prefs.speed : 1
-  useEffect(() => { return () => window.speechSynthesis?.cancel() }, [playing, pick.id])
-  const resetFilters = () => { setSearch(''); setArea('all'); setPosition('all'); setMuscle('all'); setEquipment('all'); setLevel('all'); setFavOnly(false) }
+  useEffect(() => {
+    return () => window.speechSynthesis?.cancel()
+  }, [playing, pick.id])
+  const resetFilters = () => {
+    setSearch('')
+    setArea('all')
+    setPosition('all')
+    setMuscle('all')
+    setEquipment('all')
+    setLevel('all')
+    setFavOnly(false)
+  }
 
   // Holds count seconds; reps come from the animation loop.
   useEffect(() => {
@@ -249,13 +324,26 @@ export function ExercisePage() {
         : [...prefs.favourites, id],
     })
   const muscles = Object.keys(muscleNames) as Muscle[]
-  useTabTitle(playing ? `💪 ${pick.name} ${count}/${prefs.target}${pick.hold ? 's' : ''}` : '', 'Exercises', 'exercises')
+  useTabTitle(
+    playing
+      ? `💪 ${pick.name} ${count}/${prefs.target}${pick.hold ? 's' : ''}`
+      : '',
+    'Exercises',
+    'exercises',
+  )
   // Space starts or stops the coach.
   const tabRef = useRef(tab)
   tabRef.current = tab
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.code !== 'Space' || tabRef.current !== 'coach' || (e.target as HTMLElement | null)?.closest?.('input, textarea, button, select')) return
+      if (
+        e.code !== 'Space' ||
+        tabRef.current !== 'coach' ||
+        (e.target as HTMLElement | null)?.closest?.(
+          'input, textarea, button, select',
+        )
+      )
+        return
       e.preventDefault()
       setPlaying((p) => !p)
     }
@@ -276,7 +364,19 @@ export function ExercisePage() {
             placeholder="Try seated, elbow, or shoulder"
           />
         </label>
-        <div className="studio-chip-row"><button type="button" className="studio-chip" disabled={!search} onClick={() => setSearch('')}>Clear search</button><button type="button" className="studio-chip" onClick={resetFilters}>Reset filters</button></div>
+        <div className="studio-chip-row">
+          <button
+            type="button"
+            className="studio-chip"
+            disabled={!search}
+            onClick={() => setSearch('')}
+          >
+            Clear search
+          </button>
+          <button type="button" className="studio-chip" onClick={resetFilters}>
+            Reset filters
+          </button>
+        </div>
         {on('wheelchair') && (
           <label>
             <input
@@ -311,12 +411,24 @@ export function ExercisePage() {
       {(on('areaFilter') || on('positionFilter')) && (
         <div className="ex-filters">
           {on('areaFilter') && (
-            <div className="studio-chip-row" role="group" aria-label="Body area">
-              {(['all', ...Object.keys(areaNames)] as (Area | 'all')[]).map((a) => (
-                <button key={a} type="button" className="studio-chip" aria-pressed={area === a} onClick={() => setArea(a)}>
-                  {a === 'all' ? 'Whole body' : areaNames[a]}
-                </button>
-              ))}
+            <div
+              className="studio-chip-row"
+              role="group"
+              aria-label="Body area"
+            >
+              {(['all', ...Object.keys(areaNames)] as (Area | 'all')[]).map(
+                (a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    className="studio-chip"
+                    aria-pressed={area === a}
+                    onClick={() => setArea(a)}
+                  >
+                    {a === 'all' ? 'Whole body' : areaNames[a]}
+                  </button>
+                ),
+              )}
             </div>
           )}
           {on('positionFilter') && !prefs.wheelchair && (
@@ -324,7 +436,13 @@ export function ExercisePage() {
               label="Position"
               value={position}
               onChange={setPosition}
-              options={[{ id: 'all', label: 'Any position' }, ...(Object.keys(positionNames) as Position[]).map((id) => ({ id, label: positionNames[id] }))]}
+              options={[
+                { id: 'all', label: 'Any position' },
+                ...(Object.keys(positionNames) as Position[]).map((id) => ({
+                  id,
+                  label: positionNames[id],
+                })),
+              ]}
             />
           )}
         </div>
@@ -379,49 +497,89 @@ export function ExercisePage() {
           </div>
         </div>
       )}
-      <p className="studio-empty" role="status">{list.length} matching {list.length === 1 ? 'movement' : 'movements'}{prefs.wheelchair ? ' · seated only' : ''}</p>
+      <p className="studio-empty" role="status">
+        {list.length} matching {list.length === 1 ? 'movement' : 'movements'}
+        {prefs.wheelchair ? ' · seated only' : ''}
+      </p>
       {list.length ? (
-        <Rail label="Exercises">
-          {list.map((e) => (
-            <article
-              key={e.id}
-              className="ex-card"
-              role="listitem"
-              data-on={pick.id === e.id}
-            >
-              <button
-                type="button"
-                className="ex-card-main"
-                onClick={() => choose(e)}
-                aria-label={`Open ${e.name}`}
+        <>
+          <Rail label="Exercises">
+            {visibleExercises.map((e) => (
+              <article
+                key={e.id}
+                className="ex-card"
+                role="listitem"
+                data-on={pick.id === e.id}
               >
-                <ExerciseFigure
-                  exercise={e}
-                  playing={false}
-                  animate={false}
-                  small
-                />
-                <strong>{e.name}</strong>
-                <small>
-                  {e.level} · {e.primary.map((m) => muscleNames[m]).join(', ')}
-                </small>
-              </button>
-              {on('favourites') && (
                 <button
                   type="button"
-                  className="ex-fav"
-                  aria-pressed={prefs.favourites.includes(e.id)}
-                  aria-label={`Favourite ${e.name}`}
-                  onClick={() => fav(e.id)}
+                  className="ex-card-main"
+                  onClick={() => choose(e)}
+                  aria-label={`Open ${e.name}`}
                 >
-                  <Star size={15} />
+                  <ExerciseFigure
+                    exercise={e}
+                    playing={false}
+                    animate={false}
+                    small
+                  />
+                  <strong>{e.name}</strong>
+                  <small>
+                    {e.level} ·{' '}
+                    {e.primary.map((m) => muscleNames[m]).join(', ')}
+                  </small>
                 </button>
-              )}
-            </article>
-          ))}
-        </Rail>
+                {on('favourites') && (
+                  <button
+                    type="button"
+                    className="ex-fav"
+                    aria-pressed={prefs.favourites.includes(e.id)}
+                    aria-label={`Favourite ${e.name}`}
+                    onClick={() => fav(e.id)}
+                  >
+                    <Star size={15} />
+                  </button>
+                )}
+              </article>
+            ))}
+          </Rail>
+          {list.length > pageSize && (
+            <nav className="studio-toolbar" aria-label="Exercise library pages">
+              <button
+                type="button"
+                className="studio-chip"
+                disabled={libraryPage === 0}
+                onClick={() =>
+                  setLibraryWindow({ key: windowKey, page: libraryPage - 1 })
+                }
+              >
+                Previous movements
+              </button>
+              <span role="status">
+                {libraryPage * pageSize + 1}–
+                {Math.min((libraryPage + 1) * pageSize, list.length)} of{' '}
+                {list.length}
+              </span>
+              <button
+                type="button"
+                className="studio-chip"
+                disabled={(libraryPage + 1) * pageSize >= list.length}
+                onClick={() =>
+                  setLibraryWindow({ key: windowKey, page: libraryPage + 1 })
+                }
+              >
+                Next movements
+              </button>
+            </nav>
+          )}
+        </>
       ) : (
-        <div className="studio-empty"><p>No movements match these filters.</p><button type="button" className="studio-chip" onClick={resetFilters}>Show all {prefs.wheelchair ? 'seated ' : ''}movements</button></div>
+        <div className="studio-empty">
+          <p>No movements match these filters.</p>
+          <button type="button" className="studio-chip" onClick={resetFilters}>
+            Show all {prefs.wheelchair ? 'seated ' : ''}movements
+          </button>
+        </div>
       )}
     </div>
   )
@@ -483,7 +641,10 @@ export function ExercisePage() {
         </div>
       </div>
       <div className="studio-card ex-panel">
-        <p className="studio-empty" role="note">Animated guide · counts follow the demonstration, not your body. Use Camera pose coach for measured movement tracking.</p>
+        <p className="studio-empty" role="note">
+          Animated guide · counts follow the demonstration, not your body. Use
+          Camera pose coach for measured movement tracking.
+        </p>
         <h3>
           <span aria-hidden="true">{pick.emoji}</span> {pick.name}
         </h3>
@@ -528,7 +689,26 @@ export function ExercisePage() {
           unit={pick.hold ? 's' : ''}
           onChange={(v) => setPrefs({ target: v })}
         />
-        <label className="body-exact-field">{pick.hold ? 'Exact hold seconds' : 'Exact target reps'}<input type="number" aria-label={pick.hold ? 'Exact hold seconds' : 'Exact target reps'} min={pick.hold ? 10 : 3} max={pick.hold ? 120 : 30} step="1" value={prefs.target} onChange={event => { const value = Number(event.target.value); if (Number.isFinite(value) && value >= (pick.hold ? 10 : 3) && value <= (pick.hold ? 120 : 30)) setPrefs({ target: Math.round(value) }) }} /></label>
+        <label className="body-exact-field">
+          {pick.hold ? 'Exact hold seconds' : 'Exact target reps'}
+          <input
+            type="number"
+            aria-label={pick.hold ? 'Exact hold seconds' : 'Exact target reps'}
+            min={pick.hold ? 10 : 3}
+            max={pick.hold ? 120 : 30}
+            step="1"
+            value={prefs.target}
+            onChange={(event) => {
+              const value = Number(event.target.value)
+              if (
+                Number.isFinite(value) &&
+                value >= (pick.hold ? 10 : 3) &&
+                value <= (pick.hold ? 120 : 30)
+              )
+                setPrefs({ target: Math.round(value) })
+            }}
+          />
+        </label>
         {on('slowMo') && (
           <Slider
             label="Speed"
