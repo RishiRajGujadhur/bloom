@@ -373,3 +373,5 @@
 .studio-tabs { grid-auto-columns: max-content; }
 .studio-tabs button[aria-selected='true'] { background: var(--studio); border-radius: 99px; }
 .studio-tab-ink { display: none; }
+
+.bloom-slider input[type="range"] { min-height: 24px; }

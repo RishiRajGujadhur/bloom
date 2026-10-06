@@ -110,3 +110,6 @@
   font: inherit;
   resize: vertical;
 }
+
+/* Frappe date labels sit on a white timeline surface. */
+.rm-gantt .gantt-container { --g-text-light: #555555; --g-text-dark: #333333; }

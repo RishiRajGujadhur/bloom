@@ -37,6 +37,12 @@ function GanttView({ goals, view, onDates, onProgress }: { goals: Goal[]; view: 
       on_date_change: (t: { id: string }, start: Date, end: Date) => cb.current.onDates(t.id, dayKey(start), dayKey(end)),
       on_progress_change: (t: { id: string }, p: number) => cb.current.onProgress(t.id, Math.round(p)),
     })
+    const scroller = host.current.querySelector<HTMLElement>('.gantt-container')
+    if (scroller) {
+      scroller.tabIndex = 0
+      scroller.setAttribute('role', 'region')
+      scroller.setAttribute('aria-label', 'Goal timeline')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- rebuild when tasks or view change
   }, [key, view])
   return <div ref={host} className="rm-gantt" />

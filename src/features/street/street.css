@@ -82,8 +82,8 @@
 }
 
 .st-dots button {
-  width: 10px;
-  height: 10px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -94,6 +94,6 @@
 
 .st-dots button[aria-selected='true'] {
   background: var(--accent-color, #e0703f);
-  transform: scale(1.5);
+  outline: 2px solid var(--accent-color); outline-offset: 2px;
 }
 .st-jump { display: block; margin: 10px auto 0; max-width: 260px; }
