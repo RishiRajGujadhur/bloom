@@ -28,8 +28,10 @@
 }
 .ts-label .icon-button {
   margin-left: auto;
-  width: 28px;
-  height: 28px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
 }
 .ts-board {
   display: grid;

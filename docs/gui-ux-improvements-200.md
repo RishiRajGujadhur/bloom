@@ -113,3 +113,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 107 | Enlarge controls to a 44px touch target in shop (.shop-card button) | `src/features/rewards/shop.css` |
 | 108 | Enlarge controls to a 44px touch target in showcase (.sc-search button) | `src/features/showcase/showcase.css` |
 | 109 | Enlarge controls to a 44px touch target in taichi (.tc-elements button, .tc-btn) | `src/features/taichi/taichi.css` |
+| 110 | Enlarge controls to a 44px touch target in timeSince (.ts-label .icon-button) | `src/features/timeSince/timeSince.css` |
