@@ -86,3 +86,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 80 | Enlarge controls to a 44px touch target in editor.module (.toolbar button) | `src/components/daybook/editor.module.css` |
 | 81 | Enlarge controls to a 44px touch target in guide (.bloom-guide .driver-popover-footer button) | `src/components/layout/guide.css` |
 | 82 | Enlarge controls to a 44px touch target in shortcuts (.kb-sheet header button) | `src/components/layout/shortcuts.css` |
+| 83 | Enlarge controls to a 44px touch target in studio (.studio-tabs button) | `src/components/studio/studio.css` |

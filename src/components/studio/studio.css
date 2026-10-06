@@ -57,7 +57,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 16px;
   border: 0;
   border-radius: 99px;
@@ -68,6 +68,7 @@
   font-weight: 600;
   white-space: nowrap;
   transition: color 250ms ease;
+  min-width: 44px;
 }
 .studio-tabs button[aria-selected='true'] {
   color: #fff;
