@@ -130,3 +130,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 124 | Improve small text readability in bloom-experience (.bloom-heading.feature-heading p) | `src/components/bloom-experience.css` |
 | 125 | Improve small text readability in features (.todo-overview span) | `src/features/features.css` |
 | 126 | Improve small text readability in habits (.habits-page-toolbar .segmented button small) | `src/features/habits.css` |
+| 127 | Improve small text readability in insights (.insight-stat small, .insight-note, .heatmap-legend) | `src/features/insights.css` |
