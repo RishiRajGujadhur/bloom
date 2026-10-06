@@ -17,7 +17,8 @@
 }
 .sidebar nav button {
   padding: 10px 14px;
-  min-height: 42px;
+  min-height: 44px;
+  min-width: 44px;
 }
 .sidebar nav button svg {
   flex-shrink: 0;
