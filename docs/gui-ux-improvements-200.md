@@ -157,3 +157,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 151 | Improve small text readability in affirm (.af-deck) | `src/features/affirm/affirm.css` |
 | 152 | Improve small text readability in arcade (.sb-card b) | `src/features/arcade/arcade.css` |
 | 153 | Improve small text readability in body (.bd-goal-text, .bd-axis) | `src/features/body/body.css` |
+| 154 | Improve small text readability in bodyTools (.body-tool-preference) | `src/features/body/bodyTools.css` |
