@@ -131,3 +131,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 125 | Improve small text readability in features (.todo-overview span) | `src/features/features.css` |
 | 126 | Improve small text readability in habits (.habits-page-toolbar .segmented button small) | `src/features/habits.css` |
 | 127 | Improve small text readability in insights (.insight-stat small, .insight-note, .heatmap-legend) | `src/features/insights.css` |
+| 128 | Improve small text readability in library (.adopt-detail) | `src/features/library.css` |
