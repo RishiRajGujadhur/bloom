@@ -96,3 +96,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 90 | Enlarge controls to a 44px touch target in diet (.diet-kinds button, .diet-feel button, .diet-library button) | `src/features/diet/diet.css` |
 | 91 | Enlarge controls to a 44px touch target in diet (.diet-tabs button) | `src/features/diet/diet.css` |
 | 92 | Enlarge controls to a 44px touch target in diet (.rb-servings button) | `src/features/diet/diet.css` |
+| 93 | Enlarge controls to a 44px touch target in energy (.energy-range button) | `src/features/energy/energy.css` |

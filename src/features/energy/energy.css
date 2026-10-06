@@ -33,7 +33,7 @@
   gap: 6px;
 }
 .energy-range button {
-  min-height: 38px;
+  min-height: 44px;
   padding: 6px 14px;
   border-radius: 99px;
   border: 1px solid var(--border-color);
@@ -41,6 +41,7 @@
   color: var(--text-primary);
   font: inherit;
   cursor: pointer;
+  min-width: 44px;
 }
 .energy-range button[aria-checked='true'] {
   background: var(--accent-color);
