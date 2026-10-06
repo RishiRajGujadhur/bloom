@@ -191,3 +191,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 185 | Improve small text readability in reminders (.reminder-pop-actions button) | `src/features/reminders/reminders.css` |
 | 186 | Improve small text readability in rewards (.streak-petals) | `src/features/rewards/rewards.css` |
 | 187 | Improve small text readability in shop (.shop-price) | `src/features/rewards/shop.css` |
+| 188 | Improve small text readability in run (.run-goal .run-goal-sub) | `src/features/run/run.css` |
