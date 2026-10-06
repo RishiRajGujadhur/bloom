@@ -162,3 +162,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 156 | Improve small text readability in garage (.garage-pad-label) | `src/features/collectibles/garage.css` |
 | 157 | Improve small text readability in core (.now-kicker) | `src/features/core/core.css` |
 | 158 | Improve small text readability in dailyFlow (.df-ring > span) | `src/features/dailyFlow/dailyFlow.css` |
+| 159 | Improve small text readability in diet (.diet-plate-label) | `src/features/diet/diet.css` |
