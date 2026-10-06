@@ -23,8 +23,14 @@ const isolation = {
   'Cross-Origin-Embedder-Policy': 'credentialless',
 }
 
+// Concurrent local and browser-test servers must not replace one another's
+// optimized dependency graph. Use the final CLI port override (npm adds one).
+const portArgument = process.argv.lastIndexOf('--port')
+const devPort = portArgument >= 0 ? process.argv[portArgument + 1] : '5173'
+
 // https://vite.dev/config/
 export default defineConfig({
+  cacheDir: `node_modules/.vite/bloom-${devPort}`,
   build: {
     manifest: true,
     cssCodeSplit: true,
