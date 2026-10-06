@@ -70,13 +70,15 @@
   gap: 6px;
 }
 .mn-cat {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   border: 2px solid transparent;
   background: color-mix(in srgb, var(--c) 18%, var(--bg-surface));
   font-size: 1.1rem;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 .mn-cat[aria-checked='true'] {
   border-color: var(--c);
