@@ -7,3 +7,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 1 | Make the skip-navigation link legible in light and dark themes | `src/index.css` |
 | 2 | Give all native form fields a visible keyboard focus ring | `src/index.css` |
 | 3 | Make explicitly invalid fields visibly identifiable | `src/index.css` |
+| 4 | Keep invalid-field feedback visible while correcting an entry | `src/index.css` |

@@ -281,3 +281,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px
 
 /* UX 003: Make explicitly invalid fields visibly identifiable. */
 input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border: 2px solid var(--danger); }
+
+/* UX 004: Keep invalid-field feedback visible while correcting an entry. */
+input[aria-invalid="true"]:focus, textarea[aria-invalid="true"]:focus, select[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent); }
