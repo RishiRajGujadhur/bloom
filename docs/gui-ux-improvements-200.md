@@ -44,3 +44,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 38 | Prevent narrow-screen card grid overflow in dailyFlow (.df-steps) | `src/features/dailyFlow/dailyFlow.css` |
 | 39 | Prevent narrow-screen card grid overflow in decide (.dc-row) | `src/features/decide/decide.css` |
 | 40 | Prevent narrow-screen card grid overflow in diet (.nut-table ul) | `src/features/diet/diet.css` |
+| 41 | Prevent narrow-screen card grid overflow in dojo (.dojo-grid) | `src/features/dojo/dojo.css` |
