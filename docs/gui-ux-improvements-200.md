@@ -77,3 +77,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 71 | Enlarge controls to a 44px touch target in features (.segmented button) | `src/features/features.css` |
 | 72 | Enlarge controls to a 44px touch target in library (.adopt-card > button) | `src/features/library.css` |
 | 73 | Enlarge controls to a 44px touch target in urge (.urge-habit-grid button, .context-groups button, .captured-context button) | `src/features/urge.css` |
+| 74 | Enlarge controls to a 44px touch target in rpg (.morph-button) | `src/rpg/rpg.css` |
