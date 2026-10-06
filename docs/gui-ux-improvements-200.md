@@ -58,3 +58,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 52 | Prevent narrow-screen card grid overflow in ink (.ink-pages) | `src/features/ink/ink.css` |
 | 53 | Prevent narrow-screen card grid overflow in joys (.jy-grid) | `src/features/joys/joys.css` |
 | 54 | Prevent narrow-screen card grid overflow in mixer (.mx-layers) | `src/features/mixer/mixer.css` |
+| 55 | Prevent narrow-screen card grid overflow in money (.mn-grid) | `src/features/money/money.css` |
