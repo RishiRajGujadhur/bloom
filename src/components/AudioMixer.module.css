@@ -199,7 +199,7 @@
   .pulse {
     animation: none;
   }
-  .dock button {
+  .dock button, .panel button {
     transition: none;
   }
 }

@@ -238,7 +238,7 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
     display: none;
   }
   .topbar-search {
-    order: 10;
+    order: 0;
     flex-basis: 100%;
     max-width: none;
   }
