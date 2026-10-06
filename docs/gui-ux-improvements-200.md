@@ -107,3 +107,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 101 | Enlarge controls to a 44px touch target in lab (.lab-range button) | `src/features/lab/lab.css` |
 | 102 | Enlarge controls to a 44px touch target in mindmap (.mm-tools button) | `src/features/mindmap/mindmap.css` |
 | 103 | Enlarge controls to a 44px touch target in money (.mn-cat) | `src/features/money/money.css` |
+| 104 | Enlarge controls to a 44px touch target in money (.mn-month-head button) | `src/features/money/money.css` |
