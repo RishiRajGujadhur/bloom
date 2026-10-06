@@ -167,3 +167,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 161 | Improve small text readability in english (.en-motion-setting) | `src/features/english/english.css` |
 | 162 | Improve small text readability in learningMap (.en-topic) | `src/features/english/learningMap.css` |
 | 163 | Improve small text readability in epiphany (.fc-label) | `src/features/epiphany/epiphany.css` |
+| 164 | Improve small text readability in exercise (.ex-ring .ex-ring-sub) | `src/features/exercise/exercise.css` |

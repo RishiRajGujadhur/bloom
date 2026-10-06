@@ -112,7 +112,7 @@
   font-weight: 800;
 }
 .ex-ring .ex-ring-sub {
-  font-size: 12px;
+  font-size: max(14px, 1rem);
   font-weight: 500;
   fill: var(--text-muted);
 }
