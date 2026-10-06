@@ -2296,13 +2296,15 @@ html[data-mode='dark'] .focus-editor input {
   right: 6px;
   display: grid;
   place-items: center;
-  width: 27px;
-  height: 27px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: color-mix(in oklab, var(--bg-surface) 86%, transparent);
   color: var(--text-primary);
+  min-width: 44px;
+  min-height: 44px;
 }
 .micro-actions {
   display: flex;

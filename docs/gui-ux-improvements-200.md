@@ -68,3 +68,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 62 | Enlarge controls to a 44px touch target in App (.rating-row button) | `src/App.css` |
 | 63 | Enlarge controls to a 44px touch target in App (.journal-mode-switch button) | `src/App.css` |
 | 64 | Enlarge controls to a 44px touch target in App (.micro-mood button) | `src/App.css` |
+| 65 | Enlarge controls to a 44px touch target in App (.pending-media > div > button) | `src/App.css` |
