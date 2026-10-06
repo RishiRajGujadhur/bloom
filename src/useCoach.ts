@@ -25,6 +25,7 @@ export function useCoach() {
   }, [setData])
   // Cross-tab sync: another Bloom tab saved, so adopt its data (QoL #228).
   const remote = useRef<string | null>(null)
+  const persisted = useRef<string | null>(null)
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key !== STORAGE_KEY || !e.newValue) return
@@ -41,10 +42,12 @@ export function useCoach() {
     if (blocked) return
     const json = JSON.stringify(data)
     // Don't echo a change that just arrived from another tab.
-    if (remote.current === json) { remote.current = null; return }
+    if (remote.current === json) { remote.current = null; persisted.current = json; return }
     remote.current = null
+    if (persisted.current === json) return
     try {
       localStorage.setItem(STORAGE_KEY, json)
+      persisted.current = json
       setError('')
     } catch {
       setError(t('errors.storage'))
