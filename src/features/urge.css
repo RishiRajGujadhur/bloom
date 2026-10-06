@@ -103,13 +103,14 @@
 .urge-habit-grid button,
 .context-groups button,
 .captured-context button {
-  min-height: 34px;
+  min-height: 44px;
   border: 1px solid var(--border-color);
   border-radius: 9px;
   padding: 7px 11px;
   background: var(--bg-elevated);
   color: var(--text-secondary);
   font-size: 10px;
+  min-width: 44px;
 }
 .urge-habit-grid .urge-choice:hover {
   border-color: var(--accent-color);
