@@ -156,7 +156,7 @@
 .en-ex { display: grid; gap: 16px; align-content: start; }
 .en-prompt { font-size: 1.35rem; margin: 0; }
 .en-big-emoji { font-size: 2.2rem; line-height: 1; }
-.en-pics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.en-pics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 10px; }
 .en-pic, .en-option, .en-chip, .en-card-btn, .en-hub-btn {
   border: 2px solid var(--border-color);
   border-bottom-width: 4px;
