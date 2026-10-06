@@ -12,6 +12,15 @@ export class PageBoundary extends Component<{ children: ReactNode; onHome?: () =
   componentDidCatch(error: Error) {
     console.error('Page crashed:', error)
   }
+  retry = () => {
+    // React.lazy retains a rejected import. A fresh document is needed to fetch
+    // the current dependency graph; resetting this boundary cannot repair it.
+    if (/Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk .* failed/i.test(this.state.error?.message ?? '')) {
+      window.location.reload()
+      return
+    }
+    this.setState({ error: null })
+  }
   render() {
     if (!this.state.error) return this.props.children
     return (
@@ -23,7 +32,7 @@ export class PageBoundary extends Component<{ children: ReactNode; onHome?: () =
         <h2>This page tripped over a root.</h2>
         <p>Your data is safe. Try again, or head back home.</p>
         <div className="page-crash-actions">
-          <button type="button" className="studio-btn" onClick={() => this.setState({ error: null })}>Try again</button>
+          <button type="button" className="studio-btn" onClick={this.retry}>Try again</button>
           {this.props.onHome && <button type="button" className="studio-btn" onClick={this.props.onHome}>Go home</button>}
         </div>
         <details><summary>Details</summary><code>{this.state.error.message}</code></details>
