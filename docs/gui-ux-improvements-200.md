@@ -20,3 +20,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 14 | Wrap search keyboard hints on narrow screens | `src/components/ui/ui.css` |
 | 15 | Let semantic-search status and its action wrap cleanly | `src/components/ui/ui.css` |
 | 16 | Wrap long unbroken journal content in search previews | `src/components/ui/ui.css` |
+| 17 | Fit dialogs inside the visible viewport, including mobile keyboards | `src/App.css` |

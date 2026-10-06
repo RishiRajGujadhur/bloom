@@ -2698,3 +2698,6 @@ html[data-nav='hamburger'] .topbar-tools {
     display: none;
   }
 }
+
+/* UX 017: Fit dialogs inside the visible viewport, including mobile keyboards. */
+.modal { max-width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); }
