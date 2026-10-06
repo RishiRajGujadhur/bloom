@@ -53,3 +53,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 47 | Prevent narrow-screen card grid overflow in epiphany (.epiphany-list) | `src/features/epiphany/epiphany.css` |
 | 48 | Prevent narrow-screen card grid overflow in exercise (.ex-prog-grid) | `src/features/exercise/exercise.css` |
 | 49 | Prevent narrow-screen card grid overflow in assess (.as-home) | `src/features/games/assess.css` |
+| 50 | Prevent narrow-screen card grid overflow in assess (.lb-wrap) | `src/features/games/assess.css` |
