@@ -1,0 +1,115 @@
+{
+  "commit": "5f273ad",
+  "entries": [
+    {
+      "file": "/assets/index-DpstNeco.js",
+      "bytes": 3932386
+    },
+    {
+      "file": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "bytes": 1291
+    },
+    {
+      "file": "/assets/react-DiVRNtpo.js",
+      "bytes": 7876
+    },
+    {
+      "file": "/assets/comfort-CSLNrqpi.js",
+      "bytes": 1119
+    },
+    {
+      "file": "/assets/jsx-runtime-BdxMnOeJ.js",
+      "bytes": 435
+    },
+    {
+      "file": "/assets/react-dom-DsHJ3LPU.js",
+      "bytes": 3900
+    },
+    {
+      "file": "/assets/i18n-CyDKfnZb.js",
+      "bytes": 124239
+    },
+    {
+      "file": "/assets/shim-DTZXyK8i.js",
+      "bytes": 859
+    },
+    {
+      "file": "/assets/useTranslation-BhVOVjXK.js",
+      "bytes": 4392
+    },
+    {
+      "file": "/assets/motion-Ci-J2zwC.js",
+      "bytes": 178
+    },
+    {
+      "file": "/assets/lucidePixel-B-O_V7Ip.js",
+      "bytes": 88403
+    },
+    {
+      "file": "/assets/gsap-CvDoa17S.js",
+      "bytes": 69582
+    },
+    {
+      "file": "/assets/Studio-Dye-DzNl.js",
+      "bytes": 17617
+    },
+    {
+      "file": "/assets/preload-helper-BZ1Pz5am.js",
+      "bytes": 1218
+    },
+    {
+      "file": "/assets/dates-BOGG5A0_.js",
+      "bytes": 227
+    },
+    {
+      "file": "/assets/schemas-Cmj73FYR.js",
+      "bytes": 95651
+    },
+    {
+      "file": "/assets/offscreen-CXo3BPiB.js",
+      "bytes": 1918
+    },
+    {
+      "file": "/assets/tslib.es6-DBL_t5aq.js",
+      "bytes": 1856
+    },
+    {
+      "file": "/assets/moneyModel-CVCwfakp.js",
+      "bytes": 28058
+    },
+    {
+      "file": "/assets/format-aW9tARex.js",
+      "bytes": 19340
+    },
+    {
+      "file": "/assets/reduced-motion-2fDGfAC9.js",
+      "bytes": 271
+    },
+    {
+      "file": "/assets/proxy-MvK83Gyn.js",
+      "bytes": 120496
+    },
+    {
+      "file": "/assets/use-gesture-react.esm-TchGiQql.js",
+      "bytes": 28313
+    },
+    {
+      "file": "/assets/QuickPanel-BFA73Fyz.js",
+      "bytes": 1371
+    },
+    {
+      "file": "/assets/Studio-BnnvYUSq.css",
+      "bytes": 22047
+    },
+    {
+      "file": "/assets/QuickPanel-apfpyaTm.css",
+      "bytes": 5312
+    },
+    {
+      "file": "/assets/index-BdNQeXl0.css",
+      "bytes": 555379
+    }
+  ],
+  "fontFiles": 62,
+  "fontBytes": 709676
+}
