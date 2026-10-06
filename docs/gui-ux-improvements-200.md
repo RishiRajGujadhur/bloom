@@ -127,3 +127,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 121 | Improve small text readability in choiceSlider (.choice-slider-control) | `src/companion/choiceSlider.css` |
 | 122 | Improve small text readability in companion (.bloom-story p) | `src/companion/companion.css` |
 | 123 | Improve small text readability in qol (.choice-slider-items small) | `src/companion/qol.css` |
+| 124 | Improve small text readability in bloom-experience (.bloom-heading.feature-heading p) | `src/components/bloom-experience.css` |

@@ -32,7 +32,7 @@
 .bloom-heading.feature-heading p {
   margin: 9px 0 0;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: max(16px, 1.142857rem);
 }
 .bloom-word {
   display: inline-block;
