@@ -60,3 +60,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 54 | Prevent narrow-screen card grid overflow in mixer (.mx-layers) | `src/features/mixer/mixer.css` |
 | 55 | Prevent narrow-screen card grid overflow in money (.mn-grid) | `src/features/money/money.css` |
 | 56 | Prevent narrow-screen card grid overflow in receipts (.rl-grid) | `src/features/money/receipts.css` |
+| 57 | Prevent narrow-screen card grid overflow in shop (.shop-grid) | `src/features/rewards/shop.css` |
