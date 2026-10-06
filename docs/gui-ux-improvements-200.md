@@ -100,3 +100,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 94 | Enlarge controls to a 44px touch target in energy (.energy-empty-actions button) | `src/features/energy/energy.css` |
 | 95 | Enlarge controls to a 44px touch target in epiphany (.epiphany-grades button) | `src/features/epiphany/epiphany.css` |
 | 96 | Enlarge controls to a 44px touch target in explore (.explore-builder button) | `src/features/explore/explore.css` |
+| 97 | Enlarge controls to a 44px touch target in boardLessons (.bl-progress button) | `src/features/games/boardLessons.css` |
