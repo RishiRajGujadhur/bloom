@@ -162,7 +162,7 @@ export function ReceiptLens({ code, onAdd }: { code: string; onAdd: (txns: Txn[]
                 {(it.status === 'reading' || it.status === 'queued') && <div className="rl-laser" aria-hidden="true" />}
                 <Highlights item={it} />
               </div>
-              <div className="rl-form">
+              <div className="rl-form bloom-start-stack">
                 {it.status === 'reading' || it.status === 'queued' ? (
                   <p className="rl-status">{it.status === 'queued' ? 'Waiting for a free core…' : 'Reading…'}</p>
                 ) : it.status === 'error' ? (

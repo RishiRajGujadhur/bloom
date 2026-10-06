@@ -464,7 +464,7 @@ export function MoodPage() {
         </div>
         {detailed && (
           <div className="wb-wheel">
-            <div className="wb-wheel-core" role="radiogroup" aria-label="Core feeling">
+            <div className="wb-wheel-core bloom-wrap" role="radiogroup" aria-label="Core feeling">
               {emotionWheel.map((e) => (
                 <button
                   key={e.core}
@@ -805,7 +805,7 @@ export function GratitudePage() {
       <GratitudeQuick setEntries={setEntries} jarIds={jars.map((j) => j.id)} />
       <LetterWall entries={entries} jars={jars} />
       {entries.length >= 3 && recall && (
-        <div className="wb-card wb-recall">
+        <div className="wb-card wb-recall bloom-inline">
           <span aria-hidden="true">{jars.find((j) => j.id === (recall.jarId ?? 'moments'))?.emoji ?? '✨'}</span>
           <div>
             <small>
@@ -1045,7 +1045,7 @@ export function GratitudePage() {
             </small>
           )}
         </h3>
-        <ol className="wb-compare">
+        <ol className="wb-compare bloom-list">
           {totals.map(({ jar: j, count }) => (
             <li key={j.id} style={{ ['--jar' as string]: j.color }}>
               <span>

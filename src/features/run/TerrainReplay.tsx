@@ -183,7 +183,7 @@ export function TerrainReplay({ run, units }: { run: Run; units: 'km' | 'mi' }) 
           </div>
         </div>
       </div>
-      <div className="tr-controls">
+      <div className="tr-controls bloom-controls">
         <button type="button" className="tr-play" onClick={playing ? pause : play} aria-label={playing ? 'Pause replay' : 'Play replay'}>{playing ? <Pause size={18} /> : <Play size={18} />}</button>
         <input type="range" min={0} max={1000} value={Math.round(progress * 1000)} aria-label="Replay position" onChange={(e) => { pause(); state.current.p = Number(e.target.value) / 1000; setProgress(state.current.p) }} />
         <span className="tr-clock">{fmtTime(elapsed)} · {Math.round(prof.speed[i])} km/h</span>

@@ -93,8 +93,7 @@
   border-radius: inherit;
 }
 .diet-water-row {
-  display: grid;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .diet-water-row > span {
   display: inline-flex;
@@ -104,9 +103,7 @@
   color: var(--text-secondary);
 }
 .diet-glasses {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  --bloom-gap: 4px;
 }
 .diet-glasses button {
   width: 36px;
@@ -223,14 +220,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
-}
-.diet-meals,
-.diet-insights {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 .diet-meals li {
   display: flex;
@@ -366,9 +355,7 @@
   height: 360px;
 }
 .nut-side {
-  display: grid;
-  gap: 16px;
-  align-content: start;
+  --bloom-gap: 16px;
 }
 .nut-diversity {
   display: grid;
@@ -730,11 +717,6 @@
   font-size: 12px;
   font-weight: 700;
   transition: flex 500ms ease;
-}
-.rb-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 .rb-saved {
   grid-column: 1 / -1;

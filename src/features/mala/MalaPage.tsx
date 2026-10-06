@@ -168,7 +168,7 @@ export function MalaPage() {
           {mantra.text}
         </p>
       </div>
-      <div className="studio-card ml-side">
+      <div className="studio-card ml-side bloom-start-stack">
         <div className="studio-stats">
           <Stat value={beadOf(count)} label={`of ${BEADS}`} />
           {on('rounds') && <Stat value={roundsOf(count)} label="rounds" />}
@@ -199,7 +199,7 @@ export function MalaPage() {
   )
 
   const mantrasTab = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       <Rail label="Mantras">
         {all.map((m) => (
           <div key={m.id} role="listitem">

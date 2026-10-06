@@ -114,7 +114,7 @@ function WaterGlasses({ count, target, onSet }: { count: number; target: number;
     prev.current = count
   }, [count])
   return (
-    <div className="diet-glasses" ref={root} role="group" aria-label={`${count} of ${target} glasses of water`}>
+    <div className="diet-glasses bloom-wrap" ref={root} role="group" aria-label={`${count} of ${target} glasses of water`}>
       {Array.from({ length: Math.max(target, count) }, (_, i) => (
         <button key={i} type="button" aria-pressed={i < count} aria-label={`Glass ${i + 1}`} onClick={() => onSet(i < count ? i : i + 1)}>
           <svg viewBox="0 0 30 40" aria-hidden="true">
@@ -293,7 +293,7 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
             </div>
           )}
           {subOn('dietTracker', 'water') && (
-            <div className="diet-water-row">
+            <div className="diet-water-row bloom-stack">
               <span>
                 <Droplet size={16} aria-hidden="true" /> Water {water}/{waterTarget}
                 {(() => {
@@ -417,7 +417,7 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           {todayMeals.length === 0 ? (
             <p className="diet-empty">Nothing logged yet. Every bite counts, including the small ones.</p>
           ) : (
-            <ul className="diet-meals">
+            <ul className="diet-meals bloom-list">
               {todayMeals.map((m) => (
                 <li key={m.id}>
                   <span className="diet-meal-kind">{kinds.find((k) => k.id === m.kind)?.emoji}</span>
@@ -453,7 +453,7 @@ export function DietPage({ today, data, setData }: FeaturePageProps) {
           <h3>This week</h3>
           <WeekChart state={state} today={today} />
           {subOn('dietTracker', 'insights') && insights.length > 0 && (
-            <ul className="diet-insights">
+            <ul className="diet-insights bloom-list">
               {insights.map((t) => (
                 <li key={t}>{t}</li>
               ))}

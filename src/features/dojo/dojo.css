@@ -1,11 +1,9 @@
 .dojo-lib {
-  display: grid;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 
 .dojo-filters {
-  display: grid;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 
 .dojo-grid {
@@ -58,9 +56,7 @@
 }
 
 .dojo-form {
-  display: grid;
-  gap: 6px;
-  align-content: start;
+  --bloom-gap: 6px;
 }
 
 .dojo-form h3,

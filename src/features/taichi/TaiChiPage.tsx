@@ -127,7 +127,7 @@ export function TaiChiPage() {
     <div className="tc-page" style={{ ['--el' as string]: el.color }}>
       {silkOn && <Silk breath={breath.value} palette={subOn('breathSilk', 'elementColours') ? paletteFor[element] : 'dawn'} ripple={subOn('breathSilk', 'ripple')} className="tc-silk" />}
       <div className="tc-overlay">
-        <header className="tc-head">
+        <header className="tc-head bloom-inline">
           <span className="tc-han" aria-hidden="true">
             {el.han}
           </span>
@@ -170,7 +170,7 @@ export function TaiChiPage() {
           <div className="tc-meter" aria-label={`Grounding ${Math.round(grounding * 100)}%`}>
             <span style={{ height: `${Math.max(4, grounding * 100)}%` }} />
           </div>
-          <div className="tc-ground-info">
+          <div className="tc-ground-info bloom-stack">
             <strong>{camera === 'on' ? (stance ? stance.name : 'Step back so your whole body is in view') : 'Grounding'}</strong>
             {camera === 'on' && stance ? (
               <small>

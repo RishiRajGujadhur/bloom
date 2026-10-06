@@ -142,7 +142,7 @@ export function ReleasePage() {
   }, [card, burning])
   usePageActions(card ? [{ id: 'rl-go', label: 'Release it', icon: '🔥', run: release }, { id: 'rl-not', label: 'Not yet', icon: '↩️', run: () => setCard(null) }] : [])
   return (
-    <section className="release-page" aria-label="Burn and release">
+    <section className="release-page bloom-stack" aria-label="Burn and release">
       <div className="release-stage">
         <div className="release-left">
           {!card ? (

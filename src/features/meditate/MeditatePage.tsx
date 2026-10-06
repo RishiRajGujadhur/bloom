@@ -222,7 +222,7 @@ export function MeditatePage() {
   )
 
   const today = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       {resume && (
         <div className="md-resume">
           <span>
@@ -277,7 +277,7 @@ export function MeditatePage() {
   )
 
   const coursesTab = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       <Rail label="Courses">
         {courses.map((c) => {
           const done = c.sessions.filter((id) => store.logs.some((l) => l.id === id)).length
@@ -286,7 +286,7 @@ export function MeditatePage() {
               <span aria-hidden="true">{c.emoji}</span>
               <strong>{c.title}</strong>
               <small>{c.blurb}</small>
-              <div className="md-steps">
+              <div className="md-steps bloom-stack">
                 {c.sessions.map((id, i) => (
                   <button key={id} type="button" className="studio-chip" aria-pressed={store.logs.some((l) => l.id === id)} onClick={() => start(sessionById(id))}>
                     {i + 1}. {sessionById(id).title}

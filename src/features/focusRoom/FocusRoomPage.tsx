@@ -74,7 +74,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
   }
 
   return (
-    <section className="room-page" aria-label="Focus room">
+    <section className="room-page bloom-stack" aria-label="Focus room">
       <div className={`room-scene${night ? ' is-night' : ''}${running ? ' is-working' : ''}${quietScene ? ' is-quiet' : ''}`}>
         <div className="room-window" aria-hidden="true">
           <span className="room-sky" />
@@ -182,7 +182,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
             </span>
           </>
         )}
-        <div className="room-buttons">
+        <div className="room-buttons bloom-inline">
           {running ? (
             <p className="wb-muted">{paused ? 'Session paused. Your remaining time is saved.' : 'Deep work in progress. The session ends by itself.'}</p>
           ) : (

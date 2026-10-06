@@ -1,6 +1,5 @@
 .release-page {
-  display: grid;
-  gap: 14px;
+  --bloom-gap: 14px;
 }
 .release-stage {
   position: relative;

@@ -141,7 +141,7 @@ export function CodeCityPage() {
           <div><p className="cc-eyebrow"><Building2 size={14} /> Burnout radar</p><h2>{name ? `${name} — ${files.length} files, ${commits.length} commits` : 'Your code as a city. Your rhythm as a radar.'}</h2></div>
           <CapsBadge caps={['gpu', 'oc', 'mt', 'fsa', 'simd']} />
         </header>
-        <div className="cc-actions">
+        <div className="cc-actions bloom-controls">
           <button type="button" className="cc-cta" onClick={() => void openRepo()}><FolderGit2 size={16} /> Open a local repository</button>
             {lastRepo && <button type="button" className="cc-cta" onClick={() => void regrant(lastRepo).then((ok) => { if (ok) void openRepo(lastRepo) })}>↻ Reopen {lastRepo.name}</button>}
           <button type="button" className="cc-ghost" onClick={sample}>Try the sample city</button>
@@ -155,7 +155,7 @@ export function CodeCityPage() {
         )}
         <div className="cc-legend"><span>Height = changes</span><span>Footprint = file size</span><span className="cc-heat">Colour = share of late-night (10 pm–5 am) changes</span></div>
       </section>
-      <aside className="cc-side">
+      <aside className="cc-side bloom-start-stack">
         <div className="cc-card">
           <h3>Burnout risk <small>last 4 weeks</small></h3>
           <Radar axes={rd.axes} risk={commits.length ? rd.risk : 0} />

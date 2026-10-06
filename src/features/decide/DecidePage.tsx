@@ -64,11 +64,11 @@ export function DecidePage() {
       <section className="dc-left">
         <p className="dc-eyebrow">Decision lab</p>
         <input className="dc-question" value={d.question} onChange={(e) => save((x) => ({ ...x, question: e.target.value }))} aria-label="Your question" />
-        <div className="dc-matrix" role="table" aria-label="Decision matrix">
+        <div className="dc-matrix bloom-stack" role="table" aria-label="Decision matrix">
           <div className="dc-row head" role="row">
             <span role="columnheader">Matters · weight</span>
             {d.options.map((o) => (
-              <span key={o.id} role="columnheader" className="dc-opt-name">
+              <span key={o.id} role="columnheader" className="dc-opt-name bloom-inline">
                 <input value={o.name} onChange={(e) => save((x) => ({ ...x, options: x.options.map((y) => (y.id === o.id ? { ...y, name: e.target.value || '?' } : y)) }))} aria-label="Option name" />
                 {d.options.length > 2 && <button type="button" onClick={() => save((x) => ({ ...x, options: x.options.filter((y) => y.id !== o.id) }))} aria-label={`Remove ${o.name}`}>×</button>}
               </span>
@@ -76,7 +76,7 @@ export function DecidePage() {
           </div>
           {d.criteria.map((c) => (
             <div key={c.id} className="dc-row" role="row">
-              <span role="rowheader" className="dc-crit">
+              <span role="rowheader" className="dc-crit bloom-stack">
                 <input
                   value={c.name}
                   onChange={(e) => save((x) => ({ ...x, criteria: x.criteria.map((y) => (y.id === c.id ? { ...y, name: e.target.value || '?' } : y)) }))}
@@ -109,7 +109,7 @@ export function DecidePage() {
             </div>
           ))}
         </div>
-        <div className="dc-actions">
+        <div className="dc-actions bloom-wrap">
           <button type="button" className="dc-ghost" onClick={() => save((x) => ({ ...x, criteria: [...x.criteria, { id: crypto.randomUUID(), name: 'Something else', weight: 3 }] }))}>+ What matters</button>
           {d.options.length < 4 && <button type="button" className="dc-ghost" onClick={() => save((x) => ({ ...x, options: [...x.options, { id: crypto.randomUUID(), name: `Option ${String.fromCharCode(65 + x.options.length)}` }] }))}>+ Option</button>}
           <button type="button" className="dc-ghost" onClick={() => saveDecision(d, top?.name ?? '')}>💾 Save decision</button>
@@ -161,12 +161,12 @@ export function DecidePage() {
               </Suspense>
             ) : <div className="dc-coin-fallback" aria-hidden="true"><span>?</span></div>}
           </div>
-          <div className="dc-gut-text">
+          <div className="dc-gut-text bloom-stack">
             <strong>Gut check</strong>
             {!flip?.landed ? <p>Flip a coin between your top two. You’re not bound by it — notice how you feel when it lands.</p> : (
               <>
                 <p>It landed on <strong>{landedName}</strong>. How does that feel?</p>
-                <div className="dc-actions">
+                <div className="dc-actions bloom-wrap">
                   <button type="button" className={`dc-ghost ${feel === 'relief' ? 'on' : ''}`} onClick={() => setFeel('relief')}>😌 Relieved</button>
                   <button type="button" className={`dc-ghost ${feel === 'sink' ? 'on' : ''}`} onClick={() => setFeel('sink')}>😕 A bit disappointed</button>
                 </div>

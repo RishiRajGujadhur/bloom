@@ -16,11 +16,6 @@
 :root[data-theme='dark'] .run-tiles {
   filter: invert(0.92) hue-rotate(180deg) saturate(0.6);
 }
-.run-side {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
 .run-big {
   display: flex;
   align-items: baseline;

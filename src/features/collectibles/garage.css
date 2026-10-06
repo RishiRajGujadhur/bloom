@@ -1,6 +1,5 @@
 .garage {
-  display: grid;
-  gap: 16px;
+  --bloom-gap: 16px;
 }
 .garage-scene {
   position: relative;
@@ -139,10 +138,7 @@
   font-size: 34px;
 }
 .garage-strip {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .garage-cars {
   display: flex;

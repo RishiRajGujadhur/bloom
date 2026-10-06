@@ -130,7 +130,7 @@ export function SwipeDeck<T extends SwipeCard>({
           <div className="swipe-empty">{empty ?? 'All done. Nice.'}</div>
         )}
       </div>
-      <div className="swipe-actions">
+      <div className="swipe-actions bloom-inline">
         <button type="button" data-cursor-stick className="swipe-btn no" onClick={() => decide(false)} disabled={!card} aria-label={no}>
           <X size={20} />
         </button>

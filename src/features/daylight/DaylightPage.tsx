@@ -167,8 +167,8 @@ export function DaylightPage() {
           })()}
         </div>
       </div>
-      <div className="studio-card rm-side">
-        <div className="dl-place">
+      <div className="studio-card rm-side bloom-start-stack">
+        <div className="dl-place bloom-controls">
           <select className="studio-input" aria-label="City" value={cities.some((c) => c.name === p.name) ? p.name : ''} onChange={(e) => setStore((s) => ({ ...s, place: cities.find((c) => c.name === e.target.value) ?? s.place }))}>
             {!cities.some((c) => c.name === p.name) && <option value="">{p.name}</option>}
             {cities.map((c) => (
@@ -183,7 +183,7 @@ export function DaylightPage() {
         </div>
         {on('lightGoal') && (
           <div className="dl-light">
-            <div className="dl-light-head">
+            <div className="dl-light-head bloom-inline">
               <Sunrise size={18} />
               <strong>
                 Morning light {lightToday}/{store.lightGoal} min
@@ -221,7 +221,7 @@ export function DaylightPage() {
 
   const rhythm = () => (
     <div className="studio-split">
-      <div className="studio-card rm-side">
+      <div className="studio-card rm-side bloom-start-stack">
         <Slider label="I wake at" value={Number(store.wake.slice(0, 2)) * 60 + Number(store.wake.slice(3))} min={240} max={720} step={15} format={(v) => `${String(Math.floor(v / 60)).padStart(2, '0')}:${String(v % 60).padStart(2, '0')}`} onChange={(v) => setStore((s) => ({ ...s, wake: `${String(Math.floor(v / 60)).padStart(2, '0')}:${String(v % 60).padStart(2, '0')}` }))} />
         {on('caffeine') && <Slider label="Caffeine curfew before sleep" value={store.caffeineGap} min={4} max={12} unit="h" onChange={(v) => setStore((s) => ({ ...s, caffeineGap: v }))} />}
         {on('windDown') && <Slider label="Wind-down before sleep" value={store.windDownGap} min={15} max={120} step={15} unit="min" onChange={(v) => setStore((s) => ({ ...s, windDownGap: v }))} />}

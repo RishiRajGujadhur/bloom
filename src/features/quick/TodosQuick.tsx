@@ -61,7 +61,7 @@ export function TodosQuick({ data, setData }: { data: AppData; setData: Dispatch
     <QuickPanel id="todos" title="Quick plan">
       {on('naturalAdd') && (
         <form
-          className="quick-add"
+          className="quick-add bloom-wrap"
           onSubmit={(e) => {
             e.preventDefault()
             if (!preview?.title) return
@@ -89,7 +89,7 @@ export function TodosQuick({ data, setData }: { data: AppData; setData: Dispatch
         <MoodGuide value={mood} onChange={(m) => { setMood(m); logMood('todos', m) }} label="Energy check — what suits you now?" />
       )}
       {fit.length > 0 && (
-        <ul className="quick-done">
+        <ul className="quick-done bloom-list">
           {fit.map((t) => <li key={t.id}>👉 {t.title} <small>{t.priority}</small></li>)}
         </ul>
       )}

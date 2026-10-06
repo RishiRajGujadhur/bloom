@@ -135,7 +135,7 @@ export function NowCard({ data, setData, today, flags, onNavigate, onPlan }: Pro
         </p>
         <h2 id="now-title">{now.title}</h2>
         <p className="now-reason">{now.reason}</p>
-        <div className="now-actions">
+        <div className="now-actions bloom-controls">
           <button ref={btn} className="now-primary" type="button" onClick={() => run(now.primary)}>
             {now.primary.label} <ArrowRight size={18} aria-hidden="true" />
           </button>
@@ -148,7 +148,7 @@ export function NowCard({ data, setData, today, flags, onNavigate, onPlan }: Pro
         {flags.affirmations && <AffirmTicker onOpen={() => onNavigate('affirm')} />}
       </div>
       {subOn('bloomCore', 'progress') && (
-        <ul className="now-chips" aria-label="Progress today">
+        <ul className="now-chips bloom-list" aria-label="Progress today">
           {now.chips.map((c) => (
             <li key={c.label}>
               <span className="now-chip-ring" style={{ ['--p' as string]: Math.min(1, c.value / Math.max(1, c.of)) }} aria-hidden="true" />

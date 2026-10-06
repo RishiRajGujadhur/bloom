@@ -108,9 +108,9 @@ export function MelodyEcho() {
       </svg>
       <button className="melody-play" onClick={() => void play()} disabled={playing}><Play size={16} /> {playing ? 'Playing melody…' : heard ? 'Hear it again' : 'Play melody'}</button>
       {error && <p role="alert">Audio is unavailable here. Use the note names shown above to practice visually.</p>}
-      <div className="melody-keys" role="group" aria-label="Echo the melody">{keys.map(midi => <button key={midi} disabled={!heard || input.length === 3 || playing} onClick={() => press(midi)}>{midiName(midi)}</button>)}</div>
+      <div className="melody-keys bloom-wrap" role="group" aria-label="Echo the melody">{keys.map(midi => <button key={midi} disabled={!heard || input.length === 3 || playing} onClick={() => press(midi)}>{midiName(midi)}</button>)}</div>
       <p className="melody-answer" role="status">{input.length === 3 ? `${score} of 3 notes in place. ${score === 3 ? 'Perfect echo!' : 'Listen once more and notice the shape.'}` : input.length ? `Your echo: ${input.map(midiName).join(' · ')} · ${3 - input.length} to go` : 'Your notes will appear here.'}</p>
-      {input.length === 3 && <div className="melody-actions"><button onClick={() => { setInput([]); setScore(0) }}>Try this melody again</button><button onClick={advance}>{round === rounds.length - 1 ? 'Finish session' : 'Next melody →'}</button></div>}
+      {input.length === 3 && <div className="melody-actions bloom-wrap"><button onClick={() => { setInput([]); setScore(0) }}>Try this melody again</button><button onClick={advance}>{round === rounds.length - 1 ? 'Finish session' : 'Next melody →'}</button></div>}
     </>}
   </section>
 }

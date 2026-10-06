@@ -1,6 +1,5 @@
 .st-page {
-  display: grid;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 
 .st-viewport {

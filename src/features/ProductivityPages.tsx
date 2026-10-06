@@ -968,7 +968,7 @@ export function TodoPage({ data, setData }: Props) {
               key={task.id}
               className={`task-item priority-${task.priority.toLowerCase()}${task.done ? ' is-completed' : ''}${completing.has(task.id) ? ' is-completing' : ''}`}
             >
-              <div className="task-row">
+              <div className="task-row bloom-inline">
                 <button
                   className={`task-check todo-animated-check ${task.done ? 'done' : ''} ${proMode && waterDo ? 'waterdo-bubble' : ''}`}
                   aria-label={`${task.done ? 'Reopen' : 'Complete'} ${task.title}`}

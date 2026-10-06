@@ -9,7 +9,8 @@
 .pn-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
 .pn-head h2 { margin: 0; font: 900 clamp(1.8rem, 4vw, 3rem)/1 'Manrope', sans-serif; letter-spacing: -0.03em; }
 .pn-eyebrow { margin: 0 0 4px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.72rem; color: var(--accent-color); }
-.pn-modes, .pn-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.pn-modes, .pn-chips {
+  --bloom-gap: 6px; }
 .pn-mode { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 14px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .pn-mode.on { border-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 16%, var(--bg-surface)); }
 .pn-cta { border: 0; border-radius: 12px; padding: 7px 16px; background: var(--accent-color); color: var(--text-on-accent, #fff); font: inherit; font-weight: 800; cursor: pointer; }

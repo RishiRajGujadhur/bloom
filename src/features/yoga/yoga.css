@@ -33,9 +33,7 @@
   background: var(--studio);
 }
 .yg-side {
-  display: grid;
-  align-content: start;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .yg-pose-name {
   margin: 0 !important;
@@ -78,10 +76,7 @@
   gap: 12px;
 }
 .yg-build-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .yg-build-head .studio-input {
   flex: 1;

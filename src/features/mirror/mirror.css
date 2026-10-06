@@ -1,7 +1,5 @@
 .mr-overview {
-  display: grid;
-  align-content: start;
-  gap: 16px;
+  --bloom-gap: 16px;
 }
 .mr-face {
   display: grid;
@@ -104,8 +102,7 @@
   background: var(--border-color);
 }
 .mr-reframe {
-  display: grid;
-  gap: 4px;
+  --bloom-gap: 4px;
 }
 .mr-reframe p {
   margin: 0;

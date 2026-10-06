@@ -352,7 +352,7 @@ export function ExercisePage() {
   }, [])
 
   const library = () => (
-    <div className="ex-library">
+    <div className="ex-library bloom-stack">
       <div className="studio-card">
         <label>
           Find a movement
@@ -409,7 +409,7 @@ export function ExercisePage() {
         )}
       </div>
       {(on('areaFilter') || on('positionFilter')) && (
-        <div className="ex-filters">
+        <div className="ex-filters bloom-stack">
           {on('areaFilter') && (
             <div
               className="studio-chip-row"
@@ -448,7 +448,7 @@ export function ExercisePage() {
         </div>
       )}
       {on('filters') && (
-        <div className="ex-filters">
+        <div className="ex-filters bloom-stack">
           <div className="studio-chip-row" role="group" aria-label="Muscle">
             {(['all', ...muscles] as const).map((m) => (
               <button
@@ -462,7 +462,7 @@ export function ExercisePage() {
               </button>
             ))}
           </div>
-          <div className="ex-filter-line">
+          <div className="ex-filter-line bloom-wrap">
             <Segmented
               label="Equipment"
               value={equipment}
@@ -603,7 +603,7 @@ export function ExercisePage() {
         ) : (
           <ExerciseFigure exercise={pick} playing={false} animate={false} />
         )}
-        <div className="ex-stage-bar">
+        <div className="ex-stage-bar bloom-controls">
           {on('mirror') && (
             <button
               type="button"
@@ -640,7 +640,7 @@ export function ExercisePage() {
           </span>
         </div>
       </div>
-      <div className="studio-card ex-panel">
+      <div className="studio-card ex-panel bloom-start-stack">
         <p className="studio-empty" role="note">
           Animated guide · counts follow the demonstration, not your body. Use
           Camera pose coach for measured movement tracking.
@@ -648,9 +648,9 @@ export function ExercisePage() {
         <h3>
           <span aria-hidden="true">{pick.emoji}</span> {pick.name}
         </h3>
-        <div className="ex-count">
+        <div className="ex-count bloom-inline">
           <RepRing value={count} of={prefs.target} hold={pick.hold} />
-          <div className="ex-controls">
+          <div className="ex-controls bloom-stack">
             <button
               ref={goBtn}
               type="button"

@@ -135,7 +135,7 @@ export function EpiphanyGate({ today, children, enabled = true }: { today: strin
         )}
         {subOn('epiphanies', 'curve') && <ForgettingCurve item={current} />}
         {show && (
-          <div className="epiphany-grades" role="group" aria-label="How well did you remember it?">
+          <div className="epiphany-grades bloom-wrap" role="group" aria-label="How well did you remember it?">
             {grades.map((g) => (
               <button
                 key={g.grade}
@@ -172,7 +172,7 @@ export function EpiphaniesPage({ today }: { today: string }) {
     .filter((e) => !epQuery.trim() || e.text.toLowerCase().includes(epQuery.trim().toLowerCase()))
     .sort((a, b) => Number(Boolean(b.starred)) - Number(Boolean(a.starred)) || a.due.localeCompare(b.due))
   return (
-    <section className="epiphanies-page" aria-label="Epiphanies">
+    <section className="epiphanies-page bloom-stack" aria-label="Epiphanies">
       <EpiphaniesQuick today={today} />
       <BulbGarland list={list} />
       <form

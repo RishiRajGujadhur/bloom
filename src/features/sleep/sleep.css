@@ -38,8 +38,7 @@
   font-size: 18px;
 }
 .sleep-log {
-  display: grid;
-  gap: 18px;
+  --bloom-gap: 18px;
 }
 .sleep-log fieldset {
   border: 0;
@@ -94,9 +93,7 @@
   box-shadow: 0 16px 30px -18px #6b7fd7;
 }
 .sleep-quality {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .sleep-quality button {
   width: 56px;
@@ -162,13 +159,6 @@
 }
 .sleep-settings input[type='number'] {
   width: 84px;
-}
-.sleep-steps {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 .sleep-steps button {
   display: flex;

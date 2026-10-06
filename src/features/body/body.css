@@ -1,9 +1,3 @@
-.bd-sliders,
-.bd-side {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
 .bd-trends {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -36,14 +30,10 @@
   font-size: max(14px, 1rem);
 }
 .bd-photos {
-  display: grid;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .bd-photo-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .bd-photo {
   display: grid;

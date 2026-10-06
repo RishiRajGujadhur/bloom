@@ -212,7 +212,7 @@ export function EnergyPage({ data, today, onNavigate }: FeaturePageProps) {
             </form>
             <p className="sr-only" role="status" aria-live="polite">{logMessage}</p>
             <p className="energy-note">Sleep, focus sessions, habits and journaling are counted automatically.</p>
-            <ul className="energy-logs">
+            <ul className="energy-logs bloom-list">
               {todayLogs.map((l) => {
                 const c = categories.find((x) => x.id === l.category)
                 return (
@@ -259,7 +259,7 @@ export function EnergyPage({ data, today, onNavigate }: FeaturePageProps) {
         {subOn('energySankey', 'insights') && (
           <section className="energy-card">
             <h3>Debug your week</h3>
-            <ul className="energy-insights">
+            <ul className="energy-insights bloom-list">
               {flowInsights(flow).map((t) => (
                 <li key={t}>{t}</li>
               ))}

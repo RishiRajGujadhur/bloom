@@ -118,11 +118,6 @@
   font: inherit;
   cursor: pointer;
 }
-.epiphany-grades {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
 .epiphany-grades button {
   flex: 1;
   justify-content: center;
@@ -131,8 +126,7 @@
   min-width: 44px;
 }
 .epiphanies-page {
-  display: grid;
-  gap: 16px;
+  --bloom-gap: 16px;
 }
 .epiphany-add {
   display: flex;

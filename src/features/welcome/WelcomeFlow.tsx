@@ -226,7 +226,7 @@ export function WelcomeFlow({
                   ) : (
                     <span className="wf-emoji" aria-hidden="true">{o.emoji}</span>
                   )}
-                  <span className="wf-label">
+                  <span className="wf-label bloom-stack">
                     <strong>{o.label}</strong>
                     {o.hint && <small>{o.hint}</small>}
                   </span>

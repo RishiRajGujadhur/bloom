@@ -1,0 +1,55 @@
+/* Shared feature primitives. Import once from index.css.
+   Local feature styles may override the custom properties below. Defaults are
+   reset on each primitive so nested components do not inherit a parent's gap. */
+.bloom-wrap {
+  --bloom-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bloom-gap);
+}
+.bloom-controls {
+  --bloom-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bloom-gap);
+}
+.bloom-inline {
+  --bloom-gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: var(--bloom-gap);
+}
+.bloom-stack {
+  --bloom-gap: 8px;
+  display: grid;
+  gap: var(--bloom-gap);
+}
+.bloom-start-stack {
+  --bloom-gap: 14px;
+  display: grid;
+  align-content: start;
+  gap: var(--bloom-gap);
+}
+.bloom-list {
+  --bloom-gap: 8px;
+  display: grid;
+  gap: var(--bloom-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.bloom-columns {
+  --bloom-gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--bloom-gap);
+}
+.bloom-surface {
+  --bloom-radius: 1rem;
+  --bloom-padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--bloom-radius);
+  padding: var(--bloom-padding);
+  background: var(--bg-surface);
+}

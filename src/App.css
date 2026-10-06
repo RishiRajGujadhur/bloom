@@ -191,9 +191,7 @@ html[data-sidebar='collapsed'] main {
   background: var(--accent-soft);
 }
 .topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 9px;
+  --bloom-gap: 9px;
 }
 .language-selector {
   display: flex;
@@ -407,8 +405,7 @@ html[data-sidebar='collapsed'] main {
 }
 .left-column,
 .right-column {
-  display: grid;
-  gap: 22px;
+  --bloom-gap: 22px;
 }
 .card {
   background: var(--bg-surface);
@@ -425,9 +422,7 @@ html[data-sidebar='collapsed'] main {
   margin-bottom: 22px;
 }
 .section-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
+  --bloom-gap: 11px;
 }
 .section-title h2,
 h2 {
@@ -1971,8 +1966,7 @@ html[data-mode='dark'] .storage-error button {
 }
 .guided-editor,
 .split-editor {
-  display: grid;
-  gap: 13px;
+  --bloom-gap: 13px;
 }
 .guided-editor label,
 .split-editor label,
@@ -2161,8 +2155,7 @@ html[data-mode='dark'] .focus-editor input {
   font-size: 12px;
 }
 .micro-journal {
-  display: grid;
-  gap: 14px;
+  --bloom-gap: 14px;
 }
 .micro-mood {
   display: flex;
@@ -2305,11 +2298,6 @@ html[data-mode='dark'] .focus-editor input {
   color: var(--text-primary);
   min-width: 44px;
   min-height: 44px;
-}
-.micro-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 .media-action {
   display: inline-flex;

@@ -166,7 +166,7 @@ function Stroop({ level, finish, sound }: { level: number; finish: Finish; sound
       </div>
       <div className="bg-controls">
         <p>What colour is the ink? {left}s</p>
-        <div className="bg-options">
+        <div className="bg-options bloom-wrap">
           {trial.options.map((o, k) => (
             <button key={o} type="button" className="studio-chip" title={`${o} (${k + 1})`} onClick={() => pick(o)}>
               {o}
@@ -362,7 +362,7 @@ export function GamesPage() {
           {game === 'replies' && <KindReply {...newProps('replies')} />}
         </div>
       ) : (
-        <div className="iv-programs">
+        <div className="iv-programs bloom-stack">
           {last && (
             <div className="studio-card bg-result">
               <strong>{games.find((g) => g.id === last.game)?.name}</strong>

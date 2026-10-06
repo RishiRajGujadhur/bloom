@@ -189,7 +189,7 @@ export function HabitsPage({
           )}
           <button role="tab" aria-selected={false} disabled title="Urge tracking is coming soon"><Waves size={15} aria-hidden="true" /> Urges <small>soon</small></button>
         </div>
-        <div className="habits-actions">
+        <div className="habits-actions bloom-inline">
         <button className="quiet-button" onClick={() => window.dispatchEvent(new CustomEvent('bloom:guide', { detail: { dock: true } }))}><MessageCircle size={16} aria-hidden="true" /> Ask Bloom</button>
         {subOn('habitTracker', 'library') && (
         <button className="quiet-button" onClick={() => setLibrary(true)}>
@@ -803,7 +803,7 @@ export function HabitsPage({
             </label>
             <fieldset>
               <legend>Repeat on</legend>
-              <div className="routine-days">
+              <div className="routine-days bloom-wrap">
                 {weekdays.map((day, i) => (
                   <label key={day}>
                     <input

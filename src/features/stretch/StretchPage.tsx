@@ -230,9 +230,9 @@ export function StretchPage() {
           ))}
         </div>
       </div>
-      <div className="studio-card st-side">
+      <div className="studio-card st-side bloom-start-stack">
         {finished ? (
-          <div className="st-done">
+          <div className="st-done bloom-stack">
             <h3>
               <Sparkles size={18} /> {routine.name} done
             </h3>
@@ -299,7 +299,7 @@ export function StretchPage() {
   )
 
   const routinesTab = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       <h3>Routines</h3>
       <Rail label="Routines">
         {routines.map((r) => (
@@ -325,7 +325,7 @@ export function StretchPage() {
       <div className="studio-card studio-center">
         <BodyMap selected={areas} onToggle={(a) => setAreas((x) => (x.includes(a) ? x.filter((y) => y !== a) : [...x, a]))} />
       </div>
-      <div className="studio-card st-side">
+      <div className="studio-card st-side bloom-start-stack">
         <h3>Where does it feel tight?</h3>
         <div className="yg-pose-chips">
           {(Object.keys(areaNames) as Area[]).map((a) => (

@@ -27,7 +27,7 @@ html[data-focus-mode='on'] main#overview { margin-left: 0 !important; padding-le
 .storage-warn { position: fixed; z-index: 9300; top: 70px; left: 50%; translate: -50% 0; display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 12px; background: #fff4d6; color: #5a3b00; border: 1px solid #f0c95c; font-weight: 700; }
 .storage-warn button { border: 0; background: transparent; cursor: pointer; }
 .copied-toast { position: fixed; z-index: 9400; right: 22px; bottom: 150px; padding: 6px 12px; border-radius: 999px; background: #22a06b; color: #fff; font-weight: 800; font-size: 0.85rem; animation: to-top-in 0.25s ease-out; }
-.trash-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.trash-list { --bloom-gap: 6px; }
 .trash-list li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
 .trash-list li span { display: grid; }
 .trash-list small { color: var(--text-secondary); }

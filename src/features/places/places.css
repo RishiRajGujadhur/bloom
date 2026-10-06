@@ -56,13 +56,6 @@ html[data-mode='dark'] .places-tiles {
   background: color-mix(in oklab, #3fb07a 12%, var(--bg-surface));
   font-size: 14px;
 }
-.places-list {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
 .places-list li {
   display: grid;
   grid-template-columns: 12px minmax(0, 1fr) auto;
@@ -99,7 +92,6 @@ html[data-mode='dark'] .places-tiles {
 .lm-layers > * { pointer-events: auto; }
 .lm-layers button, .lm-layers select { border: 1px solid #ffffffcc; border-radius: 999px; padding: 5px 12px; font: 800 0.8rem 'Manrope', sans-serif; background: #ffffffe6; color: #1c1c28; cursor: pointer; box-shadow: 0 4px 14px -6px #0006; backdrop-filter: blur(6px); }
 .lm-layers button.on { background: #1c1c28; color: #fff; border-color: #1c1c28; }
-.lm-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .lm-spot { perspective: 600px; padding: 14px; border-radius: 18px; color: #fff; background: linear-gradient(135deg, #7c5cff, #ff8a3d); box-shadow: 0 14px 34px -14px #7c5cff; display: grid; gap: 6px; }
 .lm-spot p { margin: 0; }
 .lm-spot-eyebrow { font: 800 0.7rem 'Manrope', sans-serif; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.85; }

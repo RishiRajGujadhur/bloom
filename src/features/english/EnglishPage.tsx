@@ -156,7 +156,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
 
   const learnTab = () => (
     <div className="en-learn">
-      <div className="en-main">
+      <div className="en-main bloom-stack">
         {summary && (
           <section className="studio-card en-summary" role="status">
             <h3>Lesson complete! 🎉</h3>
@@ -191,8 +191,8 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
         )}
         <LearningMap store={store} onStart={startUnit} onPractice={on('review') ? () => setTab('practice') : undefined} onSpeak={on('pronunciation') ? () => setTab('speak') : undefined} />
       </div>
-      <aside className="en-side">
-        <section className="studio-card en-goal">
+      <aside className="en-side bloom-stack">
+        <section className="studio-card en-goal bloom-inline">
           <GoalRing value={xp} goal={store.goal} />
           <div>
             <strong>Daily goal</strong>
@@ -214,7 +214,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
         {on('quests') && (
           <section className="studio-card">
             <h3>Daily quests</h3>
-            <ul className="en-quests">
+            <ul className="en-quests bloom-list">
               {quests.map((q) => {
                 const v = Math.min(q.target, q.measure(store, today))
                 const claimed = store.questsClaimed[today]?.includes(q.id)
@@ -234,7 +234,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
           </section>
         )}
         {on('review') && (
-          <section className="studio-card en-practice-quick">
+          <section className="studio-card en-practice-quick bloom-wrap">
             <button
               type="button"
               className="studio-btn"
@@ -259,7 +259,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
           <section className="studio-card en-league" style={{ ['--lg' as string]: leagueColors[store.league] }}>
             <h3><Trophy size={16} /> {leagues[store.league]} league</h3>
             <p className="quick-note">Top 5 move up next Monday · you have {weekXp(store, today)} XP this week</p>
-            <ol className="en-table">
+            <ol className="en-table bloom-list">
               {table.map((r, k) => (
                 <li key={r.name} className={`${r.me ? 'is-me' : ''} ${k < 5 ? 'up' : k >= 10 ? 'down' : ''}`}>
                   <span className="en-rank">{k + 1}</span>
@@ -274,7 +274,7 @@ export function EnglishPage({ data, today, onNavigate }: { data: AppData; setDat
         {on('shop') && (
           <section className="studio-card">
             <h3><Gem size={16} /> Gem shop</h3>
-            <ul className="en-shop">
+            <ul className="en-shop bloom-list">
               {[
                 { id: 'freeze', emoji: '🧊', title: 'Streak freeze', desc: `Keeps your streak if you miss a day (own ${store.freezes}/2)`, cost: 20, can: store.freezes < 2, buy: (s: EnglishStore) => ({ ...s, freezes: s.freezes + 1 }) },
                 { id: 'hearts', emoji: '❤️', title: 'Refill hearts', desc: 'Back to 5 hearts now', cost: 30, can: hearts.hearts < MAX_HEARTS, buy: (s: EnglishStore) => ({ ...s, hearts: MAX_HEARTS, heartsAt: Date.now() }) },

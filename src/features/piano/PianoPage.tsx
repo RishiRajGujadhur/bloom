@@ -223,7 +223,7 @@ export function PianoPage() {
         <button type="button" className="pn-mode" aria-pressed={labels} title="Show or hide note names and keyboard letters" onClick={() => setLabels((v) => { try { localStorage.setItem('bloom-piano-labels', v ? '0' : '1') } catch { /* optional */ } return !v })}>
           {labels ? '🔤 Labels on' : '🔤 Labels off'}
         </button>
-        <div className="pn-modes" role="tablist" aria-label="Mode">
+        <div className="pn-modes bloom-wrap" role="tablist" aria-label="Mode">
           {(['play', 'quest', 'ear', 'songs'] as Mode[]).map((m) => <button key={m} type="button" role="tab" aria-selected={mode === m} className={`pn-mode ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ play: '🎹 Play', quest: '🎯 Note quest', ear: '👂 Ear', songs: '🎵 Songs' }[m]}</button>)}
         </div>
       </header>
@@ -243,7 +243,7 @@ export function PianoPage() {
         {mode === 'quest' && <p className="pn-big">{msg} <small>· {store.quest} found</small></p>}
         {mode === 'ear' && ear && (
           <div className="pn-ear">
-            <div className="pn-chips">
+            <div className="pn-chips bloom-wrap">
               {(['interval', 'chord'] as const).map((k) => <button key={k} type="button" className={`pn-mode ${earKind === k ? 'on' : ''}`} onClick={() => setEarKind(k)}>{k === 'interval' ? 'Intervals' : 'Chords'}</button>)}
               <button type="button" className="pn-cta" onClick={listen}>▶ Listen</button>
             </div>
@@ -262,7 +262,7 @@ export function PianoPage() {
         )}
         {mode === 'songs' && (
           <div className="pn-songs">
-            <div className="pn-chips">{songs.map((s) => <button key={s.id} type="button" className={`pn-mode ${s.id === songId ? 'on' : ''}`} onClick={() => { setSongId(s.id); setStep(0); setMsg('') }}>{store.songs.includes(s.id) ? '★ ' : ''}{s.title}</button>)}</div>
+            <div className="pn-chips bloom-wrap">{songs.map((s) => <button key={s.id} type="button" className={`pn-mode ${s.id === songId ? 'on' : ''}`} onClick={() => { setSongId(s.id); setStep(0); setMsg('') }}>{store.songs.includes(s.id) ? '★ ' : ''}{s.title}</button>)}</div>
             <div ref={lane} className="pn-lane" aria-label="Upcoming notes">
               {upcoming.map((n, i) => <span key={`${step}-${i}`} className={`pn-drop ${i === 0 ? 'now' : ''}`} style={{ ['--c' as string]: hue(n) }}>{norm(n).replace(/\d/, '')}<small>{keyFor[norm(n)]}</small></span>)}
             </div>

@@ -66,7 +66,7 @@ export function HabitsQuick({ data, setData, today }: { data: AppData; setData: 
         />
       )}
       {on('doneList') && done.length > 0 && (
-        <ul ref={list} className="quick-done">
+        <ul ref={list} className="quick-done bloom-list">
           {done.map((h) => (
             <li key={h.id}>
               ✅ {h.title}

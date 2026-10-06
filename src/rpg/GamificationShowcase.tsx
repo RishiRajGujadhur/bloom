@@ -399,7 +399,7 @@ function RaidPanel({
   const maxHp = data.rpg.weeklyRaid?.maxHp ?? 500
   return (
     <section className="gamify-panel raid-panel" aria-labelledby="raid-title">
-      <div className="raid-head">
+      <div className="raid-head bloom-inline">
         <div className="raid-boss-mark">
           <Crown size={22} />
         </div>
@@ -497,7 +497,7 @@ function GracePanel({
           )
         })}
       </div>
-      <div className="grace-stats">
+      <div className="grace-stats bloom-wrap">
         <span>
           <strong>14</strong> {t('rpg.graceActiveDays')}
         </span>

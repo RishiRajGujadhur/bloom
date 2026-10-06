@@ -1,12 +1,9 @@
 .bg-guide {
-  display: grid;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 
 .bg-guide-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 
 .bg-guide-head small {

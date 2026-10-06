@@ -69,7 +69,7 @@ export function ArcadePage() {
           <button type="button" className="ar-recent-clear" aria-label="Clear recently played" onClick={() => { try { localStorage.removeItem(RECENT_KEY) } catch { /* optional */ } setFavs((f) => [...f]) /* re-render without the row */ }}>✕</button>
         </div>
       )}
-      <div className="ar-filters">
+      <div className="ar-filters bloom-controls">
         <input
           type="search"
           value={q}

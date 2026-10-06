@@ -160,8 +160,7 @@
   color: var(--text-muted);
 }
 .md-steps {
-  display: grid;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .md-steps .studio-chip {
   justify-self: start;

@@ -23,7 +23,7 @@ function Board({ counter, now, removable, onRemove }: { counter: Counter; now: n
     typeof window !== 'undefined' && prefersReducedMotion()
   const flap = subOn('timeSince', 'splitFlap') && !reduced
   return (
-    <li className="ts-row" data-kind={counter.kind}>
+    <li className="ts-row bloom-stack" data-kind={counter.kind}>
       <div className="ts-label">
         <span aria-hidden="true">{counter.emoji}</span>
         <strong>{counter.label}</strong>
@@ -138,7 +138,7 @@ export function TimeSinceCard({ data }: { data: AppData }) {
           </button>
         </form>
       )}
-      <ul className="ts-list">
+      <ul className="ts-list bloom-list">
         {all.slice(0, 5).map((counter) => (
           <Board
             key={counter.id}

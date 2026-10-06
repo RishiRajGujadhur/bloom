@@ -223,7 +223,7 @@ export function PlanningTools({
   )
   return (
     <div className="planning-tools">
-      <div className="planning-toolbar">
+      <div className="planning-toolbar bloom-controls">
         <button
           className="quiet-button"
           aria-expanded={expanded}
@@ -486,7 +486,7 @@ export function PlanningTools({
           onClose={() => setProject(null)}
         >
           <form
-            className="planning-form"
+            className="planning-form bloom-stack"
             onSubmit={(e) => {
               e.preventDefault()
               if (!project.title.trim()) return
@@ -554,7 +554,7 @@ export function PlanningTools({
                 }
               />
             </label>
-            <div className="planning-toolbar">
+            <div className="planning-toolbar bloom-controls">
               <button className="primary" type="submit">
                 <Check size={16} /> Save project
               </button>
@@ -579,7 +579,7 @@ export function PlanningTools({
       {saving && (
         <Modal title="Save perspective" onClose={() => setSaving(false)}>
           <form
-            className="planning-form"
+            className="planning-form bloom-stack"
             onSubmit={(e) => {
               e.preventDefault()
               if (!perspectiveTitle.trim()) return
@@ -604,7 +604,7 @@ export function PlanningTools({
                 onChange={(e) => setPerspectiveTitle(e.target.value)}
               />
             </label>
-            <div className="planning-toolbar">
+            <div className="planning-toolbar bloom-controls">
               <button className="primary">
                 <Save size={16} />
                 {perspectiveId ? 'Update perspective' : 'Save perspective'}

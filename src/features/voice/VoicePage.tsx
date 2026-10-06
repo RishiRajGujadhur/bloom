@@ -235,7 +235,7 @@ function MemoCard({
 
   return (
     <li className="voice-memo">
-      <div className="voice-memo-head">
+      <div className="voice-memo-head bloom-controls">
         <button className="voice-play" type="button" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
           {playing ? <Pause size={18} /> : <Play size={18} />}
         </button>
@@ -302,7 +302,7 @@ function MemoCard({
       {info && subOn('voiceMemos', 'extract') && (
         <div className="voice-extract">
           {info.moods.length > 0 && (
-            <div className="voice-tags">
+            <div className="voice-tags bloom-wrap">
               {info.moods.map((m) => (
                 <span key={m}>#{m}</span>
               ))}
@@ -316,7 +316,7 @@ function MemoCard({
             </ul>
           )}
           {info.habits.length > 0 && (
-            <div className="voice-habits">
+            <div className="voice-habits bloom-controls">
               <span>Ideas to act on</span>
               {info.habits.map((h) => (
                 <button
@@ -490,7 +490,7 @@ export function VoicePage(props: FeaturePageProps) {
       ) : shown.length === 0 ? (
         <p className="voice-empty">No memo mentions “{query}”.</p>
       ) : (
-        <ul className="voice-list">
+        <ul className="voice-list bloom-list">
           {shown.map((m) => (
             <MemoCard
               key={m.id}

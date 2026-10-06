@@ -244,8 +244,8 @@ export function CalendarPage({ data, setData }: Props) {
       className={`calendar-workspace${fullscreen ? ' is-fullscreen' : ''}`}
       id="calendar-page"
     >
-      <div className="calendar-toolbar">
-        <div className="planning-toolbar">
+      <div className="calendar-toolbar bloom-controls">
+        <div className="planning-toolbar bloom-controls">
           <button
             className="icon-button"
             title="Previous period"
@@ -279,7 +279,7 @@ export function CalendarPage({ data, setData }: Props) {
             return mins ? <small className="cal-booked">{(mins / 60).toFixed(mins % 60 ? 1 : 0)} h blocked today</small> : null
           })()}
         </div>
-        <div className="planning-toolbar">
+        <div className="planning-toolbar bloom-controls">
           <button
             className="quiet-button"
             title="Download your time blocks as an .ics file (Google, Apple or Outlook calendar)"
@@ -711,7 +711,7 @@ export function CalendarPage({ data, setData }: Props) {
           onClose={() => setDraft(null)}
         >
           <form
-            className="planning-form"
+            className="planning-form bloom-stack"
             onSubmit={(e) => {
               e.preventDefault()
               if (save({ ...draft, title: draft.title.trim() })) setDraft(null)
@@ -788,7 +788,7 @@ export function CalendarPage({ data, setData }: Props) {
               Deep work
             </label>
             {notice && <p role="alert">{notice}</p>}
-            <div className="planning-toolbar">
+            <div className="planning-toolbar bloom-controls">
               <button className="primary">
                 <Check size={16} /> Save block
               </button>

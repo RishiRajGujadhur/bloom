@@ -66,13 +66,13 @@ export function HabitCalendar({ data, setData, today }: { data: AppData; setData
 
   return <section className="habit-calendar" aria-label="Habit calendar">
     <div className="habit-calendar-main">
-      <div className="habit-calendar-toolbar">
-        <div className="habit-calendar-nav">
+      <div className="habit-calendar-toolbar bloom-inline">
+        <div className="habit-calendar-nav bloom-inline">
           <button type="button" className="icon-button" aria-label="Previous week" onClick={() => { setWeekStart(dateAt(weekStart, -7)); setSelectedId(null) }}><ChevronLeft size={18} /></button>
           <button type="button" className="icon-button" aria-label="Next week" onClick={() => { setWeekStart(dateAt(weekStart, 7)); setSelectedId(null) }}><ChevronRight size={18} /></button>
           <h2>{monthLabel}</h2>
         </div>
-        <div className="habit-calendar-controls">
+        <div className="habit-calendar-controls bloom-inline">
           <span className="habit-calendar-view"><CalendarDays size={15} /> Week</span>
           <button type="button" className="habit-calendar-today" onClick={() => { setWeekStart(mondayOf(today)); setSelectedId(null) }}>Today</button>
           <button type="button" className="icon-button" aria-label={showPreviews ? 'Hide preview items' : 'Show preview items'} aria-pressed={showPreviews} title={showPreviews ? 'Hide preview items' : 'Show preview items'} onClick={() => { setShowPreviews((value) => !value); setSelectedId(null) }}><Ellipsis size={18} /></button>

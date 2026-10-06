@@ -143,14 +143,14 @@ export function SoundLab({ memo, onApply, onRestore }: { memo: VoiceMemo; onAppl
               <CoreRing threads={threads} done={busy.done} total={busy.total} />
             </div>
           )}
-          <div className="sl-ab" role="radiogroup" aria-label="Listen to">
+          <div className="sl-ab bloom-wrap" role="radiogroup" aria-label="Listen to">
             <button type="button" role="radio" aria-checked={!showAfter || !res} className={!showAfter || !res ? 'on' : ''} onClick={() => setShowAfter(false)}>A · Original</button>
             <button type="button" role="radio" aria-checked={showAfter && !!res} className={showAfter && res ? 'on' : ''} disabled={!res} onClick={() => setShowAfter(true)}>B · Cleaned</button>
             <button type="button" className="sl-play" onClick={() => void ws.current?.playPause()}>▶︎ / ❚❚</button>
           </div>
           <div className="sl-wave"><div ref={wave} /><div ref={spec} className="sl-spec" /></div>
         </div>
-        <div className="sl-side">
+        <div className="sl-side bloom-start-stack">
           <fieldset className="sl-opts">
             <legend>Cleaning</legend>
             <label><input type="checkbox" checked={opts.ai} onChange={(e) => setOpts({ ...opts, ai: e.target.checked })} /> AI voice isolation <small>RNNoise neural net</small></label>

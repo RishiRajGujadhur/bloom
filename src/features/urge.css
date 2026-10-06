@@ -79,8 +79,7 @@
   line-height: 1.6;
 }
 .urge-habit-grid {
-  display: grid;
-  gap: 9px;
+  --bloom-gap: 9px;
 }
 .urge-habit-grid article {
   display: flex;
@@ -209,8 +208,7 @@
   font-size: 9px;
 }
 .context-groups {
-  display: grid;
-  gap: 14px;
+  --bloom-gap: 14px;
 }
 .context-groups fieldset {
   border: 0;
@@ -310,8 +308,7 @@
   line-height: 1.5;
 }
 .urge-patterns {
-  display: grid;
-  gap: 16px;
+  --bloom-gap: 16px;
 }
 .pattern-filter {
   display: flex;

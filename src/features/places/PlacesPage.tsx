@@ -272,7 +272,7 @@ export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProp
         </MapContainer>
       </div>
       <aside className="places-side">
-        <div className="lm-row">
+        <div className="lm-row bloom-controls">
           <button className="ov-primary" onClick={logHere}><Crosshair size={17} aria-hidden="true" /> Log where I am</button>
           {subOn('placesMap', 'onThisSpot') && <button className="ov-secondary" onClick={() => locate()}><BookOpen size={16} aria-hidden="true" /> What happened here?</button>}
         </div>
@@ -308,7 +308,7 @@ export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProp
         {subOn('placesMap', 'placeHabits') && data.habits.length > 0 && (
           <div className="lm-pin">
             <h3>Tie a habit to a place</h3>
-            <div className="lm-row">
+            <div className="lm-row bloom-controls">
               <select aria-label="Habit" value={habitPick} onChange={(e) => setHabitPick(e.target.value)}>
                 <option value="">Choose a habit…</option>
                 {data.habits.map((h) => <option key={h.id} value={h.id}>{h.title}</option>)}
@@ -319,7 +319,7 @@ export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProp
         )}
         <h3>Your places</h3>
         {clusters.length === 0 && <p className="wb-muted">Check in your mood to start filling the map.</p>}
-        <ul className="places-list">
+        <ul className="places-list bloom-list">
           {clusters.slice(0, 12).map((c) => (
             <li key={c.key}>
               <span className="places-dot" style={{ background: moodColor(c.mood) }} aria-hidden="true" />

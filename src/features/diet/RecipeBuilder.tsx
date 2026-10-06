@@ -289,7 +289,7 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
               )}
             </div>
           )}
-          <div className="rb-actions">
+          <div className="rb-actions bloom-wrap">
             {subOn('recipeBuilder', 'saveRecipes') && (
               <button ref={saveBtn} type="button" className="lab-secondary" onClick={save} disabled={!rows.length}>
                 <Save size={15} /> Save recipe

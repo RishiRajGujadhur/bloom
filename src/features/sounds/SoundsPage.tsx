@@ -148,7 +148,7 @@ export function SoundsPage({ setData }: FeaturePageProps) {
         </button>
         {left !== null && <span className="fm-left">{`${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`}</span>}
       </div>
-      <div className="studio-card fm-side">
+      <div className="studio-card fm-side bloom-start-stack">
         {on('modes') && (
           <div className="fm-modes" role="radiogroup" aria-label="Mode">
             {(Object.keys(modes) as Mode[]).map((m) => (

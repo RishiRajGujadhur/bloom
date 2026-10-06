@@ -22,7 +22,6 @@
 @keyframes br-blink { 50% { opacity: 0.35; } }
 .br-controls { display: grid; gap: 12px; justify-items: start; }
 .br-play { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; border: 0; cursor: pointer; color: #1c0d05; background: radial-gradient(circle at 35% 30%, #ffe0a3, #ff8a3d 70%); box-shadow: 0 0 0 6px #ff8a3d22, 0 16px 40px -12px #ff6a3d; }
-.br-voice { display: flex; flex-wrap: wrap; gap: 8px; }
 .br-voice label { display: flex; align-items: center; gap: 8px; font-weight: 800; }
 .br-ghost { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ffffff33; border-radius: 12px; padding: 8px 12px; font: 800 0.85rem 'Manrope', sans-serif; color: #fff4e6; background: #ffffff08; cursor: pointer; }
 .br-ghost:disabled { opacity: 0.55; cursor: default; }

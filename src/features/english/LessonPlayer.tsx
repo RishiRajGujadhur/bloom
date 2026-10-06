@@ -171,7 +171,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
   return (
     <div className="en-lesson" role="dialog" aria-label={`Lesson: ${title}`}>
       {theme && <UnitScene theme={theme} dense className="en-lesson-fx" />}
-      <div className="en-lesson-top">
+      <div className="en-lesson-top bloom-inline">
         <button type="button" className="en-icon-btn" aria-label="Quit lesson" onClick={onQuit}><X size={20} /></button>
         <div className="en-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${progress * 100}%` }} /></div>
         {theme?.cast[0] && <BloomFace ref={buddy} variant={theme.cast[0].face} size={44} follow={false} waveOnMount={false} label={theme.cast[0].name} />}
@@ -182,7 +182,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
         </label>
       </div>
 
-      <div ref={card} className="en-ex" key={i}>
+      <div ref={card} className="en-ex bloom-start-stack" key={i}>
         <h3 className="en-prompt">{ex.kind === 'type' ? <><Words text="Type the word:" /> <span className="en-big-emoji w">{ex.emoji}</span> <Words text={ex.prompt} /></> : <Words text={promptOf(ex)} />}</h3>
 
         {ex.kind === 'picture' && (
@@ -196,7 +196,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
           </div>
         )}
         {(ex.kind === 'choice' || ex.kind === 'cloze') && (
-          <div className="en-options">
+          <div className="en-options bloom-stack">
             {ex.options.map((o, k) => (
               <button key={o} type="button" disabled={locked} className="en-option" aria-pressed={choice === o} onClick={() => setChoice(o)}>
                 <kbd>{k + 1}</kbd> {o}
@@ -227,7 +227,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
         {(ex.kind === 'type' || ex.kind === 'listen') && (
           <>
             {ex.kind === 'listen' && (
-              <div className="en-audio">
+              <div className="en-audio bloom-controls">
                 <button type="button" className="en-speaker" aria-label="Play" onClick={() => speak(ex.answer)}><Volume2 size={34} /></button>
                 <button type="button" className="en-speaker small" aria-label="Play slowly" onClick={() => speak(ex.answer, 0.6)}><Snail size={22} /></button>
               </div>
@@ -236,7 +236,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
           </>
         )}
         {ex.kind === 'speak' && (
-          <div className="en-audio">
+          <div className="en-audio bloom-controls">
             <button type="button" className="en-speaker" aria-label="Hear it" onClick={() => speak(ex.answer)}><Volume2 size={30} /></button>
             {canListen() ? (
               <button type="button" className="en-mic" disabled={locked} onClick={async () => setHeard((await listen()) ?? '')}><Mic size={22} /> Tap and speak</button>
@@ -247,7 +247,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
           </div>
         )}
         {ex.kind === 'match' && (
-          <div className="en-match">
+          <div className="en-match bloom-columns">
             <div>{ex.pairs.map((p) => <button key={p.en} type="button" className="en-option" aria-pressed={pickL === p.en} disabled={matched.includes(`l:${p.en}`)} onClick={() => tapMatch('l', p.en)}>{p.en}</button>)}</div>
             <div>{rightSide.map((p) => <button key={p.en} type="button" className="en-option" disabled={matched.includes(`r:${p.en}`)} onClick={() => tapMatch('r', p.en)}>{p.hint}</button>)}</div>
           </div>

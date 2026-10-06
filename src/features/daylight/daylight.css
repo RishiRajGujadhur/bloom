@@ -21,12 +21,6 @@
   font-size: 14px;
   font-weight: 700;
 }
-.dl-place {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
 .dl-place select {
   flex: 1;
   min-width: 160px;
@@ -37,11 +31,6 @@
   padding: 14px;
   border-radius: 18px;
   background: color-mix(in oklab, #f2a65a 12%, var(--bg-surface));
-}
-.dl-light-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 .dl-tip {
   display: flex;

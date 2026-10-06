@@ -177,7 +177,7 @@ export function CprPage() {
           </ol>
           <button type="button" className="cp-cta" onClick={() => void start()} disabled={running}>▶ Start the 110 bpm beat</button>
         </details>
-        <div className="cp-row">
+        <div className="cp-row bloom-controls">
           <button type="button" className={`cp-chip ${store.mode === 'hands' ? 'on' : ''}`} onClick={() => save((s) => ({ ...s, mode: 'hands' }))}>Hands-only</button>
           <button type="button" className={`cp-chip ${store.mode === 'breaths' ? 'on' : ''}`} onClick={() => save((s) => ({ ...s, mode: 'breaths' }))}>30 : 2 (trained)</button>
           <button type="button" className="cp-cta" onClick={running ? stop : () => void start()}>{running ? '■ Stop' : '▶ Start 110 bpm'}</button>
@@ -193,7 +193,7 @@ export function CprPage() {
             <p className="cp-rate">{rate ? `${rate} / min — ${good ? 'perfect rhythm!' : rate < 100 ? 'a little faster' : 'a little slower'}` : 'Tap at least three times'}</p>
           </div>
         </div>
-        <ol className="cp-steps">
+        <ol className="cp-steps bloom-list">
           {steps.map((s, i) => (
             <li key={i} className={step === i ? 'on' : ''}>
               <button type="button" onClick={() => setStep(i)}><b>{s.k}</b> {s.title}</button>

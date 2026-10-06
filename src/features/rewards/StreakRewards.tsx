@@ -126,7 +126,7 @@ export function StreakRewards({ data, today }: { data: AppData; today: string })
               </div>
               <div className="streak-grid" role="img" aria-label={`${yearCount} days visited this year`}>
                 {weeks.map((week, w) => (
-                  <span key={w} className="streak-week">
+                  <span key={w} className="streak-week bloom-stack">
                     {week.map((day) => (
                       <i
                         key={day.key}

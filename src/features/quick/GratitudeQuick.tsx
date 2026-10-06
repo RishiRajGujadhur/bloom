@@ -50,7 +50,7 @@ export function GratitudeQuick({ setEntries, jarIds }: { setEntries: Dispatch<Se
         />
       )}
       {draft && (
-        <form className="quick-add" onSubmit={(e) => { e.preventDefault(); save() }}>
+        <form className="quick-add bloom-wrap" onSubmit={(e) => { e.preventDefault(); save() }}>
           <input autoFocus aria-label="Gratitude note" value={draft.text} maxLength={200} onChange={(e) => setDraft({ ...draft, text: e.target.value })} />
           <button type="submit" className="primary">Into the jar</button>
           <button type="button" className="quiet-button" onClick={() => setDraft(null)}>Cancel</button>

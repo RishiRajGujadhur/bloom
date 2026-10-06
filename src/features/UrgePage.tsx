@@ -163,7 +163,7 @@ export function UrgePage({ data, setData }: Props) {
                     Add a habit you want to interrupt to start tracking urges.
                   </p>
                 ) : (
-                <div className="urge-habit-grid">
+                <div className="urge-habit-grid bloom-stack">
                   {habits.map((habit) => (
                     <article key={habit.id}>
                       <strong>{habit.title}</strong>
@@ -342,7 +342,7 @@ export function UrgePage({ data, setData }: Props) {
 
 function ContextGrid({ onChoose }: { onChoose: (tag: string) => void }) {
   return (
-    <div className="context-groups">
+    <div className="context-groups bloom-stack">
       {Object.entries(urgeContexts).map(([group, tags]) => (
         <fieldset key={group}>
           <legend>{group}</legend>
@@ -395,7 +395,7 @@ function UrgePatterns({ data }: { data: AppData }) {
     )
 
   return (
-    <div className="urge-patterns flex flex-col gap-5">
+    <div className="urge-patterns flex flex-col gap-5 bloom-stack">
       <div className="pattern-filter">
         <label htmlFor="pattern-habit">Pattern for</label>
         <select

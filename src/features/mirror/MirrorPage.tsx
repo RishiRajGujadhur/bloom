@@ -100,7 +100,7 @@ export function MirrorPage({ data }: FeaturePageProps) {
 
   const overview = () => (
     <div className="studio-split">
-      <div className="studio-card mr-overview">
+      <div className="studio-card mr-overview bloom-start-stack">
         {on('weekFace') && (
         <div className="mr-face" data-tone={label(avg(recent))}>
           <span>{{ Bright: '😊', Warm: '🙂', Neutral: '😐', Cloudy: '😕', Heavy: '😔' }[label(avg(recent))]}</span>
@@ -185,13 +185,13 @@ export function MirrorPage({ data }: FeaturePageProps) {
   const reframes = () => {
     const list = reframesFor(recent.length ? recent : items)
     return (
-      <div className="iv-programs">
+      <div className="iv-programs bloom-stack">
         <h3>
           <HeartHandshake size={17} /> Gentle reframes
         </h3>
         {list.length ? (
           list.map(([w, text]) => (
-            <div key={w} className="studio-card mr-reframe">
+            <div key={w} className="studio-card mr-reframe bloom-stack">
               <strong>“{w}”</strong>
               <p>{text}</p>
             </div>

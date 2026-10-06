@@ -147,7 +147,7 @@ export function BodyPage() {
   usePageActions([{ id: 'bd-save', label: 'Save today’s check-in', icon: '📏', run: save }])
   const checkin = () => (
     <div className="studio-split">
-      <div className="studio-card bd-sliders">
+      <div className="studio-card bd-sliders bloom-start-stack">
         <div className="studio-chip-row" role="group" aria-label="Include">
           {measures
             .filter((m) => m.id === 'weight' || on('measurements'))
@@ -169,7 +169,7 @@ export function BodyPage() {
         </button>
         <p role="status">{!include.length ? 'Select a measurement to save.' : saveMessage}</p>
       </div>
-      <div className="studio-card bd-side">
+      <div className="studio-card bd-side bloom-start-stack">
         {on('sparkline') && (() => {
           const w = store.entries.filter((e) => typeof e.weight === 'number')
           return <Sparkline values={w.map((e) => e.weight!)} labels={w.map((e) => e.date)} unit="kg" goodWhenDown={store.goalWeight < (w.at(-1)?.weight ?? 0)} />
@@ -227,8 +227,8 @@ export function BodyPage() {
   )
 
   const photosTab = () => (
-    <div className="bd-photos">
-      <div className="bd-photo-bar">
+    <div className="bd-photos bloom-stack">
+      <div className="bd-photo-bar bloom-controls">
         <button type="button" className="studio-go" disabled={photoBusy} onClick={() => file.current?.click()}>
           <Camera size={16} /> Add photo
         </button>
@@ -301,7 +301,7 @@ export function BodyPage() {
 
   const goals = () => (
     <div className="studio-split">
-      <div className="studio-card bd-side">
+      <div className="studio-card bd-side bloom-start-stack">
         <h3>
           <Target size={17} /> Goal weight
         </h3>

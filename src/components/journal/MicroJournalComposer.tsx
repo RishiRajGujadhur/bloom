@@ -244,7 +244,7 @@ export function MicroJournalComposer({
   }
 
   return (
-    <div className="micro-journal flex flex-col gap-4">
+    <div className="micro-journal flex flex-col gap-4 bloom-stack">
       <div className="micro-mood" aria-label={t('journal.feeling')}>
         {moods.map((label, index) => (
           <button
@@ -322,7 +322,7 @@ export function MicroJournalComposer({
           ))}
         </div>
       )}
-      <div className="micro-actions">
+      <div className="micro-actions bloom-inline">
         <label className="media-action">
           <Camera size={17} /> {t('journal.photo')}
           <input

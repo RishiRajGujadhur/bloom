@@ -25,7 +25,6 @@
 .momentum-readout{display:flex;align-items:baseline;gap:10px;margin:24px 0 18px;color:var(--game-accent);font:500 clamp(34px,5vw,52px) monospace;letter-spacing:-3px}
 .momentum-readout b{font-size:24px;color:#b9a9c3;letter-spacing:0}
 .momentum-readout span{display:flex;align-items:baseline;gap:7px}.momentum-readout small{font:500 9px Manrope,sans-serif;letter-spacing:0;color:#8c7898}
-.feature-actions,.quest-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .feature-primary,.feature-secondary,.sound-button{display:inline-flex;align-items:center;gap:7px;border-radius:7px;padding:10px 13px;font-size:10px;cursor:pointer}
 .feature-primary{border:1px solid var(--game-accent);background:var(--game-accent);color:#fff}.feature-primary:disabled{opacity:.5;cursor:not-allowed}
 .feature-secondary,.sound-button{border:1px solid #ded2e8;background:#fbf8fd;color:#765c87}.feature-secondary.danger{color:#9a5360}
@@ -82,8 +81,8 @@ html[data-mode='dark'] .boss-won .boss-art{background:#2e4833}
 .gamify-note{font-size:9px;color:#907e9b;margin-top:1px}
 .gold-balance{font-family:monospace;font-size:11px;color:#a57925;background:#fff7dc;border:1px solid #eedb9e;border-radius:999px;padding:6px 8px}
 .shop-list{display:grid;gap:9px;margin-top:17px}.shop-item{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #f0eaf3}.shop-item:last-child{border-bottom:0}.shop-icon{width:31px;height:31px;border-radius:8px;display:grid;place-items:center;background:#f3edf8;color:#8061a1}.shop-item strong{font-size:10px;color:#5c4868}.shop-item p{font-size:8px;color:#9987a3;margin-top:3px}.shop-item button{border:1px solid #dcccea;background:#faf6ff;color:#775597;border-radius:5px;padding:7px 8px;font-size:9px}.shop-item button:disabled{opacity:.55;cursor:not-allowed}
-.raid-panel{background:#2d2440;color:white;border-color:#413453}.raid-head{display:flex;align-items:center;gap:10px}.raid-boss-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:#513e62;color:#e9ca76}.raid-head h3{color:#fff;font-size:15px;margin-top:4px}.raid-head p{font-size:9px;color:#bdaeca;margin-top:3px}.raid-level{margin-left:auto;font:10px monospace;color:#eccd78}.raid-panel .liquid-meter{margin-top:19px}.raid-panel .liquid-meter-heading{color:#c9bbd5}.raid-panel .liquid-track{fill:#453854}.raid-tasks{display:grid;gap:7px;margin-top:14px}.raid-tasks button{display:flex;align-items:center;gap:7px;border:1px solid #554466;background:#3a2e4d;color:#e9deef;border-radius:6px;padding:9px;font-size:9px;text-align:left}.raid-tasks button:hover{background:#49375d}.raid-tasks span{margin-left:auto;color:#efc977;font-family:monospace}.attack-feedback{display:flex;align-items:center;gap:5px;color:#e6bf73;font-size:9px;margin-top:10px}
-.grace-panel p{color:#897a93;font-size:10px;line-height:1.6;margin-top:12px}.grace-week{display:flex;justify-content:space-between;gap:5px;margin:18px 0 14px}.grace-week span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#f1ecf5;color:#a292ac;font-size:9px}.grace-week .grace-active{background:#e8f3eb;color:#5f9272;box-shadow:inset 0 0 0 2px #c5e0cc}.grace-stats{display:flex;gap:9px;flex-wrap:wrap}.grace-stats span{font-size:8px;color:#9887a1}.grace-stats strong{font:12px monospace;color:#624e72;margin-right:3px}
+.raid-panel{background:#2d2440;color:white;border-color:#413453}.raid-head{--bloom-gap:10px}.raid-boss-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:#513e62;color:#e9ca76}.raid-head h3{color:#fff;font-size:15px;margin-top:4px}.raid-head p{font-size:9px;color:#bdaeca;margin-top:3px}.raid-level{margin-left:auto;font:10px monospace;color:#eccd78}.raid-panel .liquid-meter{margin-top:19px}.raid-panel .liquid-meter-heading{color:#c9bbd5}.raid-panel .liquid-track{fill:#453854}.raid-tasks{display:grid;gap:7px;margin-top:14px}.raid-tasks button{display:flex;align-items:center;gap:7px;border:1px solid #554466;background:#3a2e4d;color:#e9deef;border-radius:6px;padding:9px;font-size:9px;text-align:left}.raid-tasks button:hover{background:#49375d}.raid-tasks span{margin-left:auto;color:#efc977;font-family:monospace}.attack-feedback{display:flex;align-items:center;gap:5px;color:#e6bf73;font-size:9px;margin-top:10px}
+.grace-panel p{color:#897a93;font-size:10px;line-height:1.6;margin-top:12px}.grace-week{display:flex;justify-content:space-between;gap:5px;margin:18px 0 14px}.grace-week span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#f1ecf5;color:#a292ac;font-size:9px}.grace-week .grace-active{background:#e8f3eb;color:#5f9272;box-shadow:inset 0 0 0 2px #c5e0cc}.grace-stats{--bloom-gap:9px}.grace-stats span{font-size:8px;color:#9887a1}.grace-stats strong{font:12px monospace;color:#624e72;margin-right:3px}
 .tutorial-reward{position:fixed;right:26px;bottom:26px;z-index:80;display:flex;align-items:center;gap:5px;padding:10px 17px 10px 8px;background:#fff;border:1px solid #e0d2eb;border-radius:12px;box-shadow:0 14px 35px #4c356326;animation:reward-enter .4s ease-out}.tutorial-reward button{position:absolute;right:4px;top:2px;border:0;background:none;color:#9c8aa7;font-size:16px}.tutorial-reward strong,.tutorial-reward span{display:block}.tutorial-reward strong{font-size:11px;color:#624974}.tutorial-reward span{font-size:10px;color:#9b7427;margin-top:4px}
 @keyframes connector-glow{50%{stroke:#9b73ba;stroke-dashoffset:14}}@keyframes available-pulse{50%{box-shadow:0 0 0 6px #e7cf7c33}}@keyframes reward-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media(max-width:700px){.gamification-showcase{padding:18px 14px}.showcase-heading{align-items:flex-start;flex-direction:column}.showcase-heading h2{font-size:19px}.orientation-button{align-self:stretch;justify-content:center}.resource-strip{grid-template-columns:1fr 1fr}.morph-button{grid-column:1/-1;justify-content:center}.showcase-grid{grid-template-columns:1fr}.skill-tree{height:190px}.tutorial-reward{left:14px;right:14px;bottom:14px}}
@@ -101,12 +100,7 @@ html[data-mode='dark'] .gamification-showcase{background:#211d2c;border-color:#3
   align-items: center;
 }
 
-.ls-feed {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.ls-feed {--bloom-gap:6px;
 }
 
 .ls-feed a {

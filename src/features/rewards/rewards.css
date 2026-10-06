@@ -127,8 +127,7 @@
   gap: 2px;
 }
 .streak-week {
-  display: grid;
-  gap: 2px;
+  --bloom-gap: 2px;
 }
 .streak-grid i,
 .streak-legend i {

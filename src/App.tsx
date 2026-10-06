@@ -870,7 +870,7 @@ function App() {
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
             <span className="wco-title" aria-hidden="true">Bloom{pageLabel ? <b>{pageLabel}</b> : null}</span>
             <SearchTrigger onOpen={() => setPaletteOpen(true)} />
-            <div className="topbar-actions flex flex-wrap items-center gap-3">
+            <div className="topbar-actions flex flex-wrap items-center gap-3 bloom-inline">
               <QuickAdd
                 onHabit={() => setModal('habit')}
                 onIntention={() => setModal('plan')}
@@ -890,7 +890,7 @@ function App() {
             <PageBoundary key={active} onHome={() => jump('overview' as never)}>
             {active === 'overview' && (
               <div className="overview-bar">
-                <nav className="overview-switch" aria-label="Overview sections">
+                <nav className="overview-switch bloom-controls" aria-label="Overview sections">
                   {(['today', 'insights', 'memories'] as const).map((panel) => (
                     <button
                       key={panel}
@@ -1438,7 +1438,7 @@ function App() {
                       {subOn('bloomCore', 'nowCard') && (
                         <NowCard data={data} setData={setData} today={today} flags={settings.features} onNavigate={jump} onPlan={() => setModal('plan')} />
                       )}
-                      <div className="home-today-row">
+                      <div className="home-today-row bloom-controls">
                         <TodayRing
                           habitsDone={data.habits.filter((h) => h.dates.includes(today)).length}
                           habitsTotal={data.habits.length}
@@ -1516,13 +1516,13 @@ function App() {
                         : 'dashboard-grid grid grid-cols-1 gap-5'
                     }
                   >
-                    <div className="left-column">
+                    <div className="left-column bloom-stack">
                       {active === 'overview' &&
                         settings.features.habitTracker && (
 <EpiphanyGate today={today} enabled={settings.features.epiphanies}>
                           <section className="card" id="habits">
                             <div className="card-heading">
-                              <div className="section-title">
+                              <div className="section-title bloom-inline">
                                 <span className="icon-tile purple">
                                   <ListChecks size={19} />
                                 </span>
@@ -1677,7 +1677,7 @@ function App() {
                       {(active === 'overview' || active === 'planning') && (
                         <section className="card" id="planning">
                           <div className="card-heading">
-                            <div className="section-title">
+                            <div className="section-title bloom-inline">
                               <span className="icon-tile orange">
                                 <Sun size={19} />
                               </span>
@@ -1778,7 +1778,7 @@ function App() {
                       )}
                     </div>
                     {active === 'overview' && (
-                      <div className="right-column">
+                      <div className="right-column bloom-stack">
                         {modules.focus && (
                           <FocusCard
                             data={data}

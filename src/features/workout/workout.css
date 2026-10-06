@@ -36,12 +36,6 @@
 .wo-template small {
   color: var(--text-muted);
 }
-.wo-lift,
-.wo-side {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
 .wo-lift-nav {
   display: flex;
   align-items: center;

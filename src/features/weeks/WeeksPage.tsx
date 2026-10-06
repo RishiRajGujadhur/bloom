@@ -124,13 +124,13 @@ export function WeeksPage() {
           <Counter value={Math.round(summers)} label="summers ahead" />
           <Counter value={moons} label="full moons ahead" />
         </div>
-        <form className="lw-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="lw-form bloom-controls" onSubmit={(e) => e.preventDefault()}>
           <label>Born <input type="date" className="studio-input" value={store.birth} max={format(today, 'yyyy-MM-dd')} onChange={(e) => e.target.value && save((s) => ({ ...s, birth: e.target.value }))} /></label>
           <label>Plan for <input type="number" className="studio-input" min={40} max={110} value={store.years} onChange={(e) => save((s) => ({ ...s, years: Math.min(110, Math.max(40, Number(e.target.value) || 85)) }))} /> years</label>
         </form>
         <details className="lw-add" ref={addForm}>
           <summary>Chapters & milestones</summary>
-          <form className="lw-form" onSubmit={(e) => {
+          <form className="lw-form bloom-controls" onSubmit={(e) => {
             e.preventDefault()
             const f = new FormData(e.currentTarget)
             const kind = String(f.get('kind'))

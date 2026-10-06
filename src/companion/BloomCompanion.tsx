@@ -520,7 +520,7 @@ export function BloomCompanion({
             />
           ) : (
           <div className="bloom-companion" id="bloom-plan-content" role="tabpanel" aria-labelledby="bloom-plan-tab">
-            <div className="companion-identity">
+            <div className="companion-identity bloom-inline">
               {data.rpg.companion !== 'none' ? (
                 <Sprite
                   name={data.rpg.companion}
@@ -708,7 +708,7 @@ export function BloomCompanion({
               >
                 <span className="bloom-kicker">A LITTLE ROOM TO BREATHE</span>
                 <h3>Your next small steps</h3>
-                <div className="companion-plan-controls">
+                <div className="companion-plan-controls bloom-wrap">
                   <label>
                     Time available
                     <select

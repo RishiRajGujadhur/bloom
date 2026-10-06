@@ -305,9 +305,7 @@
   border-left-color: #e5a03f;
 }
 .task-row {
-  display: flex;
-  gap: 14px;
-  align-items: center;
+  --bloom-gap: 14px;
 }
 .task-check {
   display: grid;

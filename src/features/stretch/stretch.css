@@ -53,9 +53,7 @@
   background: var(--studio);
 }
 .st-side {
-  display: grid;
-  align-content: start;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .st-side-label {
   margin: 0;
@@ -75,8 +73,7 @@
   font-variant-numeric: tabular-nums;
 }
 .st-done {
-  display: grid;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .st-done h3 {
   font-size: 22px;

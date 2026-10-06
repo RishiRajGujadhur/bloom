@@ -55,10 +55,7 @@
   transform: scale(1.15);
 }
 .ex-stage-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .ex-stage-bar .studio-chip {
   display: inline-flex;
@@ -72,23 +69,12 @@
   color: var(--studio);
   letter-spacing: 0.02em;
 }
-.ex-panel {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
 .ex-panel h3 {
   margin: 0;
   font-size: 22px;
 }
 .ex-count {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.ex-controls {
-  display: grid;
-  gap: 8px;
+  --bloom-gap: 18px;
 }
 .ex-ring {
   width: 130px;
@@ -141,12 +127,7 @@
   font-weight: 800;
 }
 .ex-library {
-  display: grid;
-  gap: 12px;
-}
-.ex-filters {
-  display: grid;
-  gap: 8px;
+  --bloom-gap: 12px;
 }
 .studio-chip-row {
   display: flex;
@@ -159,9 +140,7 @@
   flex: none;
 }
 .ex-filter-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .ex-card {
   position: relative;

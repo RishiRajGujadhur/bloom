@@ -18,18 +18,16 @@
 .cql-3d-label { display: block; max-width: 170px; padding: 3px 6px; border-radius: 5px; background: #0d1d38d9; color: white; text-align: center; font: 700 10px/1.25 'Fira Code', monospace; white-space: nowrap; }
 .cql-task { border-left: 4px solid var(--cql-accent); padding: 6px 10px; background: color-mix(in srgb, var(--cql-accent) 11%, transparent); border-radius: 5px; }
 .cql-task p { margin: 3px 0 0; line-height: 1.4; }
-.cql-options { display: flex; flex-wrap: wrap; gap: 8px; }
 .cql-options button { padding: 9px 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: inherit; cursor: pointer; text-align: left; }
 .cql-options button.picked { border-color: var(--cql-accent); background: color-mix(in srgb, var(--cql-accent) 20%, var(--bg-surface)); }
 .cql-options button:disabled { opacity: .65; cursor: not-allowed; }
 .cql-options code, .cql-sequence code { font: 600 .86rem/1.35 'Fira Code', monospace; overflow-wrap: anywhere; }
-.cql-sequence { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.cql-sequence { --bloom-gap: 7px; }
 .cql-sequence code { padding: 5px 7px; border-radius: 6px; background: color-mix(in srgb, var(--cql-accent) 17%, transparent); }
 .cql-sequence span { color: var(--text-secondary); }
 .cql-feedback { margin: 0; padding: 9px 11px; border-radius: 9px; font-weight: 700; }
 .cql-feedback.success { background: #62d88628; color: #24874a; }
 .cql-feedback.error { background: #e67c6825; color: #bb4639; }
-.cql-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .cql-hint { color: var(--text-secondary); font-size: .86rem; }
 .cql-finale { font-weight: 800; }
 @media (max-width: 850px) { .cql-map { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -45,9 +45,9 @@ export function MoodGuide({
   }, [value])
   const current = moods.find((m) => m.id === value)
   return (
-    <div className="mood-guide" ref={root}>
+    <div className="mood-guide bloom-stack" ref={root}>
       <span className="mood-guide-label">{label}</span>
-      <div className="mood-guide-row" role="group" aria-label={label}>
+      <div className="mood-guide-row bloom-wrap" role="group" aria-label={label}>
         {moods.map((m) => (
           <button
             key={m.id}

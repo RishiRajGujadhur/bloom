@@ -536,7 +536,7 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
 
   const current = list[at]
   return (
-    <section className="st-page" aria-label="Bloom Street">
+    <section className="st-page bloom-stack" aria-label="Bloom Street">
       <div ref={viewport} className="st-viewport">
         <svg
           className="st-svg"

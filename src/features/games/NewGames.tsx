@@ -126,7 +126,7 @@ export function MentalRotation({ level, finish, blip }: Props) {
   return (
     <div className="bg-play bg-col">
       <p className="bg-prompt">Round {n + 1}/{rounds} — is the right shape the same object, just turned?</p>
-      <div className="bg-rotate">
+      <div className="bg-rotate bloom-columns">
         {[trial.shape, trial.other].map((cubes, i) => (
           <div key={`${n}-${i}`} className="bg-rotate-view" aria-label={i ? 'Second shape' : 'First shape'}>
             <Canvas camera={{ position: [0, 0, 7], fov: 45 }} dpr={[1, 2]}>

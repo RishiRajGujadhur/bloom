@@ -37,9 +37,7 @@
   color: var(--text-secondary);
 }
 .fm-side {
-  display: grid;
-  align-content: start;
-  gap: 16px;
+  --bloom-gap: 16px;
 }
 .fm-modes {
   display: grid;

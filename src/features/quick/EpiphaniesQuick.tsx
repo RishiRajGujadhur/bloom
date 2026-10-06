@@ -54,7 +54,7 @@ export function EpiphaniesQuick({ today }: { today: string }) {
   })()
   return (
     <QuickPanel id="epiphanies" title="Quick review">
-      <div className="epi-quick-top">
+      <div className="epi-quick-top bloom-inline">
         {on('bulbGlow') && <Bulb level={level} />}
         <div>
           {pick && <blockquote className="epi-pick">“{pick.text}”</blockquote>}

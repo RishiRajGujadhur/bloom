@@ -144,7 +144,7 @@ export function WidgetBoard({
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search features"
           />
-          <div className="widget-library">
+          <div className="widget-library bloom-wrap">
             {available.slice(0, 20).map((page) => (
               <button
                 key={page}
@@ -163,7 +163,7 @@ export function WidgetBoard({
             {available.length} available · {hiddenCount} hidden because the
             feature is off
           </small>
-          <div className="widget-editor-actions">
+          <div className="widget-editor-actions bloom-wrap">
             <button type="button" onClick={() => setWidgets(DEFAULT_WIDGETS)}>
               Restore starter layout
             </button>

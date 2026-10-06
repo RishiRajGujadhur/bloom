@@ -95,9 +95,7 @@
   background: #3f7fd0;
 }
 .fc-add {
-  display: grid;
-  align-content: start;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .fc-area {
   min-height: 84px;

@@ -100,7 +100,7 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
           }}
         />
       </div>
-      <div className="rm-legend">
+      <div className="rm-legend bloom-wrap">
         {store.goals.map((g, i) => (
           <button key={g.id} type="button" className="studio-chip" onClick={() => (setSel(g.id), setTab('goal'))}>
             <i style={{ background: goalColors[i % goalColors.length] }} /> {g.title} · {Math.round(goalProgress(g) * 100)}%
@@ -116,7 +116,7 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
       <p className="studio-empty">Add a goal to begin.</p>
     ) : (
       <div className="studio-split">
-        <div className="studio-card rm-side">
+        <div className="studio-card rm-side bloom-start-stack">
           <div className="studio-chip-row">
             {store.goals.map((g) => (
               <button key={g.id} type="button" className="studio-chip" aria-pressed={g.id === goal.id} onClick={() => setSel(g.id)}>
@@ -154,11 +154,11 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
             <Trash2 size={13} /> Delete goal
           </button>
         </div>
-        <div className="studio-card rm-side">
+        <div className="studio-card rm-side bloom-start-stack">
           <h3>
             <Flag size={16} /> Milestones
           </h3>
-          <ul className="rm-ms">
+          <ul className="rm-ms bloom-list">
             {goal.milestones.map((m) => (
               <li key={m.id}>
                 <span>
@@ -219,7 +219,7 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
   const reviewTab = () =>
     !goal ? null : (
       <div className="studio-split">
-        <div className="studio-card rm-side">
+        <div className="studio-card rm-side bloom-start-stack">
           <h3>
             <ClipboardCheck size={16} /> Weekly review · {goal.title}
           </h3>
@@ -243,7 +243,7 @@ export function RoadmapPage({ setData }: FeaturePageProps) {
             Save review
           </button>
         </div>
-        <div className="studio-card rm-side">
+        <div className="studio-card rm-side bloom-start-stack">
           <h3>Goals needing a review</h3>
           {store.goals.filter((g) => reviewDue(g, today)).map((g) => (
             <button key={g.id} type="button" className="studio-chip" onClick={() => setSel(g.id)}>

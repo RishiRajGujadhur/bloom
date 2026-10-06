@@ -100,7 +100,7 @@ export function ChatJournalContainer({
       id="chat-journal"
     >
       <div className="card-heading">
-        <div className="section-title">
+        <div className="section-title bloom-inline">
           <span className="icon-tile purple">
             <BookOpen size={19} />
           </span>

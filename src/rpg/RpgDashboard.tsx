@@ -390,7 +390,7 @@ export function RpgDashboard({
               0,
             )}
           />
-          <div className="feature-actions">
+          <div className="feature-actions bloom-controls">
             <button
               className="primary"
               onClick={() => {

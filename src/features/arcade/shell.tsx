@@ -55,8 +55,8 @@ export function GameShell({ title, score, best, hint, result, onRestart, childre
     return () => window.removeEventListener('keydown', k)
   }, [onRestart])
   return (
-    <div className="ar-shell">
-      <div className="ar-hud">
+    <div className="ar-shell bloom-stack">
+      <div className="ar-hud bloom-controls">
         <strong>{title}</strong>
         <span className="ar-score" aria-live="polite">{score}</span>
         <span className="ar-best">Best {best}</span>

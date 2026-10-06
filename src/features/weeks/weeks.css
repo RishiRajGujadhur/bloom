@@ -25,7 +25,6 @@
 .lw-stat { display: grid; padding: 12px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-surface); }
 .lw-stat strong { font: 800 1.6rem 'Manrope', sans-serif; }
 .lw-stat small { color: var(--text-muted); }
-.lw-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .lw-form label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
 .lw-form input[type='number'] { width: 76px; }
 .lw-emoji { width: 64px; }

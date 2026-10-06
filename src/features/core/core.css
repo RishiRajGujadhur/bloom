@@ -57,10 +57,7 @@
   font-size: 16px;
 }
 .now-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 /* Fitts: the primary action is big, close and unmistakable. */
 .now-primary {
@@ -105,11 +102,7 @@
   border-color: var(--accent-color);
 }
 .now-chips {
-  display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  --bloom-gap: 10px;
 }
 .now-chips li {
   display: flex;
@@ -612,7 +605,8 @@
 .ql-group button { border: 1px solid transparent; background: transparent; border-radius: 10px; padding: 3px 7px; cursor: pointer; font-size: 17px; color: inherit; }
 .ql-group button:hover, .ql-group button[aria-pressed='true'] { border-color: var(--accent-color); }
 .ql-group button:disabled { opacity: 0.4; }
-.home-today-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.home-today-row {
+  --bloom-gap: 12px; }
 .home-today-row .quick-log-row { flex: 1; }
 .today-ring { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-secondary); }
 .today-ring svg { width: 40px; height: 40px; }

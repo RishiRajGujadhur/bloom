@@ -29,7 +29,7 @@ export function GaragePanel({ owned, onShop }: { owned: string[]; onShop?: () =>
   const parked = new Set(layout.pads.filter(Boolean))
 
   return (
-    <section className="garage" aria-label="Your garage">
+    <section className="garage bloom-stack" aria-label="Your garage">
       <div className={`garage-scene${has('garage-spotlights') ? ' has-spotlights' : ''}`}>
         {has('garage-neon') && (
           <div className="garage-neon" aria-hidden="true">
@@ -82,7 +82,7 @@ export function GaragePanel({ owned, onShop }: { owned: string[]; onShop?: () =>
           </div>
         )}
       </div>
-      <div className="garage-strip">
+      <div className="garage-strip bloom-controls">
         <strong>{picked ? `Choose a pad for ${findCar(picked)?.name}` : 'Pick a car to park'}</strong>
         {picked && (
           <button className="icon-button" aria-label="Cancel" onClick={() => setPicked(null)}>

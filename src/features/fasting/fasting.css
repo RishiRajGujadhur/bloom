@@ -36,11 +36,6 @@
 .fs-time-big {
   font-size: 64px;
 }
-.fs-side {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
 .fs-stage-name {
   margin: 0 !important;
   font-size: 28px !important;

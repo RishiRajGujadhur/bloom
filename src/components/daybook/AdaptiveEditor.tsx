@@ -420,7 +420,7 @@ export function AdaptiveEditor({
             </span>
           </div>
         </div>
-        <div className="daybook-actions">
+        <div className="daybook-actions bloom-inline">
           {loadSettings().features.epiphanies && subOn('epiphanies', 'extract') && (
             <ExtractEpiphany
               today={new Date().toISOString().slice(0, 10)}
@@ -512,7 +512,7 @@ export function AdaptiveEditor({
         />
       )}
       {mode.editorType === 'guided' && (
-        <div className="guided-editor">
+        <div className="guided-editor bloom-stack">
           {(mode.prompts ?? []).map((prompt, index) =>
             index === promptStep ? (
               <label key={prompt} className="daybook-prompt">
@@ -540,7 +540,7 @@ export function AdaptiveEditor({
         </div>
       )}
       {mode.editorType === 'split-pane' && (
-        <div className="split-editor">
+        <div className="split-editor bloom-stack">
           {promptStep === 0 ? (
             <label>
               <span>{t('journal.whatsInHead')}</span>

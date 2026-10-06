@@ -389,9 +389,7 @@
 }
 
 .sb-stickers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1px;
+  --bloom-gap: 1px;
 }
 
 .sb-sticker {
@@ -613,9 +611,7 @@
 
 /* ---------- Calendar capacity ring ---------- */
 .cap-ring {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 
 .cap-ring svg {
@@ -963,9 +959,7 @@
 
 /* ---------- Sparkline ---------- */
 .spk {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 
 .spk svg {

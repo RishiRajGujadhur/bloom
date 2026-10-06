@@ -54,7 +54,7 @@ function ProductCard({ p, mine, grams }: { p: Product; mine: string[]; grams: nu
   const portion = forPortion(p, grams)
   return (
     <div className="sc-product">
-      <div className="sc-head">
+      <div className="sc-head bloom-inline">
         {on('productPhoto') && p.image && <img src={p.image} alt="" />}
         <div>
           <h3>{p.name}</h3>
@@ -62,7 +62,7 @@ function ProductCard({ p, mine, grams }: { p: Product; mine: string[]; grams: nu
         </div>
       </div>
       {on('grades') && (
-        <div className="sc-grades">
+        <div className="sc-grades bloom-wrap">
           <Grade label="Nutri-Score" value={p.nutriscore} scale="letter" />
           <Grade label="NOVA" value={p.nova} scale="nova" />
           <Grade label="Eco-Score" value={p.ecoscore} scale="letter" />
@@ -79,7 +79,7 @@ function ProductCard({ p, mine, grams }: { p: Product; mine: string[]; grams: nu
         <Stat value={`${portion.carbs} g`} label="carbs" />
         <Stat value={`${portion.fat} g`} label="fat" />
       </div>
-      <div className="sc-lights">
+      <div className="sc-lights bloom-wrap">
         {(['sugars', 'fat', 'satFat', 'salt'] as const).map((k) => (
           <span key={k} data-level={light(k, p.per100[k])}>
             {k === 'satFat' ? 'Saturates' : k[0].toUpperCase() + k.slice(1)} {Math.round(p.per100[k] * 10) / 10}g
@@ -173,7 +173,7 @@ export function ScanPage() {
 
   const scan = () => (
     <div className="studio-split">
-      <div className="studio-card sc-scanner">
+      <div className="studio-card sc-scanner bloom-start-stack">
         {on('camera') && (
           <div className="sc-video" data-on={camera}>
             <video ref={video} muted playsInline />
@@ -204,7 +204,7 @@ export function ScanPage() {
             </button>
           </form>
         )}
-        <div className="sc-samples">
+        <div className="sc-samples bloom-controls">
           <span className="studio-empty">Try:</span>
           {samples.map((s) => (
             <button key={s.code} type="button" className="studio-chip" onClick={() => (setCode(s.code), void lookup(s.code))}>
@@ -214,7 +214,7 @@ export function ScanPage() {
         </div>
         {error && <p className="voice-error">{error}</p>}
       </div>
-      <div className="studio-card sc-result">
+      <div className="studio-card sc-result bloom-start-stack">
         {product ? (
           <>
             <ProductCard p={product} mine={store.allergens} grams={grams} />

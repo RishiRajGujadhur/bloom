@@ -49,7 +49,7 @@ export function QuickAdd({
       label="Quick add"
       items={items}
       trigger={
-        <button type="button" className="quick-add icon-only" aria-label="Quick add" title="Quick add" data-hint="Quick add">
+        <button type="button" className="quick-add icon-only bloom-wrap" aria-label="Quick add" title="Quick add" data-hint="Quick add">
           <LottieIcon name="plus" size={20} />
         </button>
       }

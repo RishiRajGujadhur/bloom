@@ -84,7 +84,7 @@ export function LivingSeedling({ data }: { data: AppData }) {
           {thirst && on('thirst') && <text x="112" y="120" fontSize="14">💧?</text>}
         </svg>
         {on('feedLinks') && (
-          <ul className="ls-feed">
+          <ul className="ls-feed bloom-list">
             {parts.map((p) => (
               <li key={p.key}>
                 <a href={`#${p.page}`}>{p.emoji} {p.label}</a>

@@ -240,7 +240,7 @@ export function MoneyPage() {
       )}
       <section className="studio-card mn-report">
         <GalaxyOrbit />
-        <div className="mn-stats">
+        <div className="mn-stats bloom-columns">
           <div>
             <span className="mn-label">✦ This month</span>
             <Count minor={t.month} code={code} />
@@ -263,7 +263,7 @@ export function MoneyPage() {
           </ul>
         )}
       </section>
-      <section className="studio-card mn-add">
+      <section className="studio-card mn-add bloom-stack">
         <h3>Add</h3>
         <form className="mn-sentence" onSubmit={async (e) => {
           e.preventDefault()
@@ -284,7 +284,7 @@ export function MoneyPage() {
         <input className="studio-input" inputMode="decimal" placeholder={`Amount (${code})`} aria-label="Amount" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))} onKeyDown={(e) => e.key === 'Enter' && add()} />
         <input className="studio-input" placeholder="Where? (e.g. Tesco, Netflix)" aria-label="Place" value={place} onChange={(e) => { setPlace(e.target.value); if (on('autoCategory')) setCategory(guessCategory(e.target.value) === 'other' ? category : guessCategory(e.target.value)) }} onKeyDown={(e) => e.key === 'Enter' && add()} />
         {!income && (
-          <div className="mn-cats" role="radiogroup" aria-label="Category">
+          <div className="mn-cats bloom-wrap" role="radiogroup" aria-label="Category">
             {categories.map((c) => (
               <button key={c.id} type="button" role="radio" aria-label={c.name} aria-checked={category === c.id} className="mn-cat" style={{ ['--c' as string]: c.color }} onClick={() => setCategory(c.id)} data-hint={c.name}>
                 <span className="mn-original-cat-icon">{c.emoji}</span><GalaxyCategoryIcon category={c.id} />
@@ -297,7 +297,7 @@ export function MoneyPage() {
         </button>
       </section>
       <section className="studio-card mn-split">
-        <h3 className="mn-month-head">
+        <h3 className="mn-month-head bloom-inline">
           <button type="button" aria-label="Previous month" onClick={() => setViewMonth((m) => shiftMonth(m, -1))}>‹</button>
           Where it goes · {new Date(`${viewMonth}-15T12:00:00`).toLocaleDateString([], { month: 'long', ...(viewMonth.slice(0, 4) !== today.slice(0, 4) ? { year: 'numeric' } : {}) })}
           <button type="button" aria-label="Next month" disabled={viewMonth >= month} onClick={() => setViewMonth((m) => shiftMonth(m, 1))}>›</button>
@@ -334,7 +334,7 @@ export function MoneyPage() {
           ) : null
         })()}
         {byCategory(store.txns, viewMonth).length ? (
-          <div className="mn-bars">
+          <div className="mn-bars bloom-stack">
             {byCategory(store.txns, viewMonth).map((c) => {
               const cat = categoryOf(c.category)
               return (
@@ -370,7 +370,7 @@ export function MoneyPage() {
         {store.txns.length > 5 && (
           <input type="search" className="studio-input mn-search" aria-label="Search transactions" placeholder="Search place, category or amount…" value={txnQuery} onChange={(e) => setTxnQuery(e.target.value)} />
         )}
-        <ShowMore as="ul" className="mn-txns" initial={6} label="more">
+        <ShowMore as="ul" className="mn-txns bloom-list" initial={6} label="more">
           {store.txns.filter((x) => { const q = txnQuery.trim().toLowerCase(); return !q || `${x.place} ${categoryOf(x.category).name} ${(x.amount / 100).toFixed(2)} ${x.date}`.toLowerCase().includes(q) }).map((x) => (
             <li key={x.id}>
               {x.income ? (
@@ -473,7 +473,7 @@ export function MoneyPage() {
         </section>
         <section className="studio-card">
           <h3>Set a budget</h3>
-          <div className="mn-cats" role="radiogroup" aria-label="Budget category">
+          <div className="mn-cats bloom-wrap" role="radiogroup" aria-label="Budget category">
             {categories.map((c) => (
               <button key={c.id} type="button" role="radio" aria-label={c.name} aria-checked={category === c.id} className="mn-cat" style={{ ['--c' as string]: c.color }} onClick={() => setCategory(c.id)} data-hint={c.name}>
                 <span className="mn-original-cat-icon">{c.emoji}</span><GalaxyCategoryIcon category={c.id} />
@@ -537,7 +537,7 @@ export function MoneyPage() {
           <section className="studio-card">
             <h3>🗓️ Upcoming bills</h3>
             {bills.length ? (
-              <ul className="mn-txns">
+              <ul className="mn-txns bloom-list">
                 {bills.map((b) => (
                   <li key={b.place}>
                     <span className="mn-emoji">📅</span>
@@ -564,7 +564,7 @@ export function MoneyPage() {
             <h3>🔁 Subscriptions found</h3>
             <p className="quick-note">Payments to the same place in several months at a similar price.</p>
             {subs.length ? (
-              <ul className="mn-txns">
+              <ul className="mn-txns bloom-list">
                 {subs.map((sb) => (
                   <li key={sb.place}>
                     <span className="mn-emoji">🔁</span>
@@ -586,7 +586,7 @@ export function MoneyPage() {
           <section className="studio-card">
             <h3>🏦 Net worth</h3>
             <Count minor={worth} code={code} />
-            <ul className="mn-txns">
+            <ul className="mn-txns bloom-list">
               {store.holdings.map((h) => (
                 <li key={h.id}>
                   <span className="mn-emoji">{h.kind === 'asset' ? '🏦' : '💳'}</span>

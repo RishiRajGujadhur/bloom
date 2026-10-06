@@ -158,7 +158,7 @@ export function AffirmPage() {
   const settings = () => (
     <div className="studio-split">
       {on('custom') && (
-        <div className="studio-card rm-side">
+        <div className="studio-card rm-side bloom-start-stack">
           <h3>Write your own</h3>
           <form
             className="sc-manual"
@@ -174,7 +174,7 @@ export function AffirmPage() {
               <Plus size={16} />
             </button>
           </form>
-          <ul className="rm-ms">
+          <ul className="rm-ms bloom-list">
             {store.custom.map((c) => (
               <li key={c}>
                 <span>{c}</span>
@@ -186,7 +186,7 @@ export function AffirmPage() {
           </ul>
         </div>
       )}
-      <div className="studio-card rm-side">
+      <div className="studio-card rm-side bloom-start-stack">
         {on('themes') && <Segmented label="Card style" value={store.theme} onChange={(t) => setStore((s) => ({ ...s, theme: t }))} options={[{ id: 'gradient', label: 'Gradient' }, { id: 'paper', label: 'Paper' }, { id: 'night', label: 'Night' }]} />}
         {on('autoplay') && <Slider label="Slideshow pace" value={store.autoplay || 6} min={3} max={20} unit="s" onChange={(v) => setStore((s) => ({ ...s, autoplay: v }))} />}
         {on('repeat') && <p className="studio-empty">{Object.values(store.repeats).reduce((a, b) => a + b, 0)} affirmations spoken so far.</p>}

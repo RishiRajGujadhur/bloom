@@ -45,8 +45,7 @@
 }
 
 .data-reset {
-  display: grid;
-  gap: 10px;
+  --bloom-gap: 10px;
 }
 .data-reset h2 {
   display: flex;
@@ -68,10 +67,6 @@
 .data-reset-btn:not(:disabled):hover {
   background: #d9534f;
   color: #fff;
-}
-.data-reset-confirm {
-  display: grid;
-  gap: 8px;
 }
 .data-reset-confirm label {
   display: grid;

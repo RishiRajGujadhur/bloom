@@ -80,9 +80,7 @@
   color: #3f8a5a;
 }
 .daybook-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+  --bloom-gap: 10px;
 }
 .daybook-actions .quiet-button {
   font-size: 14px;

@@ -94,7 +94,7 @@ export function NutrientsPanel({ state, today, data, setData }: { state: DietSta
           </div>
         </section>
       )}
-      <div className="nut-side">
+      <div className="nut-side bloom-start-stack">
         {subOn('microNutrients', 'diversity') && (
           <section className="diet-card nut-diversity">
             <h3>

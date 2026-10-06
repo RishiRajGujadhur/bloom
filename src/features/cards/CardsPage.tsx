@@ -216,7 +216,7 @@ export function CardsPage() {
 
   const addTab = () => (
     <div className="studio-split">
-      <div className="studio-card fc-add">
+      <div className="studio-card fc-add bloom-start-stack">
         <select className="studio-input" aria-label="Deck" value={addDeck} onChange={(e) => setAddDeck(e.target.value)}>
           {store.decks.map((d) => (
             <option key={d.id} value={d.id}>
@@ -240,7 +240,7 @@ export function CardsPage() {
           <Plus size={16} /> Add card
         </button>
       </div>
-      <div className="studio-card fc-add">
+      <div className="studio-card fc-add bloom-start-stack">
         <h3>Preview</h3>
         <div className="fc-preview">
           <Md text={on('cloze') && hasCloze(front) ? clozeFront(front) : front || '*Front*'} />
@@ -272,7 +272,7 @@ export function CardsPage() {
   )
 
   const decksTab = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       <Rail label="Decks">
         {store.decks.map((d) => {
           const list = store.cards.filter((c) => c.deck === d.id)

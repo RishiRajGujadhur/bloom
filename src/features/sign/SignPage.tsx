@@ -200,7 +200,7 @@ export function SignPage() {
           <p className="sg-eyebrow">Sign alphabet · ASL fingerspelling</p>
           <h2>{mode === 'learn' ? `The letter ${letter}` : mode === 'quiz' ? 'Which letter?' : `Spell “${word}”`}</h2>
         </div>
-        <div className="sg-modes" role="tablist" aria-label="Mode">
+        <div className="sg-modes bloom-controls" role="tablist" aria-label="Mode">
           {(['learn', 'quiz', 'camera'] as const).map((m) => <button key={m} type="button" role="tab" aria-selected={mode === m} className={`sg-mode ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ learn: '✋ Learn', quiz: '❓ Quiz', camera: '📷 Practice' }[m]}</button>)}
         </div>
       </header>
@@ -256,7 +256,7 @@ export function SignPage() {
                 ))}
               </div>
               {picked && <p className="sg-tip">{picked === quizQ.answer ? '✓ ' : '✗ '}{letters[quizQ.answer].tip}</p>}
-              <div className="sg-row">
+              <div className="sg-row bloom-controls">
                 <span>Streak {streak}</span>
                 {picked && <button type="button" className="sg-cta" onClick={newQuiz}>Next</button>}
               </div>
@@ -269,7 +269,7 @@ export function SignPage() {
               </div>
               <p className="sg-tip">Hold each letter until the ring fills. Next: <strong>{word[signed.length] ?? '✓'}</strong> — {letters[word[signed.length]]?.tip ?? 'done!'}</p>
               {result && <p className="sg-tip">{result.dist === 0 ? '🎉 Perfect spelling!' : `${result.right} of ${result.total} letters right.`}</p>}
-              <div className="sg-row">
+              <div className="sg-row bloom-controls">
                 <button type="button" className="sg-cta ghost" onClick={() => setSigned((s) => s.slice(0, -1))}>⌫ Undo</button>
                 <button type="button" className="sg-cta" onClick={() => { setWord(words[Math.floor(Math.random() * words.length)]); setSigned('') }}>New word</button>
               </div>

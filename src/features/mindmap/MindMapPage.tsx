@@ -332,7 +332,7 @@ export function MindMapPage() {
   )
 
   const maps = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       {on('templates') && (
         <>
           <h3>Start from a template</h3>

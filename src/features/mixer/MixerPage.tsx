@@ -293,7 +293,7 @@ export function MixerPage() {
   )
 
   const library = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       {on('presets') && (
         <>
           <h3>Scenes</h3>

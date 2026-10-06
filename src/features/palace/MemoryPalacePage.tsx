@@ -198,7 +198,7 @@ export function MemoryPalacePage({ data, today }: FeaturePageProps) {
     { id: 'pl-zoom', label: zoomed ? 'Zoom out' : 'Zoom in', icon: '🔍', run: () => setZoomed((z) => !z) },
   ])
   return (
-    <section className="palace-page" aria-label="Memory palace">
+    <section className="palace-page bloom-stack" aria-label="Memory palace">
       <div
         className="palace-stage"
         ref={stage}

@@ -142,7 +142,7 @@ export function ReaderPage() {
           <p className="rd-eyebrow">Speed reader{store.words?.[new Date().toISOString().slice(0, 10)] ? ` · ${store.words[new Date().toISOString().slice(0, 10)]} words read today` : ''} · {est.words} words · {Math.round(est.minutes * 60)} s at normal pace</p>
           <h2>{textId === 'custom' ? 'Your text' : texts.find((t) => t.id === textId)!.title}</h2>
         </div>
-        <div className="rd-row">
+        <div className="rd-row bloom-wrap">
           {texts.map((t) => <button key={t.id} type="button" className={`rd-chip ${textId === t.id ? 'on' : ''}`} onClick={() => { setTextId(t.id); setPhase('ready'); setI(0); setPlaying(false) }}>{t.title}</button>)}
           <button type="button" className={`rd-chip ${textId === 'custom' ? 'on' : ''}`} onClick={() => { setTextId('custom'); setPhase('ready'); setI(0); setPlaying(false) }}>Paste your own</button>
         </div>
@@ -165,9 +165,9 @@ export function ReaderPage() {
         {phase === 'quiz' || phase === 'done' ? (
           <div className="rd-quiz">
             {qs.map((q, k) => (
-              <div key={k} className="rd-q">
+              <div key={k} className="rd-q bloom-stack">
                 <strong>{k + 1}. {q.q}</strong>
-                <div className="rd-row">
+                <div className="rd-row bloom-wrap">
                   {q.options.map((o) => <button key={o} type="button" disabled={answers[k] !== undefined} className={`rd-opt ${answers[k] !== undefined && o === q.answer ? 'right' : ''} ${answers[k] === o && o !== q.answer ? 'wrong' : ''}`} onClick={() => setAnswers((a) => ({ ...a, [k]: o }))}>{o}</button>)}
                 </div>
               </div>

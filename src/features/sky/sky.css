@@ -24,16 +24,17 @@
 .sk-eyebrow { margin: 0; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.75rem; color: var(--accent-color); }
 .sk-time { margin: 0; font: 900 clamp(2.6rem, 6vw, 4.4rem)/1 'Manrope', sans-serif; letter-spacing: -0.04em; }
 .sk-time small { font-size: 0.35em; letter-spacing: 0; color: var(--text-muted); }
-.sk-scrub { display: flex; align-items: center; gap: 8px; }
 .sk-scrub input { flex: 1; accent-color: var(--accent-color); }
 .sk-btn { border: 0; border-radius: 12px; padding: 7px 14px; background: #1f2a5a; color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
 .sk-btn.ghost { background: transparent; color: inherit; border: 1px solid var(--border-color); }
-.sk-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.sk-list {
+  --bloom-gap: 6px; }
 .sk-list li { display: grid; grid-template-columns: 12px auto 1fr; align-items: center; gap: 8px; font-size: 0.92rem; }
 .sk-list i { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
 .sk-list span { color: var(--text-secondary); }
 .sk-moon { margin: 0; color: var(--text-secondary); }
-.sk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sk-chips {
+  --bloom-gap: 6px; }
 .sk-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 4px 11px; background: var(--bg-surface); color: inherit; font: inherit; font-size: 0.85rem; cursor: pointer; }
 .sk-chip.on { border-color: #ffd24d; background: color-mix(in srgb, #ffd24d 22%, var(--bg-surface)); }
 .sk-tip { margin: 0; line-height: 1.45; }

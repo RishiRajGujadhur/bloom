@@ -23,7 +23,7 @@ export function CapacityRing({ capacity, booked, deep, label }: { capacity: numb
     return () => void tl.progress(1)
   }, [used, deepShare, C, c])
   return (
-    <div className="cap-ring" data-hint={`${label(booked)} of ${label(capacity)} booked · ${label(deep)} deep work`}>
+    <div className="cap-ring bloom-inline" data-hint={`${label(booked)} of ${label(capacity)} booked · ${label(deep)} deep work`}>
       <svg viewBox="0 0 100 100" role="img" aria-label={`${Math.round(used * 100)}% of the day booked`}>
         <circle cx="50" cy="50" r="40" className="cap-track" />
         <circle ref={outer} cx="50" cy="50" r="40" className={`cap-used${over ? ' over' : ''}`} strokeDasharray={C} strokeDashoffset={C} />

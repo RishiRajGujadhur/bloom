@@ -161,7 +161,7 @@ export function EyesPage() {
       <div ref={stage} className="studio-card ey-stage" data-dark={current.id === 'palming'}>
         <Guide ex={current} t={t} speed={store.speed} color={targetColor} />
       </div>
-      <div className="studio-card rm-side">
+      <div className="studio-card rm-side bloom-start-stack">
         {queue.length > 1 && (
           <div className="rt-steps">
             {queue.map((id, k) => (
@@ -201,7 +201,7 @@ export function EyesPage() {
   )
 
   const library = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       <Rail label="Eye exercises">
         {visible.map((e) => (
           <div key={e.id} role="listitem">
@@ -216,7 +216,7 @@ export function EyesPage() {
         ))}
       </Rail>
       {on('reminders') && (
-        <div className="studio-card rm-side">
+        <div className="studio-card rm-side bloom-start-stack">
           <h3>
             <BellRing size={16} /> 20-20-20 reminders
           </h3>

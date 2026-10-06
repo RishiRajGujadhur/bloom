@@ -77,9 +77,7 @@
   text-align: left;
 }
 .companion-identity {
-  display: flex;
-  gap: 12px;
-  align-items: center;
+  --bloom-gap: 12px;
 }
 .companion-identity p {
   font-size: 11px;
@@ -181,9 +179,7 @@
   margin: 8px 0 14px;
 }
 .companion-plan-controls {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  --bloom-gap: 12px;
 }
 .companion-plan-controls label {
   display: grid;

@@ -182,7 +182,7 @@ export function PosturePage({ data }: FeaturePageProps) {
         )}
       </div>
       <aside className="posture-side">
-        <div className="posture-buttons">
+        <div className="posture-buttons bloom-stack">
           {running ? (
             <button className="ov-secondary" onClick={stopPosture}>
               <CameraOff size={17} aria-hidden="true" /> Stop camera

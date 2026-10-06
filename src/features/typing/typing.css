@@ -31,7 +31,8 @@
 .ty-ch.cur { color: var(--text-primary); border-bottom: 4px solid var(--accent-color); animation: ty-blink 1s steps(2) infinite; }
 @keyframes ty-blink { 50% { border-bottom-color: transparent; } }
 .ty-hint { margin: 0; color: var(--text-secondary); }
-.ty-done { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ty-done {
+  --bloom-gap: 10px; }
 .ty-done strong { font: 900 1.4rem 'Manrope', sans-serif; }
 .ty-cta { border: 0; border-radius: 12px; padding: 8px 16px; background: var(--accent-color); color: var(--text-on-accent, #fff); font: inherit; font-weight: 800; cursor: pointer; }
 .ty-cta.ghost { background: transparent; color: inherit; border: 1px solid var(--border-color); }
@@ -45,7 +46,8 @@
 .ty-key text { font: 700 17px 'Manrope', sans-serif; fill: var(--text-primary); text-transform: uppercase; pointer-events: none; }
 .ty-bump { fill: var(--text-muted); }
 .ty-side { display: grid; grid-template-rows: auto 1fr; gap: 10px; min-height: 0; }
-.ty-lessons { display: flex; flex-wrap: wrap; gap: 6px; }
+.ty-lessons {
+  --bloom-gap: 6px; }
 .ty-pill { width: 34px; height: 34px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 800; cursor: pointer; }
 .ty-pill.on { border-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 18%, var(--bg-surface)); }
 .ty-pill.done { color: #3f8a02; }

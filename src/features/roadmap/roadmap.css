@@ -46,9 +46,7 @@
   fill: #e27396;
 }
 .rm-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .rm-legend i {
   display: inline-block;
@@ -58,9 +56,7 @@
   margin-right: 4px;
 }
 .rm-side {
-  display: grid;
-  align-content: start;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .rm-title {
   font-size: 20px;
@@ -87,13 +83,6 @@
   height: 22px;
   border-radius: 2px;
   background: var(--text-primary);
-}
-.rm-ms {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 .rm-ms li {
   display: flex;

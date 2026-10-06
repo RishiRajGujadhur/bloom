@@ -12,13 +12,13 @@
 .gq-side h2 { margin: 0; font: 900 clamp(1.8rem, 3.6vw, 2.8rem)/1.05 'Manrope', sans-serif; letter-spacing: -0.03em; }
 .gq-side h2 em { font-style: normal; color: var(--accent-color); }
 .gq-eyebrow { margin: 0; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.72rem; color: var(--accent-color); }
-.gq-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.gq-row { --bloom-gap: 6px; }
 .gq-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 14px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .gq-chip.small { padding: 4px 10px; font-size: 0.82rem; }
 .gq-chip.on { border-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 16%, var(--bg-surface)); }
 .gq-hint { margin: 0; color: var(--text-secondary); }
 .gq-cta { border: 0; border-radius: 12px; padding: 8px 16px; background: var(--accent-color); color: var(--text-on-accent, #fff); font: inherit; font-weight: 800; cursor: pointer; }
-.gq-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.gq-opts { --bloom-gap: 8px; }
 .gq-opt { padding: 12px; border: 2px solid var(--border-color); border-bottom-width: 4px; border-radius: 14px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .gq-opt.right { border-color: #58cc02; background: #58cc0218; }
 .gq-result { display: grid; gap: 6px; justify-items: start; padding: 12px; border-radius: 14px; }

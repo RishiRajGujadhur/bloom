@@ -334,7 +334,7 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
 
   const champion = state.cleared >= levels.length
   return (
-    <div ref={map} className="st-map">
+    <div ref={map} className="st-map bloom-stack">
       <header>
         <h3>🏆 Story: The Word Well</h3>
         <p>{champion ? 'You are the champion — Bloom World is saved! Replay any match for fun.' : 'Win the Grand English Tournament to refill the Word Well and save Bloom World.'}</p>
@@ -361,7 +361,7 @@ export function StoryMode({ onXp, onGems, onFreeze }: { onXp: (n: number) => voi
           )
         })}
       </div>
-      <div className="en-inline">
+      <div className="en-inline bloom-controls">
         <button type="button" className="studio-btn" onClick={() => setStep({ kind: 'video', then: { kind: 'map' } })}>▶ Watch the intro</button>
         <button type="button" className="en-link" onClick={() => setStep({ kind: 'talk', lines: prologue, sky: ['#fff0e0', '#ffc2a8'], then: { kind: 'map' } })}>Replay the prologue</button>
       </div>

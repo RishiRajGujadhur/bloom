@@ -59,7 +59,7 @@ function MatchMadness({ onXp }: { onXp: (n: number) => void }) {
     <div>
       <div className="en-madness-bar"><i style={{ width: `${(left / 60) * 100}%` }} /></div>
       <p className="quick-note">{left}s · {score} pairs</p>
-      <div className="en-match">
+      <div className="en-match bloom-columns">
         <div>{round.map((w) => <button key={w.en} type="button" className="en-option" aria-pressed={pick === w.en} disabled={gone.includes(w.en)} onClick={() => tap(w.en, 'l')}>{w.en}</button>)}</div>
         <div>{right.map((w) => <button key={w.en} type="button" className="en-option" disabled={gone.includes(w.en)} onClick={() => tap(w.en, 'r')}>{w.emoji} {w.meaning}</button>)}</div>
       </div>
@@ -82,7 +82,7 @@ function StoryPlayer({ id, onDone }: { id: string; onDone: (score: number) => vo
   const allAnswered = Object.keys(answers).length === s.questions.length
   return (
     <div className="en-story">
-      <div ref={box} className="en-lines">
+      <div ref={box} className="en-lines bloom-stack">
         {s.lines.slice(0, shown).map((l, k) => (
           <p key={k} className={`en-line ${k % 2 ? 'right' : ''}`}>
             <span className="en-who">{l.who}</span>
@@ -94,11 +94,11 @@ function StoryPlayer({ id, onDone }: { id: string; onDone: (score: number) => vo
       {!finished ? (
         <button type="button" className="en-check" onClick={() => setShown((n) => n + 1)}>Continue</button>
       ) : (
-        <div className="en-questions">
+        <div className="en-questions bloom-stack">
           {s.questions.map((q, qi) => (
             <div key={q.q}>
               <strong>{q.q}</strong>
-              <div className="en-options">
+              <div className="en-options bloom-stack">
                 {q.options.map((o) => (
                   <button key={o} type="button" className={`en-option ${answers[qi] !== undefined && o === q.answer ? 'is-right' : ''} ${answers[qi] === o && o !== q.answer ? 'is-wrong' : ''}`} disabled={answers[qi] !== undefined} onClick={() => { sfx(o === q.answer ? 'right' : 'wrong'); setAnswers((a) => ({ ...a, [qi]: o })) }}>{o}</button>
                 ))}
@@ -141,7 +141,7 @@ function RoleplayChat({ id, onDone }: { id: string; onDone: () => void }) {
   }
   return (
     <div className="en-roleplay">
-      <div className="en-chat">
+      <div className="en-chat bloom-stack">
         {log.map((m, k) => <p key={k} className={`en-bubble ${m.who} ${m.ok === false ? 'miss' : ''}`}>{m.text}</p>)}
       </div>
       <form className="en-chat-form" onSubmit={(e) => { e.preventDefault(); send() }}>
@@ -205,7 +205,7 @@ export function EnglishPractice({ store, save, today, onStart, makeReview, makeM
 
   return (
     <div className="en-grid">
-      <section className="studio-card en-hub">
+      <section className="studio-card en-hub bloom-stack">
         <h3>🏋️ Practice hub</h3>
         <button type="button" className="en-hub-btn" disabled={!due.length} onClick={() => onStart(makeReview(due), 'Word review', 'review')}>
           <span>🔁</span><strong>Review due words</strong><small>{due.length ? `${due.length} ready` : 'Nothing due — come back later'}</small>

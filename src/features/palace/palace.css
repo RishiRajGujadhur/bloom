@@ -1,6 +1,5 @@
 .palace-page {
-  display: grid;
-  gap: 14px;
+  --bloom-gap: 14px;
 }
 .palace-stage {
   position: relative;

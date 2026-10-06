@@ -22,8 +22,7 @@
 }
 
 .as-run {
-  display: grid;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 
 .as-progress {

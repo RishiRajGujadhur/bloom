@@ -224,7 +224,7 @@ export function YogaPage() {
           </div>
         )}
       </div>
-      <div className="studio-card yg-side">
+      <div className="studio-card yg-side bloom-start-stack">
         <span className="now-kicker">{current.name}</span>
         <h3 className="yg-pose-name">{pose.name}</h3>
         {on('sanskrit') && <p className="yg-sanskrit">{pose.sanskrit}</p>}
@@ -251,7 +251,7 @@ export function YogaPage() {
   const build = () => (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <div className="yg-build">
-        <div className="yg-build-head">
+        <div className="yg-build-head bloom-controls">
           <input className="studio-input" aria-label="Flow name" value={draft.name} onChange={(e) => setStore((s) => ({ ...s, draft: { ...s.draft, name: e.target.value } }))} />
           <span className="studio-empty">{fmt(flowSeconds(draft, breath))}</span>
           <button type="button" className="studio-go" onClick={() => play({ ...draft, id: `draft-${Date.now()}` })} disabled={!draft.steps.length}>
@@ -295,7 +295,7 @@ export function YogaPage() {
           <FigureSvg pose={focusPose.pose} floor={focusPose.floor} label={focusPose.name} className="yg-morph" />
         </div>
       </div>
-      <div className="studio-card yg-side">
+      <div className="studio-card yg-side bloom-start-stack">
         <h3 className="yg-pose-name">{focusPose.name}</h3>
         {on('sanskrit') && <p className="yg-sanskrit">{focusPose.sanskrit}</p>}
         {on('benefits') && <p className="yg-benefit">✦ {focusPose.benefit}</p>}
@@ -315,7 +315,7 @@ export function YogaPage() {
   )
 
   const flows = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       {(() => {
         try {
           const last = JSON.parse(localStorage.getItem('bloom-yoga-last') ?? 'null') as Flow | null

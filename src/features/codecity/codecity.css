@@ -6,7 +6,6 @@
 .cc-eyebrow { display: flex; align-items: center; gap: 6px; margin: 0 0 4px; font: 800 0.72rem 'Manrope', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: #a78bfa; }
 .cc-main .caps-badge li, .cc-card .caps-badge li { color: #a5acd6; border-color: #ffffff26; }
 .cc-main .caps-badge li.on { color: #7dffc4; }
-.cc-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .cc-cta { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 12px; padding: 10px 16px; font: 900 0.92rem 'Manrope', sans-serif; color: #0b0820; cursor: pointer; background: linear-gradient(90deg, #a78bfa, #ec4899); box-shadow: 0 10px 28px -12px #a78bfa; }
 .cc-ghost { border: 1px solid #ffffff33; border-radius: 12px; padding: 9px 14px; font: 800 0.9rem 'Manrope', sans-serif; color: #e6ebff; background: #ffffff08; cursor: pointer; }
 .cc-prog { color: #a78bfa; font-weight: 800; font-size: 0.88rem; }
@@ -20,7 +19,6 @@
 .cc-tip span { color: #a5acd6; }
 .cc-legend { display: flex; flex-wrap: wrap; gap: 14px; color: #a5acd6; font-size: 0.8rem; font-weight: 700; }
 .cc-heat { background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.cc-side { display: grid; gap: 14px; align-content: start; }
 .cc-card { display: grid; gap: 8px; padding: 16px; border-radius: 22px; background: #0b0d22; color: #e6ebff; border: 1px solid #ffffff1a; }
 .cc-card h3 { margin: 0; font: 900 1.05rem 'Manrope', sans-serif; }
 .cc-card h3 small { color: #a5acd6; font-weight: 600; font-size: 0.78rem; }

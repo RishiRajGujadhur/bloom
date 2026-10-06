@@ -92,8 +92,8 @@ function Whiteboard({ strokes, onAdd, onClear }: { strokes: Stroke[]; onAdd: (s:
     return s.length ? `M${s.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L')} Z` : ''
   }
   return (
-    <div className="du-board">
-      <div className="du-board-bar">
+    <div className="du-board bloom-stack">
+      <div className="du-board-bar bloom-inline">
         <strong>Shared whiteboard</strong>
         {COLORS.slice(0, 4).map((c) => <button key={c} type="button" className={`du-swatch ${c === color ? 'on' : ''}`} style={{ background: c }} onClick={() => setColor(c)} aria-label={`Ink ${c}`} />)}
         <button type="button" className="du-ghost" onClick={onClear}>Clear</button>
@@ -175,7 +175,7 @@ export function StudyDuel({ onXp }: { onXp: (n: number) => void }) {
         <div className="du-lobby">
           <label className="du-name">Your name<input className="studio-input" value={name} maxLength={16} onChange={(e) => { setName(e.target.value); try { localStorage.setItem('bloom-duel-name', e.target.value) } catch { /* optional */ } }} placeholder="e.g. Rishi" /></label>
           <button type="button" className="du-cta" onClick={() => setCode(roomCode())}>⚔️ Create a duel</button>
-          <form className="du-join" onSubmit={(e) => { e.preventDefault(); if (joinCode.trim().length === 5) setCode(joinCode.trim().toUpperCase()) }}>
+          <form className="du-join bloom-wrap" onSubmit={(e) => { e.preventDefault(); if (joinCode.trim().length === 5) setCode(joinCode.trim().toUpperCase()) }}>
             <input className="studio-input" value={joinCode} onChange={(e) => setJoinCode(e.target.value.toUpperCase())} placeholder="Room code" maxLength={5} aria-label="Room code" />
             <button type="submit" className="du-ghost">Join</button>
           </form>
@@ -195,7 +195,7 @@ export function StudyDuel({ onXp }: { onXp: (n: number) => void }) {
       <div className="du-grid">
         <div className="du-play">
           {room.phase === 'lobby' || allDone ? (
-            <div className="du-waiting">
+            <div className="du-waiting bloom-controls">
               {qr && <img src={qr} alt={`QR code to join room ${code}`} className="du-qr" />}
             {link && (
               <button type="button" className="du-cta" onClick={(e) => { void navigator.clipboard?.writeText(link); e.currentTarget.textContent = '✓ Link copied' }}>
@@ -205,7 +205,7 @@ export function StudyDuel({ onXp }: { onXp: (n: number) => void }) {
               <div>
                 <p>Scan to join, or enter code <b className="du-code">{code}</b> in Bloom → English → Duel.</p>
                 <ul className="du-roster">{players.map(([id, p]) => <li key={id}>{p.emoji} {id === me ? `${p.name} (you)` : p.name}{allDone ? ` — ${p.score}` : ''}</li>)}</ul>
-                <div className="du-row">
+                <div className="du-row bloom-wrap">
                   <button type="button" className="du-cta" onClick={start}>{allDone ? 'Rematch' : players.length > 1 ? `Start (${players.length} players)` : 'Start solo'}</button>
                   <button type="button" className="du-ghost" onClick={() => setCode(null)}>Leave</button>
                 </div>
@@ -218,7 +218,7 @@ export function StudyDuel({ onXp }: { onXp: (n: number) => void }) {
               <p className="du-qn">Question {mine.idx + 1} / {round.length}{mine.streak > 1 ? ` · 🔥 ${mine.streak} in a row` : ''}</p>
               <h4>{round[mine.idx].prompt}</h4>
               {round[mine.idx].hint && <p className="du-hint">{round[mine.idx].hint}</p>}
-              <div className="du-opts">
+              <div className="du-opts bloom-columns">
                 {round[mine.idx].options.map((o) => {
                   const state = pick && pick.i === mine.idx ? (o === round[mine.idx].answer ? 'right' : o === pick.chosen ? 'wrong' : '') : ''
                   return <button key={o} type="button" className={`du-opt ${state}`} onClick={() => answer(o)}>{o}</button>
@@ -226,7 +226,7 @@ export function StudyDuel({ onXp }: { onXp: (n: number) => void }) {
               </div>
             </div>
           ) : (
-            <div className="du-waiting"><p>Finished with <b>{mine?.score}</b> points. Waiting for the others…</p></div>
+            <div className="du-waiting bloom-controls"><p>Finished with <b>{mine?.score}</b> points. Waiting for the others…</p></div>
           )}
         </div>
         <Whiteboard strokes={room.strokes} onAdd={(s) => room.room.current?.strokes.push([s])} onClear={() => { const a = room.room.current?.strokes; if (a) a.delete(0, a.length) }} />

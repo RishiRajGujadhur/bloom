@@ -198,10 +198,10 @@ export function GlobePage() {
         </button>
         <h2>{q.mode === 'find' ? <>Find <em>{q.country.name}</em></> : q.mode === 'name' ? 'Which country is glowing?' : <>Capital of <em>{q.country.name}</em>?</>}</h2>
         <p className="gq-shortcuts">Keyboard: S skips · Enter continues · 1–4 answer capital choices</p>
-        <div className="gq-row">
+        <div className="gq-row bloom-wrap">
           {(['find', 'name', 'capital'] as Mode[]).map((m) => <button key={m} type="button" disabled={retryMode || paused} className={`gq-chip ${mode === m ? 'on' : ''}`} onClick={() => setMode(m)}>{{ find: '🔎 Find it', name: '🏷️ Name it', capital: '🏛️ Capitals' }[m]}</button>)}
         </div>
-        <div className="gq-row">
+        <div className="gq-row bloom-wrap">
           {continents.map((c) => <button key={c} type="button" disabled={retryMode || paused} className={`gq-chip small ${continent === c ? 'on' : ''}`} onClick={() => setContinent(c)}>{c}</button>)}
         </div>
         {paused && <p className="gq-hint" role="status">Quiz paused. Your question is saved; resume whenever you’re ready.</p>}
@@ -212,13 +212,13 @@ export function GlobePage() {
           </button>
         )}
         {q.mode === 'name' && !answer && (
-          <form className="gq-row" onSubmit={(e) => { e.preventDefault(); submitName() }}>
+          <form className="gq-row bloom-wrap" onSubmit={(e) => { e.preventDefault(); submitName() }}>
             <input className="studio-input" disabled={paused} value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type the country…" aria-label="Country name" autoFocus />
             <button type="submit" disabled={paused} className="gq-cta">Check</button>
           </form>
         )}
         {q.mode === 'capital' && q.options && (
-          <div className="gq-opts">
+          <div className="gq-opts bloom-columns">
             {q.options.map((o) => <button key={o} type="button" disabled={!!answer || paused} className={`gq-opt ${answer && o === q.country.capital ? 'right' : ''}`} onClick={() => judge(o === q.country.capital)}>{o}</button>)}
           </div>
         )}

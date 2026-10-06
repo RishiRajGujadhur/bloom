@@ -174,10 +174,10 @@ export function TunerPage() {
       <aside className="tu-side">
         <p className="tu-eyebrow">Tuner</p>
         <h2>{inTune ? 'Perfect.' : reading ? (reading.cents < 0 ? 'Tune up a little' : 'Tune down a little') : 'Tune by ear, perfectly'}</h2>
-        <div className="tu-row">
+        <div className="tu-row bloom-wrap">
           {Object.entries(presets).map(([id, p]) => <button key={id} type="button" className={`tu-chip ${preset === id ? 'on' : ''}`} onClick={() => setPreset(id)}>{p.label}</button>)}
         </div>
-        <div className="tu-strings">
+        <div className="tu-strings bloom-wrap">
           {strings.map((s) => (
             <button key={s} type="button" className={`tu-string ${closest === s ? 'near' : ''} ${closest === s && inTune ? 'good' : ''}`} onClick={() => void reference(s)} title={`Play ${s}`}>
               <strong>{s.replace(/\d/, '')}</strong><small>{s}</small>

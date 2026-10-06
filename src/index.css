@@ -3,6 +3,7 @@
 @import './styles/variables.css';
 @import './styles/themes.css';
 @import './styles/galaxy-app.css';
+@import './styles/common.css';
 
 /*
  * Tailwind is the responsive composition layer. Preflight is intentionally

@@ -69,7 +69,7 @@ export function StickerBook({ data, setData, today }: { data: AppData; setData: 
           d ? (
             <div key={d} className={`sb-day ${d === today ? 'today' : ''} ${d > today ? 'future' : ''}`} style={{ ['--tape' as string]: tape[i % tape.length] }}>
               <small>{Number(d.slice(8))}</small>
-              <div className="sb-stickers">
+              <div className="sb-stickers bloom-wrap">
                 {stickersOn(d).map(({ h, s, i: k }) => (
                   <span key={h.id} className="sb-sticker" title={h.title} style={{ ['--r' as string]: `${((k * 37 + i * 13) % 30) - 15}deg` }}>
                     {s}

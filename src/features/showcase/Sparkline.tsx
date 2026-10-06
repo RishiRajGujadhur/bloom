@@ -28,7 +28,7 @@ export function Sparkline({ values, labels, unit, goodWhenDown = false, color = 
   }, [d])
   if (pts.length < 2) return null
   return (
-    <div className="spk">
+    <div className="spk bloom-inline">
       <svg viewBox="0 0 220 58" role="img" aria-label={`Trend: ${delta > 0 ? '+' : ''}${delta.toFixed(1)} ${unit}`}>
         <path ref={line} d={d} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         {xy.map(([x, y], i) => (

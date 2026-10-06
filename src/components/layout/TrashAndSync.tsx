@@ -122,7 +122,7 @@ export function TrashList({ setData }: { setData: Dispatch<SetStateAction<AppDat
   }, [])
   if (!items.length) return <p className="trash-empty">Trash is empty. Deleted habits, to-dos and calendar blocks stay here for 30 days.</p>
   return (
-    <ul className="trash-list">
+    <ul className="trash-list bloom-list">
       {items.slice(0, 40).map((t) => (
         <li key={t.id}>
           <span><b>{t.label}</b><small>{LABEL[t.kind]} · deleted {new Date(t.at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}</small></span>

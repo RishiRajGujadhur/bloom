@@ -190,7 +190,7 @@ export function BillsInbox({ code, bills, onBills, onPaid }: { code: string; bil
         </button>
       )}
       {upcoming.length > 0 ? (
-        <ul className="bi-list">
+        <ul className="bi-list bloom-list">
           {upcoming.map((b) => {
             const when = b.due ?? b.renews
             return (
@@ -201,7 +201,7 @@ export function BillsInbox({ code, bills, onBills, onPaid }: { code: string; bil
                   <small>{b.kind === 'renewal' ? `Renews ${when}` : when ? `Due ${when}` : 'Letter'}{b.reference ? ` · ${b.reference}` : ''}</small>
                 </div>
                 <b className="bi-amt">{b.amount != null ? fmt(b.amount) : '—'}</b>
-                <div className="bi-acts">
+                <div className="bi-acts bloom-wrap">
                   {b.amount != null && <button type="button" className="rl-ghost" onClick={() => pay(b)}>Mark paid</button>}
                   <button type="button" className="rl-ghost" onClick={() => void exportPdf(b)} aria-label={`Save ${b.biller} as a searchable PDF`}><FileDown size={15} /> PDF</button>
                   <button type="button" className="rl-ghost" onClick={() => remove(b)} aria-label={`Remove ${b.biller}`}><Trash2 size={15} /></button>

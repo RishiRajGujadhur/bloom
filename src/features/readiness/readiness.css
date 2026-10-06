@@ -19,7 +19,7 @@
 .rd-unit { fill: #ffd1da; font: 800 12px 'Manrope', sans-serif; letter-spacing: 0.16em; text-transform: uppercase; }
 .rd-beats { fill: #a9b3d6; font: 700 12px 'Manrope', sans-serif; }
 .rd-controls { display: grid; gap: 10px; align-content: center; }
-.rd-sources { display: flex; flex-wrap: wrap; gap: 6px; }
+.rd-sources { --bloom-gap: 6px; }
 .rd-sources button { border: 1px solid #ffffff2a; background: #ffffff0d; color: #e8eeff; border-radius: 999px; padding: 7px 14px; font: 800 0.85rem 'Manrope', sans-serif; cursor: pointer; }
 .rd-sources button.on { background: linear-gradient(90deg, #ff4d6d, #ff9f6d); color: #1d0710; border-color: transparent; box-shadow: 0 0 22px -6px #ff4d6d; }
 .rd-sources button:disabled { opacity: 0.6; cursor: default; }
@@ -32,7 +32,6 @@
 .rd-chart h3, .rd-card h3 { margin: 0 0 6px; font: 900 1.05rem 'Manrope', sans-serif; }
 .rd-chart small, .rd-card h3 small { font-weight: 600; color: #8fa3c7; font-size: 0.78rem; }
 .rd-chart .u-wrap, .rd-card .u-wrap { background: transparent; }
-.rd-side { display: grid; gap: 14px; align-content: start; }
 .rd-card { display: grid; gap: 8px; padding: 16px; border-radius: 22px; background: #0d0a1f; color: #e8eeff; border: 1px solid #ffffff1a; }
 .rd-card p { margin: 0; color: #c3cae6; }
 .rd-small { font-size: 0.85rem; color: #8fa3c7 !important; }

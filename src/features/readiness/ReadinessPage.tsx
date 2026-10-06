@@ -262,7 +262,7 @@ export function ReadinessPage() {
         <div className="rd-stage">
           <Hud phase={phase} left={left} bpm={bpm} beats={rr.length} pulse={pulse} />
           <div className="rd-controls">
-            <div className="rd-sources" role="radiogroup" aria-label="Heart-rate source">
+            <div className="rd-sources bloom-wrap" role="radiogroup" aria-label="Heart-rate source">
               {([['bluetooth', '📡 Bluetooth strap'], ['camera', '☝️ Fingertip camera'], ['simulated', '🧪 Simulated strap']] as [Source, string][]).map(([id, label]) => (
                 <button key={id} type="button" role="radio" aria-checked={source === id} className={source === id ? 'on' : ''} disabled={phase === 'scanning' || phase === 'connecting'} onClick={() => setSource(id)}>{label}</button>
               ))}
@@ -288,7 +288,7 @@ export function ReadinessPage() {
           <div ref={tachoHost} data-matrix-native />
         </div>
       </section>
-      <aside className="rd-side">
+      <aside className="rd-side bloom-start-stack">
         {result ? (
           <div className={`rd-card rd-result ${result.verdict.tone}`}>
             <Gauge v={result.verdict} />

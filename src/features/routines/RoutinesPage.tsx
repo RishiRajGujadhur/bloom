@@ -115,7 +115,7 @@ export function RoutinesPage() {
     playing && on('player') ? (
       <Player routine={playing} onDone={finish(playing)} onClose={() => setPlaying(null)} />
     ) : (
-      <div className="iv-programs">
+      <div className="iv-programs bloom-stack">
         {on('dial') && todays.length > 0 && (
           <div className="rt-dial-row">
             <DayDial
@@ -172,7 +172,7 @@ export function RoutinesPage() {
   const edit = () =>
     !routine ? null : (
       <div className="studio-split">
-        <div className="studio-card rt-side">
+        <div className="studio-card rt-side bloom-start-stack">
           <div className="studio-chip-row">
             {store.routines.map((r) => (
               <button key={r.id} type="button" className="studio-chip" aria-pressed={r.id === routine.id} onClick={() => setSel(r.id)}>
@@ -181,7 +181,7 @@ export function RoutinesPage() {
             ))}
           </div>
           <input className="studio-input rm-title" aria-label="Routine name" value={routine.name} onChange={(e) => upd(routine.id, (r) => ({ ...r, name: e.target.value }))} />
-          <ul className="rm-ms">
+          <ul className="rm-ms bloom-list">
             {routine.steps.map((s, k) => (
               <li key={s.id}>
                 <span>
@@ -207,13 +207,13 @@ export function RoutinesPage() {
           </div>
           <Slider label="Step length" value={stepMin} min={1} max={60} unit="min" compact onChange={setStepMin} />
         </div>
-        <div className="studio-card rt-side">
+        <div className="studio-card rt-side bloom-start-stack">
           <h3>
             <Repeat size={16} /> Repeats
           </h3>
           <Segmented label="Frequency" value={routine.repeat.freq} onChange={(f) => upd(routine.id, (r) => ({ ...r, repeat: { ...r.repeat, freq: f } }))} options={[{ id: 'daily', label: 'Daily' }, { id: 'weekly', label: 'Weekly' }, { id: 'monthly', label: 'Monthly' }]} />
           {routine.repeat.freq === 'weekly' && (
-            <div className="rt-days" role="group" aria-label="Days">
+            <div className="rt-days bloom-wrap" role="group" aria-label="Days">
               {dayNames.map((d, i) => (
                 <button key={d} type="button" className="studio-chip" aria-pressed={routine.repeat.days.includes(i)} onClick={() => upd(routine.id, (r) => ({ ...r, repeat: { ...r.repeat, days: r.repeat.days.includes(i) ? r.repeat.days.filter((x) => x !== i) : [...r.repeat.days, i].sort() } }))}>
                   {d}
@@ -244,7 +244,7 @@ export function RoutinesPage() {
     )
 
   const library = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       <h3>Templates</h3>
       <Rail label="Routine templates">
         {templates.map((t) => (

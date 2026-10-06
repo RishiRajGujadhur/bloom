@@ -2,7 +2,7 @@
 .rd-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
 .rd-head h2 { margin: 0; font: 900 clamp(1.8rem, 3.8vw, 2.8rem)/1 'Manrope', sans-serif; letter-spacing: -0.03em; }
 .rd-eyebrow { margin: 0 0 4px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.72rem; color: var(--accent-color); }
-.rd-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.rd-row { --bloom-gap: 6px; }
 .rd-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 12px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .rd-chip.on { border-color: #8f7ae5; background: color-mix(in srgb, #8f7ae5 16%, var(--bg-surface)); }
 .rd-stage { position: relative; display: grid; place-items: center; min-height: 0; border-radius: 26px; background: radial-gradient(circle at 50% 50%, color-mix(in srgb, #8f7ae5 10%, var(--bg-surface)), var(--bg-surface)); border: 1px solid var(--border-color); overflow: hidden; }
@@ -20,7 +20,6 @@
 .rd-post { text-align: left; }
 .rd-paste { width: min(90%, 720px); }
 .rd-quiz { display: grid; gap: 14px; padding: 20px; width: min(92%, 760px); }
-.rd-q { display: grid; gap: 8px; }
 .rd-opt { padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .rd-opt.right { border-color: #58cc02; background: #58cc0218; }
 .rd-opt.wrong { border-color: #ff4b4b; background: #ff4b4b14; }

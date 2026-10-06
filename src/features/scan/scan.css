@@ -1,8 +1,6 @@
 .sc-scanner,
 .sc-result {
-  display: grid;
-  align-content: start;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .sc-video {
   position: relative;
@@ -44,10 +42,7 @@
   letter-spacing: 0.08em;
 }
 .sc-samples {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .sc-product {
   display: grid;
@@ -55,9 +50,7 @@
   animation: sc-in 450ms cubic-bezier(0.2, 1.2, 0.3, 1) both;
 }
 .sc-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .sc-head img {
   width: 64px;
@@ -72,11 +65,6 @@
 }
 .sc-head small {
   color: var(--text-muted);
-}
-.sc-grades {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 .sc-grade {
   display: grid;
@@ -107,9 +95,7 @@
   font-weight: 700;
 }
 .sc-lights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .sc-lights span {
   padding: 4px 10px;

@@ -117,9 +117,7 @@
 }
 .widget-library,
 .widget-editor-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .widget-library button,
 .widget-editor-actions button {

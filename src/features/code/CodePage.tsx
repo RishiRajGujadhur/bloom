@@ -63,7 +63,7 @@ function Workspace({ title, body, starter, solution, checks, hint, draft, onDraf
       <section className="cd-pane cd-learn">
         <header><h3>{title}</h3>{done && <span className="cd-done">✓ Done</span>}</header>
         <div className="cd-body" dangerouslySetInnerHTML={{ __html: md(body) }} />
-        <ul ref={list} className="cd-checks" aria-label="Checklist">
+        <ul ref={list} className="cd-checks bloom-list" aria-label="Checklist">
           {checks.map((c, i) => {
             const r = result?.checks[i]
             return (
@@ -133,9 +133,9 @@ function CourseMap({ store, open }: { store: CodeStore; open: (id: string) => vo
               <circle cx="22" cy="22" r="18" className="cd-ring-arc" strokeDasharray="113" strokeDashoffset={off} data-off={off} />
               <text x="22" y="27" textAnchor="middle">{m.emoji}</text>
             </svg>
-            <div className="cd-mod-main">
+            <div className="cd-mod-main bloom-stack">
               <strong>{m.title}</strong>
-              <div className="cd-mod-lessons">
+              <div className="cd-mod-lessons bloom-wrap">
                 {ls.map((l) => (
                   <button key={l.id} type="button" className={`cd-chip ${store.done[l.id] ? 'done' : ''}`} onClick={() => open(l.id)}>{store.done[l.id] ? '✓ ' : ''}{l.title}</button>
                 ))}
@@ -171,11 +171,11 @@ function Quiz({ store, save }: { store: CodeStore; save: (f: (s: CodeStore) => C
   return (
     <div className="cd-quiz">
       <div className="cd-dots" aria-label={`Question ${i + 1} of ${quiz.length}`}>{quiz.map((x, k) => <i key={x.id} className={`${k === i ? 'now' : ''} ${store.quiz[x.id] ? 'ok' : ''}`} />)}</div>
-      <div ref={card} className="studio-card cd-qcard">
+      <div ref={card} className="studio-card cd-qcard bloom-stack">
         <small>{modules.find((m) => m.id === q.module)?.title}</small>
         <h3>{q.q}</h3>
         {q.code && <pre className="cd-snippet">{q.code}</pre>}
-        <div className="cd-opts">
+        <div className="cd-opts bloom-columns">
           {q.options.map((o, k) => (
             <button key={o} type="button" className={`cd-opt ${picked !== null && k === q.answer ? 'right' : ''} ${picked === k && k !== q.answer ? 'wrong' : ''}`} onClick={() => pick(k)} disabled={picked !== null}>
               <kbd>{'ABCD'[k]}</kbd> <code>{o}</code>
@@ -248,7 +248,7 @@ export function CodePage() {
   const learnTab = () =>
     lessonId === null ? (
       <div className="cd-home">
-        <section className="studio-card cd-hero">
+        <section className="studio-card cd-hero bloom-stack">
           <svg viewBox="0 0 120 80" className="cd-hero-art" aria-hidden="true">
             <rect x="4" y="6" width="112" height="68" rx="10" fill="#1f1d2b" />
             <circle cx="16" cy="16" r="3" fill="#ff5f56" /><circle cx="26" cy="16" r="3" fill="#ffbd2e" /><circle cx="36" cy="16" r="3" fill="#27c93f" />
@@ -319,7 +319,7 @@ export function CodePage() {
         }] : []),
         ...(on('cheatsheets') ? [{
           id: 'cheats', label: 'Cheat sheets', icon: <BookOpen size={15} />, render: () => (
-            <div className="cd-cheats">
+            <div className="cd-cheats bloom-stack">
               <input className="studio-input" placeholder="Search: map, loop, template…" aria-label="Search cheat sheets" value={query} onChange={(e) => setQuery(e.target.value)} />
               <div className="cd-cheat-grid">
                 {(query ? [{ m: 'results', rows: fuse.search(query).map((r) => r.item) }] : Object.entries(cheatsheets).map(([m, rows]) => ({ m, rows }))).map(({ m, rows }) => (

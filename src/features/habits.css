@@ -171,9 +171,7 @@
   place-items: center;
 }
 .routine-days {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .routine-days label {
   align-items: center;
@@ -249,9 +247,7 @@
   }
 }
 .habits-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+  --bloom-gap: 10px;
 }
 
 .habits-loot {

@@ -77,9 +77,9 @@ export function ShopQuick({ owned, balance, onBuy }: { owned: string[]; balance:
         />
       )}
       {on('wishRings') && wished.length > 0 && (
-        <div className="wish-rings">
+        <div className="wish-rings bloom-stack">
           {wished.map((i) => (
-            <div key={i.id} className="wish-row">
+            <div key={i.id} className="wish-row bloom-inline">
               <Ring item={i} balance={balance} />
               {balance >= i.price && <button type="button" className="primary" onClick={() => onBuy(i)}>Buy</button>}
               <button type="button" className="quiet-button" aria-label={`Remove ${i.name}`} onClick={() => save({ ...wish, wished: wish.wished.filter((x) => x !== i.id) })}>✕</button>

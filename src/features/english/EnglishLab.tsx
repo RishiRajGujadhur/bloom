@@ -27,12 +27,12 @@ function Pronounce({ onXp }: { onXp: (n: number) => void }) {
   const stressed = ph?.split(' ').map((p, k) => <span key={k} className={/1$/.test(p) ? 'stress' : /2$/.test(p) ? 'second' : ''}>{p.replace(/\d/, '')}</span>)
   return (
     <div className="en-lab">
-      <form className="en-inline" onSubmit={(e) => { e.preventDefault(); void look(String(new FormData(e.currentTarget).get('w') || '').trim()) }}>
+      <form className="en-inline bloom-controls" onSubmit={(e) => { e.preventDefault(); void look(String(new FormData(e.currentTarget).get('w') || '').trim()) }}>
         <input name="w" className="studio-input" defaultValue={word} aria-label="Word to pronounce" />
         <button type="submit" className="studio-btn">Look up</button>
         <button type="button" className="studio-btn" onClick={() => void look(pick(allWords).en.split(' ')[0])}>Random</button>
       </form>
-      <div className="en-pron">
+      <div className="en-pron bloom-inline">
         <button type="button" className="en-speaker" aria-label="Hear it" onClick={() => speak(word, 0.8)}><Volume2 size={28} /></button>
         <div>
           <strong className="en-pron-word">{word}</strong>
@@ -80,13 +80,13 @@ function Rhymes({ onXp }: { onXp: (n: number) => void }) {
   return (
     <div className="en-lab">
       <p>Words that rhyme with <strong className="en-pron-word">{seed}</strong></p>
-      <form className="en-inline" onSubmit={(e) => { e.preventDefault(); const f = e.currentTarget; void guess(String(new FormData(f).get('r') || '')); f.reset() }}>
+      <form className="en-inline bloom-controls" onSubmit={(e) => { e.preventDefault(); const f = e.currentTarget; void guess(String(new FormData(f).get('r') || '')); f.reset() }}>
         <input name="r" className="studio-input" aria-label="A rhyme" placeholder="Type a rhyme" />
         <button type="submit" className="studio-btn">Check</button>
         <button type="button" className="studio-btn" onClick={() => { setSeed(pick(seeds.filter((s) => s !== seed))); setFound([]); setAll(null); setMsg('') }}>New word</button>
       </form>
       <p className="quick-note">{msg}</p>
-      <div className="en-tags">{found.map((f) => <span key={f}>{f}</span>)}</div>
+      <div className="en-tags bloom-wrap">{found.map((f) => <span key={f}>{f}</span>)}</div>
       {all && <button type="button" className="en-link" onClick={() => setFound(all.slice(0, 12))}>Show some</button>}
     </div>
   )
@@ -108,7 +108,7 @@ function MinimalPairs({ onXp }: { onXp: (n: number) => void }) {
   return (
     <div className="en-lab">
       <button type="button" className="en-speaker" aria-label="Play word" onClick={() => speak(target, 0.8)}><Volume2 size={30} /></button>
-      <div className="en-options">
+      <div className="en-options bloom-stack">
         {pair.map((w) => (
           <button key={w} type="button" className={`en-option ${res && w === target ? 'is-right' : ''}`} disabled={!!res} onClick={() => { const ok = w === target; setRes(ok ? 'right' : 'wrong'); sfx(ok ? 'right' : 'wrong'); if (ok) onXp(1) }}>{w}</button>
         ))}
@@ -137,7 +137,7 @@ function SpellingBee({ onXp }: { onXp: (n: number) => void }) {
   }
   return (
     <div className="en-lab">
-      <div className="en-inline">
+      <div className="en-inline bloom-controls">
         <button type="button" className="en-speaker" aria-label="Hear the word" onClick={() => speak(word, 0.75)}><Volume2 size={28} /></button>
         <input className="studio-input" aria-label="Spell the word" value={typed} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && void check()} />
         <button type="button" className="studio-btn" onClick={() => void check()}>Check</button>
@@ -158,7 +158,7 @@ function Numbers({ onXp }: { onXp: (n: number) => void }) {
   return (
     <div className="en-lab">
       <p>Write in words: <strong className="en-pron-word">{n.toLocaleString('en-GB')}</strong></p>
-      <div className="en-inline">
+      <div className="en-inline bloom-controls">
         <input className="studio-input" aria-label="Number in words" value={typed} onChange={(e) => setTyped(e.target.value)} />
         <button type="button" className="studio-btn" onClick={() => { const ok = checkTyped(typed.replace(/-/g, ' '), answer.replace(/-/g, ' ').replace(/,/g, '')) !== 'wrong'; setMsg(ok ? '✓ Correct!' : `It’s “${answer}”`); sfx(ok ? 'right' : 'wrong'); if (ok) onXp(2) }}>Check</button>
         <button type="button" className="studio-btn" onClick={() => { speak(String(n)) }}><Volume2 size={15} /></button>
@@ -185,12 +185,12 @@ function Forms({ onXp }: { onXp: (n: number) => void }) {
   }
   return (
     <div className="en-lab">
-      <div className="en-options">
+      <div className="en-options bloom-stack">
         <button type="button" className="en-option" aria-pressed={mode === 'plural'} onClick={() => { setMode('plural'); next('plural') }}>Plurals</button>
         <button type="button" className="en-option" aria-pressed={mode === 'past'} onClick={() => { setMode('past'); next('past') }}>Past tense</button>
       </div>
       <p>{mode === 'plural' ? 'One' : 'Today I'} <strong className="en-pron-word">{w}</strong>, {mode === 'plural' ? 'two …' : 'yesterday I …'}</p>
-      <div className="en-inline">
+      <div className="en-inline bloom-controls">
         <input className="studio-input" aria-label="Your answer" value={typed} onChange={(e) => setTyped(e.target.value)} />
         <button type="button" className="studio-btn" onClick={() => { const ok = typed.trim().toLowerCase() === answer.toLowerCase(); setMsg(ok ? '✓ Correct!' : `It’s “${answer}”`); sfx(ok ? 'right' : 'wrong'); if (ok) onXp(1) }}>Check</button>
         <button type="button" className="studio-btn" onClick={() => next()}>Next</button>

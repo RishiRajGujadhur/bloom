@@ -47,11 +47,13 @@
 .cb-dot.cap { fill: none; stroke: #1f1d2b44; stroke-width: 5; }
 .cb-star { fill: #ffc800; stroke: #b47f00; stroke-width: 1.5; pointer-events: none; }
 
-.ch-side { display: grid; gap: 10px; align-content: start; }
+.ch-side {
+  --bloom-gap: 10px; }
 .ch-side h3 { margin: 0; font-size: 1.3rem; }
 .ch-side p { margin: 0; }
 .ch-meta { color: var(--text-secondary); font-size: 0.92rem; }
-.ch-lessons, .ch-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ch-lessons, .ch-row {
+  --bloom-gap: 6px; }
 .ch-pill {
   border: 1px solid var(--border-color);
   border-radius: 999px;

@@ -347,7 +347,7 @@ export function FocusPage({
               {quest.pausedAt !== null ? 'Resume session' : 'Pause session'}
             </button>
             {confirmStop ? (
-              <div className="feature-actions">
+              <div className="feature-actions bloom-controls">
                 <button
                   className="quiet-button"
                   onClick={() => setConfirmStop(false)}
@@ -409,7 +409,7 @@ export function FocusPage({
         </p>
       </section>
       <section style={{ order: 4 }} className="card focus-garden rounded-ui-lg border border-ui-border bg-surface p-5 sm:p-6">
-        <div className="section-title">
+        <div className="section-title bloom-inline">
           <Timer size={20} />
           <h2>Your garden</h2>
         </div>

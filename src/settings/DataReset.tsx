@@ -31,13 +31,13 @@ export function DataReset({ className }: { className?: string }) {
   const [word, setWord] = useState('')
   const [busy, setBusy] = useState(false)
   return (
-    <section className={`data-reset ${className ?? ''}`} aria-labelledby="data-reset-heading">
+    <section className={`data-reset bloom-stack ${className ?? ''}`} aria-labelledby="data-reset-heading">
       <h2 id="data-reset-heading"><Trash2 size={18} aria-hidden="true" /> Clear my data</h2>
       <p>Delete everything Bloom has stored on this device — journal, habits, money, English progress, settings and caches. Export a backup first if you might want it back. This can’t be undone.</p>
       {!open ? (
         <button type="button" className="studio-btn data-reset-btn" onClick={() => setOpen(true)}>Clear all my data…</button>
       ) : (
-        <form className="data-reset-confirm" onSubmit={async (e) => {
+        <form className="data-reset-confirm bloom-stack" onSubmit={async (e) => {
           e.preventDefault()
           if (word !== 'DELETE') return
           setBusy(true)

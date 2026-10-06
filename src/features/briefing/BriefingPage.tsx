@@ -250,7 +250,7 @@ export function BriefingPage({ data, today }: FeaturePageProps) {
               {playing || speaking ? <Pause size={30} /> : <Play size={30} />}
             </button>
             {rendering && <p className="br-note">Voicing on this device… {rendering.done}/{rendering.total}</p>}
-            <div className="br-voice">
+            <div className="br-voice bloom-wrap">
               {hd === 'ready' ? (
                 <label>HD voice
                   <select className="studio-input" value={voice} onChange={(e) => setVoice(e.target.value)}>{VOICES.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}</select>

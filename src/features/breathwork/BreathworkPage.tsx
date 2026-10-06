@@ -184,7 +184,7 @@ export function BreathworkPage() {
             {s?.phase === 'retention' && <button className="studio-go bw-tap">Tap to breathe</button>}
           </div>
         </div>
-        <div className="studio-card bw-side">
+        <div className="studio-card bw-side bloom-start-stack">
           {!s || s.phase === 'done' ? (
             <>
               {on('pace') && (

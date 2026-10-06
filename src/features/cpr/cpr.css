@@ -9,7 +9,7 @@
 .cp-side { display: grid; gap: 10px; align-content: start; overflow-y: auto; padding-right: 4px; }
 .cp-side h2 { margin: 0; font: 900 clamp(1.6rem, 3vw, 2.4rem)/1.05 'Manrope', sans-serif; letter-spacing: -0.03em; }
 .cp-eyebrow { margin: 0; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.7rem; color: #e0303f; }
-.cp-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cp-row { --bloom-gap: 6px; }
 .cp-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 6px 12px; background: var(--bg-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
 .cp-chip.on { border-color: #e0303f; background: #e0303f18; }
 .cp-cta { border: 0; border-radius: 12px; padding: 9px 18px; background: #e0303f; color: #fff; font: inherit; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #9c1f2b; }
@@ -18,7 +18,7 @@
 .cp-tap { display: grid; justify-items: center; width: 100%; padding: 14px; border: 2px dashed #e0303f; border-radius: 14px; background: #e0303f10; color: inherit; font: 900 1.2rem 'Manrope', sans-serif; cursor: pointer; touch-action: manipulation; }
 .cp-tap small { font: 500 0.75rem 'Manrope', sans-serif; color: var(--text-muted); }
 .cp-rate { margin: 6px 0 0; font-weight: 700; }
-.cp-steps { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.cp-steps { --bloom-gap: 4px; }
 .cp-steps button { width: 100%; text-align: left; border: 0; background: none; color: inherit; font: inherit; padding: 4px 0; cursor: pointer; }
 .cp-steps b { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 6px; border-radius: 7px; background: #e0303f; color: #fff; font-size: 0.8rem; }
 .cp-steps li.on b { background: #1cb0f6; }

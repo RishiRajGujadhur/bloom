@@ -208,7 +208,7 @@ function SleepLog({
   }, [])
   return (
     <form
-      className="sleep-card sleep-log"
+      className="sleep-card sleep-log bloom-stack"
       onSubmit={(e) => {
         e.preventDefault()
         onSave({ id: crypto.randomUUID(), date: night, bedtime, wake, quality, factors })
@@ -236,7 +236,7 @@ function SleepLog({
           <input type="time" value={wake} onChange={(e) => setWake(e.target.value)} required />
         </label>
       </div>
-      <fieldset className="sleep-quality">
+      <fieldset className="sleep-quality bloom-wrap">
         <legend>How rested do you feel? <small>(1–5)</small></legend>
         {qualities.map((emoji, i) => (
           <button
@@ -379,7 +379,7 @@ function WindDown({
             </select>
           </label>
         </div>
-        <ol className="sleep-steps">
+        <ol className="sleep-steps bloom-list">
           {windDownSteps.map((step) => {
             const checked = done.includes(step.id)
             return (

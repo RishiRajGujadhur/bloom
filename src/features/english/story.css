@@ -171,8 +171,7 @@
 
 /* Map */
 .st-map {
-  display: grid;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .st-map header h3 { margin: 0; }
 .st-map header p { margin: 4px 0 0; color: var(--text-secondary); }

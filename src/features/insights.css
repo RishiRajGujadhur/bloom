@@ -40,14 +40,6 @@
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
 }
-.insight-switch,
-.overview-switch,
-.memory-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
 .overview-switch {
   margin-bottom: 18px;
 }
@@ -57,10 +49,6 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 18px;
-}
-.insight-stat {
-  display: grid;
-  gap: 8px;
 }
 .insight-stat strong {
   font-size: 32px;

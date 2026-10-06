@@ -160,7 +160,7 @@ export function IqAssessment({ onDone }: { onDone: (score: number) => void }) {
     setI(i + 1)
   }
   return (
-    <div className="as-run">
+    <div className="as-run bloom-stack">
       <div className="as-progress" aria-label={`Question ${i + 1} of ${items.length}`}><i style={{ width: `${(i / items.length) * 100}%` }} /></div>
       <div ref={stage}><ItemView item={items[i]} onAnswer={answer} /></div>
     </div>
@@ -227,7 +227,7 @@ export function EqAssessment({ onDone }: { onDone: (r: EqResult) => void }) {
     )
   }
   return (
-    <div className="as-run">
+    <div className="as-run bloom-stack">
       <div className="as-progress" aria-label={`Step ${step + 1} of ${total}`}><i style={{ width: `${(step / total) * 100}%` }} /></div>
       {body}
     </div>

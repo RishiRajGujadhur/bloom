@@ -88,9 +88,7 @@
 }
 
 .swipe-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+  --bloom-gap: 14px;
 }
 
 .swipe-btn {
@@ -141,19 +139,8 @@
   border-radius: 20px;
 }
 
-.mood-guide {
-  display: grid;
-  gap: 8px;
-}
-
 .mood-guide-label {
   font-weight: 600;
-}
-
-.mood-guide-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .mood-guide-chip {
@@ -252,23 +239,13 @@
 }
 
 .quick-done {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  --bloom-gap: 6px;
 }
 
 .quick-done li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-}
-
-.quick-add {
-  display: flex;
-  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -294,9 +271,7 @@
 }
 
 .epi-quick-top {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+  --bloom-gap: 14px;
 }
 
 .epi-bulb {
@@ -346,17 +321,6 @@
   align-items: center;
   gap: 8px;
   font-weight: 700;
-}
-
-.wish-rings {
-  display: grid;
-  gap: 8px;
-}
-
-.wish-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .wish-ring {

@@ -37,14 +37,10 @@
   color: #fff;
 }
 .rt-side {
-  display: grid;
-  align-content: start;
-  gap: 12px;
+  --bloom-gap: 12px;
 }
 .rt-days {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .rt-rule {
   margin: 0;

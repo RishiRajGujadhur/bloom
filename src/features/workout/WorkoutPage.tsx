@@ -281,7 +281,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
       </div>
     ) : (
       <div className="studio-split">
-        <div className="studio-card wo-lift">
+        <div className="studio-card wo-lift bloom-start-stack">
           <div className="wo-lift-nav">
             <button type="button" className="studio-chip" aria-label="Previous lift" onClick={() => setLiftIdx((i) => Math.max(0, i - 1))} disabled={liftIdx === 0}>
               <ChevronLeft size={16} />
@@ -332,7 +332,7 @@ export function WorkoutPage({ onCoachReward }: { onCoachReward?: (reward: { id: 
           </button>
           {on('e1rm') && lift && lift.id !== 'plank' && <p className="studio-empty">Estimated max: {e1rm(load({ liftId: lift.id, weight, reps, at: 0 }, store.bodyweight), reps)} kg</p>}
         </div>
-        <div className="studio-card wo-side">
+        <div className="studio-card wo-side bloom-start-stack">
           {on('restTimer') && (
             <div className="wo-rest-box">
               <RestRing total={store.rest} left={restLeft} />

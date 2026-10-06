@@ -1,13 +1,8 @@
 .ts-list {
-  display: grid;
-  gap: 14px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  --bloom-gap: 14px;
 }
 .ts-row {
-  display: grid;
-  gap: 6px;
+  --bloom-gap: 6px;
 }
 .ts-label {
   display: flex;

@@ -133,7 +133,7 @@ function Duel({ round, onDone, onQuit }: { round: Round; onDone: (score: number)
   return (
     <Scene sky={round.sky} final={round.id === 'final'}>
       <div className="cs-duel">
-        <div className="cs-bars">
+        <div className="cs-bars bloom-stack">
           <div className="cs-bar you"><span><BloomFace variant="bloom" size={30} follow={false} waveOnMount={false} label="" /> You</span><em><i style={{ width: `${(correct / total) * 100}%` }} /></em><b>{correct}/{total}</b></div>
           <div className="cs-bar rival" style={{ filter: r.tint }}><span><BloomFace variant={r.face} size={30} follow={false} waveOnMount={false} label="" /> {r.name}</span><em><i ref={rivalBar} style={{ background: r.color }} /></em><b>{Math.round(round.rivalScore * total)}/{total}</b></div>
         </div>
@@ -141,7 +141,7 @@ function Duel({ round, onDone, onQuit }: { round: Round; onDone: (score: number)
           <small>{round.title} · question {i + 1} of {total}</small>
           <h3>{q.q}</h3>
           {q.code && <pre className="cd-snippet">{q.code}</pre>}
-          <div className="cd-opts">
+          <div className="cd-opts bloom-columns">
             {q.options.map((o, k) => (
               <button key={o} type="button" className={`cd-opt ${picked !== null && k === q.answer ? 'right' : ''} ${picked === k && k !== q.answer ? 'wrong' : ''}`} disabled={picked !== null} onClick={() => pick(k)}>
                 <kbd>{'ABCD'[k]}</kbd> <code>{o}</code>
@@ -225,7 +225,7 @@ export function CodeStory({ onXp }: { onXp: (n: number) => void }) {
 
   const champion = state.cleared >= rounds.length
   return (
-    <div ref={map} className="st-map cs-map">
+    <div ref={map} className="st-map cs-map bloom-stack">
       <header>
         <h3>🏆 Story: The Code Cup</h3>
         <p>{champion ? 'Champion! The Lighthouse shines again. Replay any duel for fun.' : 'Win three code duels to earn the Debug Key and relight Bloom World’s Lighthouse.'}</p>
@@ -253,7 +253,7 @@ export function CodeStory({ onXp }: { onXp: (n: number) => void }) {
           )
         })}
       </div>
-      <div className="cs-row">
+      <div className="cs-row bloom-wrap">
         <button type="button" className="studio-btn" onClick={() => setStep({ kind: 'video', video: 'codeCupIntro', then: { kind: 'map' } })}>▶ Watch the intro</button>
         {state.seenFinale && <button type="button" className="studio-btn" onClick={() => setStep({ kind: 'video', video: 'codeCupFinale', then: { kind: 'map' } })}>▶ Watch the finale</button>}
         <button type="button" className="studio-btn" onClick={() => setStep(talkPrologue)}>Replay the prologue</button>

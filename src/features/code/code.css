@@ -27,7 +27,8 @@
 .cd-done { margin-left: auto; padding: 2px 8px; border-radius: 999px; background: #58cc0222; color: #3f8a02; font-size: 0.75rem; font-weight: 800; }
 .cd-body p { margin: 0 0 8px; line-height: 1.45; }
 .cd-body code, .cd-cheat code, .cd-opt code { font-family: 'Fira Code', monospace; font-size: 0.85em; padding: 1px 5px; border-radius: 6px; background: color-mix(in srgb, #f7df1e 22%, transparent); }
-.cd-checks { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.cd-checks {
+  --bloom-gap: 6px; }
 .cd-checks li { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
 .cd-checks svg { width: 20px; height: 20px; flex-shrink: 0; }
 .cd-checks circle { fill: none; stroke: var(--border-color); stroke-width: 2; }
@@ -64,7 +65,8 @@
 /* course map */
 .cd-home { display: grid; grid-template-columns: minmax(260px, 0.8fr) 1.2fr; gap: 12px; align-items: start; height: 100%; min-height: 0; }
 @media (max-width: 900px) { .cd-home { grid-template-columns: 1fr; } }
-.cd-hero { display: grid; gap: 10px; }
+.cd-hero {
+  --bloom-gap: 10px; }
 .cd-hero h3 { margin: 0; }
 .cd-hero p { margin: 0; color: var(--text-secondary); }
 .cd-hero-art { width: 100%; max-width: 280px; }
@@ -77,8 +79,10 @@
 .cd-ring-track { stroke: var(--border-color); }
 .cd-ring-arc { stroke: var(--m); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 22px 22px; }
 .cd-ring text { font-size: 16px; }
-.cd-mod-main { display: grid; gap: 6px; }
-.cd-mod-lessons { display: flex; flex-wrap: wrap; gap: 6px; }
+.cd-mod-main {
+  --bloom-gap: 6px; }
+.cd-mod-lessons {
+  --bloom-gap: 6px; }
 .cd-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 4px 10px; background: transparent; color: inherit; font: inherit; font-size: 0.82rem; cursor: pointer; }
 .cd-chip.done { border-color: #58cc02; color: #3f8a02; background: #58cc0214; }
 .cd-mod small { color: var(--text-muted); font-weight: 700; }
@@ -88,17 +92,20 @@
 .cd-dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--border-color); transition: transform 200ms; }
 .cd-dots i.ok { background: #58cc02; }
 .cd-dots i.now { transform: scale(1.5); outline: 2px solid #f7df1e; }
-.cd-qcard { display: grid; gap: 10px; }
+.cd-qcard {
+  --bloom-gap: 10px; }
 .cd-qcard h3, .cd-qcard small { margin: 0; }
 .cd-snippet { margin: 0; padding: 12px; border-radius: 12px; background: #1f1d2b; color: #f7df1e; font: 14px/1.5 'Fira Code', monospace; }
-.cd-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cd-opts {
+  --bloom-gap: 8px; }
 .cd-opt { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 2px solid var(--border-color); border-bottom-width: 4px; border-radius: 12px; background: var(--bg-surface); color: inherit; font: inherit; cursor: pointer; text-align: left; }
 .cd-opt kbd { font-family: inherit; font-weight: 800; color: var(--text-muted); }
 .cd-opt.right { border-color: #58cc02; background: #58cc0218; }
 .cd-opt.wrong { border-color: #ff4b4b; background: #ff4b4b14; }
 .cd-why { margin: 0; }
 /* cheat sheets */
-.cd-cheats { display: grid; gap: 10px; }
+.cd-cheats {
+  --bloom-gap: 10px; }
 .cd-cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; max-height: calc(100dvh - 300px); overflow-y: auto; }
 .cd-cheat-grid h3 { margin: 0 0 6px; }
 .cd-cheat { display: grid; gap: 2px; padding: 6px 0; border-bottom: 1px dashed var(--border-color); }
@@ -122,7 +129,8 @@ html[data-theme='matrix'] .cd-opt code { color: #d9ffe3; background: #0f3a1c; }
   margin: 0 auto;
   padding: 18px 14px;
 }
-.cs-bars { display: grid; gap: 6px; }
+.cs-bars {
+  --bloom-gap: 6px; }
 .cs-bar {
   display: grid;
   grid-template-columns: 170px 1fr 48px;
@@ -147,5 +155,4 @@ html[data-theme='matrix'] .cd-opt code { color: #d9ffe3; background: #0f3a1c; }
   box-shadow: 0 20px 40px -20px #0008;
 }
 .cs-card h3, .cs-card small { margin: 0; }
-.cs-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .cs-map .st-map-svg { max-height: 180px; }

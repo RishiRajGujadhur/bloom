@@ -86,7 +86,7 @@ export function PersonalInsights({
               : 'What happened, how it felt, and what you want to keep.'}
           </p>
         </div>
-        <div className="insight-switch">
+        <div className="insight-switch bloom-controls">
           <button
             aria-pressed={view === 'insights'}
             onClick={() => setView('insights')}
@@ -108,7 +108,7 @@ export function PersonalInsights({
               const current = total(recent, key),
                 old = total(previous, key)
               return (
-                <article className="insight-stat" key={key}>
+                <article className="insight-stat bloom-stack" key={key}>
                   <span>{labels[key]}</span>
                   <strong>{current}</strong>
                   <small>
@@ -245,7 +245,7 @@ export function PersonalInsights({
             <CardRail label={`${month} in Bloom`}>
               {(['tasks', 'focus', 'journals', 'habits'] as const).map(
                 (key) => (
-                  <article className="insight-stat" key={key}>
+                  <article className="insight-stat bloom-stack" key={key}>
                     <span>{labels[key]}</span>
                     <strong>{total(monthDays, key)}</strong>
                     <small>Recorded in {month}</small>
@@ -260,7 +260,7 @@ export function PersonalInsights({
         </>
       ) : (
         <>
-          <div className="memory-filters">
+          <div className="memory-filters bloom-controls">
             <label>
               Day{' '}
               <input
@@ -349,7 +349,7 @@ export function PersonalInsights({
             </p>
           )}
           {filtered.length > 6 && (
-            <div className="memory-filters">
+            <div className="memory-filters bloom-controls">
               <button disabled={page === 0} onClick={() => setPage(page - 1)}>
                 Previous
               </button>

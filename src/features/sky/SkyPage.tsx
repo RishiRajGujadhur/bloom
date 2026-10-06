@@ -143,7 +143,7 @@ export function SkyPage() {
       <aside className="sk-side">
         <p className="sk-eyebrow">Night sky · {night ? 'dark sky' : twilight ? 'twilight' : 'daytime'}</p>
         <h2 className="sk-time">{format(date, 'HH:mm')}<small>{offset === 0 ? ' now' : ` ${offset > 0 ? '+' : ''}${Math.round(offset / 60)}h`}</small></h2>
-        <div className="sk-scrub">
+        <div className="sk-scrub bloom-inline">
           <input type="range" min={-720} max={720} step={10} value={Math.max(-720, Math.min(720, offset))} aria-label="Time offset" onChange={(e) => { setPlaying(false); setOffset(Number(e.target.value)) }} />
           <button type="button" className="sk-btn" onClick={() => setPlaying((v) => !v)}>{playing ? '❚❚' : '▶'} 6 h</button>
           <button type="button" className="sk-btn ghost" onClick={() => { setPlaying(false); setOffset(0) }}>Now</button>
@@ -165,7 +165,7 @@ export function SkyPage() {
           </button>
         </div>
         <h3>Up now</h3>
-        <ul className="sk-list">
+        <ul className="sk-list bloom-list">
           {upNow.length ? upNow.slice(0, 7).map((p) => (
             <li key={p.name} onMouseEnter={() => setHover(p.name)} onMouseLeave={() => setHover(null)}>
               <i style={{ background: p.color ?? '#fff' }} />
@@ -176,7 +176,7 @@ export function SkyPage() {
         </ul>
         <p className="sk-moon">🌙 {phaseName(sky.moonPhase)} · {Math.round(sky.moonLit * 100)}% lit{(() => { const f = nextFullMoon(new Date()); return f && sky.moonLit < 0.98 ? ` · full moon ${f.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}` : '' })()} · sunset {sunTimes.sunset && !isNaN(+sunTimes.sunset) ? format(sunTimes.sunset, 'HH:mm') : '—'}</p>
         <h3>Star-hop</h3>
-        <div className="sk-chips">
+        <div className="sk-chips bloom-wrap">
           {constellations.map((c) => <button key={c.name} type="button" className={`sk-chip ${pick === c.name ? 'on' : ''}`} onClick={() => setPick(c.name)}>{c.name}</button>)}
         </div>
         <p className="sk-tip">{con.tip}{!conUp && ' (It is below your horizon at this time.)'}</p>

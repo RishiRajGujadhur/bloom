@@ -1,0 +1,29 @@
+/* Shared learning frame. Exercise CSS owns previews, grading feedback, accent
+   colors and responsive breakpoints; common.css owns the panel surface. */
+.learning-exercise header {
+  display: flex;
+  gap: .8rem;
+  align-items: start;
+}
+.learning-exercise--shared-back header > button {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.learning-exercise--minimum-back header > button {
+  width: auto;
+  height: auto;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+}
+.learning-exercise h2 {
+  margin: .1rem 0 .4rem;
+}
+.learning-exercise p {
+  line-height: 1.45;
+}

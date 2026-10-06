@@ -73,8 +73,8 @@ function LearnTab({ store, save }: { store: Store; save: (f: (s: Store) => Store
   return (
     <div className="ch-layout">
       <ChessBoard position={{ [at]: lesson.piece as PieceCode }} targets={targets} selected={selected} onSelect={(s) => setSelected(s)} onMove={move} stars={left} lastMove={last} disabled={done} />
-      <aside className="ch-side">
-        <div className="ch-lessons">
+      <aside className="ch-side bloom-start-stack">
+        <div className="ch-lessons bloom-wrap">
           {lessons.map((l, i) => (
             <button key={l.id} type="button" className={`ch-pill ${i === li ? 'on' : ''} ${store.lessons[l.id] ? 'done' : ''}`} onClick={() => setLi(i)}>
               {store.lessons[l.id] ? '★ ' : ''}{l.title.replace('The ', '')}
@@ -88,7 +88,7 @@ function LearnTab({ store, save }: { store: Store; save: (f: (s: Store) => Store
           <>
             <Kinetic text={moves <= target ? 'PERFECT!' : 'NICE!'} tone="win" />
             <p>{moves <= target ? 'You found the fastest route.' : `Done in ${moves} — try for ${target}.`}</p>
-            <div className="ch-row">
+            <div className="ch-row bloom-wrap">
               <button type="button" className="studio-btn" onClick={() => { setAt(lesson.start); setLeft(lesson.stars); setMoves(0); setLast(null) }}>Try again</button>
               {li + 1 < lessons.length && <button type="button" className="ch-cta" onClick={() => setLi(li + 1)}>Next piece →</button>}
             </div>
@@ -142,8 +142,8 @@ function PuzzleTab({ store, save }: { store: Store; save: (f: (s: Store) => Stor
   return (
     <div className="ch-layout">
       <ChessBoard position={positionOf(game)} targets={targets} selected={selected} onSelect={(s) => setSelected(s && game.get(s as Square)?.color === 'w' ? s : null)} onMove={move} lastMove={last} check={kingInCheck} disabled={result !== null} />
-      <aside className="ch-side">
-        <div className="ch-lessons">
+      <aside className="ch-side bloom-start-stack">
+        <div className="ch-lessons bloom-wrap">
           {puzzles.map((x, i) => (
             <button key={x.id} type="button" className={`ch-pill ${i === pi ? 'on' : ''} ${store.puzzles[x.id] ? 'done' : ''}`} onClick={() => setPi(i)}>{store.puzzles[x.id] ? '✓ ' : ''}{i + 1}</button>
           ))}
@@ -153,7 +153,7 @@ function PuzzleTab({ store, save }: { store: Store; save: (f: (s: Store) => Stor
         {result === 'mate' && <Kinetic text="CHECKMATE" tone="win" />}
         {result === 'miss' && <><Kinetic text="NOT MATE" tone="lose" /><p>That move doesn’t finish the game. Look again!</p></>}
         {hint && <p className="ch-hint">💡 {p.hint}</p>}
-        <div className="ch-row">
+        <div className="ch-row bloom-wrap">
           {result === null && <button type="button" className="studio-btn" onClick={() => setHint(true)}>Hint</button>}
           {result !== null && <button type="button" className="studio-btn" onClick={() => { setGame(new Chess(p.fen)); setResult(null); setLast(null) }}>Retry</button>}
           {result === 'mate' && pi + 1 < puzzles.length && <button type="button" className="ch-cta" onClick={() => setPi(pi + 1)}>Next puzzle →</button>}
@@ -241,9 +241,9 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
   return (
     <div className="ch-layout">
       <ChessBoard position={positionOf(game)} targets={targets} selected={selected} onSelect={(s) => setSelected(s && game.get(s as Square)?.color === 'w' ? s : null)} onMove={move} lastMove={last} check={kingInCheck} disabled={bloomTurn || over} flipped={flipped} />
-      <aside className="ch-side">
+      <aside className="ch-side bloom-start-stack">
         <h3>Play Bloom</h3>
-        <div className="ch-lessons">
+        <div className="ch-lessons bloom-wrap">
           {([1, 2, 3] as const).map((l) => <button key={l} type="button" className={`ch-pill ${level === l ? 'on' : ''}`} onClick={() => setLevel(l)}>{['', 'Playful', 'Solid', 'Sharp'][l]}</button>)}
         </div>
         {over ? (
@@ -254,7 +254,7 @@ function PlayTab({ save }: { save: (f: (s: Store) => Store) => void }) {
         <ol className="ch-moves" aria-label="Moves">
           {Array.from({ length: Math.ceil(history.length / 2) }, (_, i) => <li key={i}><span>{i + 1}.</span> {history[i * 2]} <em>{history[i * 2 + 1] ?? ''}</em></li>)}
         </ol>
-        <div className="ch-row">
+        <div className="ch-row bloom-wrap">
           <button type="button" className="studio-btn" disabled={thinking || history.length < 2} onClick={() => { const g = new Chess(); for (const m of history.slice(0, -2)) g.move(m); setGame(g); setLast(null) }}>Undo</button>
           <button type="button" className="studio-btn" disabled={!history.length} title="Copy the game as PGN (for Lichess or other chess apps)" onClick={(e) => { void navigator.clipboard?.writeText(game.pgn()); e.currentTarget.textContent = '✓ Copied' }}>PGN</button>
           <button type="button" className="studio-btn" title="Copy the current position (FEN) to analyse it elsewhere" onClick={(e) => { void navigator.clipboard?.writeText(game.fen()); e.currentTarget.textContent = '✓ Copied' }}>FEN</button>

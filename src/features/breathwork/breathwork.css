@@ -67,11 +67,6 @@
   margin-top: 10px;
   animation: bw-pulse 1.6s ease-in-out infinite;
 }
-.bw-side {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
 .bw-safety {
   max-width: 560px;
   margin: 0 auto;

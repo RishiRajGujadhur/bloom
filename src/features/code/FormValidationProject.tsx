@@ -1,6 +1,7 @@
+import { LearningExercise } from './LearningExercise'
 import { useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ArrowLeft } from 'lucide-react'
+
 import { prefersReducedMotion } from '../../utils/motion'
 import { checkValidationRules, STARTER_RULES, validateForm, type FormValues, type Rules } from './formValidationModel'
 import './formValidationProject.css'
@@ -39,14 +40,14 @@ export function FormValidationProject({ onClose }: { onClose: () => void }) {
     setSubmitted(Object.keys(validateForm(values, saved.rules)).length === 0)
   }
 
-  return <section className="form-validation-project" aria-label="Form validation project">
-    <header><button type="button" onClick={onClose} aria-label="Back to learning path"><ArrowLeft size={18} /></button><div><h2>Make a signup form reliable</h2><p>Set validation rules, try the form, then run seven cases. A good form catches missing and malformed values before accepting a signup.</p></div></header>
+  return <LearningExercise className="form-validation-project" aria-label="Form validation project" title={<>Make a signup form reliable</>} description={<>Set validation rules, try the form, then run seven cases. A good form catches missing and malformed values before accepting a signup.</>} onClose={onClose}>
+
     <p className="form-validation-objective"><strong>Objective:</strong> Require a name of at least two characters, a valid email, and a password of at least eight characters. {saved.done ? '✓ All cases passed.' : ''}</p>
-    <div className="form-validation-grid"><div><h3>Validation rules</h3>{fields.map((key) => <fieldset key={key}><legend>{key[0].toUpperCase() + key.slice(1)}</legend><label><input type="checkbox" checked={saved.rules[key].required} onChange={(event) => update(key, { required: event.target.checked })} /> Required</label><label>Format<select value={saved.rules[key].format} onChange={(event) => update(key, { format: event.target.value as 'text' | 'email' })}><option value="text">Any text</option><option value="email">Email address</option></select></label><label>Minimum characters<input type="number" min="0" max="30" value={saved.rules[key].minLength} onChange={(event) => update(key, { minLength: Math.max(0, Math.min(30, Number(event.target.value) || 0)) })} /></label></fieldset>)}</div>
+    <div className="form-validation-grid bloom-columns"><div><h3>Validation rules</h3>{fields.map((key) => <fieldset key={key}><legend>{key[0].toUpperCase() + key.slice(1)}</legend><label><input type="checkbox" checked={saved.rules[key].required} onChange={(event) => update(key, { required: event.target.checked })} /> Required</label><label>Format<select value={saved.rules[key].format} onChange={(event) => update(key, { format: event.target.value as 'text' | 'email' })}><option value="text">Any text</option><option value="email">Email address</option></select></label><label>Minimum characters<input type="number" min="0" max="30" value={saved.rules[key].minLength} onChange={(event) => update(key, { minLength: Math.max(0, Math.min(30, Number(event.target.value) || 0)) })} /></label></fieldset>)}</div>
     <div><h3>Try your form</h3><form noValidate onSubmit={submit}>{fields.map((key) => <label key={key}>{key[0].toUpperCase() + key.slice(1)}<input type={key === 'password' ? 'password' : 'text'} value={values[key]} aria-invalid={!!errors[key]} aria-describedby={errors[key] ? `${key}-error` : undefined} onChange={(event) => { setValues({ ...values, [key]: event.target.value }); setSubmitted(false) }} />{errors[key] && <small id={`${key}-error`}>{errors[key]}</small>}</label>)}<button type="submit">Submit signup</button><p role="status">{submitted ? 'Signup accepted by your current rules.' : attempted && Object.keys(errors).length ? 'Fix the highlighted fields and try again.' : 'Fill the form to test your rules.'}</p></form></div></div>
     <button type="button" className="form-validation-run" onClick={run}>Run seven cases</button>
     <p role="status">{checked ? check.pass ? 'All seven cases pass. Your validation protects the signup.' : 'Some cases fail. Adjust the rules and run them again.' : 'Run cases to check empty, short, malformed, and valid input.'}</p>
     <svg viewBox="0 0 510 318" role="img" aria-label={`Validation case paths: ${check.results.map((item) => `${item.label} ${item.pass ? 'pass' : 'needs work'}`).join(', ')}`}><g ref={paths}>{check.results.map((item, at) => { const y = 25 + at * 44; return <g key={item.label}><text x="5" y={y + 5}>{item.label}</text><path d={`M145 ${y} H395`} stroke={checked ? item.pass ? '#4da785' : '#d77b64' : '#a7b4c2'} strokeWidth="4" /><circle cx="400" cy={y} r="10" fill={checked ? item.pass ? '#4da785' : '#d77b64' : '#a7b4c2'} /><text x="420" y={y + 5}>{checked ? item.pass ? 'PASS' : 'FIX' : 'TEST'}</text></g> })}</g></svg>
     {checked && <ul aria-label="Case feedback">{check.results.map((item) => <li key={item.label}>{item.label}: {item.pass ? 'correct' : `expected ${item.expected ?? 'accepted'}, got ${item.actual ?? 'accepted'}`}</li>)}</ul>}
-  </section>
+  </LearningExercise>
 }

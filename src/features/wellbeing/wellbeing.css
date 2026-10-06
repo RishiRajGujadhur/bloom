@@ -375,11 +375,7 @@
   font-size: 20px !important;
 }
 .wb-compare {
-  display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  --bloom-gap: 10px;
 }
 .wb-compare li {
   --jar: var(--accent-color);
@@ -467,11 +463,6 @@
   display: grid;
   gap: 14px;
   margin-top: 16px;
-}
-.wb-wheel-core {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 .wb-wheel-core button {
   min-height: 44px;
@@ -678,7 +669,8 @@
 .wb-three { display: grid; gap: 8px; margin-top: 10px; }
 .wb-three input { min-height: 40px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
 .wb-three div { display: flex; gap: 8px; }
-.wb-recall { display: flex; gap: 14px; align-items: center; }
+.wb-recall {
+  --bloom-gap: 14px; }
 .wb-recall > span { font-size: 28px; }
 .wb-recall > div { flex: 1; }
 .wb-recall small { color: var(--text-muted); }

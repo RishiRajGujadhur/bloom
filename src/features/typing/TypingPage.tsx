@@ -212,7 +212,7 @@ export function TypingPage() {
         </div>
       </div>
       {done ? (
-        <div className="ty-done" role="status">
+        <div className="ty-done bloom-controls" role="status">
           <strong>{done.wpm} WPM · {done.accuracy}% accurate</strong>
           <span>{done.accuracy >= 95 ? 'Clean and steady — great form.' : 'Slow down a touch; accuracy first, speed follows.'}{closeness !== null ? ` Keystroke efficiency ${closeness}%.` : ''}</span>
           {wrongAt.size > 0 && (
@@ -234,7 +234,7 @@ export function TypingPage() {
       <div className="ty-bottom">
         <Keyboard next={next} flash={flash} />
         <aside className="ty-side">
-          <div className="ty-lessons">
+          <div className="ty-lessons bloom-wrap">
             {lessons.map((l, i) => <button key={l.id} type="button" className={`ty-pill ${i === li && !usingOwn ? 'on' : ''} ${store.best[l.id] ? 'done' : ''}`} onClick={() => { setUsingOwn(false); if (i === li) void newDrill(); else setLi(i) }} title={store.best[l.id] ? `${l.title} · best ${store.best[l.id]} WPM` : l.title}>{i + 1}{store.best[l.id] ? <sup>{store.best[l.id]}</sup> : null}</button>)}
           </div>
           <button type="button" className="ty-cta ghost ty-own-btn" aria-expanded={ownOpen} onClick={() => setOwnOpen((v) => !v)}>✍️ Practise your own text</button>

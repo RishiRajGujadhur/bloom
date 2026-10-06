@@ -328,7 +328,7 @@ export function RunPage() {
   const track = () => (
     <div className="studio-split run-split">
       <div className="studio-card run-map-card">{on('map') ? <><button type="button" className="studio-chip" aria-pressed={followMap} onClick={() => { setFollowMap(!followMap); writeStore('bloom-run-map-follow', !followMap) }}>Follow route {followMap ? 'on' : 'off'}</button><RouteMap points={points} replay={replay} follow={followMap} /></> : <div className="studio-center">Map is off</div>}</div>
-      <div className="studio-card run-side">
+      <div className="studio-card run-side bloom-start-stack">
         <Segmented label="Activity" value={kind} onChange={setKind} options={[{ id: 'run', label: '🏃 Run' }, { id: 'walk', label: '🚶 Walk' }]} />
         <div className="run-big">
           {on('strider') && <Strider active={active && status !== 'paused'} walk={kind === 'walk'} />}
@@ -396,7 +396,7 @@ export function RunPage() {
 
   const manual = () => (
     <div className="studio-split">
-      <div className="studio-card run-side">
+      <div className="studio-card run-side bloom-start-stack">
         <h3>
           <PlusCircle size={17} /> Log without GPS
         </h3>
@@ -432,8 +432,8 @@ export function RunPage() {
   )
 
   const terrain = () => (
-    <div className="tr-page">
-      <div className="tr-bar">
+    <div className="tr-page bloom-stack">
+      <div className="tr-bar bloom-controls">
         {routed.length > 0 && (
           <label className="tr-pick">
             Route

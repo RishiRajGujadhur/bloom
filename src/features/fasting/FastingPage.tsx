@@ -116,7 +116,7 @@ export function FastingPage() {
         {on('ring') ? <FastRing h={h} goal={cur?.goal ?? protocol.fast} /> : <strong className="fs-time-big">{fmtH(h)}</strong>}
         {on('stageTrack') && <StageTrack stages={stages} hours={cur ? h : 0} goal={cur?.goal ?? protocol.fast} max={Math.max(24, (cur?.goal ?? protocol.fast) + 6)} />}
       </div>
-      <div className="studio-card fs-side">
+      <div className="studio-card fs-side bloom-start-stack">
         {!cur ? (
           <>
             {on('protocols') && <Segmented label="Protocol" value={store.protocol} onChange={(p) => setStore((s) => ({ ...s, protocol: p }))} options={protocols.map((p) => ({ id: p.id, label: p.label }))} />}

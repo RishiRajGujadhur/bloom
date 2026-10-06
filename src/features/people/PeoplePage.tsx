@@ -158,7 +158,7 @@ export function PeoplePage() {
             </p>
             <h2>Tend the people who matter</h2>
           </div>
-          <div className="pg-headtools">
+          <div className="pg-headtools bloom-controls">
             <div className="pg-view" role="radiogroup" aria-label="View">
               <button type="button" role="radio" aria-checked={view === 'garden'} className={view === 'garden' ? 'on' : ''} onClick={() => setView('garden')}>🌱 Garden</button>
               <button type="button" role="radio" aria-checked={view === 'globe'} className={view === 'globe' ? 'on' : ''} onClick={() => setView('globe')}>🌍 Globe</button>
@@ -231,7 +231,7 @@ export function PeoplePage() {
               return <p className={`pg-local ${w.good ? 'good' : ''}`}>{w.awake ? '☀️' : '🌙'} {localTime(person.city.tz).label} in {person.city.name}{w.good ? ' · good time to call' : w.awake ? '' : ' · probably asleep'}</p>
             })()}
             <label>Birthday <input type="date" className="studio-input" value={person.birthday ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, birthday: e.target.value || undefined } : p)))} /></label>
-            <div className="pg-contact">
+            <div className="pg-contact bloom-controls">
               <input type="tel" className="studio-input" placeholder="Phone" aria-label="Phone" value={person.phone ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, phone: e.target.value } : p)))} />
               <input type="email" className="studio-input" placeholder="Email" aria-label="Email" value={person.email ?? ''} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, email: e.target.value } : p)))} />
               {person.phone && <a className="pg-link" href={`tel:${person.phone}`}>📞 Call</a>}

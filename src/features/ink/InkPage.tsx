@@ -177,7 +177,7 @@ export function InkPage() {
 
   const draw = () => (
     <div className="ink-layout">
-      <div className="ink-tools studio-card">
+      <div className="ink-tools studio-card bloom-start-stack">
         <div className="ink-toolrow" role="radiogroup" aria-label="Tool">
           <button type="button" role="radio" aria-checked={tool === 'pen'} aria-label="Pen" title="Pen (P)" onClick={() => setTool('pen')}>
             <Pen size={18} />
@@ -194,7 +194,7 @@ export function InkPage() {
           )}
         </div>
         {on('colours') && (
-          <div className="ink-colors" role="radiogroup" aria-label="Colour">
+          <div className="ink-colors bloom-wrap" role="radiogroup" aria-label="Colour">
             {colors.map((c) => (
               <button key={c} type="button" role="radio" aria-checked={store.color === c} aria-label={`Colour ${c}`} style={{ background: c }} onClick={() => setStore((s) => ({ ...s, color: c }))} />
             ))}

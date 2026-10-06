@@ -159,9 +159,9 @@ export function DojoPage() {
 
   useBodyPractice('dojo', pick.id, pick.name, () => setPlaying(false))
   const library = () => (
-    <div className="dojo-lib">
+    <div className="dojo-lib bloom-stack">
       {on('belts') && <Belt reps={s.reps} />}
-      <div className="studio-card dojo-filters">
+      <div className="studio-card dojo-filters bloom-stack">
         <label>Find a technique<input className="studio-input" type="search" aria-label="Search Dojo techniques" maxLength={100} value={search} onChange={e => setSearch(e.target.value)} /></label>
         <p role="status">{visible.length} matching techniques</p>
         <button type="button" className="studio-chip" onClick={() => { setSearch(''); setKind('all'); save({ styles: start.styles }) }}>Clear technique filters</button>
@@ -295,7 +295,7 @@ function Forms({ s, onDone }: { s: Store; onDone: (f: Form, reps: number) => voi
       {forms
         .filter((f) => (s.seated ? f.id === 'seated-dojo' : f.id !== 'seated-dojo') && s.styles.includes(f.style))
         .map((f) => (
-          <article key={f.id} className="studio-card dojo-form">
+          <article key={f.id} className="studio-card dojo-form bloom-start-stack">
             <h3>{f.emoji} {f.name}</h3>
             <small>{styleNames[f.style]}{s.forms[f.id] ? ` · done ${s.forms[f.id]}×` : ''}</small>
             <p>{f.about}</p>

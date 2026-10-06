@@ -246,7 +246,7 @@ export function IntervalPage() {
           ))}
         </div>
       </div>
-      <div className="studio-card iv-side">
+      <div className="studio-card iv-side bloom-start-stack">
         <h3>
           <span aria-hidden="true">{program.emoji}</span> {program.name}
         </h3>
@@ -276,7 +276,7 @@ export function IntervalPage() {
   )
 
   const programs = () => (
-    <div className="iv-programs">
+    <div className="iv-programs bloom-stack">
       {on('presets') && (
         <>
           <h3>Programs</h3>
@@ -341,7 +341,7 @@ export function IntervalPage() {
     const set = (p: Partial<Program>) => setStore((s) => ({ ...s, custom: { ...s.custom, ...p } }))
     return (
       <div className="studio-split">
-        <div className="studio-card iv-builder">
+        <div className="studio-card iv-builder bloom-start-stack">
           <Slider label="Work" value={c.work} min={5} max={300} step={5} unit="s" onChange={(v) => set({ work: v })} />
           <Slider label="Rest" value={c.rest} min={0} max={180} step={5} unit="s" onChange={(v) => set({ rest: v })} />
           <Slider label="Rounds" value={c.rounds} min={1} max={30} onChange={(v) => set({ rounds: v })} />

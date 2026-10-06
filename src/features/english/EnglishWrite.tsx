@@ -51,11 +51,11 @@ export function EnglishWrite({ data, onFeedback }: { data: AppData; onFeedback: 
 
   return (
     <div className="en-grid">
-      <section className="studio-card en-write">
+      <section className="studio-card en-write bloom-stack">
         <h3>✍️ Writing coach</h3>
         <p className="quick-note">Prompt: <strong>{prompt}</strong> <button type="button" className="en-link" onClick={() => setPrompt(prompts[(prompts.indexOf(prompt) + 1) % prompts.length])}>another</button></p>
         <textarea className="studio-input" rows={7} value={text} aria-label="Your writing" placeholder="Write a few sentences in English…" onChange={(e) => { setText(e.target.value); setShown(null) }} />
-        <div className="en-inline">
+        <div className="en-inline bloom-controls">
           <small>{live.words} words · {live.sentences} sentences</small>
           {on('daybookLink') && lastEntry && <button type="button" className="studio-btn" onClick={() => setText(lastEntry)}>Use my last Daybook entry</button>}
           <button type="button" className="en-check" disabled={live.words < 5} onClick={() => { setShown(analyseWriting(text)); onFeedback() }}>Get feedback</button>
@@ -77,7 +77,7 @@ export function EnglishWrite({ data, onFeedback }: { data: AppData; onFeedback: 
           ) : (
             <p>✅ No style issues found. Nice writing!</p>
           )}
-          {shown.keywords.length > 0 && <div className="en-tags">{shown.keywords.map((k) => <span key={k}>{k}</span>)}</div>}
+          {shown.keywords.length > 0 && <div className="en-tags bloom-wrap">{shown.keywords.map((k) => <span key={k}>{k}</span>)}</div>}
         </section>
       )}
     </div>

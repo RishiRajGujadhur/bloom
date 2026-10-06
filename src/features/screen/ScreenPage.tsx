@@ -62,7 +62,7 @@ export function ScreenPage() {
           </div>
         )}
       </div>
-      <div className="studio-card rm-side">
+      <div className="studio-card rm-side bloom-start-stack">
         {on('limit') && <Slider label="Daily limit" value={s.dailyLimit} min={15} max={480} step={15} format={fmt} onChange={(v) => setSettings({ dailyLimit: v })} />}
         {on('breaks') && <Slider label="Break reminder after" value={s.breakEvery} min={10} max={120} step={5} unit="min" onChange={(v) => setSettings({ breakEvery: v })} />}
         {on('detox') && (

@@ -86,7 +86,7 @@ function Hydration({ store, save, today }: { store: JoysStore; save: (f: (s: Joy
           <path d="M36 34 L44 180" stroke="#fff" strokeWidth="5" strokeLinecap="round" opacity="0.35" />
         </svg>
         <strong className="jy-big">{glasses} / {store.goal}</strong>
-        <div className="jy-row">
+        <div className="jy-row bloom-inline">
           <button type="button" className="studio-btn" onClick={() => add(-1)} disabled={!glasses}>−</button>
           <button type="button" className="jy-cta" onClick={(e) => add(1, e.currentTarget)}>+ Glass</button>
         </div>
@@ -227,7 +227,7 @@ function Kindness({ store, save, today }: { store: JoysStore; save: (f: (s: Joys
             </div>
           </div>
         </div>
-        <div className="jy-row">
+        <div className="jy-row bloom-inline">
           <button type="button" className="jy-cta" disabled={done} onClick={(e) => { save((s) => ({ ...s, kind: { ...s.kind, [today]: true } })); burst(e.currentTarget, 'stars'); logActivity('kindness', {}) }}>{done ? 'Done today ✓' : 'I did it!'}</button>
           <button type="button" className="studio-btn" onClick={() => { setExtra((n) => n + 1); if (!flipped) flip() }}>Another idea</button>
         </div>
@@ -287,7 +287,7 @@ function MoodColours({ store, save }: { store: JoysStore; save: (f: (s: JoysStor
       </section>
       <section className="studio-card">
         <h3>How do you feel?</h3>
-        <div className="jy-row wrap">
+        <div className="jy-row wrap bloom-inline">
           {moodBases.map((m) => (
             <button key={m.label} type="button" className="studio-chip" aria-pressed={store.moodHex === m.hex} style={{ ['--c' as string]: m.hex }} onClick={() => save((s) => ({ ...s, moodHex: m.hex }))}>
               <i className="mc-dot" style={{ background: m.hex }} /> {m.label}
@@ -355,7 +355,7 @@ function Postcard({ data, today }: { data: AppData; today: string }) {
             </g>
           </g>
         </svg>
-        <div className="jy-row wrap">
+        <div className="jy-row wrap bloom-inline">
           <input className="studio-input" value={msg} maxLength={90} aria-label="Postcard message" onChange={(e) => setMsg(e.target.value)} />
           <button type="button" className="jy-cta" onClick={download}>Download</button>
         </div>
