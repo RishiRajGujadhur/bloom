@@ -32,6 +32,7 @@ const devPort = portArgument >= 0 ? process.argv[portArgument + 1] : '5173'
 export default defineConfig({
   cacheDir: `node_modules/.vite/bloom-${devPort}`,
   build: {
+    target: 'es2023',
     manifest: true,
     cssCodeSplit: true,
     minify: true,

@@ -12,6 +12,8 @@
     "test:watch": "jest --watch",
     "test:e2e": "playwright test",
     "test:server": "node --test scripts/server-performance.test.mjs",
+    "audit:standards": "node scripts/standards-audit.mjs",
+    "check:ecmascript": "node scripts/check-ecmascript.mjs",
     "perf:build": "node scripts/performance-build.mjs",
     "perf:pages": "node scripts/performance-pages.mjs",
     "perf:offline": "node scripts/performance-offline.mjs",
