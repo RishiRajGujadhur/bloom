@@ -55,3 +55,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 49 | Prevent narrow-screen card grid overflow in assess (.as-home) | `src/features/games/assess.css` |
 | 50 | Prevent narrow-screen card grid overflow in assess (.lb-wrap) | `src/features/games/assess.css` |
 | 51 | Prevent narrow-screen card grid overflow in gameCards (.studio-rail.is-all:has(.game-card)) | `src/features/games/gameCards.css` |
+| 52 | Prevent narrow-screen card grid overflow in ink (.ink-pages) | `src/features/ink/ink.css` |
