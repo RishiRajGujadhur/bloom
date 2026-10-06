@@ -51,6 +51,21 @@ export async function headFiles(fs: PFs, dir: string): Promise<{ path: string; s
     fs,
     dir,
     trees: [git.TREE({ ref: 'HEAD' })],
+    // A repository can contain thousands of blobs. Bound sibling reads instead
+    // of opening/decompressing every file in a directory concurrently. Results
+    // are collected by map, so no recursive result arrays need retaining.
+    iterate: async (walk, children) => {
+      let batch: Promise<unknown>[] = []
+      for (const child of children) {
+        batch.push(walk(child))
+        if (batch.length === 4) {
+          await Promise.all(batch)
+          batch = []
+        }
+      }
+      await Promise.all(batch)
+      return []
+    },
     map: async (path, [e]) => {
       if (!e || path === '.') return true
       if ((await e.type()) === 'blob') {
