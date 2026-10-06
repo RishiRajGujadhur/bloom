@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: [desktop, mobile]
+        profile: [desktop, mobile, reflow]
         mode: [basic, advanced]
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +63,7 @@ jobs:
       - name: Check keyboard, scaling and progressive disclosure
         env:
           BLOOM_E2E_URL: http://127.0.0.1:5175
-        run: npm run test:e2e -- e2e/standards.spec.ts --project=${{ matrix.profile }} --workers=1
+        run: npm run test:e2e -- e2e/standards.spec.ts e2e/widgets.spec.ts --project=${{ matrix.profile }} --workers=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:

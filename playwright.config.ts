@@ -10,6 +10,7 @@ export default defineConfig({
   },
   projects: [
     { name: 'desktop', use: { viewport: { width: 1440, height: 1000 } } },
+    { name: 'reflow', use: { viewport: { width: 320, height: 800 }, isMobile: true, hasTouch: true } },
     {
       name: 'mobile',
       use: {

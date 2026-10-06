@@ -8,7 +8,8 @@ const baseURL = option('url', 'http://localhost:5173')
 const source = await readFile('src/components/layout/Sidebar.tsx', 'utf8')
 const routes = [...source.split('export type NavKey =')[1].split('interface SidebarProps')[0].matchAll(/\| '([^']+)'/g)].map(match => match[1])
 const selected = option('pages', '').split(',').filter(Boolean)
-const mobile = option('profile', 'desktop') === 'mobile'
+const profile = option('profile', 'desktop')
+const mobile = profile === 'mobile' || profile === 'reflow'
 const mode = option('mode', 'basic')
 if (!['basic', 'advanced'].includes(mode)) throw new Error('Mode must be basic or advanced')
 for (let attempt = 0; ; attempt++) {
@@ -18,7 +19,7 @@ for (let attempt = 0; ; attempt++) {
 }
 const browser = await chromium.launch()
 const context = await browser.newContext({
-  viewport: mobile ? { width: 390, height: 844 } : { width: 1440, height: 1000 },
+  viewport: profile === 'reflow' ? { width: 320, height: 800 } : mobile ? { width: 390, height: 844 } : { width: 1440, height: 1000 },
   isMobile: mobile, hasTouch: mobile, serviceWorkers: 'block', reducedMotion: 'reduce',
 })
 await context.addInitScript(mode => {
@@ -54,7 +55,7 @@ try {
     results.push(result)
     console.log(`${route}: ${errors.length} errors; ${result.violations.map(item => `${item.id} (${item.nodes.length})`).join(', ') || 'no automated WCAG violations'}`)
     await page.close()
-    await writeFile(option('output', `docs/standards-${mobile ? 'mobile' : 'desktop'}-${mode}.json`), JSON.stringify({ date: new Intl.DateTimeFormat('en-CA', { timeZone: 'Indian/Mauritius' }).format(new Date()), baseURL, mode, profile: mobile ? 'mobile' : 'desktop', results }, null, 2) + '\n')
+    await writeFile(option('output', `docs/standards-${profile}-${mode}.json`), JSON.stringify({ date: new Intl.DateTimeFormat('en-CA', { timeZone: 'Indian/Mauritius' }).format(new Date()), baseURL, mode, profile, results }, null, 2) + '\n')
   }
 } finally { await browser.close() }
 if (results.some(result => result.errors.length || result.violations.length || result.markup?.duplicateIds.length || result.markup?.nestedButtons || result.markup?.horizontalOverflow)) process.exitCode = 1
