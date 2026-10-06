@@ -70,3 +70,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 64 | Enlarge controls to a 44px touch target in App (.micro-mood button) | `src/App.css` |
 | 65 | Enlarge controls to a 44px touch target in App (.pending-media > div > button) | `src/App.css` |
 | 66 | Enlarge controls to a 44px touch target in index (.icon-button, .studio-chip, .quiet-button) | `src/index.css` |
+| 67 | Enlarge controls to a 44px touch target in settings.module (.categoryActions button) | `src/settings.module.css` |
