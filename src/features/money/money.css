@@ -424,3 +424,8 @@ html[data-theme='galaxy'] .studio[data-studio='money'] .mn-month-head button { f
   html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tab-ink { display: none; }
   html[data-theme='galaxy'] .studio[data-studio='money'] .studio-tabs button[aria-selected='true'] { background: linear-gradient(110deg, #b7ffc1, #94cbff 65%, #b28aff); }
 }
+
+/* UX 146: Adapt Money totals to narrow screens and enlarged text. */
+.mn-stats { grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); }
+.mn-stats > div { min-width: 0; }
+.mn-big { overflow-wrap: anywhere; }
