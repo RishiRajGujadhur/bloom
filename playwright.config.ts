@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
   use: {
-    baseURL: 'http://127.0.0.1:5175',
+    baseURL: process.env.BLOOM_E2E_URL ?? 'http://127.0.0.1:5175',
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
   },
@@ -19,7 +19,7 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
+  webServer: process.env.BLOOM_E2E_URL ? undefined : {
     command: 'npm run dev -- --port 5175',
     url: 'http://127.0.0.1:5175',
     reuseExistingServer: !process.env.CI,

@@ -52,7 +52,9 @@ export function CalendarPage({ data, setData }: Props) {
     const root = workspace.current
     if (!root) return
     const makeScrollable = () => root.querySelectorAll<HTMLElement>('.fc-scroller').forEach(scroller => {
-      scroller.tabIndex = 0
+      // Focus a real cell inside the scrolling grid. Focusing presentation
+      // wrappers would expose invalid generic children to its ARIA table.
+      scroller.querySelector<HTMLElement>('[role="gridcell"]')?.setAttribute('tabindex', '0')
     })
     // FullCalendar creates/replaces its scrollers after datesSet has fired.
     const observer = new MutationObserver(makeScrollable)
