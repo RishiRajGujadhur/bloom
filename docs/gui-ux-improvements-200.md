@@ -27,3 +27,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 21 | Prevent narrow-screen card grid overflow in App (.pending-media, .journal-media-grid) | `src/App.css` |
 | 22 | Prevent narrow-screen card grid overflow in settings.module (.featureGrid) | `src/settings.module.css` |
 | 23 | Prevent narrow-screen card grid overflow in features (.page-growth .showcase-grid) | `src/features/features.css` |
+| 24 | Prevent narrow-screen card grid overflow in library (.adopt-grid) | `src/features/library.css` |
