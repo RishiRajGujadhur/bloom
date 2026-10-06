@@ -1,3 +1,4 @@
+import { Checkbox } from '../components/ui/Checkbox'
 import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useSyncExternalStore } from 'react'
 import { avatarStyles, type AvatarStyle } from '../components/ui/avatarStyle'
@@ -42,8 +43,8 @@ export function ChatAppearanceSettings() {
         </DropdownSelect>
       </label>
       <label className="chat-theme-option">
-        <input type="checkbox" checked={followTheme}
-          onChange={(event) => save('bloom-chat-follow-theme', event.target.checked ? '1' : '0')} />
+        <Checkbox  checked={followTheme}
+          onCheckedChange={(checked) => save('bloom-chat-follow-theme', checked ? '1' : '0')} />
         Use my app theme for Bloom chat
       </label>
       <small>Changes apply immediately and are remembered on this device.</small>

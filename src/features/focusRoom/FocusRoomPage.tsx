@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { subOn } from '../subFeatures'
 import { useEffect, useState } from 'react'
 import { Music, Pause, Play, Sparkles } from 'lucide-react'
@@ -121,7 +122,7 @@ export function FocusRoomPage({ data, setData }: FeaturePageProps) {
       )}
       <div className="room-controls">
         <label className="room-quiet-toggle">
-          <input type="checkbox" checked={quietScene} onChange={(event) => setQuietScene(event.target.checked)} />
+          <Checkbox  checked={quietScene} onCheckedChange={(checked) => setQuietScene(checked)} />
           Quiet scene
         </label>
         <div className="wb-chips" role="radiogroup" aria-label="Session length">

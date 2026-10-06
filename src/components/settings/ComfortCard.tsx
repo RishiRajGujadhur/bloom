@@ -1,3 +1,4 @@
+import { Checkbox } from '../ui/Checkbox'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { readComfort, saveComfort, type Comfort } from '../../settings/comfort'
@@ -26,7 +27,7 @@ export function ComfortCard() {
     </div>
   )
   const toggle = (k: 'scenes' | 'transitions' | 'keepAwake' | 'pauseWhenAway', label: string, hint: string) => (
-    <label className="cf-toggle"><input type="checkbox" checked={c[k]} onChange={(e) => set(k, e.target.checked)} /><span><b>{label}</b><small>{hint}</small></span></label>
+    <label className="cf-toggle"><Checkbox  checked={c[k]} onCheckedChange={(checked) => set(k, checked)} /><span><b>{label}</b><small>{hint}</small></span></label>
   )
   return (
     <div className="cf">

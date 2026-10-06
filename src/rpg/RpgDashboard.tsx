@@ -1,3 +1,4 @@
+import { Checkbox } from '../components/ui/Checkbox'
 import { usePageMode } from '../components/ui/PageMode'
 import { useEffect, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
@@ -484,14 +485,14 @@ export function RpgDashboard({
                       <div className="boss-select">
                         {priorities.map((p) => (
                           <label key={p.id}>
-                            <input
-                              type="checkbox"
+                            <Checkbox
+                              
                               checked={selection.includes(p.id)}
                               disabled={
                                 !selection.includes(p.id) &&
                                 selection.length >= 3
                               }
-                              onChange={() =>
+                              onCheckedChange={() =>
                                 setSelection((ids) =>
                                   ids.includes(p.id)
                                     ? ids.filter((id) => id !== p.id)

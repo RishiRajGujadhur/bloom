@@ -565,3 +565,30 @@
   .ui-select, .ui-select-content { border-color: ButtonText; }
   .ui-menu-item[data-highlighted] { outline: 2px solid Highlight; outline-offset: -2px; }
 }
+
+/* One checkbox surface across all features, with a 44px target and compact visual box. */
+button.ui-checkbox[data-bloom-checkbox] {
+  display: inline-flex; align-items: center; justify-content: center;
+  position: relative; vertical-align: middle; flex: 0 0 44px;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  padding: 0; margin: 0; border: 0; border-radius: 8px;
+  background: transparent; color: var(--text-on-accent, #fff); cursor: pointer;
+}
+button.ui-checkbox[data-bloom-checkbox]::before {
+  content: ''; position: absolute; width: 20px; height: 20px;
+  border: 2px solid var(--border-strong, var(--text-secondary));
+  border-radius: 5px; background: var(--bg-surface); box-sizing: border-box;
+}
+button.ui-checkbox[data-bloom-checkbox][data-state='checked']::before,
+button.ui-checkbox[data-bloom-checkbox][data-state='indeterminate']::before { background: var(--accent-color); border-color: var(--accent-color); }
+.ui-checkbox-indicator { display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+button.ui-checkbox[data-bloom-checkbox][data-state='indeterminate'] .ui-checkbox-indicator svg { display: none; }
+button.ui-checkbox[data-bloom-checkbox][data-state='indeterminate'] .ui-checkbox-indicator::after { content: ''; width: 10px; height: 2px; background: currentColor; }
+button.ui-checkbox[data-bloom-checkbox]:focus-visible { outline: 3px solid var(--focus-ring, var(--accent-color)); outline-offset: 2px; }
+button.ui-checkbox[data-bloom-checkbox]:disabled { opacity: .5; cursor: not-allowed; }
+button.ui-checkbox[data-bloom-checkbox]:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-color) 10%, transparent); }
+@media (forced-colors: active) {
+  button.ui-checkbox[data-bloom-checkbox]::before { border-color: ButtonText; }
+  button.ui-checkbox[data-bloom-checkbox][data-state='checked']::before { background: Highlight; border-color: Highlight; }
+  button.ui-checkbox[data-bloom-checkbox] .ui-checkbox-indicator { color: HighlightText; }
+}

@@ -25,5 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Enforce shared React controls
+        run: npm run check:ui-controls
+
       - name: Run Jest tests
         run: npm test -- --ci

@@ -1,3 +1,4 @@
+import { Checkbox } from '../components/ui/Checkbox'
 import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { AdvancedSection, usePageMode } from '../components/ui/PageMode'
 import { useTabTitle } from '../utils/useTabTitle'
@@ -811,10 +812,10 @@ export function HabitsPage({
               <div className="routine-days bloom-wrap">
                 {weekdays.map((day, i) => (
                   <label key={day}>
-                    <input
-                      type="checkbox"
+                    <Checkbox
+                      
                       checked={routine.days.includes(i)}
-                      onChange={() =>
+                      onCheckedChange={() =>
                         setRoutine({
                           ...routine,
                           days: routine.days.includes(i)

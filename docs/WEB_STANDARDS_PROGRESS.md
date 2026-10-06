@@ -57,3 +57,15 @@ The earlier desktop baseline remains in [standards-desktop.json](standards-deskt
 - Bounded popup height and width; added long-label truncation, disabled styling, and forced-colors focus treatment.
 - Updated integration tests to select through visible menus instead of native select APIs.
 - Validation: TypeScript passed; all five picker regression tests and two learning-page integration tests passed. Shared-control lint passed.
+
+## Shared Radix checkboxes and control guard — 2026-10-07
+
+- Added the official Radix Checkbox package and migrated all 62 native JSX checkboxes across 30 files.
+- Centralized checked, unchecked, mixed, disabled, focus, and forced-colors styling; provided a 44px pointer target around a compact indicator.
+- Retained controlled state, initial defaults, keyboard Space, existing settings persistence, and checkbox form submission.
+- Added a source audit and CI steps that reject new native JSX dropdowns and checkboxes outside the select's hidden form bridge. HTML examples inside coding lessons remain native HTML by design.
+- Converted the pure nested-project option renderer to an option array so every project remains selectable.
+- Kept dropdown portals inside native dialogs and preserved uncontrolled form resets.
+- Fixed a test-only JSDOM selector recursion for unsupported fullscreen matching.
+- Validation: 36 targeted tests passed on the rerun; the other four affected suites passed previously. TypeScript and shared-control lint passed. Production performance budgets and all 636 emitted JavaScript files passed ECMAScript 2023 validation.
+- Browser verification: all 83 feature choices appear in the Radix menu; keyboard Space hides and restores the Soundscape button.

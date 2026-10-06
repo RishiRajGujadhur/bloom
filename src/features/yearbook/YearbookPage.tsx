@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useState } from 'react'
@@ -133,10 +134,10 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
             )
             .map((key) => (
             <label key={key} className="yearbook-check">
-              <input
-                type="checkbox"
+              <Checkbox
+                
                 checked={chapters[key]}
-                onChange={() => setChapters((c) => ({ ...c, [key]: !c[key] }))}
+                onCheckedChange={() => setChapters((c) => ({ ...c, [key]: !c[key] }))}
               />
               {chapterLabels[key]}
             </label>

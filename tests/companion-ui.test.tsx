@@ -84,6 +84,7 @@ test('stopping generation preserves a newly typed draft and ignores the late rep
 })
 
 test('chat appearance changes the avatar and follows the app theme persistently', () => {
+  localStorage.setItem('bloom-chat-follow-theme', '0')
   const view = mount()
   const settings = render(<ChatAppearanceSettings />)
   expect(screen.queryByText('Chat appearance')).not.toBeInTheDocument()

@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
@@ -349,7 +350,7 @@ export function IntervalPage() {
           {on('warmCool') && <Slider label="Warm up" value={c.warmup} min={0} max={600} step={30} unit="s" onChange={(v) => set({ warmup: v })} />}
           {on('voice') && (
             <label className="iv-check">
-              <input type="checkbox" checked={store.countdown !== false} onChange={(e) => setStore((st) => ({ ...st, countdown: e.target.checked }))} /> Say “3, 2, 1” before each change
+              <Checkbox  checked={store.countdown !== false} onCheckedChange={(checked) => setStore((st) => ({ ...st, countdown: checked }))} /> Say “3, 2, 1” before each change
             </label>
           )}
           {on('warmCool') && <Slider label="Cool down" value={c.cooldown} min={0} max={600} step={30} unit="s" onChange={(v) => set({ cooldown: v })} />}

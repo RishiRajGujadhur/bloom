@@ -1,3 +1,4 @@
+import { Checkbox } from './components/ui/Checkbox'
 import { DropdownSelect } from './components/ui/DropdownSelect'
 import { AdvancedSection } from './components/ui/PageMode'
 import { FeatureModes } from './components/settings/FeatureModes'
@@ -290,7 +291,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Use fewer animations throughout Bloom. This also helps slower phones and computers.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input type="checkbox" checked={reducedMotion} onChange={(e) => setReducedMotion(e.target.checked)} aria-label="Reduce motion" />
+          <Checkbox  checked={reducedMotion} onCheckedChange={(checked) => setReducedMotion(checked)} aria-label="Reduce motion" />
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
@@ -300,12 +301,12 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Keep the sidebar tucked behind a menu button on every screen size, like on phones. Off shows the side column.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={hamburger}
-            onChange={(e) => {
-              setHamburger(e.target.checked)
-              setHamburgerNav(e.target.checked)
+            onCheckedChange={(checked) => {
+              setHamburger(checked)
+              setHamburgerNav(checked)
             }}
             aria-label="Hamburger menu"
           />
@@ -318,12 +319,12 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Use each page’s illustrated icon as its heading. Hover or focus it to see the page name.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={compact}
-            onChange={(e) => {
-              setCompact(e.target.checked)
-              setCompactTitles(e.target.checked)
+            onCheckedChange={(checked) => {
+              setCompact(checked)
+              setCompactTitles(checked)
             }}
             aria-label="Icon page headings"
           />
@@ -337,12 +338,12 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
             <small>{t.hint}</small>
           </span>
           <span className={styles.switch} data-size="small">
-            <input
-              type="checkbox"
+            <Checkbox
+              
               defaultChecked={document.documentElement.hasAttribute(t.attr)}
-              onChange={(e) => {
+              onCheckedChange={(checked) => {
                 try {
-                  localStorage.setItem(t.key, e.target.checked ? '1' : '0')
+                  localStorage.setItem(t.key, checked ? '1' : '0')
                 } catch {
                   /* optional */
                 }
@@ -533,17 +534,17 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Stronger text and borders on every theme.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={contrast}
-            onChange={(e) => {
-              setContrast(e.target.checked)
+            onCheckedChange={(checked) => {
+              setContrast(checked)
               try {
-                localStorage.setItem('bloom-high-contrast', e.target.checked ? '1' : '0')
+                localStorage.setItem('bloom-high-contrast', checked ? '1' : '0')
               } catch {
                 /* optional */
               }
-              document.documentElement.toggleAttribute('data-high-contrast', e.target.checked)
+              document.documentElement.toggleAttribute('data-high-contrast', checked)
             }}
             aria-label="High contrast"
           />
@@ -556,17 +557,17 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Tighter rows so more pages fit without scrolling.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={dense}
-            onChange={(e) => {
-              setDense(e.target.checked)
+            onCheckedChange={(checked) => {
+              setDense(checked)
               try {
-                localStorage.setItem('bloom-nav-dense', e.target.checked ? '1' : '0')
+                localStorage.setItem('bloom-nav-dense', checked ? '1' : '0')
               } catch {
                 /* optional */
               }
-              document.documentElement.toggleAttribute('data-nav-dense', e.target.checked)
+              document.documentElement.toggleAttribute('data-nav-dense', checked)
             }}
             aria-label="Compact sidebar"
           />
@@ -579,16 +580,16 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Open the floating Bloom chat on the right side of the screen instead of the left.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             defaultChecked={document.documentElement.hasAttribute('data-bloom-right')}
-            onChange={(e) => {
+            onCheckedChange={(checked) => {
               try {
-                localStorage.setItem('bloom-chat-right', e.target.checked ? '1' : '0')
+                localStorage.setItem('bloom-chat-right', checked ? '1' : '0')
               } catch {
                 /* optional */
               }
-              document.documentElement.toggleAttribute('data-bloom-right', e.target.checked)
+              document.documentElement.toggleAttribute('data-bloom-right', checked)
             }}
             aria-label="Bloom chat on the right"
           />
@@ -601,8 +602,8 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>System notifications say “Open Bloom to see it” instead of the habit or routine name.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             defaultChecked={(() => {
               try {
                 return localStorage.getItem('bloom-private-notifications') === '1'
@@ -610,9 +611,9 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
                 return false
               }
             })()}
-            onChange={(e) => {
+            onCheckedChange={(checked) => {
               try {
-                localStorage.setItem('bloom-private-notifications', e.target.checked ? '1' : '0')
+                localStorage.setItem('bloom-private-notifications', checked ? '1' : '0')
               } catch {
                 /* optional */
               }
@@ -751,12 +752,12 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Switch between light and dark whenever your device does.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={followSys}
-            onChange={(e) => {
-              setFollowSys(e.target.checked)
-              setFollowSystemTheme(e.target.checked)
+            onCheckedChange={(checked) => {
+              setFollowSys(checked)
+              setFollowSystemTheme(checked)
             }}
             aria-label="Follow system light/dark"
           />
@@ -769,12 +770,12 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>The title bar with the page’s icon and related links at the top of each page. Turn off for more room.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={banner}
-            onChange={(e) => {
-              setBanner(e.target.checked)
-              setPageBanner(e.target.checked)
+            onCheckedChange={(checked) => {
+              setBanner(checked)
+              setPageBanner(checked)
             }}
             aria-label="Page banner"
           />
@@ -787,12 +788,12 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <small>Swap Bloom’s line icons for pixel-art icons. Animated icons keep their motion.</small>
         </span>
         <span className={styles.switch} data-size="small">
-          <input
-            type="checkbox"
+          <Checkbox
+            
             checked={pixel}
-            onChange={(e) => {
-              setPixel(e.target.checked)
-              setPixelIcons(e.target.checked)
+            onCheckedChange={(checked) => {
+              setPixel(checked)
+              setPixelIcons(checked)
             }}
             aria-label="Pixel icon mode"
           />
@@ -860,11 +861,11 @@ function OptionList({
                   </small>
                 </span>
                 <span className={styles.switch} data-size="small">
-                  <input
-                    type="checkbox"
+                  <Checkbox
+                    
                     checked={on && live}
                     disabled={!live}
-                    onChange={() => setSub({ ...sub, [id]: !on })}
+                    onCheckedChange={() => setSub({ ...sub, [id]: !on })}
                     aria-label={`${option.title} (${parentTitle})`}
                   />
                   <span className={styles.slider} aria-hidden="true" />
@@ -1101,10 +1102,10 @@ export function SettingsPage({
                   </span>
                 </span>
                 <span className={styles.switch}>
-                  <input
-                    type="checkbox"
+                  <Checkbox
+                    
                     checked={settings.features[key]}
-                    onChange={() => handleToggleFeature(key)}
+                    onCheckedChange={() => handleToggleFeature(key)}
                     aria-label={t('settings.enableFeature', { title })}
                   />
                   <span className={styles.slider} aria-hidden="true" />

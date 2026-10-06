@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { bodySilent } from '../body/bodyPreferences'
 import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
 import { useBodyPractice, usePauseForBodyCoach } from '../body/bodyPractice'
@@ -167,7 +168,7 @@ export function DojoPage() {
         <button type="button" className="studio-chip" onClick={() => { setSearch(''); setKind('all'); save({ styles: start.styles }) }}>Clear technique filters</button>
         {on('seated') && (
           <label>
-            <input type="checkbox" checked={s.seated} onChange={(e) => { setBodySeated(e.target.checked); save({ seated: e.target.checked }) }} /> Seated / wheelchair dojo
+            <Checkbox  checked={s.seated} onCheckedChange={(checked) => { setBodySeated(checked); save({ seated: checked }) }} /> Seated / wheelchair dojo
           </label>
         )}
         {on('styleFilter') && (
@@ -220,12 +221,12 @@ export function DojoPage() {
         <button type="button" className="studio-btn" onClick={() => setCount(0)}>Reset</button>
         {on('southpaw') && (
           <label>
-            <input type="checkbox" checked={s.southpaw} onChange={(e) => save({ southpaw: e.target.checked })} /> Southpaw / mirror
+            <Checkbox  checked={s.southpaw} onCheckedChange={(checked) => save({ southpaw: checked })} /> Southpaw / mirror
           </label>
         )}
         {on('voice') && (
           <label>
-            <input type="checkbox" checked={s.voice} onChange={(e) => save({ voice: e.target.checked })} /> Voice
+            <Checkbox  checked={s.voice} onCheckedChange={(checked) => save({ voice: checked })} /> Voice
           </label>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { Checkbox } from '../components/ui/Checkbox'
 import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { subOn } from './subFeatures'
 import {
@@ -444,10 +445,10 @@ export function CalendarPage({ data, setData }: Props) {
             ))}
           </div>
           <label className="planning-check">
-            <input
-              type="checkbox"
+            <Checkbox
+              
               checked={includeScheduled}
-              onChange={(e) => setIncludeScheduled(e.target.checked)}
+              onCheckedChange={(checked) => setIncludeScheduled(checked)}
             />
             Include scheduled tasks
           </label>
@@ -793,11 +794,11 @@ export function CalendarPage({ data, setData }: Props) {
               />
             </label>
             <label className="planning-check">
-              <input
-                type="checkbox"
+              <Checkbox
+                
                 checked={draft.deepWork}
-                onChange={(e) =>
-                  setDraft({ ...draft, deepWork: e.target.checked })
+                onCheckedChange={(checked) =>
+                  setDraft({ ...draft, deepWork: checked })
                 }
               />
               Deep work

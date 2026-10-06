@@ -1,3 +1,4 @@
+import { Checkbox } from '../components/ui/Checkbox'
 import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useLeaveGuard } from '../utils/useLeaveGuard'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
@@ -308,7 +309,7 @@ export function FocusPage({
                 ))}
             </DropdownSelect>
             <label className="strict-option">
-              <input type="checkbox" checked={awayOn} onChange={(e) => { setAwayOn(e.target.checked); writeStore('bloom-focus-away', e.target.checked) }} />{' '}
+              <Checkbox  checked={awayOn} onCheckedChange={(checked) => { setAwayOn(checked); writeStore('bloom-focus-away', checked) }} />{' '}
               Pause when I step away{' '}
               <small>
                 {osIdle ? 'Uses your computer’s idle and screen-lock state.' : 'Watches this page for activity.'}{' '}
@@ -316,10 +317,10 @@ export function FocusPage({
               </small>
             </label>
             <label className="strict-option">
-              <input
-                type="checkbox"
+              <Checkbox
+                
                 checked={quest.strict}
-                onChange={(event) => update({ strict: event.target.checked })}
+                onCheckedChange={(checked) => update({ strict: checked })}
               />{' '}
               Strict mode{' '}
               <small>Leaving this browser tab ends the session.</small>

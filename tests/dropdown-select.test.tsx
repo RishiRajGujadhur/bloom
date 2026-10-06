@@ -29,6 +29,8 @@ test('keeps uncontrolled defaults, implicit labels and form values', () => {
   changeField(picker, { target: { value: '15' } })
   expect(picker).toHaveTextContent('15 days')
   expect(new FormData(view.container.querySelector('form')!).getAll('duration')).toEqual(['15'])
+  fireEvent.reset(view.container.querySelector('form')!)
+  expect(picker).toHaveTextContent('30 days')
 })
 
 test('supports linked labels, disabled options, groups and keyboard dismissal', () => {
@@ -56,4 +58,10 @@ test('the existing Select API shares the picker and accepts an empty option', ()
   render(<Select value="" onValueChange={changed} label="Legacy picker" options={[{ value: '', label: 'None' }, { value: 'a', label: 'A' }]} />)
   changeField(screen.getByRole('combobox', { name: 'Legacy picker' }), { target: { value: 'a' } })
   expect(changed).toHaveBeenCalledWith('a')
+})
+
+test('portals stay inside native dialogs so their options remain interactive', () => {
+  render(<dialog open><DropdownSelect aria-label="Dialog choice"><option value="a">A</option></DropdownSelect></dialog>)
+  fireEvent.keyDown(screen.getByRole('combobox', { name: 'Dialog choice' }), { key: 'ArrowDown' })
+  expect(screen.getByRole('listbox').closest('dialog')).not.toBeNull()
 })

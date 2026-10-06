@@ -1,3 +1,4 @@
+import { Checkbox } from '../components/ui/Checkbox'
 import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import {
@@ -26,7 +27,7 @@ import './planning.css'
 type Props = { data: AppData; setData: Dispatch<SetStateAction<AppData>> }
 export type PlanningFilter = Omit<Perspective, 'id' | 'title'>
 
-export function ProjectOptions({
+function projectOptions({
   projects,
   exclude,
 }: {
@@ -83,7 +84,7 @@ export function TaskPlanningFields({
           }
         >
           <option value="">Inbox</option>
-          <ProjectOptions projects={projects} />
+          {projectOptions({ projects })}
         </DropdownSelect>
       </label>
       <label>
@@ -146,10 +147,10 @@ export function TaskPlanningFields({
         />
       </label>
       <label className="planning-check">
-        <input
-          type="checkbox"
+        <Checkbox
+          
           checked={value.deepWork}
-          onChange={(e) => change({ deepWork: e.target.checked })}
+          onCheckedChange={(checked) => change({ deepWork: checked })}
         />
         {prefix}Deep work
       </label>
@@ -405,7 +406,7 @@ export function PlanningTools({
           >
             <option value="all">All projects</option>
             <option value="inbox">Inbox</option>
-            <ProjectOptions projects={data.projects} />
+            {projectOptions({ projects: data.projects })}
           </DropdownSelect>
         </label>
         <label>
@@ -527,7 +528,7 @@ export function PlanningTools({
                 }
               >
                 <option value="">No parent</option>
-                <ProjectOptions projects={data.projects} exclude={project.id} />
+                {projectOptions({ projects: data.projects, exclude: project.id })}
               </DropdownSelect>
             </label>
             <label>

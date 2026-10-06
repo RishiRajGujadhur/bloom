@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core'
@@ -177,7 +178,7 @@ export function LessonPlayer({ exercises, hearts, onHeartLost, onDone, onQuit, t
         {theme?.cast[0] && <BloomFace ref={buddy} variant={theme.cast[0].face} size={44} follow={false} waveOnMount={false} label={theme.cast[0].name} />}
         <span className="en-hearts" aria-label={`${hearts} hearts`}><Heart size={18} fill="currentColor" /> {hearts}</span>
         <label className="en-motion-setting">
-          <input type="checkbox" checked={reducedAnimations} onChange={(event) => setReducedAnimations(event.target.checked)} />
+          <Checkbox  checked={reducedAnimations} onCheckedChange={(checked) => setReducedAnimations(checked)} />
           Reduce animations
         </label>
       </div>

@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { bodySilent } from '../body/bodyPreferences'
 import { setBodySeated, useBodySeated } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
@@ -379,18 +380,18 @@ export function ExercisePage() {
         </div>
         {on('wheelchair') && (
           <label>
-            <input
-              type="checkbox"
+            <Checkbox
+              
               checked={!!prefs.wheelchair}
-              onChange={(e) => {
-                setBodySeated(e.target.checked)
-                setPrefs({ wheelchair: e.target.checked })
+              onCheckedChange={(checked) => {
+                setBodySeated(checked)
+                setPrefs({ wheelchair: checked })
                 setPlaying(false)
                 setCount(0)
                 setMuscle('all')
                 setEquipment('all')
                 setLevel('all')
-                setPick(e.target.checked ? seatedExercises[0] : exercises[0])
+                setPick(checked ? seatedExercises[0] : exercises[0])
               }}
             />{' '}
             Wheelchair / seated-only mode

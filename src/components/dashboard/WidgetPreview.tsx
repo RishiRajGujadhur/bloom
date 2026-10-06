@@ -1,3 +1,4 @@
+import { Checkbox } from '../ui/Checkbox'
 import type { Dispatch, SetStateAction } from 'react'
 import { id, taskSchema, toggleHabit, type AppData } from '../../model'
 import type { NavKey } from '../layout/Sidebar'
@@ -31,10 +32,10 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
           </small>
           {data.habits.slice(0, 2).map((habit) => (
             <label key={habit.id}>
-              <input
-                type="checkbox"
+              <Checkbox
+                
                 checked={habit.dates.includes(today)}
-                onChange={() =>
+                onCheckedChange={() =>
                   setData((current) => toggleHabit(current, habit.id, today))
                 }
               />
@@ -61,10 +62,10 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
           </form>
           {pending.slice(0, 4).map((task) => (
             <label key={task.id}>
-              <input
-                type="checkbox"
+              <Checkbox
+                
                 checked={false}
-                onChange={() =>
+                onCheckedChange={() =>
                   setData((current) => ({
                     ...current,
                     todos: current.todos.map((item) =>
@@ -94,10 +95,10 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
             .slice(0, 2)
             .map((plan) => (
               <label key={plan.id}>
-                <input
-                  type="checkbox"
+                <Checkbox
+                  
                   checked={false}
-                  onChange={() =>
+                  onCheckedChange={() =>
                     setData((current) => ({
                       ...current,
                       plans: current.plans.map((item) =>

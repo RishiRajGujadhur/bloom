@@ -1,3 +1,4 @@
+import { Checkbox } from '../../components/ui/Checkbox'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import gsap from 'gsap'
@@ -254,7 +255,7 @@ export function RecipeBuilder({ today, onLog }: { today: string; onLog: (meal: M
             {subOn('recipeBuilder', 'cookLoss') && (
               <>
                 <label className="rb-toggle">
-                  <input type="checkbox" checked={cooked} onChange={(e) => setCooked(e.target.checked)} /> Cooked (apply yield)
+                  <Checkbox  checked={cooked} onCheckedChange={(checked) => setCooked(checked)} /> Cooked (apply yield)
                 </label>
                 {cooked && (
                   <label className="rb-measured">

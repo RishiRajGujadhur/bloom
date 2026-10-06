@@ -4,6 +4,7 @@ import {
   Children,
   Fragment,
   isValidElement,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -50,10 +51,11 @@ function collectOptions(
         disabled || !!child.props.disabled,
       )
     if (child.type !== 'option') return []
-    const label = child.props.label ?? optionText(child.props.children)
+    const text = optionText(child.props.children)
+    const label = child.props.label ?? text
     return [
       {
-        value: String(child.props.value ?? label),
+        value: String(child.props.value ?? text),
         label,
         group,
         disabled: disabled || !!child.props.disabled,
@@ -83,11 +85,23 @@ export function DropdownSelect({
     String(defaultValue ?? options[0]?.value ?? ''),
   )
   const [implicitLabel, setImplicitLabel] = useState<string>()
+  const [portalContainer, setPortalContainer] = useState<HTMLElement>()
   const selected = value === undefined ? localValue : String(value)
   // Encoding every value avoids reserved empty values and collisions with sentinel strings.
   const encode = (item: string) => `bloom:${item}`
   const ariaLabel = attributes['aria-label']
   const ariaLabelledBy = attributes['aria-labelledby']
+  useLayoutEffect(() => {
+    setPortalContainer(trigger.current?.closest('dialog') ?? undefined)
+  }, [])
+  const resetValue = String(defaultValue ?? options[0]?.value ?? '')
+  useEffect(() => {
+    if (value !== undefined) return
+    const form = native.current?.form
+    const reset = () => setLocalValue(resetValue)
+    form?.addEventListener('reset', reset)
+    return () => form?.removeEventListener('reset', reset)
+  }, [value, resetValue])
   useLayoutEffect(() => {
     if (ariaLabel || ariaLabelledBy) return
     const label = trigger.current?.labels?.[0]
@@ -152,7 +166,7 @@ export function DropdownSelect({
             <ChevronDown size={16} aria-hidden="true" />
           </RadixSelect.Icon>
         </RadixSelect.Trigger>
-        <RadixSelect.Portal>
+        <RadixSelect.Portal container={portalContainer}>
           <RadixSelect.Content
             className="ui-menu ui-select-content"
             position="popper"
