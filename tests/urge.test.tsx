@@ -107,8 +107,8 @@ test('the three-click logger saves an urge and immediately updates patterns', as
 test('Settings can disable the feature without removing saved data', async () => {
   await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true })) })
-  showAll()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
+  showAll()
   const toggle = screen.getByRole('checkbox', {
     name: 'Enable Urge & trigger tracker',
   })

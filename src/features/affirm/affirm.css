@@ -93,6 +93,6 @@
 .af-say {
   background: var(--studio);
   border-color: var(--studio);
-  color: #fff;
+  color: var(--studio-text);
   padding: 0 22px;
 }
