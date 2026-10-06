@@ -7,7 +7,7 @@ All 83 routes share the delivery, build and application-shell safeguards below. 
 - `performance-baseline.json`: original production static entry graph.
 - `performance-build.json`: final production static entry graph, including shared imports and CSS, with raw and compressed bytes and enforced budgets.
 - `performance-pages.json`: desktop and mobile snapshots for every route, all features enabled. Fresh document per route with a shared warm browser HTTP cache; service workers disabled to isolate network delivery. These are lab observations, not field Core Web Vitals or Lighthouse scores.
-- `npm run build`, `npm run perf:build`, `npm run perf:pages`, `npm run perf:offline`, `npm run test:server` reproduce the checks. Page audit accepts `--pages=overview,habits` and `--output=test-results/perf-subset.json`.
+- `npm run build`, `npm run perf:build`, `npm run perf:pages`, `npm run perf:offline`, `npm run perf:navigation`, `npm run test:server` reproduce the checks. Page audit accepts `--pages=overview,habits` and `--output=test-results/perf-subset.json`.
 
 The production server improvements apply to `node server.mjs` (also used by the desktop launcher). Another host must supply equivalent compression and cache headers. No CDN subscription, hosting upgrade, HTTP/2 or HTTP/3 deployment, redirect configuration or server-side database cache was provisioned.
 
@@ -106,6 +106,7 @@ Items 1–43 and 47–74 are the shared delivery/shell changes applicable to eve
 - Closed lower-page details/footer sections opt into content visibility with intrinsic size, without containing open popovers.
 - Model-download cache has independent entry, age and quota bounds.
 - Build budgets reject oversized startup JS/CSS, runtime CSS imports and eager heavy optional dependencies.
+- Code City bounds concurrent sibling blob reads while preserving exact HEAD file sizes.
 
 ## Limits of the supplied 50-item list
 

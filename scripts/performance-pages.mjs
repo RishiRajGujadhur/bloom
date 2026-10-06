@@ -160,19 +160,37 @@ console.log(
 )
 if (failures.length) process.exitCode = 1
 // Keep a reviewable per-route checklist alongside the machine-readable results.
-const rows = [...new Set(results.map(result => result.page))].map(page => {
-  const desktop = results.find(result => result.page === page && result.profile === 'desktop')
-  const mobile = results.find(result => result.page === page && result.profile === 'mobile')
+const rows = [...new Set(results.map((result) => result.page))].map((page) => {
+  const desktop = results.find(
+    (result) => result.page === page && result.profile === 'desktop',
+  )
+  const mobile = results.find(
+    (result) => result.page === page && result.profile === 'mobile',
+  )
   const pair = [desktop, mobile].filter(Boolean)
   const notes = []
-  if (pair.some(result => result.error || result.errorScreen || result.errors.length)) notes.push('runtime failure')
-  if (pair.some(result => result.domNodes > 1500)) notes.push('DOM > 1,500')
-  if (pair.some(result => result.horizontalOverflow)) notes.push('horizontal overflow')
+  if (
+    pair.some(
+      (result) => result.error || result.errorScreen || result.errors.length,
+    )
+  )
+    notes.push('runtime failure')
+  if (pair.some((result) => result.domNodes > 1500)) notes.push('DOM > 1,500')
+  if (pair.some((result) => result.horizontalOverflow))
+    notes.push('horizontal overflow')
   return `| #${page} | 1–43, 47–74 (71 shared safeguards) | ${desktop?.domNodes ?? '—'} | ${mobile?.domNodes ?? '—'} | ${notes.join('; ') || 'Passed snapshot checks'} |`
 })
-if (output === 'docs/performance-pages.json') await writeFile('docs/performance-pages.md', [
-  '# Per-page performance matrix', '',
-  'See [performance.md](performance.md) for source evidence and conditional applicability of each safeguard. Counts reflect shared changes, not independent per-page edits. DOM snapshots include navigation and the page shell; populated user data can change these counts.', '',
-  '| Route | Implemented shared checklist | Desktop DOM | Mobile DOM | Observations |',
-  '|---|---|---:|---:|---|', ...rows, '',
-].join('\n'))
+if (output === 'docs/performance-pages.json')
+  await writeFile(
+    'docs/performance-pages.md',
+    [
+      '# Per-page performance matrix',
+      '',
+      'See [performance.md](performance.md) for source evidence and conditional applicability of each safeguard. Counts reflect shared changes, not independent per-page edits. DOM snapshots include navigation and the page shell; populated user data can change these counts.',
+      '',
+      '| Route | Implemented shared checklist | Desktop DOM | Mobile DOM | Observations |',
+      '|---|---|---:|---:|---|',
+      ...rows,
+      '',
+    ].join('\n'),
+  )

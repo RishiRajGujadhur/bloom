@@ -15,6 +15,7 @@
     "perf:build": "node scripts/performance-build.mjs",
     "perf:pages": "node scripts/performance-pages.mjs",
     "perf:offline": "node scripts/performance-offline.mjs",
+    "perf:navigation": "node scripts/performance-navigation.mjs",
     "format": "prettier --write src tests *.json *.ts *.cjs *.js"
   },
   "dependencies": {
