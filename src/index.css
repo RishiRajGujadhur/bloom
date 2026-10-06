@@ -293,3 +293,6 @@ legend { max-inline-size: 100%; white-space: normal; overflow-wrap: anywhere; }
 
 /* UX 007: Make native select text follow the chosen app font. */
 select { font: inherit; color: var(--text-primary); }
+
+/* UX 008: Communicate disabled form controls consistently. */
+select:disabled, input:disabled, textarea:disabled { cursor: not-allowed; opacity: 0.65; }
