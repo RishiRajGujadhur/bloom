@@ -18,6 +18,12 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 
 ## Verification
 
+### Interval countdown styling
+
+- [x] Match the [Pinterest reference](https://www.pinterest.com/pin/750060512983502539/) with a flat blue progress ring, neutral track and lighter centered digits.
+- [x] Keep Work, Rest, Warm up, round labels and timer behavior unchanged; implementation changes are limited to countdown CSS.
+- [x] Visually check the local interval page; verify the 240px ring fits a 320px viewport without horizontal overflow. Dark-mode digits use a lighter blue for contrast.
+
 ### Follow-up: Settings and chat layout controls
 
 - [x] Every feature's Basic/Advanced preference is edited in Settings → Feature modes, including Todo and Settings itself.

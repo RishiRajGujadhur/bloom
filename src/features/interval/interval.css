@@ -1,12 +1,12 @@
 .iv-stage {
   --seg: var(--studio);
+  --iv-countdown: #1976d2;
   position: relative;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   place-items: center;
   gap: 12px;
-  background: radial-gradient(circle at 50% 42%, color-mix(in oklab, var(--seg) 22%, transparent), transparent 62%), color-mix(in oklab, var(--bg-surface) 82%, transparent);
-  transition: background 600ms ease;
+  background: var(--bg-surface);
 }
 .iv-ring {
   grid-area: 1 / 1;
@@ -16,16 +16,14 @@
 }
 .iv-track {
   fill: none;
-  stroke: color-mix(in oklab, var(--seg) 18%, transparent);
+  stroke: color-mix(in oklab, var(--text-primary) 12%, var(--bg-surface));
   stroke-width: 16;
 }
 .iv-arc {
   fill: none;
-  stroke: var(--seg);
+  stroke: var(--iv-countdown);
   stroke-width: 16;
   stroke-linecap: round;
-  transition: stroke 400ms ease;
-  filter: drop-shadow(0 0 12px color-mix(in oklab, var(--seg) 55%, transparent));
 }
 .iv-readout {
   grid-area: 1 / 1;
@@ -41,10 +39,18 @@
   letter-spacing: 0.08em;
 }
 .iv-readout strong {
-  font-size: clamp(56px, 8vw, 88px);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(40px, 7vw, 80px);
+  font-weight: 300;
+  color: var(--iv-countdown);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .iv-stage { --iv-countdown: #64b5f6; }
+}
+html[data-theme='dark'] .iv-stage,
+html[data-mode='dark'] .iv-stage { --iv-countdown: #64b5f6; }
 .iv-round {
   color: var(--text-muted);
   font-weight: 600;
