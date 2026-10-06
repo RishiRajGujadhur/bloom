@@ -57,3 +57,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 51 | Prevent narrow-screen card grid overflow in gameCards (.studio-rail.is-all:has(.game-card)) | `src/features/games/gameCards.css` |
 | 52 | Prevent narrow-screen card grid overflow in ink (.ink-pages) | `src/features/ink/ink.css` |
 | 53 | Prevent narrow-screen card grid overflow in joys (.jy-grid) | `src/features/joys/joys.css` |
+| 54 | Prevent narrow-screen card grid overflow in mixer (.mx-layers) | `src/features/mixer/mixer.css` |
