@@ -101,7 +101,7 @@
   font-size: 12px;
 }
 .bloom-guide .driver-popover-footer button {
-  min-height: 38px;
+  min-height: 44px;
   padding: 8px 16px;
   border-radius: 12px;
   border: 1px solid var(--border-color);
@@ -114,6 +114,7 @@
   transition:
     transform 150ms ease,
     background 150ms ease;
+  min-width: 44px;
 }
 .bloom-guide .driver-popover-footer button:hover {
   transform: translateY(-1px);
