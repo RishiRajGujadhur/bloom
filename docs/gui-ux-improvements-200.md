@@ -133,3 +133,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 127 | Improve small text readability in insights (.insight-stat small, .insight-note, .heatmap-legend) | `src/features/insights.css` |
 | 128 | Improve small text readability in library (.adopt-detail) | `src/features/library.css` |
 | 129 | Improve small text readability in planning (.planning-fields label, .planning-form label, .perspective-picker, .calendar-capacity label) | `src/features/planning.css` |
+| 130 | Improve small text readability in urge (.urge-progress li) | `src/features/urge.css` |
