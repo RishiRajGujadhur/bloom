@@ -5,6 +5,7 @@ import type { AppData } from '../../model'
 import type { Dispatch, SetStateAction } from 'react'
 import { WidgetPreview } from './WidgetPreview'
 import './widgetBoard.css'
+import { WidgetFrame } from '../layout/WidgetLayout'
 
 export type Widget = { page: NavKey; size: 1 | 2 }
 export const WIDGET_KEY = 'bloom-home-widgets-v1'
@@ -68,6 +69,7 @@ export function WidgetBoard({
   const [editing, setEditing] = useState(false)
   const [query, setQuery] = useState('')
   const [dragging, setDragging] = useState<NavKey | null>(null)
+  const [pageIndex, setPageIndex] = useState(0)
   useEffect(() => {
     try {
       localStorage.setItem(WIDGET_KEY, JSON.stringify(widgets))
@@ -86,6 +88,9 @@ export function WidgetBoard({
   }, [])
   const visible = widgets.filter((widget) => enabled(widget.page))
   const hiddenCount = widgets.length - visible.length
+  const pageCount = Math.max(1, Math.ceil(visible.length / 6))
+  const currentPage = Math.min(pageIndex, pageCount - 1)
+  const displayed = editing ? visible : visible.slice(currentPage * 6, currentPage * 6 + 6)
   const available = choices.filter(
     (page) =>
       enabled(page) &&
@@ -174,8 +179,11 @@ export function WidgetBoard({
         </div>
       )}
       <div className="widget-grid">
-        {visible.map((widget, index) => (
-          <article
+        {displayed.map((widget, index) => (
+          <WidgetFrame
+            id={`home:${widget.page}`}
+            title={pageDetails[widget.page].title}
+            editing={editing}
             className={`widget-card widget-size-${widget.size}`}
             key={widget.page}
             draggable={editing}
@@ -248,9 +256,14 @@ export function WidgetBoard({
                 </button>
               </div>
             )}
-          </article>
+          </WidgetFrame>
         ))}
       </div>
+      {!editing && pageCount > 1 && <nav className="widget-pager" aria-label="Widget pages">
+        <button type="button" disabled={currentPage === 0} onClick={() => setPageIndex(currentPage - 1)}>Previous widgets</button>
+        <span>Page {currentPage + 1} of {pageCount}</span>
+        <button type="button" disabled={currentPage === pageCount - 1} onClick={() => setPageIndex(currentPage + 1)}>Next widgets</button>
+      </nav>}
       {!visible.length && (
         <p className="widget-empty">
           Your dashboard has no visible widgets. Choose Customize widgets to add

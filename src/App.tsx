@@ -108,6 +108,7 @@ import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
 import { PageBoundary } from './components/ui/PageBoundary'
 import { PageModeContext, PageModeSwitch, usePageModeState } from './components/ui/PageMode'
+import { PageLayout } from './components/layout/WidgetLayout'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
 const EpiphaniesPage = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphaniesPage })))
 const EpiphanyGate = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphanyGate })))
@@ -447,6 +448,7 @@ function readPageAloud() {
 }
 
 function App() {
+  const widgetRoot = useRef<HTMLDivElement>(null)
   useEffect(() => { if (!prefersReducedMotion()) return idleTask(initHoudini) }, [])
   useEffect(pauseGsapWhenHidden, [])
   const { t } = useTranslation(undefined, { i18n })
@@ -888,6 +890,7 @@ function App() {
             </div>
           </header>
           <div
+            ref={widgetRoot}
             className={`page-content feature-page page-${active}${simpleHome ? ' is-simple-home' : ''} mx-auto w-full max-w-[1600px] px-4 pb-10 sm:px-6 lg:px-8`}
           >
             <PageBoundary key={active} onHome={() => jump('overview' as never)}>
@@ -947,6 +950,7 @@ function App() {
               <FeatureGuide page={active} />
             </BloomHeading>
             {active !== 'todos' && <PageModeSwitch />}
+            <PageLayout page={active} root={widgetRoot} />
             {pageMode.mode === 'advanced' && settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
                 data={data}

@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { toggleHabit, type AppData } from '../../model'
+import { id, taskSchema, toggleHabit, type AppData } from '../../model'
 import type { NavKey } from '../layout/Sidebar'
 
 type Props = {
@@ -47,7 +47,19 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
       return (
         <div className="widget-preview">
           <small>{pending.length} to do</small>
-          {pending.slice(0, 2).map((task) => (
+          <form className="widget-task-composer" onSubmit={event => {
+            event.preventDefault()
+            const form = event.currentTarget
+            const title = String(new FormData(form).get('task') ?? '').trim()
+            if (!title) return
+            const task = taskSchema.parse({ id: id(), title, done: false, due: null, challengeId: null })
+            setData(current => ({ ...current, todos: [...current.todos, task] }))
+            form.reset()
+          }}>
+            <input name="task" aria-label="New widget task" placeholder="Add a task" maxLength={300} required />
+            <button type="submit">Add</button>
+          </form>
+          {pending.slice(0, 4).map((task) => (
             <label key={task.id}>
               <input
                 type="checkbox"
@@ -66,6 +78,8 @@ export function WidgetPreview({ page, data, today, setData }: Props) {
               {task.title}
             </label>
           ))}
+          {!pending.length && <span>All clear. Add your next task above.</span>}
+          {pending.length > 4 && <small>{pending.length - 4} more in the full task page</small>}
         </div>
       )
     case 'planning':
