@@ -32,3 +32,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 26 | Prevent narrow-screen card grid overflow in urgeClock (.urge-clocks) | `src/features/urgeClock.css` |
 | 27 | Prevent narrow-screen card grid overflow in shortcuts (.kb-cols) | `src/components/layout/shortcuts.css` |
 | 28 | Prevent narrow-screen card grid overflow in localFonts (.lf-grid) | `src/components/settings/localFonts.css` |
+| 29 | Prevent narrow-screen card grid overflow in ThemePicker.module (.themeGrid) | `src/components/settings/ThemePicker.module.css` |

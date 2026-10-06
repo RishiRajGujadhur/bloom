@@ -25,7 +25,7 @@
 /* ---- Theme grid ------------------------------------------------------ */
 .themeGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 155px), 1fr));
   gap: 11px;
   margin-top: 15px;
 }
