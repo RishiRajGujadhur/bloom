@@ -527,3 +527,6 @@
 
 /* UX 015: Let semantic-search status and its action wrap cleanly. */
 .cmdk-semantic { flex-wrap: wrap; }
+
+/* UX 016: Wrap long unbroken journal content in search previews. */
+.cmdk-preview p { overflow-wrap: anywhere; }
