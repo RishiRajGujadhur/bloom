@@ -348,12 +348,14 @@ html:not([data-nav='hamburger'])[data-sidebar='collapsed'] {
 .bc-head-actions button {
   display: inline-grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   background: var(--bg-surface);
   color: var(--text-primary);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .bc-head-actions button[aria-pressed='true'] {
