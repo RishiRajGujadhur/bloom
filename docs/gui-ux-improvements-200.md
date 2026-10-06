@@ -156,3 +156,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 150 | Improve small text readability in VisionBoard.module (.heading > div > span) | `src/components/VisionBoard/VisionBoard.module.css` |
 | 151 | Improve small text readability in affirm (.af-deck) | `src/features/affirm/affirm.css` |
 | 152 | Improve small text readability in arcade (.sb-card b) | `src/features/arcade/arcade.css` |
+| 153 | Improve small text readability in body (.bd-goal-text, .bd-axis) | `src/features/body/body.css` |
