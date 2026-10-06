@@ -1,7 +1,6 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { renderApp } from './helpers/renderApp'
 import type { UrgeEvent } from '../src/model'
-import { showAll } from './helpers/showAll'
 import {
   buildUrgeInsight,
   calculateCorrelations,
@@ -108,7 +107,7 @@ test('Settings can disable the feature without removing saved data', async () =>
   await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true })) })
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
-  showAll()
+  fireEvent.change(screen.getByRole('searchbox', { name: 'Find a feature' }), { target: { value: 'Urge' } })
   const toggle = screen.getByRole('checkbox', {
     name: 'Enable Urge & trigger tracker',
   })
