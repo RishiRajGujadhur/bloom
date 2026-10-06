@@ -287,3 +287,6 @@ input[aria-invalid="true"]:focus, textarea[aria-invalid="true"]:focus, select[ar
 
 /* UX 005: Allow grouped forms to shrink inside narrow cards. */
 fieldset { min-inline-size: 0; }
+
+/* UX 006: Wrap long form section labels without horizontal overflow. */
+legend { max-inline-size: 100%; white-space: normal; overflow-wrap: anywhere; }
