@@ -80,3 +80,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 74 | Enlarge controls to a 44px touch target in rpg (.morph-button) | `src/rpg/rpg.css` |
 | 75 | Enlarge controls to a 44px touch target in shared-ui (.app-shell .topbar .theme-toggle, .app-shell .topbar .quiet-button) | `src/styles/shared-ui.css` |
 | 76 | Enlarge controls to a 44px touch target in shared-ui (.filter-chips button) | `src/styles/shared-ui.css` |
+| 77 | Improve small text readability in shared menus (.streak-pill) | `src/styles/shared-ui.css` |
