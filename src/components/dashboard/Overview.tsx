@@ -271,7 +271,7 @@ export function ReflectionCard({
             </button>
           )}
         </div>
-        <img src={journalBook} alt="" aria-hidden="true" />
+        <img src={journalBook} width={162} height={104} loading="lazy" decoding="async" alt="" aria-hidden="true" />
       </div>
     </OverviewCard>
   )
@@ -379,7 +379,7 @@ export function FocusCard({
             {running ? 'Continue focus' : 'Start focus'}
           </button>
         </div>
-        <img src={focusStones} alt="" aria-hidden="true" />
+        <img src={focusStones} width={235} height={158} loading="lazy" decoding="async" alt="" aria-hidden="true" />
       </div>
     </OverviewCard>
   )

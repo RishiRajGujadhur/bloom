@@ -22,6 +22,10 @@ export function BadgeNode({ id, data }: NodeProps<CanvasNode>) {
         src="/rpg/chest.svg"
         alt="Pixel art treasure chest"
         draggable={false}
+        width={64}
+        height={64}
+        loading="lazy"
+        decoding="async"
       />
       {earned ? (
         <h3>{String(data.referenceId)}</h3>

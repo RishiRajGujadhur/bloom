@@ -11,6 +11,7 @@ import {
 } from 'react'
 import { ChevronLeft, ChevronRight, Leaf } from 'lucide-react'
 import heroLandscape from '../assets/bloom/hero-landscape.webp'
+import heroLandscapeSmall from '../assets/bloom/hero-landscape-small.webp'
 import type { NavKey } from './layout/Sidebar'
 import { PageEmblem } from './ui/PageEmblem'
 import { createPortal } from 'react-dom'
@@ -266,7 +267,7 @@ export function BloomHeading({
     <div className={`bloom-heading feature-heading${hero ? ' is-hero' : ''}${lead ? ' has-lead' : ''}${inSlot ? ' in-slot' : ''}`} data-scene={sc.kind} style={{ '--scene-kind': sc.kind, '--scene-seed': String(sc.seed) } as CSSProperties}>
       {lead && <div className="bloom-heading-lead">{lead}</div>}
       {hero && (
-        <img className="bloom-hero-art" src={heroLandscape} alt="" aria-hidden="true" />
+        <img className="bloom-hero-art" src={heroLandscape} srcSet={`${heroLandscapeSmall} 480w, ${heroLandscape} 760w`} sizes="(max-width: 720px) 100vw, (max-width: 1500px) 62vw, 780px" width={760} height={220} decoding="async" fetchPriority="high" alt="" aria-hidden="true" />
       )}
       <svg
         className="bloom-contours"
