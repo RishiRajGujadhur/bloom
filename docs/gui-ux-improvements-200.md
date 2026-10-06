@@ -151,3 +151,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 145 | Improve small text readability in shared (.ex-aside) | `src/components/studio/shared.css` |
 | 146 | Adapt Money totals to narrow screens and enlarged text | `src/features/money/money.css` |
 | 147 | Improve small text readability in shared menus (.app-shell .sidebar .nav-section) | `src/styles/shared-ui.css` |
+| 148 | Improve small text readability in ui (.ui-menu-hint) | `src/components/ui/ui.css` |
