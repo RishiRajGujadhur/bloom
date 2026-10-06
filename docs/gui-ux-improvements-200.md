@@ -25,3 +25,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 19 | Separate dialog titles and close actions when titles wrap | `src/App.css` |
 | 20 | Keep long dialog titles from displacing the close button | `src/App.css` |
 | 21 | Prevent narrow-screen card grid overflow in App (.pending-media, .journal-media-grid) | `src/App.css` |
+| 22 | Prevent narrow-screen card grid overflow in settings.module (.featureGrid) | `src/settings.module.css` |
