@@ -381,13 +381,14 @@
   flex-shrink: 0;
 }
 .journal-reader-controls button {
-  min-height: 42px;
+  min-height: 44px;
   padding: 10px 14px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   color: var(--text-primary);
   font-size: 12px;
+  min-width: 44px;
 }
 .journal-reader-controls button:disabled {
   opacity: 0.35;
