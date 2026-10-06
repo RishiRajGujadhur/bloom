@@ -24,7 +24,7 @@
   .topbar .wco-title b { font-weight: 800; color: var(--text-secondary); letter-spacing: 0; }
   .topbar .wco-title b::before { content: '·'; margin: 0 6px; color: var(--text-muted, var(--text-secondary)); }
   /* Everything shrinks to fit a native-height title bar. */
-  .topbar :is(button, [role='button'], .search-trigger, input) { height: 30px !important; min-height: 0 !important; min-width: 30px; padding-block: 0 !important; font-size: 0.82rem; }
+  .topbar :is(button, [role='button'], .search-trigger, input) { height: 44px !important; min-height: 0 !important; min-width: 44px; padding-block: 0 !important; font-size: 0.82rem; }
   .topbar :is(button, [role='button']) svg { width: 16px; height: 16px; }
   .topbar .topbar-actions { gap: 8px !important; flex-wrap: nowrap !important; }
   main#overview { padding-top: calc(env(titlebar-area-height, 40px) + 12px); }

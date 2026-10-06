@@ -81,3 +81,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 75 | Enlarge controls to a 44px touch target in shared-ui (.app-shell .topbar .theme-toggle, .app-shell .topbar .quiet-button) | `src/styles/shared-ui.css` |
 | 76 | Enlarge controls to a 44px touch target in shared-ui (.filter-chips button) | `src/styles/shared-ui.css` |
 | 77 | Improve small text readability in shared menus (.streak-pill) | `src/styles/shared-ui.css` |
+| 78 | Enlarge controls to a 44px touch target in titlebar (.topbar :is(button, [role='button'], .search-trigger, input)) | `src/styles/titlebar.css` |
