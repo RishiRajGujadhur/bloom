@@ -126,8 +126,9 @@
 .epiphany-grades button {
   flex: 1;
   justify-content: center;
-  min-height: 40px !important;
+  min-height: 44px !important;
   padding: 8px 12px;
+  min-width: 44px;
 }
 .epiphanies-page {
   display: grid;

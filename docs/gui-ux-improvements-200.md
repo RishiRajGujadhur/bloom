@@ -98,3 +98,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 92 | Enlarge controls to a 44px touch target in diet (.rb-servings button) | `src/features/diet/diet.css` |
 | 93 | Enlarge controls to a 44px touch target in energy (.energy-range button) | `src/features/energy/energy.css` |
 | 94 | Enlarge controls to a 44px touch target in energy (.energy-empty-actions button) | `src/features/energy/energy.css` |
+| 95 | Enlarge controls to a 44px touch target in epiphany (.epiphany-grades button) | `src/features/epiphany/epiphany.css` |
