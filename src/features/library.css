@@ -107,9 +107,10 @@
 .adopt-card > button {
   margin-top: 8px;
   justify-content: center;
-  min-height: 40px !important;
+  min-height: 44px !important;
   padding: 8px 14px;
   font-size: 14px;
+  min-width: 44px;
 }
 .modal .adopt-library {
   width: min(880px, 90vw);
