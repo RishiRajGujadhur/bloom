@@ -102,3 +102,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 96 | Enlarge controls to a 44px touch target in explore (.explore-builder button) | `src/features/explore/explore.css` |
 | 97 | Enlarge controls to a 44px touch target in boardLessons (.bl-progress button) | `src/features/games/boardLessons.css` |
 | 98 | Enlarge controls to a 44px touch target in habitCalendar (.habit-calendar-toolbar .icon-button) | `src/features/habits/habitCalendar.css` |
+| 99 | Enlarge controls to a 44px touch target in ink (.ink-colors button) | `src/features/ink/ink.css` |
