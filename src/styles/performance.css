@@ -1,0 +1,25 @@
+/* Stable route loading space; the heading remains available during chunk loading. */
+.page-loading {
+  min-block-size: min(45vh, 360px);
+  padding-block: 24px;
+}
+.lottie-icon {
+  position: relative;
+  flex-shrink: 0;
+}
+.lottie-player {
+  position: absolute;
+  inset: 0;
+}
+.lottie-icon.is-loaded > .lottie-fallback {
+  visibility: hidden;
+}
+
+/* Opt in only independent, closed lower-page sections. Never clip open popovers. */
+@supports (content-visibility: auto) {
+  .page-content > .page-footer,
+  .page-content details:not([open]) {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 48px;
+  }
+}
