@@ -15,6 +15,7 @@ import { WORKOUT_KEY, type WorkoutStore } from '../workout/workoutModel'
 import { c25k, c25kProgram, calories, fmt, normalizeProgram, position, presets, segments, total, type Program } from './intervalModel'
 import { usePageActions } from '../../components/ui/PageMenu'
 import './interval.css'
+import { FallingCountdown } from './FallingCountdown'
 
 const on = (id: string) => subOn('intervalCoach', id)
 const KEY = 'bloom-intervals-v1'
@@ -228,7 +229,7 @@ export function IntervalPage() {
         ) : null}
         <div className="iv-readout" aria-live="polite">
           <span className="iv-label">{done ? 'Finished' : (pos?.segment.label ?? 'Ready')}</span>
-          <strong>{done ? fmt(length) : pos ? fmt(pos.left) : fmt(length)}</strong>
+          <FallingCountdown value={done ? fmt(length) : pos ? fmt(pos.left) : fmt(length)} />
           {on('rounds') && pos?.segment.round && (
             <span className="iv-round">
               Round {pos.segment.round} / {program.rounds}

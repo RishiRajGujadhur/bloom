@@ -1,6 +1,6 @@
 .iv-stage {
   --seg: var(--studio);
-  --iv-countdown: #1976d2;
+  --iv-countdown: var(--seg);
   position: relative;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
@@ -46,11 +46,32 @@
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme]) .iv-stage { --iv-countdown: #64b5f6; }
+.iv-number {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding-block: 0.08em;
 }
-html[data-theme='dark'] .iv-stage,
-html[data-mode='dark'] .iv-stage { --iv-countdown: #64b5f6; }
+.iv-number-current { display: block; }
+.iv-number-current.is-changing { animation: iv-number-enter 450ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.iv-number-previous {
+  position: absolute;
+  inset: 0.08em 0 auto;
+  text-align: center;
+  animation: iv-number-exit 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes iv-number-enter {
+  from { transform: translateY(-115%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes iv-number-exit {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(115%); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iv-number-current.is-changing { animation: none; }
+  .iv-number-previous { display: none; animation: none; }
+}
 .iv-round {
   color: var(--text-muted);
   font-weight: 600;

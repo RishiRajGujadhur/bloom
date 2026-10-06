@@ -21,8 +21,10 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 ### Interval countdown styling
 
 - [x] Match the [Pinterest reference](https://www.pinterest.com/pin/750060512983502539/) with a flat blue progress ring, neutral track and lighter centered digits.
-- [x] Keep Work, Rest, Warm up, round labels and timer behavior unchanged; implementation changes are limited to countdown CSS.
-- [x] Visually check the local interval page; verify the 240px ring fits a 320px viewport without horizontal overflow. Dark-mode digits use a lighter blue for contrast.
+- [x] Keep Work, Rest, Warm up, round labels and timer behavior unchanged.
+- [x] Visually check the local interval page; verify the 240px ring fits a 320px viewport without horizontal overflow.
+- [x] Add the reference's falling-number transition: the outgoing value drops below the readout while the new value enters from above over 450ms. Reduced-motion preferences disable movement; outgoing text is hidden from screen readers.
+- [x] Ring and countdown digits follow the existing phase-label color. Verify matching computed colors for Work and Rest, live number transitions and resetting the timer.
 
 ### Follow-up: Settings and chat layout controls
 
