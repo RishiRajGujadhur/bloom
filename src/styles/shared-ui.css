@@ -268,8 +268,8 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
 }
 .app-shell .topbar .theme-toggle,
 .app-shell .topbar .quiet-button {
-  min-height: 42px;
-  min-width: 42px;
+  min-height: 44px;
+  min-width: 44px;
   justify-content: center;
   padding: 10px 12px;
 }
