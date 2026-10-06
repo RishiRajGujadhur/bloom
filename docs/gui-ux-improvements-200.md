@@ -181,3 +181,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 175 | Improve small text readability in meditate (.md-kicker) | `src/features/meditate/meditate.css` |
 | 176 | Improve small text readability in mindmap (.mm-save-status) | `src/features/mindmap/mindmap.css` |
 | 177 | Improve small text readability in money (.mn-csv) | `src/features/money/money.css` |
+| 178 | Improve small text readability in monk (.monk-foot) | `src/features/monk/monk.css` |
