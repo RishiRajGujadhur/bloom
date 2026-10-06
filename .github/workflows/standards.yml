@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run check:ecmascript
+      - name: Enforce startup performance budgets
+        run: node scripts/performance-build.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: standards-build
