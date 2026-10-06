@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-06",
+  "baseURL": "http://127.0.0.1:5180",
+  "mode": "basic",
+  "profile": "desktop",
+  "results": [
+    {
+      "route": "todos",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "overview",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "settings",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "vision-board",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "code",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mindmaps",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "route": "mala",
+      "errors": [],
+      "violations": [],
+      "markup": {
+        "duplicateIds": [],
+        "nestedButtons": 0,
+        "horizontalOverflow": false
+      }
+    }
+  ]
+}

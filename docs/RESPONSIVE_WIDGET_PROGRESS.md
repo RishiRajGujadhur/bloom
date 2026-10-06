@@ -30,7 +30,20 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 - [x] Mind-map tools wrap in a separate row instead of covering diagram labels.
 - [x] Soundscape moves beside Search; an essential Settings switch persists its visibility.
 - [x] Conversation examples, restart and export move to a right-click menu, with keyboard and touch overflow access.
-- [ ] Complete follow-up production/browser/accessibility checks.
+- [x] Escape dismisses a conversation menu without closing Bloom; portaled menu keys bypass the panel focus trap.
+- [x] Complete follow-up production/browser/accessibility checks.
+
+Follow-up page audits passed for Settings, Code, Mind maps, Todo, Overview, Mala and Vision board in desktop Basic, 320px Basic and 320px Advanced modes (21 checks). They report no runtime errors, automated WCAG violations, duplicate IDs, nested controls or horizontal page overflow:
+
+- [Desktop Basic](layout-controls-desktop-basic.json)
+- [320px Basic](layout-controls-reflow-basic.json)
+- [320px Advanced](layout-controls-reflow-advanced.json)
+
+These audits cover the shared layout and header changes. The subsequent menu Escape fix is covered by the interaction tests. Automated checks do not certify full WCAG conformance. PR CI includes the new layout-control and chat interaction suites alongside the existing full-route audits.
+
+Final TypeScript, focused lint and production build passed. Shared layout, page-mode, theme and navigation regression suites passed. All 634 emitted JavaScript files passed ECMAScript 2023 syntax validation. Startup assets remain within budget: 2,556,163 JavaScript bytes and 379,119 CSS bytes.
+
+All 44 applicable production browser cases passed across desktop, 320px reflow and 390px mobile; four dedicated-mobile cases are intentionally skipped on other profiles. The first run passed 42 cases; two focused reruns passed after allowing slower transcript cleanup and updating the focus-order assertion for the new overflow button. Checks cover the three-button slider, transcript download, drafts, mobile full-screen/focus behavior, menu Escape, Soundscape visibility, Settings modes, mind-map scroll bounds, drag/keyboard resizing and embedded Todo widgets. New menus and the open sound mixer also pass automated WCAG checks.
 
 ### Original widget rollout
 

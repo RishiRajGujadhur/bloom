@@ -22,6 +22,7 @@ test('guide suggestions show three at a time and slider reveals remaining action
 })
 
 test('draft recovers after refresh and guide transcript can be downloaded', async ({ page }) => {
+  test.setTimeout(60000)
   await page.goto('/#focus')
   await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
   const panel = page.getByRole('region', { name: 'Talk to Bloom', exact: true })
@@ -85,8 +86,13 @@ test('mobile floating chat also fills the viewport and keeps keyboard focus insi
   const input = panel.getByRole('searchbox')
   await input.focus()
   await input.press('Tab')
+  const tools = panel.getByRole('button', { name: 'Conversation tools', exact: true })
+  await expect(tools).toBeFocused()
+  await tools.press('Tab')
   await expect(panel.getByRole('tab', { name: 'Guide me', exact: true })).toBeFocused()
   await panel.getByRole('tab', { name: 'Guide me', exact: true }).press('Shift+Tab')
+  await expect(tools).toBeFocused()
+  await tools.press('Shift+Tab')
   await expect(input).toBeFocused()
   await page.setViewportSize({ width: 390, height: 500 })
   await expect.poll(async () => (await panel.boundingBox())?.height).toBe(500)

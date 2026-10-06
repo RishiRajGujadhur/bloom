@@ -1,26 +1,26 @@
 {
-  "jsBytes": 2545340,
-  "cssBytes": 371795,
+  "jsBytes": 2556163,
+  "cssBytes": 379119,
   "baselineJsBytes": 4550996,
   "baselineCssBytes": 582738,
-  "jsReductionPercent": 44.1,
-  "cssReductionPercent": 36.2,
+  "jsReductionPercent": 43.8,
+  "cssReductionPercent": 34.9,
   "budgets": {
     "jsBytes": 3145728,
     "cssBytes": 460800
   },
   "assets": [
     {
-      "file": "assets/index-BD5ZS891.js",
-      "bytes": 1745899,
-      "gzip": 548837,
-      "brotli": 548389
+      "file": "assets/index-DEJfqBhu.js",
+      "bytes": 1767385,
+      "gzip": 555434,
+      "brotli": 555088
     },
     {
-      "file": "assets/index-DspDM1Ub.css",
-      "bytes": 345394,
-      "gzip": 64595,
-      "brotli": 67454
+      "file": "assets/index-BC5DXlwm.css",
+      "bytes": 352399,
+      "gzip": 65944,
+      "brotli": 68746
     },
     {
       "file": "assets/rolldown-runtime-C0FnF6B9.js",
@@ -77,16 +77,16 @@
       "brotli": 28053
     },
     {
-      "file": "assets/Studio-C-89q64z.js",
+      "file": "assets/Studio-BDzyMMQx.js",
       "bytes": 20278,
       "gzip": 7708,
       "brotli": 7986
     },
     {
-      "file": "assets/Studio-HP3JJ12x.css",
-      "bytes": 23359,
-      "gzip": 5212,
-      "brotli": 5344
+      "file": "assets/Studio-Cr5Z8nX5.css",
+      "bytes": 23678,
+      "gzip": 5265,
+      "brotli": 5396
     },
     {
       "file": "assets/MatrixRain-D4S74J5G.js",
@@ -195,12 +195,6 @@
       "bytes": 271,
       "gzip": 199,
       "brotli": 174
-    },
-    {
-      "file": "assets/confetti.module-_kxxSlzM.js",
-      "bytes": 10663,
-      "gzip": 4244,
-      "brotli": 4341
     }
   ]
 }
