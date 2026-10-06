@@ -253,7 +253,7 @@
 .en-strength i:nth-child(2) { height: 9px; }
 .en-strength i:nth-child(3) { height: 12px; }
 .en-strength i.on { background: #58cc02; }
-.en-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+.en-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 120px), 1fr)); gap: 8px; }
 .en-card-btn { display: grid; justify-items: center; gap: 4px; padding: 14px 8px; }
 .en-card-btn small { color: var(--text-muted); }
 .en-story { display: grid; gap: 14px; max-width: 640px; }

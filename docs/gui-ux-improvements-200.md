@@ -48,3 +48,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 42 | Prevent narrow-screen card grid overflow in english (.en-grid) | `src/features/english/english.css` |
 | 43 | Prevent narrow-screen card grid overflow in english (.en-pics) | `src/features/english/english.css` |
 | 44 | Prevent narrow-screen card grid overflow in english (.en-badges) | `src/features/english/english.css` |
+| 45 | Prevent narrow-screen card grid overflow in english (.en-cards) | `src/features/english/english.css` |
