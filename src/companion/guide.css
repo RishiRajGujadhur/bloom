@@ -206,3 +206,9 @@ html[data-theme='matrix'] .bg-guide-chat .cs-typing-indicator__dot {
 @keyframes bg-quiz-in {
   from { transform: translateY(8px) scale(0.96); opacity: 0; }
 }
+.bg-guide-entry { display:flex; align-items:center; gap:8px; min-width:0; }
+.bg-guide-entry .bg-guide-search { flex:1; min-width:0; }
+.chat-context-trigger { flex:0 0 48px; width:48px; height:48px; padding:8px; border:1px solid var(--border-color); border-radius:12px; background:var(--bg-surface); color:var(--text-primary); }
+.chat-context-trigger:focus-visible, .bg-guide-chat:focus-visible { outline:3px solid var(--focus-ring); outline-offset:2px; }
+.chat-context-menu { z-index:120; max-height:min(420px,var(--radix-context-menu-content-available-height,420px)); }
+.chat-context-menu .ui-menu-item { min-height:44px; }

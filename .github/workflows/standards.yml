@@ -63,7 +63,7 @@ jobs:
       - name: Check keyboard, scaling and progressive disclosure
         env:
           BLOOM_E2E_URL: http://127.0.0.1:5175
-        run: npm run test:e2e -- e2e/standards.spec.ts e2e/widgets.spec.ts --project=${{ matrix.profile }} --workers=1
+        run: npm run test:e2e -- e2e/standards.spec.ts e2e/widgets.spec.ts e2e/layout-controls.spec.ts e2e/bloom-qol.spec.ts --project=${{ matrix.profile }} --workers=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:

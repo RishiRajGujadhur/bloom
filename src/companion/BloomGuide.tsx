@@ -1,4 +1,7 @@
 import { prefersReducedMotion } from '../utils/motion'
+import * as ContextMenu from '@radix-ui/react-context-menu'
+import { MoreHorizontal } from 'lucide-react'
+import { Menu } from '../components/ui/Menu'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import Fuse from 'fuse.js'
@@ -199,12 +202,27 @@ export function BloomGuide({
     say(fn(), root2)
   }
   const results = query.trim() ? fuse.search(query).slice(0, 6).map((r) => r.item) : []
+  const conversationActions = [
+    { label: 'Show command examples', disabled: typing, onSelect: () => say('Try “add todo call mum”, “spent 5 on coffee”, “hint”, or a page name. Your guide uses local commands, so specific short requests work best.', root) },
+    { label: 'Restart this page guide', disabled: typing, onSelect: () => { setLines([{ id: ++lineId, from: 'bloom', text: start.say }]); setChoices(withNav(start.choices)); setQuery('') } },
+    { label: 'Export conversation', disabled: false, onSelect: () => {
+      try { exportConversation(lines.map(line => ({ speaker: line.from === 'you' ? 'You' : 'Bloom', text: line.text })), 'bloom-guide') }
+      catch { say('Export unavailable. Select the conversation text to copy it.', choices) }
+    } },
+  ]
   return (
+    <ContextMenu.Root modal={false}>
     <div className="bg-guide bloom-stack" id="bloom-guide-content" role="tabpanel" aria-labelledby="bloom-guide-tab" aria-busy={typing}>
       <div className="bg-guide-head bloom-inline">
         <BloomFace ref={face} size={72} label={`Bloom, your guide on ${names(page)}`} />
       </div>
-      <div className="bg-guide-chat">
+      <ContextMenu.Trigger asChild><div className="bg-guide-chat" tabIndex={0} role="region" aria-label="Conversation messages" onKeyDown={event => {
+        if (event.key !== 'ContextMenu' && !(event.shiftKey && event.key === 'F10')) return
+        event.preventDefault()
+        event.stopPropagation()
+        const bounds = event.currentTarget.getBoundingClientRect()
+        event.currentTarget.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: bounds.left + 16, clientY: bounds.top + 16 }))
+      }}>
         <MainContainer>
           <ChatContainer>
             <MessageList autoScrollToBottom={false} aria-label="Conversation with Bloom guide" typingIndicator={typing ? <TypingIndicator content="Bloom is typing" /> : undefined}>
@@ -214,7 +232,7 @@ export function BloomGuide({
             </MessageList>
           </ChatContainer>
         </MainContainer>
-      </div>
+      </div></ContextMenu.Trigger>
       <div ref={chips}>
         <ChoiceSlider key={results.length ? `search:${query}` : choices.map((c) => c.label).join('|')}
           label={results.length ? 'Matching pages' : 'Choices'}
@@ -231,20 +249,18 @@ export function BloomGuide({
       </div>
       {query.trim() && !results.length && <p className="chat-search-status" role="status">No matching page. Press Enter to try a command, or type “help”.</p>}
       {typing && <button type="button" className="chat-stop" onClick={() => { window.clearTimeout(timer.current); commandRevision.current++; submitting.current = false; setTyping(false) }}>Stop reply</button>}
-      <details className="chat-tools">
-        <summary>Conversation tools</summary>
-        <button type="button" disabled={typing} onClick={() => say('Try “add todo call mum”, “spent 5 on coffee”, “hint”, or a page name. Your guide uses local commands, so specific short requests work best.', root)}>Show command examples</button>
-        <button type="button" disabled={typing} onClick={() => { setLines([{ id: ++lineId, from: 'bloom', text: start.say }]); setChoices(withNav(start.choices)); setQuery('') }}>Restart this page guide</button>
-        <button type="button" onClick={() => {
-          try { exportConversation(lines.map((line) => ({ speaker: line.from === 'you' ? 'You' : 'Bloom', text: line.text })), 'bloom-guide') }
-          catch { say('Export unavailable. Select the conversation text to copy it.', choices) }
-        }}>Export conversation</button>
-      </details>
       <p className="chat-scope" id="bloom-guide-scope">I can find pages, run shortcuts, and help you plan. Review changes to your tasks and spending.</p>
+      <div className="bg-guide-entry">
       <label className="bg-guide-search">
         <span className="sr-only">Ask Bloom or find a page</span>
         <input aria-describedby="bloom-guide-scope" type="search" autoComplete="off" enterKeyHint="send" maxLength={1000} placeholder="Ask Bloom: “spent 5 on coffee”, “hint”, a page…" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.nativeEvent.isComposing && void submit()} />
       </label>
+      <Menu label="Conversation tools" contentClassName="chat-context-menu" items={conversationActions} trigger={<button type="button" className="chat-context-trigger" aria-label="Conversation tools" title="Conversation tools — or right-click a message"><MoreHorizontal size={18} aria-hidden="true" /></button>} />
+      </div>
+      <ContextMenu.Portal><ContextMenu.Content className="ui-menu chat-context-menu" aria-label="Conversation tools" collisionPadding={12}>
+        {conversationActions.map(action => <ContextMenu.Item key={action.label} className="ui-menu-item" disabled={action.disabled} onSelect={action.onSelect}>{action.label}</ContextMenu.Item>)}
+      </ContextMenu.Content></ContextMenu.Portal>
     </div>
+    </ContextMenu.Root>
   )
 }

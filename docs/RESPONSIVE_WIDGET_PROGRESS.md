@@ -28,6 +28,8 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 - [x] Code illustration and stack children no longer shrink into overlapping text.
 - [x] Shared bottom padding no longer creates empty scroll destinations; navigation measures visible content and clamps jumps to its end.
 - [x] Mind-map tools wrap in a separate row instead of covering diagram labels.
+- [x] Soundscape moves beside Search; an essential Settings switch persists its visibility.
+- [x] Conversation examples, restart and export move to a right-click menu, with keyboard and touch overflow access.
 - [ ] Complete follow-up production/browser/accessibility checks.
 
 ### Original widget rollout

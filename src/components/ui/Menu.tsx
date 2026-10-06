@@ -16,6 +16,7 @@ export type MenuItem =
       icon?: ReactNode
       hint?: string
       onSelect: () => void
+      disabled?: boolean
     }
   | {
       kind: 'checkbox'
@@ -32,19 +33,21 @@ export function Menu({
   items,
   align = 'end',
   label,
+  contentClassName = '',
 }: {
   trigger: ReactNode
   items: MenuItem[]
   align?: 'start' | 'center' | 'end'
   /** Accessible name for the menu content. */
   label?: string
+  contentClassName?: string
 }) {
   return (
     <Dropdown.Root modal={false}>
       <Dropdown.Trigger asChild>{trigger}</Dropdown.Trigger>
       <Dropdown.Portal>
         <Dropdown.Content
-          className="ui-menu"
+          className={`ui-menu ${contentClassName}`}
           align={align}
           sideOffset={8}
           collisionPadding={12}
@@ -79,6 +82,7 @@ export function Menu({
                 key={item.label}
                 className="ui-menu-item"
                 onSelect={item.onSelect}
+                disabled={item.disabled}
               >
                 {item.icon}
                 <span>{item.label}</span>

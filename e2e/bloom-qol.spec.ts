@@ -33,9 +33,9 @@ test('draft recovers after refresh and guide transcript can be downloaded', asyn
   await input.press('Enter')
   await expect(input).toHaveValue('')
   await expect(panel.getByText('help', { exact: true })).toBeVisible()
-  await panel.getByText('Conversation tools', { exact: true }).click()
+  await panel.getByRole('button', { name: 'Conversation tools', exact: true }).click()
   const download = page.waitForEvent('download')
-  await panel.getByRole('button', { name: 'Export conversation', exact: true }).click()
+  await page.getByRole('menuitem', { name: 'Export conversation', exact: true }).click()
   expect((await download).suggestedFilename()).toMatch(/^bloom-guide-.*\.txt$/)
 })
 
