@@ -177,7 +177,7 @@
 /* ---- Fonts ----------------------------------------------------------- */
 .fontList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr));
   gap: 10px;
   margin-top: 15px;
 }
