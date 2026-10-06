@@ -194,3 +194,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 188 | Improve small text readability in run (.run-goal .run-goal-sub) | `src/features/run/run.css` |
 | 189 | Improve small text readability in scan (.sc-grade small) | `src/features/scan/scan.css` |
 | 190 | Improve small text readability in showcase (.dd-hour) | `src/features/showcase/showcase.css` |
+| 191 | Improve small text readability in sleep (.sleep-stat small) | `src/features/sleep/sleep.css` |
