@@ -203,3 +203,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 197 | Improve small text readability in workout (.wo-history ul) | `src/features/workout/workout.css` |
 | 198 | Improve small text readability in world (.world-eyebrow) | `src/features/world/world.css` |
 | 199 | Improve small text readability in yearbook (.yearbook-stats span) | `src/features/yearbook/yearbook.css` |
+| 200 | Improve small text readability in yoga (.yg-step strong, .yg-lib strong) | `src/features/yoga/yoga.css` |
