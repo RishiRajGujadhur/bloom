@@ -438,6 +438,8 @@ export function BloomCompanion({
           className={`bc-panel${docked ? ' is-docked' : ''}${followTheme ? ' uses-app-theme' : ''}`}
           aria-label="Talk to Bloom"
           onKeyDown={(e) => {
+            // Portaled menus bubble through React; let their own keyboard controls finish.
+            if (e.defaultPrevented || (e.target instanceof Element && e.target.closest('[role="menu"], [role="listbox"]'))) return
             if (e.key === 'Tab' && window.matchMedia('(max-width: 600px)').matches) {
               const items = [...e.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select, summary, [tabindex="0"]')]
                 .filter((el) => el.getClientRects().length > 0 && (!el.closest('details:not([open])') || el.tagName === 'SUMMARY'))
