@@ -138,3 +138,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 132 | Improve small text readability in constellation (.constellation-head span) | `src/rpg/constellation.css` |
 | 133 | Improve small text readability in rewards (.growth-eyebrow) | `src/rpg/rewards.css` |
 | 134 | Improve small text readability in rpg (.rpg-heading>.eyebrow) | `src/rpg/rpg.css` |
+| 135 | Improve small text readability in shared-ui (.app-shell .topbar .theme-toggle, .app-shell .topbar .quiet-button) | `src/styles/shared-ui.css` |
