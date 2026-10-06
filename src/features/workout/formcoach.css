@@ -208,7 +208,7 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 .fc-guide-column .fc-workout-hud b{font-size:clamp(18px,1.6vw,25px);line-height:1.2}
 .fc-info-slider{min-width:0;border:1px solid #38785d;border-radius:12px;padding:6px}
 .fc-info-slider nav{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.fc-info-slider nav button{display:grid;place-items:center;min-width:36px;min-height:36px;padding:4px}
+.fc-info-slider nav button{display:grid;place-items:center;min-width:44px;min-height:44px;padding:4px}
 .fc-info-content{max-height:145px;overflow:auto;font-size:12px;overscroll-behavior:contain}
 .fc-info-content .fc-movement-guide,.fc-info-content .fc-set-recap{border:0;padding:6px}
 .fc .fc-workout-focused .fc-guide-column{align-content:center;gap:6px;overflow:hidden;max-height:calc(100dvh - 24px)}

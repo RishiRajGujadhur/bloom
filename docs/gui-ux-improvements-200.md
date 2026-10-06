@@ -122,3 +122,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 116 | Enlarge controls to a 44px touch target in formcoach (.fc-workout-focused .fc-camera-controls button) | `src/features/workout/formcoach.css` |
 | 117 | Enlarge controls to a 44px touch target in formcoach (.fc-view-modes button) | `src/features/workout/formcoach.css` |
 | 118 | Enlarge controls to a 44px touch target in formcoach (.fc-workout-focused .cb-actions button) | `src/features/workout/formcoach.css` |
+| 119 | Enlarge controls to a 44px touch target in formcoach (.fc-info-slider nav button) | `src/features/workout/formcoach.css` |
