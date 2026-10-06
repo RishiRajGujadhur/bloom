@@ -190,7 +190,7 @@ html[data-privacy-blur] body::after { content: 'Hidden · press Ctrl+Shift+L to 
 
 /* Touch screens: small icon buttons get a comfortable tap area. */
 @media (pointer: coarse) {
-  .icon-button, .studio-chip, .quiet-button { min-height: 40px; min-width: 40px; }
+  .icon-button, .studio-chip, .quiet-button { min-height: 44px; min-width: 44px; }
 }
 
 /* Notched phones (viewport-fit=cover): keep content clear of the notch and home bar. */
