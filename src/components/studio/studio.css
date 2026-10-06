@@ -365,3 +365,8 @@
 
 /* UX 031: Keep Studio content inside narrow cards instead of clipping it. */
 .studio { grid-template-columns: minmax(0, 1fr); }
+
+/* UX 032: Give Studio tab labels room and scroll overflowing choices. */
+.studio-tabs { grid-auto-columns: max-content; }
+.studio-tabs button[aria-selected='true'] { background: var(--studio); border-radius: 99px; }
+.studio-tab-ink { display: none; }

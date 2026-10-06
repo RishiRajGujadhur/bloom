@@ -35,3 +35,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 29 | Prevent narrow-screen card grid overflow in ThemePicker.module (.themeGrid) | `src/components/settings/ThemePicker.module.css` |
 | 30 | Prevent narrow-screen card grid overflow in ThemePicker.module (.fontList) | `src/components/settings/ThemePicker.module.css` |
 | 31 | Keep Studio content inside narrow cards instead of clipping it | `src/components/studio/studio.css` |
+| 32 | Give Studio tab labels room and scroll overflowing choices | `src/components/studio/studio.css` |
