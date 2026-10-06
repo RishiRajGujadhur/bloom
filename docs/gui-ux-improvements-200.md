@@ -39,3 +39,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 33 | Prevent narrow-screen card grid overflow in avatarPicker (.avatar-options) | `src/components/ui/avatarPicker.css` |
 | 34 | Prevent narrow-screen card grid overflow in pointer (.pt-grid) | `src/components/ui/pointer.css` |
 | 35 | Prevent narrow-screen card grid overflow in arcade (.ar-grid) | `src/features/arcade/arcade.css` |
+| 36 | Prevent narrow-screen card grid overflow in code (.cd-cheat-grid) | `src/features/code/code.css` |

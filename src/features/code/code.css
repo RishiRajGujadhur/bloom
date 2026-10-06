@@ -99,7 +99,7 @@
 .cd-why { margin: 0; }
 /* cheat sheets */
 .cd-cheats { display: grid; gap: 10px; }
-.cd-cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; max-height: calc(100dvh - 300px); overflow-y: auto; }
+.cd-cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; max-height: calc(100dvh - 300px); overflow-y: auto; }
 .cd-cheat-grid h3 { margin: 0 0 6px; }
 .cd-cheat { display: grid; gap: 2px; padding: 6px 0; border-bottom: 1px dashed var(--border-color); }
 .cd-cheat small { color: var(--text-muted); }
