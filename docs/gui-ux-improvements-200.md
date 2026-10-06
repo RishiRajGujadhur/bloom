@@ -171,3 +171,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 165 | Improve small text readability in explore (.explore-builder button) | `src/features/explore/explore.css` |
 | 166 | Improve small text readability in flow (.flow-mountain figcaption) | `src/features/flow/flow.css` |
 | 167 | Improve small text readability in gameCards (.gc-number,.gc-mark) | `src/features/games/gameCards.css` |
+| 168 | Improve small text readability in globe (.gq-missed) | `src/features/globe/globe.css` |
