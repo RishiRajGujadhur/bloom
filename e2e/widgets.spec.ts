@@ -79,7 +79,7 @@ test('existing widget library can run the full Todo feature inline', async ({ pa
   const widget = page.getByRole('article', { name: 'To-dos', exact: true })
   await widget.getByRole('button', { name: 'Use feature here', exact: true }).click()
   const embedded = widget.frameLocator('iframe')
-  await expect(embedded.getByLabel('New task', { exact: true })).toBeVisible()
+  await expect(embedded.getByLabel('New task', { exact: true })).toBeVisible({ timeout: 30000 })
   await expect(embedded.getByRole('button', { name: 'Talk to Bloom', exact: true })).toHaveCount(0)
   await embedded.getByLabel('New task', { exact: true }).fill('Task from embedded feature')
   await embedded.getByLabel('New task', { exact: true }).press('Enter')

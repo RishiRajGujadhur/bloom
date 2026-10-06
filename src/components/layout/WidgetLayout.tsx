@@ -29,7 +29,11 @@ export function constrainWidgetResize(element: HTMLElement, width: number, heigh
     safeWidth = Math.min(available, safeWidth + Math.max(0, element.scrollWidth - element.clientWidth))
     element.style.setProperty('--widget-width', `${safeWidth}px`)
     const media = [...element.querySelectorAll('img, svg, canvas, video')].some(node => node.getBoundingClientRect().height > 48 && getComputedStyle(node).position !== 'absolute')
-    if (media) minimumHeight = Math.max(160, Math.min(1200, element.scrollHeight))
+    if (media) {
+      const style = getComputedStyle(element)
+      const borders = (Number.parseFloat(style.borderTopWidth) || 0) + (Number.parseFloat(style.borderBottomWidth) || 0)
+      minimumHeight = Math.max(160, Math.min(1200, Math.ceil(element.scrollHeight + borders)))
+    }
   } finally {
     if (oldWidth) element.style.setProperty('--widget-width', oldWidth); else element.style.removeProperty('--widget-width')
     if (oldHeight) element.style.setProperty('--widget-height', oldHeight); else element.style.removeProperty('--widget-height')

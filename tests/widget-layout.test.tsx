@@ -76,7 +76,8 @@ test('resize limits grow with visible media and intrinsic overflow', () => {
   jest.spyOn(image, 'getBoundingClientRect').mockReturnValue({ width: 300, height: 240 } as DOMRect)
   frame.style.setProperty('--widget-width', '480px')
   frame.style.setProperty('--widget-height', '600px')
-  expect(constrainWidgetResize(frame, 280, 160)).toMatchObject({ width: 400, height: 560 })
+  frame.style.border = '1px solid black'
+  expect(constrainWidgetResize(frame, 280, 160)).toMatchObject({ width: 400, height: 562 })
   expect(frame.style.getPropertyValue('--widget-width')).toBe('480px')
   expect(frame.style.getPropertyValue('--widget-height')).toBe('600px')
   frame.remove()
