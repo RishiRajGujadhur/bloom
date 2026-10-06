@@ -52,11 +52,16 @@ export function AudioMixerProvider({ children }: { children: ReactNode }) {
     const sound = sounds.current.get(id)
     clearTimeout(timers.current.get(id))
     timers.current.delete(id)
-    if (!sound || sound.state() !== 'loaded') return
+    if (!sound) return
     const target =
       desired.current.playing && !desired.current.muted[id]
         ? desired.current.volumes[id]
         : 0
+    // Fetch/decode only audible tracks after the user starts playback.
+    if (sound.state() !== 'loaded') {
+      if (target > 0 && sound.state() === 'unloaded') sound.load()
+      return
+    }
     const current = sound.volume()
     // volume() cancels a prior fade before starting its replacement.
     sound.volume(current)
@@ -83,7 +88,7 @@ export function AudioMixerProvider({ children }: { children: ReactNode }) {
       const sound = new Howl({
         src: [track.src],
         loop: true,
-        preload: true,
+        preload: false,
         volume: 0,
         onload: () => {
           if (!alive) return

@@ -57,7 +57,7 @@ test('presets stay silent until play, crossfade, and cancel stale pauses', () =>
   expect(mockSounds).toHaveLength(audioTracks.length)
   for (const sound of mockSounds) {
     expect(sound.options).toEqual(
-      expect.objectContaining({ loop: true, preload: true }),
+      expect.objectContaining({ loop: true, preload: false }),
     )
     expect(sound.play).not.toHaveBeenCalled()
   }
@@ -85,6 +85,20 @@ test('presets stay silent until play, crossfade, and cancel stale pauses', () =>
   unmount()
   for (const sound of mockSounds) expect(sound.unload).toHaveBeenCalledTimes(1)
   expect(jest.getTimerCount()).toBe(0)
+})
+
+test('does not fetch audio before Play and loads only audible tracks', () => {
+  const view = render(<AudioMixerProvider><AudioMixer /></AudioMixerProvider>)
+  for (const sound of mockSounds) sound.state.mockReturnValue('unloaded')
+  fireEvent.click(screen.getByRole('button', { name: 'Soundscape' }))
+  for (const sound of mockSounds) expect(sound.load).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByRole('button', { name: 'Play soundscape' }))
+  mockSounds.forEach((sound, index) => {
+    const id = audioTracks[index].id
+    const expected = id === 'rain' || id === 'brown' || id === 'strings'
+    expect(sound.load.mock.calls.length).toBe(expected ? 1 : 0)
+  })
+  view.unmount()
 })
 
 test('delayed loading does not start playback after the user pauses', () => {
