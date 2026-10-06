@@ -141,7 +141,7 @@
 .diet-kinds button,
 .diet-feel button,
 .diet-library button {
-  min-height: 40px;
+  min-height: 44px;
   padding: 6px 14px;
   border-radius: 99px;
   border: 1px solid var(--border-color);
@@ -152,6 +152,7 @@
   cursor: pointer;
   text-transform: capitalize;
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  min-width: 44px;
 }
 .diet-kinds button:hover,
 .diet-feel button:hover,
