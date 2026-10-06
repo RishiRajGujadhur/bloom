@@ -40,7 +40,7 @@ test('accepting a challenge creates visible tasks and a goal, which survive relo
 test('a task supports priorities, tags, recurrence, and an actionable checklist', async () => {
   await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true })) })
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
+  await act(async () => { localStorage.setItem('bloom-page-mode:todos', 'advanced'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
   fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
     target: { value: 'Prepare the presentation' },
   })
@@ -104,9 +104,7 @@ test('Daybook reveals one category and one prompt at a time', async () => {
 test('todos default to simple and remember Pro without losing tasks', async () => {
   const view = await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true })) })
-  expect(
-    screen.getByRole('button', { name: 'Basic', exact: true }),
-  ).toHaveAttribute('aria-pressed', 'true')
+  expect(screen.queryByRole('group', { name: 'Page mode' })).not.toBeInTheDocument()
   expect(screen.queryByText('Planning workspace')).not.toBeInTheDocument()
   fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
     target: { value: 'Take a walk' },
@@ -115,16 +113,14 @@ test('todos default to simple and remember Pro without losing tasks', async () =
   expect(
     screen.queryByRole('button', { name: 'Add steps' }),
   ).not.toBeInTheDocument()
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
+  await act(async () => { localStorage.setItem('bloom-page-mode:todos', 'advanced'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
   expect(screen.getByText('Planning workspace')).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Add steps' })).toBeInTheDocument()
   view.unmount()
   await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'To-dos', exact: true })) })
-  expect(
-    screen.getByRole('button', { name: 'Advanced', exact: true }),
-  ).toHaveAttribute('aria-pressed', 'true')
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Basic', exact: true })) })
+  expect(screen.getByText('Planning workspace')).toBeInTheDocument()
+  await act(async () => { localStorage.setItem('bloom-page-mode:todos', 'basic'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
   expect(screen.getByText('Take a walk')).toBeInTheDocument()
   expect(
     screen.queryByRole('button', { name: 'Add steps' }),

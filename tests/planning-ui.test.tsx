@@ -33,7 +33,7 @@ function Calendar() {
 
 test('projects, task metadata, and custom perspectives work together', async () => {
   render(<Tasks />)
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
+  await act(async () => { localStorage.setItem('bloom-page-mode:todos', 'advanced'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'New project' })) })
   fireEvent.change(screen.getByLabelText('Project name'), {
     target: { value: 'Launch' },

@@ -227,13 +227,6 @@ import { addDays, parseQuickTask, splitLines } from './todos/quickTask'
 export function TodoPage({ data, setData }: Props) {
   const pageMode = usePageModeState('todos')
   const proMode = pageMode.mode === 'advanced'
-  const changeMode = (pro: boolean) => {
-    pageMode.setMode(pro ? 'advanced' : 'basic')
-    setTagFilter('all')
-    setPerspective({ ...emptyPerspective })
-    setEditing(null)
-    setExpanded(null)
-  }
   const composerRef = useRef<HTMLInputElement>(null)
   const [waterDo, setWaterDo] = useState(
     () => localStorage.getItem('bloom-waterdo') === 'true',
@@ -516,22 +509,6 @@ export function TodoPage({ data, setData }: Props) {
               ? 'Plan the details. Find your next step.'
               : 'One clear list. One thing at a time.'}
           </p>
-        </div>
-        <div className="todo-mode" role="group" aria-label="Page mode">
-          <button
-            type="button"
-            aria-pressed={!proMode}
-            onClick={() => changeMode(false)}
-          >
-            Basic
-          </button>
-          <button
-            type="button"
-            aria-pressed={proMode}
-            onClick={() => changeMode(true)}
-          >
-            <SlidersHorizontal size={15} /> Advanced
-          </button>
         </div>
       </header>
       {proMode && (

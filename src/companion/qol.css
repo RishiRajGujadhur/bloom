@@ -52,6 +52,7 @@
 .bloom-companion-launch:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 4px; }
 
 .bloom-companion-launch { min-height: 56px; font-size: 0.875rem; }
+html .bloom-companion-launch { bottom: max(18px, env(safe-area-inset-bottom)); }
 
 .bc-panel .bg-guide-search input { font-size: 1rem; min-height: 48px; }
 

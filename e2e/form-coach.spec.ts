@@ -158,7 +158,7 @@ test('personal calibration and visual preferences survive reload without saving 
 test('Basic defaults to essentials and fullscreen keeps the reference, count and left controls', async ({ page }) => {
   await page.addInitScript(() => localStorage.removeItem('bloom-coach-view'))
   await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
-  await expect(page.getByRole('button', { name: 'Basic', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('group', { name: 'Page mode', exact: true })).toHaveCount(0)
   await expect(page.getByRole('combobox', { name: 'Selected workout' })).toBeVisible()
   await expect(page.getByRole('radiogroup', { name: 'Pose check' })).toBeHidden()
   await expect(page.getByRole('checkbox', { name: 'Energy estimates', exact: true })).toBeHidden()
@@ -367,7 +367,7 @@ for (const viewport of [{width:1440,height:900},{width:390,height:844}]) {
   test(`fullscreen keeps the reference and smaller counter visible at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport)
     await page.goto('/#workouts/coach')
-    await page.getByRole('button', { name: 'Basic', exact: true }).click()
+    await page.evaluate(() => { localStorage.setItem('bloom-page-mode:workouts', 'basic'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
     await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
     await page.getByRole('button', { name: 'Fullscreen workout', exact: true }).click()
     for (let i=0;i<3;i++) {

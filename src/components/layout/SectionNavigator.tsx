@@ -34,9 +34,9 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
     const update = frameThrottle(() => {
       const bounds = (content.closest('main') ?? content).getBoundingClientRect()
       let left = Math.max(16, bounds.left + 16)
-      let right = Math.min(window.innerWidth - 16, bounds.right - 16)
+      let right = Math.min(window.innerWidth - (window.innerWidth > 720 ? 104 : 16), bounds.right - 16)
       const panel = document.querySelector<HTMLElement>('.bc-panel')?.getBoundingClientRect()
-      const bottom = window.innerWidth <= 720 ? 168 : 18
+      const bottom = window.innerWidth <= 720 ? 90 : 18
       const rowTop = window.innerHeight - bottom - 64
       if (panel && panel.bottom > rowTop && panel.top < window.innerHeight - bottom) {
         if (panel.left <= left) left = Math.max(left, panel.right + 16)
@@ -46,7 +46,8 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
       }
       const available = Math.max(0, right - left)
       setSpace(current => {
-        const next = { left: (left + right) / 2, width: Math.min(360, available), covered: available < 160 }
+        const width = Math.min(360, available)
+        const next = { left: right - width / 2, width, covered: available < 160 }
         return current.left === next.left && current.width === next.width && current.covered === next.covered ? current : next
       })
       const inset = topInset()

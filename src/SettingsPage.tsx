@@ -1,4 +1,5 @@
 import { AdvancedSection } from './components/ui/PageMode'
+import { FeatureModes } from './components/settings/FeatureModes'
 import { Disclosure } from './components/BloomExperience'
 import { ComfortCard, SettingsSearch } from './components/settings/ComfortCard'
 import { useRef, useState } from 'react'
@@ -961,6 +962,7 @@ export function SettingsPage({
       }}
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
+      <FeatureModes />
       <AdvancedSection><SettingsSearch root={settingsRoot} />
       <nav className="settings-jump" aria-label="Settings sections">
         {[

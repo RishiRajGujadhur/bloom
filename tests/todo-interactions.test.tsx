@@ -80,7 +80,7 @@ test('Pro sorting keeps completed tasks last and search still finds them', () =>
   add('Second task')
   fireEvent.click(screen.getByRole('button', { name: 'Complete First task' }))
   act(() => jest.advanceTimersByTime(550))
-  fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true }))
+  act(() => { localStorage.setItem('bloom-page-mode:todos', 'advanced'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
   fireEvent.change(screen.getByLabelText('Sort tasks'), {
     target: { value: 'due' },
   })

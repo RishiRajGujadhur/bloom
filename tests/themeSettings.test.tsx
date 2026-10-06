@@ -22,12 +22,12 @@ const openSettings = async () => {
 test('the Settings destination swaps the dashboard for the settings page', async () => {
   await renderApp()
   expect(screen.queryByText('Appearance')).not.toBeInTheDocument()
-  expect(screen.getByText('Daily Quests')).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'Daily Quests', exact: true })).toBeInTheDocument()
 
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings' })) })
 
   expect(screen.getByText('Appearance')).toBeInTheDocument()
-  expect(screen.queryByText('Daily Quests')).not.toBeInTheDocument()
+  expect(screen.queryByRole('heading', { name: 'Daily Quests', exact: true })).not.toBeInTheDocument()
 })
 
 test("their feature flags survive the port and still control the UI", async () => {

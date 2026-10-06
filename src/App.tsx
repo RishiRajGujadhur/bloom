@@ -107,7 +107,7 @@ import type { OmniAction } from './components/layout/omnibox'
 import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
 import { PageBoundary } from './components/ui/PageBoundary'
-import { PageModeContext, PageModeSwitch, usePageModeState } from './components/ui/PageMode'
+import { PageModeContext, usePageModeState } from './components/ui/PageMode'
 import { PageLayout } from './components/layout/WidgetLayout'
 import { SectionNavigator } from './components/layout/SectionNavigator'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
@@ -954,7 +954,6 @@ function App() {
             >
               <FeatureGuide page={active} />
             </BloomHeading>
-            {active !== 'todos' && <PageModeSwitch />}
             {!embeddedWidget && <PageLayout page={active} root={widgetRoot} />}
             {pageMode.mode === 'advanced' && settings.features.rpgSkillTree && active !== 'overview' && (
               <GrowthRewards
