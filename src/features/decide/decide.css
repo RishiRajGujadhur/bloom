@@ -5,7 +5,7 @@
 .dc-question { border: 0; background: none; color: inherit; font: 900 clamp(1.6rem, 3.2vw, 2.4rem)/1.1 'Manrope', sans-serif; letter-spacing: -0.03em; padding: 0; outline: none; border-bottom: 2px dashed transparent; }
 .dc-question:focus { border-bottom-color: var(--accent-color); }
 .dc-matrix { display: grid; gap: 6px; }
-.dc-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; align-items: center; }
+.dc-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) repeat(auto-fit, minmax(min(100%, 120px), 1fr)); gap: 8px; align-items: center; }
 .dc-row.head { font-weight: 800; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
 .dc-opt-name { display: flex; align-items: center; gap: 4px; }
 .dc-opt-name input, .dc-crit input { width: 100%; border: 0; background: none; color: var(--text-primary); font: 800 1rem 'Manrope', sans-serif; text-transform: none; letter-spacing: 0; padding: 2px 0; }
