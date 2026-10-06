@@ -166,3 +166,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 160 | Improve small text readability in energy (.energy-note) | `src/features/energy/energy.css` |
 | 161 | Improve small text readability in english (.en-motion-setting) | `src/features/english/english.css` |
 | 162 | Improve small text readability in learningMap (.en-topic) | `src/features/english/learningMap.css` |
+| 163 | Improve small text readability in epiphany (.fc-label) | `src/features/epiphany/epiphany.css` |
