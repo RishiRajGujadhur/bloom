@@ -111,3 +111,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 105 | Enlarge controls to a 44px touch target in money (html[data-theme='galaxy'] .studio[data-studio='money'] .mn-month-head button) | `src/features/money/money.css` |
 | 106 | Enlarge controls to a 44px touch target in reminders (.reminder-pop-actions button) | `src/features/reminders/reminders.css` |
 | 107 | Enlarge controls to a 44px touch target in shop (.shop-card button) | `src/features/rewards/shop.css` |
+| 108 | Enlarge controls to a 44px touch target in showcase (.sc-search button) | `src/features/showcase/showcase.css` |
