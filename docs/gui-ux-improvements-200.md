@@ -64,3 +64,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 58 | Prevent narrow-screen card grid overflow in welcome (.wf-opts.cards, .wf-opts.theme) | `src/features/welcome/welcome.css` |
 | 59 | Prevent narrow-screen card grid overflow in world (.world-districts) | `src/features/world/world.css` |
 | 60 | Prevent narrow-screen card grid overflow in world (.world-decor ul) | `src/features/world/world.css` |
+| 61 | Prevent narrow-screen card grid overflow in yearbook (.yearbook-options fieldset) | `src/features/yearbook/yearbook.css` |
