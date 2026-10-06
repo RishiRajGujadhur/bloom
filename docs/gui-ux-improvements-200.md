@@ -30,3 +30,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 24 | Prevent narrow-screen card grid overflow in library (.adopt-grid) | `src/features/library.css` |
 | 25 | Prevent narrow-screen card grid overflow in planning (.planning-fields) | `src/features/planning.css` |
 | 26 | Prevent narrow-screen card grid overflow in urgeClock (.urge-clocks) | `src/features/urgeClock.css` |
+| 27 | Prevent narrow-screen card grid overflow in shortcuts (.kb-cols) | `src/components/layout/shortcuts.css` |

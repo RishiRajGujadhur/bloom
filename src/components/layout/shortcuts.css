@@ -4,7 +4,7 @@
 .kb-sheet header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .kb-sheet h3 { margin: 0; font: 900 1.3rem 'Manrope', sans-serif; }
 .kb-sheet header button { border: 1px solid var(--border-color); border-radius: 10px; width: 32px; height: 32px; background: transparent; color: inherit; cursor: pointer; }
-.kb-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+.kb-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 18px; }
 .kb-cols h4 { margin: 0 0 6px; font: 800 0.72rem 'Manrope', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color); }
 .kb-cols ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
 .kb-cols li { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: 0.9rem; }
