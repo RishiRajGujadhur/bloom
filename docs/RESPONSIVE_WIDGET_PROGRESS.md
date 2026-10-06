@@ -25,6 +25,7 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 - [x] Visually check the local interval page; verify the 240px ring fits a 320px viewport without horizontal overflow.
 - [x] Add the reference's falling-number transition: the outgoing value drops below the readout while the new value enters from above over 450ms. Reduced-motion preferences disable movement; outgoing text is hidden from screen readers.
 - [x] Ring and countdown digits follow the existing phase-label color. Verify matching computed colors for Work and Rest, live number transitions and resetting the timer.
+- [x] Animate only changed digit columns. Stable digits and the colon do not restart their animation; the accessible time remains one complete value. Three regression checks cover single-digit changes, minute rollover and changes in minute length. Focused lint passes.
 
 ### Follow-up: empty page tails
 

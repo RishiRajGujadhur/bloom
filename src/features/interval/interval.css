@@ -47,6 +47,10 @@
   line-height: 1;
 }
 .iv-number {
+  display: block;
+}
+.iv-number-digits { display: inline-flex; }
+.iv-digit {
   position: relative;
   display: block;
   overflow: hidden;
