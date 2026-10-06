@@ -7,6 +7,8 @@
    transport and this module is the only writer.
    ========================================================================== */
 
+import { loadThemeFonts } from './fontLoader'
+
 export type ThemeMode = 'light' | 'dark'
 
 export interface ThemeSettings {
@@ -332,6 +334,7 @@ export function applyTheme(settings: ThemeSettings): void {
     ? settings.fontId
     : DEFAULT_FONT_ID
   const mode = getThemeMode(themeId)
+  loadThemeFonts(fontId, themeId)
 
   root.setAttribute('data-theme', themeId)
   const local =
