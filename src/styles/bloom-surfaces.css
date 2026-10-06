@@ -1,0 +1,40 @@
+/* Shared surfaces stay usable by wheel, touch and keyboard without scrollbar chrome. */
+html,
+body,
+#root,
+#root * {
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+#root *::-webkit-scrollbar {
+  display: none;
+}
+
+.app-shell :is(.card, .ov-card, .wb-card, .quest-card, .bloom-disclosure) {
+  border-color: color-mix(in srgb, var(--accent-color) 14%, var(--border-color));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--accent-color) 5%, transparent);
+}
+
+.app-shell :is(.bloom-rail-toolbar, .fold-head, .bloom-disclosure > summary) {
+  border-radius: var(--radius-md, 14px);
+}
+
+.app-shell :is(.bloom-rail-track, .link-rail) {
+  scroll-padding-inline: 8px;
+}
+
+/* A quiet edge cue makes horizontal collections discoverable without a bar. */
+.app-shell .bloom-rail-track:not(.is-expanded) {
+  mask-image: linear-gradient(to right, transparent, #000 8px, #000 calc(100% - 8px), transparent);
+}
+
+.app-shell :is(.fold-head, .bloom-disclosure > summary):hover {
+  background: color-mix(in srgb, var(--accent-color) 7%, transparent);
+}
+
+.app-shell :is(.bloom-rail-toolbar button, .fold-head, .bloom-disclosure > summary):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
