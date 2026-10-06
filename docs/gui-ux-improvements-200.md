@@ -125,3 +125,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 119 | Enlarge controls to a 44px touch target in formcoach (.fc-info-slider nav button) | `src/features/workout/formcoach.css` |
 | 120 | Improve small text readability in settings.module (.eyebrow) | `src/settings.module.css` |
 | 121 | Improve small text readability in choiceSlider (.choice-slider-control) | `src/companion/choiceSlider.css` |
+| 122 | Improve small text readability in companion (.bloom-story p) | `src/companion/companion.css` |
