@@ -123,3 +123,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 117 | Enlarge controls to a 44px touch target in formcoach (.fc-view-modes button) | `src/features/workout/formcoach.css` |
 | 118 | Enlarge controls to a 44px touch target in formcoach (.fc-workout-focused .cb-actions button) | `src/features/workout/formcoach.css` |
 | 119 | Enlarge controls to a 44px touch target in formcoach (.fc-info-slider nav button) | `src/features/workout/formcoach.css` |
+| 120 | Improve small text readability in settings.module (.eyebrow) | `src/settings.module.css` |
