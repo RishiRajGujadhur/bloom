@@ -105,3 +105,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 99 | Enlarge controls to a 44px touch target in ink (.ink-colors button) | `src/features/ink/ink.css` |
 | 100 | Enlarge controls to a 44px touch target in energyCompass (.energy-compass-head button) | `src/features/innovation/energyCompass.css` |
 | 101 | Enlarge controls to a 44px touch target in lab (.lab-range button) | `src/features/lab/lab.css` |
+| 102 | Enlarge controls to a 44px touch target in mindmap (.mm-tools button) | `src/features/mindmap/mindmap.css` |
