@@ -69,12 +69,31 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
       const next = ordered.findIndex(item => item.top > inset + 24)
       const previous = ordered.findLastIndex(item => item.top < inset - 24)
       const scroller = document.scrollingElement
+      const clipping = new Map<HTMLElement, { top: number; bottom: number } | null>()
       const meaningful = [...content.querySelectorAll<HTMLElement>('h2, h3, h4, p, button, input, textarea, select, canvas, img, svg, video, iframe, table, li, pre, [contenteditable="true"], [role="grid"]')]
-        .filter(node => node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden' && !node.closest('.widget-resize-handle, .widget-resize-edge, .widget-layout-tools, [hidden]'))
-      const contentEnd = Math.max(0, ...meaningful.map(node => node.getBoundingClientRect().bottom + window.scrollY))
+        .filter(node => node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden' && !node.closest('.studio-scene, .widget-resize-handle, .widget-resize-edge, .widget-layout-tools, [hidden]'))
+      const contentEnd = Math.max(0, ...meaningful.map(node => {
+        const bounds = node.getBoundingClientRect()
+        let top = bounds.top
+        let bottom = bounds.bottom
+        // Content in a scrollable card must not create a second page-scroll destination.
+        for (let parent = node.parentElement; parent && content.contains(parent); parent = parent.parentElement) {
+          if (!clipping.has(parent)) {
+            if (/^(auto|scroll|hidden|clip)$/.test(getComputedStyle(parent).overflowY)) {
+              const innerTop = parent.getBoundingClientRect().top + parent.clientTop
+              clipping.set(parent, { top: innerTop, bottom: innerTop + parent.clientHeight })
+            } else clipping.set(parent, null)
+          }
+          const clip = clipping.get(parent)
+          if (!clip) continue
+          top = Math.max(top, clip.top)
+          bottom = Math.min(bottom, clip.bottom)
+        }
+        return bottom > top ? bottom + window.scrollY : 0
+      }))
       const maximum = Math.max(0, Math.min(scroller?.scrollHeight ?? 0, contentEnd) - window.innerHeight)
       const scrollTop = scroller?.scrollTop ?? window.scrollY
-      const canUp = scrollTop > 2
+      const canUp = maximum > 2 && scrollTop > 2
       const canDown = scrollTop < maximum - 2
       const sorted = ordered.map(item => item.section)
       setNavigation(current => {
@@ -132,7 +151,7 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
         <ArrowUp size={18} aria-hidden="true" />
       </button>
       <div className="section-navigator-copy">
-        <span aria-hidden="true">{navigation.canDown ? nextLabel : 'End of page'}</span>
+        <span aria-hidden="true">{navigation.canDown ? nextLabel : previousLabel}</span>
         {navigation.sections.length > 0 && <select aria-label="Jump to page section" value="" onChange={event => jump(Number(event.target.value), 1)}>
           <option value="" disabled>Jump to section…</option>
           {navigation.sections.map((section, index) => <option key={index} value={index}>{section.label}</option>)}

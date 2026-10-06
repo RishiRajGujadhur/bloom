@@ -10,7 +10,7 @@
 }
 .iv-ring {
   grid-area: 1 / 1;
-  width: min(100%, 340px);
+  width: min(100%, 340px, max(220px, calc(100dvh - 350px)));
   height: auto;
   max-height: 100%;
 }

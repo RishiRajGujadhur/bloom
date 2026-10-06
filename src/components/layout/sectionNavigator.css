@@ -62,7 +62,7 @@ html, body { overflow-x: clip; }
   outline-offset: 2px;
 }
 /* Floating navigation must not manufacture an empty scroll destination. */
-.app-shell .page-content { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.app-shell .page-content { padding-bottom: env(safe-area-inset-bottom, 0px); }
 @media (max-width: 720px) {
   .section-navigator {
     bottom: calc(max(18px, env(safe-area-inset-bottom)) + 72px);

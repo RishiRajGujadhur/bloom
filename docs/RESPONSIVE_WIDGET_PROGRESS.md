@@ -26,6 +26,15 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 - [x] Add the reference's falling-number transition: the outgoing value drops below the readout while the new value enters from above over 450ms. Reduced-motion preferences disable movement; outgoing text is hidden from screen readers.
 - [x] Ring and countdown digits follow the existing phase-label color. Verify matching computed colors for Work and Rest, live number transitions and resetting the timer.
 
+### Follow-up: empty page tails
+
+- [x] Exclude decorative Studio backgrounds from page-scroll destinations.
+- [x] Bound measurements to visible content inside scrollable cards; their internal overflow no longer extends page navigation.
+- [x] Hide section navigation when only empty trailing space is scrollable; use real section labels instead of an artificial “End of page” label.
+- [x] Remove shared trailing page padding while preserving device safe-area insets.
+- [x] Fit the interval ring to shorter viewport heights, keeping a readable minimum size.
+- [x] All five section-navigation regressions pass. Live verification at 1280×664 shows a 664px document, zero trailing padding and no section navigator, including the skipped-session notice.
+
 ### Follow-up: Settings and chat layout controls
 
 - [x] Every feature's Basic/Advanced preference is edited in Settings → Feature modes, including Todo and Settings itself.
