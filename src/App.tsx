@@ -119,6 +119,7 @@ import { TimeSinceCard } from './features/timeSince/TimeSinceCard'
 import { hasWebGL } from './components/ui/Scene3D'
 import { LottieIcon } from './components/ui/LottieIcon'
 import { QuickAdd, SearchTrigger } from './components/layout/TopbarExtras'
+import { AudioMixer } from './components/AudioMixer'
 import { StreakRewards } from './features/rewards/StreakRewards'
 import { ReminderCenter } from './features/reminders/ReminderCenter'
 import { readRecentPages, rememberPage } from './components/layout/navigationHistory'
@@ -878,7 +879,7 @@ function App() {
         <main id="overview" className="min-w-0 flex-1" data-page-mode={pageMode.mode}>
           <header className="topbar flex flex-wrap items-center justify-between gap-3">
             <span className="wco-title" aria-hidden="true">Bloom{pageLabel ? <b>{pageLabel}</b> : null}</span>
-            <SearchTrigger onOpen={() => setPaletteOpen(true)} />
+            <div className="topbar-search-tools"><SearchTrigger onOpen={() => setPaletteOpen(true)} />{!embeddedWidget && <AudioMixer />}</div>
             <div className="topbar-actions flex flex-wrap items-center gap-3 bloom-inline">
               <QuickAdd
                 onHabit={() => setModal('habit')}

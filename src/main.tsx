@@ -10,7 +10,6 @@ import './styles/performance.css'
 import './i18n'
 import App from './App.tsx'
 import { AudioMixerProvider } from './contexts/AudioMixerContext'
-import { AudioMixer } from './components/AudioMixer'
 import { installInteractions } from './components/ui/interactions'
 import './components/ui/interactions.css'
 import { applyCompactTitles, applyCustomCss, applyDisplayToggles, applyPageBanner } from './components/ui/Flow'
@@ -35,7 +34,6 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AudioMixerProvider>
       <App />
-      <AudioMixer />
     </AudioMixerProvider>
   </StrictMode>,
 )

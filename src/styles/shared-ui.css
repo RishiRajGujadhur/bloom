@@ -148,6 +148,8 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
 }
 
 /* Topbar: search, quick add and streak. */
+.topbar-search-tools { display:flex; align-items:center; gap:8px; flex:1 1 280px; max-width:520px; min-width:0; }
+.topbar-search-tools .topbar-search { min-width:0; flex:1; }
 .topbar-search {
   display: flex;
   align-items: center;

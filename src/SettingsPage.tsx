@@ -1,5 +1,6 @@
 import { AdvancedSection } from './components/ui/PageMode'
 import { FeatureModes } from './components/settings/FeatureModes'
+import { SoundscapeSettings } from './components/settings/SoundscapeSettings'
 import { Disclosure } from './components/BloomExperience'
 import { ComfortCard, SettingsSearch } from './components/settings/ComfortCard'
 import { useRef, useState } from 'react'
@@ -328,7 +329,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <span className={styles.slider} aria-hidden="true" />
         </span>
       </label>
-      {DISPLAY_TOGGLES.map((t) => (
+      {DISPLAY_TOGGLES.filter(t => t.key !== 'bloom-hide-soundscape').map((t) => (
         <label key={t.key} className={styles.subOption}>
           <span>
             <strong>{t.label}</strong>
@@ -963,6 +964,7 @@ export function SettingsPage({
       className={`${styles.page} mx-auto flex w-full max-w-5xl flex-col gap-5`}
     >
       <FeatureModes />
+      <SoundscapeSettings />
       <AdvancedSection><SettingsSearch root={settingsRoot} />
       <nav className="settings-jump" aria-label="Settings sections">
         {[

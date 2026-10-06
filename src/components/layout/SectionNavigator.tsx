@@ -93,6 +93,7 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
     resize?.observe(content)
     window.addEventListener('scroll', update, { passive: true })
     window.addEventListener('resize', update)
+    window.addEventListener('bloom-display-change', update)
     content.addEventListener('toggle', update, true)
     return () => {
       observer.disconnect()
@@ -100,6 +101,7 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
       resize?.disconnect()
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', update)
+      window.removeEventListener('bloom-display-change', update)
       content.removeEventListener('toggle', update, true)
       update.cancel()
     }

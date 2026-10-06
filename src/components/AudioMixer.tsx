@@ -1,27 +1,51 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { createPortal } from 'react-dom'
 import { Headphones, Pause, Play, Volume2, VolumeX, X } from 'lucide-react'
-import { useAudioMixer } from '../contexts/AudioMixerContext'
+import { useAudioMixer, useOptionalAudioMixer } from '../contexts/AudioMixerContext'
+import { useSoundscapeButton } from '../settings/soundscapeButton'
 import { audioTracks, mixerPresets } from '../types/audio'
 import styles from './AudioMixer.module.css'
 
 export function AudioMixer() {
+  const mixer = useOptionalAudioMixer()
+  const visible = useSoundscapeButton()
+  return mixer && visible ? <AudioMixerControls /> : null
+}
+
+function AudioMixerControls() {
   const [open, setOpen] = useState(false)
+  const [position, setPosition] = useState<CSSProperties>({ top: 80, left: 12 })
   const trigger = useRef<HTMLButtonElement>(null)
   const closeButton = useRef<HTMLButtonElement>(null)
   useEffect(() => {
     if (open) closeButton.current?.focus()
   }, [open])
   const mixer = useAudioMixer()
+  useEffect(() => {
+    if (!open) return
+    const update = () => {
+      const bounds = trigger.current?.getBoundingClientRect()
+      if (!bounds) return
+      const width = Math.min(390, window.innerWidth - 24)
+      const top = Math.max(12, Math.min(bounds.bottom + 8, window.innerHeight - 160))
+      setPosition({ top, left: Math.max(12, Math.min(window.innerWidth - width - 12, bounds.right - width)), width, maxHeight: `calc(100dvh - ${top + 12}px)` })
+    }
+    update()
+    window.addEventListener('resize', update)
+    window.addEventListener('scroll', update, { passive: true })
+    return () => { window.removeEventListener('resize', update); window.removeEventListener('scroll', update) }
+  }, [open])
   const close = () => {
     setOpen(false)
     trigger.current?.focus()
   }
   return (
     <aside className={styles.dock} aria-label="Ambient audio">
-      {open && (
+      {open && createPortal(
         <section
           id="ambient-mixer"
           className={styles.panel}
+          style={position}
           aria-label="Sound mixer"
           onKeyDown={(event) => {
             if (event.key === 'Escape') {
@@ -131,7 +155,7 @@ export function AudioMixer() {
                 ? 'Sound continues while you write or browse.'
                 : 'Ready when you are. Presets won’t start playback.'}
           </p>
-        </section>
+        </section>, document.body
       )}
       <button
         className={styles.launcher}
@@ -139,10 +163,12 @@ export function AudioMixer() {
         type="button"
         aria-expanded={open}
         aria-controls="ambient-mixer"
+        aria-label="Soundscape"
+        title={mixer.isPlaying ? 'Soundscape is playing' : 'Open Soundscape'}
         onClick={() => setOpen((value) => !value)}
       >
         <Headphones size={19} />
-        <span>{mixer.isPlaying ? 'Soundscape on' : 'Soundscape'}</span>
+        <span className="sr-only">{mixer.isPlaying ? 'Soundscape on' : 'Soundscape'}</span>
         {mixer.isPlaying && (
           <span className={styles.pulse} aria-hidden="true" />
         )}

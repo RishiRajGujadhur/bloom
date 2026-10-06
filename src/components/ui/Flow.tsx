@@ -198,6 +198,7 @@ export function setCompactTitles(on: boolean) {
 
 /** Settings → simple show/hide switches, each mirrored as an attribute on <html> that CSS acts on. */
 export const DISPLAY_TOGGLES = [
+  { key: 'bloom-hide-soundscape', attr: 'data-hide-soundscape', label: 'Hide the Soundscape button', hint: 'Remove Soundscape from beside Search.' },
   { key: 'bloom-hide-launch', attr: 'data-hide-launch', label: 'Hide the floating Bloom button', hint: 'You can still open Bloom from Ctrl K or the Home page.' },
   { key: 'bloom-hide-quicklog', attr: 'data-hide-quicklog', label: 'Hide the Home quick-log row', hint: 'The mood and water buttons under the Now card.' },
   { key: 'bloom-hide-affirm', attr: 'data-hide-affirm', label: 'Hide the rotating affirmation', hint: 'The line of encouragement on the Home card.' },
@@ -214,6 +215,7 @@ export function applyDisplayToggles() {
     }
     document.documentElement.toggleAttribute(t.attr, on)
   }
+  window.dispatchEvent(new Event('bloom-display-change'))
 }
 
 /** Settings → Custom CSS: a <style> tag kept in sync with the saved snippet. */

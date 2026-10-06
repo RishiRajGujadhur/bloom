@@ -1,11 +1,12 @@
 .dock {
-  position: fixed;
-  right: max(20px, env(safe-area-inset-right));
-  bottom: max(20px, env(safe-area-inset-bottom));
+  position: relative;
+  flex: 0 0 auto;
   z-index: 55;
   color: var(--text-primary);
 }
 .panel {
+  position: fixed;
+  z-index: 60;
   width: min(390px, calc(100vw - 32px));
   max-height: calc(100dvh - 110px);
   overflow-y: auto;
@@ -38,7 +39,7 @@
   letter-spacing: 0.1em;
   color: var(--text-secondary);
 }
-.dock button {
+.dock button, .panel button {
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   background: var(--bg-surface);
@@ -52,13 +53,13 @@
     transform 160ms ease,
     background 160ms ease;
 }
-.dock button:hover {
+.dock button:hover, .panel button:hover {
   background: color-mix(in srgb, var(--accent-color) 12%, var(--bg-surface));
 }
-.dock button:active {
+.dock button:active, .panel button:active {
   transform: scale(0.97);
 }
-.dock .master {
+.panel .master {
   width: 100%;
   margin: 16px 0;
   padding: 14px;
@@ -159,8 +160,10 @@
 .dock .launcher {
   display: flex;
   margin-left: auto;
-  border-radius: 99px;
-  padding: 12px 18px;
+  border-radius: 14px;
+  width: 48px;
+  height: 48px;
+  padding: 10px;
   box-shadow: 0 5px 24px
     color-mix(in srgb, var(--text-primary) 12%, transparent);
 }
@@ -187,9 +190,6 @@
   }
 }
 @media (max-width: 500px) {
-  .dock {
-    right: 16px;
-  }
   .panel {
     padding: 18px;
   }

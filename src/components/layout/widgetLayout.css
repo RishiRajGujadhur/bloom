@@ -87,9 +87,6 @@
   [data-widget-collapsed] { min-height:56px !important; height:56px !important; }
   .page-content[data-compact-layout] { padding:10px 12px 16px; }
   [data-widget-group] { gap:10px !important; }
-  /* Keep floating tools together and leave the resize corner reachable. */
-  body:has([data-compact-layout]) aside[aria-label="Ambient audio"] { left:max(104px,env(safe-area-inset-left)); right:auto; }
-  body:has([data-compact-layout]) aside[aria-label="Ambient audio"]:has(#ambient-mixer) { left:max(16px,env(safe-area-inset-left)); right:auto; }
 }
 @media(forced-colors:active) { .widget-resize-handle,.widget-size-options { border-color:ButtonText; } }
 .is-embedded-widget { display:block !important; min-height:0 !important; padding:0 !important; }
