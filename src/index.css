@@ -278,3 +278,6 @@ pre:hover > .pre-copy, .pre-copy:focus-visible { opacity: 1; }
 
 /* UX 002: Give all native form fields a visible keyboard focus ring. */
 input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+
+/* UX 003: Make explicitly invalid fields visibly identifiable. */
+input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border: 2px solid var(--danger); }
