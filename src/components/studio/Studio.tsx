@@ -8,6 +8,7 @@ import { setHeadSlot } from '../ui/headSlot'
 import './shared.css'
 import './galaxy.css'
 import { GalaxyGlyph } from './GalaxyGlyph'
+import { frameThrottle } from '../../utils/frameThrottle'
 
 /**
  * The shared page shell for Bloom's studios (exercise, sounds, meditation…):
@@ -238,13 +239,18 @@ export function Rail({ children, label }: { children: ReactNode; label: string }
   useEffect(() => {
     const node = track.current
     if (!node) return
-    const update = () => setEdges({ start: node.scrollLeft < 2, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 2 })
+    const update = frameThrottle(() => {
+      const start = node.scrollLeft < 2
+      const end = node.scrollLeft + node.clientWidth >= node.scrollWidth - 2
+      setEdges(previous => previous.start === start && previous.end === end ? previous : { start, end })
+    })
     update()
     node.addEventListener('scroll', update, { passive: true })
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null
     ro?.observe(node)
     return () => {
       node.removeEventListener('scroll', update)
+      update.cancel()
       ro?.disconnect()
     }
   }, [count, all])
