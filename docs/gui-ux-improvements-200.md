@@ -87,3 +87,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 81 | Enlarge controls to a 44px touch target in guide (.bloom-guide .driver-popover-footer button) | `src/components/layout/guide.css` |
 | 82 | Enlarge controls to a 44px touch target in shortcuts (.kb-sheet header button) | `src/components/layout/shortcuts.css` |
 | 83 | Enlarge controls to a 44px touch target in studio (.studio-tabs button) | `src/components/studio/studio.css` |
+| 84 | Enlarge controls to a 44px touch target in studio (.studio-seg button, .studio-chip) | `src/components/studio/studio.css` |
