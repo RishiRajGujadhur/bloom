@@ -375,3 +375,5 @@
 .studio-tab-ink { display: none; }
 
 .bloom-slider input[type="range"] { min-height: 24px; }
+
+.studio-rail > [role="listitem"] > button { width: 100%; }

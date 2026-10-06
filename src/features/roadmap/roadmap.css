@@ -112,4 +112,4 @@
 }
 
 /* Frappe date labels sit on a white timeline surface. */
-.rm-gantt .gantt-container { --g-text-light: #555555; --g-text-dark: #333333; }
+.rm-gantt .gantt-container { --g-text-dark: #333333; --g-text-muted: #555555; }

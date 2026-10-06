@@ -53,8 +53,6 @@ export function CalendarPage({ data, setData }: Props) {
     if (!root) return
     const makeScrollable = () => root.querySelectorAll<HTMLElement>('.fc-scroller').forEach(scroller => {
       scroller.tabIndex = 0
-      scroller.setAttribute('role', 'region')
-      scroller.setAttribute('aria-label', 'Calendar schedule')
     })
     // FullCalendar creates/replaces its scrollers after datesSet has fired.
     const observer = new MutationObserver(makeScrollable)

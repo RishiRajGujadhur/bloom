@@ -1,6 +1,6 @@
 import { prefersReducedMotion } from '../../utils/motion'
 import { StudioNameContext } from './StudioScene'
-import { Children, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { Children, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import gsap from 'gsap'
 import './studio.css'
@@ -279,7 +279,7 @@ export function Rail({ children, label }: { children: ReactNode; label: string }
       <div
         ref={track}
         className={`studio-rail${all ? ' is-all' : ''}`}
-        role="group"
+        role="list"
         aria-label={label}
         tabIndex={0}
         onKeyDown={(e) => {
@@ -288,7 +288,7 @@ export function Rail({ children, label }: { children: ReactNode; label: string }
           if (e.key === 'ArrowLeft') move(-1)
         }}
       >
-        {children}
+        {Children.map(children, (child) => isValidElement<{ role?: string }>(child) && child.props.role === 'listitem' ? child : <div role="listitem">{child}</div>)}
       </div>
     </div>
   )
