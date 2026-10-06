@@ -515,3 +515,6 @@
 
 /* UX 011: Prevent scrolling a menu from moving the page underneath. */
 .ui-menu { overscroll-behavior: contain; }
+
+/* UX 012: Keep popup menus within narrow viewport edges. */
+.ui-menu { max-width: calc(100vw - 32px); }

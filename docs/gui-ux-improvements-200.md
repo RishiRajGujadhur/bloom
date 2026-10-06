@@ -15,3 +15,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 9 | Connect native choice controls to the selected accent theme | `src/index.css` |
 | 10 | Expose keyboard focus on expandable sections | `src/index.css` |
 | 11 | Prevent scrolling a menu from moving the page underneath | `src/components/ui/ui.css` |
+| 12 | Keep popup menus within narrow viewport edges | `src/components/ui/ui.css` |
