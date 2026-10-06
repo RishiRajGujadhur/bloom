@@ -10,7 +10,7 @@
   margin-bottom: 24px;
 }
 .heading > div > span {
-  font-size: 10px;
+  font-size: max(14px, 1rem);
   letter-spacing: 0.18em;
   color: var(--accent-color);
 }
