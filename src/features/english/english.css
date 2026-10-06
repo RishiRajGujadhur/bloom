@@ -148,7 +148,7 @@
   margin: 0 auto;
 }
 .en-lesson-top { display: flex; align-items: center; gap: 12px; }
-.en-motion-setting { display: inline-flex; align-items: center; gap: 5px; color: var(--text-muted); font-size: 12px; white-space: nowrap; cursor: pointer; }
+.en-motion-setting { display: inline-flex; align-items: center; gap: 5px; color: var(--text-muted); font-size: max(14px, 1rem); white-space: nowrap; cursor: pointer; }
 .en-icon-btn { border: 0; background: none; color: var(--text-muted); cursor: pointer; }
 .en-progress { flex: 1; height: 16px; border-radius: 8px; background: var(--border-color); overflow: hidden; }
 .en-progress i { display: block; height: 100%; border-radius: 8px; background: #58cc02; transition: width 400ms ease; box-shadow: inset 0 -4px 0 #0002; }
