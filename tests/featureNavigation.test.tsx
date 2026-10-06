@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import App from '../src/App'
+import { renderApp } from './helpers/renderApp'
 import { FeatureGuide } from '../src/components/layout/FeatureGuide'
 
 const drive = jest.fn()
@@ -14,18 +14,18 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-test('daybook has a dedicated page and hash navigation restores destinations', () => {
-  render(<App />)
+test('daybook has a dedicated page and hash navigation restores destinations', async () => {
+  await renderApp()
   expect(
     screen.queryByRole('textbox', { name: /Search journal modes/ }),
   ).not.toBeInTheDocument()
-  fireEvent.click(screen.getAllByRole('button', { name: 'Daybook modes' })[0])
+  await act(async () => { fireEvent.click(screen.getAllByRole('button', { name: 'Daybook modes' })[0]) })
   expect(window.location.hash).toBe('#daybook')
   expect(
     screen.getByRole('heading', { name: 'Daybook', level: 1 }),
   ).toHaveFocus()
   expect(screen.getByRole('button', { name: 'Plan', exact: true })).toBeVisible()
-  fireEvent.click(screen.getByRole('button', { name: 'Plan', exact: true }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Plan', exact: true })) })
   expect(screen.getByPlaceholderText('Search modes')).toBeVisible()
   expect(
     screen.queryByRole('button', { name: /Move with intention/ }),
@@ -42,14 +42,14 @@ test('daybook has a dedicated page and hash navigation restores destinations', (
   ).not.toBeInTheDocument()
 })
 
-test('the page tour starts from Bloom’s chat, not a heading button', () => {
-  render(<App />)
+test('the page tour starts from Bloom’s chat, not a heading button', async () => {
+  await renderApp()
   expect(screen.queryByRole('button', { name: 'Guide me' })).not.toBeInTheDocument()
-  fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true })) })
   expect(screen.queryByRole('button', { name: 'Guide me' })).not.toBeInTheDocument()
 })
 
-test('guide highlights only the current feature and cleans up on navigation', () => {
+test('guide highlights only the current feature and cleans up on navigation', async () => {
   const view = render(
     <>
       <div id="planning">
@@ -72,11 +72,11 @@ test('guide highlights only the current feature and cleans up on navigation', ()
   expect(destroy).toHaveBeenCalled()
 })
 
-test('collapsed sidebar preference survives remount', () => {
-  const view = render(<App />)
-  fireEvent.click(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ }))
+test('collapsed sidebar preference survives remount', async () => {
+  const view = await renderApp()
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ })) })
   view.unmount()
-  render(<App />)
+  await renderApp()
   expect(screen.getByRole('button', { name: /^(Collapse|Expand) menu$/ })).toHaveAttribute(
     'aria-expanded',
     'false',

@@ -1,4 +1,4 @@
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import { applyPreset, featureCategory, presets } from '../../settings/featureCatalog'
 
 /**

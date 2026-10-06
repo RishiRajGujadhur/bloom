@@ -94,7 +94,7 @@ import { Apple as AppleNav, Feather as FeatherNav, Mic as MicNav, Zap as ZapNav,
 import type { LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import styles from './Sidebar.module.css'
 import sidebarPlant from '../../assets/bloom/sidebar-plant.webp'
 
@@ -965,7 +965,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
             You’re doing better than you think.{' '}
             <span aria-hidden="true">🌱</span>
           </p>
-          <img src={sidebarPlant} alt="" />
+          <img src={sidebarPlant} width={132} height={165} loading="lazy" decoding="async" alt="" />
         </div>
       </aside>
     </>

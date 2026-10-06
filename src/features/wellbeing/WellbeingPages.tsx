@@ -38,7 +38,7 @@ import { orbToMood } from './moodOrbModel'
 const MoodOrb = lazy(() => import('./MoodOrb').then((m) => ({ default: m.MoodOrb })))
 const BreathSilkCard = lazy(() => import('../taichi/TaiChiPage').then((m) => ({ default: m.BreathSilkCard })))
 import { capturePlace } from '../places/placesStore'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 import { LottieIcon } from '../../components/ui/LottieIcon'
 
 /* ------------------------------------------------------------------ */

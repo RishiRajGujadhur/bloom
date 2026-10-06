@@ -1,5 +1,5 @@
 import { useState, type Dispatch, type SetStateAction } from 'react'
-import type { AppSettings } from '../SettingsPage'
+import type { AppSettings } from '../settings/appSettings'
 import {
   FONTS,
   THEMES,

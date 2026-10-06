@@ -1,4 +1,4 @@
-import type { FeatureFlags } from '../SettingsPage'
+import type { FeatureFlags } from '../settings/appSettings'
 
 const KEY = 'bloom-feature-disabled-at-v1'
 

@@ -1,7 +1,7 @@
 import type { AppData } from '../../model'
 import { dayKey } from '../../dates'
 import type { NavKey } from '../../components/layout/Sidebar'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 
 /**
  * The Daily flow ties features into two gentle routines. Each step knows how

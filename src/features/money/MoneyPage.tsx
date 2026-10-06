@@ -39,7 +39,7 @@ import { download } from '../lab/exportSuite'
 
 import './receipts.css'
 import { capturePlace } from '../places/placesStore'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 
 /** Pins a spend to where you are (only when Places is on) for the Life Map's money layer. */
 const pinSpend = (t: Txn) => { if (!t.income && loadSettings().features.placesMap && subOn('placesMap', 'spendCapture')) capturePlace('spend', null, { ref: t.id, label: t.place, amount: t.amount, category: t.category }) }

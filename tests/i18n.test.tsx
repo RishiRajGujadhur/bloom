@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import fs from 'node:fs'
 import path from 'node:path'
 import i18n, { resources } from '../src/i18n'
-import App from '../src/App'
+import { renderApp } from './helpers/renderApp'
 import { SettingsPage, defaultSettings } from '../src/SettingsPage'
 import { showAll } from './helpers/showAll'
 import { getStoredTheme } from '../src/utils/themeEngine'
@@ -63,19 +63,19 @@ afterEach(async () => {
   await i18n.changeLanguage('en')
 })
 
-test('English and French expose the same translation keys', () => {
+test('English and French expose the same translation keys', async () => {
   expect(flatten(fr).sort()).toEqual([...enKeys].sort())
 })
 
-test('every literal translation key used in the source exists in English and French', () => {
+test('every literal translation key used in the source exists in English and French', async () => {
   const keys = usedKeys()
   expect(keys.length).toBeGreaterThan(150)
   expect(keys.filter((key) => !hasKey(enKeys, key))).toEqual([])
   expect(keys.filter((key) => !hasKey(frKeys, key))).toEqual([])
 })
 
-test('English remains the default language', () => {
-  render(<App />)
+test('English remains the default language', async () => {
+  await renderApp()
   expect(document.documentElement.lang).toBe('en')
   expect(screen.getByRole('heading', { name: 'A little intention. A lot of good ahead.' })).toBeInTheDocument()
   expect(screen.getAllByText(/Move with intention/).length).toBeGreaterThan(0)
@@ -83,22 +83,22 @@ test('English remains the default language', () => {
 
 test('switching to French localizes the dashboard, RPG, gamification and daybook', async () => {
   await i18n.changeLanguage('fr')
-  render(<App />)
+  await renderApp()
 
   expect(document.documentElement.lang).toBe('fr')
-  fireEvent.click(screen.getByRole('button', { name: 'Growth' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Growth' })) })
   expect(
     screen.getAllByRole('button', { name: /Comment jouer/ }).length,
   ).toBeGreaterThan(0)
   expect(screen.getAllByText('La Pousse').length).toBeGreaterThan(0)
   expect(screen.getAllByText('Vitalité').length).toBeGreaterThan(0)
-  fireEvent.click(screen.getByRole('button', { name: 'Skill tree' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Skill tree' })) })
   expect(screen.getAllByText(/CHEMIN DE PRATIQUE/).length).toBeGreaterThan(0)
   expect(
     screen.getAllByText('Votre arbre de compétences').length,
   ).toBeGreaterThan(0)
-  fireEvent.click(screen.getAllByRole('button', { name: /Modes de carnet/ })[0])
-  fireEvent.click(screen.getByRole('button', { name: 'Plan', exact: true }))
+  await act(async () => { fireEvent.click(screen.getAllByRole('button', { name: /Modes de carnet/ })[0]) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Plan', exact: true })) })
   expect(
     screen.getAllByText('Intention du matin (la seule chose)').length,
   ).toBeGreaterThan(0)
@@ -106,15 +106,15 @@ test('switching to French localizes the dashboard, RPG, gamification and daybook
 
 test('French journal prompts and chips come from the French resources', async () => {
   await i18n.changeLanguage('fr')
-  render(<App />)
+  await renderApp()
 
-  fireEvent.click(
+  await act(async () => { fireEvent.click(
     screen.getAllByRole('button', { name: /Journal de réflexion/ })[0],
-  )
+  ) })
   await act(async () => {
-    fireEvent.click(
+    await act(async () => { fireEvent.click(
       screen.getAllByRole('button', { name: /Commencer un bilan/ })[0],
-    )
+    ) })
   })
 
   expect(screen.getAllByText(/Prenons un souffle/).length).toBeGreaterThan(0)
@@ -123,11 +123,11 @@ test('French journal prompts and chips come from the French resources', async ()
 
 test('pirate and slang English stay usable on the shared English sections', async () => {
   await i18n.changeLanguage('en-pirate')
-  render(<App />)
+  await renderApp()
   expect(
     screen.getAllByText(/Main deck|Yer Stats|A wee bit better/).length,
   ).toBeGreaterThan(0)
-  fireEvent.click(screen.getByRole('button', { name: 'Growth' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Growth' })) })
   expect(screen.getByRole('button', { name: /How to play/ })).toBeInTheDocument()
 })
 test('French settings page renders translated feature copy', async () => {

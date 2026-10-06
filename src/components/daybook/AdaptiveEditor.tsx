@@ -18,7 +18,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { journalText } from '../../search/db'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 import { ThoughtDiffPanel } from './ThoughtDiff'
 import { ExtractEpiphany } from '../../features/epiphany/EpiphanyUI'
 import { RelatedPages } from './RelatedPages'

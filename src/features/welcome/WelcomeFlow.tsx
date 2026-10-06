@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import { ChevronLeft } from 'lucide-react'
 import { BloomFace, type BloomFaceHandle } from '../../components/ui/BloomFace'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import { questions, themeSwatches, type Answers } from './welcomeModel'
 import './welcome.css'
 

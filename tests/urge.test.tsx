@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
-import App from '../src/App'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
+import { renderApp } from './helpers/renderApp'
 import type { UrgeEvent } from '../src/model'
 import { showAll } from './helpers/showAll'
 import {
@@ -33,7 +33,7 @@ const event = (
   visibilityChanges: 1,
 })
 
-test('passive context groups time and day without asking the user', () => {
+test('passive context groups time and day without asking the user', async () => {
   const weekday = new Date(2026, 8, 21, 14).getTime()
   const weekend = new Date(2026, 8, 20, 23).getTime()
   expect(timeBucketAt(weekday)).toBe('post-lunch')
@@ -56,7 +56,7 @@ test('passive context groups time and day without asking the user', () => {
   })
 })
 
-test('correlations calculate conditional slip probability and interruption rate', () => {
+test('correlations calculate conditional slip probability and interruption rate', async () => {
   const events = [
     event('slip', 'Bored', 1),
     event('slip', 'Bored', 2),
@@ -72,7 +72,7 @@ test('correlations calculate conditional slip probability and interruption rate'
   expect(urgeInterruptionRate(events)).toBe(50)
 })
 
-test('actionable insights wait for seven days and use the strongest trigger', () => {
+test('actionable insights wait for seven days and use the strongest trigger', async () => {
   const early = [
     event('slip', 'Bored', 1),
     event('slip', 'Bored', 2),
@@ -87,32 +87,32 @@ test('actionable insights wait for seven days and use the strongest trigger', ()
   expect(insight?.suggestion).toContain('stretch')
 })
 
-test('the three-click logger saves an urge and immediately updates patterns', () => {
-  render(<App />)
-  fireEvent.click(screen.getByRole('button', { name: 'Urges', exact: true }))
+test('the three-click logger saves an urge and immediately updates patterns', async () => {
+  await renderApp()
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Urges', exact: true })) })
   const habit = screen.getByText('Mindless phone scrolling').closest('article')!
-  fireEvent.click(within(habit).getByRole('button', { name: 'Urge' }))
-  fireEvent.click(screen.getByRole('button', { name: 'Intensity 4 of 5' }))
-  fireEvent.click(screen.getByRole('button', { name: 'Bored' }))
+  await act(async () => { fireEvent.click(within(habit).getByRole('button', { name: 'Urge' })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Intensity 4 of 5' })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Bored' })) })
   expect(
     screen.getByRole('heading', { name: 'Pattern captured' }),
   ).toBeInTheDocument()
-  fireEvent.click(screen.getByRole('button', { name: /Patterns/ }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Patterns/ })) })
   const total = screen.getByText('Logged moments').closest('article')!
   expect(within(total).getByText('1')).toBeInTheDocument()
   expect(screen.getByText('100%')).toBeInTheDocument()
   expect(screen.getAllByText('Bored').length).toBeGreaterThan(0)
 })
 
-test('Settings can disable the feature without removing saved data', () => {
-  render(<App />)
-  fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true }))
+test('Settings can disable the feature without removing saved data', async () => {
+  await renderApp()
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true })) })
   showAll()
   const toggle = screen.getByRole('checkbox', {
     name: 'Enable Urge & trigger tracker',
   })
   expect(toggle).toBeChecked()
-  fireEvent.click(toggle)
+  await act(async () => { fireEvent.click(toggle) })
   expect(
     screen.queryByRole('button', { name: 'Urges' }),
   ).not.toBeInTheDocument()

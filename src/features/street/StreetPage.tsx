@@ -10,10 +10,10 @@ import {
 import gsap from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 import { ChevronLeft, ChevronRight, DoorOpen } from 'lucide-react'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import { usePageActions } from '../../components/ui/PageMenu'
 import { subOn } from '../subFeatures'
-import { readRecentPages } from '../../components/layout/CommandPalette'
+import { readRecentPages } from '../../components/layout/navigationHistory'
 import './street.css'
 
 gsap.registerPlugin(Draggable)

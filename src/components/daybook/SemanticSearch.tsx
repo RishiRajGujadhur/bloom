@@ -11,7 +11,7 @@ import {
   tagPrototypes,
   type Scored,
 } from '../../search/hybrid'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 import { subOn } from '../../features/subFeatures'
 import type { JournalEntry } from './types'
 import styles from './search.module.css'

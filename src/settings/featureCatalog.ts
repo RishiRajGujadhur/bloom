@@ -1,4 +1,4 @@
-import type { FeatureFlags } from '../SettingsPage'
+import type { FeatureFlags } from '../settings/appSettings'
 
 /** Settings groups, in display order. */
 export const categories = [

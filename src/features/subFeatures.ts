@@ -1,4 +1,4 @@
-import type { FeatureFlags } from '../SettingsPage'
+import type { FeatureFlags } from '../settings/appSettings'
 import { SETTINGS_STORAGE_KEY } from '../settingsKey'
 
 /**

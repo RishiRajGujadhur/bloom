@@ -5,7 +5,7 @@ import { ArrowRight, Check, Moon, Sparkles, Sun, Sunrise, X } from 'lucide-react
 import type { AppData } from '../../model'
 import { id as newId, toggleHabit } from '../../model'
 import type { NavKey } from '../../components/layout/Sidebar'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import { inferStat } from '../../rpg/schema'
 import { toggleTodo } from '../productivity'
 import { subOn } from '../subFeatures'

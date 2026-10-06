@@ -1,6 +1,6 @@
 import { subOn } from './subFeatures'
 import { UrgeClocks } from './urgeClock'
-import { loadSettings } from '../SettingsPage'
+import { loadSettings } from '../settings/appSettings'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import {

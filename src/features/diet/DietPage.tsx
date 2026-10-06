@@ -24,7 +24,7 @@ import {
 } from './dietModel'
 import { NutrientsPanel } from './NutrientsPanel'
 import { RecipeBuilder } from './RecipeBuilder'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 import type { FeaturePageProps } from '../shared/pageProps'
 import { DietQuick } from '../quick/DietQuick'
 import './diet.css'

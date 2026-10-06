@@ -18,7 +18,7 @@ import {
   Timer,
 } from 'lucide-react'
 import type { AppData } from '../../model'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import { journalText } from '../../search/db'
 import { useAIWorker } from '../../search/useAIWorker'
 import {
@@ -53,7 +53,6 @@ export function paletteMatch(value: string, search: string, keywords: string[] =
   for (const character of haystack) if (character === query[at]) at++
   return at === query.length ? 0.4 : 0
 }
-const RECENT_KEY = 'bloom-recent-pages'
 const SEARCHES_KEY = 'bloom-recent-searches'
 const readSearches = (): string[] => {
   try {
@@ -145,37 +144,8 @@ export const pageFlags: Partial<Record<NavKey, keyof FeatureFlags>> = {
   'places': 'placesMap',
 }
 
-export function readRecentPages(): NavKey[] {
-  try {
-    const value: unknown = JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]')
-    return Array.isArray(value)
-      ? value.filter((key): key is NavKey => typeof key === 'string' && key in pageDetails)
-      : []
-  } catch {
-    return []
-  }
-}
-
-/** Remembers the last few destinations for the palette's "Recent" group. */
-export function rememberPage(key: NavKey) {
-  try {
-    const next = [key, ...readRecentPages().filter((k) => k !== key)].slice(0, 5)
-    localStorage.setItem(RECENT_KEY, JSON.stringify(next))
-  } catch {
-    /* Recents are a convenience only. */
-  }
-}
-
-/** Opens a saved Daybook page; the Daybook listens for this. */
-export const OPEN_DAYBOOK_EVENT = 'bloom:open-daybook'
-export function openDaybookPage(id: string) {
-  try {
-    sessionStorage.setItem(OPEN_DAYBOOK_EVENT, id)
-  } catch {
-    /* The event below still works while the Daybook is mounted. */
-  }
-  window.dispatchEvent(new CustomEvent(OPEN_DAYBOOK_EVENT, { detail: id }))
-}
+export { readRecentPages, rememberPage, OPEN_DAYBOOK_EVENT, openDaybookPage } from './navigationHistory'
+import { readRecentPages, openDaybookPage } from './navigationHistory'
 
 function readDaybook(): JournalEntry[] {
   try {
@@ -230,24 +200,6 @@ export function CommandPalette({
   const { embed, status } = useAIWorker()
   const [selected, setSelected] = useState('')
 
-  // Global shortcut: Ctrl/Cmd + K toggles, "/" opens when not typing.
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null
-      const typing =
-        target?.isContentEditable ||
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName ?? '')
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault()
-        onOpenChange(!open)
-      } else if (event.key === '/' && !typing && !open) {
-        event.preventDefault()
-        onOpenChange(true)
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, onOpenChange])
 
   useEffect(() => {
     if (!open) return

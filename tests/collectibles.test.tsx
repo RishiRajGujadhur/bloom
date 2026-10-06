@@ -20,7 +20,7 @@ import {
   loadSettings,
   SETTINGS_STORAGE_KEY,
 } from '../src/SettingsPage'
-import App from '../src/App'
+import { renderApp } from './helpers/renderApp'
 
 beforeEach(() => {
   localStorage.clear()
@@ -42,7 +42,7 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-test('wins persist an unowned car, and same-day attempts leave the result unchanged', () => {
+test('wins persist an unowned car, and same-day attempts leave the result unchanged', async () => {
   const date = new Date(2026, 8, 25, 12)
   const state = rollCollection(emptyCollection, date, () => 0)
   expect(state.owned).toEqual([cars[0].id])
@@ -52,14 +52,14 @@ test('wins persist an unowned car, and same-day attempts leave the result unchan
   expect(parseCollection(JSON.stringify(state))).toEqual(state)
 })
 
-test('a losing roll consumes the day and never shows a matching combination', () => {
+test('a losing roll consumes the day and never shows a matching combination', async () => {
   const state = rollCollection(emptyCollection, new Date(), () => 0.99)
   expect(state.owned).toEqual([])
   expect(state.lastSpin?.reels).toEqual([7, 7, 1])
   expect(canSpin(state)).toBe(false)
 })
 
-test('eligibility resets at local midnight, not after 24 hours, and rejects clock rollback', () => {
+test('eligibility resets at local midnight, not after 24 hours, and rejects clock rollback', async () => {
   const state = rollCollection(
     emptyCollection,
     new Date(2026, 8, 25, 23, 59),
@@ -70,7 +70,7 @@ test('eligibility resets at local midnight, not after 24 hours, and rejects cloc
   expect(canSpin(state, new Date(2026, 8, 24))).toBe(false)
 })
 
-test('jackpots never duplicate a car and a complete collection stops consuming spins', () => {
+test('jackpots never duplicate a car and a complete collection stops consuming spins', async () => {
   let state = emptyCollection
   for (let day = 1; day <= cars.length; day++)
     state = rollCollection(state, new Date(2026, 8, day), () => 0)
@@ -106,7 +106,7 @@ test('selection persists only for an owned car and can be cleared', async () => 
 test('the result is saved before animation ends and cannot reroll after remount', async () => {
   jest.spyOn(Math, 'random').mockReturnValue(0)
   const view = render(<DailySpin />)
-  fireEvent.click(screen.getByRole('button', { name: 'Daily 7-7-7 Spin' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Daily 7-7-7 Spin' })) })
   await waitFor(() =>
     expect(localStorage.getItem(COLLECTIBLES_KEY)).toContain(cars[0].id),
   )
@@ -123,13 +123,13 @@ test('storage failure does not grant a reward or claim a successful spin', async
     throw new Error('quota')
   })
   render(<DailySpin />)
-  fireEvent.click(screen.getByRole('button', { name: 'Daily 7-7-7 Spin' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Daily 7-7-7 Spin' })) })
   expect(await screen.findByRole('alert')).toHaveTextContent('Could not save')
   expect(localStorage.getItem(COLLECTIBLES_KEY)).toBeNull()
   expect(screen.getByRole('button', { name: 'Daily 7-7-7 Spin' })).toBeEnabled()
 })
 
-test('corrupt saved data is preserved and blocks play', () => {
+test('corrupt saved data is preserved and blocks play', async () => {
   localStorage.setItem(COLLECTIBLES_KEY, 'broken')
   render(<DailySpin />)
   expect(screen.getByRole('alert')).toHaveTextContent('could not be read')
@@ -162,7 +162,7 @@ test('gallery selection updates the focus companion and survives remount', async
   expect(
     screen.getAllByRole('button', { name: 'Awaiting discovery' }),
   ).toHaveLength(5)
-  fireEvent.click(screen.getByRole('button', { name: 'Take to focus' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Take to focus' })) })
   await waitFor(() =>
     expect(
       screen.getByRole('button', { name: 'Focus companion' }),
@@ -182,7 +182,7 @@ test('gallery selection updates the focus companion and survives remount', async
   )
 })
 
-test('a storage event synchronizes another tab without granting another attempt', () => {
+test('a storage event synchronizes another tab without granting another attempt', async () => {
   render(<DailySpin />)
   act(() => {
     localStorage.setItem(
@@ -196,7 +196,7 @@ test('a storage event synchronizes another tab without granting another attempt'
   ).toBeDisabled()
 })
 
-test('old settings migrate to opt-in defaults and enabling features reveals their entry points', () => {
+test('old settings migrate to opt-in defaults and enabling features reveals their entry points', async () => {
   localStorage.setItem(
     SETTINGS_STORAGE_KEY,
     JSON.stringify({ features: { habitTracker: false } }),
@@ -205,18 +205,18 @@ test('old settings migrate to opt-in defaults and enabling features reveals thei
     ...defaultSettings.features,
     habitTracker: false,
   })
-  render(<App />)
+  await renderApp()
   expect(
     screen.queryByRole('button', { name: 'My Collectibles' }),
   ).not.toBeInTheDocument()
-  fireEvent.click(screen.getByRole('button', { name: 'Settings' }))
-  fireEvent.click(
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings' })) })
+  await act(async () => { fireEvent.click(
     screen.getByRole('checkbox', { name: 'Enable Daily 7-7-7 Spin' }),
-  )
-  fireEvent.click(
+  ) })
+  await act(async () => { fireEvent.click(
     screen.getByRole('checkbox', { name: 'Enable My Collectibles' }),
-  )
-  fireEvent.click(screen.getByRole('button', { name: 'My Collectibles' }))
+  ) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'My Collectibles' })) })
   expect(screen.getByText('0 of 6 cars collected')).toBeInTheDocument()
   expect(dayKey()).toMatch(/^\d{4}-\d{2}-\d{2}$/)
 })

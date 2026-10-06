@@ -1,5 +1,5 @@
 import { prefersReducedMotion } from '../../utils/motion'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 import { subOn } from '../../features/subFeatures'
 
 /**

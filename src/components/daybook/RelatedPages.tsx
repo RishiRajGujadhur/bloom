@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link2 } from 'lucide-react'
 import { journalText } from '../../search/db'
 import { relatedPages, type Scored } from '../../search/hybrid'
-import { openDaybookPage } from '../layout/CommandPalette'
+import { openDaybookPage } from '../layout/navigationHistory'
 import { DAYBOOK_STORAGE_KEY } from './storage'
 import type { JournalEntry } from './types'
 

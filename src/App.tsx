@@ -2,7 +2,7 @@ import { prefersReducedMotion } from './utils/motion'
 import { BodyTools } from './features/body/BodyTools'
 import { pauseGsapWhenHidden } from './utils/gsapVisibility'
 import { subOn } from './features/subFeatures'
-import { PersonalInsights } from './features/PersonalInsights'
+const PersonalInsights = lazy(() => import('./features/PersonalInsights').then(m => ({ default: m.PersonalInsights })))
 import { BloomHeading, Disclosure } from './components/BloomExperience'
 import { BloomCompanion } from './companion/BloomCompanion'
 import { PlaceWatcher } from './features/places/PlaceWatcher'
@@ -12,7 +12,7 @@ import { initHoudini } from './styles/houdini'
 import './styles/houdini.css'
 import './styles/viewTransitions.css'
 
-initHoudini()
+
 import {
   CustomizeMenu,
   FocusCard,
@@ -24,7 +24,9 @@ import {
   HabitChips,
   StatsRow,
 } from './components/dashboard/Overview'
-import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useToday } from './utils/useToday'
+import { idleTask } from './utils/idleTask'
 import { flushSync } from 'react-dom'
 import { withViewTransition } from './platform/viewTransition'
 import { Shortcuts } from './components/layout/Shortcuts'
@@ -64,12 +66,14 @@ import { dayKey, id, STORAGE_KEY, toggleHabit } from './model'
 import type { Session } from './model'
 import { useCoach } from './useCoach'
 import { Modal } from './components/Modal'
-import { ChatJournalContainer } from './components/journal/ChatJournalContainer'
-import { JournalContainer } from './components/daybook/JournalContainer'
+const ChatJournalContainer = lazy(() => import('./components/journal/ChatJournalContainer').then(m => ({ default: m.ChatJournalContainer })))
+const JournalContainer = lazy(() => import('./components/daybook/JournalContainer').then(m => ({ default: m.JournalContainer })))
 import { SummaryContent } from './components/journal/SessionSummaryModal'
-import { ChallengesPage, TodoPage } from './features/ProductivityPages'
-import { FocusPage, useFocusLifecycle } from './features/FocusPage'
-import { UrgePage } from './features/UrgePage'
+const ChallengesPage = lazy(() => import('./features/ProductivityPages').then(m => ({ default: m.ChallengesPage })))
+const TodoPage = lazy(() => import('./features/ProductivityPages').then(m => ({ default: m.TodoPage })))
+import { useFocusLifecycle } from './features/useFocusLifecycle'
+const FocusPage = lazy(() => import('./features/FocusPage').then(m => ({ default: m.FocusPage })))
+const UrgePage = lazy(() => import('./features/UrgePage').then(m => ({ default: m.UrgePage })))
 import { LanguageSelector } from './components/LanguageSelector'
 import './App.css'
 import {
@@ -80,15 +84,14 @@ import {
 import { GrowthRewards } from './rpg/GrowthRewards'
 import { awardCoachSet } from './features/workout/coachRewards'
 import { startFocusQuest } from './rpg/engine'
-import { RpgDashboard } from './rpg/RpgDashboard'
+const RpgDashboard = lazy(() => import('./rpg/RpgDashboard').then(m => ({ default: m.RpgDashboard })))
 import { inferStat, statNames } from './rpg/schema'
 import type { Stat } from './rpg/schema'
-import { SettingsPage, defaultSettings, featureKeys, useAppSettings, type FeatureFlags } from './SettingsPage'
-import { HabitsPage } from './features/HabitsPage'
-import {
-  CollectiblesPage,
-  DailySpin,
-} from './features/collectibles/Collectibles'
+import { defaultSettings, featureKeys, useAppSettings, type FeatureFlags } from './settings/appSettings'
+const SettingsPage = lazy(() => import('./SettingsPage').then(m => ({ default: m.SettingsPage })))
+const HabitsPage = lazy(() => import('./features/HabitsPage').then(m => ({ default: m.HabitsPage })))
+const CollectiblesPage = lazy(() => import('./features/collectibles/Collectibles').then(m => ({ default: m.CollectiblesPage })))
+const DailySpin = lazy(() => import('./features/collectibles/Collectibles').then(m => ({ default: m.DailySpin })))
 import { Sidebar } from './components/layout/Sidebar'
 import { Carousel } from './components/ui/Carousel'
 import { burst, streakMilestone } from './components/ui/celebrate'
@@ -105,7 +108,8 @@ import { kindFor, readDiet, saveDiet } from './features/diet/dietModel'
 import { MOOD_KEY } from './features/wellbeing/store'
 import { PageBoundary } from './components/ui/PageBoundary'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
-import { EpiphaniesPage, EpiphanyGate } from './features/epiphany/EpiphanyUI'
+const EpiphaniesPage = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphaniesPage })))
+const EpiphanyGate = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphanyGate })))
 import { habitStats } from './features/habits'
 import { TimeCapsuleCard } from './features/timeCapsule'
 import { TimeSinceCard } from './features/timeSince/TimeSinceCard'
@@ -114,11 +118,8 @@ import { LottieIcon } from './components/ui/LottieIcon'
 import { QuickAdd, SearchTrigger } from './components/layout/TopbarExtras'
 import { StreakRewards } from './features/rewards/StreakRewards'
 import { ReminderCenter } from './features/reminders/ReminderCenter'
-import {
-  CommandPalette,
-  readRecentPages,
-  rememberPage,
-} from './components/layout/CommandPalette'
+import { readRecentPages, rememberPage } from './components/layout/navigationHistory'
+const CommandPalette = lazy(() => import('./components/layout/CommandPalette').then(m => ({ default: m.CommandPalette })))
 import type { NavKey } from './components/layout/Sidebar'
 import {
   applyTheme,
@@ -445,6 +446,7 @@ function readPageAloud() {
 }
 
 function App() {
+  useEffect(() => { if (!prefersReducedMotion()) return idleTask(initHoudini) }, [])
   useEffect(pauseGsapWhenHidden, [])
   const { t } = useTranslation(undefined, { i18n })
   const { data, setData, error, blocked, resumeSaving } = useCoach()
@@ -453,7 +455,7 @@ function App() {
     'today' | 'insights' | 'memories'
   >('today')
   const [settings, setSettings] = useAppSettings()
-  const [today, setToday] = useState(dayKey)
+  const today = useToday()
   const [modal, setModal] = useState<
     'habit' | 'plan' | 'affirmation' | 'history' | null
   >(null)
@@ -482,6 +484,17 @@ function App() {
     }
   }, [companionOpen])
   const [paletteOpen, setPaletteOpen] = useState(false)
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return
+      const target = event.target as HTMLElement | null
+      const typing = target?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName ?? '')
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setPaletteOpen(value => !value) }
+      else if (event.key === '/' && !typing) { event.preventDefault(); setPaletteOpen(true) }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   // The posture runtime only loads once the Posture page has been opened.
   const [postureTouched, setPostureTouched] = useState(active === 'posture')
   useEffect(() => {
@@ -623,15 +636,6 @@ function App() {
     if (description)
       description.setAttribute('content', t('ui.metaDescription'))
   }, [t])
-  useEffect(() => {
-    const timer = setInterval(() => setToday(dayKey()), 30000)
-    const refresh = () => setToday(dayKey())
-    window.addEventListener('focus', refresh)
-    return () => {
-      clearInterval(timer)
-      window.removeEventListener('focus', refresh)
-    }
-  }, [])
   // applyTheme() is the only writer of <html>'s theme attributes, so a theme
   // change repaints the page without re-rendering the tree.
   useEffect(() => {
@@ -654,7 +658,7 @@ function App() {
       settings.features.compactMode && subOn('compactMode', 'cards'),
     )
   }, [settings])
-  const completed = data.habits.filter((h) => h.dates.includes(today)).length
+  const completed = useMemo(() => data.habits.reduce((count, h) => count + Number(h.dates.includes(today)), 0), [data.habits, today])
   // Hick's law: the simple home shows fewer, stronger choices; the rest is one tap away.
   const simpleHome = settings.features.bloomCore && subOn('bloomCore', 'simpleHome')
   // Pixel juice: any new habit tick today (from any page) pops loot.
@@ -673,19 +677,20 @@ function App() {
   const progress = data.habits.length
     ? Math.round((completed / data.habits.length) * 100)
     : 0
-  const plans = data.plans.filter((p) => p.date === today)
-  const lastWeek = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date()
+  const plans = useMemo(() => data.plans.filter((p) => p.date === today), [data.plans, today])
+  const language = i18n.resolvedLanguage ?? 'en'
+  const lastWeek = useMemo(() => Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(`${today}T12:00:00`)
     date.setDate(date.getDate() - 6 + i)
     const key = dayKey(date)
     return {
       key,
-      label: date.toLocaleDateString(i18n.resolvedLanguage ?? 'en', {
+      label: date.toLocaleDateString(language, {
         weekday: 'narrow',
       }),
-      count: data.habits.filter((h) => h.dates.includes(key)).length,
+      count: data.habits.reduce((count, h) => count + Number(h.dates.includes(key)), 0),
     }
-  })
+  }), [data.habits, today, language])
   const exportData = (original = false) => {
     let content: string
     try {
@@ -965,8 +970,9 @@ function App() {
               </div>
             )}
 
-            {settings.features.habitTracker && (
-              <div hidden={active !== 'habits'}>
+            <Suspense fallback={<p className="page-loading" role="status">Loading page…</p>}>
+            {settings.features.habitTracker && active === 'habits' && (
+              <div>
                 <EpiphanyGate today={today} enabled={settings.features.epiphanies}>
                 <HabitsPage
                   data={data}
@@ -977,8 +983,8 @@ function App() {
                 </EpiphanyGate>
               </div>
             )}
-            {settings.features.daybookModes && (
-              <div hidden={active !== 'daybook'}>
+            {settings.features.daybookModes && active === 'daybook' && (
+              <div>
                 <JournalContainer />
               </div>
             )}
@@ -1855,6 +1861,7 @@ function App() {
                 </div>
               </>
             )}
+            </Suspense>
             </PageBoundary>
           </div>
         </main>
@@ -1883,6 +1890,7 @@ function App() {
             onOpen={() => jump('habits')}
           />
         )}
+        {paletteOpen && <Suspense fallback={<p className="palette-loading" role="status">Loading search…</p>}>
         <CommandPalette
           open={paletteOpen}
           onOpenChange={setPaletteOpen}
@@ -1898,6 +1906,7 @@ function App() {
           today={today}
           onCommand={runCommand}
         />
+        </Suspense>}
         <BloomCompanion
           data={data}
           setData={setData}

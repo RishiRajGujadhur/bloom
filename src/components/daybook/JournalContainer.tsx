@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Carousel } from '../ui/Carousel'
 import { journalText } from '../../search/db'
 import { DAYBOOK_STORAGE_KEY } from './storage'
-import { OPEN_DAYBOOK_EVENT } from '../layout/CommandPalette'
+import { OPEN_DAYBOOK_EVENT } from '../layout/navigationHistory'
 import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
@@ -23,7 +23,7 @@ import { changeDaybookView } from './transition'
 import { prefersReducedMotion } from '../../utils/motion'
 import { FlowMountain } from '../../features/flow/FlowMountain'
 import { capturePlace } from '../../features/places/placesStore'
-import { loadSettings } from '../../SettingsPage'
+import { loadSettings } from '../../settings/appSettings'
 
 export { DAYBOOK_STORAGE_KEY }
 export function JournalContainer() {

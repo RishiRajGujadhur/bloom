@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { defaults, taskSchema } from '../src/model'
 import { TodoPage } from '../src/features/ProductivityPages'
 import { CalendarPage } from '../src/features/CalendarPage'
-import App from '../src/App'
+import { renderApp } from './helpers/renderApp'
 
 beforeEach(() => {
   localStorage.clear()
@@ -31,20 +31,21 @@ function Calendar() {
   return <CalendarPage data={data} setData={setData} />
 }
 
-test('projects, task metadata, and custom perspectives work together', () => {
+test('projects, task metadata, and custom perspectives work together', async () => {
   render(<Tasks />)
-  fireEvent.click(screen.getByRole('button', { name: 'New project' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'New project' })) })
   fireEvent.change(screen.getByLabelText('Project name'), {
     target: { value: 'Launch' },
   })
   fireEvent.change(screen.getByLabelText('Action order'), {
     target: { value: 'sequential' },
   })
-  fireEvent.click(screen.getByRole('button', { name: 'Save project' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Save project' })) })
   fireEvent.change(screen.getByLabelText('New task'), {
     target: { value: 'Draft proposal' },
   })
-  fireEvent.click(screen.getByRole('button', { name: /Details/ }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Details/ })) })
   const projectSelect = screen.getByLabelText('Project') as HTMLSelectElement
   fireEvent.change(projectSelect, {
     target: { value: projectSelect.options[1].value },
@@ -58,7 +59,7 @@ test('projects, task metadata, and custom perspectives work together', () => {
   fireEvent.change(screen.getByLabelText('Time of day', { exact: true }), {
     target: { value: 'morning' },
   })
-  fireEvent.click(screen.getByRole('button', { name: 'Add', exact: true }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Add', exact: true })) })
   fireEvent.change(screen.getByLabelText('Filter energy'), {
     target: { value: 'low' },
   })
@@ -69,15 +70,15 @@ test('projects, task metadata, and custom perspectives work together', () => {
   fireEvent.change(screen.getByLabelText('Filter time of day'), {
     target: { value: 'morning' },
   })
-  fireEvent.click(screen.getByRole('button', { name: 'Save perspective' }))
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Save perspective' })) })
   fireEvent.change(screen.getByLabelText('Perspective name'), {
     target: { value: 'Morning focus' },
   })
-  fireEvent.click(
+  await act(async () => { fireEvent.click(
     within(screen.getByRole('dialog')).getByRole('button', {
       name: 'Save perspective',
     }),
-  )
+  ) })
   fireEvent.change(screen.getByLabelText('Perspective', { exact: true }), {
     target: { value: '' },
   })
@@ -92,38 +93,38 @@ test('projects, task metadata, and custom perspectives work together', () => {
   expect(screen.getByText('Draft proposal')).toBeVisible()
 })
 
-test('calendar schedules a task, counts deep work, edits duration, and unschedules without deleting the task', () => {
+test('calendar schedules a task, counts deep work, edits duration, and unschedules without deleting the task', async () => {
   render(<Calendar />)
-  fireEvent.click(
+  await act(async () => { fireEvent.click(
     screen.getByRole('button', { name: 'Schedule Write proposal' }),
-  )
-  fireEvent.click(screen.getByRole('button', { name: 'Save block' }))
+  ) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Save block' })) })
   expect(screen.getByRole('status')).toHaveTextContent('Time block saved')
   expect(screen.getAllByText('1.5h')).toHaveLength(2)
   expect(
     screen.queryByRole('button', { name: 'Schedule Write proposal' }),
   ).not.toBeInTheDocument()
-  fireEvent.click(
+  await act(async () => { fireEvent.click(
     screen.getByRole('button', { name: 'Write proposal', exact: true }),
-  )
-  fireEvent.click(screen.getByRole('button', { name: 'Unschedule' }))
+  ) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Unschedule' })) })
   expect(
     screen.getByRole('button', { name: 'Schedule Write proposal' }),
   ).toBeVisible()
 })
 
-test('calendar feature toggle persists and a disabled deep link cannot show the calendar', () => {
-  const view = render(<App />)
-  fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true }))
-  fireEvent.click(
+test('calendar feature toggle persists and a disabled deep link cannot show the calendar', async () => {
+  const view = await renderApp()
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true })) })
+  await act(async () => { fireEvent.click(
     screen.getByRole('checkbox', { name: 'Enable Full calendar' }),
-  )
+  ) })
   expect(
     screen.queryByRole('button', { name: 'Full calendar', exact: true }),
   ).not.toBeInTheDocument()
   view.unmount()
   window.location.hash = '#calendar'
-  render(<App />)
+  await renderApp()
   expect(
     screen.getByRole('heading', { name: 'This feature is turned off' }),
   ).toBeVisible()

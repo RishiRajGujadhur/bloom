@@ -5,7 +5,7 @@ import { supportedBodyExercise, useCurrentPractice } from './bodyPractice'
 import { setBodySeated, useBodySeated, setBodySilent, useBodySilent } from './bodyPreferences'
 import { RULES } from '../workout/formModel'
 import { BodyPracticeNote } from './BodyPracticeNote'
-import type { FeatureFlags } from '../../SettingsPage'
+import type { FeatureFlags } from '../../settings/appSettings'
 import '../workout/formcoach.css'
 import './bodyTools.css'
 

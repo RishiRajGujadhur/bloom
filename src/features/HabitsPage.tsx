@@ -1,7 +1,7 @@
 import { useTabTitle } from '../utils/useTabTitle'
 import { PixelSprite } from './juice/PixelJuice'
 import { pickSprite } from './juice/sprites'
-import { loadSettings } from '../SettingsPage'
+import { loadSettings } from '../settings/appSettings'
 import { subOn } from './subFeatures'
 import { CardRail } from '../components/BloomExperience'
 import { useEffect, useState } from 'react'
