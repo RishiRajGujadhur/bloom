@@ -1,8 +1,13 @@
 import { useId } from 'react'
+import { useThemeId } from '../ui/MatrixRain'
 
 /** A compact SVG icon family for Galaxy's Studio tabs. Labels remain in the tab. */
 export function GalaxyGlyph({ label, id }: { label: string; id: string }) {
   const gradientId = useId().replace(/:/g, '')
+  const theme = useThemeId()
+  // These alternate drawings are hidden by CSS outside Galaxy. Avoid keeping
+  // a second SVG tree for every navigation item and tab in those themes.
+  if (theme !== 'galaxy') return null
   const word = `${id} ${label}`.toLowerCase()
   const kind = /chart|trend|record|history|stats|progress/.test(word) ? 'chart'
     : /menu|navigation/.test(word) ? 'menu'
