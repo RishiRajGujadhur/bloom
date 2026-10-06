@@ -30,7 +30,34 @@ test('portaled AI panel follows the shared no-scrollbar policy', async ({ page }
   await page.locator('.companion-ai-options > summary').click()
   const panel = page.locator('.bc-panel')
   await expect(panel).toBeVisible()
+  await expect(panel).toHaveClass(/uses-app-theme/)
   await expect.poll(() => panel.evaluate(node => getComputedStyle(node).scrollbarWidth)).toBe('none')
+})
+
+test('focus section controls stay clear of docked chat', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.addInitScript(() => localStorage.setItem('bloom-companion-width', '560'))
+  await page.goto('/#focus')
+  await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
+  const panel = page.locator('.bc-panel')
+  await expect(panel).toBeVisible()
+  const navigator = page.getByRole('navigation', { name: 'Page sections', exact: true })
+  if (page.viewportSize()!.width <= 900) {
+    await expect(navigator).toBeHidden()
+  } else {
+    await expect(navigator).toBeVisible()
+    await expect.poll(async () => {
+      const chat = await panel.boundingBox()
+      const controls = await navigator.boundingBox()
+      return !!chat && !!controls && controls.x >= chat.x + chat.width
+    }).toBe(true)
+    const down = navigator.getByRole('button', { name: /^Next section:/ })
+    await down.click()
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+    const up = navigator.getByRole('button', { name: /^Previous section:/ })
+    await expect(up).toBeEnabled()
+    await up.click()
+  }
 })
 
 test('section arrows and jump menu navigate long pages', async ({ page }, testInfo) => {

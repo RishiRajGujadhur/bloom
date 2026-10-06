@@ -1,5 +1,6 @@
 /* Keep mobile layout viewports from expanding around oversized feature content. */
 html, body { overflow-x: clip; }
+.section-navigator[hidden] { display: none; }
 .section-navigator {
   position: fixed;
   bottom: max(18px, env(safe-area-inset-bottom));

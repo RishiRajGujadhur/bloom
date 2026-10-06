@@ -236,7 +236,11 @@ export function BloomCompanion({
   useEffect(() => {
     const on = open && docked
     document.documentElement.toggleAttribute('data-bloom-docked', on)
-    return () => document.documentElement.removeAttribute('data-bloom-docked')
+    document.documentElement.toggleAttribute('data-bloom-open', open)
+    return () => {
+      document.documentElement.removeAttribute('data-bloom-docked')
+      document.documentElement.removeAttribute('data-bloom-open')
+    }
   }, [open, docked])
   // Open like the soundscape box: grow from the button corner (GSAP).
   useEffect(() => {

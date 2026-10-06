@@ -26,11 +26,29 @@ const topInset = () => {
 /** Shared section controls make long pages discoverable without scrollbar chrome. */
 export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElement | null>; page: string }) {
   const [navigation, setNavigation] = useState<Navigation>(empty)
+  const [space, setSpace] = useState({ left: 0, width: 360, covered: false })
 
   useEffect(() => {
     const content = root.current
     if (!content) return
     const update = frameThrottle(() => {
+      const bounds = (content.closest('main') ?? content).getBoundingClientRect()
+      let left = Math.max(16, bounds.left + 16)
+      let right = Math.min(window.innerWidth - 16, bounds.right - 16)
+      const panel = document.querySelector<HTMLElement>('.bc-panel')?.getBoundingClientRect()
+      const bottom = window.innerWidth <= 720 ? 168 : 18
+      const rowTop = window.innerHeight - bottom - 64
+      if (panel && panel.bottom > rowTop && panel.top < window.innerHeight - bottom) {
+        if (panel.left <= left) left = Math.max(left, panel.right + 16)
+        else if (panel.right >= right) right = Math.min(right, panel.left - 16)
+        else if (panel.left - left > right - panel.right) right = panel.left - 16
+        else left = panel.right + 16
+      }
+      const available = Math.max(0, right - left)
+      setSpace(current => {
+        const next = { left: (left + right) / 2, width: Math.min(360, available), covered: available < 160 }
+        return current.left === next.left && current.width === next.width && current.covered === next.covered ? current : next
+      })
       const inset = topInset()
       const sections: Section[] = []
       const positions: number[] = []
@@ -63,6 +81,9 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
     update()
     const observer = new MutationObserver(update)
     observer.observe(content, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'open', 'aria-expanded'] })
+    const layoutObserver = new MutationObserver(update)
+    layoutObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bloom-docked', 'data-bloom-open', 'data-bloom-right', 'style'] })
+    layoutObserver.observe(document.body, { childList: true })
     const resize = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null
     resize?.observe(content)
     window.addEventListener('scroll', update, { passive: true })
@@ -70,6 +91,7 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
     content.addEventListener('toggle', update, true)
     return () => {
       observer.disconnect()
+      layoutObserver.disconnect()
       resize?.disconnect()
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', update)
@@ -98,7 +120,7 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
   const nextLabel = navigation.sections[navigation.next]?.label ?? 'More below'
   const previousLabel = navigation.sections[navigation.previous]?.label ?? 'Page top'
   return (
-    <nav className="section-navigator" aria-label="Page sections">
+    <nav className="section-navigator" aria-label="Page sections" hidden={space.covered} style={{ left: space.left, width: space.width }}>
       <button type="button" disabled={!navigation.canUp} aria-label={`Previous section: ${previousLabel}`} title={previousLabel} onClick={() => move(-1)}>
         <ArrowUp size={18} aria-hidden="true" />
       </button>
