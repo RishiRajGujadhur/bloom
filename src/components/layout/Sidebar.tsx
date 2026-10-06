@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ConfirmDisable, NavContextMenu, type NavMenuState } from './NavContextMenu'
 import { GalaxyGlyph } from '../studio/GalaxyGlyph'
 import './sidebarGalaxy.css'
@@ -206,6 +206,7 @@ export const navSections: { label: string; keys: NavKey[] }[] = [
   { label: 'Games', keys: ['arcade'] },
   { label: 'Explore', keys: ['vision-board', 'explore', 'places', 'yearbook', 'energy', 'lab', 'pointer', 'street', 'weeks', 'sky', 'decide', 'code-city'] },
 ]
+const sectionIcons = [LayoutDashboard, Sprout, BookOpen, Wind, PersonStanding, Gamepad2F_arcade, Map]
 
 /** Below this width the sidebar becomes an off-canvas drawer. */
 const DRAWER_MEDIA_QUERY = '(max-width: 900px)'
@@ -592,17 +593,20 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
     .filter((v): v is (typeof visibleItems)[number] => !!v)
     .slice(0, 4)
 
-  // Collapsible groups: remembered per device; the group holding the current page is always open.
+  // Open the current page's group on navigation, while allowing manual collapse.
+  const activeSection = sectionOf(active as NavKey)
   const [openGroups, setOpenGroups] = useState<Set<number>>(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('bloom-nav-groups') ?? 'null') as number[] | null
-      return new Set(saved ?? [0])
+      return new Set([...(saved ?? [0]), activeSection])
     } catch {
-      return new Set([0])
+      return new Set([0, activeSection])
     }
   })
-  const activeSection = sectionOf(active as NavKey)
-  const groupOpen = (section: number) => !isOpen || section >= navSections.length || section === activeSection || openGroups.has(section)
+  useEffect(() => {
+    setOpenGroups(previous => previous.has(activeSection) ? previous : new Set([...previous, activeSection]))
+  }, [activeSection])
+  const groupOpen = (section: number) => !isOpen || section >= navSections.length || openGroups.has(section)
   const toggleGroup = (section: number) =>
     setOpenGroups((prev) => {
       const next = new Set(prev)
@@ -796,7 +800,7 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
           onKeyDown={(e) => {
             // Up/Down move between pages; Home/End jump to the first/last.
             if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return
-            const items = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('button.nav-item, button.nav-pin')].filter((b) => b.offsetParent !== null)
+            const items = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('button.nav-item, button.nav-pin')].filter((b) => b.offsetParent !== null && !b.closest('[inert]'))
             const i = items.indexOf(document.activeElement as HTMLButtonElement)
             if (i < 0) return
             e.preventDefault()
@@ -888,23 +892,25 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
               ))}
             </div>
           )}
-          {visibleItems.map(({ key, title, Icon, section }, index) => {
-            const first = index === 0 || visibleItems[index - 1].section !== section
+          {[...new Set(visibleItems.map(item => item.section))].map(section => {
+            const children = visibleItems.filter(item => item.section === section)
             const expanded = groupOpen(section)
-            const count = visibleItems.filter((v) => v.section === section).length
+            const GroupIcon = sectionIcons[section] ?? Settings
             return (
-              <Fragment key={key}>
-                {first && section < navSections.length && (
+              <div key={section} className="nav-submenu-group" data-nested={isOpen && section < navSections.length ? 'true' : undefined}>
+                {section < navSections.length && (
                   isOpen ? (
                     <button
                       type="button"
                       className="nav-caption nav-section nav-group"
                       data-section={section}
                       aria-expanded={expanded}
+                      aria-controls={`bloom-nav-section-${section}`}
                       onClick={() => toggleGroup(section)}
                     >
+                      <GroupIcon size={18} aria-hidden="true" className="nav-group-icon" />
                       <span>{section === 0 ? t('navigation.space') : navSections[section].label}</span>
-                      <small>{count}</small>
+                      <small>{children.length}</small>
                       <ChevronDown size={14} aria-hidden="true" className="nav-group-chevron" />
                     </button>
                   ) : (
@@ -913,8 +919,11 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                     </div>
                   )
                 )}
-                {expanded && (
+                <div id={`bloom-nav-section-${section}`} className="nav-submenu" data-expanded={expanded} inert={!expanded} aria-hidden={!expanded || undefined}>
+                <div className="nav-submenu-items">
+                {children.map(({ key, title, Icon }) => (
                   <button
+                    key={key}
                     type="button"
                     className={`nav-item ${active === key ? 'active' : ''}`}
                     data-section={section}
@@ -943,8 +952,10 @@ export function Sidebar({ active, onNavigate, flags, tools, onDisable }: Sidebar
                     <span className={styles.navLabel}>{title}</span>
                     {active === key && <span className="nav-indicator" />}
                   </button>
-                )}
-              </Fragment>
+                ))}
+                </div>
+                </div>
+              </div>
             )
           })}
         </nav>

@@ -366,3 +366,17 @@ test('sidebar groups collapse like dropdowns and remember it', async () => {
   expect(screen.getByRole('button', { name: /learn to code/i })).toBeTruthy()
   expect(JSON.parse(localStorage.getItem('bloom-nav-groups')!)).toContain(2)
 })
+
+test('the active submenu can collapse and a new active page opens its own group', () => {
+  localStorage.setItem('bloom-nav-hamburger', '0')
+  const view = render(<Sidebar active="overview" onNavigate={() => {}} flags={allOn} />)
+  const current = view.container.querySelector<HTMLButtonElement>('button[aria-controls="bloom-nav-section-0"]')!
+  expect(current).toHaveAttribute('aria-expanded', 'true')
+  fireEvent.click(current)
+  expect(current).toHaveAttribute('aria-expanded', 'false')
+  expect(document.getElementById('bloom-nav-section-0')).toHaveAttribute('inert')
+  expect(screen.queryByRole('button', { name: 'My dashboard', exact: true })).not.toBeInTheDocument()
+  view.rerender(<Sidebar active="code" onNavigate={() => {}} flags={allOn} />)
+  expect(screen.getByRole('button', { name: /learn/i, expanded: true })).toHaveAttribute('aria-controls', 'bloom-nav-section-2')
+  expect(screen.getByRole('button', { name: 'Learn to code', exact: true })).toHaveAttribute('aria-current', 'page')
+})

@@ -18,6 +18,14 @@ Content uses its natural height by default. Explicitly short widgets retain a re
 
 ## Verification
 
+### Sidebar submenu toggle
+
+- [x] Match the [ES6 sidebar reference](https://www.pinterest.com/pin/99853316733977540/) with rounded icon headers, highlighted open groups, rotating chevrons and indented sliding submenus.
+- [x] Preserve feature navigation, filtering, pins, recent pages and icon-rail behavior.
+- [x] Allow the active group to collapse; navigating to a new page opens its group.
+- [x] Collapsed groups are inert and hidden from assistive technology. Headers retain native Enter/Space activation and support reduced-motion preferences.
+- [x] All 13 sidebar regression checks, TypeScript and focused lint pass. Live browser checks confirm chevron rotation, collapse/expand with Enter/Space, and Tab focus entering the expanded submenu.
+
 ### Interval countdown styling
 
 - [x] Match the [Pinterest reference](https://www.pinterest.com/pin/750060512983502539/) with a flat blue progress ring, neutral track and lighter centered digits.
