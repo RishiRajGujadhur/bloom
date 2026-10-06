@@ -362,3 +362,6 @@
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   overflow: visible;
 }
+
+/* UX 031: Keep Studio content inside narrow cards instead of clipping it. */
+.studio { grid-template-columns: minmax(0, 1fr); }
