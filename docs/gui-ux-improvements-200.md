@@ -139,3 +139,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 133 | Improve small text readability in rewards (.growth-eyebrow) | `src/rpg/rewards.css` |
 | 134 | Improve small text readability in rpg (.rpg-heading>.eyebrow) | `src/rpg/rpg.css` |
 | 135 | Improve small text readability in shared-ui (.app-shell .topbar .theme-toggle, .app-shell .topbar .quiet-button) | `src/styles/shared-ui.css` |
+| 136 | Improve small text readability in overview (.is-hero .bloom-kicker) | `src/components/dashboard/overview.css` |
