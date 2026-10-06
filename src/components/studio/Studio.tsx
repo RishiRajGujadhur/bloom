@@ -148,7 +148,7 @@ export function Studio({
         <div className="studio-head-slot" ref={(el) => setHeadSlot(el)} />
         {aside && <div className="studio-aside">{aside}</div>}
       </div>
-      <div ref={panel} className="studio-panel" role="tabpanel" id={`studio-${name}-panel`} aria-labelledby={tab ? `studio-${name}-${tab.id}` : undefined}>
+      <div ref={panel} className="studio-panel" role={visible.length > 1 ? 'tabpanel' : 'region'} id={`studio-${name}-panel`} aria-labelledby={visible.length > 1 && tab ? `studio-${name}-${tab.id}` : undefined} aria-label={visible.length > 1 ? undefined : `${name}: ${tab?.label ?? 'Workspace'}`}>
         {tab?.render()}
       </div>
     </div>

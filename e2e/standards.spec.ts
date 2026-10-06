@@ -1,4 +1,8 @@
 import { test, expect } from '@playwright/test'
+import { createRequire } from 'node:module'
+import { resolve } from 'node:path'
+
+const require = createRequire(resolve('package.json'))
 
 test.setTimeout(60000)
 
@@ -20,6 +24,13 @@ test('Growth loads and Bloom uses compact scalable message text', async ({ page 
   expect(await message.evaluate(element => parseFloat(getComputedStyle(element).fontSize))).toBeGreaterThan(size)
   await page.evaluate(() => { document.documentElement.style.fontSize = '' })
   await expect(panel.getByRole('group', { name: 'Choices', exact: true }).getByRole('button')).toHaveCount(3)
+  await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') })
+  const violations = await page.evaluate(async () => {
+    const axe = (window as Window & { axe: typeof import('axe-core') }).axe
+    const result = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'] } })
+    return result.violations.map(item => ({ id: item.id, targets: item.nodes.map(node => node.target) }))
+  })
+  expect(violations).toEqual([])
 })
 
 test('chessboard supports arrow navigation and keyboard selection', async ({ page }) => {
