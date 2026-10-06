@@ -24,7 +24,7 @@ export function useChatAppearance() {
     return avatarStyles.some((style) => style.id === value) ? value as AvatarStyle : 'glass'
   }, () => 'glass' as ChatAvatar)
   const followTheme = useSyncExternalStore(subscribe,
-    () => read('bloom-chat-follow-theme') === '1', () => false)
+    () => read('bloom-chat-follow-theme') !== '0', () => true)
   return { avatar, followTheme }
 }
 

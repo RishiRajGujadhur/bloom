@@ -1,4 +1,44 @@
 /* Shared surfaces stay usable by wheel, touch and keyboard without scrollbar chrome. */
+/* Portaled chat and page actions share the same control recipe. */
+:is(.app-shell, .bc-panel) :is(.feature-primary, .feature-secondary, .quiet-button, .bg-chip),
+.bc-panel :is(.bc-head-actions button, .companion-prompts button, .companion-composer button) {
+  min-height: 44px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: inherit;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+:is(.app-shell, .bc-panel) .feature-primary,
+.bc-panel :is(.companion-composer button, .bc-head-actions button[aria-selected='true']) {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--text-on-accent, var(--bg-primary));
+}
+:is(.app-shell, .bc-panel) :is(.feature-secondary, .quiet-button, .bg-chip):hover:not(:disabled),
+.bc-panel :is(.bc-head-actions button, .companion-prompts button):hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent-color);
+}
+.bc-panel :is(button, input, summary):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+.bc-panel.uses-app-theme {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+}
+.bc-panel.uses-app-theme .companion-composer {
+  padding: 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg, 15px);
+  background: var(--bg-primary);
+}
+.bc-panel.uses-app-theme .companion-composer input { border: 0; background: transparent; }
+.bc-panel.uses-app-theme .companion-message { border: 1px solid var(--border-color); background: var(--bg-primary); }
+.bc-panel.uses-app-theme .companion-message.user { background: var(--accent-soft); }
+.bc-panel.uses-app-theme .companion-ai-options { background: var(--bg-primary); border-color: var(--border-color); }
 html,
 body,
 body * {
