@@ -22,7 +22,7 @@
   display: flex;
   gap: 7px;
   align-items: center;
-  font-size: 10px;
+  font-size: max(14px, 1rem);
   font-weight: 700;
   letter-spacing: 0.15em;
   color: var(--accent-color);
