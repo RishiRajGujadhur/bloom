@@ -44,7 +44,7 @@
 .palace-hud .ov-secondary {
   min-height: 36px !important;
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: max(14px, 1rem);
   background: #ffffff18;
   color: #fff;
   border-color: #ffffff30;
