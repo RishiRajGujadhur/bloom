@@ -66,3 +66,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 60 | Prevent narrow-screen card grid overflow in world (.world-decor ul) | `src/features/world/world.css` |
 | 61 | Prevent narrow-screen card grid overflow in yearbook (.yearbook-options fieldset) | `src/features/yearbook/yearbook.css` |
 | 62 | Enlarge controls to a 44px touch target in App (.rating-row button) | `src/App.css` |
+| 63 | Enlarge controls to a 44px touch target in App (.journal-mode-switch button) | `src/App.css` |
