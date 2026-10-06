@@ -737,7 +737,7 @@ html[data-compact-sidebar='true'] .app-shell .sidebar .nav-section {
   background: transparent;
   color: var(--text-muted);
   font: inherit;
-  font-size: 10.5px;
+  font-size: max(14px, 1rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
