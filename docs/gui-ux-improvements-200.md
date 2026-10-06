@@ -142,3 +142,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 136 | Improve small text readability in overview (.is-hero .bloom-kicker) | `src/components/dashboard/overview.css` |
 | 137 | Improve small text readability in bookshelf (.journal-shelf > header p) | `src/components/daybook/bookshelf.css` |
 | 138 | Improve small text readability in daybook (.daybook-crumbs) | `src/components/daybook/daybook.css` |
+| 139 | Improve small text readability in selection (.daybook .direction-copy small) | `src/components/daybook/selection.css` |
