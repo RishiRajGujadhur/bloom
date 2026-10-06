@@ -83,7 +83,7 @@ html[data-mode='dark'] .places-tiles {
   background: var(--bg-primary);
   color: var(--text-primary);
   font: inherit;
-  font-size: 13.5px;
+  font-size: max(16px, 1.142857rem);
 }
 .places-list small {
   color: var(--text-muted);
