@@ -1,3 +1,4 @@
+import { changeField } from './helpers/dropdown'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { cars } from '../src/features/collectibles/catalog'
 import {
@@ -170,9 +171,9 @@ test('gallery selection updates the focus companion and survives remount', async
   )
   gallery.unmount()
   render(<FocusCompanion active />)
-  expect(screen.getByLabelText('Focus companion')).toHaveValue(cars[0].id)
+  expect(screen.getByLabelText('Focus companion')).toHaveAttribute('data-value', cars[0].id)
   expect(screen.getByRole('img', { name: 'Mint Mile' })).toBeInTheDocument()
-  fireEvent.change(screen.getByLabelText('Focus companion'), {
+  changeField(screen.getByLabelText('Focus companion'), {
     target: { value: '' },
   })
   await waitFor(() =>

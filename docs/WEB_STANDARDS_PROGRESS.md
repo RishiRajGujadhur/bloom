@@ -47,3 +47,13 @@ The target is [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/). Automated axe checks
 JavaScript targets the standardized ES2023 subset of [ECMA-262](https://ecma-international.org/publications-and-standards/standards/ecma-262/). Parsing validates emitted syntax; runtime behavior still needs browser tests. [MDN performance guidance](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Performance) informs lazy optional content and bounded loading.
 
 The earlier desktop baseline remains in [standards-desktop.json](standards-desktop.json). Final mode-specific reports are linked above. Automated route audits inspect the initial workspace in each mode; every alternate tab, custom theme, screen reader and generated-content state is not covered by these results.
+
+## Shared React dropdown migration — 2026-10-07
+
+- Reused the installed Radix Select and Dropdown Menu libraries.
+- Migrated all 118 native JSX pickers in 59 source files to one shared Radix picker.
+- Preserved empty choices, numeric values, defaults, disabled options, labels, and real change events through a hidden form bridge.
+- Updated common and feature selectors so existing layouts continue styling the visible controls.
+- Bounded popup height and width; added long-label truncation, disabled styling, and forced-colors focus treatment.
+- Updated integration tests to select through visible menus instead of native select APIs.
+- Validation: TypeScript passed; all five picker regression tests and two learning-page integration tests passed. Shared-control lint passed.

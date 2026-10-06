@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useState } from 'react'
 import { BookMarked, Download, Loader2 } from 'lucide-react'
@@ -105,13 +106,13 @@ export function YearbookPage({ data, today }: FeaturePageProps) {
       <div className="yearbook-options">
         <label>
           Year
-          <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+          <DropdownSelect value={year} onChange={(e) => setYear(Number(e.target.value))}>
             {[thisYear, thisYear - 1, thisYear - 2].map((y) => (
               <option key={y} value={y}>
                 {y}
               </option>
             ))}
-          </select>
+          </DropdownSelect>
         </label>
         <label>
           Title

@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useMemo, useState, type Dispatch, type SetStateAction } from 'react'
 import type { AppData } from '../model'
 import { dayKey } from '../dates'
@@ -128,7 +129,7 @@ export function PersonalInsights({
               </div>
               <label>
                 Show{' '}
-                <select
+                <DropdownSelect
                   value={metric}
                   onChange={(e) => setMetric(e.target.value as Metric)}
                 >
@@ -137,7 +138,7 @@ export function PersonalInsights({
                       {label}
                     </option>
                   ))}
-                </select>
+                </DropdownSelect>
               </label>
             </div>
             <div className="heatmap">

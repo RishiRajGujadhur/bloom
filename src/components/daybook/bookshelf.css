@@ -402,7 +402,7 @@
   font-size: 9px;
   color: var(--text-secondary);
 }
-.journal-reader-controls select {
+.journal-reader-controls :is(select, [data-bloom-select]) {
   max-width: 100%;
   width: 240px;
   background: var(--bg-elevated);
@@ -414,7 +414,7 @@
   font-size: 11px;
 }
 .journal-reader button:focus-visible,
-.journal-reader select:focus-visible {
+.journal-reader :is(select, [data-bloom-select]):focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 4px;
 }
@@ -518,7 +518,7 @@
   .journal-reader-controls {
     gap: 8px;
   }
-  .journal-reader-controls select {
+  .journal-reader-controls :is(select, [data-bloom-select]) {
     width: 180px;
   }
   .journal-paper-content {

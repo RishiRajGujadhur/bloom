@@ -18,7 +18,7 @@ html, body { overflow-x: clip; }
   background: var(--bg-surface);
   box-shadow: 0 6px 28px color-mix(in srgb, var(--accent-color) 16%, transparent);
 }
-.section-navigator button {
+.section-navigator button:not([data-bloom-select]) {
   display: grid;
   place-items: center;
   flex: 0 0 44px;
@@ -31,11 +31,11 @@ html, body { overflow-x: clip; }
   color: var(--accent-color);
   transition: background 160ms, transform 160ms;
 }
-.section-navigator button:hover:not(:disabled) {
+.section-navigator button:not([data-bloom-select]):hover:not(:disabled) {
   background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-surface));
   transform: translateY(2px);
 }
-.section-navigator button:first-child:hover:not(:disabled) { transform: translateY(-2px); }
+.section-navigator button:not([data-bloom-select]):first-child:hover:not(:disabled) { transform: translateY(-2px); }
 .section-navigator-copy { flex: 1; min-width: 0; }
 .section-navigator-copy > span {
   display: block;
@@ -45,7 +45,7 @@ html, body { overflow-x: clip; }
   font-size: 11px;
   font-weight: 700;
 }
-.section-navigator select {
+.section-navigator :is(select, [data-bloom-select]) {
   width: 100%;
   min-height: 28px;
   padding: 2px 0;
@@ -57,7 +57,7 @@ html, body { overflow-x: clip; }
   font-size: 11px;
   cursor: pointer;
 }
-.section-navigator :is(button, select):focus-visible {
+.section-navigator :is(button, :is(select, [data-bloom-select])):focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
@@ -70,8 +70,8 @@ html, body { overflow-x: clip; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .section-navigator button { transition: none; }
-  .section-navigator button:hover:not(:disabled) { transform: none; }
+  .section-navigator button:not([data-bloom-select]) { transition: none; }
+  .section-navigator button:not([data-bloom-select]):hover:not(:disabled) { transform: none; }
 }
-html[data-reduce-motion='true'] .section-navigator button { transition: none; transform: none; }
-html[data-reduce-motion='true'] .section-navigator button:hover:not(:disabled) { transform: none; }
+html[data-reduce-motion='true'] .section-navigator button:not([data-bloom-select]) { transition: none; transform: none; }
+html[data-reduce-motion='true'] .section-navigator button:not([data-bloom-select]):hover:not(:disabled) { transform: none; }

@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useTabTitle } from '../../utils/useTabTitle'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -163,11 +164,11 @@ export function PeoplePage() {
               <button type="button" role="radio" aria-checked={view === 'garden'} className={view === 'garden' ? 'on' : ''} onClick={() => setView('garden')}>🌱 Garden</button>
               <button type="button" role="radio" aria-checked={view === 'globe'} className={view === 'globe' ? 'on' : ''} onClick={() => setView('globe')}>🌍 Globe</button>
             </div>
-            <select className="studio-input pg-sort" aria-label="Sort people" value={sortBy} onChange={(e) => { setSortBy(e.target.value); try { localStorage.setItem('bloom-people-sort', e.target.value) } catch { /* optional */ } }}>
+            <DropdownSelect className="studio-input pg-sort" aria-label="Sort people" value={sortBy} onChange={(e) => { setSortBy(e.target.value); try { localStorage.setItem('bloom-people-sort', e.target.value) } catch { /* optional */ } }}>
               <option value="added">As added</option>
               <option value="overdue">Most overdue</option>
               <option value="name">A–Z</option>
-            </select>
+            </DropdownSelect>
             <input className="studio-input pg-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find someone…" aria-label="Find someone" />
           </div>
         </header>
@@ -201,14 +202,14 @@ export function PeoplePage() {
             <p>{daysSince(person) === 0 ? 'You talked today 💚' : `Last talked ${daysSince(person)} days ago`} · {Math.round(health(person) * 100)}% blooming</p>
             <button type="button" className="pg-cta" onClick={() => water(person.id)}>💧 We talked today</button>
             <label>Group
-              <select className="studio-input" value={person.group ?? 'Other'} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, group: e.target.value } : p)))}>
+              <DropdownSelect className="studio-input" value={person.group ?? 'Other'} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, group: e.target.value } : p)))}>
                 {groups.map((g) => <option key={g}>{g}</option>)}
-              </select>
+              </DropdownSelect>
             </label>
             <label>Keep in touch
-              <select className="studio-input" value={person.every} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, every: Number(e.target.value) } : p)))}>
+              <DropdownSelect className="studio-input" value={person.every} onChange={(e) => save((ps) => ps.map((p) => (p.id === person.id ? { ...p, every: Number(e.target.value) } : p)))}>
                 {rhythms.map((r) => <option key={r.days} value={r.days}>{r.label}</option>)}
-              </select>
+              </DropdownSelect>
             </label>
             <form className="pg-city" onSubmit={(e) => {
               e.preventDefault()
@@ -252,7 +253,7 @@ export function PeoplePage() {
           }}>
             <h3>🌱 Plant someone</h3>
             <div className="pg-row"><input name="emoji" className="studio-input pg-emoji" placeholder="🙂" maxLength={4} aria-label="Emoji" /><input name="name" className="studio-input" placeholder="Name" aria-label="Name" /></div>
-            <select name="every" className="studio-input" defaultValue={30} aria-label="How often">{rhythms.map((r) => <option key={r.days} value={r.days}>{r.label}</option>)}</select>
+            <DropdownSelect name="every" className="studio-input" defaultValue={30} aria-label="How often">{rhythms.map((r) => <option key={r.days} value={r.days}>{r.label}</option>)}</DropdownSelect>
             <label>Birthday (optional) <input name="birthday" type="date" className="studio-input" /></label>
             <button type="submit" className="pg-cta">Plant</button>
           </form>

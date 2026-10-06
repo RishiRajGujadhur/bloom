@@ -1,3 +1,4 @@
+import { changeField } from './helpers/dropdown'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { LearningMap } from '../src/features/english/LearningMap'
 import { emptyEnglish } from '../src/features/english/englishModel'
@@ -20,7 +21,7 @@ test('saved progress selects the next unit and completed units remain available 
   render(<LearningMap store={{ ...emptyEnglish, done: { hello: 4, food: 2 } }} onStart={start} />)
   fireEvent.click(screen.getByRole('button', { name: 'Start Food & drink lesson 3' }))
   expect(start).toHaveBeenLastCalledWith(1)
-  fireEvent.change(screen.getByRole('combobox', { name: 'Choose a unit' }), { target: { value: '0' } })
+  changeField(screen.getByRole('combobox', { name: 'Choose a unit' }), { target: { value: '0' } })
   fireEvent.click(screen.getByRole('button', { name: 'Start Hello! lesson 1' }))
   expect(start).toHaveBeenLastCalledWith(0)
 })

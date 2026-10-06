@@ -1,3 +1,4 @@
+import { chooseSelectOption, selectOptionValues } from './helpers/dropdown'
 import { test, expect } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
@@ -78,10 +79,10 @@ test('section arrows and jump menu navigate long pages', async ({ page }, testIn
   await down.click()
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
   const menu = navigator.getByRole('combobox', { name: 'Jump to page section' })
-  const last = await menu.locator('option').last().getAttribute('value')
-  await menu.selectOption(last!)
+  const last = (await selectOptionValues(menu)).at(-1)
+  await chooseSelectOption(menu, last!)
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(100)
-  await menu.selectOption('0')
+  await chooseSelectOption(menu, '0')
   await expect(up).toBeEnabled()
   await up.focus()
   await up.press('Enter')

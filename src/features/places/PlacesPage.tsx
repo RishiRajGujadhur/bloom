@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { subOn } from '../subFeatures'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { MapContainer, Circle, CircleMarker, Polygon, Tooltip, useMap, useMapEvents } from 'react-leaflet'
@@ -225,12 +226,12 @@ export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProp
           {LAYERS.filter((l) => !l.sub || subOn('placesMap', l.sub)).map((l) => (
             <button key={l.id} type="button" aria-pressed={on(l.id)} className={on(l.id) ? 'on' : ''} onClick={() => setLayers((s) => { const n = new Set(s); if (n.has(l.id)) n.delete(l.id); else n.add(l.id); return n })}>{l.label}</button>
           ))}
-          <select aria-label="Time range" value={range} onChange={(e) => setRange(Number(e.target.value) as 7 | 30 | 365 | 0)}>
+          <DropdownSelect aria-label="Time range" value={range} onChange={(e) => setRange(Number(e.target.value) as 7 | 30 | 365 | 0)}>
             <option value={0}>All time</option>
             <option value={7}>7 days</option>
             <option value={30}>30 days</option>
             <option value={365}>This year</option>
-          </select>
+          </DropdownSelect>
         </div>
         <MapContainer center={[51.5, -0.12]} zoom={3} scrollWheelZoom style={{ height: '100%', width: '100%' }}>
           <CachedTiles />
@@ -309,10 +310,10 @@ export function PlacesPage({ data, setData, today, onNavigate }: FeaturePageProp
           <div className="lm-pin">
             <h3>Tie a habit to a place</h3>
             <div className="lm-row bloom-controls">
-              <select aria-label="Habit" value={habitPick} onChange={(e) => setHabitPick(e.target.value)}>
+              <DropdownSelect aria-label="Habit" value={habitPick} onChange={(e) => setHabitPick(e.target.value)}>
                 <option value="">Choose a habit…</option>
                 {data.habits.map((h) => <option key={h.id} value={h.id}>{h.title}</option>)}
-              </select>
+              </DropdownSelect>
               <button type="button" className="ov-secondary" disabled={!habitPick} onClick={pinHabit}>📍 Pin here</button>
             </div>
           </div>

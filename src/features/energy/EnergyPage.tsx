@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useEffect, useMemo, useState } from 'react'
 import { ResponsiveSankey } from '@nivo/sankey'
 import { Check, Pencil, Plus, Trash2, X, Zap } from 'lucide-react'
@@ -198,13 +199,13 @@ export function EnergyPage({ data, today, onNavigate }: FeaturePageProps) {
                 setLogMessage(`Added ${h} ${h === 1 ? 'hour' : 'hours'} for ${categories.find((item) => item.id === category)?.label ?? 'activity'}.`)
               }}
             >
-              <select aria-label="Activity" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <DropdownSelect aria-label="Activity" value={category} onChange={(e) => setCategory(e.target.value)}>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.label}
                   </option>
                 ))}
-              </select>
+              </DropdownSelect>
               <input aria-label="Hours" type="number" min="0.25" max="24" step="0.25" value={hours} onChange={(e) => setHours(e.target.value)} />
               <button className="ov-primary" type="submit">
                 <Plus size={16} aria-hidden="true" /> Add
@@ -219,9 +220,9 @@ export function EnergyPage({ data, today, onNavigate }: FeaturePageProps) {
                   <li key={l.id}>
                     {editingLogId === l.id ? (
                       <div className="energy-log-edit">
-                        <select aria-label="Edit activity" value={editCategory} onChange={(event) => setEditCategory(event.target.value)}>
+                        <DropdownSelect aria-label="Edit activity" value={editCategory} onChange={(event) => setEditCategory(event.target.value)}>
                           {categories.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
-                        </select>
+                        </DropdownSelect>
                         <input
                           aria-label="Edit hours"
                           type="number"

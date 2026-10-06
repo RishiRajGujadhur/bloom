@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -293,7 +294,7 @@ export function ScanPage() {
       <div className="sc-compare">
         {[A, B].map((p, side) => (
           <div key={side} className="studio-card">
-            <select
+            <DropdownSelect
               className="studio-input"
               aria-label={side ? 'Second product' : 'First product'}
               value={p.code}
@@ -304,7 +305,7 @@ export function ScanPage() {
                   {h.name}
                 </option>
               ))}
-            </select>
+            </DropdownSelect>
             <ProductCard p={p} mine={store.allergens} grams={100} />
           </div>
         ))}

@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../ui/DropdownSelect'
 import { Handle, NodeResizer, Position, type NodeProps } from '@xyflow/react'
 import { useBoard, type CanvasNode } from '../BoardContext'
 import styles from '../VisionBoard.module.css'
@@ -33,7 +34,7 @@ export function StickyNode({ id, data, selected }: NodeProps<CanvasNode>) {
       <footer className="nodrag">
         <label>
           Color{' '}
-          <select
+          <DropdownSelect
             aria-label="Sticky note color"
             value={String(data.color ?? 'gold')}
             onChange={(event) => update(id, { color: event.target.value })}
@@ -42,7 +43,7 @@ export function StickyNode({ id, data, selected }: NodeProps<CanvasNode>) {
             <option value="rose">Rose</option>
             <option value="mint">Mint</option>
             <option value="lavender">Lavender</option>
-          </select>
+          </DropdownSelect>
         </label>
         <span>Make room for it.</span>
       </footer>

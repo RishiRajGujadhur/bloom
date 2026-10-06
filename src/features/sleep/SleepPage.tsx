@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { NextStep } from '../dailyFlow/DailyFlow'
 import { Wind } from 'lucide-react'
 import { subOn } from '../subFeatures'
@@ -364,7 +365,7 @@ function WindDown({
           </label>
           <label>
             Remind me
-            <select
+            <DropdownSelect
               value={settings.remindBefore ?? 0}
               onChange={(e) => {
                 const v = Number(e.target.value)
@@ -376,7 +377,7 @@ function WindDown({
               <option value={15}>15 min before</option>
               <option value={30}>30 min before</option>
               <option value={60}>1 hour before</option>
-            </select>
+            </DropdownSelect>
           </label>
         </div>
         <ol className="sleep-steps bloom-list">

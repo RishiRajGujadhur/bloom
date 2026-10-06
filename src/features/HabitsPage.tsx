@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { AdvancedSection, usePageMode } from '../components/ui/PageMode'
 import { useTabTitle } from '../utils/useTabTitle'
 import { PixelSprite } from './juice/PixelJuice'
@@ -555,7 +556,7 @@ export function HabitsPage({
         <>
           <div className="habits-toolbar">
             <h2>Your routines</h2>
-            <select
+            <DropdownSelect
               aria-label="Time of day"
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
@@ -566,7 +567,7 @@ export function HabitsPage({
                   {p[0].toUpperCase() + p.slice(1)}
                 </option>
               ))}
-            </select>
+            </DropdownSelect>
           </div>
           {!(data.routines ?? []).filter(
             (r) => period === 'all' || r.period === period,
@@ -791,7 +792,7 @@ export function HabitsPage({
             </label>
             <label>
               Time of day
-              <select
+              <DropdownSelect
                 value={routine.period}
                 onChange={(e) =>
                   setRoutine({
@@ -803,7 +804,7 @@ export function HabitsPage({
                 {['morning', 'afternoon', 'evening', 'night'].map((p) => (
                   <option key={p}>{p}</option>
                 ))}
-              </select>
+              </DropdownSelect>
             </label>
             <fieldset>
               <legend>Repeat on</legend>

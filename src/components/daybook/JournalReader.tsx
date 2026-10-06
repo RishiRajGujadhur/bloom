@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import {
   useEffect,
   useLayoutEffect,
@@ -265,7 +266,7 @@ export function JournalReader({
             </button>
             <label>
               Saved page
-              <select
+              <DropdownSelect
                 aria-label="Choose saved journal page"
                 value={selected.id}
                 onChange={(event) => choose(event.target.value)}
@@ -279,7 +280,7 @@ export function JournalReader({
                     })}
                   </option>
                 ))}
-              </select>
+              </DropdownSelect>
             </label>
             <button
               type="button"

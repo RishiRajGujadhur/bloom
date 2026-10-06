@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { bodySilent } from '../body/bodyPreferences'
 import { useBodyPractice } from '../body/bodyPractice'
 import { useLeaveGuard } from '../../utils/useLeaveGuard'
@@ -437,9 +438,9 @@ export function RunPage() {
         {routed.length > 0 && (
           <label className="tr-pick">
             Route
-            <select className="studio-input" value={terrainRun?.id ?? ''} onChange={(e) => { setSampleRoute(null); setTerrainId(e.target.value) }}>
+            <DropdownSelect className="studio-input" value={terrainRun?.id ?? ''} onChange={(e) => { setSampleRoute(null); setTerrainId(e.target.value) }}>
               {[...routed].reverse().map((r) => <option key={r.id} value={r.id}>{new Date(r.at).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {toUnits(r.km, units).toFixed(1)} {units} {r.kind}</option>)}
-            </select>
+            </DropdownSelect>
           </label>
         )}
         {on('gpxImport') && (

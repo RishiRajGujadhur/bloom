@@ -64,7 +64,7 @@
   font-size: 23px;
   margin: 14px 0 8px;
 }
-.personal-insights select,
+.personal-insights :is(select, [data-bloom-select]),
 .personal-insights input {
   padding: 8px;
   border: 1px solid var(--border-color);

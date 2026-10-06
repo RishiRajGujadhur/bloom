@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { subOn } from '../subFeatures'
 import { fountain } from '../../components/ui/celebrate'
 import { CardRail } from '../../components/BloomExperience'
@@ -312,7 +313,7 @@ export function FocusCompanion({
     <div className="focus-companion">
       {selected ? <CarSprite car={selected} moving={active} /> : fallback}
       <label htmlFor="focus-companion">Focus companion</label>
-      <select
+      <DropdownSelect
         id="focus-companion"
         value={collection.selected ?? ''}
         disabled={!!error}
@@ -333,7 +334,7 @@ export function FocusCompanion({
               {car.name}
             </option>
           ))}
-      </select>
+      </DropdownSelect>
       {!collection.owned.length && !error && (
         <small>No cars unlocked yet.</small>
       )}

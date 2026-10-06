@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import {
   useCallback,
@@ -662,7 +663,7 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
           <ChevronRight size={18} />
         </button>
       </div>
-      <select
+      <DropdownSelect
         className="studio-input st-jump"
         aria-label="Jump to a building"
         value={at}
@@ -673,7 +674,7 @@ export function StreetPage({ flags }: { flags: FeatureFlags }) {
             {b.name}
           </option>
         ))}
-      </select>
+      </DropdownSelect>
       {subOn('bloomStreet', 'dots') && (
         <div className="st-dots" role="tablist" aria-label="Buildings">
           {list.map((b, i) => (

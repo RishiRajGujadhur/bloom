@@ -16,12 +16,12 @@
   opacity: 0.7;
 }
 .widget-board button,
-.widget-board select {
+.widget-board :is(select, [data-bloom-select]) {
   font: inherit;
 }
 .widget-board-heading button,
 .widget-actions button,
-.widget-add select {
+.widget-add :is(select, [data-bloom-select]) {
   border: 1px solid var(--border-color, #aaa6);
   border-radius: 9px;
   background: var(--bg-surface);

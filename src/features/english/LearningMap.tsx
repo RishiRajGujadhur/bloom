@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useState, type CSSProperties } from 'react'
 import { BookOpen, Check, Headphones, ListPlus, Lock, Mic, Play, Sparkles } from 'lucide-react'
 import { units } from './englishCourse'
@@ -78,7 +79,7 @@ export function LearningMap({ store, onStart, onPractice, onSpeak }: {
           <div className="en-map-progress" role="progressbar" aria-label="Lessons completed" aria-valuemin={0} aria-valuemax={LESSONS_PER_UNIT} aria-valuenow={progress}>{Array.from({ length: LESSONS_PER_UNIT }, (_, i) => <i key={i} className={i < progress ? 'done' : ''} />)}</div>
         </div>
       </div>
-      <label className="en-course-select">Explore your course<select className="studio-input" value={selected} onChange={(event) => { setSelected(Number(event.target.value)); setNotice('') }} aria-label="Choose a unit">{units.map((u, i) => <option key={u.id} value={i} disabled={!unitUnlocked(store, i)}>{i + 1}. {u.title}{!unitUnlocked(store, i) ? ' · Locked' : ''}</option>)}</select></label>
+      <label className="en-course-select">Explore your course<DropdownSelect className="studio-input" value={selected} onChange={(event) => { setSelected(Number(event.target.value)); setNotice('') }} aria-label="Choose a unit">{units.map((u, i) => <option key={u.id} value={i} disabled={!unitUnlocked(store, i)}>{i + 1}. {u.title}{!unitUnlocked(store, i) ? ' · Locked' : ''}</option>)}</DropdownSelect></label>
       <div className="en-map-caption" role="status"><Sparkles size={16} /><span>{notice || 'A little practice today. A world of possibilities tomorrow.'}</span></div>
     </section>
   )

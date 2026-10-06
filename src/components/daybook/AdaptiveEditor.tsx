@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import { subOn } from '../../features/subFeatures'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -381,7 +382,7 @@ export function AdaptiveEditor({
               {goal ? `${words}/${goal} words${words >= goal ? ' ✓' : ''}` : `${words} ${words === 1 ? 'word' : 'words'}`}
               {words >= 200 && ` · ${Math.max(1, Math.round(words / 230))} min read`}
               {goal > 0 && <i style={{ width: `${Math.min(100, (words / goal) * 100)}%` }} aria-hidden="true" />}
-              <select
+              <DropdownSelect
                 aria-label="Word goal"
                 value={goal}
                 onChange={(e) => {
@@ -400,7 +401,7 @@ export function AdaptiveEditor({
                     goal {g}
                   </option>
                 ))}
-              </select>
+              </DropdownSelect>
             </span>
             <span className="daybook-mood" role="group" aria-label="Mood">
               {['😄', '🙂', '😐', '😔', '😣'].map((m) => (

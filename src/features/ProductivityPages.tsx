@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { usePageModeState } from '../components/ui/PageMode'
 import { useTabTitle } from '../utils/useTabTitle'
 import { prefersReducedMotion } from '../utils/motion'
@@ -762,7 +763,7 @@ export function TodoPage({ data, setData }: Props) {
                 <>
                   <label>
                     Priority
-                    <select
+                    <DropdownSelect
                       value={priority}
                       onChange={(event) =>
                         setPriority(event.target.value as typeof priority)
@@ -772,11 +773,11 @@ export function TodoPage({ data, setData }: Props) {
                       <option value="P2">P2 · Important</option>
                       <option value="P3">P3 · Normal</option>
                       <option value="P4">P4 · Low</option>
-                    </select>
+                    </DropdownSelect>
                   </label>
                   <label>
                     Repeat
-                    <select
+                    <DropdownSelect
                       value={recurrence}
                       onChange={(event) =>
                         setRecurrence(event.target.value as typeof recurrence)
@@ -786,7 +787,7 @@ export function TodoPage({ data, setData }: Props) {
                       <option value="daily">Daily</option>
                       <option value="weekly">Weekly</option>
                       <option value="monthly">Monthly</option>
-                    </select>
+                    </DropdownSelect>
                   </label>
                   <label className="tag-field">
                     Tags
@@ -900,7 +901,7 @@ export function TodoPage({ data, setData }: Props) {
           </button>
           <label className="todo-sort">
             Sort tasks
-            <select
+            <DropdownSelect
               aria-label="Sort tasks"
               value={taskSort}
               onChange={(event) =>
@@ -911,7 +912,7 @@ export function TodoPage({ data, setData }: Props) {
               <option value="due">Due date</option>
               <option value="priority">Priority</option>
               <option value="created">Created order</option>
-            </select>
+            </DropdownSelect>
           </label>
         </div>
       )}
@@ -1088,7 +1089,7 @@ export function TodoPage({ data, setData }: Props) {
                     />
                     {proMode && (
                       <>
-                        <select
+                        <DropdownSelect
                           aria-label="Edit priority"
                           value={editPriority}
                           onChange={(event) =>
@@ -1100,8 +1101,8 @@ export function TodoPage({ data, setData }: Props) {
                           {['P1', 'P2', 'P3', 'P4'].map((value) => (
                             <option key={value}>{value}</option>
                           ))}
-                        </select>
-                        <select
+                        </DropdownSelect>
+                        <DropdownSelect
                           aria-label="Edit recurrence"
                           value={editRecurrence}
                           onChange={(event) =>
@@ -1114,7 +1115,7 @@ export function TodoPage({ data, setData }: Props) {
                           <option value="daily">Daily</option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </DropdownSelect>
                         <input
                           aria-label="Edit tags"
                           placeholder="#tags"

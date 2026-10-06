@@ -35,7 +35,7 @@
   text-align: right;
 }
 .page button,
-.page select {
+.page :is(select, [data-bloom-select]) {
   font: inherit;
   color: inherit;
   cursor: pointer;
@@ -53,7 +53,7 @@
 .page button:focus-visible,
 .page textarea:focus-visible,
 .page input:focus-visible,
-.page select:focus-visible {
+.page :is(select, [data-bloom-select]):focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 3px;
 }
@@ -231,7 +231,7 @@
   align-items: center;
   font-size: 9px;
 }
-.sticky select {
+.sticky :is(select, [data-bloom-select]) {
   max-width: 90px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -511,7 +511,7 @@
 
 .fileBar { position: absolute; z-index: 6; left: 16px; bottom: 16px; display: flex; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 14px; background: var(--bg-surface); border: 1px solid var(--border-color); box-shadow: 0 10px 30px -18px #0006; font-size: 0.85rem; }
 .fileBar input { border: 0; background: transparent; color: inherit; font: 800 0.9rem 'Manrope', sans-serif; width: 160px; }
-.fileBar select { border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: inherit; padding: 3px 6px; }
+.fileBar :is(select, [data-bloom-select]) { border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: inherit; padding: 3px 6px; }
 .confirm { position: absolute; z-index: 7; left: 50%; top: 50%; translate: -50% -50%; display: grid; gap: 10px; max-width: 360px; padding: 18px; border-radius: 18px; background: var(--bg-surface); border: 1px solid var(--border-color); box-shadow: 0 30px 60px -20px #0008; }
 .confirm p { margin: 0; }
 .confirm button { border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 12px; background: var(--bg-surface); color: inherit; font-weight: 800; cursor: pointer; }

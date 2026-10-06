@@ -17,7 +17,7 @@
   justify-content: space-between;
   gap: 10px;
 }
-.journey-toolbar select {
+.journey-toolbar :is(select, [data-bloom-select]) {
   min-height: 40px;
   padding: 6px 10px;
   border-radius: 10px;

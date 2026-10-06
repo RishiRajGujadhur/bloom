@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { subOn } from '../subFeatures'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -124,13 +125,13 @@ export function StreakJourneyPage({ data, today }: FeaturePageProps) {
         <div className="journey-toolbar">
           <label>
             Habit{' '}
-            <select value={habitId} onChange={(e) => setHabitId(e.target.value)}>
+            <DropdownSelect value={habitId} onChange={(e) => setHabitId(e.target.value)}>
               {ranked.map((h) => (
                 <option key={h.id} value={h.id}>
                   {h.title}
                 </option>
               ))}
-            </select>
+            </DropdownSelect>
           </label>
           <strong>
             {steps.length} day{steps.length === 1 ? '' : 's'} · day {Math.min(current + 1, steps.length)}

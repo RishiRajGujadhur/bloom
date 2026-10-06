@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Download, Pause, Play, Radio, RefreshCw, Sparkles } from 'lucide-react'
@@ -253,7 +254,7 @@ export function BriefingPage({ data, today }: FeaturePageProps) {
             <div className="br-voice bloom-wrap">
               {hd === 'ready' ? (
                 <label>HD voice
-                  <select className="studio-input" value={voice} onChange={(e) => setVoice(e.target.value)}>{VOICES.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}</select>
+                  <DropdownSelect className="studio-input" value={voice} onChange={(e) => setVoice(e.target.value)}>{VOICES.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}</DropdownSelect>
                 </label>
               ) : (
                 <button type="button" className="br-ghost" onClick={() => void getHd()} disabled={hd === 'loading'}>

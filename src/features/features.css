@@ -161,11 +161,11 @@
 }
 .task-add input,
 .task-edit input,
-.task-edit select,
+.task-edit :is(select, [data-bloom-select]),
 .task-options input,
-.task-options select,
+.task-options :is(select, [data-bloom-select]),
 .subtask-add input,
-.focus-setup select {
+.focus-setup :is(select, [data-bloom-select]) {
   min-width: 0;
   padding: 12px;
   border: 1px solid color-mix(in oklab, var(--accent-color) 14%, var(--border-color));
@@ -182,8 +182,8 @@
 .task-edit input:focus,
 .task-options input:focus,
 .subtask-add input:focus,
-.task-edit select:focus,
-.task-options select:focus {
+.task-edit :is(select, [data-bloom-select]):focus,
+.task-options :is(select, [data-bloom-select]):focus {
   outline: none;
   border-color: color-mix(in oklab, var(--accent-color) 60%, var(--border-color));
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent-color) 12%, transparent);
@@ -255,7 +255,7 @@
   color: var(--text-muted);
   font-size: 12px;
 }
-.todo-sort select {
+.todo-sort :is(select, [data-bloom-select]) {
   max-width: 100%;
   padding: 7px 10px;
   border: 1px solid var(--border-color);
@@ -891,7 +891,7 @@ button:active svg,
 .clear-done { margin-left: 8px; border: 0; background: none; color: var(--text-muted); font-size: 12px; text-decoration: underline; cursor: pointer; }
 .focus-ends { margin: 4px 0 0; text-align: center; font-size: 13px; color: var(--text-muted); }
 .focus-goal { margin: 6px 0 0; text-align: center; font-size: 13px; color: var(--text-secondary); }
-.focus-goal select { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.focus-goal :is(select, [data-bloom-select]) { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
 .focus-distract { margin-top: 10px; }
 .focus-distract input { width: 100%; padding: 7px 12px; border-radius: 12px; border: 1px dashed var(--border-color); background: transparent; color: var(--text-primary); font-size: 13px; }
 .focus-distract-log { margin-top: 10px; font-size: 13px; color: var(--text-secondary); }

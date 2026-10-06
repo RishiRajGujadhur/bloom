@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import { loadHandle, regrant, saveHandle } from '../../platform/handleStore'
 import { prefersReducedMotion } from '../../utils/motion'
 import { subOn } from '../../features/subFeatures'
@@ -623,10 +624,10 @@ function Canvas({ badges, habits = [] }: { badges: string[]; habits?: Habit[] })
               <input aria-label="Board name" value={boardName} onChange={(e) => setBoardName(e.target.value)} />
               {fileMsg && <span>{fileMsg}</span>}
               {backups.length > 0 && (
-                <select aria-label="Restore a backup" value="" onChange={(e) => e.target.value && void restoreBackup(e.target.value)}>
+                <DropdownSelect aria-label="Restore a backup" value="" onChange={(e) => e.target.value && void restoreBackup(e.target.value)}>
                   <option value="">↺ Restore a backup…</option>
                   {backups.map((b) => <option key={b} value={b}>{b.replace(BOARD_EXT, '').replace(/T(\d\d)-(\d\d).*/, ' $1:$2')}</option>)}
-                </select>
+                </DropdownSelect>
               )}
             </div>
           )}

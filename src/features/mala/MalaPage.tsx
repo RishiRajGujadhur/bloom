@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useRef, useState } from 'react'
 import Zdog from 'zdog'
@@ -174,13 +175,13 @@ export function MalaPage() {
           {on('rounds') && <Stat value={roundsOf(count)} label="rounds" />}
         </div>
         {on('library') && (
-          <select className="studio-input" aria-label="Mantra" value={store.mantra} onChange={(e) => setStore((s) => ({ ...s, mantra: e.target.value }))}>
+          <DropdownSelect className="studio-input" aria-label="Mantra" value={store.mantra} onChange={(e) => setStore((s) => ({ ...s, mantra: e.target.value }))}>
             {all.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.text}
               </option>
             ))}
-          </select>
+          </DropdownSelect>
         )}
         <p className="studio-empty">{mantra.meaning} · tap the mala or press space</p>
         {on('autoChant') && (

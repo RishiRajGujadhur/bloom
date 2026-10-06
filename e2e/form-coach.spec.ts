@@ -1,3 +1,4 @@
+import { chooseSelectOption } from './helpers/dropdown'
 import { test, expect } from '@playwright/test'
 import { upperPose } from '../src/features/workout/formModel'
 
@@ -64,9 +65,9 @@ test('either-hand hovering changes exercises, logs one set, and finishes from fu
   await page.getByRole('button', { name: 'Skip countdown', exact: true }).click()
   const send = (pose: ReturnType<typeof upperPose>) => page.evaluate((value) => { (window as typeof window & { __coachPose: typeof value }).__coachPose = value }, pose)
   if (!(await page.locator('.fc-quick-options').getAttribute('open') !== null)) await page.getByText('Workout options', { exact: true }).click()
-  await page.getByRole('combobox', { name: 'Camera background' }).selectOption('black')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Camera background' }), 'black')
   await expect.poll(() => page.locator('.fc-background-mask').evaluate((node: HTMLCanvasElement) => node.getContext('2d')!.getImageData(0, 0, 1, 1).data[3])).toBe(255)
-  await page.getByRole('combobox', { name: 'Camera background' }).selectOption('dim')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Camera background' }), 'dim')
   await expect.poll(() => page.locator('.fc-background-mask').evaluate((node: HTMLCanvasElement) => node.getContext('2d')!.getImageData(0, 0, 1, 1).data[3])).toBe(190)
   const offBalance = upperPose('seatedTwist', 0); offBalance[12].y += .16; await send(offBalance)
   await expect.poll(() => page.locator('.fc-canvas').evaluate((node: HTMLCanvasElement) => { const data = node.getContext('2d')!.getImageData(0, 0, node.width, node.height).data; let red = 0; for (let i = 0; i < data.length; i += 4) if (data[i] > 200 && data[i + 1] < 120 && data[i + 2] < 120 && data[i + 3]) red++; return red })).toBeGreaterThan(30)
@@ -205,18 +206,18 @@ test('Basic keeps optional markers quiet, counts air punches and shows countdown
   if (await page.getByRole('button', { name: 'More controls', exact: true }).isEnabled()) await page.getByRole('button', { name: 'More controls', exact: true }).click()
   await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
   if (!(await page.locator('.fc-quick-options').getAttribute('open') !== null)) await page.getByText('Workout options', { exact: true }).click()
-  await page.getByRole('combobox', { name: 'Camera background' }).selectOption('black')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Camera background' }), 'black')
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.getByText('Workout options', { exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Camera background' })).toHaveValue('black')
-  await page.getByRole('combobox', { name: 'Camera background' }).selectOption('dim')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Camera background' }), 'dim')
   await expect(page.getByRole('combobox', { name: 'Camera background' })).toHaveValue('dim')
 })
 
 test('Game sword and ropes retain the matching reference next to the camera', async ({ page }) => {
   await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
   await page.getByRole('button', { name: 'Game', exact: true }).click()
-  await page.getByRole('combobox', { name: 'Seated camera arcade' }).selectOption('sword')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Seated camera arcade' }), 'sword')
   await expect(page.locator('.fc-reference')).toContainText('Empty-hand seated sword')
   await expect(page.locator('.fc-split')).not.toHaveClass(/fc-no-reference/)
   await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
@@ -225,7 +226,7 @@ test('Game sword and ropes retain the matching reference next to the camera', as
   if (await page.getByRole('button', { name: 'More controls', exact: true }).isEnabled()) await page.getByRole('button', { name: 'More controls', exact: true }).click()
   await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
   await page.getByText('Seated arcade · Empty-hand seated sword', { exact: true }).click()
-  await page.getByRole('combobox', { name: 'Seated camera arcade' }).selectOption('doubleRopes')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Seated camera arcade' }), 'doubleRopes')
   await expect(page.locator('.fc-reference')).toContainText('Shadow ropes · double slams')
 })
 
@@ -246,7 +247,7 @@ test('camera action pages are spacious and progress stays beneath the reference'
   await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
   await expect(page.locator('.fc-control-actions button')).toHaveCount(3)
   await expect(page.getByRole('combobox', { name: 'Reference style', exact: true })).toHaveValue('person')
-  await page.getByRole('combobox', { name: 'Reference view angle', exact: true }).selectOption('side')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Reference view angle', exact: true }), 'side')
   await page.getByRole('checkbox', { name: 'Slow reference movement', exact: true }).check()
   const feed = (await page.locator('.fc-view').boundingBox())!, hud = (await page.locator('.fc-workout-hud').boundingBox())!, guide = (await page.locator('.fc-reference').boundingBox())!
   expect(hud.x).toBeGreaterThanOrEqual(feed.x + feed.width - 2)
@@ -265,8 +266,8 @@ test('camera action pages are spacious and progress stays beneath the reference'
   await page.getByRole('button', { name: 'Keep training', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
   await page.getByText('Coach settings', { exact: true }).click()
-  await page.getByRole('combobox', { name: 'Reach side', exact: true }).selectOption('right')
-  await page.getByRole('combobox', { name: 'Hand hold time', exact: true }).selectOption('5')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Reach side', exact: true }), 'right')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Hand hold time', exact: true }), '5')
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.getByText('Coach settings', { exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Reach side', exact: true })).toHaveValue('right')
@@ -308,7 +309,7 @@ test('new seated movements are searchable, guided and camera-demo counted with t
   await expect(page.getByRole('status', { name: '' }).filter({ hasText: 'No movements match' })).toBeVisible()
   await page.getByRole('searchbox', { name: 'Find a movement', exact: true }).fill('curl')
   await page.getByRole('radio', { name: 'Seated Bicep Curl', exact: true }).click()
-  await page.getByRole('combobox', { name: 'Movement tempo', exact: true }).selectOption('1:3')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Movement tempo', exact: true }), '1:3')
   await page.getByRole('button', { name: 'Next workout detail', exact: true }).click()
   await expect(page.locator('.fc-movement-guide')).toContainText('elbows')
   await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
@@ -324,7 +325,7 @@ test('new seated movements are searchable, guided and camera-demo counted with t
   await page.screenshot({ path: 'docs/screenshots/form-coach-motion-practice.png' })
   await page.getByRole('button', { name: 'More controls', exact: true }).click()
   await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
-  await page.getByRole('combobox', { name: 'Selected workout', exact: true }).selectOption('lateralRaise')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Selected workout', exact: true }), 'lateralRaise')
   await expect.poll(async () => Number((await page.locator('.fc-workout-hud b').textContent())!.split('/')[0]), { timeout: 25000 }).toBeGreaterThan(0)
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.getByText('Workout options', { exact: true }).click()
@@ -338,7 +339,7 @@ test('saved set recap shows same-exercise progress and keeps details folded', as
     localStorage.removeItem('bloom-coach-view')
   })
   await page.goto('/#workouts/coach', { waitUntil: 'domcontentloaded' })
-  await page.getByRole('combobox', { name: 'Selected workout', exact: true }).selectOption('bicepCurl')
+  await chooseSelectOption(page.getByRole('combobox', { name: 'Selected workout', exact: true }), 'bicepCurl')
   await expect(page.locator('.fc-set-recap')).toHaveCount(0)
   await page.getByRole('button', { name: 'Previous workout detail', exact: true }).click()
   await expect(page.locator('.fc-set-recap')).toContainText('+10 points')
@@ -349,7 +350,7 @@ test('saved set recap shows same-exercise progress and keeps details folded', as
 
 test('Auto is selectable and never identifies the prerecorded demo as a real workout', async ({ page }) => {
   await page.goto('/#workouts/coach')
-  await page.getByLabel('Selected workout').selectOption('auto')
+  await chooseSelectOption(page.getByLabel('Selected workout'), 'auto')
   await expect(page.locator('.fc-auto-help')).toContainText('first movement is not counted')
   await page.getByRole('button', { name: 'Watch the demo athlete', exact: true }).click()
   await expect(page.locator('.fc-side-status')).toContainText('Auto needs a live camera', { timeout: 20000 })

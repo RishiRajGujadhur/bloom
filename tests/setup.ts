@@ -141,3 +141,14 @@ Storage.prototype.getItem = function (key: string) {
   if (v === null && key === 'bloom-nav-groups') return '[0,1,2,3,4,5,6]'
   return v
 }
+
+// Radix Select scrolls its highlighted item into view.
+Element.prototype.scrollIntoView = jest.fn()
+
+// JSDOM has no fullscreen support. Its selector engine otherwise recurses while
+// evaluating the fullscreen rules in its default stylesheet for Radix portals.
+const nativeMatches = Element.prototype.matches
+Element.prototype.matches = function (selector: string) {
+  if (selector === ':fullscreen') return false
+  return nativeMatches.call(this, selector)
+}

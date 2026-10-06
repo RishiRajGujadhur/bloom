@@ -71,7 +71,7 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--accent-color) 60%, transparent);
 }
-:where(button, a, input, select, textarea, [role='button']):focus-visible {
+:where(button, a, input, :is(select, [data-bloom-select]), textarea, [role='button']):focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }

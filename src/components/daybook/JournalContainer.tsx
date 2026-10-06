@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import { subOn } from '../../features/subFeatures'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Carousel } from '../ui/Carousel'
@@ -519,7 +520,7 @@ export function JournalContainer() {
                   {recentPages.length > 1 && subOn('daybookModes', 'pages') && (
                     <label className="daybook-sort">
                       Sort pages
-                      <select
+                      <DropdownSelect
                         value={sort}
                         onChange={(e) => changeSort(e.target.value)}
                       >
@@ -527,7 +528,7 @@ export function JournalContainer() {
                         <option value="created">Newest first</option>
                         <option value="oldest">Oldest first</option>
                         <option value="title">By page type</option>
-                      </select>
+                      </DropdownSelect>
                     </label>
                   )}
                   {memory && (

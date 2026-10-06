@@ -71,7 +71,7 @@
   margin-bottom: 14px;
 }
 .ts-form input,
-.ts-form select {
+.ts-form :is(select, [data-bloom-select]) {
   min-height: 40px;
   flex: 1 1 140px;
   padding: 6px 10px;

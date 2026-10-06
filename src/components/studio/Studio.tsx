@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { StudioNameContext } from './StudioScene'
 import { Children, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
@@ -299,7 +300,7 @@ export function Rail({ children, label }: { children: ReactNode; label: string }
 /** Segmented choice (radio group) with a sliding highlight. */
 export function Segmented<T extends string>({ value, options, onChange, label }: { value: T; options: { id: T; label: string }[]; onChange: (v: T) => void; label: string }) {
   const { mode } = usePageMode()
-  if (mode === 'basic' && options.length > 3) return <label className="basic-choice">{label}<select value={value} onChange={event => onChange(event.target.value as T)}>{options.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
+  if (mode === 'basic' && options.length > 3) return <label className="basic-choice">{label}<DropdownSelect value={value} onChange={event => onChange(event.target.value as T)}>{options.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}</DropdownSelect></label>
   return (
     <div className="studio-seg" role="radiogroup" aria-label={label}>
       {options.map((o) => (

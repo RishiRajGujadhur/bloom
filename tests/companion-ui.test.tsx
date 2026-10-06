@@ -1,3 +1,4 @@
+import { changeField } from './helpers/dropdown'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { BloomCompanion } from '../src/companion/BloomCompanion'
 import { ChatAppearanceSettings } from '../src/companion/chatAppearance'
@@ -48,7 +49,7 @@ test('mode controls have valid tab semantics and resize values follow keyboard c
 test('draft and conversation recover after remount, and clear can be undone', () => {
   const view = mount()
   fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))
-  fireEvent.change(screen.getByLabelText('Message Bloom'), { target: { value: 'An unsent thought' } })
+  changeField(screen.getByLabelText('Message Bloom'), { target: { value: 'An unsent thought' } })
   view.unmount()
   mount()
   expect(screen.getByLabelText('Message Bloom')).toHaveValue('An unsent thought')
@@ -75,7 +76,7 @@ test('stopping generation preserves a newly typed draft and ignores the late rep
   fireEvent.click(screen.getByRole('button', { name: 'Download & enable local AI' }))
   await screen.findByText('Local AI · running on this device')
   fireEvent.click(screen.getByRole('button', { name: 'I have 40 minutes' }))
-  fireEvent.change(screen.getByLabelText('Message Bloom'), { target: { value: 'My next question' } })
+  changeField(screen.getByLabelText('Message Bloom'), { target: { value: 'My next question' } })
   fireEvent.click(screen.getByRole('button', { name: 'Stop generating' }))
   expect(screen.getByLabelText('Message Bloom')).toHaveValue('My next question')
   finish({ intent: 'chat', minutes: 40, energy: 'medium', message: 'Late reply' })
@@ -86,7 +87,7 @@ test('chat appearance changes the avatar and follows the app theme persistently'
   const view = mount()
   const settings = render(<ChatAppearanceSettings />)
   expect(screen.queryByText('Chat appearance')).not.toBeInTheDocument()
-  fireEvent.change(screen.getByLabelText('Chat avatar'), { target: { value: 'robot' } })
+  changeField(screen.getByLabelText('Chat avatar'), { target: { value: 'robot' } })
   expect(screen.getByRole('img', { name: 'Bloom, your chat avatar' })).toBeVisible()
   expect(localStorage.getItem('bloom-chat-avatar')).toBe('robot')
   fireEvent.click(screen.getByLabelText('Use my app theme for Bloom chat'))
@@ -95,7 +96,7 @@ test('chat appearance changes the avatar and follows the app theme persistently'
   view.unmount()
   render(<ChatAppearanceSettings />)
   mount()
-  expect(screen.getByLabelText('Chat avatar')).toHaveValue('robot')
+  expect(screen.getByLabelText('Chat avatar')).toHaveAttribute('data-value', 'robot')
   expect(screen.getByLabelText('Use my app theme for Bloom chat')).toBeChecked()
   expect(screen.getByRole('region', { name: 'Talk to Bloom' })).toHaveClass('uses-app-theme')
 })
@@ -140,7 +141,7 @@ test('local AI is opt-in and a valid interpretation produces a reviewable plan',
     screen.getByRole('button', { name: 'Download & enable local AI' }),
   )
   await screen.findByText('Local AI · running on this device')
-  fireEvent.change(screen.getByLabelText('Message Bloom'), {
+  changeField(screen.getByLabelText('Message Bloom'), {
     target: { value: 'Help me get started' },
   })
   fireEvent.click(screen.getByRole('button', { name: 'Send to Bloom' }))

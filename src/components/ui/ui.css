@@ -547,3 +547,21 @@
 
 /* UX 016: Wrap long unbroken journal content in search previews. */
 .cmdk-preview p { overflow-wrap: anywhere; }
+/* All feature pickers share this bounded, theme-aware Radix surface. */
+.ui-select { max-width: 100%; min-width: 0; text-align: start; justify-content: space-between; }
+.ui-select-value { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.ui-select > span:first-of-type { min-width: 0; overflow: hidden; }
+.ui-select-icon { flex-shrink: 0; margin-inline-start: auto; }
+.ui-select-content {
+  z-index: 1400;
+  max-height: min(420px, var(--radix-select-content-available-height));
+  max-width: min(36rem, calc(100vw - 24px));
+}
+.ui-select-content .ui-menu-item { overflow-wrap: anywhere; white-space: normal; }
+.ui-select-content .ui-menu-item > span:last-child { min-width: 0; }
+.ui-select-content .ui-menu-check { flex: 0 0 16px; }
+.ui-select:disabled { opacity: .55; cursor: not-allowed; }
+@media (forced-colors: active) {
+  .ui-select, .ui-select-content { border-color: ButtonText; }
+  .ui-menu-item[data-highlighted] { outline: 2px solid Highlight; outline-offset: -2px; }
+}

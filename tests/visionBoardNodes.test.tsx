@@ -1,3 +1,4 @@
+import { changeField } from './helpers/dropdown'
 import { fireEvent, render, screen } from '@testing-library/react'
 import type { NodeProps } from '@xyflow/react'
 import { BoardContext, type CanvasNode } from '../src/components/VisionBoard/BoardContext'
@@ -12,9 +13,9 @@ test('editing a sticky updates its text and color, and removal targets only that
   const update = jest.fn()
   const remove = jest.fn()
   render(<BoardContext.Provider value={{ journals: [], update, remove }}><StickyNode {...props({ text: 'One small step', color: 'gold' })} /></BoardContext.Provider>)
-  fireEvent.change(screen.getByLabelText('Sticky note text'), { target: { value: 'Make space to rest' } })
+  changeField(screen.getByLabelText('Sticky note text'), { target: { value: 'Make space to rest' } })
   expect(update).toHaveBeenCalledWith('pin', { text: 'Make space to rest' })
-  fireEvent.change(screen.getByLabelText('Sticky note color'), { target: { value: 'mint' } })
+  changeField(screen.getByLabelText('Sticky note color'), { target: { value: 'mint' } })
   expect(update).toHaveBeenCalledWith('pin', { color: 'mint' })
   fireEvent.click(screen.getByRole('button', { name: 'Remove sticky note' }))
   expect(remove).toHaveBeenCalledWith('pin')

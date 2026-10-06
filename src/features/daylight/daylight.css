@@ -21,7 +21,7 @@
   font-size: 14px;
   font-weight: 700;
 }
-.dl-place select {
+.dl-place :is(select, [data-bloom-select]) {
   flex: 1;
   min-width: 160px;
 }

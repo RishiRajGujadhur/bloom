@@ -71,7 +71,7 @@ html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-go:not([dat
   color: #07121a;
   box-shadow: 0 0 23px color-mix(in srgb, var(--galaxy-blue) 42%, transparent);
 }
-html[data-theme='galaxy'] .studio:not([data-studio='money']) :is(button, input, select, textarea):focus-visible { outline: 2px solid var(--galaxy-light); outline-offset: 2px; }
+html[data-theme='galaxy'] .studio:not([data-studio='money']) :is(button, input, :is(select, [data-bloom-select]), textarea):focus-visible { outline: 2px solid var(--galaxy-light); outline-offset: 2px; }
 @media (max-width: 720px) {
   html[data-theme='galaxy'] .studio:not([data-studio='money']) { border-radius: 24px; padding: 12px; }
   html[data-theme='galaxy'] .studio:not([data-studio='money']) .studio-card { border-radius: 21px 21px 30px 21px; }

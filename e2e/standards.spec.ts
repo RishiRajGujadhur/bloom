@@ -1,3 +1,4 @@
+import { chooseSelectOption, selectOptionValues } from './helpers/dropdown'
 import { test, expect } from '@playwright/test'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
@@ -56,10 +57,10 @@ test('Settings controls every feature mode and pages keep their choices', async 
   await page.goto('/#settings', { waitUntil: 'domcontentloaded' })
   const preferences = page.locator('.feature-mode-settings')
   const feature = preferences.getByRole('combobox', { name: 'Feature', exact: true })
-  await expect(feature.locator('option')).toHaveCount(83)
-  await feature.selectOption('code')
+  expect(await selectOptionValues(feature)).toHaveLength(83)
+  await chooseSelectOption(feature, 'code')
   await preferences.getByRole('button', { name: 'Advanced', exact: true }).click()
-  await feature.selectOption('habits')
+  await chooseSelectOption(feature, 'habits')
   await expect(preferences.getByRole('button', { name: 'Basic', exact: true })).toHaveAttribute('aria-pressed', 'true')
   await page.goto('/#code', { waitUntil: 'domcontentloaded' })
   await expect.poll(() => page.locator('.studio-tabs').getByRole('tab').count()).toBeGreaterThan(1)

@@ -1,6 +1,6 @@
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
-import * as RadixSelect from '@radix-ui/react-select'
-import { Check, ChevronDown } from 'lucide-react'
+import { DropdownSelect } from './DropdownSelect'
+import { Check } from 'lucide-react'
 import type { ReactNode } from 'react'
 import './ui.css'
 
@@ -115,46 +115,19 @@ export function Select({
   icon?: ReactNode
 }) {
   return (
-    <RadixSelect.Root
+    <DropdownSelect
       value={value}
-      onValueChange={onValueChange}
+      onChange={(event) => onValueChange(event.currentTarget.value)}
+      aria-label={label}
+      className={className}
       disabled={disabled}
+      icon={icon}
     >
-      <RadixSelect.Trigger
-        className={`ui-select ${className}`}
-        aria-label={label}
-      >
-        {icon}
-        <RadixSelect.Value />
-        <RadixSelect.Icon className="ui-select-icon">
-          <ChevronDown size={16} aria-hidden="true" />
-        </RadixSelect.Icon>
-      </RadixSelect.Trigger>
-      <RadixSelect.Portal>
-        <RadixSelect.Content
-          className="ui-menu ui-select-content"
-          position="popper"
-          sideOffset={8}
-          collisionPadding={12}
-        >
-          <RadixSelect.Viewport>
-            {options.map((option) => (
-              <RadixSelect.Item
-                key={option.value}
-                value={option.value}
-                className="ui-menu-item"
-              >
-                <span className="ui-menu-check" aria-hidden="true">
-                  <RadixSelect.ItemIndicator>
-                    <Check size={15} />
-                  </RadixSelect.ItemIndicator>
-                </span>
-                <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
-              </RadixSelect.Item>
-            ))}
-          </RadixSelect.Viewport>
-        </RadixSelect.Content>
-      </RadixSelect.Portal>
-    </RadixSelect.Root>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </DropdownSelect>
   )
 }

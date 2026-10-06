@@ -24,7 +24,7 @@
   gap: 8px;
   align-items: center;
 }
-.explore-builder select,
+.explore-builder :is(select, [data-bloom-select]),
 .explore-builder input {
   min-height: 38px;
   padding: 6px 10px;

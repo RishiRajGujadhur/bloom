@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useTabTitle } from '../../utils/useTabTitle'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -217,13 +218,13 @@ export function CardsPage() {
   const addTab = () => (
     <div className="studio-split">
       <div className="studio-card fc-add bloom-start-stack">
-        <select className="studio-input" aria-label="Deck" value={addDeck} onChange={(e) => setAddDeck(e.target.value)}>
+        <DropdownSelect className="studio-input" aria-label="Deck" value={addDeck} onChange={(e) => setAddDeck(e.target.value)}>
           {store.decks.map((d) => (
             <option key={d.id} value={d.id}>
               {d.emoji} {d.name}
             </option>
           ))}
-        </select>
+        </DropdownSelect>
         <textarea className="studio-input fc-area" aria-label="Front" placeholder={on('cloze') ? 'Front (Markdown). Cloze: The {{c1::heart}} pumps blood' : 'Front'} value={front} onChange={(e) => setFront(e.target.value)} />
         <textarea className="studio-input fc-area" aria-label="Back" placeholder="Back" value={back} onChange={(e) => setBack(e.target.value)} />
         {on('tags') && <input className="studio-input" aria-label="Tags" placeholder="tags, comma separated" value={tags} onChange={(e) => setTags(e.target.value)} />}

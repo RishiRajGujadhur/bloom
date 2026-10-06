@@ -1,3 +1,4 @@
+import { DropdownSelect } from './components/ui/DropdownSelect'
 import { AdvancedSection } from './components/ui/PageMode'
 import { FeatureModes } from './components/settings/FeatureModes'
 import { SoundscapeSettings } from './components/settings/SoundscapeSettings'
@@ -507,7 +508,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <strong>Corner roundness</strong>
           <small>How rounded buttons, fields and cards look.</small>
         </span>
-        <select
+        <DropdownSelect
           className="settings-name"
           aria-label="Corner roundness"
           defaultValue={document.documentElement.dataset.round ?? ''}
@@ -524,7 +525,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <option value="">Soft</option>
           <option value="square">Square-ish</option>
           <option value="round">Extra round</option>
-        </select>
+        </DropdownSelect>
       </label>
       <label className={styles.subOption}>
         <span>
@@ -626,7 +627,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <strong>Quiet hours</strong>
           <small>No habit or routine reminders during these hours.</small>
         </span>
-        <select
+        <DropdownSelect
           className="settings-name"
           aria-label="Quiet hours"
           defaultValue={(() => {
@@ -650,14 +651,14 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <option value="21-8">21:00–08:00</option>
           <option value="23-9">23:00–09:00</option>
           <option value="12-14">12:00–14:00 (lunch)</option>
-        </select>
+        </DropdownSelect>
       </label>
       <label className={styles.subOption}>
         <span>
           <strong>Week starts on</strong>
           <small>Used by the calendar.</small>
         </span>
-        <select
+        <DropdownSelect
           className="settings-name"
           aria-label="Week starts on"
           defaultValue={(() => {
@@ -677,14 +678,14 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
         >
           <option value="1">Monday</option>
           <option value="0">Sunday</option>
-        </select>
+        </DropdownSelect>
       </label>
       <label className={styles.subOption}>
         <span>
           <strong>Open Bloom on</strong>
           <small>The page you land on when you open Bloom without a link.</small>
         </span>
-        <select
+        <DropdownSelect
           className="settings-name"
           aria-label="Open Bloom on"
           defaultValue={(() => {
@@ -710,14 +711,14 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <option value="todos">To-dos</option>
           <option value="focus">Focus</option>
           <option value="calendar">Calendar</option>
-        </select>
+        </DropdownSelect>
       </label>
       <label className={styles.subOption}>
         <span>
           <strong>Theme schedule</strong>
           <small>Switch to dark in the evening and back to light in the morning.</small>
         </span>
-        <select
+        <DropdownSelect
           className="settings-name"
           aria-label="Theme schedule"
           defaultValue={(() => {
@@ -742,7 +743,7 @@ function NavigationCard({ reducedMotion, setReducedMotion }: { reducedMotion: bo
           <option value="20-7">Dark 20:00–07:00</option>
           <option value="21-6">Dark 21:00–06:00</option>
           <option value="18-8">Dark 18:00–08:00</option>
-        </select>
+        </DropdownSelect>
       </label>
       <label className={styles.subOption}>
         <span>
@@ -1017,7 +1018,7 @@ export function SettingsPage({
         <div className={styles.presetBar}>
           <label className={styles.presetPick}>
             <span>Configuration</span>
-            <select
+            <DropdownSelect
               value={current?.id ?? 'custom'}
               onChange={(event) => {
                 const preset = presets.find((p) => p.id === event.target.value)
@@ -1031,7 +1032,7 @@ export function SettingsPage({
                   {p.label}
                 </option>
               ))}
-            </select>
+            </DropdownSelect>
             <small>{current ? current.description : 'Your own mix of features.'}</small>
           </label>
           <label className={styles.presetPick}>

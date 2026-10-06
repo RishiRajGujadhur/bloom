@@ -187,7 +187,7 @@
   font-size: 11px;
   flex: 1;
 }
-.companion-plan-controls select {
+.companion-plan-controls :is(select, [data-bloom-select]) {
   width: 100%;
   padding: 8px;
   border-radius: 8px;
@@ -525,7 +525,7 @@ html[data-bloom-motion='paused'] .companion-orb { animation: none; }
 }
 .chat-appearance-settings legend { font-weight: 600; font-size: 14px; }
 .chat-appearance-settings label { display: grid; gap: 8px; font-size: 13px; }
-.chat-appearance-settings select {
+.chat-appearance-settings :is(select, [data-bloom-select]) {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--border-color);

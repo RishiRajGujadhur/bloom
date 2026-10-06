@@ -1,3 +1,4 @@
+import { chooseSelectOption } from './helpers/dropdown'
 import { test, expect } from '@playwright/test'
 
 test('nested projects and perspectives survive reload', async ({
@@ -6,28 +7,25 @@ test('nested projects and perspectives survive reload', async ({
   await page.goto('/#todos')
   await page.getByRole('button', { name: 'New project', exact: true }).click()
   await page.getByLabel('Project name', { exact: true }).fill('Product launch')
-  await page.getByLabel('Action order').selectOption('sequential')
+  await chooseSelectOption(page.getByLabel('Action order'), 'sequential')
   await page.getByRole('button', { name: 'Save project' }).click()
   await page.getByRole('button', { name: /Product launch 0\/0/ }).click()
   await page.getByRole('button', { name: 'New project', exact: true }).click()
   await page.getByLabel('Project name', { exact: true }).fill('Research')
   await page.getByRole('button', { name: 'Save project' }).click()
-  await page
-    .getByLabel('Filter project')
-    .selectOption({ label: 'Product launch / Research' })
+  await chooseSelectOption(page
+    .getByLabel('Filter project'), { label: 'Product launch / Research' })
   await page.getByLabel('New task').fill('Review customer interviews')
   await page.getByRole('button', { name: /Details/ }).click()
   await page.getByLabel('Context', { exact: true }).fill('Office')
-  await page
-    .getByRole('combobox', { name: 'Energy', exact: true })
-    .selectOption('high')
-  await page
-    .getByRole('combobox', { name: 'Time of day', exact: true })
-    .selectOption('morning')
+  await chooseSelectOption(page
+    .getByRole('combobox', { name: 'Energy', exact: true }), 'high')
+  await chooseSelectOption(page
+    .getByRole('combobox', { name: 'Time of day', exact: true }), 'morning')
   await page.getByRole('button', { name: 'Add', exact: true }).click()
-  await page.getByLabel('Filter energy').selectOption('high')
-  await page.getByLabel('Filter context').selectOption('Office')
-  await page.getByLabel('Filter time of day').selectOption('morning')
+  await chooseSelectOption(page.getByLabel('Filter energy'), 'high')
+  await chooseSelectOption(page.getByLabel('Filter context'), 'Office')
+  await chooseSelectOption(page.getByLabel('Filter time of day'), 'morning')
   await page
     .getByRole('button', { name: 'Save perspective', exact: true })
     .click()
@@ -37,10 +35,9 @@ test('nested projects and perspectives survive reload', async ({
     .getByRole('button', { name: 'Save perspective', exact: true })
     .click()
   await page.reload()
-  await page
-    .getByLabel('Perspective', { exact: true })
-    .selectOption({ label: 'Morning deep work' })
-  await expect(page.getByLabel('Filter context')).toHaveValue('Office')
+  await chooseSelectOption(page
+    .getByLabel('Perspective', { exact: true }), { label: 'Morning deep work' })
+  await expect(page.getByLabel('Filter context')).toHaveAttribute('data-value', 'Office')
   await expect(
     page.getByRole('button', {
       name: 'Complete Review customer interviews',
@@ -73,7 +70,7 @@ test('time blocks support scheduling, resizing, overlap protection, and settings
   await page.getByLabel('Deep work', { exact: true }).check()
   await page.getByRole('button', { name: 'Add', exact: true }).click()
   await page.goto('/#calendar')
-  await page.getByLabel('Calendar view').selectOption('timeGridDay')
+  await chooseSelectOption(page.getByLabel('Calendar view'), 'timeGridDay')
   if (testInfo.project.name === 'desktop') {
     const source = page.locator('.calendar-draggable')
     const target = page.locator('.fc-timegrid-slot-lane[data-time="09:00:00"]')

@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useLeaveGuard } from '../utils/useLeaveGuard'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { idleGranted, idleSupported, requestIdle, useAway, useKeepAwake } from '../platform/presence'
@@ -221,13 +222,13 @@ export function FocusPage({
           })()} ·{' '}
           <label>
             goal{' '}
-            <select aria-label="Daily focus goal" value={dailyGoal} onChange={(e) => setDailyGoal(Number(e.target.value))}>
+            <DropdownSelect aria-label="Daily focus goal" value={dailyGoal} onChange={(e) => setDailyGoal(Number(e.target.value))}>
               {[1, 2, 3, 4, 5, 6, 8].map((n) => (
                 <option key={n} value={n}>
                   {n}
                 </option>
               ))}
-            </select>
+            </DropdownSelect>
           </label>
         </p>
         {active && (
@@ -290,7 +291,7 @@ export function FocusPage({
                 </button>
               ))}
             </div>
-            <select
+            <DropdownSelect
               aria-label="Focus task"
               value={quest.taskId ?? ''}
               onChange={(event) =>
@@ -305,7 +306,7 @@ export function FocusPage({
                     {task.title}
                   </option>
                 ))}
-            </select>
+            </DropdownSelect>
             <label className="strict-option">
               <input type="checkbox" checked={awayOn} onChange={(e) => { setAwayOn(e.target.checked); writeStore('bloom-focus-away', e.target.checked) }} />{' '}
               Pause when I step away{' '}

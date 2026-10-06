@@ -1,6 +1,6 @@
 .tr-page { --bloom-gap: 12px; }
 .tr-pick { display: flex; align-items: center; gap: 8px; font-weight: 800; }
-.tr-pick select { min-width: 220px; }
+.tr-pick :is(select, [data-bloom-select]) { min-width: 220px; }
 .tr { display: grid; gap: 12px; padding: 16px; border-radius: 24px; color: #e6f1ff; background: radial-gradient(120% 100% at 100% 0%, #10244d 0%, #060b18 60%); border: 1px solid #ffffff1a; position: relative; overflow: hidden; }
 .tr::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, #ffffff05 0 1px, transparent 1px 3px); }
 .tr-wait { min-height: 200px; place-items: center; font-weight: 800; }

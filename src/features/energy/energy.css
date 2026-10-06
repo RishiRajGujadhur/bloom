@@ -112,7 +112,7 @@
   grid-template-columns: minmax(0, 1fr) 90px auto;
   gap: 8px;
 }
-.energy-form select,
+.energy-form :is(select, [data-bloom-select]),
 .energy-form input {
   min-height: 44px;
   padding: 8px 12px;
@@ -134,7 +134,7 @@
   gap: 6px;
   width: 100%;
 }
-.energy-log-edit select,
+.energy-log-edit :is(select, [data-bloom-select]),
 .energy-log-edit input {
   min-width: 0;
   min-height: 40px;

@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -378,9 +379,9 @@ export function MoneyPage() {
               ) : (
                 <label className="mn-emoji mn-cat-pick" title="Change category">
                   {categoryOf(x.category).emoji}
-                  <select aria-label="Category" value={x.category} onChange={(e) => save((s) => ({ ...s, txns: s.txns.map((y) => (y.id === x.id ? { ...y, category: e.target.value } : y)) }))}>
+                  <DropdownSelect aria-label="Category" value={x.category} onChange={(e) => save((s) => ({ ...s, txns: s.txns.map((y) => (y.id === x.id ? { ...y, category: e.target.value } : y)) }))}>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>)}
-                  </select>
+                  </DropdownSelect>
                 </label>
               )}
               <span className="mn-txn-main">
@@ -609,7 +610,7 @@ export function MoneyPage() {
             }}>
               <input name="name" className="studio-input" placeholder="Account or debt" aria-label="Name" />
               <input name="value" className="studio-input" inputMode="decimal" placeholder="Value" aria-label="Value" />
-              <select name="kind" className="studio-input" aria-label="Kind"><option value="asset">Asset</option><option value="debt">Debt</option></select>
+              <DropdownSelect name="kind" className="studio-input" aria-label="Kind"><option value="asset">Asset</option><option value="debt">Debt</option></DropdownSelect>
               <button type="submit" className="studio-btn">Add</button>
             </form>
           </section>
@@ -671,9 +672,9 @@ export function MoneyPage() {
         {on('currency') ? (
           <label className="mn-currency" data-hint="Currency">
             <Wallet size={15} aria-hidden="true" />
-            <select aria-label="Currency" value={code} onChange={(e) => save((s) => ({ ...s, currency: e.target.value }))}>
+            <DropdownSelect aria-label="Currency" value={code} onChange={(e) => save((s) => ({ ...s, currency: e.target.value }))}>
               {currencies.map((c) => <option key={c}>{c}</option>)}
-            </select>
+            </DropdownSelect>
           </label>
         ) : null}
         </>

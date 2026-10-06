@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -169,12 +170,12 @@ export function DaylightPage() {
       </div>
       <div className="studio-card rm-side bloom-start-stack">
         <div className="dl-place bloom-controls">
-          <select className="studio-input" aria-label="City" value={cities.some((c) => c.name === p.name) ? p.name : ''} onChange={(e) => setStore((s) => ({ ...s, place: cities.find((c) => c.name === e.target.value) ?? s.place }))}>
+          <DropdownSelect className="studio-input" aria-label="City" value={cities.some((c) => c.name === p.name) ? p.name : ''} onChange={(e) => setStore((s) => ({ ...s, place: cities.find((c) => c.name === e.target.value) ?? s.place }))}>
             {!cities.some((c) => c.name === p.name) && <option value="">{p.name}</option>}
             {cities.map((c) => (
               <option key={c.name}>{c.name}</option>
             ))}
-          </select>
+          </DropdownSelect>
           {on('gps') && (
             <button type="button" className="studio-chip" onClick={locate} disabled={locating}>
               <LocateFixed size={13} /> {locating ? 'Locating…' : 'Use my location'}

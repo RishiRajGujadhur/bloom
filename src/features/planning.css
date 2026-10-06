@@ -25,7 +25,7 @@
 .calendar-toolbar > .planning-toolbar:last-child {
   flex-wrap: nowrap;
 }
-.calendar-toolbar .planning-toolbar select {
+.calendar-toolbar .planning-toolbar :is(select, [data-bloom-select]) {
   width: auto;
   min-width: 120px;
 }
@@ -48,12 +48,12 @@
   min-width: 0;
 }
 .planning-fields input,
-.planning-fields select,
+.planning-fields :is(select, [data-bloom-select]),
 .planning-form input,
-.planning-form select,
+.planning-form :is(select, [data-bloom-select]),
 .calendar-workspace input,
-.calendar-workspace select,
-.perspective-picker select {
+.calendar-workspace :is(select, [data-bloom-select]),
+.perspective-picker :is(select, [data-bloom-select]) {
   min-width: 0;
   width: 100%;
   border: 1px solid var(--border);
@@ -348,7 +348,7 @@
     font-size: 17px;
   }
   .task-edit > input,
-  .task-edit > select {
+  .task-edit > :is(select, [data-bloom-select]) {
     max-width: 100%;
   }
 }

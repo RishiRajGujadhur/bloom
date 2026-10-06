@@ -47,7 +47,7 @@
 
 .bc-head-actions button svg { flex-shrink: 0; }
 
-.bc-panel :is(button, input, select, summary):focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; }
+.bc-panel :is(button, input, :is(select, [data-bloom-select]), summary):focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; }
 
 .bloom-companion-launch:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 4px; }
 
@@ -90,7 +90,7 @@ html .bloom-companion-launch.has-face .bloom-face { width: 40px !important; heig
 
 .bc-panel .companion-plan-controls label { font-size: 0.875rem; }
 
-.bc-panel .companion-plan-controls select { font-size: 1rem; min-height: 48px; }
+.bc-panel .companion-plan-controls :is(select, [data-bloom-select]) { font-size: 1rem; min-height: 48px; }
 
 .companion-plan-controls label { min-width: min(100%, 150px); }
 
@@ -132,7 +132,7 @@ html .bloom-companion-launch.has-face .bloom-face { width: 40px !important; heig
 
 @media (prefers-reduced-motion: reduce) { .bc-panel *, .bc-panel *::before, .bc-panel *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 
-@media (forced-colors: active) { .bc-panel :is(button, input, select, summary) { border: 1px solid ButtonText; } .bc-panel:not(.uses-app-theme), .bc-panel.uses-app-theme { border: 1px solid CanvasText; background: Canvas; color: CanvasText; box-shadow: none; } }
+@media (forced-colors: active) { .bc-panel :is(button, input, :is(select, [data-bloom-select]), summary) { border: 1px solid ButtonText; } .bc-panel:not(.uses-app-theme), .bc-panel.uses-app-theme { border: 1px solid CanvasText; background: Canvas; color: CanvasText; box-shadow: none; } }
 
 @media (forced-colors: active) { .bc-panel button:disabled { color: GrayText; border-color: GrayText; opacity: 1; } }
 

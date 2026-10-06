@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { usePageMode } from '../../components/ui/PageMode'
 import { usePageActions } from '../../components/ui/PageMenu'
 import { download } from '../lab/exportSuite'
@@ -1069,7 +1070,7 @@ export function GratitudePage() {
       {inJar.length > 0 && (
         <div className="wb-note-filter">
           <label htmlFor="gratitude-note-month">Browse notes by month</label>
-          <select id="gratitude-note-month" value={noteMonth} onChange={(event) => setNoteMonth(event.target.value)}>
+          <DropdownSelect id="gratitude-note-month" value={noteMonth} onChange={(event) => setNoteMonth(event.target.value)}>
             <option value="all">All dates ({inJar.length})</option>
             {noteMonths.map((month) => (
               <option key={month} value={month}>
@@ -1077,7 +1078,7 @@ export function GratitudePage() {
                 {' '}({inJar.filter((entry) => monthKey(entry.at) === month).length})
               </option>
             ))}
-          </select>
+          </DropdownSelect>
           <span aria-live="polite">{visibleNotes.length} {visibleNotes.length === 1 ? 'note' : 'notes'}</span>
         </div>
       )}

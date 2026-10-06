@@ -130,7 +130,7 @@
   margin: 8px 0;
 }
 .urge-manage input,
-.pattern-filter select {
+.pattern-filter :is(select, [data-bloom-select]) {
   min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--border-color);

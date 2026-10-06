@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { marked } from 'marked'
@@ -313,7 +314,7 @@ export function CodePage() {
               onDraft={(c) => save((s) => ({ ...s, drafts: { ...s.drafts, [challenge.id]: c } }))}
               onPass={() => pass(challenge.id, challenge.level === 'hard' ? 30 : challenge.level === 'medium' ? 20 : 10)}
               done={!!store.done[challenge.id]}
-              nav={<select className="studio-input" aria-label="Challenge" value={challengeId} onChange={(e) => setChallengeId(e.target.value)}>{challenges.map((c) => <option key={c.id} value={c.id}>{store.done[c.id] ? '✓ ' : ''}{c.title} ({c.level})</option>)}</select>}
+              nav={<DropdownSelect className="studio-input" aria-label="Challenge" value={challengeId} onChange={(e) => setChallengeId(e.target.value)}>{challenges.map((c) => <option key={c.id} value={c.id}>{store.done[c.id] ? '✓ ' : ''}{c.title} ({c.level})</option>)}</DropdownSelect>}
             />
           ),
         }] : []),

@@ -417,7 +417,7 @@ html[data-sidebar='collapsed'] .sidebar-encourage {
 .app-shell .sidebar nav button:active {
   transform: scale(0.98);
 }
-.app-shell :is(button, a, [role='button'], input, select, textarea, summary):focus-visible {
+.app-shell :is(button, a, [role='button'], input, :is(select, [data-bloom-select]), textarea, summary):focus-visible {
   outline: 3px solid var(--focus-ring, var(--accent-color));
   outline-offset: 2px;
 }

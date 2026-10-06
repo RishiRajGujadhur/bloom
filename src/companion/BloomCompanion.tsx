@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../utils/motion'
 import { LayoutChatHost } from '../components/layout/WidgetLayout'
 import {
@@ -719,7 +720,7 @@ export function BloomCompanion({
                 <div className="companion-plan-controls bloom-wrap">
                   <label>
                     Time available
-                    <select
+                    <DropdownSelect
                       value={minutes}
                       onChange={(event) =>
                         build({
@@ -737,11 +738,11 @@ export function BloomCompanion({
                             {value} minutes
                           </option>
                         ))}
-                    </select>
+                    </DropdownSelect>
                   </label>
                   <label>
                     Energy
-                    <select
+                    <DropdownSelect
                       value={energy}
                       onChange={(event) =>
                         build({
@@ -755,7 +756,7 @@ export function BloomCompanion({
                       <option value="low">Low · keep it gentle</option>
                       <option value="medium">Some room to focus</option>
                       <option value="high">Feeling energized</option>
-                    </select>
+                    </DropdownSelect>
                   </label>
                 </div>
                 {proposal.tasks.length ? (

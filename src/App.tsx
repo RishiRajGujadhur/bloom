@@ -1,3 +1,4 @@
+import { DropdownSelect } from './components/ui/DropdownSelect'
 import { prefersReducedMotion } from './utils/motion'
 import { BodyTools } from './features/body/BodyTools'
 import { pauseGsapWhenHidden } from './utils/gsapVisibility'
@@ -1607,7 +1608,7 @@ function App() {
                                   </button>
                                   <label className="habit-stat-select">
                                     +5
-                                    <select
+                                    <DropdownSelect
                                       aria-label={t('ui.statFor', {
                                         title: h.title,
                                       })}
@@ -1631,7 +1632,7 @@ function App() {
                                           </option>
                                         ),
                                       )}
-                                    </select>
+                                    </DropdownSelect>
                                     <small>{t('ui.comboExp')}</small>
                                   </label>
                                 </div>

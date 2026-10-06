@@ -44,7 +44,7 @@
   margin: 0;
   overflow-wrap: anywhere;
 }
-.habits-toolbar select {
+.habits-toolbar :is(select, [data-bloom-select]) {
   width: auto;
 }
 .habit-message:empty {

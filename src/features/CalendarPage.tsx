@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { subOn } from './subFeatures'
 import {
   useEffect,
@@ -355,7 +356,7 @@ export function CalendarPage({ data, setData }: Props) {
           >
             Today
           </button>
-          <select
+          <DropdownSelect
             aria-label="Calendar view"
             value={view}
             onChange={(e) => {
@@ -367,7 +368,7 @@ export function CalendarPage({ data, setData }: Props) {
             <option value="timeGridWeek">Week</option>
             <option value="dayGridMonth">Month</option>
             {subOn('fullCalendar', 'agenda') && <option value="listWeek">Agenda</option>}
-          </select>
+          </DropdownSelect>
           <button
             className="primary"
             onClick={() => {
@@ -492,7 +493,7 @@ export function CalendarPage({ data, setData }: Props) {
             <div className="planning-fields">
               <label>
                 Start hour
-                <select
+                <DropdownSelect
                   value={data.calendarHours.start}
                   onChange={(e) =>
                     setData((current) => ({
@@ -509,11 +510,11 @@ export function CalendarPage({ data, setData }: Props) {
                       {String(h).padStart(2, '0')}:00
                     </option>
                   ))}
-                </select>
+                </DropdownSelect>
               </label>
               <label>
                 End hour
-                <select
+                <DropdownSelect
                   value={data.calendarHours.end}
                   onChange={(e) =>
                     setData((current) => ({
@@ -533,7 +534,7 @@ export function CalendarPage({ data, setData }: Props) {
                       {String(h).padStart(2, '0')}:00
                     </option>
                   ))}
-                </select>
+                </DropdownSelect>
               </label>
             </div>
           </details>
@@ -733,7 +734,7 @@ export function CalendarPage({ data, setData }: Props) {
           >
             <label>
               Linked task
-              <select
+              <DropdownSelect
                 value={draft.taskId ?? ''}
                 onChange={(e) => {
                   const task = data.todos.find((t) => t.id === e.target.value)
@@ -753,7 +754,7 @@ export function CalendarPage({ data, setData }: Props) {
                       {t.title}
                     </option>
                   ))}
-              </select>
+              </DropdownSelect>
             </label>
             <label>
               Block title

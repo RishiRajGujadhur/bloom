@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import chroma from 'chroma-js'
@@ -142,7 +143,7 @@ export function WeeksPage() {
             else save((s) => ({ ...s, milestones: [...s.milestones, { id: crypto.randomUUID(), name, date: from, emoji: String(f.get('emoji') || '⭐') }] }))
             e.currentTarget.reset()
           }}>
-            <select name="kind" className="studio-input" aria-label="Type"><option value="chapter">Chapter</option><option value="milestone">Milestone</option></select>
+            <DropdownSelect name="kind" className="studio-input" aria-label="Type"><option value="chapter">Chapter</option><option value="milestone">Milestone</option></DropdownSelect>
             <input name="name" className="studio-input" placeholder="University, First job, Paris…" aria-label="Name" />
             <input name="from" type="date" className="studio-input" aria-label="From" />
             <input name="to" type="date" className="studio-input" aria-label="To (chapters)" />

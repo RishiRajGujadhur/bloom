@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import {
   ArrowDown,
@@ -75,7 +76,7 @@ export function TaskPlanningFields({
     <div className="planning-fields">
       <label>
         {prefix}Project
-        <select
+        <DropdownSelect
           value={value.projectId ?? ''}
           onChange={(e) =>
             change({ projectId: e.target.value || null, order: Date.now() })
@@ -83,7 +84,7 @@ export function TaskPlanningFields({
         >
           <option value="">Inbox</option>
           <ProjectOptions projects={projects} />
-        </select>
+        </DropdownSelect>
       </label>
       <label>
         {prefix}Defer until
@@ -104,7 +105,7 @@ export function TaskPlanningFields({
       </label>
       <label>
         {prefix}Energy
-        <select
+        <DropdownSelect
           value={value.energy}
           onChange={(e) =>
             change({ energy: e.target.value as TaskPlanning['energy'] })
@@ -115,11 +116,11 @@ export function TaskPlanningFields({
               {v === 'any' ? 'Any energy' : v}
             </option>
           ))}
-        </select>
+        </DropdownSelect>
       </label>
       <label>
         {prefix}Time of day
-        <select
+        <DropdownSelect
           value={value.timeOfDay}
           onChange={(e) =>
             change({ timeOfDay: e.target.value as TaskPlanning['timeOfDay'] })
@@ -130,7 +131,7 @@ export function TaskPlanningFields({
               {v === 'any' ? 'Any time' : v}
             </option>
           ))}
-        </select>
+        </DropdownSelect>
       </label>
       <label>
         {prefix}Estimated minutes
@@ -249,7 +250,7 @@ export function PlanningTools({
         </button>
         <label className="perspective-picker">
           Perspective
-          <select
+          <DropdownSelect
             aria-label="Perspective"
             value={perspectiveId}
             onChange={(e) => {
@@ -276,7 +277,7 @@ export function PlanningTools({
                 {p.title}
               </option>
             ))}
-          </select>
+          </DropdownSelect>
         </label>
         <button
           className="icon-button"
@@ -398,18 +399,18 @@ export function PlanningTools({
       <div className="planning-fields perspective-filters">
         <label>
           Filter project
-          <select
+          <DropdownSelect
             value={filter.projectId}
             onChange={(e) => updateFilter({ projectId: e.target.value })}
           >
             <option value="all">All projects</option>
             <option value="inbox">Inbox</option>
             <ProjectOptions projects={data.projects} />
-          </select>
+          </DropdownSelect>
         </label>
         <label>
           Filter context
-          <select
+          <DropdownSelect
             value={filter.context}
             onChange={(e) => updateFilter({ context: e.target.value })}
           >
@@ -422,11 +423,11 @@ export function PlanningTools({
             ].map((c) => (
               <option key={c}>{c}</option>
             ))}
-          </select>
+          </DropdownSelect>
         </label>
         <label>
           Filter energy
-          <select
+          <DropdownSelect
             value={filter.energy}
             onChange={(e) =>
               updateFilter({
@@ -439,11 +440,11 @@ export function PlanningTools({
                 {v === 'any' ? 'All energy levels' : v}
               </option>
             ))}
-          </select>
+          </DropdownSelect>
         </label>
         <label>
           Filter time of day
-          <select
+          <DropdownSelect
             value={filter.timeOfDay}
             onChange={(e) =>
               updateFilter({
@@ -456,11 +457,11 @@ export function PlanningTools({
                 {v === 'any' ? 'Any time' : v}
               </option>
             ))}
-          </select>
+          </DropdownSelect>
         </label>
         <label>
           Availability
-          <select
+          <DropdownSelect
             value={filter.availability}
             onChange={(e) =>
               updateFilter({
@@ -473,7 +474,7 @@ export function PlanningTools({
                 {v === 'all' ? 'All actions' : v}
               </option>
             ))}
-          </select>
+          </DropdownSelect>
         </label>
       </div>
       {project && (
@@ -515,7 +516,7 @@ export function PlanningTools({
             </label>
             <label>
               Parent project
-              <select
+              <DropdownSelect
                 value={project.parentId ?? ''}
                 onChange={(e) =>
                   setProject({
@@ -527,11 +528,11 @@ export function PlanningTools({
               >
                 <option value="">No parent</option>
                 <ProjectOptions projects={data.projects} exclude={project.id} />
-              </select>
+              </DropdownSelect>
             </label>
             <label>
               Action order
-              <select
+              <DropdownSelect
                 value={project.mode}
                 onChange={(e) =>
                   setProject({
@@ -542,7 +543,7 @@ export function PlanningTools({
               >
                 <option value="parallel">Parallel</option>
                 <option value="sequential">Sequential</option>
-              </select>
+              </DropdownSelect>
             </label>
             <label>
               Defer project until

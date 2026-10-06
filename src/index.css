@@ -278,13 +278,13 @@ pre:hover > .pre-copy, .pre-copy:focus-visible { opacity: 1; }
 .skip-link { background: var(--bg-surface); color: var(--text-primary); border: 2px solid var(--focus-ring); }
 
 /* UX 002: Give all native form fields a visible keyboard focus ring. */
-input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+input:focus-visible, textarea:focus-visible, :is(select, [data-bloom-select]):focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 
 /* UX 003: Make explicitly invalid fields visibly identifiable. */
-input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border: 2px solid var(--danger); }
+input[aria-invalid="true"], textarea[aria-invalid="true"], :is(select, [data-bloom-select])[aria-invalid="true"] { border: 2px solid var(--danger); }
 
 /* UX 004: Keep invalid-field feedback visible while correcting an entry. */
-input[aria-invalid="true"]:focus, textarea[aria-invalid="true"]:focus, select[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent); }
+input[aria-invalid="true"]:focus, textarea[aria-invalid="true"]:focus, :is(select, [data-bloom-select])[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent); }
 
 /* UX 005: Allow grouped forms to shrink inside narrow cards. */
 fieldset { min-inline-size: 0; }
@@ -293,10 +293,10 @@ fieldset { min-inline-size: 0; }
 legend { max-inline-size: 100%; white-space: normal; overflow-wrap: anywhere; }
 
 /* UX 007: Make native select text follow the chosen app font. */
-select { font: inherit; color: var(--text-primary); }
+:is(select, [data-bloom-select]) { font: inherit; color: var(--text-primary); }
 
 /* UX 008: Communicate disabled form controls consistently. */
-select:disabled, input:disabled, textarea:disabled { cursor: not-allowed; opacity: 0.65; }
+:is(select, [data-bloom-select]):disabled, input:disabled, textarea:disabled { cursor: not-allowed; opacity: 0.65; }
 
 /* UX 009: Connect native choice controls to the selected accent theme. */
 input[type="checkbox"], input[type="radio"] { accent-color: var(--accent-color); }

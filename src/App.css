@@ -200,7 +200,7 @@ html[data-sidebar='collapsed'] main {
   color: var(--text-secondary);
   font-size: 11px;
 }
-.language-selector select {
+.language-selector :is(select, [data-bloom-select]) {
   width: auto;
   padding: 8px 27px 8px 9px;
   border: 1px solid var(--accent-border);
@@ -1592,14 +1592,14 @@ html[data-mode='dark'] .avatar {
 }
 html[data-mode='dark'] .quiet-button,
 html[data-mode='dark'] .theme-toggle,
-html[data-mode='dark'] .language-selector select {
+html[data-mode='dark'] .language-selector :is(select, [data-bloom-select]) {
   background: var(--bg-surface);
   border-color: var(--border-color);
   color: var(--text-muted);
 }
 html[data-mode='dark'] .quiet-button:hover,
 html[data-mode='dark'] .theme-toggle:hover,
-html[data-mode='dark'] .language-selector select:hover,
+html[data-mode='dark'] .language-selector :is(select, [data-bloom-select]):hover,
 html[data-mode='dark'] .icon-button:hover {
   background: var(--bg-elevated);
   color: var(--text-primary);

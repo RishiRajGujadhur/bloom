@@ -96,7 +96,7 @@ test('saved page selection, unfolding, long writing, and editing use the exact e
   fireEvent.click(screen.getByRole('button', { name: 'Older saved page' }))
   expect(
     screen.getByRole('combobox', { name: 'Choose saved journal page' }),
-  ).toHaveValue('older')
+  ).toHaveAttribute('data-value', 'older')
   expect(
     screen.getByRole('button', { name: 'Older saved page' }),
   ).toBeDisabled()

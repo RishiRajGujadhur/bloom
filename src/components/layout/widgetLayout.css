@@ -1,8 +1,8 @@
 /* Section layout belongs to the shared shell, not individual feature pages. */
 .page-layout-controls { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:8px 0; font-size:.875rem; }
 .page-layout-controls label { display:flex; align-items:center; gap:6px; min-width:0; }
-.page-layout-controls select { max-width:min(360px,65vw); }
-.page-layout-controls button, .page-layout-controls select, .widget-layout-tools button, .widget-size-menu summary, .widget-size-options button { min-height:36px; padding:6px 10px; font:inherit; color:var(--text-primary); background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; cursor:pointer; }
+.page-layout-controls :is(select, [data-bloom-select]) { max-width:min(360px,65vw); }
+.page-layout-controls button, .page-layout-controls :is(select, [data-bloom-select]), .widget-layout-tools button, .widget-size-menu summary, .widget-size-options button { min-height:36px; padding:6px 10px; font:inherit; color:var(--text-primary); background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; cursor:pointer; }
 .page-layout-controls span { color:var(--text-secondary); }
 [data-resizable-widget] { position:relative; min-width:0 !important; max-width:100% !important; width:min(var(--widget-width,100%),100%) !important; padding-bottom:36px !important; box-sizing:border-box; container-type:inline-size; container-name:bloom-widget; }
 [data-resizable-widget] :is(canvas,img,video) { max-width:100%; }
@@ -71,7 +71,7 @@
   :is(.studio-split,.studio-grid,.habit-calendar,.rpg-grid,.bloom-grid) { grid-template-columns:minmax(0,1fr) !important; }
   :is(.todo-overview,.ov-stats) { grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr)) !important; }
   :is(.task-composer,.todo-heading,.card-heading,.studio-bar,.task-add,.task-row,.bloom-controls) { flex-wrap:wrap; min-width:0; }
-  :is(input,textarea,select) { max-width:100%; min-width:0; }
+  :is(input,textarea,:is(select, [data-bloom-select])) { max-width:100%; min-width:0; }
   :is(.task-add,.task-composer) > input { flex:1 1 180px; width:100%; }
   :is(.task-item,.task-title,.task-content,.task-add,.studio-tabs) { min-width:0; overflow-wrap:anywhere; }
   :is(.studio-panel,.task-list,.studio-rail,.habit-calendar-scroll) { max-width:100%; }
@@ -82,7 +82,7 @@
   #todo-page .todo-mode { align-self:flex-start; }
 }
 @media(max-width:600px) {
-  .page-layout-controls button,.page-layout-controls select,.widget-layout-tools button,.widget-size-menu summary { min-height:44px; }
+  .page-layout-controls button,.page-layout-controls :is(select, [data-bloom-select]),.widget-layout-tools button,.widget-size-menu summary { min-height:44px; }
   [data-widget-editing] { padding-top:64px !important; }
   [data-widget-collapsed] { min-height:56px !important; height:56px !important; }
   .page-content[data-compact-layout] { padding:10px 12px 16px; }

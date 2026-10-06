@@ -473,7 +473,7 @@ html[data-mode='dark'] .thought-diff del {
 .daybook-page-tools button { border: 0; background: var(--bg-surface); border-radius: 8px; padding: 3px 6px; cursor: pointer; font-size: 13px; transition: transform 160ms ease, background 160ms ease; }
 .daybook-page-tools button:hover { transform: translateY(-1px) scale(1.08); background: var(--accent-soft); }
 .daybook-sort { display: flex; justify-content: flex-end; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: -18px; position: relative; z-index: 1; }
-.daybook-sort select { font-size: 12px; padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
+.daybook-sort :is(select, [data-bloom-select]) { font-size: 12px; padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); }
 .daybook-mood { display: inline-flex; gap: 2px; }
 .daybook-mood button { border: 0; background: transparent; cursor: pointer; font-size: 15px; padding: 0 2px; opacity: 0.4; filter: grayscale(0.7); transition: opacity 120ms, transform 120ms; }
 .daybook-mood button:hover { opacity: 0.8; }
@@ -488,4 +488,4 @@ html[data-mode='dark'] .thought-diff del {
 .daybook-memory small { font-style: normal; color: var(--accent-color); font-weight: 600; }
 .daybook-goal { position: relative; display: inline-flex; gap: 6px; align-items: center; }
 .daybook-goal i { position: absolute; left: 0; bottom: -3px; height: 2px; border-radius: 2px; background: var(--accent-color); }
-.daybook-goal select { border: 0; background: transparent; color: var(--text-muted); font-size: 12px; cursor: pointer; }
+.daybook-goal :is(select, [data-bloom-select]) { border: 0; background: transparent; color: var(--text-muted); font-size: 12px; cursor: pointer; }

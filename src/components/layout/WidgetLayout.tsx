@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type HTMLAttributes, type PointerEvent as ReactPointerEvent, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import './widgetLayout.css'
@@ -282,7 +283,7 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
     {host && createPortal(<details className="chat-layout-options">
       <summary>Arrange layout</summary>
       <div className="page-layout-controls">
-      {sections.length > 1 && <label>View <select aria-label="Visible section" value={selected} onChange={event => setFocus(event.target.value)}><option value="">All sections</option>{sections.map(section => <option key={section.id} value={section.id}>{section.title}</option>)}</select></label>}
+      {sections.length > 1 && <label>View <DropdownSelect aria-label="Visible section" value={selected} onChange={event => setFocus(event.target.value)}><option value="">All sections</option>{sections.map(section => <option key={section.id} value={section.id}>{section.title}</option>)}</DropdownSelect></label>}
       <span>Drag any edge or corner to resize. Changes save automatically.</span>
       </div>
       <div className="chat-layout-section-list">{sections.map(section => <ChatSectionTools key={section.id} section={section} />)}</div>

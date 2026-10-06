@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Camera, FolderOpen, Sparkles } from 'lucide-react'
@@ -173,9 +174,9 @@ export function ReceiptLens({ code, onAdd }: { code: string; onAdd: (txns: Txn[]
                     <label><span className="rl-key date">Date</span><input type="date" className="studio-input" value={it.draft.date} disabled={it.status === 'added'} onChange={(e) => patch(it.id, { draft: { ...it.draft!, date: e.target.value } })} /></label>
                     <label><span className="rl-key total">Total</span><input className="studio-input" inputMode="decimal" value={it.draft.total} disabled={it.status === 'added'} onChange={(e) => patch(it.id, { draft: { ...it.draft!, total: e.target.value } })} /></label>
                     <label><span className="rl-key">Category</span>
-                      <select className="studio-input" value={it.draft.category} disabled={it.status === 'added'} onChange={(e) => patch(it.id, { draft: { ...it.draft!, category: e.target.value } })}>
+                      <DropdownSelect className="studio-input" value={it.draft.category} disabled={it.status === 'added'} onChange={(e) => patch(it.id, { draft: { ...it.draft!, category: e.target.value } })}>
                         {categories.map((c) => <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>)}
-                      </select>
+                      </DropdownSelect>
                     </label>
                     {it.parsed!.items.length > 0 && (
                       <details className="rl-items">

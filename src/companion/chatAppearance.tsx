@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { useSyncExternalStore } from 'react'
 import { avatarStyles, type AvatarStyle } from '../components/ui/avatarStyle'
 
@@ -35,10 +36,10 @@ export function ChatAppearanceSettings() {
       <legend>Bloom chat appearance</legend>
       <label>
         Chat avatar
-        <select value={avatar} onChange={(event) => save('bloom-chat-avatar', event.target.value)}>
+        <DropdownSelect value={avatar} onChange={(event) => save('bloom-chat-avatar', event.target.value)}>
           <option value="glass">Glass orb</option>
           {avatarStyles.map((style) => <option key={style.id} value={style.id}>{style.label}</option>)}
-        </select>
+        </DropdownSelect>
       </label>
       <label className="chat-theme-option">
         <input type="checkbox" checked={followTheme}

@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
@@ -203,13 +204,13 @@ export function LabPage({ data, today }: FeaturePageProps) {
           {subOn('insightsLab', 'scatter') && (
             <div className="lab-scatter-card">
               <p className="lab-pick">
-                <select aria-label="First metric" value={pick[0]} onChange={(e) => setPick([e.target.value as MetricId, pick[1]])}>
+                <DropdownSelect aria-label="First metric" value={pick[0]} onChange={(e) => setPick([e.target.value as MetricId, pick[1]])}>
                   {metrics.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
-                </select>
+                </DropdownSelect>
                 {' × '}
-                <select aria-label="Second metric" value={pick[1]} onChange={(e) => setPick([pick[0], e.target.value as MetricId])}>
+                <DropdownSelect aria-label="Second metric" value={pick[1]} onChange={(e) => setPick([pick[0], e.target.value as MetricId])}>
                   {metrics.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
-                </select>
+                </DropdownSelect>
                 {sel && pi !== pj && (
                   <strong>
                     {' '}

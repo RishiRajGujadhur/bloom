@@ -246,7 +246,7 @@
   font-size: 12px;
   font-weight: 600;
 }
-.focus-companion select {
+.focus-companion :is(select, [data-bloom-select]) {
   width: 100%;
   min-height: 42px;
   border: 1px solid var(--border-color);

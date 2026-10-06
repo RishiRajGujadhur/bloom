@@ -54,7 +54,7 @@
   color: var(--text-secondary);
 }
 .yearbook-options input:not([type='checkbox']),
-.yearbook-options select {
+.yearbook-options :is(select, [data-bloom-select]) {
   min-height: 44px;
   padding: 8px 12px;
   border-radius: 12px;

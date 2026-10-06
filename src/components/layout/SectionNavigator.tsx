@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../ui/DropdownSelect'
 import { useEffect, useState, type RefObject } from 'react'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 import { frameThrottle } from '../../utils/frameThrottle'
@@ -152,10 +153,10 @@ export function SectionNavigator({ root, page }: { root: RefObject<HTMLDivElemen
       </button>
       <div className="section-navigator-copy">
         <span aria-hidden="true">{navigation.canDown ? nextLabel : previousLabel}</span>
-        {navigation.sections.length > 0 && <select aria-label="Jump to page section" value="" onChange={event => jump(Number(event.target.value), 1)}>
+        {navigation.sections.length > 0 && <DropdownSelect aria-label="Jump to page section" value="" onChange={event => jump(Number(event.target.value), 1)}>
           <option value="" disabled>Jump to section…</option>
           {navigation.sections.map((section, index) => <option key={index} value={index}>{section.label}</option>)}
-        </select>}
+        </DropdownSelect>}
       </div>
       <button type="button" disabled={!navigation.canDown} aria-label={`Next section: ${nextLabel}`} title={nextLabel} onClick={() => move(1)}>
         <ArrowDown size={18} aria-hidden="true" />

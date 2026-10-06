@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../../components/ui/DropdownSelect'
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react'
 import gsap from 'gsap'
 import { GameShell, reducedMotion, useBest } from '../shell'
@@ -176,7 +177,7 @@ export default function BloomVision() {
           <span className="bv-eyebrow">MOVE · MATCH · BLOOM</span><h3>Your garden, your pace.</h3>
           <p>Bigger bubbles. Smaller reaches. One hand or both — you choose.</p>
           <div className="bv-modes" role="group" aria-label="Game mode">{MODES.map((m) => <button type="button" key={m.id} disabled={mode === 'loading'} aria-pressed={gardenMode === m.id} onClick={() => setGardenMode(m.id)}><b>{m.title}</b><small>{m.text}</small></button>)}</div>
-          <label className="bv-hands">Camera controls <select value={hands} disabled={mode === 'loading'} onChange={(e) => setHands(Number(e.target.value) as 1 | 2)}><option value="2">Both hands (or either hand)</option><option value="1">One hand</option></select></label>
+          <label className="bv-hands">Camera controls <DropdownSelect value={hands} disabled={mode === 'loading'} onChange={(e) => setHands(Number(e.target.value) as 1 | 2)}><option value="2">Both hands (or either hand)</option><option value="1">One hand</option></DropdownSelect></label>
           <small>For both hands, keep them apart and visible in good light. A live counter shows what the camera sees. Tracking loss holds the clock.</small>
           <div className="bv-legend" aria-label="Bubble guide"><span>✺ <b>Pollen Storm</b> · nearby matching pops</span><span>❄ <b>Time Freeze</b> · 8s slow motion</span><span>◇ <b>Prism</b> · any requested colour</span><span>✹ <b>Thorn</b> · −35 & streak reset{gardenMode === 'zen' ? ' (off in Zen)' : ''}</span></div>
           <small>Match within 6 seconds to grow your streak. Missed matches reset it; your score stays safe. Wrong colours stay intact.</small>

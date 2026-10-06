@@ -18,7 +18,7 @@
     -webkit-app-region: drag;
     app-region: drag;
   }
-  .topbar button, .topbar input, .topbar a, .topbar [role='button'], .topbar select { -webkit-app-region: no-drag; app-region: no-drag; }
+  .topbar button, .topbar input, .topbar a, .topbar [role='button'], .topbar :is(select, [data-bloom-select]) { -webkit-app-region: no-drag; app-region: no-drag; }
   .topbar .wco-title { display: inline-flex; align-items: center; gap: 6px; margin-right: 8px; font: 900 0.85rem 'Manrope', sans-serif; letter-spacing: 0.04em; color: var(--accent-color); }
   .topbar .wco-title::before { content: '✿'; }
   .topbar .wco-title b { font-weight: 800; color: var(--text-secondary); letter-spacing: 0; }

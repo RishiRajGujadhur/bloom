@@ -1,3 +1,4 @@
+import { changeField } from './helpers/dropdown'
 import { useState } from 'react'
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { TodoPage } from '../src/features/ProductivityPages'
@@ -41,7 +42,7 @@ function Harness() {
   return <TodoPage data={data} setData={setData} />
 }
 function add(title: string) {
-  fireEvent.change(screen.getByRole('textbox', { name: 'New task' }), {
+  changeField(screen.getByRole('textbox', { name: 'New task' }), {
     target: { value: title },
   })
   fireEvent.click(screen.getByRole('button', { name: 'Add', exact: true }))
@@ -81,11 +82,11 @@ test('Pro sorting keeps completed tasks last and search still finds them', () =>
   fireEvent.click(screen.getByRole('button', { name: 'Complete First task' }))
   act(() => jest.advanceTimersByTime(550))
   act(() => { localStorage.setItem('bloom-page-mode:todos', 'advanced'); window.dispatchEvent(new Event('bloom-page-mode-change')) })
-  fireEvent.change(screen.getByLabelText('Sort tasks'), {
+  changeField(screen.getByLabelText('Sort tasks'), {
     target: { value: 'due' },
   })
   expect(titles(container)).toEqual(['Second task', 'First task'])
-  fireEvent.change(screen.getByRole('searchbox', { name: 'Search tasks' }), {
+  changeField(screen.getByRole('searchbox', { name: 'Search tasks' }), {
     target: { value: 'First' },
   })
   expect(

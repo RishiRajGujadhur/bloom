@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../../components/ui/DropdownSelect'
 import { prefersReducedMotion } from '../../utils/motion'
 import { useEffect, useMemo, useState } from 'react'
 import FlipNumbersModule from 'react-flip-numbers'
@@ -127,10 +128,10 @@ export function TimeSinceCard({ data }: { data: AppData }) {
           <input aria-label="Emoji" className="ts-emoji" value={draft.emoji} maxLength={4} onChange={(e) => setDraft({ ...draft, emoji: e.target.value })} />
           <input aria-label="Label" placeholder="e.g. Apartment handover" value={draft.label} maxLength={40} onChange={(e) => setDraft({ ...draft, label: e.target.value })} />
           {subOn('timeSince', 'countdowns') && (
-            <select aria-label="Direction" value={draft.kind} onChange={(e) => setDraft({ ...draft, kind: e.target.value as Counter['kind'] })}>
+            <DropdownSelect aria-label="Direction" value={draft.kind} onChange={(e) => setDraft({ ...draft, kind: e.target.value as Counter['kind'] })}>
               <option value="since">Since</option>
               <option value="until">Until</option>
-            </select>
+            </DropdownSelect>
           )}
           <input aria-label="Date and time" type="datetime-local" value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} />
           <button className="ov-primary" type="submit">

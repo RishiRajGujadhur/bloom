@@ -1,3 +1,4 @@
+import { DropdownSelect } from '../components/ui/DropdownSelect'
 import { subOn } from './subFeatures'
 import { UrgeClocks } from './urgeClock'
 import { loadSettings } from '../settings/appSettings'
@@ -398,7 +399,7 @@ function UrgePatterns({ data }: { data: AppData }) {
     <div className="urge-patterns flex flex-col gap-5 bloom-stack">
       <div className="pattern-filter">
         <label htmlFor="pattern-habit">Pattern for</label>
-        <select
+        <DropdownSelect
           id="pattern-habit"
           value={habitFilter}
           onChange={(event) => setHabitFilter(event.target.value)}
@@ -409,7 +410,7 @@ function UrgePatterns({ data }: { data: AppData }) {
               {habit.title}
             </option>
           ))}
-        </select>
+        </DropdownSelect>
       </div>
       <div className="urge-stats grid grid-cols-1 gap-3 sm:grid-cols-3">
         <article className="card">

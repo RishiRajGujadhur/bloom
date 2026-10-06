@@ -1,3 +1,4 @@
+import { chooseSelectOption, selectOptionValues } from './helpers/dropdown'
 import { test, expect } from '@playwright/test'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
@@ -60,8 +61,8 @@ test('arranged sections stay accessible and focus view reduces page length', asy
   await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
   await page.locator('.chat-layout-options > summary').click()
   const select = page.getByRole('combobox', { name: 'Visible section', exact: true })
-  const option = await select.locator('option').nth(1).getAttribute('value')
-  await select.selectOption(option!)
+  const option = (await selectOptionValues(select))[1]
+  await chooseSelectOption(select, option!)
   await expect(page.locator('[data-resizable-widget]:visible')).toHaveCount(1)
   await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') })
   const violations = await page.evaluate(async () => {
