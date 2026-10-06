@@ -414,7 +414,7 @@ html[data-theme='galaxy'] .studio[data-studio='money'] .studio-chip[aria-pressed
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-split { position: relative; min-height: 180px; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-split::after { content: ''; position: absolute; left: -7%; bottom: -80px; width: 120%; height: 145px; border-radius: 50%; border-top: 1px solid #a8bdff52; background: linear-gradient(180deg, #8a90ff20, transparent); pointer-events: none; }
 html[data-theme='galaxy'] .studio[data-studio='money'] .mn-list { min-height: 110px; }
-html[data-theme='galaxy'] .studio[data-studio='money'] .mn-month-head button { flex: none; width: 34px; height: 34px; }
+html[data-theme='galaxy'] .studio[data-studio='money'] .mn-month-head button { flex: none; width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
 @media (max-width: 900px) {
   html[data-theme='galaxy'] .studio[data-studio='money'] .mn-grid:has(> .mn-report) { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'report' 'add' 'split' 'recent'; }
   html[data-theme='galaxy'] .studio[data-studio='money'] .mn-report { min-height: 360px; }
