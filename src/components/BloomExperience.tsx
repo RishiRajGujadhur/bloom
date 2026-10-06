@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../utils/motion'
+import { useSurfaceReveal } from '../utils/useSurfaceReveal'
 import { sceneFor } from '../styles/houdini'
 import {
   Children,
@@ -30,6 +31,7 @@ export function CardRail({
   const [edges, setEdges] = useState({ start: true, end: false })
   const [expanded, setExpanded] = useState(false)
   const items = Children.toArray(children)
+  useSurfaceReveal(track, true, `${expanded}:${items.length}`)
   useEffect(() => {
     const node = track.current
     if (!node) return
@@ -132,13 +134,17 @@ export function Disclosure({
   children: ReactNode
   open?: boolean
 }) {
+  const body = useRef<HTMLDivElement>(null)
+  const [revealed, setRevealed] = useState(open)
+  useSurfaceReveal(body, revealed, title)
   return (
-    <details className="bloom-disclosure" open={open || undefined}>
+    <details className="bloom-disclosure" open={open || undefined}
+      onToggle={(event) => setRevealed(event.currentTarget.open)}>
       <summary>
         {title}
         <ChevronRight size={17} aria-hidden="true" />
       </summary>
-      <div className="bloom-disclosure-body">{children}</div>
+      <div ref={body} className="bloom-disclosure-body">{children}</div>
     </details>
   )
 }

@@ -13,12 +13,12 @@ test('shared pages hide scrollbar chrome while keeping long content reachable', 
       return nodes.filter(node => node.scrollHeight > node.clientHeight + 1)
         .every(node => getComputedStyle(node).scrollbarWidth === 'none')
     })).toBe(true)
-    const canReachEnd = await page.evaluate(() => {
+    await expect.poll(() => page.evaluate(async () => {
       const node = document.scrollingElement!
       const maximum = node.scrollHeight - node.clientHeight
       window.scrollTo({ top: maximum, behavior: 'instant' })
-      return maximum <= 1 || Math.abs(node.scrollTop - maximum) <= 1
-    })
-    expect(canReachEnd).toBe(true)
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+      return maximum <= 1 || Math.abs(node.scrollTop - (node.scrollHeight - node.clientHeight)) <= 2
+    })).toBe(true)
   }
 })

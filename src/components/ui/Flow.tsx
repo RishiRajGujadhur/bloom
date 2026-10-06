@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../../utils/motion'
+import { useSurfaceReveal } from '../../utils/useSurfaceReveal'
 import { Children, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -110,16 +111,12 @@ export function Fold({ id, title: heading, summary, children }: { id: string; ti
   const key = 'bloom-folds-v1'
   const [open, setOpen] = useState(() => readStore<Record<string, boolean>>(key, {})[id] ?? !narrow())
   const body = useRef<HTMLDivElement>(null)
+  useSurfaceReveal(body, open, id)
   const toggle = () => {
     const next = !open
     setOpen(next)
     writeStore(key, { ...readStore<Record<string, boolean>>(key, {}), [id]: next })
   }
-  useLayoutEffect(() => {
-    if (!open || !body.current || reduced()) return
-    const tw = gsap.fromTo(body.current, { height: 0, opacity: 0 }, { height: 'auto', opacity: 1, duration: 0.35, ease: 'power2.out', clearProps: 'height' })
-    return () => void tw.progress(1)
-  }, [open])
   return (
     <section className="fold" data-open={open}>
       <button type="button" className="fold-head" aria-expanded={open} onClick={toggle} data-hint={open ? 'Fold away' : 'Open'}>
