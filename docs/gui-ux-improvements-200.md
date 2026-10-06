@@ -158,3 +158,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 152 | Improve small text readability in arcade (.sb-card b) | `src/features/arcade/arcade.css` |
 | 153 | Improve small text readability in body (.bd-goal-text, .bd-axis) | `src/features/body/body.css` |
 | 154 | Improve small text readability in bodyTools (.body-tool-preference) | `src/features/body/bodyTools.css` |
+| 155 | Improve small text readability in collectibles (.collectible-eyebrow) | `src/features/collectibles/collectibles.css` |
