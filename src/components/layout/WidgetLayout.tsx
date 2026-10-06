@@ -145,11 +145,22 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
     const groups = new Set<HTMLElement>()
     const selector = 'section, .card, .studio-card, .task-workspace, .habit-calendar'
     const scan = () => {
-      const candidates = [...host.querySelectorAll<HTMLElement>(selector)].filter(element =>
-        !element.closest('[data-managed-widget], .widget-board, dialog, [role="dialog"], .task-item, .habit-card, nav, .widget-layout-tools') &&
-        (element.querySelector('h2, h3') || element.getAttribute('aria-label')),
-      )
+      let interactiveSection = false
+      const candidates = [...host.querySelectorAll<HTMLElement>(selector)].filter(element => {
+        if (element.closest('[data-managed-widget], .widget-board, dialog, [role="dialog"], .task-item, .habit-card, nav, .widget-layout-tools')) return false
+        // Controls belong on a frame, never inside an existing control or a
+        // structured ARIA container whose children have prescribed roles.
+        if (element.closest('button, a[href], input, textarea, select, ul, ol, table, [role="button"], [role="link"], [role="slider"], [role="checkbox"], [role="switch"], [role="list"], [role="grid"], [role="table"], [role="tablist"], [role="listbox"], [role="tree"], [role="meter"], [role="progressbar"]')) {
+          interactiveSection = true
+          return false
+        }
+        return !!(element.querySelector('h2, h3') || element.getAttribute('aria-label'))
+      })
       const leaves = candidates.filter(element => !candidates.some(other => other !== element && element.contains(other)))
+      if (interactiveSection) {
+        const studio = host.querySelector<HTMLElement>('.studio')
+        if (studio && !leaves.includes(studio)) leaves.push(studio)
+      }
       if (!leaves.length) {
         const feature = host.querySelector<HTMLElement>('.studio') ?? [...host.children].find(element =>
           element instanceof HTMLElement && !element.matches('.bloom-heading, .overview-bar, .page-mode-bar, .page-layout-controls, .widget-board, nav, [role="status"], [hidden]') &&
@@ -162,7 +173,7 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
         const identity = element.id || element.classList[0] || element.tagName.toLowerCase()
         const number = counts.get(identity) ?? 0
         counts.set(identity, number + 1)
-        const title = element.getAttribute('aria-label') || element.querySelector('h2, h3')?.textContent?.trim() || host.querySelector('#page-heading')?.textContent?.trim() || 'Workspace'
+        const title = element.dataset.studio || element.getAttribute('aria-label') || element.querySelector('h2, h3')?.textContent?.trim() || host.querySelector('#page-heading')?.textContent?.trim() || 'Workspace'
         return { element, id: `${page}:${identity}:${number}`, title }
       })
       for (const element of groups) element.removeAttribute('data-widget-group')

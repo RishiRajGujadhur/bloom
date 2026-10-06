@@ -52,3 +52,16 @@ test('existing sections gain controls without replacing their inputs', async () 
   expect(screen.getByLabelText('Section draft')).toBe(draft)
   expect(draft).toHaveValue('Saved')
 })
+
+function InteractiveSection() {
+  const root = useRef<HTMLDivElement>(null)
+  return <div ref={root}><PageLayout page="mala" root={root} />
+    <div className="studio" data-studio="Mala"><section className="studio-card" role="button" tabIndex={0} aria-label="Tap a bead"><h2>Beads</h2></section></div>
+  </div>
+}
+test('resize controls never become nested inside an interactive card', async () => {
+  render(<InteractiveSection />)
+  const handle = await screen.findByRole('button', { name: 'Resize Mala' })
+  expect(handle.closest('[role="button"]')).toBeNull()
+  expect(screen.getByRole('button', { name: 'Tap a bead' }).querySelector('button')).toBeNull()
+})

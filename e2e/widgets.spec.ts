@@ -24,6 +24,7 @@ test('Todo resizes to mobile width, preserves a draft and restores its layout', 
   const width = (await widget.boundingBox())!.width
   expect(width).toBeLessThanOrEqual(320)
   expect(width).toBeGreaterThanOrEqual(280)
+  expect(await widget.evaluate(element => element.scrollWidth > element.clientWidth + 1)).toBe(false)
   await page.getByRole('button', { name: 'Arrange layout', exact: true }).click()
   await widget.getByRole('button', { name: 'Collapse Your to-dos', exact: true }).click()
   await expect(widget.getByLabel('New task', { exact: true })).toBeHidden()
