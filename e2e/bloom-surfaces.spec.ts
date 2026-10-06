@@ -15,10 +15,43 @@ test('shared pages hide scrollbar chrome while keeping long content reachable', 
     })).toBe(true)
     await expect.poll(() => page.evaluate(async () => {
       const node = document.scrollingElement!
-      const maximum = node.scrollHeight - node.clientHeight
+      const maximum = node.scrollHeight - Math.max(node.clientHeight, window.innerHeight)
       window.scrollTo({ top: maximum, behavior: 'instant' })
       await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
-      return maximum <= 1 || Math.abs(node.scrollTop - (node.scrollHeight - node.clientHeight)) <= 2
+      return maximum <= 1 || Math.abs(node.scrollTop - (node.scrollHeight - Math.max(node.clientHeight, window.innerHeight))) <= 2
     })).toBe(true)
   }
+})
+
+test('section arrows and jump menu navigate long pages', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/#settings')
+  const navigator = page.getByRole('navigation', { name: 'Page sections', exact: true })
+  await expect(navigator).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Install Bloom', exact: true })).toBeVisible()
+  const down = navigator.getByRole('button', { name: /^Next section:/ })
+  await expect(down).toBeEnabled()
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+  await down.click()
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+  const up = navigator.getByRole('button', { name: /^Previous section:/ })
+  await expect(up).toBeEnabled()
+  await up.click()
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+  await down.click()
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+  const menu = navigator.getByRole('combobox', { name: 'Jump to page section' })
+  const last = await menu.locator('option').last().getAttribute('value')
+  await menu.selectOption(last!)
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(100)
+  await menu.selectOption('0')
+  await expect(up).toBeEnabled()
+  await up.focus()
+  await up.press('Enter')
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+  await expect(up).toBeDisabled()
+  const bounds = await navigator.boundingBox()
+  expect(bounds!.x).toBeGreaterThanOrEqual(0)
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width)
+  await page.screenshot({ path: testInfo.outputPath('section-navigation.png') })
 })

@@ -1,0 +1,77 @@
+/* Keep mobile layout viewports from expanding around oversized feature content. */
+html, body { overflow-x: clip; }
+.section-navigator {
+  position: fixed;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 28;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: min(360px, calc(100vw - 160px));
+  padding: 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  box-shadow: 0 6px 28px color-mix(in srgb, var(--accent-color) 16%, transparent);
+}
+.section-navigator button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: var(--accent-soft);
+  color: var(--accent-color);
+  transition: background 160ms, transform 160ms;
+}
+.section-navigator button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-surface));
+  transform: translateY(2px);
+}
+.section-navigator button:first-child:hover:not(:disabled) { transform: translateY(-2px); }
+.section-navigator-copy { flex: 1; min-width: 0; }
+.section-navigator-copy > span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+}
+.section-navigator select {
+  width: 100%;
+  min-height: 28px;
+  padding: 2px 0;
+  border: 0;
+  border-radius: 4px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.section-navigator :is(button, select):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* Leave the final section clear of the floating controls. */
+.app-shell .page-content { padding-bottom: max(110px, calc(env(safe-area-inset-bottom) + 92px)); }
+@media (max-width: 720px) {
+  .section-navigator {
+    bottom: calc(max(18px, env(safe-area-inset-bottom)) + 150px);
+    width: min(360px, calc(100vw - 32px));
+  }
+  .app-shell .page-content { padding-bottom: max(260px, calc(env(safe-area-inset-bottom) + 242px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-navigator button { transition: none; }
+  .section-navigator button:hover:not(:disabled) { transform: none; }
+}
+html[data-reduce-motion='true'] .section-navigator button { transition: none; transform: none; }
+html[data-reduce-motion='true'] .section-navigator button:hover:not(:disabled) { transform: none; }

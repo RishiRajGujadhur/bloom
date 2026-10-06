@@ -109,6 +109,7 @@ import { MOOD_KEY } from './features/wellbeing/store'
 import { PageBoundary } from './components/ui/PageBoundary'
 import { PageModeContext, PageModeSwitch, usePageModeState } from './components/ui/PageMode'
 import { PageLayout } from './components/layout/WidgetLayout'
+import { SectionNavigator } from './components/layout/SectionNavigator'
 import { DailyFlowCard } from './features/dailyFlow/DailyFlow'
 const EpiphaniesPage = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphaniesPage })))
 const EpiphanyGate = lazy(() => import('./features/epiphany/EpiphanyUI').then(m => ({ default: m.EpiphanyGate })))
@@ -1876,6 +1877,7 @@ function App() {
             </Suspense>
             </PageBoundary>
           </div>
+          {!embeddedWidget && <SectionNavigator root={widgetRoot} page={active} />}
         </main>
         </PageModeContext.Provider>
         </PageMenu>
