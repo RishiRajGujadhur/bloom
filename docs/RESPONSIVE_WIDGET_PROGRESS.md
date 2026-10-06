@@ -12,11 +12,23 @@
 - [x] Use feature here opens the existing full feature inside a widget on demand, with shared cross-document data synchronization.
 - [x] Finish desktop/mobile layout and accessibility verification.
 
-Drag any section's edges or corners directly, like resizing a desktop window. No size menu or arrange mode is needed. The bottom corner is also keyboard accessible: arrow keys resize it, Shift uses smaller steps, and Home resets. **Arrange layout** exposes collapse and reset controls; **Customize widgets** also exposes home widget order and removal. Custom dimensions and collapse state persist locally per widget.
+Drag any section's edges or corners directly, like resizing a desktop window. No size menu or arrange mode is needed. The bottom corner is also keyboard accessible: arrow keys resize it, Shift uses smaller steps, and Home resets. Open **Bloom → Arrange layout** for section focus, collapse and reset controls; **Customize widgets** also exposes home widget order and removal. Custom dimensions and collapse state persist locally per widget.
 
 Content uses its natural height by default. Explicitly short widgets retain a reachable internal scroll area instead of clipping content. Wide desktops place related sections together; narrow widgets switch shared grids and forms into compact layouts. The View selector focuses one section without unmounting the others.
 
 ## Verification
+
+### Follow-up: Settings and chat layout controls
+
+- [x] Every feature's Basic/Advanced preference is edited in Settings → Feature modes, including Todo and Settings itself.
+- [x] Feature pages no longer show mode controls; existing preferences remain compatible.
+- [x] Bloom launcher uses a 52px tap target at the bottom-left; section navigation moves toward the right edge.
+- [x] Arrange layout, section focus, collapse and reset controls move into Bloom.
+- [x] Resize limits measure intrinsic overflow and visible media after reflow, and recheck saved dimensions when content or the viewport changes.
+- [x] Code illustration and stack children no longer shrink into overlapping text.
+- [ ] Complete follow-up production/browser/accessibility checks.
+
+### Original widget rollout
 
 TypeScript, production build and focused lint passed. All 17 regression tests passed across the shared layout, page modes and Todo interactions. All 21 production browser cases passed at desktop, 390px mobile and 320px reflow widths, covering direct dragging, keyboard resizing, collapse/draft preservation, saved dimensions, focus view and inline full-feature Todo data sharing.
 

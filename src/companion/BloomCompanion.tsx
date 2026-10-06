@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../utils/motion'
+import { LayoutChatHost } from '../components/layout/WidgetLayout'
 import {
   useEffect,
   useRef,
@@ -495,6 +496,7 @@ export function BloomCompanion({
               </button>
             </div>
           </header>
+          <LayoutChatHost />
           {!online && <p className="chat-offline" role="status">You’re offline. Page guidance and lightweight planning still work; a new AI download needs a connection.</p>}
           <div className={`companion-orb-stage${busy ? ' is-thinking' : ''}`}>
             {avatar === 'glass' ? (

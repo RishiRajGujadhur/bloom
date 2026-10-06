@@ -69,7 +69,8 @@
   --bloom-gap: 10px; }
 .cd-hero h3 { margin: 0; }
 .cd-hero p { margin: 0; color: var(--text-secondary); }
-.cd-hero-art { width: 100%; max-width: 280px; }
+.cd-hero-art { display: block; flex: none; width: min(100%, 280px); max-width: 280px; height: auto; aspect-ratio: 3 / 2; }
+.cd-hero > div { flex: none; min-width: 0; }
 .cd-caret { animation: cd-blink 1s steps(2) infinite; }
 @keyframes cd-blink { 50% { opacity: 0; } }
 .cd-map { display: grid; gap: 8px; max-height: 100%; overflow-y: auto; padding-right: 4px; }

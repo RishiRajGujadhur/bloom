@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type HTMLAttributes, type PointerEvent as ReactPointerEvent, type ReactNode, type RefObject } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type HTMLAttributes, type PointerEvent as ReactPointerEvent, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import './widgetLayout.css'
 
@@ -6,6 +6,36 @@ export type WidgetSize = { width?: number; height?: number; collapsed?: boolean 
 const storageKey = 'bloom-widget-layout-v1'
 const eventName = 'bloom-widget-layout-change'
 let fallback = '{}'
+const layoutHostEvent = 'bloom-layout-host-change'
+let layoutHost: HTMLDivElement | null = null
+const setLayoutHost = (node: HTMLDivElement | null) => { layoutHost = node; window.dispatchEvent(new Event(layoutHostEvent)) }
+function subscribeHost(listener: () => void) {
+  window.addEventListener(layoutHostEvent, listener)
+  return () => window.removeEventListener(layoutHostEvent, listener)
+}
+export function LayoutChatHost() { return <div ref={setLayoutHost} className="chat-layout-host" /> }
+
+/** Reflow at the requested width before measuring intrinsic overflow and media. */
+export function constrainWidgetResize(element: HTMLElement, width: number, height: number): WidgetSize {
+  const available = Math.max(280, Math.min(1800, element.parentElement?.clientWidth || window.innerWidth))
+  let safeWidth = Math.max(280, Math.min(available, width))
+  let minimumHeight = 160
+  const oldWidth = element.style.getPropertyValue('--widget-width')
+  const oldHeight = element.style.getPropertyValue('--widget-height')
+  try {
+    element.style.setProperty('--widget-width', `${safeWidth}px`)
+    element.style.setProperty('--widget-height', 'auto')
+    // Horizontal scrollers retain their own overflow; only frame overflow raises the limit.
+    safeWidth = Math.min(available, safeWidth + Math.max(0, element.scrollWidth - element.clientWidth))
+    element.style.setProperty('--widget-width', `${safeWidth}px`)
+    const media = [...element.querySelectorAll('img, svg, canvas, video')].some(node => node.getBoundingClientRect().height > 48 && getComputedStyle(node).position !== 'absolute')
+    if (media) minimumHeight = Math.max(160, Math.min(1200, element.scrollHeight))
+  } finally {
+    if (oldWidth) element.style.setProperty('--widget-width', oldWidth); else element.style.removeProperty('--widget-width')
+    if (oldHeight) element.style.setProperty('--widget-height', oldHeight); else element.style.removeProperty('--widget-height')
+  }
+  return { width: Math.round(safeWidth), height: Math.round(Math.max(minimumHeight, Math.min(1200, height))), collapsed: false }
+}
 function snapshot() {
   try { return localStorage.getItem(storageKey) ?? '{}' } catch { return fallback }
 }
@@ -34,13 +64,13 @@ function useWidgetSize(id: string) {
     const frame = requestAnimationFrame(() => window.dispatchEvent(new Event('resize')))
     return () => cancelAnimationFrame(frame)
   }, [size.width, size.height, size.collapsed])
-  const setSize = (next: WidgetSize) => {
+  const setSize = useCallback((next: WidgetSize) => {
     const saved = readLayout(snapshot())
     saved[id] = normalizeWidgetSize(next)
     fallback = JSON.stringify(saved)
     try { localStorage.setItem(storageKey, fallback) } catch { /* retain changes for this session */ }
     window.dispatchEvent(new Event(eventName))
-  }
+  }, [id])
   return { size, setSize }
 }
 const sizeStyle = (size: WidgetSize): CSSProperties => ({
@@ -48,14 +78,39 @@ const sizeStyle = (size: WidgetSize): CSSProperties => ({
   '--widget-height': size.height ? `${size.height}px` : undefined,
 } as CSSProperties)
 
-function WidgetTools({ title, target, size, setSize, editing }: {
-  title: string; target: () => HTMLElement | null; size: WidgetSize; setSize: (size: WidgetSize) => void; editing: boolean
+function useWidgetBounds(size: WidgetSize, setSize: (next: WidgetSize) => void, ref: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const element = ref.current
+    if (!element || size.collapsed || (!size.width && !size.height)) return
+    let frame = 0
+    const check = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const bounds = element.getBoundingClientRect()
+        const safe = constrainWidgetResize(element, size.width ?? bounds.width, size.height ?? bounds.height)
+        const next = { ...size, ...(size.width ? { width: safe.width } : {}), ...(size.height ? { height: safe.height } : {}) }
+        if (next.width !== size.width || next.height !== size.height) setSize(next)
+      })
+    }
+    const observer = new MutationObserver(check)
+    observer.observe(element, { childList: true, subtree: true })
+    const resize = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(check)
+    resize?.observe(element)
+    if (element.parentElement) resize?.observe(element.parentElement)
+    for (const child of element.children) if (!child.classList.contains('widget-layout-tools')) resize?.observe(child)
+    window.addEventListener('resize', check)
+    check()
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); resize?.disconnect(); window.removeEventListener('resize', check) }
+  }, [size, setSize, ref])
+}
+
+function WidgetTools({ title, target, size, setSize, editing, controlsInChat = false }: {
+  title: string; target: () => HTMLElement | null; size: WidgetSize; setSize: (size: WidgetSize) => void; editing: boolean; controlsInChat?: boolean
 }) {
   const drag = useRef<{ x: number; y: number; width: number; height: number; edge: string } | null>(null)
   const resize = (width: number, height: number) => {
     const element = target()
-    const available = element?.parentElement?.clientWidth || window.innerWidth
-    setSize({ width: Math.min(available, width), height, collapsed: false })
+    if (element) setSize(constrainWidgetResize(element, width, height))
   }
   const startDrag = (event: ReactPointerEvent<HTMLElement>, edge: string) => {
     if (event.button !== 0) return
@@ -76,7 +131,7 @@ function WidgetTools({ title, target, size, setSize, editing }: {
   return <>
     {(editing || size.collapsed) && <div className="widget-layout-tools">
       <strong>{title}</strong>
-      <button type="button" aria-label={`${size.collapsed ? 'Expand' : 'Collapse'} ${title}`} aria-expanded={!size.collapsed} onClick={() => setSize({ ...size, collapsed: !size.collapsed })}>{size.collapsed ? 'Expand' : 'Collapse'}</button>
+      {!controlsInChat && <button type="button" aria-label={`${size.collapsed ? 'Expand' : 'Collapse'} ${title}`} aria-expanded={!size.collapsed} onClick={() => setSize({ ...size, collapsed: !size.collapsed })}>{size.collapsed ? 'Expand' : 'Collapse'}</button>}
       {editing && <button type="button" aria-label={`Reset size of ${title}`} onClick={() => setSize({})}>Reset size</button>}
     </div>}
     {!size.collapsed && <>
@@ -104,6 +159,7 @@ export function WidgetFrame({ id, title, editing = false, children, className = 
 } & Omit<HTMLAttributes<HTMLElement>, 'id' | 'title'>) {
   const ref = useRef<HTMLElement>(null)
   const { size, setSize } = useWidgetSize(id)
+  useWidgetBounds(size, setSize, ref)
   return <article {...props} ref={ref} className={`resizable-widget ${className}`} data-managed-widget="true" data-resizable-widget={id} data-widget-editing={editing || undefined} data-widget-collapsed={size.collapsed || undefined} data-widget-sized={!!size.height || undefined} style={sizeStyle(size)} aria-label={title}>
     <div className="widget-frame-content">{children}</div>
     <WidgetTools title={title} target={() => ref.current} size={size} setSize={setSize} editing={editing} />
@@ -113,6 +169,9 @@ export function WidgetFrame({ id, title, editing = false, children, className = 
 type Section = { element: HTMLElement; id: string; title: string }
 function SectionWidget({ section, editing, focused }: { section: Section; editing: boolean; focused: boolean }) {
   const { size, setSize } = useWidgetSize(section.id)
+  const ref = useRef<HTMLElement | null>(section.element)
+  ref.current = section.element
+  useWidgetBounds(size, setSize, ref)
   useEffect(() => {
     const element = section.element
     element.dataset.resizableWidget = section.id
@@ -128,16 +187,25 @@ function SectionWidget({ section, editing, focused }: { section: Section; editin
       element.style.removeProperty('--widget-width'); element.style.removeProperty('--widget-height')
     }
   }, [section, size, editing, focused])
-  return createPortal(<WidgetTools title={section.title} target={() => section.element} size={size} setSize={setSize} editing={editing} />, section.element)
+  return createPortal(<WidgetTools title={section.title} target={() => section.element} size={size} setSize={setSize} editing={editing} controlsInChat />, section.element)
+}
+
+function ChatSectionTools({ section }: { section: Section }) {
+  const { size, setSize } = useWidgetSize(section.id)
+  return <div className="chat-section-tools">
+    <strong>{section.title}</strong>
+    <button type="button" aria-label={`${size.collapsed ? 'Expand' : 'Collapse'} ${section.title}`} aria-expanded={!size.collapsed} onClick={() => setSize({ ...size, collapsed: !size.collapsed })}>{size.collapsed ? 'Expand' : 'Collapse'}</button>
+    <button type="button" aria-label={`Reset size of ${section.title}`} onClick={() => setSize({})}>Reset size</button>
+  </div>
 }
 
 /** Discover section boundaries centrally without reparenting React-owned content. */
 export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLDivElement | null> }) {
-  const [editing, setEditing] = useState(false)
+  const host = useSyncExternalStore(subscribeHost, () => layoutHost, () => null)
   const [sections, setSections] = useState<Section[]>([])
   const [focus, setFocus] = useState('')
   useEffect(() => {
-    setEditing(false); setFocus('')
+    setFocus('')
     const host = root.current
     if (!host) return
     host.dataset.compactLayout = 'true'
@@ -207,11 +275,14 @@ export function PageLayout({ page, root }: { page: string; root: RefObject<HTMLD
     return () => { host.removeAttribute('data-widget-focus-view') }
   }, [root, selected])
   return <>
-    <div className="page-layout-controls">
-      <button type="button" aria-pressed={editing} onClick={() => setEditing(value => !value)}>{editing ? 'Done arranging' : 'Arrange layout'}</button>
+    {host && createPortal(<details className="chat-layout-options">
+      <summary>Arrange layout</summary>
+      <div className="page-layout-controls">
       {sections.length > 1 && <label>View <select aria-label="Visible section" value={selected} onChange={event => setFocus(event.target.value)}><option value="">All sections</option>{sections.map(section => <option key={section.id} value={section.id}>{section.title}</option>)}</select></label>}
-      {editing && <span>Drag any edge or corner to resize. Changes save automatically.</span>}
-    </div>
-    {sections.map(section => <SectionWidget key={section.id} section={section} editing={editing} focused={selected === section.id} />)}
+      <span>Drag any edge or corner to resize. Changes save automatically.</span>
+      </div>
+      <div className="chat-layout-section-list">{sections.map(section => <ChatSectionTools key={section.id} section={section} />)}</div>
+    </details>, host)}
+    {sections.map(section => <SectionWidget key={section.id} section={section} editing={false} focused={selected === section.id} />)}
   </>
 }

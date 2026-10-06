@@ -52,7 +52,9 @@
 .bloom-companion-launch:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 4px; }
 
 .bloom-companion-launch { min-height: 56px; font-size: 0.875rem; }
-html .bloom-companion-launch { bottom: max(18px, env(safe-area-inset-bottom)); }
+html .bloom-companion-launch.has-face { left: max(12px, env(safe-area-inset-left)) !important; right: auto !important; bottom: max(12px, env(safe-area-inset-bottom)) !important; width: 52px; height: 52px; min-height: 52px; padding: 3px; border-radius: 50%; justify-content: center; }
+html .bloom-companion-launch.has-face > span { display: none; }
+html .bloom-companion-launch.has-face .bloom-face { width: 40px !important; height: 40px !important; }
 
 .bc-panel .bg-guide-search input { font-size: 1rem; min-height: 48px; }
 

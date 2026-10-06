@@ -25,10 +25,12 @@ test('Todo resizes to mobile width, preserves a draft and restores its layout', 
   expect(width).toBeLessThanOrEqual(320)
   expect(width).toBeGreaterThanOrEqual(280)
   expect(await widget.evaluate(element => element.scrollWidth > element.clientWidth + 1)).toBe(false)
-  await page.getByRole('button', { name: 'Arrange layout', exact: true }).click()
-  await widget.getByRole('button', { name: 'Collapse Your to-dos', exact: true }).click()
+  await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
+  await page.locator('.chat-layout-options > summary').click()
+  await page.locator('.chat-layout-options').getByRole('button', { name: 'Collapse Your to-dos', exact: true }).click()
   await expect(widget.getByLabel('New task', { exact: true })).toBeHidden()
-  await widget.getByRole('button', { name: 'Expand Your to-dos', exact: true }).click()
+  await page.locator('.chat-layout-options').getByRole('button', { name: 'Expand Your to-dos', exact: true }).click()
+  await page.getByRole('button', { name: 'Close Bloom', exact: true }).click()
   await expect(widget.getByLabel('New task', { exact: true })).toHaveValue('Draft survives resizing')
   const handle = widget.getByRole('button', { name: 'Resize Your to-dos', exact: true })
   await handle.focus()
@@ -55,7 +57,8 @@ test('home Todo widget adds tasks and shares completion with the full page', asy
 
 test('arranged sections stay accessible and focus view reduces page length', async ({ page }) => {
   await page.goto('/#settings', { waitUntil: 'domcontentloaded' })
-  await page.getByRole('button', { name: 'Arrange layout', exact: true }).click()
+  await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
+  await page.locator('.chat-layout-options > summary').click()
   const select = page.getByRole('combobox', { name: 'Visible section', exact: true })
   const option = await select.locator('option').nth(1).getAttribute('value')
   await select.selectOption(option!)
@@ -84,4 +87,28 @@ test('existing widget library can run the full Todo feature inline', async ({ pa
   await widget.getByRole('button', { name: 'Show quick view', exact: true }).click()
   await widget.getByRole('button', { name: /Open feature/ }).click()
   await expect(page.getByText('Task from embedded feature', { exact: true })).toBeVisible()
+})
+
+
+test('Bloom stays compact at bottom-left and media cards stop before content overlaps', async ({ page }) => {
+  await page.goto('/#code', { waitUntil: 'domcontentloaded' })
+  const launcher = page.getByRole('button', { name: 'Talk to Bloom', exact: true })
+  await expect(launcher).toBeVisible()
+  const bounds = (await launcher.boundingBox())!
+  expect(bounds.width).toBeLessThanOrEqual(56)
+  expect(bounds.height).toBeLessThanOrEqual(56)
+  expect(bounds.x).toBeLessThanOrEqual(16)
+  expect(page.viewportSize()!.height - bounds.y - bounds.height).toBeLessThanOrEqual(16)
+  await expect(page.locator('.page-content > .page-layout-controls')).toHaveCount(0)
+  const card = page.locator('.cd-hero')
+  const handle = card.getByRole('button', { name: 'Resize Learn JavaScript', exact: true })
+  await handle.focus()
+  for (let i = 0; i < 15; i++) await handle.press('ArrowUp')
+  const visual = (await card.locator('.cd-hero-art').boundingBox())!
+  const heading = (await card.getByRole('heading', { name: 'Learn JavaScript', exact: true }).boundingBox())!
+  expect(visual.y + visual.height).toBeLessThanOrEqual(heading.y + 1)
+  expect(await card.evaluate(node => node.clientHeight >= node.scrollHeight - 1)).toBe(true)
+  await launcher.click()
+  await page.locator('.chat-layout-options > summary').click()
+  await expect(page.locator('.chat-layout-options').getByRole('button', { name: 'Reset size of Learn JavaScript', exact: true })).toBeVisible()
 })

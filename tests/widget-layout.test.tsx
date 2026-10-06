@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRef } from 'react'
-import { normalizeWidgetSize, PageLayout, WidgetFrame } from '../src/components/layout/WidgetLayout'
+import { constrainWidgetResize, LayoutChatHost, normalizeWidgetSize, PageLayout, WidgetFrame } from '../src/components/layout/WidgetLayout'
 
 beforeEach(() => localStorage.clear())
 
@@ -37,7 +37,7 @@ test('keyboard resize has a reset path without dragging', () => {
 
 function Sections() {
   const root = useRef<HTMLDivElement>(null)
-  return <div ref={root}><PageLayout page="test" root={root} />
+  return <div ref={root}><LayoutChatHost /><PageLayout page="test" root={root} />
     <section><h2>Tasks</h2><input aria-label="Section draft" defaultValue="Saved" /></section>
     <section><h2>Notes</h2><p>Second section</p></section>
   </div>
@@ -45,8 +45,8 @@ function Sections() {
 test('existing sections gain controls without replacing their inputs', async () => {
   render(<Sections />)
   const draft = screen.getByLabelText('Section draft')
-  await waitFor(() => expect(screen.getByRole('combobox', { name: 'Visible section' })).toBeInTheDocument())
-  fireEvent.click(screen.getByRole('button', { name: 'Arrange layout' }))
+  await waitFor(() => expect(screen.getByText('Arrange layout')).toBeInTheDocument())
+  fireEvent.click(screen.getByText('Arrange layout'))
   fireEvent.click(screen.getByRole('button', { name: 'Collapse Tasks' }))
   fireEvent.click(screen.getByRole('button', { name: 'Expand Tasks' }))
   expect(screen.getByLabelText('Section draft')).toBe(draft)
@@ -64,4 +64,20 @@ test('resize controls never become nested inside an interactive card', async () 
   const handle = await screen.findByRole('button', { name: 'Resize Mala' })
   expect(handle.closest('[role="button"]')).toBeNull()
   expect(screen.getByRole('button', { name: 'Tap a bead' }).querySelector('button')).toBeNull()
+})
+
+
+test('resize limits grow with visible media and intrinsic overflow', () => {
+  const frame = document.createElement('section')
+  const image = document.createElement('img')
+  frame.append(image)
+  document.body.append(frame)
+  Object.defineProperties(frame, { clientWidth: { value: 280 }, scrollWidth: { value: 400 }, scrollHeight: { value: 560 } })
+  jest.spyOn(image, 'getBoundingClientRect').mockReturnValue({ width: 300, height: 240 } as DOMRect)
+  frame.style.setProperty('--widget-width', '480px')
+  frame.style.setProperty('--widget-height', '600px')
+  expect(constrainWidgetResize(frame, 280, 160)).toMatchObject({ width: 400, height: 560 })
+  expect(frame.style.getPropertyValue('--widget-width')).toBe('480px')
+  expect(frame.style.getPropertyValue('--widget-height')).toBe('600px')
+  frame.remove()
 })
