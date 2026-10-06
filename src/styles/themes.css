@@ -111,7 +111,7 @@
   --bg-primary: #fbf6f1;
   --bg-surface: #fffdfb;
   --bg-sidebar: #fdf8f3;
-  --accent-color: #d0643f;
+  --accent-color: #ad4e2c;
 }
 
 [data-theme='bloom-dark'] {
@@ -141,10 +141,10 @@ html[data-mode='dark'] {
   --text-primary: color-mix(in oklab, var(--bg-primary) 8%, #ffffff);
   --text-secondary: color-mix(
     in oklab,
-    var(--text-primary) 60%,
+    var(--text-primary) 78%,
     var(--bg-primary)
   );
-  --text-muted: color-mix(in oklab, var(--text-primary) 42%, var(--bg-primary));
+  --text-muted: color-mix(in oklab, var(--text-primary) 74%, var(--bg-primary));
   --text-on-accent: color-mix(in oklab, var(--accent-color) 14%, #05050a);
 
   --bg-elevated: color-mix(in oklab, var(--bg-surface) 88%, #ffffff);
@@ -191,10 +191,10 @@ html[data-mode='light'] {
   --text-primary: color-mix(in oklab, var(--bg-primary) 12%, #1b1725);
   --text-secondary: color-mix(
     in oklab,
-    var(--text-primary) 62%,
+    var(--text-primary) 78%,
     var(--bg-primary)
   );
-  --text-muted: color-mix(in oklab, var(--text-primary) 45%, var(--bg-primary));
+  --text-muted: color-mix(in oklab, var(--text-primary) 75%, var(--bg-primary));
   --text-on-accent: #ffffff;
 
   /* Cards stay the brightest thing on the page, even when the page itself

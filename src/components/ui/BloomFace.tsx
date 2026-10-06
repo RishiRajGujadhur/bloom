@@ -236,7 +236,7 @@ export const BloomFace = forwardRef<
   }, [mood])
 
   return (
-    <svg ref={svg} className={`bloom-face ${className ?? ''}`} width={size} height={size} viewBox="0 -2 100 108" role="img" aria-label={label}>
+    <svg ref={svg} className={`bloom-face ${className ?? ''}`} width={size} height={size} viewBox="0 -2 100 108" role={label ? 'img' : undefined} aria-label={label || undefined} aria-hidden={label ? undefined : true}>
       <defs>
         <linearGradient id={`bf-body-${uid}`} x1="0.2" y1="0" x2="0.8" y2="1">
           <stop offset="0" stopColor="#ff7a59" />
