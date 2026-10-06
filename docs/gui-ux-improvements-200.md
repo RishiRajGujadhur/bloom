@@ -199,3 +199,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 193 | Improve small text readability in timeSince (.ts-label small) | `src/features/timeSince/timeSince.css` |
 | 194 | Improve small text readability in workspace (#todo-page .todo-heading .eyebrow) | `src/features/todos/workspace.css` |
 | 195 | Improve small text readability in voice (.voice-meta) | `src/features/voice/voice.css` |
+| 196 | Improve small text readability in wellbeing (.wb-week small) | `src/features/wellbeing/wellbeing.css` |
