@@ -148,3 +148,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 142 | Improve small text readability in Sidebar.module (.collapseToggle) | `src/components/layout/Sidebar.module.css` |
 | 143 | Improve small text readability in writingAssist (.offline-pill) | `src/components/layout/writingAssist.css` |
 | 144 | Improve small text readability in ThemePicker.module (.block h3) | `src/components/settings/ThemePicker.module.css` |
+| 145 | Improve small text readability in shared (.ex-aside) | `src/components/studio/shared.css` |
