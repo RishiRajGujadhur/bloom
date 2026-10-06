@@ -62,3 +62,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 56 | Prevent narrow-screen card grid overflow in receipts (.rl-grid) | `src/features/money/receipts.css` |
 | 57 | Prevent narrow-screen card grid overflow in shop (.shop-grid) | `src/features/rewards/shop.css` |
 | 58 | Prevent narrow-screen card grid overflow in welcome (.wf-opts.cards, .wf-opts.theme) | `src/features/welcome/welcome.css` |
+| 59 | Prevent narrow-screen card grid overflow in world (.world-districts) | `src/features/world/world.css` |
