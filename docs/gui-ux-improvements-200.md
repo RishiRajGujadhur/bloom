@@ -120,3 +120,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 114 | Enlarge controls to a 44px touch target in coachBattle (.cb-menu select,.cb-menu button) | `src/features/workout/coachBattle.css` |
 | 115 | Enlarge controls to a 44px touch target in coachBattle (.cb-journal button) | `src/features/workout/coachBattle.css` |
 | 116 | Enlarge controls to a 44px touch target in formcoach (.fc-workout-focused .fc-camera-controls button) | `src/features/workout/formcoach.css` |
+| 117 | Enlarge controls to a 44px touch target in formcoach (.fc-view-modes button) | `src/features/workout/formcoach.css` |

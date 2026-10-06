@@ -162,7 +162,7 @@ html[data-theme='matrix'] .fc-ex button[aria-checked='true'] { color: #04160f; }
 
 .fc-mode-basic .fc-center,.fc-mode-game .fc-center{min-width:0}.fc-library-open .fc-center{grid-column:1}.fc-library-open .fc-library{grid-column:2;grid-row:1}.fc-stage.fc-library-open{grid-template-columns:minmax(0,1fr) minmax(150px,.28fr) minmax(150px,.25fr)}@media(max-width:860px){.fc-stage.fc-library-open{grid-template-columns:1fr}.fc-library-open .fc-library{grid-column:1;grid-row:auto}.fc-library-open .fc-center{grid-row:1}}
 
-.fc-mode-basic,.fc-mode-game{gap:8px;padding:12px}.fc-essentials{gap:6px;font-size:12px}.fc-essentials select{padding:5px;min-height:36px}.fc-access-row{margin:0;font-size:12px}.fc-settings summary{min-height:36px}.fc-side{gap:7px}.fc-head h3{font-size:1.2rem}.fc-instructions{margin:4px 0}.fc-view-modes button{min-height:36px;padding:6px 12px}
+.fc-mode-basic,.fc-mode-game{gap:8px;padding:12px}.fc-essentials{gap:6px;font-size:12px}.fc-essentials select{padding:5px;min-height:36px}.fc-access-row{margin:0;font-size:12px}.fc-settings summary{min-height:36px}.fc-side{gap:7px}.fc-head h3{font-size:1.2rem}.fc-instructions{margin:4px 0}.fc-view-modes button{min-height:44px;padding:6px 12px;min-width: 44px}
 
 @media(max-height:520px),(max-width:600px){.fc-workout-focused .fc-camera-controls{display:grid;grid-template-columns:1fr 1fr;width:120px;top:6px;gap:3px}.fc-workout-focused .fc-camera-controls button{min-height:44px;font-size:10px;padding:3px;min-width: 44px}.fc-workout-focused .fc-workout-hud{max-width:calc(100% - 145px)}.fc-workout-focused .cb-actions{top:180px;width:120px;flex-direction:row;flex-wrap:wrap}.fc-workout-focused .cb-actions button{font-size:10px;min-height:36px}}
 
