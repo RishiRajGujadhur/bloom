@@ -8,3 +8,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 2 | Give all native form fields a visible keyboard focus ring | `src/index.css` |
 | 3 | Make explicitly invalid fields visibly identifiable | `src/index.css` |
 | 4 | Keep invalid-field feedback visible while correcting an entry | `src/index.css` |
+| 5 | Allow grouped forms to shrink inside narrow cards | `src/index.css` |

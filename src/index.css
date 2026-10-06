@@ -284,3 +284,6 @@ input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="
 
 /* UX 004: Keep invalid-field feedback visible while correcting an entry. */
 input[aria-invalid="true"]:focus, textarea[aria-invalid="true"]:focus, select[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent); }
+
+/* UX 005: Allow grouped forms to shrink inside narrow cards. */
+fieldset { min-inline-size: 0; }
