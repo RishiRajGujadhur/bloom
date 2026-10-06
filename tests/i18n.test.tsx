@@ -92,6 +92,7 @@ test('switching to French localizes the dashboard, RPG, gamification and daybook
   ).toBeGreaterThan(0)
   expect(screen.getAllByText('La Pousse').length).toBeGreaterThan(0)
   expect(screen.getAllByText('Vitalité').length).toBeGreaterThan(0)
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Skill tree' })) })
   expect(screen.getAllByText(/CHEMIN DE PRATIQUE/).length).toBeGreaterThan(0)
   expect(

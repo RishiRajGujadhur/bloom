@@ -12,6 +12,7 @@ const go = async (name: string) =>
   await act(async () => { fireEvent.click(screen.getByRole('button', { name, exact: true })) })
 const growth = async (tab = 'Seedling') => {
   await go('Growth')
+  if (tab !== 'Seedling') await go('Advanced')
   await go(tab)
 }
 test('habit click updates EXP and undo reverses it across pages', async () => {

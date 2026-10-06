@@ -32,6 +32,7 @@ test('the Settings destination swaps the dashboard for the settings page', async
 
 test("their feature flags survive the port and still control the UI", async () => {
   await openSettings()
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   showAll()
 
   expect(screen.getByText('Features')).toBeInTheDocument()

@@ -107,7 +107,7 @@ export function Studio({
 
   return (
     <div className="studio" style={{ '--studio': accent, '--studio-text': textOnColor(accent) } as CSSProperties} data-studio={name}>
-      {scene && (
+      {mode === 'advanced' && scene && (
         <div className="studio-scene" aria-hidden="true">
           <StudioNameContext.Provider value={name}>{scene}</StudioNameContext.Provider>
         </div>

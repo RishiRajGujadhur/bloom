@@ -210,6 +210,7 @@ test('old settings migrate to opt-in defaults and enabling features reveals thei
     screen.queryByRole('button', { name: 'My Collectibles' }),
   ).not.toBeInTheDocument()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings' })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   await act(async () => { fireEvent.click(
     screen.getByRole('checkbox', { name: 'Enable Daily 7-7-7 Spin' }),
   ) })

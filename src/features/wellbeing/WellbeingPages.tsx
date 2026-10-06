@@ -1,3 +1,4 @@
+import { usePageMode } from '../../components/ui/PageMode'
 import { usePageActions } from '../../components/ui/PageMenu'
 import { download } from '../lab/exportSuite'
 import { NextStep } from '../dailyFlow/DailyFlow'
@@ -85,6 +86,7 @@ function playCue(label: string) {
 }
 
 export function BreathePage() {
+  const { mode } = usePageMode()
   const reduced = useReducedMotion()
   // Pattern, rounds, custom rhythm and cues are remembered for next time.
   const [savedPattern, setPatternId] = useStoredValue<string>('bloom-breathe-pattern', 'box')
@@ -207,7 +209,7 @@ export function BreathePage() {
             <em>{p.phases.map((ph) => ph[1]).join(' · ')}</em>
           </button>
         ))}
-        {subOn('breathe', 'customPattern') && (
+        {mode === 'advanced' && subOn('breathe', 'customPattern') && (
         <button
           type="button"
           className="wb-technique"
@@ -256,12 +258,12 @@ export function BreathePage() {
         </div>
       )}
       <div className="wb-chips" role="group" aria-label="Cues">
-        {subOn('breathe', 'soundCue') && (
+        {mode === 'advanced' && subOn('breathe', 'soundCue') && (
           <button type="button" aria-pressed={cues.sound} onClick={() => setCues((c) => ({ ...c, sound: !c.sound }))}>
             🔔 Sound cue
           </button>
         )}
-        {subOn('breathe', 'vibrate') && (
+        {mode === 'advanced' && subOn('breathe', 'vibrate') && (
           <button type="button" aria-pressed={cues.vibrate} onClick={() => setCues((c) => ({ ...c, vibrate: !c.vibrate }))}>
             📳 Vibrate
           </button>
@@ -339,6 +341,7 @@ export function BreathePage() {
 /* ------------------------------------------------------------------ */
 const FULL_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 export function MoodPage() {
+  const { mode } = usePageMode()
   const [entries, setEntries] = useStoredList<MoodEntry>(MOOD_KEY)
   const [note, setNote] = useState('')
   const [picked, setPicked] = useState<number | null>(null)
@@ -411,7 +414,7 @@ export function MoodPage() {
             >
               Quick
             </button>
-            {subOn('moodCheckin', 'detailed') && (
+            {mode === 'advanced' && subOn('moodCheckin', 'detailed') && (
             <button
               type="button"
               aria-pressed={detailed && !orb}
@@ -655,7 +658,7 @@ export function MoodPage() {
           </div>
         )
       })()}
-      {topEmotions.length > 0 && subOn('moodCheckin', 'wordCloud') && (
+      {topEmotions.length > 0 && mode === 'advanced' && subOn('moodCheckin', 'wordCloud') && (
         <div className="wb-card">
           <h2>Words you use most</h2>
           <div className="wb-word-cloud">
@@ -667,7 +670,7 @@ export function MoodPage() {
           </div>
         </div>
       )}
-      {entries.length > 0 && subOn('moodCheckin', 'recent') && (
+      {entries.length > 0 && mode === 'advanced' && subOn('moodCheckin', 'recent') && (
         <Carousel label="Recent check-ins" title="Recent" perView={4}>
           {entries.slice(0, 20).map((entry) => (
             <article key={entry.id} className="wb-note">
@@ -693,6 +696,7 @@ export function MoodPage() {
 /* Gratitude jar — one good thing a day                                */
 /* ------------------------------------------------------------------ */
 export function GratitudePage() {
+  const { mode } = usePageMode()
   const [entries, setEntries] = useStoredList<GratitudeEntry>(GRATITUDE_KEY)
   const [custom, setCustom] = useStoredList<GratitudeJar>(GRATITUDE_JARS_KEY)
   const jars = [...defaultJars, ...custom]
@@ -853,7 +857,7 @@ export function GratitudePage() {
             </button>
           )
         })}
-        {subOn('gratitude', 'customJars') && (
+        {mode === 'advanced' && subOn('gratitude', 'customJars') && (
         <button
           className="wb-mini-jar wb-new-jar"
           aria-expanded={creating}
@@ -1034,7 +1038,7 @@ export function GratitudePage() {
           )}
         </div>
       )}
-      {subOn('gratitude', 'compare') && (
+      {mode === 'advanced' && subOn('gratitude', 'compare') && (
       <div className="wb-card">
         <h3 className="wb-jar-title">
           Compare jars

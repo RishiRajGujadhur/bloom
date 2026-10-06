@@ -33,7 +33,7 @@ function Calendar() {
 
 test('projects, task metadata, and custom perspectives work together', async () => {
   render(<Tasks />)
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Pro', exact: true })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'New project' })) })
   fireEvent.change(screen.getByLabelText('Project name'), {
     target: { value: 'Launch' },
@@ -116,6 +116,7 @@ test('calendar schedules a task, counts deep work, edits duration, and unschedul
 test('calendar feature toggle persists and a disabled deep link cannot show the calendar', async () => {
   const view = await renderApp()
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Settings', exact: true })) })
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Advanced', exact: true })) })
   await act(async () => { fireEvent.click(
     screen.getByRole('checkbox', { name: 'Enable Full calendar' }),
   ) })

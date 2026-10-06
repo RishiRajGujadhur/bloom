@@ -1170,8 +1170,8 @@ export function SettingsPage({
           {t('settings.appearanceHeading')}
         </h2>
         <ThemePicker settings={theme} onChange={setTheme} />
-        <ThemeMarketplace theme={theme} setTheme={setTheme} />
-        <ConfigMarketplace settings={settings} setSettings={setSettings} theme={theme} setTheme={setTheme} parseSettings={parseSettings} />
+        <AdvancedSection><ThemeMarketplace theme={theme} setTheme={setTheme} />
+        <ConfigMarketplace settings={settings} setSettings={setSettings} theme={theme} setTheme={setTheme} parseSettings={parseSettings} /></AdvancedSection>
         <ComfortCard />
         <AdvancedSection><AvatarPicker />
         <ChatAppearanceSettings /></AdvancedSection>
