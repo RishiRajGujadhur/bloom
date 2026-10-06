@@ -37,3 +37,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 31 | Keep Studio content inside narrow cards instead of clipping it | `src/components/studio/studio.css` |
 | 32 | Give Studio tab labels room and scroll overflowing choices | `src/components/studio/studio.css` |
 | 33 | Prevent narrow-screen card grid overflow in avatarPicker (.avatar-options) | `src/components/ui/avatarPicker.css` |
+| 34 | Prevent narrow-screen card grid overflow in pointer (.pt-grid) | `src/components/ui/pointer.css` |
