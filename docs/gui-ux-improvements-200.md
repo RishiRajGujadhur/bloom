@@ -197,3 +197,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 191 | Improve small text readability in sleep (.sleep-stat small) | `src/features/sleep/sleep.css` |
 | 192 | Improve small text readability in taichi (.tc-privacy) | `src/features/taichi/taichi.css` |
 | 193 | Improve small text readability in timeSince (.ts-label small) | `src/features/timeSince/timeSince.css` |
+| 194 | Improve small text readability in workspace (#todo-page .todo-heading .eyebrow) | `src/features/todos/workspace.css` |
