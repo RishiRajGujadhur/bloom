@@ -86,9 +86,10 @@
 .shop-card button {
   width: 100%;
   justify-content: center;
-  min-height: 40px !important;
+  min-height: 44px !important;
   padding: 8px 12px;
   font-size: 14px;
+  min-width: 44px;
 }
 .shop-owned {
   display: inline-flex;
