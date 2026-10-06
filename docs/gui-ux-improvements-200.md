@@ -92,3 +92,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 86 | Enlarge controls to a 44px touch target in ui (.ui-menu-item) | `src/components/ui/ui.css` |
 | 87 | Enlarge controls to a 44px touch target in ui (.ui-select) | `src/components/ui/ui.css` |
 | 88 | Enlarge controls to a 44px touch target in ui (.ui-carousel-nav button) | `src/components/ui/ui.css` |
+| 89 | Enlarge controls to a 44px touch target in collectibles (.collectible-card > button) | `src/features/collectibles/collectibles.css` |

@@ -154,13 +154,14 @@
 }
 .collectible-card > button {
   width: 100%;
-  min-height: 42px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   font-size: 12px;
   padding-inline: 8px;
+  min-width: 44px;
 }
 .collectible-card > button:disabled {
   opacity: 0.55;
