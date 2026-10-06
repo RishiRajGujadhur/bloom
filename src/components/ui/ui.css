@@ -524,3 +524,6 @@
 
 /* UX 014: Wrap search keyboard hints on narrow screens. */
 .cmdk-footer { flex-wrap: wrap; row-gap: 8px; }
+
+/* UX 015: Let semantic-search status and its action wrap cleanly. */
+.cmdk-semantic { flex-wrap: wrap; }

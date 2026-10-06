@@ -18,3 +18,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 12 | Keep popup menus within narrow viewport edges | `src/components/ui/ui.css` |
 | 13 | Keep long menu group labels within their popup | `src/components/ui/ui.css` |
 | 14 | Wrap search keyboard hints on narrow screens | `src/components/ui/ui.css` |
+| 15 | Let semantic-search status and its action wrap cleanly | `src/components/ui/ui.css` |
