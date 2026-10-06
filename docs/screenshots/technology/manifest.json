@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-10-06T15:53:24.123Z",
+  "browser": "153.0.8010.12",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "screenshots": [
+    {
+      "file": "overview.png",
+      "route": "#overview",
+      "caption": "The current dashboard and shared section navigation."
+    },
+    {
+      "file": "focus.png",
+      "route": "#focus",
+      "caption": "Focus sessions in the current Bloom interface."
+    },
+    {
+      "file": "webcam-workout.png",
+      "route": "#workouts/coach",
+      "caption": "Form Coach running its built-in demo athlete, not a live camera."
+    },
+    {
+      "file": "bluetooth.png",
+      "route": "#readiness",
+      "caption": "Bluetooth heart-rate source selected; no physical device paired."
+    },
+    {
+      "file": "readiness-demo.png",
+      "route": "#readiness",
+      "caption": "Built-in simulated heartbeats; excluded from personal baselines."
+    },
+    {
+      "file": "life-map.png",
+      "route": "#places",
+      "caption": "OpenStreetMap with fictional sample mood check-ins."
+    },
+    {
+      "file": "terrain-replay.png",
+      "route": "#run/terrain",
+      "caption": "Built-in sample hilly run in the 3D terrain replay."
+    },
+    {
+      "file": "code-city.png",
+      "route": "#code-city",
+      "caption": "Built-in sample repository rendered as a city; no personal repository opened."
+    },
+    {
+      "file": "local-ai.png",
+      "route": "#focus",
+      "caption": "Optional local AI setup alongside the lightweight planner; no model downloaded."
+    }
+  ],
+  "errors": []
+}
