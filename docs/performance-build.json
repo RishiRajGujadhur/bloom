@@ -1,5 +1,5 @@
 {
-  "jsBytes": 2535480,
+  "jsBytes": 2535576,
   "cssBytes": 362783,
   "baselineJsBytes": 4550996,
   "baselineCssBytes": 582738,
@@ -11,10 +11,10 @@
   },
   "assets": [
     {
-      "file": "assets/index-BUN9HgCP.js",
+      "file": "assets/index-KA6WHNXY.js",
       "bytes": 1736135,
-      "gzip": 545601,
-      "brotli": 545693
+      "gzip": 545598,
+      "brotli": 545580
     },
     {
       "file": "assets/index-CWPkna8-.css",
@@ -77,10 +77,10 @@
       "brotli": 28053
     },
     {
-      "file": "assets/Studio-CPa9ZwPL.js",
-      "bytes": 20182,
-      "gzip": 7661,
-      "brotli": 7940
+      "file": "assets/Studio-C-89q64z.js",
+      "bytes": 20278,
+      "gzip": 7708,
+      "brotli": 7986
     },
     {
       "file": "assets/Studio-HP3JJ12x.css",

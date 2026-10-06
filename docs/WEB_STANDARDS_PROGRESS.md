@@ -32,7 +32,9 @@ All 83 routes passed in each desktop/mobile and Basic/Advanced combination: 332 
 
 Browser checks passed for Growth loading, chat text at 200% root font size, three-choice paging, chess arrow/selection controls, and per-page mode persistence. The full Jest run passed 602 of 610 tests; all eight initially failing cases passed after mode-aware test corrections and focused reruns. Two slow full-app cases required longer local timeouts while builds and browser audits competed for resources.
 
-Production JavaScript passed ES2023 parsing (636 files). The startup dependency graph passed its existing performance budgets: 2,535,480 bytes of JavaScript and 362,783 bytes of CSS, below 3 MiB and 450 KiB. The standards workflow now enforces these budgets alongside its build and syntax checks.
+The final production build and TypeScript check passed. The final browser run passed all six desktop/mobile cases. Code and Mood were rechecked in all four combinations after correcting the accessible name of Basic workspaces.
+
+Production JavaScript passed ES2023 parsing (636 files). The startup dependency graph passed its existing performance budgets: 2,535,576 bytes of JavaScript and 362,783 bytes of CSS, below 3 MiB and 450 KiB. The standards workflow now enforces these budgets alongside its build and syntax checks.
 
 Basic mode retains essential workflows. Advanced reveals extra Studio workspaces, bulk habit controls/history/calendar, Growth rewards and skills, detailed wellbeing controls, feature configuration, marketplaces and maintenance. Preferences persist independently per page; existing Todo Pro preferences migrate to Advanced. Optional scenes and advanced sections do not mount in Basic mode.
 

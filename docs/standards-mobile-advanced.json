@@ -834,5 +834,12 @@
         "horizontalOverflow": false
       }
     }
-  ]
+  ],
+  "rechecks": {
+    "date": "2026-10-06",
+    "routes": [
+      "mood",
+      "code"
+    ]
+  }
 }
