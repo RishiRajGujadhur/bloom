@@ -140,3 +140,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 134 | Improve small text readability in rpg (.rpg-heading>.eyebrow) | `src/rpg/rpg.css` |
 | 135 | Improve small text readability in shared-ui (.app-shell .topbar .theme-toggle, .app-shell .topbar .quiet-button) | `src/styles/shared-ui.css` |
 | 136 | Improve small text readability in overview (.is-hero .bloom-kicker) | `src/components/dashboard/overview.css` |
+| 137 | Improve small text readability in bookshelf (.journal-shelf > header p) | `src/components/daybook/bookshelf.css` |
