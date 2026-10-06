@@ -137,3 +137,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 131 | Improve small text readability in urgeClock (.urge-record) | `src/features/urgeClock.css` |
 | 132 | Improve small text readability in constellation (.constellation-head span) | `src/rpg/constellation.css` |
 | 133 | Improve small text readability in rewards (.growth-eyebrow) | `src/rpg/rewards.css` |
+| 134 | Improve small text readability in rpg (.rpg-heading>.eyebrow) | `src/rpg/rpg.css` |
