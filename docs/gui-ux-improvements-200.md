@@ -173,3 +173,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 167 | Improve small text readability in gameCards (.gc-number,.gc-mark) | `src/features/games/gameCards.css` |
 | 168 | Improve small text readability in globe (.gq-missed) | `src/features/globe/globe.css` |
 | 169 | Improve small text readability in habitCalendar (.habit-calendar-view) | `src/features/habits/habitCalendar.css` |
+| 170 | Improve small text readability in impact (.impact-hint) | `src/features/impact/impact.css` |
