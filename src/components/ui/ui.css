@@ -521,3 +521,6 @@
 
 /* UX 013: Keep long menu group labels within their popup. */
 .ui-menu-label { overflow-wrap: anywhere; }
+
+/* UX 014: Wrap search keyboard hints on narrow screens. */
+.cmdk-footer { flex-wrap: wrap; row-gap: 8px; }
