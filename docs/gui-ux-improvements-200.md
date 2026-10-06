@@ -187,3 +187,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 181 | Improve small text readability in piano (.pn-midi) | `src/features/piano/piano.css` |
 | 182 | Improve small text readability in places (.places-list input) | `src/features/places/places.css` |
 | 183 | Improve small text readability in posture (.posture-stats dt) | `src/features/posture/posture.css` |
+| 184 | Improve small text readability in release (.release-card small) | `src/features/release/release.css` |
