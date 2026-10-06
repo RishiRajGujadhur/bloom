@@ -88,7 +88,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 12px 8px 14px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -101,6 +101,7 @@
     border-color 150ms ease,
     box-shadow 150ms ease,
     transform 150ms ease;
+  min-width: 44px;
 }
 .ui-select:hover {
   border-color: color-mix(in oklab, var(--accent-color) 45%, var(--border-color));
