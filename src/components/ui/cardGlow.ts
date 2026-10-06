@@ -2,6 +2,7 @@ import { prefersReducedMotion } from '../../utils/motion'
 import gsap from 'gsap'
 import './cardGlow.css'
 import { pathLength } from '../../utils/svgLength'
+import { frameThrottle } from '../../utils/frameThrottle'
 
 /**
  * Cards glow where the pointer is (Composio-style): blurred multicolour blobs
@@ -10,65 +11,75 @@ import { pathLength } from '../../utils/svgLength'
  */
 const CARD = '.studio-card, .card, .en-unit-head, .avatar-option'
 export function installCardGlow() {
-  if (typeof window === 'undefined' || prefersReducedMotion()) return
+  if (typeof window === 'undefined' || prefersReducedMotion() || !window.matchMedia?.('(hover: hover) and (pointer: fine)').matches) return
   let current: HTMLElement | null = null
-  let setX: ((v: number) => void) | null = null
-  let setY: ((v: number) => void) | null = null
-  let spin: gsap.core.Tween | null = null
-  const track = (el: HTMLElement) => {
-    current = el
-    const px = { x: 50, y: 50 }
-    const apply = () => {
-      el.style.setProperty('--mx', `${px.x}%`)
-      el.style.setProperty('--my', `${px.y}%`)
-    }
-    setX = gsap.quickTo(px, 'x', { duration: 0.6, ease: 'power3', onUpdate: apply })
-    setY = gsap.quickTo(px, 'y', { duration: 0.6, ease: 'power3', onUpdate: apply })
+  const clear = () => {
+    update.cancel()
+    current?.classList.remove('is-glowing')
+    current = null
   }
-  document.addEventListener('pointermove', (e) => {
+  const update = frameThrottle((e: PointerEvent) => {
+    if (document.hidden || prefersReducedMotion()) { clear(); return }
     const el = (e.target as Element | null)?.closest?.(CARD) as HTMLElement | null
+    // Read geometry before any class/style writes to avoid forced layout.
+    const r = el?.isConnected ? el.getBoundingClientRect() : null
     if (el !== current) {
       current?.classList.remove('is-glowing')
-      spin?.kill()
-      current = null
-      if (el) {
-        track(el)
-        el.classList.add('is-glowing')
-        // Rotate the colours round the card while it is hovered.
-        const st = { a: 0 }
-        spin = gsap.to(st, { a: 360, duration: 6, repeat: -1, ease: 'none', onUpdate: () => el.style.setProperty('--ang', `${st.a}deg`) })
-      }
+      current = el
+      el?.classList.add('is-glowing')
     }
-    if (!el || !setX || !setY) return
-    const r = el.getBoundingClientRect()
-    setX(((e.clientX - r.left) / r.width) * 100)
-    setY(((e.clientY - r.top) / r.height) * 100)
-  }, { passive: true })
-  document.addEventListener('pointerdown', (e) => {
+    if (!el || !r || !r.width || !r.height) return
+    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`)
+    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`)
+    el.style.setProperty('--ang', `${((e.clientX - r.left) / r.width) * 360}deg`)
+  })
+  const press = (e: PointerEvent) => {
+    if (document.hidden || prefersReducedMotion()) return
     const b = (e.target as Element | null)?.closest?.('button:not(:disabled), [role="button"]')
-    if (b) gsap.fromTo(b, { scale: 0.96 }, { scale: 1, duration: 0.5, ease: 'elastic.out(1.1, 0.45)', clearProps: 'scale' })
-  }, { passive: true })
+    if (b) gsap.fromTo(b, { scale: 0.96 }, { scale: 1, duration: 0.5, ease: 'elastic.out(1.1, 0.45)', clearProps: 'scale', overwrite: 'auto' })
+  }
+  document.addEventListener('pointermove', update, { passive: true })
+  document.addEventListener('pointerdown', press, { passive: true })
+  document.addEventListener('pointerleave', clear)
+  document.addEventListener('visibilitychange', clear)
+  window.addEventListener('hashchange', clear)
+  return () => {
+    clear()
+    document.removeEventListener('pointermove', update)
+    document.removeEventListener('pointerdown', press)
+    document.removeEventListener('pointerleave', clear)
+    document.removeEventListener('visibilitychange', clear)
+    window.removeEventListener('hashchange', clear)
+  }
 }
 
-/** Page titles sweep in (clip + letter-spacing) on every page change; no DOM rewriting, so React stays in charge. */
+/** Compositor-friendly title entrance; coalesce rapid navigation. */
 export function installTitleReveal() {
   if (typeof window === 'undefined' || prefersReducedMotion()) return
-  const run = () =>
-    window.setTimeout(() => {
+  let timer = 0
+  const run = () => {
+    window.clearTimeout(timer)
+    timer = window.setTimeout(() => {
+      if (document.hidden || prefersReducedMotion()) return
       const h = document.querySelector<HTMLElement>('main h1')
       if (!h) return
-      gsap.fromTo(h, { clipPath: 'inset(0 100% 0 0)', letterSpacing: '0.12em', opacity: 0.2 }, { clipPath: 'inset(0 0% 0 0)', letterSpacing: 'normal', opacity: 1, duration: 0.8, ease: 'power3.out', clearProps: 'clipPath,letterSpacing,opacity' })
+      gsap.fromTo(h, { y: 8, opacity: 0.2 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', clearProps: 'transform,opacity', overwrite: 'auto' })
     }, 120)
+  }
   window.addEventListener('hashchange', run)
   run()
+  return () => { window.clearTimeout(timer); window.removeEventListener('hashchange', run) }
 }
 
 /** Cards on a newly opened page rise in with a short stagger and their heading icons draw in, so every page enters the same way. */
 export function installCardEntrance() {
   if (typeof window === 'undefined' || prefersReducedMotion()) return
-  const run = () =>
-    window.setTimeout(() => {
-      const cards = [...document.querySelectorAll<HTMLElement>('main :is(.studio-card, .card)')].filter((c) => c.getBoundingClientRect().top < window.innerHeight).slice(0, 14)
+  let timer = 0
+  const run = () => {
+    window.clearTimeout(timer)
+    timer = window.setTimeout(() => {
+      if (document.hidden || prefersReducedMotion()) return
+      const cards = [...document.querySelectorAll<HTMLElement>('main :is(.studio-card, .card)')].slice(0, 14).filter((c) => { const r = c.getBoundingClientRect(); return r.top < window.innerHeight && r.bottom > 0 })
       if (cards.length) gsap.from(cards, { y: 16, opacity: 0, duration: 0.5, stagger: 0.045, ease: 'power3.out', clearProps: 'transform,opacity' })
       // Heading icons draw themselves in (the same stroke-draw as page emblems).
       cards.forEach((card, i) => {
@@ -79,5 +90,7 @@ export function installCardEntrance() {
         })
       })
     }, 180)
+  }
   window.addEventListener('hashchange', run)
+  return () => { window.clearTimeout(timer); window.removeEventListener('hashchange', run) }
 }
