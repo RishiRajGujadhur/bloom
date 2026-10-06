@@ -1,0 +1,73 @@
+name: Web standards
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: standards-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ecmascript:
+    name: ECMAScript and production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check:ecmascript
+      - uses: actions/upload-artifact@v4
+        with:
+          name: standards-build
+          path: dist
+          retention-days: 3
+          include-hidden-files: true
+
+  accessibility:
+    name: WCAG 2.2 AA (${{ matrix.profile }}, ${{ matrix.mode }})
+    needs: ecmascript
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [desktop, mobile]
+        mode: [basic, advanced]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: standards-build
+          path: dist
+      - run: npx playwright install --with-deps chromium
+      - name: Start production preview
+        run: npm run preview -- --port 5175 > preview.log 2>&1 &
+      - name: Audit all pages
+        run: npm run audit:standards -- --url=http://127.0.0.1:5175 --profile=${{ matrix.profile }} --mode=${{ matrix.mode }} --output=standards-report.json
+      - name: Check keyboard, scaling and progressive disclosure
+        env:
+          BLOOM_E2E_URL: http://127.0.0.1:5175
+        run: npm run test:e2e -- e2e/standards.spec.ts --project=${{ matrix.profile }} --workers=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: standards-${{ matrix.profile }}-${{ matrix.mode }}
+          path: |
+            standards-report.json
+            test-results
+            preview.log
+          retention-days: 7
