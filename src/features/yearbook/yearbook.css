@@ -108,7 +108,7 @@
 }
 .yearbook-stats span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: max(14px, 1rem);
 }
 .yearbook-generate {
   justify-self: start;
