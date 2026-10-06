@@ -1,15 +1,14 @@
 /* Shared surfaces stay usable by wheel, touch and keyboard without scrollbar chrome. */
 html,
 body,
-#root,
-#root * {
-  scrollbar-width: none;
+body * {
+  /* Portals mount outside #root; the no-scrollbar policy also covers their panels. */
+  scrollbar-width: none !important;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
-#root::-webkit-scrollbar,
-#root *::-webkit-scrollbar {
-  display: none;
+body *::-webkit-scrollbar {
+  display: none !important;
 }
 
 .app-shell :is(.card, .ov-card, .wb-card, .quest-card, .bloom-disclosure) {

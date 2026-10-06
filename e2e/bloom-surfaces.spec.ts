@@ -9,7 +9,7 @@ test('shared pages hide scrollbar chrome while keeping long content reachable', 
     await page.goto(`/#${route}`)
     await expect(page.locator('.page-content')).toBeVisible()
     await expect.poll(() => page.evaluate(() => {
-      const nodes = [document.documentElement, document.body, ...document.querySelectorAll('#root *')]
+      const nodes = [document.documentElement, document.body, ...document.querySelectorAll('body *')]
       return nodes.filter(node => node.scrollHeight > node.clientHeight + 1)
         .every(node => getComputedStyle(node).scrollbarWidth === 'none')
     })).toBe(true)
@@ -21,6 +21,16 @@ test('shared pages hide scrollbar chrome while keeping long content reachable', 
       return maximum <= 1 || Math.abs(node.scrollTop - (node.scrollHeight - Math.max(node.clientHeight, window.innerHeight))) <= 2
     })).toBe(true)
   }
+})
+
+test('portaled AI panel follows the shared no-scrollbar policy', async ({ page }) => {
+  await page.goto('/#focus')
+  await page.getByRole('button', { name: 'Talk to Bloom', exact: true }).click()
+  await page.getByRole('tab', { name: 'Plan with Bloom', exact: true }).click()
+  await page.locator('.companion-ai-options > summary').click()
+  const panel = page.locator('.bc-panel')
+  await expect(panel).toBeVisible()
+  await expect.poll(() => panel.evaluate(node => getComputedStyle(node).scrollbarWidth)).toBe('none')
 })
 
 test('section arrows and jump menu navigate long pages', async ({ page }, testInfo) => {
