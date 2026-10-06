@@ -50,7 +50,7 @@
 .en-orbit-pulse { animation: en-map-pulse 3s ease-in-out infinite; }
 .en-orbit-pulse.second { animation-delay: 1s; }
 .en-topic, .en-map-start, .en-map-skill { position: absolute; border: 0; background: none; font: inherit; color: var(--text-secondary); display: flex; align-items: center; flex-direction: column; cursor: pointer; padding: 0; }
-.en-topic { left: var(--map-x); top: var(--map-y); transform: translate(-50%, -50%); width: 80px; gap: 5px; font-size: 12px; }
+.en-topic { left: var(--map-x); top: var(--map-y); transform: translate(-50%, -50%); width: 80px; gap: 5px; font-size: max(14px, 1rem); }
 .en-topic-circle { display: grid; place-items: center; width: 49px; height: 49px; border-radius: 50%; border: 1px solid var(--border-color); background: linear-gradient(145deg, var(--bg-surface), var(--bg-primary)); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--text-primary) 4%, transparent); transition: transform .2s, border-color .2s; }
 .en-topic-label { font-weight: 650; white-space: nowrap; }
 .en-topic small { font-size: 8px; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); }

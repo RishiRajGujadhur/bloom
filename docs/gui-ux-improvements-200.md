@@ -165,3 +165,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 159 | Improve small text readability in diet (.diet-plate-label) | `src/features/diet/diet.css` |
 | 160 | Improve small text readability in energy (.energy-note) | `src/features/energy/energy.css` |
 | 161 | Improve small text readability in english (.en-motion-setting) | `src/features/english/english.css` |
+| 162 | Improve small text readability in learningMap (.en-topic) | `src/features/english/learningMap.css` |
