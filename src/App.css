@@ -2704,3 +2704,6 @@ html[data-nav='hamburger'] .topbar-tools {
 
 /* UX 018: Keep long dialogs scrollable without scrolling the background. */
 .modal { overflow-y: auto; overscroll-behavior: contain; }
+
+/* UX 019: Separate dialog titles and close actions when titles wrap. */
+.modal-heading { display: flex; align-items: flex-start; gap: 16px; }

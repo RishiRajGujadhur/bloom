@@ -22,3 +22,4 @@ Each numbered row corresponds to one independently committed and pushed improvem
 | 16 | Wrap long unbroken journal content in search previews | `src/components/ui/ui.css` |
 | 17 | Fit dialogs inside the visible viewport, including mobile keyboards | `src/App.css` |
 | 18 | Keep long dialogs scrollable without scrolling the background | `src/App.css` |
+| 19 | Separate dialog titles and close actions when titles wrap | `src/App.css` |
